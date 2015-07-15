@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <HEAD>
+
+<SCRIPT LANGUAGE="JavaScript">
+
+<!-- This script and many more are available free online at -->
+<!-- The JavaScript Source!! http://www.javascriptsource.com -->
+
+<!--  Begin
+function resetform() {
+document.forms[0].elements[1]=="";
+}
+function submitForms() {
+if (isEmail() && isFname() && isLname() && isAddress() && isCity() && isState() && isZip())
+if (confirm("\n You are about to e-mail your submission. \n\nYES to submit.    NO to abort."))
+{
+alert("\nYour submission will now be sent. \n\n Use the Return Button once the submission is complete to return to my home page.\n\n\n Thank you for joining our mailing list!");
+return true;
+}
+else
+{
+alert("\n You have chosen to abort the submission.");
+return false
+}
+else 
+return false;
+}
+function isEmail() {
+if (document.forms[0].elements[1].value == "") {
+alert ("\n The E-Mail field is blank. \n\n Please enter your E-Mail address.")
+document.forms[0].elements[1].focus();
+return false;
+}
+if (document.forms[0].elements[1].value.indexOf ('@',0) == -1 ||
+document.forms[0].elements[1].value.indexOf ('.',0) == -1) {
+alert ("\n The E-Mail field requires a \"@\" and a \".\"be used. \n\nPlease re-enter your E-Mail address.")
+document.forms[0].elements[1].select();
+document.forms[0].elements[1].focus();
+return false;
+}
+return true;
+}
+function isFname() {
+if (document.forms[0].elements[2].value == "")
+{
+alert ("\n The First Name field is blank. \n\n Please enter your first name.")
+document.forms[0].elements[2].focus();
+return false;
+}
+return true;
+}
+function isLname() {
+if (document.forms[0].elements[3].value == "") {
+alert ("\n The Last Name field is blank. \n\nPlease enter your last name.")
+document.forms[0].elements[3].focus();
+return false;
+}
+return true;
+}
+function isAddress() {
+if (document.forms[0].elements[4].value == "") {
+alert ("\n The Address field is blank. \n\nPlease enter your address.")
+document.forms[0].elements[4].focus();
+return false;
+}
+return true;
+}
+function isCity()
+{
+if (document.forms[0].elements[5].value == "")
+{
+alert ("\n The City field is blank. \n\nPlease enter your city.")
+document.forms[0].elements[5].focus();
+return false;
+}
+return true;
+}
+function isState() {
+if (document.forms[0].elements[6].value == "") {
+alert ("\n The state field is blank.\n\nPlease enter your state.")
+document.forms[0].elements[6].focus();
+return false;
+}
+return true;
+}
+function isZip() {
+if (document.forms[0].elements[7].value == "") {
+alert ("\n The Zip code field is blank. \n\nPlease enter your Zip code.")
+document.forms[0].elements[7].focus();
+return false;
+}
+return true;
+}
+// End -->
+</SCRIPT>
+
+	
+	
+	
+	
+	<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Bootbusiness | Short description about company">
+    <meta name="author" content="Your name">
+    <title>SlidePiper | Careers</title>
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap responsive -->
+    <link href="css/bootstrap-responsive.min.css" rel="stylesheet">
+    <!-- Font awesome - iconic font with IE7 support --> 
+    <link href="css/font-awesome.css" rel="stylesheet">
+    <link href="css/font-awesome-ie7.css" rel="stylesheet">
+    <!-- Bootbusiness theme -->
+    <link href="css/boot-business.css" rel="stylesheet">
+  </head>
+  <body>
+    <!-- Start: HEADER -->
+    <header>
+      <!-- Start: Navigation wrapper -->
+      <div class="navbar navbar-fixed-top" style="vertical-align: middle">
+        <div class="navbar-inner" style="padding-bottom: 0px;padding-top: 0px" style="vertical-align: middle">
+          <div class="container">
+            <a href="index.html" class="brand brand-bootbus"><img src="img/logo.png"></a>
+            <!-- Below button used for responsive navigation -->
+            <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse" style="vertical-align:middle">
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <!-- Start: Primary navigation -->
+            <div class="nav-collapse collapse" style="vertical-align: middle;">        
+              <ul class="nav pull-right" style="display:table-cell; vertical-align: middle">
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown">Products and Benefits<b class="caret"></b></a>
+                  <ul class="dropdown-menu">
+                    <li class="nav-header">PRODUCTS</li>
+                    <li><a href="product.html">SlidePiper Sales</a></li>
+                   <li><a href="product.html">SlidePiper Training</a></li>
+                   <li><a href="product.html">SlidePiper Collaboration</a></li>
+                <!--<li><a href="all_products.html">All products</a></li> -->            
+                    <li class="divider"></li>
+                    <li class="nav-header">SlidePiper Benefits</li>
+                    <li><a href="service.html">Sales Acceleration</a></li>
+                    <li><a href="service.html">Analytical Reports </a></li>
+                    <li><a href="service.html">Recommendation Engine</a></li>
+                <!--    <li><a href="all_services.html">All services</a></li> -->
+                  </ul>                  
+                </li>
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown">About<b class="caret"></b></a>
+                  <ul class="dropdown-menu">
+                   <!--  <li><a href="our_works.html">Our works</a></li>
+                    <li><a href="patnerships.html">Parnerships</a></li> -->
+                    <li><a href="leadership.html">Leadership</a></li>
+                    <li><a href="news.html">News</a></li>
+                    <li><a href="events.html">Events</a></li>
+                    <!-- <li><a href="blog.html">Blog</a></li> -->
+                  </ul>
+                </li>
+                <li><a href="faq.html">FAQ</a></li>
+                <li><a href="contact_us.html">Contact us</a></li>
+                <li><a href="signup.html">Sign up</a></li>
+                <li><a href="signin.html">Sign in</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- End: Navigation wrapper -->   
+    </header>
+    <!-- End: HEADER -->
+    <!-- Start: MAIN CONTENT -->
+    <div class="content">
+      <div class="container">
+        <div class="page-header">
+          <h1>SlidePiper Events</h1>
+        </div>
+        <div class="row bottom-space">
+          <div class="span1 offset1">
+            <div class="circle">
+              <span class="event-date">Jul<br>15</span>
+            </div>
+          </div>
+          <div class="span9">
+            <h4><a href="#">Link to the event</a></h4>
+            <p>
+              This is a hacathon run by Sivan Bender CEO of SlidePiper to motivate young entrepreneurs to 
+            </p>
+          </div>
+        </div>
+        <div class="row bottom-space">
+          <div class="span1 offset1">
+            <div class="circle">
+              <span class="event-date">Oct<br>10</span>
+            </div>
+          </div>
+          <div class="span9">
+            <h4><a href="#">Link to the event</a></h4>
+            <p>
+              Description about your event.Description about your event.Description about your event.
+              Description about your event.Description about your event.Description about your event.
+              Description about your event.Description about your event.Description about your event.
+            </p>
+          </div>
+        </div>
+        <div class="row bottom-space">
+          <div class="span1 offset1">
+            <div class="circle">
+              <span class="event-date">Oct<br>20</span>
+            </div>
+          </div>
+          <div class="span9">
+            <h4><a href="#">Link to the event</a></h4>
+            <p>
+              Description about your event.Description about your event.Description about your event.
+              Description about your event.Description about your event.Description about your event.
+              Description about your event.Description about your event.Description about your event.
+            </p>
+          </div>
+        </div>
+        <div class="row bottom-space">
+          <div class="span1 offset1">
+            <div class="circle">
+              <span class="event-date">Nov<br>1</span>
+            </div>
+          </div>
+          <div class="span9">
+            <h4><a href="#">Link to the event</a></h4>
+            <p>
+              Description about your event.Description about your event.Description about your event.
+              Description about your event.Description about your event.Description about your event.
+              Description about your event.Description about your event.Description about your event.
+            </p>
+          </div>
+        </div>
+        <div class="row bottom-space">
+          <div class="span1 offset1">
+            <div class="circle">
+              <span class="event-date">Nov<br>12</span>
+            </div>
+          </div>
+          <div class="span9">
+            <h4><a href="#">Link to the event</a></h4>
+            <p>
+              Description about your event.Description about your event.Description about your event.
+              Description about your event.Description about your event.Description about your event.
+              Description about your event.Description about your event.Description about your event.
+            </p>
+          </div>
+        </div>
+        <div class="row bottom-space">
+          <div class="span1 offset1">
+            <div class="circle">
+              <span class="event-date">Dec<br>10</span>
+            </div>
+          </div>
+          <div class="span9">
+            <h4><a href="#">Link to the event</a></h4>
+            <p>
+              Description about your event.Description about your event.Description about your event.
+              Description about your event.Description about your event.Description about your event.
+              Description about your event.Description about your event.Description about your event.
+            </p>
+          </div>
+        </div>
+        <div class="row bottom-space">
+          <div class="span1 offset1">
+            <div class="circle">
+              <span class="event-date">Dec<br>20</span>
+            </div>
+          </div>
+          <div class="span9">
+            <h4><a href="#">Link to the event</a></h4>
+            <p>
+              Description about your event.Description about your event.Description about your event.
+              Description about your event.Description about your event.Description about your event.
+              Description about your event.Description about your event.Description about your event.
+            </p>
+          </div>
+        </div>
+        <div class="pagination pagination-centered">
+          <ul>
+            <li class="disabled">
+              <a href="#">&laquo;</a>
+            </li>
+            <li class="active">
+              <a href="#">1</a>
+            </li>
+            <li>
+              <a href="#">2</a>
+            </li>
+            <li>
+              <a href="#">3</a>
+            </li>
+            <li>
+              <a href="#">4</a>
+            </li>
+            <li>
+              <a href="#">5</a>
+            </li>
+            <li>
+              <a href="#">6</a>
+            </li>
+            <li>
+              <a href="#">&raquo;</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    <div>
+    <!-- End: MAIN CONTENT -->
+    <!-- Start: FOOTER -->
+    <footer>
+      <div class="container">
+        <div class="row">
+          <div class="span2">
+            <h4><i class="icon-star icon-white"></i> Products</h4>
+            <nav>
+              <ul class="quick-links">
+                <li><a href="product.html">SlidePiper Sales</a></li>
+                <li><a href="product.html">SlidePiper Training</a></li>
+                <li><a href="product.html">SlidePiper Collaboration</a></li>
+            <!--   <li><a href="all_products.html">All products</a></li> -->
+              </ul>
+            </nav>
+            <h4><i class="icon-cogs icon-white"></i> Benefits</h4>
+            <nav>
+              <ul class="quick-links">
+                <li><a href="service.html">Sales Acceleration</a></li>
+                <li><a href="service.html">Analytical Reports</a></li>
+                <li><a href="service.html">Recommendation Engine</a></li>
+             <!--    <li><a href="all_services.html">All services</a></li>    -->           
+              </ul>
+            </nav>
+          </div>
+          <div class="span2">
+            <h4><i class="icon-beaker icon-white"></i> About</h4>
+            <nav>
+              <ul class="quick-links">
+                <li><a href="our_works.html">Our works</a></li>
+                <li><a href="patnerships.html">Patnerships</a></li>
+                <li><a href="leadership.html">Leadership</a></li>
+                <li><a href="news.html">News</a></li>
+                <li><a href="events.html">Events</a></li>
+                <li><a href="blog.html">Blog</a></li>
+              <ul>
+            </nav>          
+          </div>
+          <div class="span2">
+            <h4><i class="icon-thumbs-up icon-white"></i> Support</h4>
+            <nav>
+              <ul class="quick-links">
+                <li><a href="faq.html">FAQ</a></li>
+                <li><a href="contact_us.html">Contact us</a></li>            
+              </ul>
+            </nav>
+            <h4><i class="icon-legal icon-white"></i> Legal</h4>
+            <nav>
+              <ul class="quick-links">
+                <li><a href="#">License</a></li>
+                <li><a href="#">Terms of Use</a></li>
+                <li><a href="#">Privacy Policy</a></li>
+                <li><a href="#">Security</a></li>      
+              </ul>
+            </nav>            
+          </div>
+          <div class="span3">
+            <h4>Get in touch</h4>
+            <div class="social-icons-row">
+              <a href="#"><i class="icon-twitter"></i></a>
+              <a href="#"><i class="icon-facebook"></i></a>
+              <a href="#"><i class="icon-linkedin"></i></a>                                         
+            </div>
+            <div class="social-icons-row">
+              <a href="#"><i class="icon-google-plus"></i></a>              
+              <!--<a href="#"><i class="icon-github"></i></a>-->
+              <a href="mailto:info@slidepiper.com"><i class="icon-envelope"></i></a>        
+            </div>
+            <div class="social-icons-row">
+              <i class="icon-phone icon-large phone-number"></i> +972(0)546815095
+            </div>
+          </div>      
+          <div class="span3">
+            <h4>Get updated by email</h4>
+            <form>
+              <input type="text" name="email" placeholder="Email address">
+              <input type="submit" class="btn btn-primary" value="Subscribe">
+            </form>
+          </div>
+        </div>
+      </div>
+      <hr class="footer-divider">
+      <div class="container">
+        <p>
+          &copy; 2015 SlidePiper, Inc. All Rights Reserved.
+        </p>
+      </div>
+    </footer>
+    <!-- End: FOOTER -->
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="js/boot-business.js"></script>
+
+
+
+
+
+<!--  STEP TWO: Copy this code into the BODY of your HTML document  -->
+
+<BODY>
+
+<CENTER>
+<FORM enctype="text/plain" name="addform" method='get'
+action='mailto:antispammer@earthling.net?subject=TJS - Mailing List' onSubmit="return submitForms()">
+<TABLE border=3 width=430 cellpadding=10><TD align="center">
+<strong>
+<font face="arial" size=+2>Join the Mailing List!</font>
+</strong>
+</TABLE>
+<input type="hidden" name="Form" value="Submit Sub">
+<TABLE border=3 cellspacing=0 cellpadding=2 bgcolor="#C0C0C0">
+<tr valign=baseline>
+<TD>
+<font face="arial">Email Address:</font>
+</TD>
+<TD>
+<input type=text name="Email Address" size=35,1 maxlength=80>
+</TD>
+</tr>
+<tr>
+<TD>
+<font face="arial">First Name:</font>
+</TD>
+<TD>
+<input type=text name="First Name" size=35,1 maxlength=80>
+</TD></tr>
+<tr>
+<TD>
+<font face="arial">Last Name:</font>
+</TD>
+<TD>
+<input type=text name="Last Name" size=35,1 maxlength=80>
+</TD></tr>
+<tr>
+<TD>
+<font face="arial">Address:</font>
+</TD>
+<TD>
+<input type=text name="Address" size=35,1 maxlength=80>
+</TD></tr>
+<tr>
+<TD>
+<font face="arial">City:</font>
+</TD>
+<TD>
+<input type=text name="City" size=35,1 maxlength=80>
+</TD></tr>
+<tr>
+<TD>
+<font face="arial">State:</font>
+</TD>
+<TD>
+<input type=text name="State" size=10,1 maxlength=25>
+</TD></tr>
+<tr>
+<TD>
+<font face="arial">Zip Code:</font>
+</TD>
+<TD>
+<input type=text name="Zip" size=20,1 maxlength=35>
+</TD></tr></TABLE>
+<br>
+<center>
+<input type="submit" value="  Submit  ">
+<input type="button" value="  Return  " onclick="window.location='your-page.html'">
+<input type="reset" value="Reset Form" onclick=resetform()>
+</FORM>
+</CENTER>
+
+<p><center>
+<font face="arial, helvetica" size="-2">Free JavaScripts provided<br>
+by <a href="http://javascriptsource.com">The JavaScript Source</a></font>
+</center><p>
+
+<!-- Script Size:  4.56 KB  -->
+
+
+
+
+
+
+
+
+
+	</body>
+</html>
