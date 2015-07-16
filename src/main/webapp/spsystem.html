@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html>
+    
+    <!-- *************************************** head ********************************** -->
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Slidepiper</title>
+	<link rel="shortcut icon" href="../favicon.ico">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,700">
+	<link rel="stylesheet" href="jqm/jquery.mobile-1.4.5.css">
+
+	<link rel="stylesheet" href="themes/blue-header.min.css" />
+	<link rel="stylesheet" href="themes/jquery.mobile.icons.min.css" />	
+	<script src="jqm/jquery.js"></script>
+	<script src="jqm/_assets/js/index.js"></script>
+	<script src="jqm/jquery.mobile-1.4.5.js"></script>
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+	
+	
+	<style id="custom-icon">
+        .ui-icon-custom:after {
+			background-image: url("jqm/_assets/img/glyphish-icons/21-skull.png");
+			background-position: 3px 3px;
+			background-size: 70%;
+		}
+    </style>
+    
+    <style type="text/css">
+    		.ui-content,.no-padding-class
+    			{
+        	padding-bottom:0px;
+        	padding-left:0px;
+        	padding-right:0px;
+        	padding-top:0px;"
+        		}	
+           
+					body {
+					    /*background: url(img/background.jpg);*/
+					    background-repeat:repeat-y;
+					    background-position:center center;
+					    background-attachment:scroll;
+					    background-size:100% 100%;
+					}
+					.ui-page {
+					    background: transparent;
+					}
+					.ui-content{
+					    background: transparent;
+					}
+										
+					/* style for barchart*/
+  				.bar {
+						  fill: steelblue;
+						}
+						.bar:hover {
+						  fill: brown;
+						}
+						.axis {
+						  font: 10px sans-serif;
+						}
+						.axis path,
+						.axis line {
+						  fill: none;
+						  stroke: #000;
+						  shape-rendering: crispEdges;
+						}
+						.x.axis path {
+						  display: none;
+						}																		
+		</style>
+</head>
+
+    <!-- *************************************** body ********************************** -->
+<body>
+    
+    
+        <!-- *************************************** main page - with login  ********************************** -->
+<div data-role="page" id="main" data-quicklinks="true" data-theme="b">
+
+                <div data-role="header" data-theme="b">
+<!-- 	<a href="index.html" data-icon="delete">Back</a> -->
+	<h1>Slidepiper</h1>
+	
+
+ </div>
+    
+        <div role="main" class="ui-content jqm-content" data-theme="b">
+            <p>Welcome to Slidepiper.</p><br><br>
+           	
+<!--   <a href="#popupLogin" data-rel="popup" data-position-to="window" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-check ui-btn-icon-left ui-btn-a" data-transition="pop">Sign in</a>
+-->
+<!--  <div data-role="popup" id="popupLogin" data-theme="b" class="ui-corner-all" data-theme="b">
+ -->
+    <form>
+        <div style="padding:10px 20px; width: 30%;">
+            <h3>Please sign in</h3>
+            <label for="un" class="ui-hidden-accessible">Username:</label>
+            <input name="user" id="usernamefield" value="" placeholder="username" data-theme="b" type="text">
+            <label for="pw" class="ui-hidden-accessible">Password:</label>
+            <input name="pass" id="passwordfield" value="" placeholder="password" data-theme="b" type="password">
+            <!--<button type="submit" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-check">Sign in</button>-->                       
+            <a id="gotoManage" data-history="false" data-position-to="window" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-check ui-btn-inline">Login</a></div>
+    </form>    
+<!--  </div>   -->
+            
+ </div>    
+  <!--   <div data-role="footer" data-theme="b"> 
+	<h4>(c) Slidepiper 2015</h4> 
+</div>  -->
+           
+</div><!-- /page -->
+
+    
+        <!-- *************************************** manage screen ********************************** -->
+<div data-role="page" id="manage" data-quicklinks="true" data-theme="b">
+    
+<div data-role="header" data-theme="b">
+	<!-- <a href="index.html" data-icon="delete">Back</a> -->
+	<h1>Slidepiper</h1>
+	<!--  <a href="index.html" data-icon="check" data-theme="b">Logout</a>-->
+</div>
+    
+    
+	<!--  <div role="main" class="ui-content jqm-content" data-theme="b"> -->
+
+ <div role="main" class="ui-content no-padding-class">
+            
+                <!-- *************************************** SMART ALERTS ********************************** -->
+<!--  <div class="ui-corner-all custom-corners"> -->
+  <div class="ui-bar ui-bar-a">
+    <h3>Followup Recommendations</h3>
+  </div>   
+  <div class="ui-body ui-body-a no-padding-class">    		
+
+			<div data-demo-html="true">
+			<ul data-role="listview" data-inset="true" id="smartalerts" style="height:250px; overflow-x:hidden; overflow-y: scroll; padding-bottom:0px;">
+			<!--  smart alerts html here -->
+			</ul> 
+			</div><!--/demo-html -->
+<!--
+ 			  <a href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-bullets ui-btn-inline" data-inline="true">All Recommendations...</a>
+ -->
+  </div> <!-- content -->
+  
+
+<!--  </div>    -->  <!-- ui corner custom corner -->
+            
+
+    <!-- *************************************** CUSTOMER MANAGEMENT ********************************** -->
+<br>
+<div class="ui-corner-all custom-corners">
+  <div class="ui-bar ui-bar-a">
+      <h3>Customer Management</h3>
+  </div>
+  <div class="ui-body ui-body-a no-padding-class">
+    		<!--  <p>Send tracked messages to your customers.</p> -->        
+                
+<div class="ui-grid-b">
+    <div class="ui-block-a"><div class="ui-bar ui-bar-a no-padding-class" >
+<div class="ui-corner-all custom-corners">
+  <div class="ui-bar ui-bar-a">
+    <h3>Select Customer(s)</h3>
+  </div>
+   <div class="ui-body ui-body-a" style="height:250px; overflow-x:hidden; overflow-y: scroll; padding-bottom:10px;" id="customersDiv">
+      </div>
+   
+                
+
+<!--              <ul id="customers" data-role="listview" data-filter="true" data-inset="true">
+            </ul>-->
+   
+              
+           <a href="#popupAddCustomer" data-rel="popup" data-position-to="window" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-plus ui-btn-icon-left ui-btn-a" data-transition="pop">Add</a>	             
+           <a id="removeCustButton" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-delete ui-btn-icon-left ui-btn-a">Remove</a>	             
+           <a id="editCustomerButton" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-edit ui-btn-icon-left ui-btn-a">Edit</a>	             
+            <div data-role="popup" id="popupAddCustomer" data-theme="b" class="ui-corner-all" data-dismissible="false">
+                <form>
+                    <div style="padding:10px 20px;">
+                        <h3>Customer Information</h3>
+                        <label for="un" class="ui-hidden-accessible">Name:</label>
+                        <input name="user" id="newcustname" value="" placeholder="Name" data-theme="b" type="text">
+                        <label for="un" class="ui-hidden-accessible">Email:</label>
+                        <input name="user" id="newcustemail" value="" placeholder="Email" data-theme="b" type="text">
+                         <label for="un" class="ui-hidden-accessible">Company:</label>
+                        <input name="user" id="newcustcompany" value="" placeholder="Company" data-theme="b" type="text">
+                        <a id="addCustButton" data-position-to="window" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-right ui-icon-check">Add</a>                                                                                                                    
+                    </div>
+                </form>
+            </div>                   
+  
+</div>
+        </div></div>
+    <div class="ui-block-b"><div class="ui-bar ui-bar-a no-padding-class">          
+    <div class="ui-corner-all custom-corners">
+  <div class="ui-bar ui-bar-a">
+    <h3>Select Presentation</h3>
+  </div>
+  <div class="ui-body ui-body-a" style="height:250px; overflow-x:hidden; overflow-y: scroll; padding-bottom:10px;" id="pres1Div" >    
+</div>      
+   <a href="#popupAddPresentation" data-rel="popup" data-position-to="window" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-plus ui-btn-icon-left ui-btn-a" data-transition="pop">Add</a>	             
+      <a id="removePresentationButton" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-delete ui-btn-icon-left ui-btn-a" data-transition="pop">Remove</a>	             
+            <!--  <a href="" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-edit ui-btn-icon-left ui-btn-a" data-transition="pop">Edit</a> -->	             
+
+<div data-role="popup" id="popupAddPresentation" data-theme="b" class="ui-corner-all">
+ <!--   <iframe id="uploadframe" src="UploadSlides.jsp"></iframe>   -->
+ 
+ 
+		<h1>Upload Presentation</h1>
+		<form method="post" action="uploadSlides" data-ajax="false"  enctype="multipart/form-data">
+			<table border="0">
+				<tr>
+					<!-- <td>Your Email (Salesman email, should be hidden): </td> -->
+					<td><input type="hidden" name="salesman_email" id="salesman_email" size="50"/></td>
+				</tr>
+				<tr>
+					<td>Presentation Name: </td>
+					<td><input type="text" name="name" size="30"/></td>
+				</tr>
+				<tr>
+					<td>Presentation File - PDF only <BR> (recommended size - up to 2MB): </td>
+					<td><input type="file" name="file" size="30"/></td>
+				</tr>
+				<tr>
+					<td colspan="2">
+						<input type="submit" value="Upload Presentation (may take a while)" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-shop ui-icon-check ui-btn-inline">
+					</td>
+				</tr>
+			</table>
+		</form>
+	
+ 
+ 
+ 
+</div></div></div></div>
+        
+    <div class="ui-block-c"><div class="ui-bar ui-bar-a no-padding-class">
+            	
+                <div class="ui-corner-all custom-corners">
+                  <div class="ui-bar ui-bar-a">
+                    <h3>Enter Message</h3>
+                  </div>
+                  <div class="ui-body ui-body-a" style="height:250px; overflow-x:hidden; overflow-y: scroll; padding-bottom:10px;">
+                    <input type="text" name="subject1" id="subject1" value="" placeholder="Subject" />
+                    <p><textarea cols="40" rows="8" name="textarea-6" id="msgtext1" placeholder="Message Body" ></textarea></p>
+<!--                    <input name="rtl"  class="" id="rtl" type="checkbox" value="Right to Left Message"> <label for="rtl">Right to Left Message</label>
+                  </div> --> 
+                    
+<!--                        <a id="clear" data-rel="popup" data-position-to="window" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-tag ui-btn-icon-left ui-btn-a" data-transition="pop">Clear</a> -->	             
+                       <a id="fromTemplate" data-position-to="window" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-bars ui-btn-icon-left ui-btn-a" data-transition="pop">From Template...</a>	             
+                </div>
+                    
+        </div></div>
+</div><!-- /grid-b -->                
+<div style="text-align: right">
+<a id="send_email_to_customers" data-history="false" data-position-to="window" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-mail ui-btn-inline">Send e-mail(s)
+</a>
+</div>
+</div> <!-- content -->
+</div> <!-- ui corner custom corner -->
+
+
+        
+                    <!-- *************************************** MORE BUTTONS - HISTORY  & LOGOUT ********************************** -->
+        
+<br>	
+<a id="history" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-calendar ui-btn-inline" data-inline="true">History</a>
+<button id="logout" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-power ui-btn-inline" data-inline="true">Logout</button>
+
+	</div><!-- /content -->
+        
+        
+        <div data-role="footer" data-theme="b"> 
+	<h4>(c) Slidepiper 2015</h4> 	
+</div> 
+        
+</div><!-- /page -->
+
+
+    <!-- *************************************** END OF PAGE ********************************** -->
+
+    
+        <!-- *************************************** INCLUDE SCRIPTS ********************************** -->
+  <script src="clientjs/d3utils.js"></script>
+<script type="text/javascript" src="clientjs/clientutils.js"></script>
+<script type="text/javascript" src="clientjs/clientcode.js"></script>
+
+ 
+<div id="dialog-confirm"></div>
+
+</body>
+</html>
+
+    <!-- *************************************** THE END ********************************** -->
+

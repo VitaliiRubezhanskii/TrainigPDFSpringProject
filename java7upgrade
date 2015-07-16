@@ -1,0 +1,21 @@
+https://developer.jboss.org/people/ozizka/blog/2013/03/13/openshift-enabling-java-7
+
+
+    touch .openshift/markers/java7  
+    git add .openshift/markers/java7  
+
+Also make sure you don't have it ignored in .gitignore like I had.
+
+
+Then in pom.xml
+
+ 
+
+    <plugin>  
+        <artifactId>maven-compiler-plugin</artifactId>  
+        <version>3.0</version>  
+        <configuration>  
+            <source>1.7</source>  
+            <target>1.7</target>  
+        </configuration>  
+    </plugin>  
