@@ -138,9 +138,12 @@ public class MainServlet extends HttpServlet {
 					
 				case "sendPresentationToCustomer":									
 					String msgtext = input.getString("msgtext");				    											
-					String msglink = "slidepiper.com/pdfjs/viewer.html?salesman_email="+
-							input.getString("salesman_email")
-							+ "&file=/file/"+
+					String msglink = "slidepiper.com/pdfjs/viewer.html?"
+							//salesman_email="+
+							//input.getString("salesman_email")
+							// cannot put exta param in mailto, 
+							// not & can be in msg body.
+							+ "file=/file/"+
 							input.getString("docid") + "#zoom=page-fit";
 
 					msgtext = msgtext + "<br>" + msglink;
@@ -149,7 +152,7 @@ public class MainServlet extends HttpServlet {
 					
 					//does not really send, just write to db. sent using mailto.
 						DbLayer.sendMessage(input.getString("docid"), input.getString("salesman_email"), DbLayer.getSalesmanEmailpasswordByEmail(input.getString("salesman_email")), input.getString("customers"),
-							input.getString("slides_ids"), msgtext +  msglink, "", input.getString("msgsubj")
+							input.getString("slides_ids"), msgtext + msglink, "", input.getString("msgsubj")
 							);
 					
 					// message will be sent using mailto!!!

@@ -252,8 +252,6 @@ public class DbLayer {
 	{
 				String id, salesManEmail, customerEmail, slidesId, msgText, timestamp;
 				
-
-		
 			try {
 				DriverManager.registerDriver(new com.mysql.jdbc.Driver());
 			} catch (SQLException e) {
@@ -284,8 +282,16 @@ public class DbLayer {
 			}			
 			return null;
 		}
-
 	
+	
+	// get only sm email, not all msg info. for customer presentation view.
+	public static String getSalesmanEmailFromMsgId(String msgid)
+	{
+				MessageInfo mi = getMessageInfo(msgid);
+				
+				return mi.getSalesManEmail();
+	}
+		
 	// set rows for this sessionId as done. 
 	// will not appear in recommendations. 
 	public static void setDone(String sessionId)

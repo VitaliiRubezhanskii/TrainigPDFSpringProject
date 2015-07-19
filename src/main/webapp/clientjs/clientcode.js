@@ -3,10 +3,6 @@
 // logged events of salesman. logged to db.
 function send_salesman_event(ename, eparam1, eparam2, eparam3) {
 	urlval = "SalesmanDataServlet";
-	// if (document.location.hostname == "localhost")
-	// {
-	// urlval = "/SlidePiper/CustomerDataServlet";
-	// }
 	$.ajax({
 		type : "POST",
 		url : urlval,
@@ -76,7 +72,7 @@ function initPage() {
 	$("#send_email_to_customers")
 			.bind(
 					"click",
-					function(event) {
+					function(event) {						
 						console.log("sendemail");
 						// alert('sending email');
 						var customers = [];
@@ -157,6 +153,7 @@ function initPage() {
 									+ '",'
 									+ '"docid":"' + docid + '"' + '}';
 
+							showWaitMsg();
 							// alert("json msg " + jsondata);
 							console.log("sendemail ajax");
 							$
@@ -180,16 +177,21 @@ function initPage() {
 
 												mailtourl = "mailto:"
 														+ JSONobj.customeremails
-														+ "?Subject=\""
+														+ "?Subject="
 														+ JSONobj.msgsubj
-														+ "\"" +
+														+ "" +
 														// $("#cust_email").text()
 														// +
-														"&body=\""
-														+ JSONobj.msgtext + " "
-														+ msg.link + "\"";
-
-												alert("mailto is " + mailtourl);
+														"&body="
+														+ JSONobj.msgtext + "%0D%0A" + "%0D%0A" //linebreaks
+														+ msg.link;
+												
+												mailtourl = mailtourl.replace(" ", "%20");
+												mailtourl = mailtourl.replace("\r\n", "%0D%0A");
+												
+												hideWaitMsg();
+												
+												//alert("mailto is " + mailtourl);
 
 												location.href = mailtourl;
 												// setCookie("SalesmanEmail",
@@ -221,7 +223,8 @@ function initPage() {
 
 				// alert("emailval is " + emailval);
 				console.log("login servlet ajax");
-				$
+				showWaitMsg();
+				$				
 						.ajax({
 							// THIS is IMPORTANT, allows me to to access
 							// this.localemailval
@@ -248,6 +251,7 @@ function initPage() {
 									// this looks OK
 									console.log("set cookie SalesmanEmail to "
 											+ this.local_emailval);
+									hideWaitMsg();
 									alert("Welcome to Slidepiper!");
 									managementScreen();
 								} else {
@@ -321,6 +325,7 @@ function fillCustomersAndPresentations() {
 				alert('error from returned json getSalesmanData' + error);
 			},
 			success : function(msg) {
+				
 				console.log("getSalesmanData ajax returned");
 				var size = msg.myCustomers.length;
 				// var myCustomers = "";
@@ -339,6 +344,7 @@ function fillCustomersAndPresentations() {
 					custCheckboxes += '</fieldset>';
 					$("#customersDiv").html(custCheckboxes);
 				}
+				customersloaded=true;
 				// $(".customerSelect").html(myCustomers);
 				var presentations = "";
 				pres1Checkboxes = '<fieldset data-role="controlgroup">';
@@ -367,6 +373,7 @@ function fillCustomersAndPresentations() {
 				$("#pres1Div").html(pres1Checkboxes);
 				$("#pres2Div").html(pres2Checkboxes);
 
+				presentationsloaded=true;
 				// refreshLists();
 				// refreshPage();
 				// setTimeout(function() { changepage('#manage');} , 400);
@@ -381,6 +388,8 @@ function fillCustomersAndPresentations() {
 				// http://www.gajotres.net/uncaught-error-cannot-call-methods-on-prior-to-initialization-attempted-to-call-method-refresh/
 				setTimeout(function() {
 					$('.jqmcheckbox').checkboxradio().checkboxradio("refresh");
+										
+					hideLoadingMsgIfFullyLoaded();
 				}, 0); // put at end of event queue, after rending checkboxes.
 				// alert("fill cust & pres done");
 			}
@@ -443,6 +452,7 @@ $("#removeCustButton")
 									+ '", "customer_email":"'
 									+ customerEmail + '"}';
 							console.log("removing cust datajson=" + datajson);
+							showWaitMsg();
 							$
 									.ajax({
 										type : "POST",
@@ -455,10 +465,12 @@ $("#removeCustButton")
 											alert('error from returned json remove cust'
 													+ error);
 										},
-										success : function(msg) {
+										success : function(msg) {											
 											console
 													.log("remove customer ajax returned successfully");
 											fillCustomersAndPresentations();
+											// fill customers will set it to true and remove loading msg.
+											customersloaded = false;
 										}
 									});
 						}
@@ -501,6 +513,7 @@ $("#removePresentationButton")
 									+ '", "presentation":"'
 									+ pres1 + '"}';
 							console.log("removing cust datajson=" + datajson);
+							showWaitMsg();
 							$
 									.ajax({
 										type : "POST",
@@ -513,10 +526,12 @@ $("#removePresentationButton")
 											alert('error from returned json remove cust'
 													+ error);
 										},
-										success : function(msg) {
+										success : function(msg) {						
 											console
 													.log("remove pres ajax returned successfully");
 											fillCustomersAndPresentations();
+											// fill cust and pres will set it to true and remove waiting widget.
+											presentationsloaded=false;
 										}
 									});
 						}
@@ -536,6 +551,7 @@ $("#addCustButton")
 					var customerCompany = $("#newcustcompany").val();
 					var customerEmail = $("#newcustemail").val();
 					console.log("adding customer ajax");
+					showWaitMsg();
 					$
 							.ajax({
 								type : "POST",
@@ -551,10 +567,12 @@ $("#addCustButton")
 								contentType : "application/json; charset=utf-8",
 								processData : false,
 								error : function(XmlHttpRequest, status, error) {
+									hideWaitMsg();
 									alert('error from returned json add new cust'
 											+ error);
 								},
 								success : function(msg) {
+									hideWaitMsg();
 									console
 											.log("adding customer ajax returned");
 									if (msg.newCustomer == 1) {
@@ -574,6 +592,7 @@ $("#addCustButton")
 										fillCustomersAndPresentations();
 
 									} else {
+										
 										alert("Problem with customer details. Cannot add Customer.");
 									}
 								}
@@ -621,6 +640,7 @@ function doneClick(sessId) // i is index of done button
 	// alert("8obj2 tostr is " + event.target.sessionId);
 
 	// call servlet for done button with this session id
+	showWaitMsg();
 	console.log("done ajax");
 	$.ajax({
 		type : "POST",
@@ -635,6 +655,7 @@ function doneClick(sessId) // i is index of done button
 			// done set. need to refresh the list.
 			console.log("done ajax event returned " + msg);
 			fillAlerts();
+			hideWaitMsg();
 		}
 	});
 }
@@ -808,6 +829,11 @@ function fillAlerts() {
 							}, 0); // put at end of event queue, after
 									// rendering checkboxes.
 					console.log("fillAlerts ajax returned done.");
+					
+					
+					alertsloaded = true;
+					// for now, if alerts loaded only (without barcharts and q's) it's enough.
+					hideLoadingMsgIfFullyLoaded(); 
 				} // success func
 
 			});
@@ -822,6 +848,8 @@ function fillBarCharts(alerts_session_ids) {
 		// each has an ajax event to get the data:
 
 		console.log("fillBarCharts calling getslideviews event");
+		//special hourglass for each barchart. may blink. ok for now.
+		showWaitMsg();
 		$
 				.ajax({
 					// / VERY important trick - this allows me to access the
@@ -836,6 +864,7 @@ function fillBarCharts(alerts_session_ids) {
 					contentType : "application/json; charset=utf-8",
 					processData : false,
 					error : function(XmlHttpRequest, status, error) {
+						hideWaitMsg();
 						alert('error from returned json.... ReportsServlet getSlideViews'
 								+ error);
 					},
@@ -881,6 +910,7 @@ function fillBarCharts(alerts_session_ids) {
 						// is " + JSON.stringify(jsonTable));
 						addAlertBarChart(".d3barchart" + this.curIndex,
 								jsonTable); // by class name.
+						hideWaitMsg();
 					} // success func
 				});
 	}
@@ -894,6 +924,7 @@ function fillQuestions(alerts_session_ids) {
 		curSessId = alerts_session_ids[i];
 		// each has an ajax event to get the data:
 		console.log("calling getquestions event");
+		showWaitMsg();
 		$
 				.ajax({
 					// / VERY important trick - this allows me to access the
@@ -908,10 +939,12 @@ function fillQuestions(alerts_session_ids) {
 					contentType : "application/json; charset=utf-8",
 					processData : false,
 					error : function(XmlHttpRequest, status, error) {
+						hideWaitMsg();
 						alert('error from returned json.... ReportsServlet getQuestions '
 								+ error);
 					},
 					success : function(msg) {
+						hideWaitMsg();
 						console.log("getqs event returned");
 						// recommendation text (email for now)
 						var recom = $(".recommendation" + this.curIndex).html();
@@ -984,10 +1017,22 @@ function managementScreen() {
 	// alert("going to mgmt");
 	// $("#usernamefield").val("sivan@gmail.com");
 	changepage('#manage');
+	
+	// Show 2 seconds after page loads. 
+	// It will be hidden after everything is fully loaded.
+	// needed only for mgmt screen.
+	setTimeout(showWaitMsg, 2000);
 	// data will be updated in page when it loads in pagecontainershow event,
 	// see above.
 
 	// alert("changed page");
+	
+	/*$.mobile.loading( "show", {
+		text: "foo",
+		textVisible: true,
+		theme: "b",
+		html: ""
+		});*/
 }
 
 // *******************************************************************************************
@@ -1006,3 +1051,40 @@ function managementScreen() {
 // );
 // }
 
+function showWaitMsg()
+{
+			$.mobile.loading( "show", {
+			text: "Please wait...",
+			textVisible: true,
+			theme: "b",
+			html: ""
+			});
+			
+			// always hide after max. 3 seconds
+			// prevents some bugs...
+			setTimeout(hideWaitMsg, 5000);
+}
+
+function hideWaitMsg()
+{
+			$.mobile.loading( "hide");
+}
+
+
+alertsloaded = false;
+customersloaded = false;
+presentationsloaded = false;
+
+//finished loading?
+function isEverythingLoaded()
+{
+		return (alertsloaded && customersloaded && presentationsloaded);
+}
+
+function hideLoadingMsgIfFullyLoaded()
+{
+			if (isEverythingLoaded())
+				{
+						hideWaitMsg();
+				}
+}

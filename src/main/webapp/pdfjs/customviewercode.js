@@ -13,7 +13,7 @@
 		paramJSON = 
 		{
 			"action" : "keepAlive",
-			"msgId" : getCookie("docid"),
+			"msgId" : getCookie("msgid"),
 			"sessionId" : thisSessionId,
 			"slideNum" : slideNum_param,
 			"estimatedTimeViewed" : estimatedTimeViewed_param						
@@ -40,7 +40,7 @@
 				type : "POST",
 				url : urlval,
 				data : {
-					id : getCookie("docid"),
+					id : getCookie("msgid"),
 					event_name : ename,
 					param1 : eparam1,
 					param2 : eparam2,
@@ -73,6 +73,7 @@
 			cursorX = e.pageX;
 			cursorY = e.pageY;
 		}
+		
 		setInterval("checkCursor()", 1000);
 		function checkCursor() {
 			//alert("Cursor at: " + cursorX + ", " + cursorY);
@@ -127,6 +128,35 @@
 			window.onfocus = onFocus;
 			window.onblur = onBlur;
 		}
+		
+		function getSalesmanEmail()		
+		{
+									
+			jsondata = '{"action":"getSalesmanEmail",'
+				+ '"msgid":"'
+				+ getCookie("msgid")
+               + '" }';
+
+		// alert("json msg " + jsondata);
+		console.log("get salesman email ajax");
+		  $.ajax({
+					type : "POST",
+					url : "../GetSalesmanEmailFromMsgIdServlet",
+					data : jsondata,
+					contentType : "application/json; charset=utf-8",
+					processData : false,
+					error : function(XmlHttpRequest,
+							status, error) {
+						alert('get sm email from msgid error from returned json'
+								+ error);
+					},
+					success : function(msg) {
+						//JSONobj = JSON.parse(jsondata);
+						setCookie("salesman_email", msg.salesman_email, 2);
+						console.log("rcvd salesman email " + msg.salesman_email);
+					}					
+		  }); // end of ajax call													
+		}
 
 		// initialize everything
 		function initView() {
@@ -134,10 +164,12 @@
 			//alert("file: "+ getURLParameter("file")); 
 			send_event("INIT_SLIDES", "0", "0", ipaddr);
 
-			docid = getURLParameter("file"); //format /file/123456
-			docid = docid.substr(docid.length - 6); // last 6 chars
-			//alert("docid is " + docid );
-			setCookie("docid", docid, 2);
+			msgid = getURLParameter("file"); //format /file/123456
+			msgid = msgid.substr(msgid.length - 6); // last 6 chars
+			//alert("smsgd is " + msgid );
+			setCookie("msgid", msgid, 2);
+			
+			getSalesmanEmail();
 			
 			console.log("binding sendmsg click");
 			$("#sendq").unbind(); //first unbind all.
@@ -150,7 +182,7 @@
 						var q = window.prompt("Please enter your question.", "");												
 						if (q!= null)							
 								//salesman_email = "david.salesmaster@gmail.com";
-								salesman_email = getURLParameter("salesman_email");
+								salesman_email = getCookie("salesman_email");
 								mailtourl = "mailto:" + salesman_email
 								+ "?Subject=Message from customer "
 								+ 

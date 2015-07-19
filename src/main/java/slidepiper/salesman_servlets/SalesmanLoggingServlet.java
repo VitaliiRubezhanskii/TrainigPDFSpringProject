@@ -23,7 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
  
 @WebServlet("/SalesmanDataServlet")
-public class SalesmanDataServlet extends HttpServlet {
+public class SalesmanLoggingServlet extends HttpServlet {
  
     // size of byte buffer to send file
     private static final int BUFFER_SIZE = 4096;   
