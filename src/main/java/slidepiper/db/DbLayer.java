@@ -30,7 +30,7 @@ public class DbLayer {
 	public static ArrayList<Customer> customers;  
   public static ArrayList<Salesman> salesmen; 
   public static ArrayList<Presentation> presentations;
-  
+  //
 	
 	// updates the customers in "customers" ArrayList.
 	public static void getCustomers(){
