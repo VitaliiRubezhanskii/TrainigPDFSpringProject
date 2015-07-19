@@ -1,4 +1,4 @@
-package slidepiper.mgmt_servlets;
+package slidepiper.salesman_servlets;
 
 import java.awt.TrayIcon.MessageType;
 import java.io.BufferedReader;

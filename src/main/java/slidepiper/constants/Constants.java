@@ -16,9 +16,13 @@ public class Constants {
 		  {	
 			  if (MYSQL_DATABASE_PORT==null) // no openshift				  
 			  {				  
-				  // for local work
-				  dbUser = "adminS16x82l";
-				  dbPass = "CdikJ1eZlpDy";
+				  // for local work - slidepipertest
+				  //dbUser = "adminS16x82l";
+				  //dbPass = "CdikJ1eZlpDy";
+				  
+				  // for sp in openshift
+				  dbUser = "adminzQQA9hc";
+				  dbPass = "P6Qmj1B_lkRi";
 				  dbURL = "jdbc:mysql://127.0.0.1:3307/picascrafxzhbcmd";
 			  }  
 			  //System.out.println("Some constants:\n mysql user " + dbUser + " pw " + dbPass + " url " + dbURL);

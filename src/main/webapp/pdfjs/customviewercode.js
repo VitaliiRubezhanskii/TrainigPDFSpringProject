@@ -35,11 +35,7 @@
 	
 		function send_event(ename, eparam1, eparam2, eparam3) {
 			urlval= "../CustomerDataServlet";
-			//if (document.location.hostname == "localhost")
-			//	{
-			//			urlval = "/SlidePiper/CustomerDataServlet";
-			//	}
-				
+
 			$.ajax({
 				type : "POST",
 				url : urlval,
@@ -52,10 +48,13 @@
 					sessionId : thisSessionId
 				},
 				success : function(res) {
-					//   alert(res); // display response as alert.                     
+					//   alert(res); // display response as alert.
+					// nothing happens on success of logging.
+					// in case of problems, remove the comment above
+					// to check.
 				},
 				fail : function() {
-					alert("error ajax cust info");
+					alert("Error in sending event AJAX");
 				}
 			});
 		}

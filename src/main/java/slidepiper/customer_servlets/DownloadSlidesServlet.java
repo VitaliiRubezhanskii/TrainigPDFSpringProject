@@ -1,4 +1,4 @@
-package slidepiper.slidesview_servlets;
+package slidepiper.customer_servlets;
  
 import java.io.IOException;
 

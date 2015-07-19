@@ -48,14 +48,13 @@ public class CustomerLogger {
 							// sends the statement to the database server
 							int row = statement.executeUpdate();
 							if (row > 0) {
-								String message = "Customer Data Servlet. added info line";
-							//	System.out.println(message);
-								
+								String message = "Logged line. id " +id + "event " + event_name +  " param1 " + param1  + " param2 " + param2 + " param3 " + param3 ;
+								System.out.println(message);								
 							}
 				}            
 				catch (SQLException ex) {
 				ex.printStackTrace();
-				System.out.println("SQL ERROR" + ex.getMessage());
+				System.out.println("SQL ERROR " + ex.getMessage());
 				//response.getWriter().print("SQL Error: " + ex.getMessage());
 					} 
 				finally {
@@ -68,45 +67,50 @@ public class CustomerLogger {
 						    }
 						}          
 				}
-								
-			  final String username = "david.salesmaster@gmail.com"; 	
-			  final String password = "davidsales";//"yourpassword";
-			  //System.out.println("user pw for email is: " + salesmanEmailpassword);
-			  Properties props = new Properties();
-			  props.put("mail.smtp.host", "smtp.gmail.com");
-			  props.put("mail.smtp.socketFactory.port", "465");
-			  props.put("mail.smtp.socketFactory.class",
-					  	"javax.net.ssl.SSLSocketFactory");
-			  props.put("mail.smtp.auth", "true");
-			  props.put("mail.smtp.port", "465");	    
-			  
-		    System.out.println("login with user " + username + " pw " + password);
-			  Session session = Session.getDefaultInstance(props,
-			  new javax.mail.Authenticator() {
-			             protected PasswordAuthentication getPasswordAuthentication() {
-			             return new PasswordAuthentication(username,password);
-			                     }
-			     });
-			   try {
-			       Message emessage = new MimeMessage(session);
-			       emessage.setFrom(new InternetAddress(username));
-			       			     
-			       MessageInfo mi = DbLayer.getMessageInfo(id);
-			       System.out.println("email to : " + mi.getSalesManEmail());
-			       emessage.setRecipients(Message.RecipientType.TO,
-			       InternetAddress.parse(mi.getSalesManEmail()));	       
-			       emessage.setSubject("SlidePiper Alert for email " + mi.getCustomerEmail());
-			       String msg = "Hello, <BR><BR>This is David Salesmaster. <BR>I am your customer alerts representative.<BR><BR>" + mi.getCustomerEmail() + " has just clicked on the link you sent him! <BR><BR> Regards, <BR>David Salesmaster<BR>SlidePiper Alerts System";
-			       emessage.setText(msg);
-			       emessage.setContent(msg, "text/html; charset=utf-8");
-			       Transport.send(emessage);
-			       			       
-			       	 
-			       System.out.println("Cust alert mail sent succesfully! msg " + msg);
-			   } catch (MessagingException e) {		   			
-				   		System.out.println("ERROR sending message " + e.getMessage() + " stack: " + e.getStackTrace());
-			        throw new RuntimeException(e);
-			      }
+				
+				/// send email if opened presentation
+				if (event_name=="OPEN_SLIDES")
+				{								
+						System.out.println("open slides event - sending email");
+					  final String username = "david.salesmaster@gmail.com"; 	
+					  final String password = "davidsales";//"yourpassword";
+					  //System.out.println("user pw for email is: " + salesmanEmailpassword);
+					  Properties props = new Properties();
+					  props.put("mail.smtp.host", "smtp.gmail.com");
+					  props.put("mail.smtp.socketFactory.port", "465");
+					  props.put("mail.smtp.socketFactory.class",
+							  	"javax.net.ssl.SSLSocketFactory");
+					  props.put("mail.smtp.auth", "true");
+					  props.put("mail.smtp.port", "465");	    
+					  
+				    System.out.println("login with user " + username + " pw " + password);
+					  Session session = Session.getDefaultInstance(props,
+					  new javax.mail.Authenticator() {
+					             protected PasswordAuthentication getPasswordAuthentication() {
+					             return new PasswordAuthentication(username,password);
+					                     }
+					     });
+					   try {
+					       Message emessage = new MimeMessage(session);
+					       emessage.setFrom(new InternetAddress(username));
+					       			     
+					       MessageInfo mi = DbLayer.getMessageInfo(id);
+					       System.out.println("email to : " + mi.getSalesManEmail());
+					       emessage.setRecipients(Message.RecipientType.TO,
+					       InternetAddress.parse(mi.getSalesManEmail()));	       
+					       emessage.setSubject("SlidePiper Alert for email " + mi.getCustomerEmail());
+					       String msg = "Hello, <BR><BR>This is David Salesmaster. <BR>I am your customer alerts representative.<BR><BR>" + mi.getCustomerEmail() + " has just clicked on the link you sent him! <BR><BR> Regards, <BR>David Salesmaster<BR>SlidePiper Alerts System";
+					       emessage.setText(msg);
+					       emessage.setContent(msg, "text/html; charset=utf-8");
+					       Transport.send(emessage);
+					       			       
+					       	 
+					       System.out.println("Cust alert mail sent succesfully! msg " + msg);
+					   } catch (MessagingException e) {		   			
+						   		System.out.println("ERROR sending message " + e.getMessage() + " stack: " + e.getStackTrace());
+					        throw new RuntimeException(e);
+					      }
+						}
 						
 	}
 }

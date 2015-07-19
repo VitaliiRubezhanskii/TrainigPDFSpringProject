@@ -1,4 +1,4 @@
-package slidepiper.mgmt_servlets;
+package slidepiper.customer_servlets;
  
 import java.io.ByteArrayOutputStream;
 
@@ -42,7 +42,16 @@ public class CustomerDataServlet extends HttpServlet {
 			    		param3 = request.getParameter("param3");
 			    		sessionId = request.getParameter("sessionId");
 			    		
+	//		    		System.out.println("Writing customer event:");
+		//	    		System.out.println("id " + id );
+			//    		System.out.println("ev name " + event_name );
+			  //  		System.out.println("param1 " + param1 );
+			    //		System.out.println("param2 " + param2 );
+			    	//	System.out.println("param3 " + param3 );			    		
+			    		//System.out.println("sessid " + sessionId );
+			    		
 			    		CustomerLogger.LogEvent(id, event_name, param1, param2, param3, sessionId);    
     	}
 }
+
 
