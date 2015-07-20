@@ -72,8 +72,8 @@ public class CustomerLogger {
 				if (event_name.equalsIgnoreCase("OPEN_SLIDES"))
 				{								
 						System.out.println("open slides event - sending email");
-					  final String username = "david.salesmaster@gmail.com"; 	
-					  final String password = "davidsales";//"yourpassword";
+					  final String username = "jacob.salesmaster@gmail.com"; 	
+					  final String password = "jacobsales";//"yourpassword";
 					  //System.out.println("user pw for email is: " + salesmanEmailpassword);
 					  Properties props = new Properties();
 					  props.put("mail.smtp.host", "smtp.gmail.com");
@@ -99,7 +99,7 @@ public class CustomerLogger {
 					       emessage.setRecipients(Message.RecipientType.TO,
 					       InternetAddress.parse(mi.getSalesManEmail()));	       
 					       emessage.setSubject("SlidePiper Alert for email " + mi.getCustomerEmail());
-					       String msg = "Hello, <BR><BR>This is David Salesmaster. <BR>I am your customer alerts representative.<BR><BR>" + mi.getCustomerEmail() + " has just clicked on the link you sent him! <BR><BR> Regards, <BR>David Salesmaster<BR>SlidePiper Alerts System";
+					       String msg = "Hello, <BR><BR>This is Jacob Salesmaster. <BR>I am your customer alerts representative.<BR><BR>" + mi.getCustomerEmail() + " has just clicked on the link you sent him! <BR><BR> Regards, <BR>Jacob Salesmaster<BR>SlidePiper Alerts System";
 					       emessage.setText(msg);
 					       emessage.setContent(msg, "text/html; charset=utf-8");
 					       Transport.send(emessage);
