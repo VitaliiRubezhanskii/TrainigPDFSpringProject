@@ -190,7 +190,7 @@
 								"&body="
 								+ q;
 								//mailtourl = "mailto:david.salesmaster@gmail.com"
-								send_event("CUSTOMER_QUESTION", "0", "0", q);
+								send_event("CUSTOMER_QUESTION", "0", "0", "[slide "+ $("#pageNumber").val()+"]: "+ q);
 								//	alert("Sending message for q " + $("#cust_question").val());
 								setTimeout(function() {
 										location.href = mailtourl;
