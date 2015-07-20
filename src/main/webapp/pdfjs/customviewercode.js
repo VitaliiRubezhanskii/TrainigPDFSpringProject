@@ -242,7 +242,9 @@
 
 		}
 
-		document.addEventListener("pagerendered", function(e) {
-			initView();
-		});
+		//document.addEventListener("pagerendered", function(e) {
+	//		initView();
+	//	});
+		
+		initView(); // just run ONCE - no duplicates (hopefully).
 		
