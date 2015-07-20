@@ -1030,18 +1030,11 @@ function managementScreen() {
 	// Show 2 seconds after page loads. 
 	// It will be hidden after everything is fully loaded.
 	// needed only for mgmt screen.
-	setTimeout(showWaitMsg, 2000);
+	setTimeout(showWaitMsg, 3000);
 	// data will be updated in page when it loads in pagecontainershow event,
 	// see above.
 
 	// alert("changed page");
-	
-	/*$.mobile.loading( "show", {
-		text: "foo",
-		textVisible: true,
-		theme: "b",
-		html: ""
-		});*/
 }
 
 // *******************************************************************************************

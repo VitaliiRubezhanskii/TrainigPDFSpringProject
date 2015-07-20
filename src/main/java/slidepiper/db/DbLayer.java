@@ -208,6 +208,7 @@ public class DbLayer {
 		} catch (Exception ex) {
 			System.out.println("err: " + ex.getMessage());
 		}
+		getCustomers();
 	}
 
 	public static void deletePresentation(String pres, String salesman_email ){
@@ -224,6 +225,7 @@ public class DbLayer {
 		} catch (Exception ex) {
 			System.out.println("err: " + ex.getMessage());
 		}
+		getPresentations();
 	}
 	
 
@@ -241,10 +243,11 @@ public class DbLayer {
 			preparedStatement.close();
 			conn.close();
 			System.out.println("new customer inserted!");
+			getCustomers();
 			return 1;
 		} catch (Exception ex) {
 			return 0;
-		}
+		}		
 	}
 	
 	
@@ -314,7 +317,8 @@ public class DbLayer {
 					// sends the statement to the database server
 					int row = statement.executeUpdate();
 					if (row > 0) {
-						String message = "updated done.";
+						System.out.println("rows updated: " + row);
+						//String message = "updated done.";
 					}
 		}            
 		catch (SQLException ex) {
@@ -431,12 +435,13 @@ public class DbLayer {
 			// this looks good, one line per viewing event of pdf.
 			// this needs to be expanded for the different pages in the pdf.
 			String reportSQL=
-					"SELECT msg_info.customer_email as 'customer_email', customers.name as 'customer_name', "+
+					"SELECT DISTINCT msg_info.customer_email as 'customer_email', customers.name as 'customer_name', "+
 					"slides.name, "+
 					"customer_events.msg_id, "+
 					"msg_info.msg_text as 'message_text', "+ 
 					"DATE_SUB(customer_events.timestamp,INTERVAL 7 HOUR) as 'open_time', "+ 
-					"DATE_SUB(msg_info.timestamp, INTERVAL 7 HOUR) as 'send_time', customer_events.session_id as 'session_id' "+
+					"DATE_SUB(msg_info.timestamp, INTERVAL 7 HOUR) as 'send_time', " +
+					"customer_events.session_id as 'session_id' "+
 					"FROM customer_events, msg_info, slides, customers "+
 					"WHERE event_name='OPEN_SLIDES' "+ 
 					   "AND msg_info.sales_man_email='" + salesman_email + "'  "+ 

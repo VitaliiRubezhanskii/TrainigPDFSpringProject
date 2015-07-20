@@ -137,25 +137,25 @@
 				+ getCookie("msgid")
                + '" }';
 
-		// alert("json msg " + jsondata);
-		console.log("get salesman email ajax");
-		  $.ajax({
-					type : "POST",
-					url : "../GetSalesmanEmailFromMsgIdServlet",
-					data : jsondata,
-					contentType : "application/json; charset=utf-8",
-					processData : false,
-					error : function(XmlHttpRequest,
-							status, error) {
-						alert('get sm email from msgid error from returned json'
-								+ error);
-					},
-					success : function(msg) {
-						//JSONobj = JSON.parse(jsondata);
-						setCookie("salesman_email", msg.salesman_email, 2);
-						console.log("rcvd salesman email " + msg.salesman_email);
-					}					
-		  }); // end of ajax call													
+				// alert("json msg " + jsondata);
+				console.log("get salesman email ajax");
+				  $.ajax({
+							type : "POST",
+							url : "../GetSalesmanEmailFromMsgIdServlet",
+							data : jsondata,
+							contentType : "application/json; charset=utf-8",
+							processData : false,
+							error : function(XmlHttpRequest,
+									status, error) {
+								alert('get sm email from msgid error from returned json'
+										+ error);
+							},
+							success : function(msg) {
+								//JSONobj = JSON.parse(jsondata);
+								setCookie("salesman_email", msg.salesman_email, 2);
+								console.log("rcvd salesman email " + msg.salesman_email);
+							}					
+				  }); // end of ajax call													
 		}
 
 		// initialize everything
