@@ -423,7 +423,7 @@ public class DbLayer {
 	/////*********************************************************
 	// GET ALERTS	 FOR SALESMAN
 		public static ArrayList<AlertData> getAlerts(String salesman_email){
-			
+				
 			System.out.println("start get alerts for email " + salesman_email);
 			ArrayList<AlertData> alerts = new ArrayList<AlertData>();
 			try {
@@ -431,6 +431,22 @@ public class DbLayer {
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
+			
+			/* query for manual use:
+			 * SELECT DISTINCT msg_info.customer_email AS 'customer_email', customers.name AS 'customer_name', slides.name, customer_events.msg_id, msg_info.msg_text AS 'message_text', DATE_SUB( customer_events.timestamp, INTERVAL 7 HOUR ) AS 'open_time', DATE_SUB( msg_info.timestamp, INTERVAL 7 HOUR ) AS 'send_time', customer_events.session_id AS 'session_id'
+FROM customer_events, msg_info, slides, customers
+WHERE event_name = 'OPEN_SLIDES'
+AND msg_info.sales_man_email = 'david.salesmaster@gmail.com'
+AND customer_events.msg_id = msg_info.id
+AND slides.id = msg_info.slides_id
+AND customers.email = msg_info.customer_email
+AND customers.sales_man =  msg_info.sales_man_email
+AND customer_events.done IS
+FALSE
+ORDER BY 6 DESC;
+
+*/
+			 
 			
 			// this looks good, one line per viewing event of pdf.
 			// this needs to be expanded for the different pages in the pdf.
@@ -448,10 +464,9 @@ public class DbLayer {
 					   "AND customer_events.msg_id = msg_info.id "+
 					   "AND slides.id = msg_info.slides_id "+
 					   "AND customers.email=msg_info.customer_email " +
+					   "AND customers.sales_man =  msg_info.sales_man_email " +
 					   " AND customer_events.done IS FALSE " +
 					"ORDER BY 6 DESC;"; 
-			
-			// LIMIT 3;"; // take only 10 alerts here. NO LIMIT for now.
 			
 			//System.out.println("full query is: \n" +reportSQL);
 
