@@ -159,7 +159,7 @@ function initPage() {
 							$
 									.ajax({
 										type : "POST",
-										url : "MainServlet",
+										url : "ManagementServlet",
 										data : jsondata,
 										contentType : "application/json; charset=utf-8",
 										processData : false,
@@ -231,7 +231,7 @@ function initPage() {
 							// from anonymous function success()
 							local_emailval : emailval,
 							type : "POST",
-							url : "MainServlet",
+							url : "ManagementServlet",
 							data : '{"action":"salesmanLogin", "email":"'
 									+ emailval.toLowerCase()
 									+ '", "password":"'
@@ -273,6 +273,9 @@ function initPage() {
 
 	console.log("initPage put email in upload form");
 	// update email in upload form
+//	alert("smemail in upload form: " + getCookie("SalesmanEmail"));
+//	emailval = $("#usernamefield").val();
+//	alert("emailval from uname field: " + emailval);
 	$("#salesman_email").val(getCookie("SalesmanEmail"));
 
 	// alert("init page done");
@@ -316,7 +319,7 @@ function fillCustomersAndPresentations() {
 	{
 		$.ajax({
 			type : "POST",
-			url : "MainServlet",
+			url : "ManagementServlet",
 			data : '{"action":"getSalesmanData", "email":"'
 					+ email.toLowerCase() + '"}',
 			contentType : "application/json; charset=utf-8",
@@ -399,6 +402,12 @@ function fillCustomersAndPresentations() {
 	console.log("fillcustAndPres done");
 }
 
+$('#uploadform').submit(function() {
+	  showWaitMsg(); //show it for a few seconds. I don't hide it, 
+	  // it will disappear after X sec, or when submission leads to a new page.
+	  return true; //true means should do the submit action.
+	});
+
 // *******************************************************************************************
 
 $("#logout").bind("click", function(event, ui) {
@@ -456,7 +465,7 @@ $("#removeCustButton")
 							$
 									.ajax({
 										type : "POST",
-										url : "MainServlet",
+										url : "ManagementServlet",
 										data : datajson,
 										contentType : "application/json; charset=utf-8",
 										processData : false,
@@ -517,7 +526,7 @@ $("#removePresentationButton")
 							$
 									.ajax({
 										type : "POST",
-										url : "MainServlet",
+										url : "ManagementServlet",
 										data : datajson,
 										contentType : "application/json; charset=utf-8",
 										processData : false,
@@ -555,7 +564,7 @@ $("#addCustButton")
 					$
 							.ajax({
 								type : "POST",
-								url : "MainServlet",
+								url : "ManagementServlet",
 								data : '{"action":"addNewCustomer", "salesmanEmail":"'
 										+ salesmanEmail
 										+ '", "customerName":"'
@@ -1060,9 +1069,9 @@ function showWaitMsg()
 			html: ""
 			});
 			
-			// always hide after max. 3 seconds
+			// always hide after max. 8 seconds
 			// prevents some bugs...
-			setTimeout(hideWaitMsg, 5000);
+			setTimeout(hideWaitMsg, 8000);
 }
 
 function hideWaitMsg()

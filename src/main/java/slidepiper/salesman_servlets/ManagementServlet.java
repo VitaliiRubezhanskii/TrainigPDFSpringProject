@@ -44,9 +44,9 @@ import javax.activation.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-@WebServlet("/MainServlet")
+@WebServlet("/ManagementServlet")
 
-public class MainServlet extends HttpServlet {
+public class ManagementServlet extends HttpServlet {
 	
 	private static final long serialVersionUID = 1L;
 	//private final String MAIL_HOST = "smtp.gmail.com";
@@ -60,7 +60,7 @@ public class MainServlet extends HttpServlet {
 //	Thread thread;
 //	static ArrayList<String[]> data;
 	
-    public MainServlet() {
+    public ManagementServlet() {
         super();
     }
 

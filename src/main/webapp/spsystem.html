@@ -185,7 +185,8 @@
                         <input name="user" id="newcustemail" value="" placeholder="Email" data-theme="b" type="text">
                          <label for="un" class="ui-hidden-accessible">Company:</label>
                         <input name="user" id="newcustcompany" value="" placeholder="Company" data-theme="b" type="text">
-                        <a id="addCustButton" data-position-to="window" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-right ui-icon-check">Add</a>                                                                                                                    
+                        <a id="addCustButton" data-position-to="window" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-check">Add</a>                                                                                                                    
+                        <a id="addCustCancel" href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-delete">Cancel</a>
                     </div>
                 </form>
             </div>                   
@@ -208,7 +209,7 @@
  
  
 		<h1>Upload Presentation</h1>
-		<form method="post" action="uploadSlides" data-ajax="false"  enctype="multipart/form-data">
+		<form method="post" id="uploadform" action="uploadSlides" data-ajax="false"  enctype="multipart/form-data">
 			<table border="0">
 				<tr>
 					<!-- <td>Your Email (Salesman email, should be hidden): </td> -->
