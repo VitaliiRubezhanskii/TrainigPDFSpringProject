@@ -69,7 +69,7 @@ public class CustomerLogger {
 				}
 				
 				/// send email if opened presentation
-				if (event_name=="OPEN_SLIDES")
+				if (event_name.equalsIgnoreCase("OPEN_SLIDES"))
 				{								
 						System.out.println("open slides event - sending email");
 					  final String username = "david.salesmaster@gmail.com"; 	
