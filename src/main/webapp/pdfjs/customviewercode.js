@@ -235,8 +235,12 @@
 			}, 3000);
 
 			//this.close();
+			$("#pageNumber").val(1); //go to 1st page.
+			
 			console.log("init view done");
 			send_event("INIT_SLIDES_DONE", "0", "0", ipaddr);
+			
+			
 
 		}
 

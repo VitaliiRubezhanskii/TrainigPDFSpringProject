@@ -1,3 +1,5 @@
+// add customer
+
 $("#addCustButton")
 		.bind(
 				"click",
