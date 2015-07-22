@@ -1,24 +1,3 @@
-/*<style>
-.bar {
-  fill: steelblue;
-}
-.bar:hover {
-  fill: brown;
-}
-.axis {
-  font: 10px sans-serif;
-}
-.axis path,
-.axis line {
-  fill: none;
-  stroke: #000;
-  shape-rendering: crispEdges;
-}
-.x.axis path {
-  display: none;
-}
-
-</style>*/
 
 // simplest example of adding barchart to element
 function addBarChart(element)
@@ -187,9 +166,6 @@ function addAlertBarChart(element, jsonTable)
 		 		  		if (timesappeared>2)
 			  				{
 			 		  			jsonTable[i].color = "white"; //"rgb("+(jsonTable[i].time * 10) + "," 
-			  						//+(jsonTable[i].time * 10) + ","
-			  						//+(jsonTable[i].time * 10)
-			  							//+ ")";
 			  				}				 	 
 			  }
 			  
