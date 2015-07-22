@@ -258,12 +258,15 @@ public class DbLayer {
 			try {
 				DriverManager.registerDriver(new com.mysql.jdbc.Driver());
 			} catch (SQLException e) {
+				System.out.println("exception in getmsginfo registering driver");
 				e.printStackTrace();
 			}
 								
 			String msginfoQuery = "SELECT id, sales_man_email, customer_email, slides_id, msg_text, timestamp " + 
 			" FROM msg_info " + 
-			" WHERE id='" + msgid + "' LIMIT 1;"; // take only 1 result. SHOULD be one.			
+			" WHERE id='" + msgid + "' LIMIT 1;"; // take only 1 result. SHOULD be one.
+			
+			System.out.println("running query to get message info: " + msginfoQuery);
 
 			try (Connection conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
 				Statement statement = conn.createStatement();
@@ -544,9 +547,9 @@ ORDER BY 6 DESC;
 			}
 			
 			//System.out.println("done addMessage- put in table. sending msg now");					
-			System.out.println("sendMessage. got customer for name " + customer +  " email " + c.getEmail());
+			System.out.println("sendMessage in DB. got customer for name " + customer +  " email " + c.getEmail());
 		
-		  final String username = salesmanEmail; //"yourmail@gmail.com";
+		  /*final String username = salesmanEmail; //"yourmail@gmail.com";
 		  final String password = salesmanEmailpassword;//"yourpassword";
 		  System.out.println("user pw for email is: " + salesmanEmailpassword);
 		  Properties props = new Properties();
@@ -581,7 +584,7 @@ ORDER BY 6 DESC;
 		   } catch (MessagingException e) {		   			
 			   		System.out.println("ERROR sending message " + e.getMessage() + " stack: " + e.getStackTrace());
 		        throw new RuntimeException(e);
-		      }
+		      }*/
 			
 			return 1;
 		}

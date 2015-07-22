@@ -138,7 +138,7 @@ public class ManagementServlet extends HttpServlet {
 					
 				case "sendPresentationToCustomer":									
 					String msgtext = input.getString("msgtext");				    											
-					String msglink = "slidepiper.com/pdfjs/viewer.html?"
+					String msglink = "http://www.slidepiper.com/pdfjs/viewer.html?"
 							//salesman_email="+
 							//input.getString("salesman_email")
 							// cannot put exta param in mailto, 

@@ -3,7 +3,7 @@
 	// and this will make ONE report entry in the smart alerts.
     thisSessionId = Math.random().toString();
     
-	function keepalive_event(estimatedTimeViewed_param, slideNum_param) {
+  function keepalive_event(estimatedTimeViewed_param, slideNum_param) {
 		urlval= "../KeepAliveServlet";
 		//if (document.location.hostname == "localhost")
 		//	{
@@ -58,14 +58,7 @@
 				}
 			});
 		}
-
-		ipaddr = "1.2.3.4";
-
-		prev_slide = $("#pageNumber").val();
-		prev_datetime = new Date(); // immediately make this global var.
-
-		send_event("OPEN_SLIDES", prev_slide, "0", ipaddr);
-
+		
 		// get mouse positions into these variables
 		var cursorX;
 		var cursorY;
@@ -79,35 +72,13 @@
 			//alert("Cursor at: " + cursorX + ", " + cursorY);
 		}
 
-		window
-				.setInterval(
-						function() {
-							cursorX = 5;
-							cursorY = 99;
-
-							var now_datetime = new Date();
-
-							cur_slide = $("#pageNumber").val();
-
-							// new slide.
-							if (cur_slide != prev_slide) {
-								// calc seconds viewed
-								var seconds_viewed = (now_datetime - prev_datetime) / 1000;
-
-								// make POST req
-								send_event("VIEW_SLIDE", prev_slide,
-										seconds_viewed, "1.2.3.4");
-
-								//update prev variables. 						
-								prev_slide = cur_slide;
-								prev_datetime = now_datetime;
-							}
-						}, 333); //  3  times in sec.
+		ipaddr = "1.2.3.4";
+		prev_slide = $("#pageNumber").val();
+		prev_datetime = new Date(); // immediately make this global var.
 
 		// initial value for leaving page - time. (sometimes 
 		// onBlur is not called before onFocus).
 		left_datetime = new Date();
-
 		function onBlur() { //leaving window
 			left_datetime = new Date();
 			send_event("LEFT_WINDOW", "0", "0", ipaddr);
@@ -166,10 +137,12 @@
 
 			msgid = getURLParameter("file"); //format /file/123456
 			msgid = msgid.substr(msgid.length - 6); // last 6 chars
-			//alert("smsgd is " + msgid );
+			console.log("msgid is " + msgid );
 			setCookie("msgid", msgid, 2);
 			
 			getSalesmanEmail();
+			
+			send_event("OPEN_SLIDES", prev_slide, "0", ipaddr);
 			
 			console.log("binding sendmsg click");
 			$("#sendq").unbind(); //first unbind all.
@@ -223,6 +196,31 @@
 					  //});
 				
 			}, 1000);
+			
+			// every 1/3 sec check for updates in slide num.
+			window.setInterval(
+					function() {
+						cursorX = 5;
+						cursorY = 99;
+
+						var now_datetime = new Date();
+
+						cur_slide = $("#pageNumber").val();
+
+						// new slide.
+						if (cur_slide != prev_slide) {
+							// calc seconds viewed
+							var seconds_viewed = (now_datetime - prev_datetime) / 1000;
+
+							// make POST req
+							send_event("VIEW_SLIDE", prev_slide,
+									seconds_viewed, "1.2.3.4");
+
+							//update prev variables. 						
+							prev_slide = cur_slide;
+							prev_datetime = now_datetime;
+						}
+					}, 333); //  3  times in sec.
 
 			// send periodic keepalive event, for registering
 			// last slide viewed.

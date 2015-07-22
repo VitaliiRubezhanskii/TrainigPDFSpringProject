@@ -36,7 +36,7 @@ function fillCustomersAndPresentations() {
 					custCheckboxes += '</fieldset>';
 					$("#customersDiv").html(custCheckboxes);
 				}
-				customersloaded=true;
+				
 				console.log("Customers loaded successfully");
 				// $(".customerSelect").html(myCustomers);
 				var presentations = "";
@@ -65,8 +65,7 @@ function fillCustomersAndPresentations() {
 				pres2Checkboxes += '</fieldset>';
 				$("#pres1Div").html(pres1Checkboxes);
 				$("#pres2Div").html(pres2Checkboxes);
-
-				presentationsloaded=true;
+				
 				console.log("Presentations loaded successfully");
 				// refreshLists();
 				// refreshPage();
@@ -82,6 +81,10 @@ function fillCustomersAndPresentations() {
 				// http://www.gajotres.net/uncaught-error-cannot-call-methods-on-prior-to-initialization-attempted-to-call-method-refresh/
 				setTimeout(function() {
 					$('.jqmcheckbox').checkboxradio().checkboxradio("refresh");
+					
+					customersloaded=true;
+					presentationsloaded=true;
+					// after the refreshes, it's all fully loaded.
 										
 					hideLoadingMsgIfFullyLoaded();
 				}, 0); // put at end of event queue, after rending checkboxes.
@@ -147,11 +150,16 @@ function fillAlerts() {
 						// that's the only way I found I can access this
 						// property from the
 						// click event.
-						alertsHTML += '<div class="ui-block-a">' + '<h2>'
-								+ description_text
-								+ '</h2><p><strong>'
+						alertsHTML += '<div class="ui-block-a">' 
+								//+ '<h2>'
+								+ description_text								
+								//+ '</h2>'
+								+ '<BR>'
+								//+ '<p>' 
+								//+ '<strong>'
 								+ clicked_text
-								+ '</strong></p>'
+								//+ '</strong>' 
+								//+ '</p>'
 								+ '<div  class="questions'
 								+ i
 								+ '"></div>'
@@ -160,7 +168,7 @@ function fillAlerts() {
 								+ '"'
 								+ ' class="doneButton'
 								+ i
-								+ ' ui-btn ui-shadow ui-btn-inline ui-mini ui-icon-check ui-btn-icon-left" data-inline="true">'
+								+ ' ui-btn ui-shadow ui-btn-inline ui-mini ui-icon-check ui-btn-icon-left" data-inline="true" data-mini="true">'
 								+ '<div sessId="' + msg.alerts[i].session_id
 								+ '" id="' + msg.alerts[i].session_id
 								+ '">Done</div></a>' + '</div>' + // of

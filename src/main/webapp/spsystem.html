@@ -184,8 +184,8 @@
                         <input name="user" id="newcustemail" value="" placeholder="Email" data-theme="b" type="text">
                          <label for="un" class="ui-hidden-accessible">Company:</label>
                         <input name="user" id="newcustcompany" value="" placeholder="Company" data-theme="b" type="text">
-                        <a id="addCustButton" data-position-to="window" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-check">Add</a>                                                                                                                    
-                        <a id="addCustCancel" href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-delete">Cancel</a>
+                        <a id="addCustButton" data-position-to="window" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-check" data-inline="true">Add</a>                                                                                                                    
+                        <a id="addCustCancel" href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-delete" data-inline="true">Cancel</a>
                     </div>
                 </form>
             </div>                   
@@ -216,15 +216,16 @@
 				</tr>
 				<tr>
 					<td>Presentation Name: </td>
-					<td><input type="text" name="name" size="30"/></td>
+					<td><input type="text" name="name" id="newpresname" size="30"/></td>
 				</tr>
 				<tr>
 					<td>Presentation File - PDF only <BR> (recommended size - up to 2MB): </td>
-					<td><input type="file" name="file" size="30"/></td>
+					<td><input type="file" name="file" id="file" size="50"/></td>
 				</tr>
 				<tr>
 					<td colspan="2">
-						<input type="submit" value="Upload Presentation (may take a while)" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-shop ui-icon-check ui-btn-inline">
+						<input type="submit" value="Upload Presentation" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-shop ui-icon-check ui-btn-inline">
+						<a id="Upload" href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-delete">Cancel</a>
 					</td>
 				</tr>
 			</table>

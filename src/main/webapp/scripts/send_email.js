@@ -113,7 +113,7 @@
 														// +
 														"&body="
 														+ JSONobj.msgtext + "%0D%0A" + "%0D%0A" //linebreaks
-														+ msg.link;
+														+ msg.link + "%0D%0A";
 												
 												mailtourl = mailtourl.replace(" ", "%20");
 												mailtourl = mailtourl.replace("\r\n", "%0D%0A");

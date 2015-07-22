@@ -28,8 +28,15 @@ function isEverythingLoaded()
 
 function hideLoadingMsgIfFullyLoaded()
 {
+	console.log("checking if all loaded: alerts " + alertsloaded + 
+			" barcharts " + barchartsloaded + 
+			" questions " + questionsloaded +
+			" customers " + customersloaded + 
+			" pres " + presentationsloaded);
+	
 			if (isEverythingLoaded())
 				{
+						console.log("hiding hourglass");
 						hideWaitMsg();
 				}
 }
