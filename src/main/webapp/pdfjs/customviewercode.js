@@ -132,13 +132,14 @@
 		// initialize everything
 		function initView() {
 			console.log("init view");
-			//alert("file: "+ getURLParameter("file")); 
-			send_event("INIT_SLIDES", "0", "0", ipaddr);
 
 			msgid = getURLParameter("file"); //format /file/123456
 			msgid = msgid.substr(msgid.length - 6); // last 6 chars
 			console.log("msgid is " + msgid );
 			setCookie("msgid", msgid, 2);
+			
+			//alert("file: "+ getURLParameter("file")); 
+			send_event("INIT_SLIDES", "0", "0", ipaddr);
 			
 			getSalesmanEmail();
 			
