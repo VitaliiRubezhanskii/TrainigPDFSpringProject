@@ -114,7 +114,7 @@ function fillAlerts() {
 				contentType : "application/json; charset=utf-8",
 				processData : false,
 				error : function(XmlHttpRequest, status, error) {
-					alert('error from returned json.... ReportsServlet' + error);
+					swal("Error",'error from returned json.... ReportsServlet' + error,"error");
 				},
 				success : function(msg) {
 					//console.log("fillAlerts ajax returned");
@@ -215,14 +215,14 @@ function fillAlerts() {
 								// alert("yoyo");
 								// setTimeout(BindDoneButtons(), 1000);
 
-							}, 1000); // put at end of event queue, after
+							}, 300); // put at end of event queue, after
 									// rendering checkboxes.
 									// small delay, may help with listview refresh. 
 					console.log("fillAlerts ajax returned done.");
 					
 					
 					alertsloaded = true;
-					console.log("Alerts loaded successfully");//(without q's and barcharts)										 
+					console.log("Alerts loaded successfully");//(without q's and barcharts)					
 				} // success func
 
 			});

@@ -1,6 +1,4 @@
-	
-$("#pageNumber").val(1); //go to 1st page.
-	
+		
 	// this runs ONCE for each page refresh - 
 	// and this will make ONE report entry in the smart alerts.
     thisSessionId = Math.random().toString();
@@ -200,6 +198,11 @@ $("#pageNumber").val(1); //go to 1st page.
 			}, 1000);
 			
 			// every 1/3 sec check for updates in slide num.
+			currentPageIndex = 1;
+			$("#pageNumber").val(1); //go to 1st page.
+			cur_slide=1;
+			prev_slide=1;
+			
 			window.setInterval(
 					function() {
 						cursorX = 5;
