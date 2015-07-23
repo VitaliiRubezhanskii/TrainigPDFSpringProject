@@ -8,7 +8,7 @@ function initPage() {
 					+ " #history, #editCustomerButton").bind("click",
 			function(event, ui) {
 				send_salesman_event("BUTTON_CLICK", '0', '0', this.id);
-				alert("This feature is coming soon (" + this.id + "). ");
+				swal("Not yet", "This feature is coming soon (" + this.id + "). ");
 			});
 
 	$("#salesman_email").val(getCookie("SalesmanEmail"));
@@ -61,7 +61,7 @@ $(document).on("pagecontainershow", function() {
 		break;
 
 	default:
-		alert("Error: page id not in case. " + activePageId);
+		swal("Error: page id not in case. " + activePageId);
 	}
 });
 

@@ -6,7 +6,7 @@ $("#logout").bind("click", function(event, ui) {
 	console.log("logout");
 	// this logs me off.
 	setCookie("SalesmanEmail", "", 2);
-	alert("Logged out.\n Thanks for using SlidePiper!");
+	swal("Logged out.\n Thanks for using SlidePiper!");
 
 	// reloads page with the redirect (with #)
 	window.location = window.location.pathname;

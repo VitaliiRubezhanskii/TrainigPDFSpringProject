@@ -19,7 +19,7 @@ function send_salesman_event(ename, eparam1, eparam2, eparam3) {
 			// alert(res); // display response as alert.
 		},
 		fail : function() {
-			alert("error ajax salesman data servlet");
+			swal("error ajax salesman data servlet");
 		}
 	});
 }

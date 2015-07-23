@@ -28,7 +28,7 @@
 							contentType : "application/json; charset=utf-8",
 							processData : false,
 							error : function(XmlHttpRequest, status, error) {
-								alert('salesmanLogin error from returned json'
+								swal('salesmanLogin error from returned json'
 										+ error);
 							},
 							success : function(msg) {
@@ -41,13 +41,14 @@
 									console.log("set cookie SalesmanEmail to "
 											+ this.local_emailval);
 									//hideWaitMsg();
-									alert("Welcome to Slidepiper!");
+									//swal("SlidePiper Login", "Welcome to SlidePiper!", "success");
+									//alert("Welcome to Slidepiper!");
 									loggedin=true;
 									managementScreen();
 								} else {
-									alert("Wrong credentials for email "
+									swal("Login Error", "Wrong credentials for email "
 											+ this.local_emailval
-											+ ". Please try again.");
+											+ ". Please try again.", "error");
 								}
 							} // success func
 						}); // end of ajax call

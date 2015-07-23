@@ -25,7 +25,7 @@ $("#removePresentationButton")
 								});
 
 						if (pres1.length != 1) {
-							alert("The system currently supports removing one presentation at a time.");
+							swal("Can't do it", "The system currently supports removing one presentation at a time.", "error");
 						} else {
 							// get email
 							var salesmanEmail = getCookie("SalesmanEmail");
@@ -44,7 +44,7 @@ $("#removePresentationButton")
 										processData : false,
 										error : function(XmlHttpRequest,
 												status, error) {
-											alert('error from returned json remove cust'
+											swal('error from returned json remove cust'
 													+ error);
 										},
 										success : function(msg) {						

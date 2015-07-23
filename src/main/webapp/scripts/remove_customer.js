@@ -27,7 +27,7 @@ $("#removeCustButton")
 								});
 
 						if (customers.length != 1) {
-							alert("The system currently supports removing one customer at a time.");
+							swal("Can't do it.", "The system currently supports removing one customer at a time.","error");
 						} else {
 							// get emails:
 							var salesmanEmail = getCookie("SalesmanEmail");
@@ -48,7 +48,7 @@ $("#removeCustButton")
 										processData : false,
 										error : function(XmlHttpRequest,
 												status, error) {
-											alert('error from returned json remove cust'
+											swal('error from returned json remove cust'
 													+ error);
 										},
 										success : function(msg) {											

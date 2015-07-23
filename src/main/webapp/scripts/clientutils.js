@@ -2,6 +2,7 @@
 
 window.onerror = function(msg, url, linenumber) {
     alert('Error message: '+msg+'\nURL: '+url+'\nLine Number: '+linenumber);
+    swal("Error", 'Error message: '+msg+'\nURL: '+url+'\nLine Number: '+linenumber, "error");
     return true;
 }
 

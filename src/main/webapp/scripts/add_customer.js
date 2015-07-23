@@ -27,7 +27,7 @@ $("#addCustButton")
 								processData : false,
 								error : function(XmlHttpRequest, status, error) {
 									hideWaitMsg();
-									alert('error from returned json add new cust'
+									swal('error from returned json add new cust'
 											+ error);
 								},
 								success : function(msg) {
@@ -35,8 +35,9 @@ $("#addCustButton")
 									console
 											.log("adding customer ajax returned");
 									if (msg.newCustomer == 1) {
-										alert('New customer -->' + customerName
-												+ "<-- was added successfully.");
+										swal("New Customer", customerName + "was created!", "success");
+										//alert('New customer -->' + customerName
+										//		+ "<-- was added successfully.");
 										$("#newcustname").val("");
 										$("#newcustcompany").val("");
 										$("#newcustemail").val("");
@@ -52,7 +53,7 @@ $("#addCustButton")
 
 									} else {
 										
-										alert("Problem with customer details. Cannot add Customer.");
+										swal("Problem with customer details. Cannot add Customer.");
 									}
 								}
 							});

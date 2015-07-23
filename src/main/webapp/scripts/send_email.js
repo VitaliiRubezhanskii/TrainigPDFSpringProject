@@ -21,7 +21,7 @@
 												.getAttribute("data-email"));
 									}
 								});
-						// alert("customers selected: " + customers);
+						// ("customers selected: " + customers);
 
 						var pres1 = [];
 						// checkboxes from the pres1 list
@@ -41,11 +41,11 @@
 
 						// first make some validations on the input.
 						if (!((customers.length == 1) && (pres1.length == 1))) {
-							alert("The system currently supports sending only one presentation to one customer.")
+							swal("Can't do it.", "The system currently supports sending only one presentation to one customer.","error");
 						} else if (msgtext == "") {
-							alert("Please fill in the message text.");
+							swal("Error","Please fill in the message text.","error");
 						} else if (msgsubj == "") {
-							alert("Please fill in the message subject.");
+							swal("Error","Please fill in the message subject.","error");
 						} else { // everything is fine, send msg
 							docid = randomHash();
 
@@ -94,7 +94,7 @@
 										processData : false,
 										error : function(XmlHttpRequest,
 												status, error) {
-											alert('sendCustomerMessage error from returned json'
+											swal('sendCustomerMessage error from returned json'
 													+ error);
 										},
 										success : function(msg) {
@@ -131,7 +131,7 @@
 												console
 														.log("send message done. (opened mailto)");
 											} else {
-												alert("Error sending message (error in writing to database)");
+												swal("Error sending message (error in writing to database)");
 											}
 										} // success func
 									}); // end of ajax call
