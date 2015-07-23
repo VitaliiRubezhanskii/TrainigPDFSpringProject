@@ -1,4 +1,6 @@
 	
+$("#pageNumber").val(1); //go to 1st page.
+	
 	// this runs ONCE for each page refresh - 
 	// and this will make ONE report entry in the smart alerts.
     thisSessionId = Math.random().toString();
@@ -13,7 +15,7 @@
 		paramJSON = 
 		{
 			"action" : "keepAlive",
-			"msgId" : getCookie("msgid"),
+			"msgId" : msgid,
 			"sessionId" : thisSessionId,
 			"slideNum" : slideNum_param,
 			"estimatedTimeViewed" : estimatedTimeViewed_param						
@@ -40,7 +42,7 @@
 				type : "POST",
 				url : urlval,
 				data : {
-					id : getCookie("msgid"),
+					id : msgid,
 					event_name : ename,
 					param1 : eparam1,
 					param2 : eparam2,
@@ -105,7 +107,7 @@
 									
 			jsondata = '{"action":"getSalesmanEmail",'
 				+ '"msgid":"'
-				+ getCookie("msgid")
+				+ msgid
                + '" }';
 
 				// alert("json msg " + jsondata);
@@ -123,7 +125,7 @@
 							},
 							success : function(msg) {
 								//JSONobj = JSON.parse(jsondata);
-								setCookie("salesman_email", msg.salesman_email, 2);
+								salesman_email = msg.salesman_email;
 								console.log("rcvd salesman email " + msg.salesman_email);
 							}					
 				  }); // end of ajax call													
@@ -135,8 +137,7 @@
 
 			msgid = getURLParameter("file"); //format /file/123456
 			msgid = msgid.substr(msgid.length - 6); // last 6 chars
-			console.log("msgid is " + msgid );
-			setCookie("msgid", msgid, 2);
+			console.log("msgid is " + msgid );			
 			
 			//alert("file: "+ getURLParameter("file")); 
 			send_event("INIT_SLIDES", "0", "0", ipaddr);
@@ -155,8 +156,8 @@
 						
 						var q = window.prompt("Please enter your question.", "");												
 						if (q!= null)							
-								//salesman_email = "david.salesmaster@gmail.com";
-								salesman_email = getCookie("salesman_email");
+								//
+								//salesman_email = getCookie("salesman_email");
 								mailtourl = "mailto:" + salesman_email
 								+ "?Subject=Message from customer "
 								+ 
@@ -235,8 +236,7 @@
 				keepalive_event(seconds_viewed, slide_viewed_now);				
 			}, 3000);
 
-			//this.close();
-			$("#pageNumber").val(1); //go to 1st page.
+			//this.close();			
 			
 			console.log("init view done");
 			send_event("INIT_SLIDES_DONE", "0", "0", ipaddr);

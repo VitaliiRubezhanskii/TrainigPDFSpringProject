@@ -102,7 +102,7 @@ public void init(ServletConfig config) throws ServletException {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		
-		System.out.println("KeepAliveServlet rcvd call.");
+		//System.out.println("KeepAliveServlet rcvd call.");
 		StringBuffer jb = new StringBuffer();
 		Constants.updateConstants();
 	    String line = null;

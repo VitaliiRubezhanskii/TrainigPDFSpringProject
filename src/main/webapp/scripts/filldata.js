@@ -163,7 +163,7 @@ function fillAlerts() {
 								+ '<div  class="questions'
 								+ i
 								+ '"></div>'
-								+ '<a href="" sessionId="'
+								+ '<a href="" sessId="'
 								+ msg.alerts[i].session_id
 								+ '"'
 								+ ' class="doneButton'

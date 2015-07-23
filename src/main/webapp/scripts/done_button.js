@@ -42,14 +42,18 @@ function bindDoneButtons(alerts_session_ids) {
 
 		$(".doneButton" + i).bind("click", function(event) {
 			// works - html
-			// alert($(event.target).html());
+			//alert($(event.target).html());
 			// undefined:
-			// alert($(event.target).id);
+		 //alert($(event.target).id);
+		 //alert($(event.target).sessid);
 
 			// works - real id - session id
-			// alert($(event.target).attr("id"));
-			doneSessionId = $(event.target).attr("id");
-			console.log("DONE for session: " + doneSessionId);
+			//alert($(event.target).attr("id"));
+			//console.log("DONE for session: " + $(event.target).attr("sessid"));
+			thissessid = $(event.target).attr("sessid");
+			//alert(thissessid);
+			doneSessionId = thissessid;
+			console.log("DONE for session (as var): " + doneSessionId);
 
 			doneClick(doneSessionId);
 

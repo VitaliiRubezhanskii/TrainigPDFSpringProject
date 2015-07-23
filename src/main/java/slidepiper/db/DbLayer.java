@@ -320,7 +320,7 @@ public class DbLayer {
 					// sends the statement to the database server
 					int row = statement.executeUpdate();
 					if (row > 0) {
-						System.out.println("rows updated: " + row);
+						System.out.println("setDone - rows updated: " + row);
 						//String message = "updated done.";
 					}
 		}            
