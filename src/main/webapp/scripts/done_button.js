@@ -28,7 +28,10 @@ function doneClick(sessId) // i is index of done button
 		success : function(msg) {
 			// done set. need to refresh the list.
 			console.log("done ajax event returned " + msg);
-			swal("Done","Recommendation marked as done!","success");
+			setTimeout(function()
+					{
+							swal("Done","Recommendation marked as done!","success");
+					}, 2500);			
 			fillAlerts();			
 		}
 	});
