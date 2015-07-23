@@ -47,7 +47,8 @@ $("#removePresentationButton")
 											swal('error from returned json remove cust'
 													+ error);
 										},
-										success : function(msg) {						
+										success : function(msg) {
+											swal("It's been done.", "Presentation deleted!", "success" );
 											console
 													.log("remove pres ajax returned successfully");
 											fillCustomersAndPresentations();

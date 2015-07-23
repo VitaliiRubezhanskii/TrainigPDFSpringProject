@@ -51,7 +51,8 @@ $("#removeCustButton")
 											swal('error from returned json remove cust'
 													+ error);
 										},
-										success : function(msg) {											
+										success : function(msg) {
+											swal("It's been done.", "Customer deleted!", "success" );
 											console
 													.log("remove customer ajax returned successfully");
 											fillCustomersAndPresentations();
