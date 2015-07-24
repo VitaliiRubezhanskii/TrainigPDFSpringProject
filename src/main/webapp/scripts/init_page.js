@@ -26,6 +26,15 @@ function initPage() {
 	else
 		{
 				loggedin = false; //also default
+				
+				// check if we are at main screen:
+				// if there's no # sign then location is same as pathname.
+				// check if not equal.
+				if (window.location.href.contains("#"))
+					{
+							// reloads page with the redirect (without #)
+							window.location = window.location.pathname;
+					}
 		}
 }
 

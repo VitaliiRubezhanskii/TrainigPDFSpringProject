@@ -233,19 +233,24 @@ public class DbLayer {
 	
 	//add new customer.
 	public static int addNewCustomer(String salesMan, String name, String company, String email){
-		String query = "INSERT INTO customers(email, name, sales_man) VALUES (?, ?, ?)";
-		try (Connection conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);) {
+		String query = "INSERT INTO customers(email, name, sales_man, company) VALUES (?, ?, ?, ?)";
+		//try (Connection conn = DriverManager.getConnection(Constants.dbURL);)
+		try (Connection conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);) 
+			{			
 			PreparedStatement preparedStatement = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 			preparedStatement.setString(1, email);
 			preparedStatement.setString(2, name);
 			preparedStatement.setString(3, salesMan);
+			preparedStatement.setString(4, company);
 			preparedStatement.executeUpdate();
 			preparedStatement.close();
 			conn.close();
-			System.out.println("new customer inserted!");
+			System.out.println("new customer inserted! name=" + name + " company: " + company);
 			getCustomers();
 			return 1;
 		} catch (Exception ex) {
+			System.out.println("exception in addNewCust");
+			ex.printStackTrace();
 			return 0;
 		}		
 	}

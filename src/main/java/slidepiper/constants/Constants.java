@@ -10,7 +10,11 @@ public class Constants {
 		  public static String dbUser = MYSQL_USERNAME; //"adminS16x82l";
 		  public static String dbPass = MYSQL_PASSWORD; //"CdikJ1eZlpDy";
 		  //public static final String dbURL = "jdbc:mysql://127.0.0.1:3307/picascrafxzhbcmd";		  
-		  public static String dbURL = "jdbc:mysql://" + MYSQL_DATABASE_HOST + ":" + MYSQL_DATABASE_PORT + "/" + MYSQL_DATABASE_NAME;
+		  public static String dbURL = 
+				  "jdbc:mysql://" + MYSQL_DATABASE_HOST + ":" + 
+		  MYSQL_DATABASE_PORT + "/" + 
+						  MYSQL_DATABASE_NAME
+						  + "?user= " + MYSQL_USERNAME + "&password" + MYSQL_PASSWORD + "&useUnicode=true&characterEncoding=UTF-8";
 		  
 		  public static void updateConstants()
 		  {	
@@ -23,7 +27,7 @@ public class Constants {
 				  // for sp in openshift
 				  dbUser = "adminzQQA9hc";
 				  dbPass = "P6Qmj1B_lkRi";
-				  dbURL = "jdbc:mysql://127.0.0.1:3307/picascrafxzhbcmd";
+				  dbURL = "jdbc:mysql://127.0.0.1:3307/picascrafxzhbcmd?user= " + MYSQL_USERNAME + "&password" + MYSQL_PASSWORD + "&useUnicode=yes&characterEncoding=UTF-8";
 			  }  
 			  //System.out.println("Some constants:\n mysql user " + dbUser + " pw " + dbPass + " url " + dbURL);
 		  }		

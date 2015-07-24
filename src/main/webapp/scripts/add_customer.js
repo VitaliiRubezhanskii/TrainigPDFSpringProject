@@ -9,20 +9,23 @@ $("#addCustButton")
 					var customerName = $("#newcustname").val();
 					var customerCompany = $("#newcustcompany").val();
 					var customerEmail = $("#newcustemail").val();
-					console.log("adding customer ajax");
+					console.log("adding customer ajax: name " + customerName + " company " + customerCompany + " email " + customerEmail );
 					showWaitMsg();
+					
+					jsondata='{"action":"addNewCustomer", "salesmanEmail":"'
+						+ salesmanEmail
+						+ '", "customerName":"'
+						+ customerName
+						+ '", "customerCompany":"'
+						+ customerCompany
+						+ '", "customerEmail":"'
+						+ customerEmail + '"}';
+					
 					$
 							.ajax({
 								type : "POST",
 								url : "ManagementServlet",
-								data : '{"action":"addNewCustomer", "salesmanEmail":"'
-										+ salesmanEmail
-										+ '", "customerName":"'
-										+ customerName
-										+ '", "customerCompany":"'
-										+ customerCompany
-										+ '", "customerEmail":"'
-										+ customerEmail + '"}',
+								data : jsondata,
 								contentType : "application/json; charset=utf-8",
 								processData : false,
 								error : function(XmlHttpRequest, status, error) {

@@ -165,7 +165,12 @@ public class ManagementServlet extends HttpServlet {
 														
 				case "addNewCustomer":
 					System.out.println("addnew cust");
-					output.put("newCustomer", DbLayer.addNewCustomer(input.getString("salesmanEmail"),input.getString("customerName"), input.getString("customerCompany"), input.getString("customerEmail")));
+					String smemail = input.getString("salesmanEmail");
+					String cname = input.getString("customerName");
+					String ccompany = input.getString("customerCompany");
+					String cemail = input.getString("customerEmail");
+					System.out.println("cust data: smemail " + smemail + " cname " + cname + "cust company: " + ccompany + " cu email:" + cemail);
+					output.put("newCustomer", DbLayer.addNewCustomer(smemail, cname, ccompany, cemail));
 					break;
 														
 				case "deleteCustomer":
