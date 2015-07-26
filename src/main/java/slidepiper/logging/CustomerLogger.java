@@ -99,7 +99,7 @@ public class CustomerLogger {
 					       emessage.setRecipients(Message.RecipientType.TO,
 					       InternetAddress.parse(mi.getSalesManEmail()));	       
 					       emessage.setSubject("SlidePiper Alert for email " + mi.getCustomerEmail());
-					       String msg = "Hello, <BR><BR>This is Jacob Salesmaster. <BR>I am your customer alerts representative.<BR><BR>" + mi.getCustomerEmail() + " has just clicked on the link you sent him! <BR><BR> Regards, <BR>Jacob Salesmaster<BR>SlidePiper Alerts System";
+					       String msg = "Hello, <BR><BR>This is Jacob Salesmaster. <BR>I am your customer alerts representative.<BR><BR>" + mi.getCustomerEmail() + " has just clicked on the link you sent him! <BR><BR> Glad to serve you, <BR>Jacob Salesmaster<BR>SlidePiper Alerts System";
 					       emessage.setText(msg);
 					       emessage.setContent(msg, "text/html; charset=utf-8");
 					       Transport.send(emessage);
