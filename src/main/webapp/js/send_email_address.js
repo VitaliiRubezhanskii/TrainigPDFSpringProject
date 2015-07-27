@@ -3,6 +3,7 @@
 function send_email_address()
 {
 			emailaddr =  $("#emailaddr").val();
-			send_text_event("WEB", "SUBSCRIBE", emailaddr);
+			console.log("Email address is: " + emailaddr);
+			send_text_event("WEB", "SUBSCRIBE", emailaddr);			
 			alert("Thanks for subscribing!");
 }
