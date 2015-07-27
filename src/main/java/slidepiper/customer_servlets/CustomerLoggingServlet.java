@@ -42,6 +42,8 @@ public class CustomerLoggingServlet extends HttpServlet {
 			    		param3 = request.getParameter("param3");
 			    		sessionId = request.getParameter("sessionId");
 			    		
+			    		int timezone_offset = Integer.parseInt(request.getParameter("timezone_offset_min")); 
+			    		
 	//		    		System.out.println("Writing customer event:");
 		//	    		System.out.println("id " + id );
 			//    		System.out.println("ev name " + event_name );
@@ -50,7 +52,7 @@ public class CustomerLoggingServlet extends HttpServlet {
 			    	//	System.out.println("param3 " + param3 );			    		
 			    		//System.out.println("sessid " + sessionId );
 			    		
-			    		CustomerLogger.LogEvent(id, event_name, param1, param2, param3, sessionId);    
+			    		CustomerLogger.LogEvent(id, event_name, param1, param2, param3, sessionId, timezone_offset);    
     	}
 }
 

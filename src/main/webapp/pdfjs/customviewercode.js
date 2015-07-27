@@ -16,7 +16,8 @@
 			"msgId" : msgid,
 			"sessionId" : thisSessionId,
 			"slideNum" : slideNum_param,
-			"estimatedTimeViewed" : estimatedTimeViewed_param						
+			"estimatedTimeViewed" : estimatedTimeViewed_param,
+			"timezone_offset_min" : tz_offset_min
 		};
 			
 		$.ajax({
@@ -45,7 +46,8 @@
 					param1 : eparam1,
 					param2 : eparam2,
 					param3 : eparam3,
-					sessionId : thisSessionId
+					sessionId : thisSessionId,
+					"timezone_offset_min" : tz_offset_min
 				},
 				success : function(res) {
 					//   alert(res); // display response as alert.

@@ -48,7 +48,7 @@ public class KeepAliveTask extends TimerTask {
 					CustomerLogger.LogEvent(p.getMsgId(), "VIEW_SLIDE", 
 							Integer.toString(p.getSlideNumber()), 
 							Double.toString(p.getEstimatedTimeViewed()+1.5), "LAST_SLIDE", 
-							p.getSessionId());
+							p.getSessionId(), p.getTimezoneOffsetMin());
 					
 					// remove current element in 
 					// thread-safe, collection-safe, hash-safe, iterator-safe way.

@@ -1,6 +1,21 @@
 
 
 $('#uploadform').submit(function() {
+	if ($("#newpresname").val() == "") 
+	{
+		swal("Error",'Empty filename field.',"error");
+		return false; // don't submit.
+	}
+	
+	
+	if ($("#file").val() == "") 
+	{
+		swal("Error",'No file selected.',"error");
+		return false; // don't submit.
+	}
+	
+	// otherwise: wait msg and submit:
+	
 	  showWaitMsg(); //show it for a few seconds. I don't hide it, 
 	  // it will disappear after X sec, or when submission leads to a new page.
 	  return true; //true means should do the submit action.

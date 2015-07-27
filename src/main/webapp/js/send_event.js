@@ -1,5 +1,11 @@
 
 
+
+
+// get the offset in min. used everywhere when I call ajax to 
+// send events to server.
+tz_offset_min = new Date().getTimezoneOffset();
+
 		
 		// this runs ONCE for each page refresh - 
 		// sets a unique id for this user, for his events.
@@ -24,7 +30,8 @@
 					param1 : eparam1,
 					param2 : eparam2,
 					param3 : eparam3,
-					sessionId : thisSessionId
+					sessionId : thisSessionId,
+					timezone_offset_min : tz_offset_min
 				},
 				success : function(res) {
 					//   alert(res); // display response as alert.

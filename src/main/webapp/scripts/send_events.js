@@ -12,6 +12,7 @@ function send_salesman_event(ename, eparam1, eparam2, eparam3) {
 			param1 : eparam1,
 			param2 : eparam2,
 			param3 : eparam3,
+			timezone_offset_min : tz_offset_min
 		// sessionId : thisSessionId
 		},
 		success : function(res) {

@@ -116,7 +116,8 @@
               </div>
               <div class="control-group">
                 <div class="controls">
-                  <input type="submit" class="btn btn-primary btn-large" value="Send">
+                  <!--  <input type="submit" class="btn btn-primary btn-large" value="Send">-->
+                  <input type="button" class="btn btn-primary btn-large" value="Send" onClick="send_contact_us();">
                 </div>
               </div>
             </form>
@@ -294,7 +295,16 @@
     <script type="text/javascript" src="js/jquery.min.js"></script>
     <script type="text/javascript" src="js/bootstrap.min.js"></script>
     <script type="text/javascript" src="js/boot-business.js"></script>
-	
-
+    
+    <script type="text/javascript" src="js/send_event.js"></script>	
+<script>
+//send contact data
+function send_contact_us()
+{
+			contactData = "Name: " + $("#inputName").val() + " Email: " +$("#inputEmail").val() + " Text: " + $("#inputMessage").val();
+			send_text_event("WEB", "CONTACT_US", contactData);
+			alert("Thanks for contacting us!" + contactData);
+}
+</script>
   </body>
 </html>

@@ -1,6 +1,5 @@
-// add customer
 
-$("#addCustButton")
+$("#addCustButton")  // add customer
 		.bind(
 				"click",
 				function(event, ui) {

@@ -123,11 +123,13 @@ public void init(ServletConfig config) throws ServletException {
 					{
 							case "keepAlive":					
 					//				System.out.println("keepalive req sessid" + input.getString("sessionId"));
+																
 									KeepAlivePacket p = new KeepAlivePacket(
+											input.getInt("timezone_offset_min"),
 											input.getInt("estimatedTimeViewed"), 
-											input.getInt("slideNum"), 
-											input.getString("sessionId"),
-											input.getString("msgId"));
+											input.getInt("slideNum"),
+											input.getString("msgId"),
+											input.getString("sessionId"));										
 						//			System.out.println("packet " + p.toString());
 									// reset old keepalive packet if any, put the new one.
 									keepAliveMap.put(p.sessionId,p);

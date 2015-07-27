@@ -49,6 +49,7 @@
 									swal("Login Error", "Wrong credentials for email "
 											+ this.local_emailval
 											+ ". Please try again.", "error");
+									hideWaitMsg();
 								}
 							} // success func
 						}); // end of ajax call

@@ -463,8 +463,11 @@ ORDER BY 6 DESC;
 					"slides.name, "+
 					"customer_events.msg_id, "+
 					"msg_info.msg_text as 'message_text', "+ 
-					"DATE_SUB(customer_events.timestamp,INTERVAL 7 HOUR) as 'open_time', "+ 
-					"DATE_SUB(msg_info.timestamp, INTERVAL 7 HOUR) as 'send_time', " +
+				//	"DATE_SUB(customer_events.timestamp,INTERVAL 7 HOUR) as 'open_time', "+ 
+					//"DATE_SUB(msg_info.timestamp, INTERVAL 7 HOUR) as 'send_time', " +
+				//without date_sub - should be added previously with correct Timezone.
+					"customer_events.timestamp as 'open_time', "+ 
+					"msg_info.timestamp as 'send_time', " +
 					"customer_events.session_id as 'session_id' "+
 					"FROM customer_events, msg_info, slides, customers "+
 					"WHERE event_name='OPEN_SLIDES' "+ 

@@ -45,7 +45,7 @@ public class SalesmanLoggingServlet extends HttpServlet {
             DriverManager.registerDriver(new com.mysql.jdbc.Driver());
             conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
  						
-						String sql = "INSERT INTO salesman_events (email, event_name, param1int, param2float, param3str, notes, timestamp) values (?, ?, ?, ?, ?, '', NOW())";
+						String sql = "INSERT INTO salesman_events (email, event_name, param1int, param2float, param3str, notes, timestamp) values (?, ?, ?, ?, ?, '', UTC_TIMESTAMP())";
 						PreparedStatement statement = conn.prepareStatement(sql);
 						statement.setString(1, email);						
 						statement.setString(2, event_name);
