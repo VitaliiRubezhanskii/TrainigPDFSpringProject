@@ -1851,8 +1851,8 @@ var SecondaryToolbar = {
   },
 
   printClick: function secondaryToolbarPrintClick(evt) {
-   // window.print();
-   // this.close();
+//    window.print();
+  //  this.close();
   },
 
   downloadClick: function secondaryToolbarDownloadClick(evt) {
@@ -5772,15 +5772,15 @@ var PDFViewerApplication = {
       toggleButton: document.getElementById('secondaryToolbarToggle'),
       presentationModeButton:
         document.getElementById('secondaryPresentationMode'),
-//      openFile: document.getElementById('secondaryOpenFile'),
- //     print: document.getElementById('secondaryPrint'),
-//      download: document.getElementById('secondaryDownload'),
-//      viewBookmark: document.getElementById('secondaryViewBookmark'),
+      openFile: document.getElementById('secondaryOpenFile'),
+      print: document.getElementById('secondaryPrint'),
+      download: document.getElementById('secondaryDownload'),
+      viewBookmark: document.getElementById('secondaryViewBookmark'),
       firstPage: document.getElementById('firstPage'),
       lastPage: document.getElementById('lastPage'),
-//      pageRotateCw: document.getElementById('pageRotateCw'),
-//      pageRotateCcw: document.getElementById('pageRotateCcw'),
-//      documentPropertiesButton: document.getElementById('documentProperties')
+      pageRotateCw: document.getElementById('pageRotateCw'),
+      pageRotateCcw: document.getElementById('pageRotateCcw'),
+      documentPropertiesButton: document.getElementById('documentProperties')
     });
 
     if (this.supportsFullscreen) {
@@ -6985,14 +6985,14 @@ function webViewerInitialized() {
   document.getElementById('presentationMode').addEventListener('click',
     SecondaryToolbar.presentationModeClick.bind(SecondaryToolbar));
 
-//  document.getElementById('openFile').addEventListener('click',
-//    SecondaryToolbar.openFileClick.bind(SecondaryToolbar));
+  document.getElementById('openFile').addEventListener('click',
+    SecondaryToolbar.openFileClick.bind(SecondaryToolbar));
 
- // document.getElementById('print').addEventListener('click',
- //   SecondaryToolbar.printClick.bind(SecondaryToolbar));
+  document.getElementById('print').addEventListener('click',
+    SecondaryToolbar.printClick.bind(SecondaryToolbar));
 
- // document.getElementById('download').addEventListener('click',
- //   SecondaryToolbar.downloadClick.bind(SecondaryToolbar));
+  document.getElementById('download').addEventListener('click',
+    SecondaryToolbar.downloadClick.bind(SecondaryToolbar));
 
 
   if (file && file.lastIndexOf('file:', 0) === 0) {
