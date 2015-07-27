@@ -28,7 +28,7 @@ public class CustomerLogger {
 				conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
 								
 							String sql = "INSERT INTO customer_events (msg_id, event_name, param1int, param2float, param3str, notes, timestamp, session_id, done) values "
-									+ "		(?, ?, ?, ?, ?, '', DATE_ADD(UTC_TIMESTAMP(),INTERVAL "+ timezone_offset_min+" MINUTE), ?, 0)";
+									+ "		(?, ?, ?, ?, ?, '', DATE_ADD(UTC_TIMESTAMP(),INTERVAL "+ (-timezone_offset_min)+" MINUTE), ?, 0)";
 							System.out.println("sql for cust logger is " + sql);
 							PreparedStatement statement = conn.prepareStatement(sql);
 							statement.setString(1, id);						
