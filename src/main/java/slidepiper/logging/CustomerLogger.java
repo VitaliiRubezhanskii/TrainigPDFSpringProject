@@ -84,6 +84,17 @@ public class CustomerLogger {
 								"Hello, <BR><BR>This is Jacob Salesmaster. <BR>I am your website alerts representative.<BR><BR>The contact us button has been clicked. This is the message:<BR> "+ param3 + "<BR><BR> Glad to serve you, <BR>Jacob Salesmaster<BR>SlidePiper Alerts System"
 								);
 				}
+				
+				/// send email for Contact us button
+				if (event_name.equalsIgnoreCase("SUBSCRIBE"))
+				{								
+						System.out.println("subscribe event - sending email");											
+						EmailSender.sendEmail("info@slidepiper.com", 
+								"Contact has subscribed to the mailing list.",
+								"Contact has subscribed to the mailing list. <BR><BR>Contact email: "+ param3 + "<BR><BR> Glad to serve you, <BR>Jacob Salesmaster<BR>SlidePiper Email Subscription Supervisor"
+								);
+				}
+
 						
 	}
 }
