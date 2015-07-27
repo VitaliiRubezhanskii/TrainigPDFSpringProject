@@ -8,11 +8,11 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Properties;
 
-import email.EmailSender;
 import slidepiper.constants.Constants;
 import slidepiper.dataobjects.Customer;
 import slidepiper.dataobjects.MessageInfo;
 import slidepiper.db.DbLayer;
+import slidepiper.email.EmailSender;
 
 public class CustomerLogger {
 	
