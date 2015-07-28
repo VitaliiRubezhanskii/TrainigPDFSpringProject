@@ -7,7 +7,7 @@ function send_salesman_event(ename, eparam1, eparam2, eparam3) {
 		type : "POST",
 		url : urlval,
 		data : {
-			email : getCookie("SalesmanEmail"),
+			email : getCookie("SalesmanEmail").toLowerCase(),
 			event_name : ename,
 			param1 : eparam1,
 			param2 : eparam2,

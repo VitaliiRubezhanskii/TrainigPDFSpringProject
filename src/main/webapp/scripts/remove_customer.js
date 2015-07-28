@@ -23,7 +23,7 @@ $("#removeCustButton")
 										// work for
 										// some reason (maybe old Firefox).
 										customeremails.push(this
-												.getAttribute("data-email"));
+												.getAttribute("data-email").toLowerCase());
 									}
 								});
 
@@ -31,13 +31,13 @@ $("#removeCustButton")
 							swal("Can't do it.", "The system currently supports removing one customer at a time.","error");
 						} else {
 							// get emails:
-							var salesmanEmail = getCookie("SalesmanEmail");
-							var customerEmail = customeremails; // should be
+							var salesmanEmail = getCookie("SalesmanEmail").toLowerCase();
+							var customerEmail = customeremails.toLowerCase(); // should be
 																// only one.
 							datajson = '{"action":"deleteCustomer", "salesman_email":"'
-									+ salesmanEmail
+									+ salesmanEmail.toLowerCase()
 									+ '", "customer_email":"'
-									+ customerEmail + '"}';
+									+ customerEmail.toLowerCase() + '"}';
 							console.log("removing cust datajson=" + datajson);
 							showWaitMsg();
 							$

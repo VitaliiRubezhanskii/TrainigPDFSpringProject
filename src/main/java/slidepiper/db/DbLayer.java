@@ -512,7 +512,7 @@ ORDER BY 6 DESC;
 		//			  System.out.println("query done, values set");
 					  // I don't save msg_id and sessId but maybe USE THEM LATER.					    
 					  alerts.add(alert);
-   			    System.out.println("Found alert: cust " + cust_email + " sl name " + slides_name + "msgtext" + msgtext + " msgid " + msg_id + " open " + open_time + " send " + send_time + " sess id " + sessId);
+   			    //System.out.println("Found alert: cust " + cust_email + " sl name " + slides_name + "msgtext" + msgtext + " msgid " + msg_id + " open " + open_time + " send " + send_time + " sess id " + sessId);
 					}
 			} catch (Exception ex) {
 					System.out.println("exception in getAlerts");

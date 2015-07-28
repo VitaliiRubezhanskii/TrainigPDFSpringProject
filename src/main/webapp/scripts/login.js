@@ -3,12 +3,12 @@
 	$("#gotoManage").bind(
 			"click",
 			function(event, ui) {
-				emailval = $("#usernamefield").val();
+				emailval = $("#usernamefield").val().toLowerCase();
 				passwordval = $("#passwordfield").val();
 
 				// alert("email is " + emailval);
 
-				emailval = $("#usernamefield").val();
+				emailval = $("#usernamefield").val().toLowerCase();
 
 				// alert("emailval is " + emailval);
 				console.log("login servlet ajax");

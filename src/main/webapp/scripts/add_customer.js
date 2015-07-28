@@ -5,9 +5,11 @@ $("#addCustButton")  // add customer
 				function(event, ui) {
 					console.log("adding customer");
 					var salesmanEmail = getCookie("SalesmanEmail");
+					salesmanEmail = salesmanEmail.toLowerCase();
 					var customerName = $("#newcustname").val();
 					var customerCompany = $("#newcustcompany").val();
 					var customerEmail = $("#newcustemail").val();
+					customerEmail = customerEmail.toLowerCase();
 					console.log("adding customer ajax: name " + customerName + " company " + customerCompany + " email " + customerEmail );
 					showWaitMsg();
 					
