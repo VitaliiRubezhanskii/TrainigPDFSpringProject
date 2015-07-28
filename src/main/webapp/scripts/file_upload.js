@@ -18,6 +18,9 @@ $('#uploadform').submit(function() {
 	
 	  showWaitMsg(); //show it for a few seconds. I don't hide it, 
 	  // it will disappear after X sec, or when submission leads to a new page.
+	  
+	  //make sure text field is filled with salesman email (not visible)
+	  $("#salesman_email").val(getCookie("SalesmanEmail").toLowerCase());
 	  return true; //true means should do the submit action.
 	});
 
