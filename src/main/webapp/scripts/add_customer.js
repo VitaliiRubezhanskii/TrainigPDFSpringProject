@@ -39,7 +39,7 @@ $("#addCustButton")  // add customer
 									console
 											.log("adding customer ajax returned");
 									if (msg.newCustomer == 1) {
-										swal("New Customer", customerName + "was created!", "success");
+										swal(" New Customer ", customerName + "  was created! ", "success");
 										//alert('New customer -->' + customerName
 										//		+ "<-- was added successfully.");
 										$("#newcustname").val("");

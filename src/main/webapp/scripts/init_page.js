@@ -31,6 +31,7 @@ $(document).on("pagecontainershow", function() {
 			console.log("already logged in. going to mgmt");
 			// set username field.
 			$("#usernamefield").val(getCookie("SalesmanEmail").toLowerCase());
+			$("#salesman_email").val(getCookie("SalesmanEmail").toLowerCase());
 			// go to mgmt screen after waiting for all callbacks and refreshes.
 			setTimeout(function() {
 				managementScreen();
@@ -46,6 +47,7 @@ $(document).on("pagecontainershow", function() {
 			console.log("initPage check logged in - YES - cookie is set");
 			loggedin = true;
 			$("#usernamefield").val(getCookie("SalesmanEmail").toLowerCase());
+			$("#salesman_email").val(getCookie("SalesmanEmail").toLowerCase());
 			console.log("in mgmt screen. filling. ");
 			showWaitMsg();
 			setTimeout(function() {
