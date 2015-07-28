@@ -32,7 +32,7 @@ public class CustomerLoggingServlet extends HttpServlet {
          
     	protected void doPost(HttpServletRequest request,
                 HttpServletResponse response) throws ServletException, IOException {			           
-			   			System.out.println("custdataservlet dopost");			    		
+//			   			System.out.println("custdataservlet dopost");			    		
 			    		String id, event_name, param1, param2, param3, sessionId;
 			    		
 			    		id = request.getParameter("id");

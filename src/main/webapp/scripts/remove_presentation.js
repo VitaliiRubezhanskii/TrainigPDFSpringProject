@@ -28,9 +28,9 @@ $("#removePresentationButton")
 							swal("Can't do it", "The system currently supports removing one presentation at a time.", "error");
 						} else {
 							// get email
-							var salesmanEmail = getCookie("SalesmanEmail");
+							var salesmanEmail = getCookie("SalesmanEmail").toLowerCase();
 							datajson = '{"action":"deletePresentation", "salesman_email":"'
-									+ salesmanEmail
+									+ salesmanEmail.toLowerCase()
 									+ '", "presentation":"'
 									+ pres1 + '"}';
 							console.log("removing cust datajson=" + datajson);

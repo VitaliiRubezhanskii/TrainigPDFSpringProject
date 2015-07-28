@@ -91,15 +91,15 @@ public class ManagementServlet extends HttpServlet {
 			
 			switch(action){
 			
-				case "customerLogin":
+				case "customerLogin": ///there's NO customer login at the moment.
 					int customer = 0;
 					String customerEmail = input.getString("email");
 					System.out.println("Login with email:" + customerEmail);
 					//System.out.println("comparing to customers, how many??="+customers.size() );
 					for(int i = 0; i < DbLayer.customers.size(); i++){
-						if(DbLayer.customers.get(i).getEmail().equals(customerEmail)){
+						if(DbLayer.customers.get(i).getEmail().equalsIgnoreCase(customerEmail)){
 							customer = 1;
-							System.out.println("Login with email:" + customerEmail + " compare to " + DbLayer.customers.get(i).getEmail() + " result " + customer);
+							//System.out.println("Login with email:" + customerEmail + " compare to " + DbLayer.customers.get(i).getEmail() + " result " + customer);
 							break;
 						}
 						
@@ -112,11 +112,11 @@ public class ManagementServlet extends HttpServlet {
 					int salesman_found = 0;
 					Salesman checkSalesman = new Salesman(input.getString("email"), input.getString("password"), null, null);
 					for(int i = 0; i < DbLayer.salesmen.size(); i++){
-						if (DbLayer.salesmen.get(i).getEmail().equals(checkSalesman.getEmail()))
+						if (DbLayer.salesmen.get(i).getEmail().equalsIgnoreCase(checkSalesman.getEmail()))
 						{
 							System.out.println("found correct salesman in db. password is: "+DbLayer.salesmen.get(i).getPassword());
 						}
-						if(DbLayer.salesmen.get(i).getEmail().equals(checkSalesman.getEmail()) && DbLayer.salesmen.get(i).getPassword().equals(checkSalesman.getPassword())){						
+						if(DbLayer.salesmen.get(i).getEmail().equals(checkSalesman.getEmail()) && DbLayer.salesmen.get(i).getPassword().equalsIgnoreCase(checkSalesman.getPassword())){						
 							salesman_found = 1;
 							break;
 						}
