@@ -36,16 +36,34 @@ public class CustomerLogger {
 							statement.setInt(3, Integer.parseInt(param1));
 							statement.setFloat(4, Float.parseFloat(param2));
 							statement.setString(5, param3);						
-							statement.setString(6, sessionId);
-							
-						//	System.out.println("adding customer event name " + event_name + " id " + id + " sessid " + sessionId);
-							
+							statement.setString(6, sessionId);							
 							// sends the statement to the database server
 							int row = statement.executeUpdate();
-							if (row > 0) {
-								String message = "Logged line. id " +id + "event " + event_name +  " param1 " + param1  + " param2 " + param2 + " param3 " + param3 ;
+							if (row > 0) { 
+								String message = "Logged customer event. id " +id + "event " + event_name +  " param1 " + param1  + " param2 " + param2 + " param3 " + param3 ;
 								System.out.println(message);								
-							}
+							}							
+							
+							// write to sessions table for open slides event
+							if (event_name.equalsIgnoreCase("OPEN_SLIDES"))
+							{							
+										sql = "INSERT INTO customer_sessions (msg_id, ipaddr, session_id, browser, operating_system, all_browser_data, done, timestamp) values "
+												+ "		(?, ?, ?, ?, ?, ?, 0, DATE_ADD(UTC_TIMESTAMP(),INTERVAL "+ (-timezone_offset_min)+" MINUTE) )";
+										System.out.println("sql for OEN_SLIDES is " + sql);
+										statement = conn.prepareStatement(sql);
+										statement.setString(1, id);						
+										statement.setString(2, "1.2.3.4");
+										statement.setString(3, sessionId);
+										statement.setString(4, "browser");
+										statement.setString(5, "os");
+										statement.setString(6, "alldata");																	
+										// sends the statement to the database server
+										row = statement.executeUpdate();
+										if (row > 0) { 
+											String message = "NEW SESSION!. id " +id + "event " + event_name +  " param1 " + param1  + " param2 " + param2 + " param3 " + param3 ;
+											System.out.println(message);								
+										}
+							}														
 				}            
 				catch (SQLException ex) {
 				ex.printStackTrace();
