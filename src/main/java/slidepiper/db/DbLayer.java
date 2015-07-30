@@ -128,7 +128,8 @@ public class DbLayer {
 			}
 			return myPres;
 		}
-
+		
+		
 
 	public  static Customer getCustomer(String name){
 				for(int i = 0; i < customers.size(); i++){
@@ -295,6 +296,7 @@ public class DbLayer {
 			}			
 			return null;
 		}
+	
 	
 	
 	// get only sm email, not all msg info. for customer presentation view.
@@ -613,7 +615,7 @@ ORDER BY 6 DESC;
 			}		
 						
 			String historySQL=
-					" SELECT customers.name AS 'customer_name', customers.email AS 'customer_email', "+
+					" SELECT DISTINCT customers.name AS 'customer_name', customers.email AS 'customer_email', "+
 				  " msg_info.msg_text AS 'message_text', msg_info.id as 'msgid', "+
 					" slides.name AS 'slides_name', msg_info.timestamp " +	
 					" FROM msg_info, customers, slides " +
@@ -624,6 +626,20 @@ ORDER BY 6 DESC;
 					" AND msg_info.sales_man_email='"+ salesman_email + "' " + 
 					" ORDER BY " +
 					" timestamp DESC";
+			
+			/* original query tested:
+			 * SELECT DISTINCT customers.name AS 'customer_name', customers.email AS 'customer_email', 
+				   msg_info.msg_text AS 'message_text', msg_info.id AS 'msgid', 
+					 slides.name AS 'slides_name', msg_info.timestamp 
+					 FROM msg_info, customers, slides 
+					 WHERE 
+					 customers.email=msg_info.customer_email
+					 AND 
+					 msg_info.slides_id = slides.id
+					 AND msg_info.sales_man_email='shauli.daon@gmail.com' 
+					ORDER BY
+					 timestamp DESC;*/
+			 
 			try (Connection conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
 				Statement statement = conn.createStatement();
 									ResultSet resultset = statement.executeQuery(historySQL);) {
@@ -654,4 +670,44 @@ ORDER BY 6 DESC;
 		}
 		///*********************************************************
 	
+// GET history for salesman
+public static ArrayList<String> getSessionsByMsgId(String msgid)
+{		
+	//System.out.println("start get sess for msgid " + msgid);
+	ArrayList<String> sessArr = new ArrayList<String>();
+	try {
+		DriverManager.registerDriver(new com.mysql.jdbc.Driver());
+	} catch (SQLException e) {
+		e.printStackTrace();
+	}		
+				
+	String sessSQL=
+			"SELECT session_id FROM customer_sessions WHERE msg_id='"+msgid+"'";
+	try (Connection conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
+		Statement statement = conn.createStatement();
+							ResultSet resultset = statement.executeQuery(sessSQL);) {
+//		System.out.println("query done");
+		
+		String sessid;
+//			System.out.println("LOOPING ON QUERY RESULTS");
+			while (resultset.next()) {
+				sessid = resultset.getString(1);
+			 	
+			 sessArr.add(sessid);		
+		//    System.out.println("Found sessid for history. sessid " + sessid + " msgid " + msgid);
+			}
+	} catch (Exception ex) {
+			System.out.println("exception in getHistory");
+			ex.printStackTrace();
+	}
+	//System.out.println("returning alerts found.");
+	return sessArr;
 }
+///*********************************************************
+
+}
+
+
+
+
+

@@ -267,8 +267,7 @@ function fillBarCharts(alerts_session_ids) {
 								+ error);
 					},
 					success : function(msg) {
-						console
-	//							.log("fillBarCharts: getslideviews event returned "
+						//console.log("fillBarCharts: getslideviews event returned "
 		//								+ msg);
 						// received slide views array.
 						var jsonTable = [];

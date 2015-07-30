@@ -92,7 +92,12 @@ public class ReportsServlet extends HttpServlet {
 								System.out.println("calling getHistory with email " + input.getString("email"));
 								ArrayList<HistoryItem> his = DbLayer.getHistory(input.getString("email"));					
 								output.put("history",his);
-								break;									
+								break;
+							case "getSessionsByMsgId":					
+								//System.out.println("calling getSessionsByMsgId with msgid " + input.getString("msgid"));
+								ArrayList<String> sessions = DbLayer.getSessionsByMsgId(input.getString("msgid"));					
+								output.put("sessions",sessions);
+								break;																				
 							case "getSlideViews":
 									//	System.out.println("calling get slide views");
 										ArrayList<SlideView> slideviews = DbLayer.getSlideViews(input.getString("sessionId"));
