@@ -34,14 +34,15 @@ function fillCustomersAndPresentations() {
 						// alert('cust email ' + msg.myCustomers[i].email);
 					}
 					custCheckboxes += '</fieldset>';
-					$("#customersDiv").html(custCheckboxes);
+					$("#customersDiv").hide().html(custCheckboxes).fadeIn('fast');
 				}
 				
-				console.log("Customers loaded successfully");
+				console.log("------------------------------Customers loaded successfully");
+				
 				// $(".customerSelect").html(myCustomers);
 				var presentations = "";
 				pres1Checkboxes = '<fieldset data-role="controlgroup">';
-				pres2Checkboxes = '<fieldset data-role="controlgroup">';
+				//pres2Checkboxes = '<fieldset data-role="controlgroup">';
 				for (var i = 0; i < msg.presentations.length; i++) {
 					// console.log("adding pres " + msg.presentations[i].name +
 					// " with id " + msg.presentations[i].id);
@@ -58,15 +59,16 @@ function fillCustomersAndPresentations() {
 					// capital letters, that's what I allow.
 					pres1Checkboxes += makeCb(msg.presentations[i].id + "@1",
 							msg.presentations[i].name, 'pres1');
-					pres2Checkboxes += makeCb(msg.presentations[i].id + "@2",
-							msg.presentations[i].name, 'pres2');
+					//pres2Checkboxes += makeCb(msg.presentations[i].id + "@2",
+					//		msg.presentations[i].name, 'pres2');
 				}
 				pres1Checkboxes += '</fieldset>';
-				pres2Checkboxes += '</fieldset>';
-				$("#pres1Div").html(pres1Checkboxes);
-				$("#pres2Div").html(pres2Checkboxes);
+				//pres2Checkboxes += '</fieldset>';
+				//alert(pres1Checkboxes);
+				$("#pres1Div").hide().html(pres1Checkboxes).fadeIn('fast');
+				//$("#pres2Div").hide().html(pres2Checkboxes).fadeIn('fast');
 				
-				console.log("Presentations loaded successfully");
+				console.log("----------------------------Presentations loaded successfully");
 				// refreshLists();
 				// refreshPage();
 				// setTimeout(function() { changepage('#manage');} , 400);
@@ -87,7 +89,7 @@ function fillCustomersAndPresentations() {
 					// after the refreshes, it's all fully loaded.
 										
 					hideLoadingMsgIfFullyLoaded();
-				}, 0); // put at end of event queue, after rending checkboxes.
+				}, 2000); // put at end of event queue, after rending checkboxes.
 				// alert("fill cust & pres done");
 			}
 		});
@@ -143,7 +145,8 @@ function fillAlerts() {
 						// + "<BR><BR> Original Message: <BR>" +
 						// msg.alerts[i].msg_text;
 						alertsHTML += '<li>';
-						alertsHTML += '<div class="ui-grid-b ui-responsive">';
+						//id is session num, to get it later in history screen.
+						alertsHTML += '<div id='+alerts_session_ids[i]+' class="ui-grid-b ui-responsive">';
 
 						// I put sessionId inside a div inside the button
 						// because
@@ -181,7 +184,7 @@ function fillAlerts() {
 					}
 
 					// alert(alertsHTML);
-					$("#smartalerts").html(alertsHTML);
+					$("#smartalerts").hide().html(alertsHTML).fadeIn('fast');
 					console.log("fillAlerts ajax returned updated alerts");
 
 					// alert("filled alerts");
@@ -363,15 +366,15 @@ function fillQuestions(alerts_session_ids) {
 							}
 							qmessage += "</ul>";
 
-							$(".questions" + this.curIndex).html(qmessage);
+							$(".questions" + this.curIndex).hide().html(qmessage).fadeIn('fast');
 
 							// alert(qmessage);
-							$(".recommendation" + this.curIndex).html(
-									"Call " + recom);
+							$(".recommendation" + this.curIndex).hide().html(
+									"Call " + recom).fadeIn('fast');
 						} else // no q's
 						{
-							$(".recommendation" + this.curIndex).html(
-									"Send e-mail to " + recom);
+							$(".recommendation" + this.curIndex).hide().html(
+									"Send e-mail to " + recom).fadeIn('fast');
 						}
 						questionsloaded = true;
 						console.log("Questions loaded successfully");
@@ -381,4 +384,4 @@ function fillQuestions(alerts_session_ids) {
 	}
 	//console.log("filling qs done");
 }
-	
+

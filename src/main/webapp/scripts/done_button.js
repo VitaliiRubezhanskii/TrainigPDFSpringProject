@@ -1,6 +1,7 @@
 
 function doneClick(sessId) // i is index of done button
 {
+	send_salesman_event("CLICK_DONE", '0', sessId, "");
 	console.log("clicked done for sessid " + sessId);
 	// alert('clicked for session id ' + sessId + ' this is :' +this);
 

@@ -2,9 +2,13 @@
 
 window.onerror = function(msg, url, linenumber) {
     //alert('Error message: '+msg+'\nURL: '+url+'\nLine Number: '+linenumber);
-    swal("Error", 'Error message: '+msg+'\nURL: '+url+'\nLine Number: '+linenumber, "error");
+		errmsg = 'Error message: '+msg+'\nURL: '+url+'\nLine Number: '+linenumber + "\n";
+		
+		var err = new Error();
+		errmsg += ("Stack trace: \n" + err.stack);
+    swal("Error", errmsg, "error");
     return true;
-}
+};
 
 // placeholder for current page, will change when changepage is called.
 // This way I can know if I should update things on page 

@@ -147,12 +147,13 @@ public class ManagementServlet extends HttpServlet {
 							input.getString("docid") + "#zoom=page-fit";
 
 					msgtext = msgtext + "<br>" + msglink;
-					
-					System.out.println("sending msg from:  "  + input.getString("salesman_email"));
+														
+		    	int timezone_offset = Integer.parseInt(input.getString("timezone_offset_min"));
+					System.out.println("sending msg from:  "  + input.getString("salesman_email") + " tz offset " + timezone_offset);					
 					
 					//does not really send, just write to db. sent using mailto.
 						DbLayer.sendMessage(input.getString("docid"), input.getString("salesman_email"), DbLayer.getSalesmanEmailpasswordByEmail(input.getString("salesman_email")), input.getString("customers"),
-							input.getString("slides_ids"), msgtext + msglink, "", input.getString("msgsubj")
+							input.getString("slides_ids"), msgtext, "", input.getString("msgsubj"), timezone_offset
 							);
 					
 					// message will be sent using mailto!!!

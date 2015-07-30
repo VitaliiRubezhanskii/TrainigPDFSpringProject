@@ -2,6 +2,7 @@ package slidepiper.db;
 
 import java.sql.Connection;
 
+
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -24,6 +25,7 @@ import slidepiper.dataobjects.MessageInfo;
 import slidepiper.dataobjects.Presentation;
 import slidepiper.dataobjects.Salesman;
 import slidepiper.dataobjects.SlideView;
+import slidepiper.dataobjects.HistoryItem;
 
 public class DbLayer {
 	
@@ -525,10 +527,11 @@ ORDER BY 6 DESC;
 
 		
 		// insert into database presentation share with customer. 
-		public static int sendMessage(String id, String salesmanEmail, String salesmanEmailpassword, String customer, String slides_ids, String message, String linktext, String subj){
+		public static int sendMessage(String id, String salesmanEmail, String salesmanEmailpassword, String customer, String slides_ids, String message, String linktext, String subj, int timezone_offset_min){
 			String salesMan = null;
 			Customer c = getCustomer(customer);
-			String query = "INSERT INTO msg_info(id,sales_man_email,customer_email,slides_id,msg_text,timestamp) VALUES (?,?,?,?,?,NOW())";
+			String query = "INSERT INTO msg_info(id,sales_man_email,customer_email,slides_id,msg_text,timestamp) VALUES "+
+			"(?,?,?,?,?, DATE_ADD(UTC_TIMESTAMP(),INTERVAL "+ (-timezone_offset_min)+" MINUTE))";
 			try (Connection conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass); ) {
 				PreparedStatement preparedStatement = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 				preparedStatement.setString(1, id);
@@ -538,7 +541,7 @@ ORDER BY 6 DESC;
 				// need to fix this: maybe it's many ids. (now it's one).
 				preparedStatement.setString(4, slides_ids);
 				
-				preparedStatement.setString(5, "Subject: " + subj + " \nMessage: " + message);
+				preparedStatement.setString(5, "Subject:"+ subj + " <BR>Text:<BR>" + message);
 				int rowsAffected = preparedStatement.executeUpdate();
 				if (rowsAffected == 1) {
 					ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
@@ -598,6 +601,57 @@ ORDER BY 6 DESC;
 		}
 		
 
-	
+		// GET history for salesman
+		public static ArrayList<HistoryItem> getHistory(String salesman_email){
+				
+			System.out.println("start get history for email " + salesman_email);
+			ArrayList<HistoryItem> his = new ArrayList<HistoryItem>();
+			try {
+				DriverManager.registerDriver(new com.mysql.jdbc.Driver());
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}		
+						
+			String historySQL=
+					" SELECT customers.name AS 'customer_name', customers.email AS 'customer_email', "+
+				  " msg_info.msg_text AS 'message_text', msg_info.id as 'msgid', "+
+					" slides.name AS 'slides_name', msg_info.timestamp " +	
+					" FROM msg_info, customers, slides " +
+					" WHERE " +
+					" customers.email=msg_info.customer_email " +
+					" AND " +
+					" msg_info.slides_id = slides.id " +
+					" AND msg_info.sales_man_email='"+ salesman_email + "' " + 
+					" ORDER BY " +
+					" timestamp DESC";
+			try (Connection conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
+				Statement statement = conn.createStatement();
+									ResultSet resultset = statement.executeQuery(historySQL);) {
+//				System.out.println("query done");
+				HistoryItem hi;
+				String cust_name, cust_email, msgtext, msg_id, slides_name, send_time;
+	//			System.out.println("LOOPING ON QUERY RESULTS");
+					while (resultset.next()) {
+						cust_name = resultset.getString(1);
+					 	cust_email = resultset.getString(2);
+					 	msgtext = resultset.getString(3);
+					 	msg_id = resultset.getString(4);
+					 	slides_name = resultset.getString(5);					 						 						 	
+					 	send_time = resultset.getString(6);
+					 	
+					  hi = new HistoryItem(cust_name, cust_email,	msgtext, msg_id, slides_name, send_time);			
+		//			  System.out.println("query done, values set");
+					  // I don't save msg_id and sessId but maybe USE THEM LATER.					    
+					  his.add(hi);
+   			    //System.out.println("Found alert: cust " + cust_email + " sl name " + slides_name + "msgtext" + msgtext + " msgid " + msg_id + " open " + open_time + " send " + send_time + " sess id " + sessId);
+					}
+			} catch (Exception ex) {
+					System.out.println("exception in getHistory");
+					ex.printStackTrace();
+			}
+			//System.out.println("returning alerts found.");
+			return his;
+		}
+		///*********************************************************
 	
 }

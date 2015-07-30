@@ -24,4 +24,3 @@ function send_salesman_event(ename, eparam1, eparam2, eparam3) {
 		}
 	});
 }
-

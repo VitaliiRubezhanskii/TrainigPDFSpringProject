@@ -47,7 +47,7 @@ function	 verifyLoaded()
 {
 			if (loggedin == true)
 			{
-					console.log("Verifying loading of data from DB");
+					console.log("Verifying loading of data from DB. stack=" + Error().stack);
 					console.log("alerts " + alertsloaded + 
 							" barcharts " + barchartsloaded + 
 							" questions " + questionsloaded +

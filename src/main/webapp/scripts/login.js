@@ -1,5 +1,5 @@
 
-	console.log(" binding gotoManage");
+//	console.log(" binding gotoManage");
 	$("#gotoManage").bind(
 			"click",
 			function(event, ui) {

@@ -1,6 +1,7 @@
 
 
 $('#uploadform').submit(function() {
+	send_salesman_event("UPLOADING_FILE", '0', '0', $("#newpresname").val());
 	if ($("#newpresname").val() == "") 
 	{
 		swal("Error",'Empty filename field.',"error");

@@ -23,7 +23,9 @@ $("#removePresentationButton")
 										pres1.push(slidesid);
 									}
 								});
-
+						
+						send_salesman_event("REMOVE_PRESENTATION", '0', '0', slidesid);
+						
 						if (pres1.length != 1) {
 							swal("Can't do it", "The system currently supports removing one presentation at a time.", "error");
 						} else {

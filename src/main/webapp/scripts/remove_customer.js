@@ -5,6 +5,7 @@ $("#removeCustButton")
 				"click",
 				function(event, ui) {
 					console.log("removing customer");
+					
 					var r = confirm("Are you sure? You may lose customer tracking.");
 					if (r == true) {
 						x = "You pressed OK!";
@@ -32,13 +33,16 @@ $("#removeCustButton")
 						} else {
 							// get emails:
 							var salesmanEmail = getCookie("SalesmanEmail").toLowerCase();
-							var customerEmail = customeremails.toLowerCase(); // should be
+							var customerEmail = customeremails; // should be
 																// only one.
+							console.log("cust email in rmove cust: " + customerEmail);
 							datajson = '{"action":"deleteCustomer", "salesman_email":"'
 									+ salesmanEmail.toLowerCase()
 									+ '", "customer_email":"'
-									+ customerEmail.toLowerCase() + '"}';
+									+ customerEmail.toString().toLowerCase() + '"}';
 							console.log("removing cust datajson=" + datajson);
+							
+							send_salesman_event("REMOVE_CUSTOMER", '0', '0', "Email:" + customerEmail.toString());
 							showWaitMsg();
 							$
 									.ajax({

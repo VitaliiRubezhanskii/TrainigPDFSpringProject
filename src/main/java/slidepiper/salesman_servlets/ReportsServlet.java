@@ -23,6 +23,7 @@ import org.json.JSONObject;
 import slidepiper.*;
 import slidepiper.constants.Constants;
 import slidepiper.dataobjects.AlertData;
+import slidepiper.dataobjects.HistoryItem;
 import slidepiper.dataobjects.SlideView;
 import slidepiper.db.DbLayer;
 
@@ -87,6 +88,11 @@ public class ReportsServlet extends HttpServlet {
 									ArrayList<AlertData> alerts = DbLayer.getAlerts(input.getString("email"));					
 									output.put("alerts", alerts);
 									break;
+							case "getHistory":					
+								System.out.println("calling getHistory with email " + input.getString("email"));
+								ArrayList<HistoryItem> his = DbLayer.getHistory(input.getString("email"));					
+								output.put("history",his);
+								break;									
 							case "getSlideViews":
 									//	System.out.println("calling get slide views");
 										ArrayList<SlideView> slideviews = DbLayer.getSlideViews(input.getString("sessionId"));

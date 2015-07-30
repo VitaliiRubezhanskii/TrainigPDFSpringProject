@@ -80,8 +80,17 @@
 									+ '"msgtext":"'
 									+ msgtext
 									+ '",'
-									+ '"docid":"' + docid + '"' + '}';
-
+									+ '"timezone_offset_min":"'
+									+ tz_offset_min
+									+ '",'									
+									+ '"docid":"' + docid 
+									+ '"'
+									+ '}';
+							
+							alert(jsondata);
+																					
+							send_salesman_event("SEND_EMAIL", '0', '0', jsondata);
+														
 							showWaitMsg();
 							// alert("json msg " + jsondata);
 							console.log("sendemail ajax");
