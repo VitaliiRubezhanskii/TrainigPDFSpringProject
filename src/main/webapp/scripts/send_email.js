@@ -87,7 +87,7 @@
 									+ '"'
 									+ '}';
 							
-							alert(jsondata);
+							//alert(jsondata);
 																					
 							send_salesman_event("SEND_EMAIL", '0', '0', jsondata);
 														
