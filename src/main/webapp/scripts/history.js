@@ -40,9 +40,9 @@
 	// load questions and barcharts for all sessions for this msgid
 	function loadDataForMessage(msgid)
 	{
-		$("#"+msgid).html("Loading data...");
-		$("#"+msgid).val("Loading more data...");
-		$("#"+msgid).text("Loading	...");
+		//alert("loading for msgid " + msgid);
+		$("#"+msgid).html("Loading more data. Please wait.");
+		$("#"+msgid).html(""); //for now, not loading anything more.
 		console.log("Loading more data for history");
 		hideWaitMsg();
 		console.log("history q's barcharts etc loaded successfully");//(without q's and barcharts)
@@ -75,7 +75,7 @@
 
 						for (var i = 0; i < msg.history.length; i++) 
 						{
-							history_msg_ids[i] = msg.history[i].msgid;
+							history_msg_ids[i] = msg.history[i].msgId;
 							customername = msg.history[i].customerName;
 							customeremail = msg.history[i].customerEmail;
 							messagetext=msg.history[i].messageText;
@@ -103,7 +103,7 @@
 						}
 
 						// update history data
-						for (var i = 0; i < msg.history.length; i++) 
+						for (var i = 0; i < history_msg_ids.length; i++) 
 						{							 					
 								setTimeout(
 											loadDataForMessage, 300, history_msg_ids[i]); // put at end of event queue, after evt queue
