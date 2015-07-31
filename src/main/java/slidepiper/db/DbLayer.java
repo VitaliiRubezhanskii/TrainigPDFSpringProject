@@ -750,7 +750,7 @@ ORDER BY 6 DESC;
 					//last to view pres
 					SQLs.add("	SELECT " + 
 							" msg_info.id, msg_info.sales_man_email,msg_info.customer_email,slides.name, " +
-							" customer_events.session_id " +
+							" customer_events.timestamp " +
 							" FROM " +
 							" msg_info, customer_events, slides " +
 							" WHERE " +
@@ -771,16 +771,43 @@ ORDER BY 6 DESC;
 					SQLs.add(
 							" SELECT * FROM msg_info ORDER BY timestamp DESC LIMIT 20;");
 					
+					
+					SQLs.add("SELECT * FROM `customer_events` WHERE event_name='SUBSCRIBE'  ORDER BY timestamp DESC;");
+					
+					SQLs.add("SELECT * FROM `customer_events` WHERE event_name='CONTACT_US'  ORDER BY timestamp DESC;");
 					// last events of customers
 					//SQLs.add(
 							//" SELECT * FROM customer_events ORDER BY timestamp DESC LIMIT 150;");
 
-									
+									int cntr=0;
 					for(String curSQL : SQLs)
 					{
 							try (Connection conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
 								Statement statement = conn.createStatement();
 													ResultSet resultset = statement.executeQuery(curSQL);) {
+									switch (cntr)
+									{
+									case 0:
+										HTML+= "<BR>recent presentation views<BR>";
+										break;
+									case 1:
+										HTML+= "<BR>recent online salesmen<BR>";
+										break;
+									case 2:
+										HTML+= "<BR>recent msgs sent<BR>";
+										break;
+									case 3:
+										HTML+= "<BR>mailing list subscribers<BR>";
+										break;
+									case 4:
+										HTML+= "<BR>contact us messages<BR>";
+										break;
+									case 5:
+										HTML+= "<BR><BR>";
+										break;
+
+									}
+									cntr++;
 								  HTML += getResultSetHTML(resultset);								  
 							} catch (Exception ex) {
 									System.out.println("exception in SQL query" + ex.getStackTrace().toString());
