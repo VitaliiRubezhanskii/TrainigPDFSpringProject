@@ -1,13 +1,14 @@
 package slidepiper.db;
 
+import java.io.PrintWriter;
+
 import java.sql.Connection;
-
-
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.Properties;
 
@@ -18,6 +19,7 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+
 import slidepiper.constants.Constants;
 import slidepiper.dataobjects.AlertData;
 import slidepiper.dataobjects.Customer;
@@ -670,40 +672,123 @@ ORDER BY 6 DESC;
 		}
 		///*********************************************************
 	
-// GET history for salesman
-public static ArrayList<String> getSessionsByMsgId(String msgid)
-{		
-	//System.out.println("start get sess for msgid " + msgid);
-	ArrayList<String> sessArr = new ArrayList<String>();
-	try {
-		DriverManager.registerDriver(new com.mysql.jdbc.Driver());
-	} catch (SQLException e) {
-		e.printStackTrace();
-	}		
+		// GET history for salesman
+		public static ArrayList<String> getSessionsByMsgId(String msgid)
+		{		
+			//System.out.println("start get sess for msgid " + msgid);
+			ArrayList<String> sessArr = new ArrayList<String>();
+			try {
+				DriverManager.registerDriver(new com.mysql.jdbc.Driver());
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}		
+						
+			String sessSQL=
+					"SELECT session_id FROM customer_sessions WHERE msg_id='"+msgid+"'";
+			try (Connection conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
+				Statement statement = conn.createStatement();
+									ResultSet resultset = statement.executeQuery(sessSQL);) {
+		//		System.out.println("query done");
 				
-	String sessSQL=
-			"SELECT session_id FROM customer_sessions WHERE msg_id='"+msgid+"'";
-	try (Connection conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
-		Statement statement = conn.createStatement();
-							ResultSet resultset = statement.executeQuery(sessSQL);) {
-//		System.out.println("query done");
-		
-		String sessid;
-//			System.out.println("LOOPING ON QUERY RESULTS");
-			while (resultset.next()) {
-				sessid = resultset.getString(1);
-			 	
-			 sessArr.add(sessid);		
-		//    System.out.println("Found sessid for history. sessid " + sessid + " msgid " + msgid);
+				String sessid;
+		//			System.out.println("LOOPING ON QUERY RESULTS");
+					while (resultset.next()) {
+						sessid = resultset.getString(1);
+					 	
+					 sessArr.add(sessid);		
+				//    System.out.println("Found sessid for history. sessid " + sessid + " msgid " + msgid);
+					}
+			} catch (Exception ex) {
+					System.out.println("exception in getHistory");
+					ex.printStackTrace();
 			}
-	} catch (Exception ex) {
-			System.out.println("exception in getHistory");
-			ex.printStackTrace();
-	}
-	//System.out.println("returning alerts found.");
-	return sessArr;
-}
-///*********************************************************
+			//System.out.println("returning alerts found.");
+			return sessArr;
+		}
+		///*********************************************************
+		
+		// helper function to convert resultset to html
+		private static String getResultSetHTML(java.sql.ResultSet rs)
+			    throws Exception {
+			 int rowCount = 0;
+			 String resultStr="";
+
+			 resultStr = "<P ALIGN='center'><TABLE BORDER=1>";
+			 ResultSetMetaData rsmd = rs.getMetaData();
+			 int columnCount = rsmd.getColumnCount();
+			 // table header
+			 resultStr += "<TR>";
+			 for (int i = 0; i < columnCount; i++) {
+				 resultStr += ("<TH>" + rsmd.getColumnLabel(i + 1) + "</TH>");
+			   }
+			 resultStr +="</TR>";
+			 // the data
+			 while (rs.next()) {
+			  rowCount++;
+			  resultStr +="<TR>";
+			  for (int i = 0; i < columnCount; i++) {
+				  resultStr +="<TD>" + rs.getString(i + 1) + "</TD>";
+			    }
+			  resultStr +="</TR>";
+			  }
+			 resultStr +="</TABLE></P>";
+			 //return rowCount;
+			 return resultStr;
+			}
+
+			public static String getAdminReport()
+			{
+					String HTML="Some reports <BR><BR>";
+					
+					try {
+						DriverManager.registerDriver(new com.mysql.jdbc.Driver());
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}		
+								
+					ArrayList<String> SQLs = new ArrayList<String>();
+					//last to view pres
+					SQLs.add("	SELECT " + 
+							" msg_info.id, msg_info.sales_man_email,msg_info.customer_email,slides.name, " +
+							" customer_events.session_id " +
+							" FROM " +
+							" msg_info, customer_events, slides " +
+							" WHERE " +
+							" slides.id=msg_info.slides_id AND msg_info.id=customer_events.msg_id AND " +
+							" customer_events.event_name='OPEN_SLIDES' " + 
+							" ORDER BY customer_events.timestamp DESC LIMIT 30;");
+
+					// last to open mgmt console
+					SQLs.add(
+					" SELECT email, timestamp " +
+					" FROM salesman_events "+
+					" WHERE event_name='OPEN_MANAGE' "+
+					" ORDER BY timestamp DESC "+
+					" LIMIT 30; ");
+
+
+					// last msgs sent
+					SQLs.add(
+							" SELECT * FROM msg_info ORDER BY timestamp DESC LIMIT 20;");
+					
+					// last events of customers
+					//SQLs.add(
+							//" SELECT * FROM customer_events ORDER BY timestamp DESC LIMIT 150;");
+
+									
+					for(String curSQL : SQLs)
+					{
+							try (Connection conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
+								Statement statement = conn.createStatement();
+													ResultSet resultset = statement.executeQuery(curSQL);) {
+								  HTML += getResultSetHTML(resultset);								  
+							} catch (Exception ex) {
+									System.out.println("exception in SQL query" + ex.getStackTrace().toString());
+									ex.printStackTrace();
+							}
+					}
+					return HTML;
+			}
 
 }
 
