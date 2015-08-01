@@ -44,36 +44,44 @@
 	function loadDataForMessage(msgid)
 	{
 		showWaitMsg();
-		//alert("loading for msgid " + msgid)
-		$("#questions_"+msgid).html("");
-		$("#barcharts_"+msgid).html("");
-		
-		//console.log("Loading more data for history");
-		
-		$.ajax({
-			type : "POST",
-			url : "ReportsServlet",
-			data : '{"action":"getSessionsByMsgId", "msgid":"' + msgid
-					+ '"}',
-			contentType : "application/json; charset=utf-8",
-			currentMsgId : msgid,
-			processData : false,
-			error : 
-				function(XmlHttpRequest, status, error) {
-				swal("Error",'error from returned json.... ReportsServlet getSessionsForMsgId' + error,"error");
-				},
-			success : 
-				function(msg) {						
-							console.log("Found num sessions " + msg.sessions.length + " for msgid " + this.currentMsgId); 
-							fillQuestions_InHistory(msg.sessions, this.currentMsgId);
-							fillBarCharts_InHistory(msg.sessions, this.currentMsgId)
-								//alert("found session " + msg.sessions[i] + " msgid " + msgid);
-			//				console.log("Started filling q's and barcharts");							
-				} 				
-			});
-				
-//		console.log("history q's barcharts etc loaded successfully");//(without q's and barcharts)		
-		hideWaitMsg();
+		console.log("loading data for msgid " + msgid);
+		if ($.inArray(msgid, loadedmsgids) == -1) // not loaded already
+		{				
+					loadedmsgids.push(msgid);			
+					$("#questions_"+msgid).html("");
+					$("#barcharts_"+msgid).html("");
+					
+					//console.log("Loading more data for history");
+					
+					$.ajax({
+						type : "POST",
+						url : "ReportsServlet",
+						data : '{"action":"getSessionsByMsgId", "msgid":"' + msgid
+								+ '"}',
+						contentType : "application/json; charset=utf-8",
+						currentMsgId : msgid,
+						processData : false,
+						error : 
+							function(XmlHttpRequest, status, error) {
+							swal("Error",'error from returned json.... ReportsServlet getSessionsForMsgId' + error,"error");
+							},
+						success : 
+							function(msg) {						
+										//console.log("Found num sessions " + msg.sessions.length + " for msgid " + this.currentMsgId + " filling..."); 
+										fillQuestions_InHistory(msg.sessions, this.currentMsgId);
+										fillBarCharts_InHistory(msg.sessions, this.currentMsgId);
+											//alert("found session " + msg.sessions[i] + " msgid " + msgid);
+						//				console.log("Started filling q's and barcharts");							
+							} 				
+						});
+							
+			//		console.log("history q's barcharts etc loaded successfully");//(without q's and barcharts)		
+					hideWaitMsg();
+		}
+		else
+			{
+				console.log(" msgid " + msgid + " already loaded. skipping."); 
+			}
 	}
 
 	//*******************************************************************************************
@@ -130,14 +138,16 @@
 									"Sent to " + customeremail + " at " + send_time + 
 									"</p></div>";
 						}
-
+						
+						// global array to track the loaded ids, to avoid loading them twice.
+						loadedmsgids = [];
+						
 						// update history data
 						for (var i = 0; i < history_msg_ids.length; i++) 
 						{							 					
 								setTimeout(
 											loadDataForMessage, 300, history_msg_ids[i]); // put at end of event queue, after evt queue
 						}
-
 											
 						// alert(alertsHTML);
 						$("#historyDiv").hide().html(historyHTML).fadeIn('fast');
@@ -153,7 +163,7 @@
 		
 	/**********************************************************************************/
 	function fillBarCharts_InHistory(session_ids, msgid) {
-		console.log("filling barcharts");
+		//console.log("filling barcharts");
 		
 		// now we finished refreshing, we can add all the bar charts:
 		
@@ -278,12 +288,12 @@
 								qmessage += "</ul>";
 								
 								var oldqs =$("#questions_" + this.currentMsgId).html();
-								console.log("q's: " + oldqs + qmessage);
+//								console.log("q's: " + oldqs + qmessage);
 								
 								$("#questions_" + this.currentMsgId).hide().html(oldqs + qmessage).fadeIn('fast');
 								// alert(qmessage);
 							}							
-							console.log("Question loaded successfully for history.");							
+							//console.log("Question loaded successfully for history.");							
 						} // success func
 					});
 		}
