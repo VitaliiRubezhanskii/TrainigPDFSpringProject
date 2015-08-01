@@ -6,20 +6,34 @@ public class Salesman {
 	private String password;// password for system
 	private String name;
 	private String emailpassword; // password for email, for sending msgs
+	private String mailType;
 	
-	public Salesman(String email, String password, String name, String emailpassword){
+	public String getMailType() {
+		return mailType;
+	}
+
+	public void setMailType(String mailType) {
+		this.mailType = mailType;
+	}
+
+	public Salesman(String email, String password, String name, String emailpassword, String mailType){
 		setEmail(email);
 		setPassword(password);
 		setName(name);
 		setEmailpassword(emailpassword);
+		setMailType(mailType);
 		//System.out.println("Created in salesman: " + email + " pw " + password + " name " + name + " emailp" + emailpassword);
 	}
+
+	
 	
 	@Override
 	public String toString() {
-		return "email: " + getEmail() + ", password: " + getPassword();
+		return "Salesman [email=" + email + ", password=" + password
+				+ ", name=" + name + ", emailpassword=" + emailpassword
+				+ ", mailType=" + mailType + "]";
 	}
-	
+
 	@Override
     public boolean equals(Object obj) {
        Salesman salesman = (Salesman)obj;

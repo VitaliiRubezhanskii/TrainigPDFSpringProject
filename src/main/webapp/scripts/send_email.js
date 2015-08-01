@@ -112,20 +112,50 @@
 												console
 														.log("message registered on server.");
 												// alert("link is " + msg.link);
-
-												mailtourl = "mailto:"
-														+ JSONobj.customeremails
-														+ "?Subject="
-														+ JSONobj.msgsubj
-														+ "" +
-														// $("#cust_email").text()
-														// +
-														"&body="
-														+ JSONobj.msgtext + "%0D%0A" + "%0D%0A" //linebreaks
-														+ msg.link + "%0D%0A";
+												
+												switch (msg.mailtype)
+												{
+													case "mailto" : 														
+														mailtourl = "mailto:"
+															+ JSONobj.customeremails
+															+ "?Subject="
+															+ JSONobj.msgsubj
+															+ "" +
+															// $("#cust_email").text()
+															// +
+															"&body="
+															+ JSONobj.msgtext + "%0D%0A" + "%0D%0A" //linebreaks
+															+ msg.link + "%0D%0A";
+														break;
+													case "gmail" :
+														mailtourl =	"https://mail.google.com/mail/u/0/?view=cm&fs=1&tf=1&to=" 
+															+ JSONobj.customeremails + 
+															"&su=" + 
+															JSONobj.msgsubj + 
+															"&body=" +
+															JSONobj.msgtext + "%0D%0A" + "%0D%0A" + //linebreaks
+															msg.link + "%0D%0A";														
+														break;														
+														default: swal("Cannot send email.", "Mailtype is not defined correctly - " + msg.mailtype, "error");
+													}
+												
+												//alert(mailtourl);
+//												alert(JSONobj.toString());
+	//											alert(JSONobj.msgtext);
+		//										alert(JSONobj.msgsubj);
+			//									alert(this.data.toString());
 												
 												mailtourl = mailtourl.replace(" ", "%20");
 												mailtourl = mailtourl.replace("\r\n", "%0D%0A");
+												
+												// someone used this and it was helpful:
+												/*
+												body = body.replaceAll("\\\\", "%5C");
+												body = body.replaceAll(" ", "%20");
+												body = body.replaceAll("\r", "%0D");
+												body = body.replaceAll("\n", "%0A");
+												body = body.replaceAll("\t", "%09");
+												*/
 												
 												hideWaitMsg();
 												

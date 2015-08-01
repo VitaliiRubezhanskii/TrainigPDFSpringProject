@@ -77,17 +77,18 @@ public class DbLayer {
 				System.out.println("cnctd");
 			Statement statement = conn.createStatement();
 				System.out.println("stmt");
-			ResultSet resultset = statement.executeQuery("SELECT email, password, name, emailpassword FROM sales_men");
+			ResultSet resultset = statement.executeQuery("SELECT email, password, name, emailpassword, mailtype FROM sales_men");
 				System.out.println("rsltst");
 			Salesman salesman;
-			String email, password, name,emailpassword;
+			String email, password, name,emailpassword, mailtype;
 				while (resultset.next()) {
 				 	email = resultset.getString(1);
 				 	password = resultset.getString(2);
 				 	name = resultset.getString(3);
 				 	emailpassword = resultset.getString(4);
+				 	mailtype = resultset.getString(5);
 			//	 	System.out.println("salesman email " + email + " pw " + password + " name " + name + " email password " + emailpassword);
-				    salesman = new Salesman(email, password, name, emailpassword);
+				    salesman = new Salesman(email, password, name, emailpassword, mailtype);
 				    salesmen.add(salesman);
 			//      System.out.println(salesMan);
 				}
@@ -182,6 +183,21 @@ public class DbLayer {
 						//System.out.println("comparing email " + salesmanEmail + " to email in list: " + salesmen.get(i).getEmail());
 						if(salesmen.get(i).getEmail().equals(salesmanEmail)){
 							return salesmen.get(i).getEmailpassword();
+						//	break;
+						}
+					}
+					
+					System.out.println("getsalesman pw by email - not found!");
+					return null; // not found
+	}
+
+	public static String getSalesmanMailType(String salesmanEmail)
+	{
+			// get salesman mailtype from his email
+					for(int i = 0; i < salesmen.size(); i++){
+						//System.out.println("comparing email " + salesmanEmail + " to email in list: " + salesmen.get(i).getEmail());
+						if(salesmen.get(i).getEmail().equals(salesmanEmail)){
+							return salesmen.get(i).getMailType();
 						//	break;
 						}
 					}

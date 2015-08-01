@@ -110,7 +110,7 @@ public class ManagementServlet extends HttpServlet {
 				case "salesmanLogin":
 					System.out.println("Salesman logging in");
 					int salesman_found = 0;
-					Salesman checkSalesman = new Salesman(input.getString("email"), input.getString("password"), null, null);
+					Salesman checkSalesman = new Salesman(input.getString("email"), input.getString("password"), null, null, null);
 					for(int i = 0; i < DbLayer.salesmen.size(); i++){
 						if (DbLayer.salesmen.get(i).getEmail().equalsIgnoreCase(checkSalesman.getEmail()))
 						{
@@ -162,6 +162,7 @@ public class ManagementServlet extends HttpServlet {
 					output.put("succeeded", 1); //success signal					
 					// important --> link is used in mailto
 					output.put("link", msglink); //link for message
+					output.put("mailtype", DbLayer.getSalesmanMailType(input.getString("salesman_email"))); //link for message
 					break;
 														
 				case "addNewCustomer":
