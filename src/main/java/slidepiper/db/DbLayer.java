@@ -816,7 +816,7 @@ ORDER BY 6 DESC;
 							" WHERE " +
 							" slides.id=msg_info.slides_id AND msg_info.id=customer_events.msg_id AND " +
 							" customer_events.event_name='OPEN_SLIDES' " + 
-							" ORDER BY customer_events.timestamp DESC LIMIT 30;");
+							" ORDER BY customer_events.timestamp DESC LIMIT 40;");
 
 					// last to open mgmt console
 					SQLs.add(
@@ -832,9 +832,11 @@ ORDER BY 6 DESC;
 							" SELECT * FROM msg_info ORDER BY timestamp DESC LIMIT 20;");
 					
 					
-					SQLs.add("SELECT * FROM `customer_events` WHERE event_name='SUBSCRIBE'  ORDER BY timestamp DESC;");
+					SQLs.add("SELECT * FROM `customer_events` WHERE event_name='SUBSCRIBE'  ORDER BY timestamp DESC LIMIT 30;");
 					
-					SQLs.add("SELECT * FROM `customer_events` WHERE event_name='CONTACT_US'  ORDER BY timestamp DESC;");
+					SQLs.add("SELECT * FROM `customer_events` WHERE event_name='CONTACT_US'  ORDER BY timestamp DESC LIMIT 30;");
+					
+					SQLs.add("SELECT * FROM `customer_events` ORDER BY timestamp DESC LIMIT 300;");
 					// last events of customers
 					//SQLs.add(
 							//" SELECT * FROM customer_events ORDER BY timestamp DESC LIMIT 150;");
@@ -863,7 +865,7 @@ ORDER BY 6 DESC;
 										HTML+= "<BR>contact us messages<BR>";
 										break;
 									case 5:
-										HTML+= "<BR><BR>";
+										HTML+= "<BR>recent customer events<BR>";
 										break;
 
 									}

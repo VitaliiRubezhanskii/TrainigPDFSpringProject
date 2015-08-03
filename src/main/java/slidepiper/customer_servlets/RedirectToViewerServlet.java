@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
  * of the pdf viewer and hides it inside, so the end user does not
  * see it.
  */
-@WebServlet("/view")
+@WebServlet("/view/*")
 public class RedirectToViewerServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
