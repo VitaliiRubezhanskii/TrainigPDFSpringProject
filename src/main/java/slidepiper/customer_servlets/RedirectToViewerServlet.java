@@ -51,7 +51,7 @@ public class RedirectToViewerServlet extends HttpServlet {
 		// get the code
 		docid = request.getPathInfo().substring(1);
 		
-		String newurl = "pdfjs/viewer.html?file=/file/" + docid + "#zoom=page-fit";
+		String newurl = "/pdfjs/viewer.html?file=/file/" + docid + "#zoom=page-fit";
 		System.out.println("new url to redirect: " + newurl);
 		
 		// I want the url to remain as-as, so:
