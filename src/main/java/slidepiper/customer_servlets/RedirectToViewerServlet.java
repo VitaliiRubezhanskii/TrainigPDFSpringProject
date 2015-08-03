@@ -47,7 +47,7 @@ public class RedirectToViewerServlet extends HttpServlet {
 		and in this case - the URL will change.
 		*/
 		String docid;
-		
+			
 		// get the code
 		docid = request.getPathInfo().substring(1);
 		
