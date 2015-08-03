@@ -167,9 +167,31 @@
     
 <div data-role="header" data-theme="b">
 	<!-- <a href="index.html" data-icon="delete">Back</a> -->
-	<h1>Slidepiper</h1>
-	<!--  <a href="index.html" data-icon="check" data-theme="b">Logout</a>-->
-</div>            	
+	<button id="logoutTop" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-power ui-btn-inline" data-inline="true">Logout</button>
+	<h1>Slidepiper</h1> 	
+	<a id="myAccount" class=	"ui-btn ui-corner-all ui-shadow ui-btn-inline ui-mini ui-icon-carat-r ui-btn-icon-right" data-inline="true" href="#accountPanel">My Account</a>
+	
+ 
+</div>
+
+<div data-role="panel" id="accountPanel" data-position="right" data-display="reveal" data-theme="b">
+
+        <h3>Change your password</h3>
+        
+        <label for="pw" class="ui-hidden-accessible">Old Password:</label>
+            <input name="passOld" id="passwordfieldOld" value="" placeholder="Old Password" data-theme="b" type="password">
+        <p>Enter your new password.</p>
+<label for="pw" class="ui-hidden-accessible">New Password:</label>
+            <input name="passChange" id="passwordfieldChange" value="" placeholder="New Password" data-theme="b" type="password">
+                    
+            <label for="pw" class="ui-hidden-accessible">Confirm New Password:</label>
+            <input name="passChange2" id="passwordfieldChange2" value="" placeholder="Confirm New Password" data-theme="b" type="password">
+            
+        <a id="changePW" class="ui-btn ui-shadow ui-corner-all ui-btn-a ui-icon-delete ui-btn-icon-left ui-btn-inline">Save</a>
+        <a href="#demo-links" data-rel="close" class="ui-btn ui-shadow ui-corner-all ui-btn-a ui-icon-delete ui-btn-icon-left ui-btn-inline">Close</a>
+
+	</div><!-- /rightpanel1 -->
+            	
 
  <div role="main" class="ui-content no-padding-class">           
                 <!-- *************************************** SMART ALERTS ********************************** -->
@@ -353,6 +375,7 @@
 <script type="text/javascript" src="scripts/send_email.js"></script>
 <script type="text/javascript" src="scripts/add_customer.js"></script>
 <script type="text/javascript" src="scripts/history.js"></script> 
+<script type="text/javascript" src="scripts/account.js"></script>
 <div id="dialog-confirm"></div>
 
 </body>

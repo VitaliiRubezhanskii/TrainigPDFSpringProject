@@ -31,7 +31,7 @@ function doneClick(sessId) // i is index of done button
 			console.log("done ajax event returned " + msg);
 			setTimeout(function()
 					{
-							swal("Done","Recommendation marked as done!","success");
+							//swal("Done","Recommendation marked as done!","success");
 					}, 2500);			
 			fillAlerts();			
 		}

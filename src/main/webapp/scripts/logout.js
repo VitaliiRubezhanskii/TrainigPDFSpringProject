@@ -2,7 +2,7 @@
 
 // *******************************************************************************************
 
-$("#logout").bind("click", function(event, ui) {
+function logout(event, ui) {
 	console.log("logout");
 	// this logs me off.
 	setCookie("SalesmanEmail", "", 2);
@@ -10,7 +10,12 @@ $("#logout").bind("click", function(event, ui) {
 
 	// reloads page with the redirect (with #)
 	window.location = window.location.pathname;
-});
+}
+
+$("#logout").bind("click", logout);
+
+// button at header - at top
+$("#logoutTop").bind("click", logout);
 
 
 

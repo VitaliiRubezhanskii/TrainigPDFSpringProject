@@ -89,8 +89,39 @@ public class ManagementServlet extends HttpServlet {
 			String action = input.getString("action");
 			JSONObject output = new JSONObject();
 			
-			switch(action){
+			int salesman_found = 0;
 			
+			switch(action){			
+			case "changeSalesmanPassword":
+				System.out.println("Salesman change pw");				
+				Salesman checkSalesman1 = new Salesman(input.getString("email"), input.getString("oldpassword"), null, null, null);
+				Salesman ourSalesman = null;
+				for(int i = 0; i < DbLayer.salesmen.size(); i++){
+					if (DbLayer.salesmen.get(i).getEmail().equalsIgnoreCase(checkSalesman1.getEmail()))
+					{
+						System.out.println("found correct salesman in db. password is: "+DbLayer.salesmen.get(i).getPassword());
+					}
+					if(DbLayer.salesmen.get(i).getEmail().equals(checkSalesman1.getEmail()) && DbLayer.salesmen.get(i).getPassword().equalsIgnoreCase(checkSalesman1.getPassword())){
+						ourSalesman = DbLayer.salesmen.get(i);
+						salesman_found = 1;
+						break;
+					}
+				}
+				if ((salesman_found==1)&&(ourSalesman!=null))
+				{
+					// set pw both in DB and in local array
+						DbLayer.setPassword(input.getString("email"), input.getString("newpassword"));
+						ourSalesman.setPassword(input.getString("newpassword"));
+						output.put("success", 1);
+						System.out.println("pw change successfully");
+				}
+				else
+				{
+					output.put("success", 0);
+					System.out.println("error changing pw");
+				}				
+				break;
+						
 				case "customerLogin": ///there's NO customer login at the moment.
 					int customer = 0;
 					String customerEmail = input.getString("email");
@@ -108,8 +139,7 @@ public class ManagementServlet extends HttpServlet {
 					break;
 					
 				case "salesmanLogin":
-					System.out.println("Salesman logging in");
-					int salesman_found = 0;
+					System.out.println("Salesman logging in");					
 					Salesman checkSalesman = new Salesman(input.getString("email"), input.getString("password"), null, null, null);
 					for(int i = 0; i < DbLayer.salesmen.size(); i++){
 						if (DbLayer.salesmen.get(i).getEmail().equalsIgnoreCase(checkSalesman.getEmail()))

@@ -14,6 +14,7 @@ function initPage() {
 			});
 
 	$("#salesman_email").val(getCookie("SalesmanEmail").toLowerCase());
+	$("#myAccount").html(getCookie("SalesmanEmail").toLowerCase());
 }
 
 // run init on event.
@@ -33,6 +34,7 @@ $(document).on("pagecontainershow", function() {
 			// set username field.
 			$("#usernamefield").val(getCookie("SalesmanEmail").toLowerCase());
 			$("#salesman_email").val(getCookie("SalesmanEmail").toLowerCase());
+			$("#myAccount").html(getCookie("SalesmanEmail").toLowerCase());
 			// go to mgmt screen after waiting for all callbacks and refreshes.
 			setTimeout(function() {
 				managementScreen();
@@ -50,6 +52,10 @@ $(document).on("pagecontainershow", function() {
 			loggedin = true;
 			$("#usernamefield").val(getCookie("SalesmanEmail").toLowerCase());
 			$("#salesman_email").val(getCookie("SalesmanEmail").toLowerCase());
+						
+			//alert("setting to " + getCookie("SalesmanEmail").toLowerCase());						
+			$("#myAccount").html(getCookie("SalesmanEmail").toLowerCase());
+			
 			console.log("in mgmt screen. filling. ");
 			showWaitMsg();
 			setTimeout(function() {
@@ -97,6 +103,7 @@ $(document).on("pagecontainershow", function() {
 			loggedin = true;
 			$("#usernamefield").val(getCookie("SalesmanEmail").toLowerCase());
 			$("#salesman_email").val(getCookie("SalesmanEmail").toLowerCase());
+			$("#myAccount").html(getCookie("SalesmanEmail").toLowerCase());
 			console.log("in history screen. filling. ");
 			showWaitMsg();
 			setTimeout(function() {

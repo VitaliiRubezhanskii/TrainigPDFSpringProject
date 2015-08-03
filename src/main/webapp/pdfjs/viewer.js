@@ -1841,6 +1841,7 @@ var SecondaryToolbar = {
 
   // Event handling functions.
   presentationModeClick: function secondaryToolbarPresentationModeClick(evt) {
+    send_event("REQUEST_FULLSCREEN", "0", "0", ipaddr);        
     PDFViewerApplication.requestPresentationMode();
     this.close();
   },
@@ -1851,13 +1852,15 @@ var SecondaryToolbar = {
   },
 
   printClick: function secondaryToolbarPrintClick(evt) {
-//    window.print();
-  //  this.close();
+    send_event("PRINT", "0", "0", ipaddr);        
+    window.print();
+    this.close();
   },
 
   downloadClick: function secondaryToolbarDownloadClick(evt) {
-  //  PDFViewerApplication.download();
-  //  this.close();
+    send_event("DOWNLOAD", "0", "0", ipaddr);        
+    PDFViewerApplication.download();
+    this.close();
   },
 
   viewBookmarkClick: function secondaryToolbarViewBookmarkClick(evt) {

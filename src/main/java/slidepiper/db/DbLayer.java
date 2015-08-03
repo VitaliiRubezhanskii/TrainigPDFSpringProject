@@ -368,6 +368,50 @@ public class DbLayer {
 	}
 	
 	
+	public static void setPassword(String salesman_email, String newpassword)
+	{
+		System.out.println("setting new pw for " + salesman_email);
+		Constants.updateConstants();
+		Connection conn = null; // connection to the database	
+		
+		try {
+		// connects to the database
+		DriverManager.registerDriver(new com.mysql.jdbc.Driver());
+		conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
+						
+					String sql = "UPDATE sales_men " + 
+					" SET password = ? " + 
+				  " WHERE email = ?";
+					PreparedStatement statement = conn.prepareStatement(sql);
+					statement.setString(1, newpassword);						
+					statement.setString(2, salesman_email);
+					
+					// sends the statement to the database server
+					int row = statement.executeUpdate();
+					if (row > 0) {
+						System.out.println("change pw - rows updated: " + row);
+						//String message = "updated done.";
+					}
+		}            
+		catch (SQLException ex) {
+		ex.printStackTrace();
+		System.out.println("SQL ERROR" + ex.getMessage());
+			} 
+		finally {
+				if (conn != null) {
+				    // closes the database connection
+				    try {
+				        conn.close();
+				    } catch (SQLException ex) {
+				        ex.printStackTrace();
+				        }
+				}
+	    }
+	}
+	
+
+	
+	
 	public static ArrayList<SlideView> getSlideViews(String sessionId){
 		//System.out.println("start get slide views");
 		
