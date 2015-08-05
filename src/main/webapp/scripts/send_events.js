@@ -2,7 +2,8 @@
 
 // logged events of salesman. logged to db.
 function send_salesman_event(ename, eparam1, eparam2, eparam3) {
-	urlval = "SalesmanDataServlet";
+	var urlval = "SalesmanDataServlet";
+	console.log("SalesmanLog: " + ename + " " + eparam1 + " " + eparam2 + " " + eparam3);
 	$.ajax({
 		type : "POST",
 		url : urlval,
@@ -16,7 +17,7 @@ function send_salesman_event(ename, eparam1, eparam2, eparam3) {
 		// sessionId : thisSessionId
 		},
 		success : function(res) {
-			console.log("salesman event returned " + res);
+			console.log("log servlet returned " + res);
 			// alert(res); // display response as alert.
 		},
 		fail : function() {

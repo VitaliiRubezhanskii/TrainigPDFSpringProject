@@ -110,11 +110,12 @@
 											JSONobj = JSON.parse(jsondata);
 											if (msg.succeeded == 1) {
 												console
-														.log("message registered on server.");
+														.log("message registered on server. loading client for " + msg.mailtype);
 												// alert("link is " + msg.link);
-												
-												send_salesman_event("REGISTERED_EMAIL", '0', '0', msg.mailtype);
-												
+
+												var mailtypemsg = "mailtype: " + msg.mailtype;
+												send_salesman_event("REGISTERED_EMAIL", '0', '0', mailtypemsg);																													
+
 												switch (msg.mailtype)
 												{
 													case "mailto" : 														
@@ -141,7 +142,7 @@
 														default: swal("Cannot send email.", "Mailtype is not defined correctly - " + msg.mailtype, "error");
 													}
 												
-												send_salesman_event("LOCAL_EMAIL", '0', '0', mailtourl);
+												send_salesman_event("OPEN_EMAIL_CLIENT", '0', '0', mailtourl.toString());
 												
 												//alert(mailtourl);
 //												alert(JSONobj.toString());
@@ -159,13 +160,18 @@
 												body = body.replaceAll("\r", "%0D");
 												body = body.replaceAll("\n", "%0A");
 												body = body.replaceAll("\t", "%09");
-												*/
-												
-												hideWaitMsg();
+												*/																								
 												
 												//alert("mailto is " + mailtourl);
 
-												location.href = mailtourl;
+												// open gmail in 2 seconds, to allow logs to update
+												// with messages above. Otherwise the log is not
+												// updated
+												setTimeout(function() {
+													hideWaitMsg();
+													location.href = mailtourl;
+												}, 2000);
+																						
 												// setCookie("SalesmanEmail",
 												// emailval, 2);
 												// alert("Message registered and
