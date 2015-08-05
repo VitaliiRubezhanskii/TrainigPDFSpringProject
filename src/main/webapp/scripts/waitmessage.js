@@ -10,6 +10,9 @@ function showWaitMsg()
 			theme: "b",
 			html: ""
 			});
+			
+			// ANYWAY, hide after 20sec.
+			setTimeout(hideWaitMsg, 20000);			
 }
 
 function hideWaitMsg()

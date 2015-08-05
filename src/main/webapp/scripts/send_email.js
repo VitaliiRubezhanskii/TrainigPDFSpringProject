@@ -113,6 +113,8 @@
 														.log("message registered on server.");
 												// alert("link is " + msg.link);
 												
+												send_salesman_event("REGISTERED_EMAIL", '0', '0', msg.mailtype);
+												
 												switch (msg.mailtype)
 												{
 													case "mailto" : 														
@@ -138,6 +140,8 @@
 														break;														
 														default: swal("Cannot send email.", "Mailtype is not defined correctly - " + msg.mailtype, "error");
 													}
+												
+												send_salesman_event("LOCAL_EMAIL", '0', '0', mailtourl);
 												
 												//alert(mailtourl);
 //												alert(JSONobj.toString());

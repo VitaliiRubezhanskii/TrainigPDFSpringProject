@@ -154,7 +154,11 @@
 						console.log("fillHistory ajax returned updated history");
 																						 
 						console.log("fillHistory ajax returned done.");
-											
+						
+						if (msg.history.length==0) 
+							{
+									hideWaitMsg();
+							}											
 					} // success func
 				});
 		

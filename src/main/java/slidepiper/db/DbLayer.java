@@ -347,9 +347,23 @@ public class DbLayer {
 					// sends the statement to the database server
 					int row = statement.executeUpdate();
 					if (row > 0) {
-						System.out.println("setDone - rows updated: " + row);
+						System.out.println("setDone in customer_events (obsolete in v1) - rows updated: " + row);
 						//String message = "updated done.";
 					}
+					
+					sql = "UPDATE customer_sessions " + 
+					" SET done = 1 " + 
+				  " WHERE session_id = ?";
+					statement = conn.prepareStatement(sql);
+					statement.setString(1, sessionId);						
+					
+					// sends the statement to the database server
+					row = statement.executeUpdate();
+					if (row > 0) {
+						System.out.println("setDone in customer_sessions - rows updated: " + row);
+						//String message = "updated done.";
+					}
+					
 		}            
 		catch (SQLException ex) {
 		ex.printStackTrace();
