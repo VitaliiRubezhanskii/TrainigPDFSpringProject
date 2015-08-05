@@ -850,7 +850,9 @@ ORDER BY 6 DESC;
 					
 					SQLs.add("SELECT * FROM `customer_events` WHERE event_name='CONTACT_US'  ORDER BY timestamp DESC LIMIT 30;");
 					
-					SQLs.add("SELECT * FROM `customer_events` ORDER BY timestamp DESC LIMIT 300;");
+					SQLs.add("SELECT * FROM `customer_events` ORDER BY timestamp DESC LIMIT 200;");
+					
+					SQLs.add("SELECT * FROM `salesman_events` ORDER BY timestamp DESC LIMIT 200;");
 					// last events of customers
 					//SQLs.add(
 							//" SELECT * FROM customer_events ORDER BY timestamp DESC LIMIT 150;");
@@ -881,7 +883,9 @@ ORDER BY 6 DESC;
 									case 5:
 										HTML+= "<BR>recent customer events<BR>";
 										break;
-
+									case 6:
+										HTML+= "<BR>recent salesman events<BR>";
+										break;										
 									}
 									cntr++;
 								  HTML += getResultSetHTML(resultset);								  

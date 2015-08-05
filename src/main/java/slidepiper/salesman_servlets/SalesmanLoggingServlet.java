@@ -57,7 +57,7 @@ public class SalesmanLoggingServlet extends HttpServlet {
 						// sends the statement to the database server
 						int row = statement.executeUpdate();
 						if (row > 0) {
-							String message = "SalesmanDataServlet. added info line";
+							String message = "SalesmanLog: " + email + " " + event_name + " " + param1 + " " + param2 + " " + param3; 
 							System.out.println(message);
 							
 						}
