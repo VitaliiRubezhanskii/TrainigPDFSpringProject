@@ -60,7 +60,7 @@ public class ManagementServlet extends HttpServlet {
 //	Thread thread;
 //	static ArrayList<String[]> data;
 	
-    public ManagementServlet() {
+    public ManagementServlet() {    	
         super();
     }
 
@@ -74,7 +74,7 @@ public class ManagementServlet extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		StringBuffer jb = new StringBuffer();
-		Constants.updateConstants();
+		DbLayer.init();
 		//System.out.println("post req");
 	    String line = null;
 	    try {

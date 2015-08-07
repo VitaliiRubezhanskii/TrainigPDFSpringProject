@@ -45,6 +45,7 @@ public class ReportsServlet extends HttpServlet {
     public void init(ServletConfig config) throws ServletException {
 		
 			Constants.updateConstants();
+			DbLayer.init();
     	}
 	
     

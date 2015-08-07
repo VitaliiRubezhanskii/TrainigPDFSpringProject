@@ -6,7 +6,15 @@ window.onerror = function(msg, url, linenumber) {
 		
 		var err = new Error();
 		errmsg += ("Stack trace: \n" + err.stack);
-    swal("Error", errmsg, "error");
+		
+		if(typeof(swal) == "function")
+			{	
+					swal("Error", errmsg, "error");
+			}
+		else
+			{
+					alert("Error: " + errmsg);
+			}
     return true;
 };
 
