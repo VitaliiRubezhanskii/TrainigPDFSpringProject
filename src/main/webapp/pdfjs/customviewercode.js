@@ -235,7 +235,7 @@
 								//alert("hiding");
 								$("#privacyMessage")[0].style.display = "none";
 								$("#privacyMessage")[0].style.visibility = "hidden";	
-							}, 	10000);
+							}, 	5000);
 																					
 							
 							// calc seconds viewed
