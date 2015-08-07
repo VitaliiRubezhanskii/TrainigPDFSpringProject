@@ -232,9 +232,10 @@
 
 							 //hide after 15sec.
 							setTimeout(function(){
+								//alert("hiding");
 								$("#privacyMessage")[0].style.display = "none";
 								$("#privacyMessage")[0].style.visibility = "hidden";	
-							}, 	15000);
+							}, 	10000);
 																					
 							
 							// calc seconds viewed
