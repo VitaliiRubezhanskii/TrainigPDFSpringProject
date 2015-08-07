@@ -229,8 +229,13 @@
 							//alert("aahiding privacy msg" + cur_slide + " " + prev_slide);
 							
 							// for now, leave it.
-							//$("#privacyMessage")[0].style.display = "none";
-							//$("#privacyMessage")[0].style.visibility = "hidden";														
+
+							 //hide after 15sec.
+							setTimeout(function(){
+								$("#privacyMessage")[0].style.display = "none";
+								$("#privacyMessage")[0].style.visibility = "hidden";	
+							}, 	15000);
+																					
 							
 							// calc seconds viewed
 							var seconds_viewed = (now_datetime - prev_datetime) / 1000;
