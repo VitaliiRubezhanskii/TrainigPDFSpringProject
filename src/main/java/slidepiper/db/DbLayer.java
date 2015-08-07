@@ -31,9 +31,10 @@ import slidepiper.dataobjects.HistoryItem;
 
 public class DbLayer {
 	
+  private static Boolean initialized = false;
 	public static ArrayList<Customer> customers;  
-  public static ArrayList<Salesman> salesmen; 
-  public static ArrayList<Presentation> presentations;
+	public static ArrayList<Salesman> salesmen; 
+	public static ArrayList<Presentation> presentations;
   //
 	
 	// updates the customers in "customers" ArrayList.
@@ -206,13 +207,17 @@ public class DbLayer {
 					return null; // not found
 	}
 
-  
+ 
   public static void init()
-  	{
-	  Constants.updateConstants();		
-		getCustomers();
-		getSalesmen();
-		getPresentations();	  
+  	{	  	
+	 	if (initialized==false)
+	  	{
+				  Constants.updateConstants();		
+					getCustomers();
+					getSalesmen();
+					getPresentations();
+					initialized = true;
+	  	}
   	}
 
 	public static void deleteCustomer(String customer_email, String salesman_email ){

@@ -200,10 +200,17 @@
 			}, 1000);
 			
 			// every 1/3 sec check for updates in slide num.
-			currentPageIndex = 1;
-			$("#pageNumber").val(1); //go to 1st page.
-			cur_slide=1;
-			prev_slide=1;
+		
+			//currentPageIndex = 1; //$("#pageNumber").val();
+			//$("#pageNumber").val(1); //go to 1st page.
+			//PDFJS.pdfViewer.currentPageNumber(1);
+			//PDFViewerApplication.page = 1;
+			
+			
+			// for now, use the current page, not necessarily 1.
+			currentPageIndex=$("#pageNumber").val();
+			cur_slide=currentPageIndex;
+			prev_slide=cur_slide; // for first slide, make it same.				
 			
 			window.setInterval(
 					function() {
@@ -212,10 +219,19 @@
 
 						var now_datetime = new Date();
 
+						//PDFViewerApplication.page = 1;
 						cur_slide = $("#pageNumber").val();
-
+																		
 						// new slide.
 						if (cur_slide != prev_slide) {
+							
+							// changed slide - immediately hide privacy message.
+							//alert("aahiding privacy msg" + cur_slide + " " + prev_slide);
+							
+							// for now, leave it.
+							//$("#privacyMessage")[0].style.display = "none";
+							//$("#privacyMessage")[0].style.visibility = "hidden";														
+							
 							// calc seconds viewed
 							var seconds_viewed = (now_datetime - prev_datetime) / 1000;
 
@@ -254,5 +270,5 @@
 	//		initView();
 	//	});
 		
-		initView(); // just run ONCE - no duplicates (hopefully).
+		//initView(); // just run ONCE - no duplicates (hopefully).
 		

@@ -1696,7 +1696,10 @@ var PDFHistory = {
     } else {
       return null;
     }
-    var params = { hash: this.currentBookmark, page: this.currentPage };
+    var params = { hash: this.currentBookmark, page: 
+     1
+//this.currentPage 
+};
     if (this.isViewerInPresentationMode) {
       params.hash = null;
     }
@@ -5701,6 +5704,10 @@ var PDFViewerApplication = {
 
   // called once when the document is loaded
   initialize: function pdfViewInitialize() {
+    //added:
+        // my custom init function.    
+      initView();
+
     var pdfRenderingQueue = new PDFRenderingQueue();
     pdfRenderingQueue.onIdle = this.cleanup.bind(this);
     this.pdfRenderingQueue = pdfRenderingQueue;
