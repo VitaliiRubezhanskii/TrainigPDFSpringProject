@@ -177,7 +177,10 @@ public class DbLayer {
 		}
 	}
 	  
-	public static String getSalesmanEmailpasswordByEmail(String salesmanEmail)
+	/*
+	 * causes null pointer exception for unknown reason. I don't need this.
+	 * 
+	 * public static String getSalesmanEmailpasswordByEmail(String salesmanEmail)
 	{
 			// get salesman w from his email
 					for(int i = 0; i < salesmen.size(); i++){
@@ -191,7 +194,7 @@ public class DbLayer {
 					System.out.println("getsalesman pw by email - not found!");
 					return null; // not found
 	}
-
+*/
 	public static String getSalesmanMailType(String salesmanEmail)
 	{
 			// get salesman mailtype from his email

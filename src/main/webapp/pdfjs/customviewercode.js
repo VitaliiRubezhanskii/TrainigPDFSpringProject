@@ -168,7 +168,7 @@
 								send_event("CUSTOMER_QUESTION", "0", "0", "[slide "+ $("#pageNumber").val()+"]: "+ q);
 								//	alert("Sending message for q " + $("#cust_question").val());
 								setTimeout(function() {
-										location.href = mailtourl;
+										//location.href = mailtourl;
 								}, 2000);
 					});
 			console.log("binding sendmsg click - DONE OK");
