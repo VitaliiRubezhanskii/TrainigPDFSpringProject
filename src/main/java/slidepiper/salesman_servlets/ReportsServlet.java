@@ -103,16 +103,21 @@ public class ReportsServlet extends HttpServlet {
 									//	System.out.println("calling get slide views");
 										ArrayList<SlideView> slideviews = DbLayer.getSlideViews(input.getString("sessionId"));
 										//for(SlideView sv : slideviews)
-										//{	
-												//System.out.println("Slideview: num " + sv.getSlideNum() + " time " + sv.getTimeViewed());
-										//}
+										//{System.out.println("Slideview: num " + sv.getSlideNum() + " time " + sv.getTimeViewed());}
 										output.put("slideviews", slideviews);
 									break;
 							case "getQuestions":
-								//System.out.println("calling getQ");
-								ArrayList<String> qs = DbLayer.getQuestions(input.getString("sessionId"));
-								output.put("questions", qs);
-							break;
+									//System.out.println("calling getQ");
+									ArrayList<String> qs = DbLayer.getQuestions(input.getString("sessionId"));
+									output.put("questions", qs);
+									break;
+							case "getSessionData": // all data for this session. 
+													//Faster to send in one roundtrip. Not used yet.
+									ArrayList<SlideView> slideviews1 = DbLayer.getSlideViews(input.getString("sessionId"));
+									ArrayList<String> qs1 = DbLayer.getQuestions(input.getString("sessionId"));
+									output.put("questions", qs1);
+									output.put("slideviews", slideviews1);
+									break;							
 							case "setDone":
 								System.out.println("calling setDone for sessid " + input.getString("sessionId"));
 								// set done for this session id.

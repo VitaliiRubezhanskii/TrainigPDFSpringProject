@@ -167,14 +167,32 @@ public class ManagementServlet extends HttpServlet {
 					break;
 					
 				case "sendPresentationToCustomer":									
-					String msgtext = input.getString("msgtext");				    											
-					String msglink = "http://www.slidepiper.com/pdfjs/viewer.html?"
-							//salesman_email="+
-							//input.getString("salesman_email")
-							// cannot put exta param in mailto, 
-							// not & can be in msg body.
-							+ "file=/file/"+
-							input.getString("docid") + "#zoom=page-fit";
+					String msgtext = input.getString("msgtext");
+					
+					String appname = System.getenv("OPENSHIFT_APP_NAME");
+					System.out.println("making link for app appname " + appname);						
+					String msglink;
+					if (appname==null)
+					{
+						msglink = "http://www.slidepiper.com/pdfjs/viewer.html?file=/file/"+ input.getString("docid") + "#zoom=page-fit";
+					}
+					else
+					{
+						 if (appname.equalsIgnoreCase("slidepipertest"))
+						 {
+							 msglink = "http://slidepipertest-slidepiper.rhcloud.com/pdfjs/viewer.html?file=/file/"+ input.getString("docid") + "#zoom=page-fit";
+						 }
+						 else
+							 if (appname.equalsIgnoreCase("sp")) 
+							 {
+								 msglink = "http://www.slidepiper.com/pdfjs/viewer.html?file=/file/"+ input.getString("docid") + "#zoom=page-fit";
+							 }
+							 else
+							 {
+								 	msglink = "CANNOT MAKE LINK";
+							 }							 
+					}
+					
 
 					msgtext = msgtext + "<br>" + msglink;
 														

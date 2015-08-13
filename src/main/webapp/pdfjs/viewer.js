@@ -5706,7 +5706,8 @@ var PDFViewerApplication = {
   initialize: function pdfViewInitialize() {
     //added:
         // my custom init function.    
-      initView();
+//      initView();
+// I put it elsewhere, where it's run AFTER pdf is visible so that loading time is not counted.
 
     var pdfRenderingQueue = new PDFRenderingQueue();
     pdfRenderingQueue.onIdle = this.cleanup.bind(this);

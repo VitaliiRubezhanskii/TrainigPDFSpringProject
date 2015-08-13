@@ -21,7 +21,7 @@ function fillCustomersAndPresentations() {
 				//console.log("getSalesmanData ajax returned");
 				var size = msg.myCustomers.length;
 				// var myCustomers = "";
-				//console.log("# of customers: " + msg.myCustomers.length);
+				console.log("Loaded customers. # of customers: " + msg.myCustomers.length);
 				custCheckboxes = '<fieldset data-role="controlgroup">';
 				if (size > 0) {
 					for (var i = 0; i < msg.myCustomers.length; i++) {
@@ -119,7 +119,7 @@ function fillAlerts() {
 					swal("Error",'error from returned json.... ReportsServlet' + error,"error");
 				},
 				success : function(msg) {
-					//console.log("fillAlerts ajax returned");
+					console.log("fillAlerts ajax returned");
 					alertsHTML = '';
 					// show some of the data, for testing.
 					// init sessionIds array, all session id's for all alerts.
@@ -204,7 +204,7 @@ function fillAlerts() {
 								//console
 									//	.log("fillAlerts ajax returned done - refresh listview");
 
-								// alert("filling stuff");
+								// alert("ng stuff");
 								fillBarCharts(alerts_session_ids);
 								fillQuestions(alerts_session_ids);
 								// alert("done filling stuff");
@@ -273,6 +273,7 @@ function fillBarCharts(alerts_session_ids) {
 						var jsonTable = [];
 						for (var j = 0; j < msg.slideviews.length; j++) {
 							slideNumStr = msg.slideviews[j].slideNum.toString();
+							if (slideNumStr == "-1") slideNumStr = "X";
 
 							// check if this slide num is already in the json
 							// table
@@ -285,14 +286,15 @@ function fillBarCharts(alerts_session_ids) {
 																		// to
 																		// avoid
 																		// duplicate
-																		// slide#.
+																		// slide#. 
+																		//adds extra space for each occurrence.
 								}
 							}
 
 							var time_viewed = msg.slideviews[j].timeViewed;
-							// put cutoff of 180 of view time.
-							if (time_viewed > 180) {
-								time_viewed = 180;
+							// put cutoff of 90 of view time.
+							if (time_viewed > 90) {
+								time_viewed = 90;
 							}
 
 							jsonItem = {

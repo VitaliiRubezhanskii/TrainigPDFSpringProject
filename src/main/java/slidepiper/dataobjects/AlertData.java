@@ -1,7 +1,11 @@
 package slidepiper.dataobjects;
 
 public class AlertData {
-			public AlertData() {
+	
+	String customer_email, customer_name, slides_name, msg_text, open_time, send_time, msg_id, session_id;
+	
+	
+	public AlertData() {
 		super();
 	}
 
@@ -45,7 +49,7 @@ public class AlertData {
 		this.send_time = send_time;
 	}
 
-	String customer_email, customer_name, slides_name, msg_text, open_time, send_time, msg_id, session_id;
+	
 
 	public String getCustomer_name() {
 		return customer_name;

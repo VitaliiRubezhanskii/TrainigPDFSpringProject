@@ -18,11 +18,15 @@ function initPage() {
 }
 
 // run init on event.
-$(document).on("pageinit", initPage());
+//$(document).on("pageinit", initPage());
 
 // load data after page show.
 // needs to be run only for manage page, so it checks.
 $(document).on("pagecontainershow", function() {
+	// basic init code.
+	console.log("pagecontainershow");
+	initPage();
+	
 	var activePage = $.mobile.pageContainer.pagecontainer("getActivePage");
 	var activePageId = activePage[0].id;
 	switch (activePageId) {
@@ -57,10 +61,14 @@ $(document).on("pagecontainershow", function() {
 			$("#myAccount").html(getCookie("SalesmanEmail").toLowerCase());
 			
 			console.log("in mgmt screen. filling. ");
-			showWaitMsg();
+			
 			setTimeout(function() {
+				console.log("putting wait");
+				showWaitMsg();	
+				console.log("calling fills");
 				fillCustomersAndPresentations();
 				fillAlerts();
+				console.log("called fills cust+pres and alerts");
 				
 				if (verifyingactivated==false) //only once.
 				{
@@ -68,7 +76,7 @@ $(document).on("pagecontainershow", function() {
 						// must be very large number.
 						// If I start reloading when it's still loading I'll get a 
 						// bug in the presentations list, names will be displayed twice.
-						verifyingactivated = true;
+						verifyingactivated = true;						
 				}
 			}, 2000);
 		} else {
