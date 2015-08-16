@@ -272,38 +272,52 @@ function fillBarCharts(alerts_session_ids) {
 						// received slide views array.
 						var jsonTable = [];
 						for (var j = 0; j < msg.slideviews.length; j++) {
-							slideNumStr = msg.slideviews[j].slideNum.toString();
-							if (slideNumStr == "-1") slideNumStr = "X";
-
-							// check if this slide num is already in the json
-							// table
-							// if so - add space to the name so it will show in
-							// the bar chart separately.
-							for (var t = 0; t < jsonTable.length; t++) {
-								if (jsonTable[t].slide == slideNumStr) {
-									slideNumStr = slideNumStr + " "; // add
-																		// space
-																		// to
-																		// avoid
-																		// duplicate
-																		// slide#. 
-																		//adds extra space for each occurrence.
-								}
-							}
-
-							var time_viewed = msg.slideviews[j].timeViewed;
-							// put cutoff of 90 of view time.
-							if (time_viewed > 90) {
-								time_viewed = 90;
-							}
-
-							jsonItem = {
-								"slide" : slideNumStr,
-								"time" : time_viewed
-							};
-
-							jsonTable.push(jsonItem);
+									slideNumStr = msg.slideviews[j].slideNum.toString();
+									if (slideNumStr == "-1") slideNumStr = "X";
+		
+									// check if this slide num is already in the json
+									// table
+									// if so - add space to the name so it will show in
+									// the bar chart separately.
+									for (var t = 0; t < jsonTable.length; t++) {
+										if (jsonTable[t].slide == slideNumStr) {
+											slideNumStr = slideNumStr + " "; // add
+																				// space
+																				// to
+																				// avoid
+																				// duplicate
+																				// slide#. 
+																				//adds extra space for each occurrence.
+										}
+									}
+		
+									var time_viewed = msg.slideviews[j].timeViewed;
+									// put cutoff of 90 of view time.
+									if (time_viewed > 90) {
+										time_viewed = 90;
+									}
+										
+									jsonItem = {
+										"slide" : slideNumStr,
+										"time" : time_viewed
+									};
+		
+									jsonTable.push(jsonItem);								
 						}
+						
+		
+						if (msg.slideviews.length <4) //1-2-3 slide views
+						{
+								emptyJsonItem = { //padding to make barchart narrower if only 1/2 bars.
+										"slide" : "",
+										"time" : 0
+								};
+								jsonTable.push(emptyJsonItem);
+								jsonTable.push(emptyJsonItem);
+								jsonTable.push(emptyJsonItem);
+								jsonTable.push(emptyJsonItem);
+						}
+						
 						// alert("json table: " + JSON.stringify(jsonTable));
 						// alert("adding bar chart number " + curIndex + " data
 						// is " + JSON.stringify(jsonTable));

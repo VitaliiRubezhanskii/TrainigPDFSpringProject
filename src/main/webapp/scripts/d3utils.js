@@ -11,6 +11,19 @@ function addAlertBarChart(element, jsonTable)
 			var margin = {top: 20, right: 10, bottom: 30, left: 30},
 			    width = 500 - margin.left - margin.right,
 			    height = 150 - margin.top - margin.bottom;
+			
+			if (jsonTable.length > 15) 	
+				{
+						width = 800;
+				}
+			
+			xtimeoffset=8;
+			ytimeoffset=4; // it's minus 4.
+			
+			if (jsonTable.length>15)  
+				{
+						xtimeoffset=2; //almost no offset.it's dense.
+				}								
 /*			
 			var jsonTable = [
 			        {
@@ -45,29 +58,16 @@ function addAlertBarChart(element, jsonTable)
 			
 			  x.domain(jsonTable.map(function(d) { return d.slide; }));
 			  y.domain([0, d3.max(jsonTable, function(d) { return d.time; })]);
+			  
 			  svg.append("g")
 			      .attr("class", "x axis")
 			      .attr("transform", "translate(0," + height + ")")
-			      .call(xAxis);
+			      .call(xAxis);			  
+			  
 			  svg.append("g")
 			      .attr("class", "y axis")
-			      .call(yAxis)
-			  svg.append("text")
-			      //.attr("transform", "rotate(-90)")
-			      .attr("class","xtext")
-			      .attr("y", -5	)
-			      .attr("x", -margin.left)
-			      //.attr("dy", ".71em")
-			      .style("text-anchor", "start")
-			      .text("Seconds for each slide viewed:");
+			      .call(yAxis);
 			  
-			  svg.append("text")
-			   .attr("class","xtext")
-			   .attr("x",width/2 - margin.left)
-			   .attr("y",height+margin.bottom)
-			   .attr("text-anchor","middle")
-			   .text("Slide number");
-			   
 			  //colors = d3.scale.category20();
 			  			    				 
 			 //barcolors = []; //colors array
@@ -113,15 +113,64 @@ function addAlertBarChart(element, jsonTable)
 		 		  			
 			  }
 			  
-			 svg.selectAll(".bar")
+			 svg.selectAll("rect")
 			      .data(jsonTable)
-			      .enter().append("rect")
+			      .enter()
+			      .append("rect")
 			      .attr("class", "bar")
 			      .attr("x", function(d) { return x(d.slide); })
 			      .attr("width", x.rangeBand())
 			      .attr("y", function(d) { return y(d.time); })
 			      .attr("height", function(d) { return height - y(d.time); })
-			      .style("fill",function(d,i){return d.color;});			      			      
-}
+			      .style("fill",function(d,i){return d.color;})			 
+			 .on("mouseover", function() {
+				    d3.select(this).classed("highlight", true);
+				})
+				.on("mouseout", function() {
+				    d3.select(this).classed("highlight", false);
+				});
+			 
+			 // add time inside the barchart.
+			 svg.selectAll("text.timelabels")
+		      .data(jsonTable)
+		      .enter()		      
+		      .append("text")
+		      .text(function(d) 		    		  
+		    		  {	
+		    	  		return d.time;
+		    		  	})
+			   	.attr("x", function(d) { return x(d.slide) + x.rangeBand()/2; })
+			   	.attr("y", function(d) { return y(d.time) - ytimeoffset;})			   
+			   //.attr("font-family", "sans-serif")
+			   .attr("font-size", "9px")			   
+			   .style("text-anchor", "middle")
+			   	//.attr("class","xtext")
+			 		//.attr("fill", "white");
+			 			 
+			  svg.append("text")
+			      //.attr("transform", "rotate(-90)")
+			      .attr("class","xtext")
+			      .attr("y", -5	)
+			      .attr("x", -margin.left)
+			      //.attr("dy", ".71em")
+			      .style("text-anchor", "start")
+			      .text("Seconds for each slide viewed:");
+			  
+			  svg.append("text")
+			   //.attr("class","xtext")
+			   .attr("x",width/2 - margin.left)
+			   .attr("y",height+margin.bottom)
+			   .attr("text-anchor","middle")
+			   .text("slide #");
+			   
+			 //message for 2sec
+		/*	 swal({
+				 	type: "info",
+				  title: "Filling report...yoyo",
+				  text: "Please wait",
+				  timer: 500,
+				  showConfirmButton: false
+				});*/
+	}
 
 
