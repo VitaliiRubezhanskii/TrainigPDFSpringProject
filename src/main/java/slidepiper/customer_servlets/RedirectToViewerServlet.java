@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import slidepiper.db.DbLayer;
+
 /**
  * Servlet implementation class RedirectToViewerServlet
  * 
@@ -46,6 +48,9 @@ public class RedirectToViewerServlet extends HttpServlet {
 		response.sendRedirect("pathToNewServletOrJsp");
 		and in this case - the URL will change.
 		*/
+		
+		DbLayer.init(); //make sure it's initialized (includes constants)
+		
 		String docid;
 			
 		// get the code

@@ -4,6 +4,7 @@ import java.io.ByteArrayOutputStream;
 
 import slidepiper.*;
 import slidepiper.constants.Constants;
+import slidepiper.db.DbLayer;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -31,6 +32,7 @@ public class SalesmanLoggingServlet extends HttpServlet {
     	
     	protected void doPost(HttpServletRequest request,
                 HttpServletResponse response) throws ServletException, IOException {
+    	  DbLayer.init(); //make sure it's initialized (includes constants)    		
     		String email, event_name, param1, param2, param3;    		
     		email = request.getParameter("email");
     		event_name = request.getParameter("event_name");

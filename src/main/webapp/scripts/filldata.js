@@ -100,8 +100,56 @@ function fillCustomersAndPresentations() {
 
 
 
+
 //*******************************************************************************************
 
+function fillAlerts() {
+	var email = getCookie("SalesmanEmail");
+	console.log("filling alerts...");
+	$
+			.ajax({
+				type : "POST",
+				url : "ReportsServlet",
+				data : '{"action":"getAlertsHtml", "email":"' + email.toLowerCase()
+						+ '"}',
+				contentType : "application/json; charset=utf-8",
+				processData : false,
+				error : function(XmlHttpRequest, status, error) {
+					swal("Error",'error from returned json.... getAlertsHtml ReportsServlet' + error,"error");
+				},
+				success : function(msg) {
+					console.log("fillAlertsHtml ajax returned");
+					alertsHTML = msg.alertsHtml;
+					alert("alerts:" + alertsHTML);
+					$("#smartalerts").hide().html(alertsHTML).fadeIn('fast');
+					// alert("filled alerts");
+					// refresh each element in returned list.
+					// refresh as in
+					// http://www.gajotres.net/uncaught-error-cannot-call-methods-on-prior-to-initialization-attempted-to-call-method-refresh/
+					setTimeout(
+							function() // pass the return parameters to this
+										// anonymous func
+							{
+								$('#smartalerts').listview("refresh");
+								//fillBarCharts(alerts_session_ids);								
+								bindDoneButtons(alerts_session_ids);
+							}, 300); // put at end of event queue, after
+									// rendering checkboxes.
+									// small delay, may help with listview refresh. 
+					//console.log("fillAlertsHtml ajax returned done.");										
+					alertsloaded = true;
+					console.log("AlertsHtml loaded successfully");//(without q's and barcharts)					
+				} // success func
+
+			});
+	console.log("fillAlertsHtml all done");
+}
+
+
+
+
+//*******************************************************************************************
+/*
 function fillAlerts() {
 	//console.log("fillAlerts");
 	var email = getCookie("SalesmanEmail");
@@ -400,3 +448,4 @@ function fillQuestions(alerts_session_ids) {
 	//console.log("filling qs done");
 }
 
+*/

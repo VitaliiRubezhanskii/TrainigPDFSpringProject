@@ -3,6 +3,7 @@ package slidepiper.customer_servlets;
 import java.io.ByteArrayOutputStream;
 
 import slidepiper.*;
+import slidepiper.db.DbLayer;
 import slidepiper.logging.CustomerLogger;
 
 import java.io.IOException;
@@ -32,7 +33,9 @@ public class CustomerLoggingServlet extends HttpServlet {
          
     	protected void doPost(HttpServletRequest request,
                 HttpServletResponse response) throws ServletException, IOException {			           
-//			   			System.out.println("custdataservlet dopost");			    		
+//			   			System.out.println("custdataservlet dopost");
+    		
+    					DbLayer.init(); //make sure it's initialized (includes constants)
 			    		String id, event_name, param1, param2, param3, sessionId;
 			    		
 			    		id = request.getParameter("id");

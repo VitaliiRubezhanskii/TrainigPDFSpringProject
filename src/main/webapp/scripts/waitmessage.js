@@ -24,16 +24,13 @@ function hideWaitMsg()
 function isEverythingLoaded()
 {
 		return (alertsloaded && customersloaded && 
-				presentationsloaded && questionsloaded && 
-				barchartsloaded);
+				presentationsloaded);
 }
 
 
 function hideLoadingMsgIfFullyLoaded()
 {
-	console.log("checking if all loaded: alerts " + alertsloaded + 
-			" barcharts " + barchartsloaded + 
-			" questions " + questionsloaded +
+	console.log("checking if all loaded: alerts " + alertsloaded + 			 			
 			" customers " + customersloaded + 
 			" pres " + presentationsloaded);
 	
@@ -51,13 +48,11 @@ function	 verifyLoaded()
 			if (loggedin == true)
 			{
 					console.log("Verifying loading of data from DB. stack=" + Error().stack);
-					console.log("alerts " + alertsloaded + 
-							" barcharts " + barchartsloaded + 
-							" questions " + questionsloaded +
+					console.log("alerts " + alertsloaded + 							
 							" customers " + customersloaded + 
 							" pres " + presentationsloaded);
 					
-					if ((alertsloaded==false)||(barchartsloaded==false)||(questionsloaded==false))
+					if (alertsloaded==false)
 						{
 								fillAlerts();
 						}
@@ -69,7 +64,7 @@ function	 verifyLoaded()
 					if (isEverythingLoaded() == false) //reschedule loading
 						{	
 								console.log("not all loaded on verify. rescheduling check.");
-								setTimeout(verifyLoaded, 15000);
+								setTimeout(verifyLoaded, 45000);
 						}
 					hideLoadingMsgIfFullyLoaded();
 			}

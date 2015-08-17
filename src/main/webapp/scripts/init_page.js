@@ -72,7 +72,7 @@ $(document).on("pagecontainershow", function() {
 				
 				if (verifyingactivated==false) //only once.
 				{
-						setTimeout(verifyLoaded, 18000);
+						setTimeout(verifyLoaded, 45000);
 						// must be very large number.
 						// If I start reloading when it's still loading I'll get a 
 						// bug in the presentations list, names will be displayed twice.

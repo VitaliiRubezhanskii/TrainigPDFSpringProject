@@ -166,10 +166,23 @@
 
 												// open gmail in 2 seconds, to allow logs to update
 												// with messages above. Otherwise the log is not
-												// updated
+												// updated. 
+												//  However this disallows me to open a popup window
+												// because it's not on click.	
+												// need to fix sometime.
 												setTimeout(function() {
 													hideWaitMsg();
-													location.href = mailtourl;
+													
+													switch (msg.mailtype)
+													{
+														case "mailto" :
+															location.href = mailtourl;
+															break;
+														case "gmail" :
+															window.open(mailtourl); // 
+															// will not open window because it's not on a click.
+															break;
+													}
 												}, 2000);
 																						
 												// setCookie("SalesmanEmail",

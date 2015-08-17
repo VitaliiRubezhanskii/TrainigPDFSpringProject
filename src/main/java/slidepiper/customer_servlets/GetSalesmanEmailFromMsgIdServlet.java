@@ -54,7 +54,11 @@ public class GetSalesmanEmailFromMsgIdServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
-	{		
+	{
+		
+		DbLayer.init(); //make sure it's initialized (includes constants)
+		
+		
 		StringBuffer jb = new StringBuffer();
 		Constants.updateConstants();
 		System.out.println("get sm email from msgid servlet");
