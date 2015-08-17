@@ -68,17 +68,19 @@ public class HtmlRenderer {
 					+ ai.getCustomer_email()
 					+ "?Subject=Followup to our last email.\">"
 					+ ai.getCustomer_email() + "</a>";
+			
+			String reco_text = "Send e-mail to ";
+			if (!qs.isEmpty()) reco_text = "Call ";
+			
 			recommendation_text = "<div class=\"recommendation" + i
-					+ "\">" + ai.getCustomer_name() + " ("
+					+ "\">" + reco_text + ai.getCustomer_name() + " ("
 					+ emailmailto + ")" + "</div>";
 			alertHTML += "<li data-role=\"list-divider\">"
 					+ recommendation_text + " </li>";
 			
 			description_text = "Viewed presentation: \""
 					+ ai.getSlides_name() + "\"";
-			clicked_text = "Opened at " + ai.getOpen_time()
-			+ "<BR><BR> Message: <BR>" +
-			ai.getMessage_text() + "<BR>";
+			clicked_text = "Opened at " + ai.getOpen_time() + "<BR>";
 			
 			alertHTML += "<li>";
 			//id is session num, to get it later in history screen.
@@ -93,7 +95,9 @@ public class HtmlRenderer {
 				+ "</div>"
 				+ "<div>"
 				+ actionsHtml
-				+ "</div>"				
+				+ "</div>"			
+				// done button: removed for now.
+				/*
 				+ "<a href=\"\" sessId=\""
 				+ ai.getSession_id()
 				+ "\" "
@@ -102,10 +106,15 @@ public class HtmlRenderer {
 				+ "\" ui-btn ui-shadow ui-btn-inline ui-mini ui-icon-check ui-btn-icon-left\" data-inline=\"true\" data-mini=\"true\">"
 				+ "<div sessId=\"" + ai.getSession_id() + "\""
 				+ " id=\"" + ai.getSession_id() + "\""
-				+ ">Done</div></a> </div>"														 
+				+ ">Done</div></a>"
+				*/
+				
+				+ "</div>"														 
 				+ "<div class=\"ui-block-b\">"
 				+ "<div class=\"d3barchart" + i + "\"></div>"
-				+ "</div></div></li>";
+				+ "</div></div></li>" 			
+				+ "<BR><BR> Original e-mail sent: <BR>" +
+				ai.getMessage_text() + "<BR>";
 			// end main responsive div, and listitem element.
 			
 			return alertHTML;			

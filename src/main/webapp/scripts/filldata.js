@@ -120,7 +120,7 @@ function fillAlerts() {
 				success : function(msg) {
 					console.log("fillAlertsHtml ajax returned");
 					alertsHTML = msg.alertsHtml;
-					alert("alerts:" + alertsHTML);
+					//alert("alerts:" + alertsHTML);
 					$("#smartalerts").hide().html(alertsHTML).fadeIn('fast');
 					// alert("filled alerts");
 					// refresh each element in returned list.
@@ -132,7 +132,7 @@ function fillAlerts() {
 							{
 								$('#smartalerts').listview("refresh");
 								//fillBarCharts(alerts_session_ids);								
-								bindDoneButtons(alerts_session_ids);
+						//		bindDoneButtons(alerts_session_ids);
 							}, 300); // put at end of event queue, after
 									// rendering checkboxes.
 									// small delay, may help with listview refresh. 
