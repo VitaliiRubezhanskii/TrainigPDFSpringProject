@@ -50,7 +50,7 @@ public class KeepAliveTask extends TimerTask {
 					
 					MessageInfo mi = DbLayer.getMessageInfo(p.getMsgId());
 													
-					AlertData ai = DbLayer.getAlert(p.sessionId);					
+					AlertData ai = DbLayer.getAlert(p.sessionId,mi.getSalesManEmail());					
 					// i=0 not important. no buttons or divs filled with code here. it's email.
 					String msg = "Hello, <BR><BR> This is Jacob Salesmaster. <BR> I am your SlidePiper reports representative. Please carefully review the following report. <BR>";
 					
