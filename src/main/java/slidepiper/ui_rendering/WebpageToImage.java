@@ -8,8 +8,12 @@ import com.ui4j.api.dom.*;
 public class WebpageToImage {
 	    public static void RenderWebpage () {
 
-	    	System.out.println("rendering webpage ");
-	        try (Page page = getWebKit().navigate("https://news.ycombinator.com")) {
+	    	// needed for headless mode.
+	    	System.setProperty("ui4j.headless", "true");
+	    	
+	    	System.out.println("rendering webpage ");	    	
+	        try (Page page = getWebKit().navigate("http://www.google.com")) {
+	        	System.out.println("navigated. ");
 	        	Document  d =  page.getDocument();
 
 	        	System.out.println("DOCUMENT TOSTRING: ");

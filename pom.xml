@@ -66,6 +66,14 @@
 			<scope>provided</scope>
 		</dependency>
 
+
+<dependency>
+    <groupId>org.jfxtras</groupId>
+    <artifactId>openjfx-monocle</artifactId>
+    <version>1.8.0_20</version>
+    <scope>test</scope>
+</dependency>
+
   <dependency>
         <groupId>com.ui4j</groupId>
         <artifactId>ui4j-all</artifactId>
