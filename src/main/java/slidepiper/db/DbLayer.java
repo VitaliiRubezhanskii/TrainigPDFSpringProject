@@ -143,8 +143,10 @@ public class DbLayer {
 						conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);				
 						PreparedStatement statement = conn.prepareStatement(msginfoQuery);				
 						statement.setString(1, msgid);								
-				 		ResultSet resultset = statement.executeQuery();							
+				 		ResultSet resultset = statement.executeQuery();
+				 		int rows=0;
 							while (resultset.next()) {
+								rows++;
 								id = resultset.getString(1);
 								salesManEmail = resultset.getString(2);
 								customerEmail = resultset.getString(3);
@@ -155,6 +157,10 @@ public class DbLayer {
 								System.out.println("Got msginfo " + mi.toString());
 								return mi;
 							}
+							if (rows!=1)
+							{
+								System.out.println("Error in getMessageInfo for msgid " + msgid + " number of rows is not 1, it is "+rows); 
+							}							
 				} finally{ if(conn!=null){ conn.close();}	}
 			} catch (Exception ex) {
 					System.out.println("exception in getmsginfo");
@@ -596,7 +602,7 @@ public class DbLayer {
 								message_text, customer_email, null, send_time, slides_id, 
 								slides_name, null, null);
 								
-								System.out.println("Alert obj: " + alert.toString());
+				//				System.out.println("Alert obj: " + alert.toString());
 								
 								alerts.add(alert);
    			    //System.out.println("Found alert: cust " + cust_email + " sl name " + slides_name + "msgtext" + msgtext + " msgid " + msg_id + " open " + open_time + " send " + send_time + " sess id " + sessId);
@@ -607,7 +613,7 @@ public class DbLayer {
 					ex.printStackTrace();
 			}
 			
-			System.out.println("starting load alertdata threads");
+			//System.out.println("starting load alertdata threads");
 			// arraylist of threads
 			ArrayList<LoadAlertDataThread> threads = new ArrayList<LoadAlertDataThread>();
 						
@@ -619,7 +625,7 @@ public class DbLayer {
 					threads.add(alertThread);
 			}
 			
-			System.out.println("waiting for threads");
+			//System.out.println("waiting for threads");
 			// wait for all threads to finish
 			for (LoadAlertDataThread thread : threads)
 			{
@@ -634,9 +640,9 @@ public class DbLayer {
 				}
 			}
 			
-			System.out.println("threads complete");
+			System.out.println("threads complete. Alerts loaded.");
 			
-			System.out.println("returning alerts found.");
+			//System.out.println("returning alerts found.");
 			return alerts;
 		}
 		///*********************************************************
@@ -686,7 +692,7 @@ public class DbLayer {
 								message_text, customer_email, null, send_time, slides_id, 
 								slides_name, null, null);
 								
-								System.out.println("ONE Alert obj: " + ad.toString());
+				//				System.out.println("ONE Alert obj: " + ad.toString());
 															
    			    //System.out.println("Found alert: cust " + cust_email + " sl name " + slides_name + "msgtext" + msgtext + " msgid " + msg_id + " open " + open_time + " send " + send_time + " sess id " + sessId);
 					}
@@ -706,7 +712,7 @@ public class DbLayer {
 			{
 				System.out.println("Error - interrupted exception in threads " + ie.getStackTrace().toString());
 			}
-			System.out.println("returning alert");
+			System.out.println("returning alert (one)");
 			return ad;
 		}
 		///*********************************************************
