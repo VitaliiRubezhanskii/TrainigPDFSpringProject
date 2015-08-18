@@ -67,12 +67,37 @@ public class EmailSender {
 		  System.out.println("alert email to : " + mi.getSalesManEmail());
 		  
 		  String logoHtml = "<img src='www.slidepiper.com/img/logoOriginal.png' style='background-color: black;'>SlidePiper</img>";
+
 		  
+		  String appname = System.getenv("OPENSHIFT_APP_NAME");									
+			String currentviewslink;
+			String chatlink = "www.google.com";
+			if (appname==null) //running locally
+			{
+				currentviewslink = "localhost:8080/sp/viewbarchart.jsp?session_id=" + sessionId;				
+			}
+			else
+			{
+				 if (appname.equalsIgnoreCase("slidepipertest"))
+				 {
+					 currentviewslink = "http://slidepipertest-slidepiper.rhcloud.com/viewbarchart.jsp?session_id=" + sessionId;
+				 }
+				 else
+					 if (appname.equalsIgnoreCase("sp")) 
+					 {
+						 currentviewslink = "http://www.slidepiper.com/viewbarchart.jsp?session_id=" + sessionId;
+					 }
+					 else
+					 {
+						 	currentviewslink = "CANNOT MAKE LINK";
+					 }							 
+			}
+					  			  
 			EmailSender.sendEmail(mi.getSalesManEmail(), 
 					"SlidePiper Alert for email " + mi.getCustomerEmail(),
 					logoHtml +
 					"Hello, <BR><BR>This is Jacob Salesmaster. <BR>I am your customer alerts representative.<BR><BR>" + mi.getCustomerEmail() + " has just clicked on the link you sent him! <BR><BR>"
-					+"<u>What to do next?</u><BR><a href=''>Connect to Chat</a><a href=''>View Current Report</a>"
+					+"<u>What would you like do next?</u><BR><a href='"+chatlink+"'>Connect to Chat</a><BR><a href='"+currentviewslink+"'>View Current Report</a>"
 					+"<BR><BR> Glad to serve you, <BR>Jacob Salesmaster<BR>SlidePiper Alerts System"
 					);
 

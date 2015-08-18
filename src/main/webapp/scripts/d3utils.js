@@ -8,7 +8,7 @@ function type(d) {
 // add barchart for given jsonTable
 function addAlertBarChart(element, jsonTable)
 {
-			var margin = {top: 20, right: 10, bottom: 30, left: 30},
+			var margin = {top: 30, right: 10, bottom: 30, left: 30},
 			    width = 500 - margin.left - margin.right,
 			    height = 150 - margin.top - margin.bottom;
 			
@@ -150,7 +150,7 @@ function addAlertBarChart(element, jsonTable)
 			  svg.append("text")
 			      //.attr("transform", "rotate(-90)")
 			      .attr("class","xtext")
-			      .attr("y", -5	)
+			      .attr("y", -13	)
 			      .attr("x", -margin.left)
 			      //.attr("dy", ".71em")
 			      .style("text-anchor", "start")

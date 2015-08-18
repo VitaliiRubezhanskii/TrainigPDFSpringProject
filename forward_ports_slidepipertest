@@ -1,1 +1,1 @@
-rhc port-forward -a slidepipertest 
+rhc port-forward -a slidepipertest -n slidepiper 
