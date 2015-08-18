@@ -85,13 +85,13 @@ public class ReportsServlet extends HttpServlet {
 									output.put("alerts", alerts);
 									break;
 							case "getAlertsHtml":											
-								System.out.println("making alerts HTML");//
+								//System.out.println("making alerts HTML");//
 								ArrayList<AlertData> alertlist = DbLayer.getAlerts(input.getString("email"));
-								System.out.println("rcvd alerts objs");//
+								//System.out.println("rcvd alerts objs");//
 								String alertsHtml = HtmlRenderer.GenerateAlertsHtml(alertlist);
-								System.out.println("rcvd alerts html: " + alertsHtml);//
+								//System.out.println("rcvd alerts html: " + alertsHtml);//
 								output.put("alertsHtml", alertsHtml);
-								System.out.println("Sent alerts html");
+								//System.out.println("Sent alerts html");
 								break;									
 							case "getHistory":					
 								System.out.println("calling getHistory with email " + input.getString("email"));
