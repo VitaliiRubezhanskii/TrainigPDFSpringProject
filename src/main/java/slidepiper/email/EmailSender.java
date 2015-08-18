@@ -14,6 +14,7 @@ import slidepiper.dataobjects.AlertData;
 import slidepiper.dataobjects.MessageInfo;
 import slidepiper.db.DbLayer;
 import slidepiper.keepalive.KeepAlivePacket;
+import slidepiper.ui_rendering.BarChartRenderer;
 import slidepiper.ui_rendering.HtmlRenderer;
 
 public class EmailSender {
@@ -66,7 +67,7 @@ public class EmailSender {
 		  MessageInfo mi = DbLayer.getMessageInfo(id);
 		  System.out.println("alert email to : " + mi.getSalesManEmail());
 		  
-		  String logoHtml = "<img src='www.slidepiper.com/img/logoOriginal.png' style='background-color: black;'>SlidePiper</img>";
+		  String logoHtml = "<img src='www.slidepiper.com/img/logoOriginal.png' style='background-color: black;'></img>";
 
 		  
 		  String appname = System.getenv("OPENSHIFT_APP_NAME");									
@@ -92,9 +93,13 @@ public class EmailSender {
 						 	currentviewslink = "CANNOT MAKE LINK";
 					 }							 
 			}
+			
+			String subj = "SlidePiper Alert for " +
+					DbLayer.getCustomerName(mi.getCustomerEmail(),mi.getSalesManEmail()) +
+					" (" + mi.getCustomerEmail() + ")";
 					  			  
 			EmailSender.sendEmail(mi.getSalesManEmail(), 
-					"SlidePiper Alert for email " + mi.getCustomerEmail(),
+					subj,
 					logoHtml +
 					"Hello, <BR><BR>This is Jacob Salesmaster. <BR>I am your customer alerts representative.<BR><BR>" + mi.getCustomerEmail() + " has just clicked on the link you sent him! <BR><BR>"
 					+"<u>What would you like do next?</u><BR><a href='"+chatlink+"'>Connect to Chat</a><BR><a href='"+currentviewslink+"'>View Current Report</a>"
@@ -107,18 +112,27 @@ public class EmailSender {
 	public static void sendReportEmail(KeepAlivePacket p)
 	{					
 			MessageInfo mi = DbLayer.getMessageInfo(p.getMsgId());													
-			AlertData ai = DbLayer.getAlert(p.getSessionId(),mi.getSalesManEmail());					
+			AlertData ai = DbLayer.getAlert(p.getSessionId(),mi.getSalesManEmail());
+			
+			// first of all: let's get the url to the barchart image.
+			// session id I have in alertdata.
+			String barchartImageUrl = BarChartRenderer.getBarChartLink(ai.getSession_id());
+			
 			// i=0 not important. no buttons or divs filled with code here. it's email.
-			  String logoHtml = "<img src='www.slidepiper.com/img/logoOriginal.png' style='background-color: black;'>SlidePiper</img>";
-			  
+			String logoHtml = "<img src='www.slidepiper.com/img/logoOriginal.png' style='background-color: black;'></img>";
+
+			String barChartImageHtml = "<img src='"+barchartImageUrl+"'></img>";
+			
 			String msg = logoHtml+ "Hello, <BR><BR> This is Jacob Salesmaster. <BR> I am your SlidePiper reports representative. Please carefully review the following report. <BR><BR>";
 			
 			System.out.println("Getcustname for custemail " +  mi.getCustomerEmail() +" sm email " + mi.getSalesManEmail());
 			String subj = "SlidePiper Report for " +
 					DbLayer.getCustomerName(mi.getCustomerEmail(),mi.getSalesManEmail()) +
 					" (" + mi.getCustomerEmail() + ")";
-					
+		
+			msg += barChartImageHtml;
 			msg += HtmlRenderer.GenerateAlertHtml(ai, 0);					
+		
 			msg += "<BR><BR>Glad to serve you, <BR>Jacob Salesmaster<BR>SlidePiper Reports Team";
 			EmailSender.sendEmail(mi.getSalesManEmail(), subj , msg);
 	}
