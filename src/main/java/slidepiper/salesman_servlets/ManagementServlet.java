@@ -68,11 +68,11 @@ public class ManagementServlet extends HttpServlet {
 
 	public void init(ServletConfig config) throws ServletException {
 			System.out.println("Init ManagementServlet");			
-			WebpageToImage.RenderWebpage();
-			System.out.println("Done render web page");
+			//WebpageToImage.RenderWebpage(); // not working well. stucks.
+			//System.out.println("Done render web page");
 			DbLayer.init();				
 	}
-	
+		
 	/***********************		GET METHODS		*********************************/
 	
 	/***********************		 DO-POST		*********************************/
