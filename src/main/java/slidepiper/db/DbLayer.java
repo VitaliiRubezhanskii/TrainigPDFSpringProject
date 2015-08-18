@@ -619,11 +619,27 @@ public class DbLayer {
 			ArrayList<LoadAlertDataThread> threads = new ArrayList<LoadAlertDataThread>();
 						
 			// loop on new threads and start them
+			int threadidx = 1;
 			for(AlertData alert : alerts)
 			{
 					LoadAlertDataThread alertThread = new LoadAlertDataThread(alert, salesman_email);
+					alertThread.threadidx = threadidx;
 					alertThread.start();					
 					threads.add(alertThread);
+					if ((threadidx%20) ==0) 
+					{						
+							// wait for it to finish before continuing.
+							try{
+									alertThread.join();
+							}
+							catch (InterruptedException ie)
+							{
+									System.out.println("Error - interrupted exception in thread in 20 batch. " + ie.getStackTrace().toString());
+							}
+							System.out.println("finished batch of 20 threads, idx is " + threadidx);
+					}
+
+					threadidx++;
 			}
 			
 			System.out.println("waiting for threads");

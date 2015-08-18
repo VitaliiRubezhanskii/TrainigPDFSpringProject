@@ -12,6 +12,7 @@ import java.util.ArrayList;
 public class LoadAlertDataThread extends Thread {	
 		private AlertData alertData;
 		private String salesman_email;
+		public int threadidx=0;
 	// loads extra stuff needed for thread
 	   public LoadAlertDataThread(AlertData ad, String smemail) {
 	       // store parameter for later user
@@ -27,7 +28,7 @@ public class LoadAlertDataThread extends Thread {
 				ArrayList<String> actions = DbLayer.getActions(sessid);
 				//System.out.println("In thread for session " + sessid + " now getqs");
 				ArrayList<String> questions = DbLayer.getQuestions(sessid);
-				System.out.println("In thread for session " + sessid + " DONE");
+				System.out.println("In thread for session " + sessid + " idx " + threadidx +" DONE");
 				
 				alertData.setCustomer_name(customer_name);
 				alertData.setActions(actions);

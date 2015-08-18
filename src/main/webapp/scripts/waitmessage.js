@@ -54,17 +54,19 @@ function	 verifyLoaded()
 					
 					if (alertsloaded==false)
 						{
-								fillAlerts();
+							//	fillAlerts();
+								swal("Error", "Error loading alerts.", "error");
 						}
 					if ((customersloaded==false) || (presentationsloaded==false))
 						{
-								fillCustomersAndPresentations();				
+								fillCustomersAndPresentations();
+								swal("Error", "Error loading your data.", "error");
 						}
 					
 					if (isEverythingLoaded() == false) //reschedule loading
 						{	
 								console.log("not all loaded on verify. rescheduling check.");
-								setTimeout(verifyLoaded, 45000);
+								//setTimeout(verifyLoaded, 45000);
 						}
 					hideLoadingMsgIfFullyLoaded();
 			}
