@@ -166,7 +166,7 @@ public class ManagementServlet extends HttpServlet {
 					System.out.println("sending msg from:  "  + input.getString("salesman_email") + " tz offset " + timezone_offset);					
 					
 					//does not really send, just write to db. sent using mailto.
-						DbLayer.sendMessage(input.getString("docid"), input.getString("salesman_email"), "no email password", input.getString("customers"),
+						DbLayer.sendMessage(input.getString("docid"), input.getString("salesman_email"), "no email password", input.getString("customeremails"),
 							input.getString("slides_ids"), msgtext, "", input.getString("msgsubj"), timezone_offset
 							);
 					
