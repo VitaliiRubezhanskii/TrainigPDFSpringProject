@@ -61,7 +61,7 @@ public class EmailSender {
 	}
 	
 	// send alert email
-	public void sendAlertEmail(String id, String sessionId)
+	public static void sendAlertEmail(String id, String sessionId)
 	{
 		  MessageInfo mi = DbLayer.getMessageInfo(id);
 		  System.out.println("alert email to : " + mi.getSalesManEmail());
