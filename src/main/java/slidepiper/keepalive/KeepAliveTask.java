@@ -9,7 +9,7 @@ import java.util.TimerTask;
 import slidepiper.db.DbLayer;
 import slidepiper.email.EmailSender;
 import slidepiper.logging.CustomerLogger;
-import slidepiper.views.HtmlRenderer;
+import slidepiper.ui_rendering.HtmlRenderer;
 
 
 // -- this is the class for the keepalive thread

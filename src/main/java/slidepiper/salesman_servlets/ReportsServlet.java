@@ -1,8 +1,6 @@
 package slidepiper.salesman_servlets;
 
 import java.io.BufferedReader;
-
-
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -22,7 +20,7 @@ import slidepiper.dataobjects.AlertData;
 import slidepiper.dataobjects.HistoryItem;
 import slidepiper.dataobjects.SlideView;
 import slidepiper.db.DbLayer;
-import slidepiper.views.*;
+import slidepiper.ui_rendering.*;
 
 /**
  * Servlet implementation class ReportsServlet

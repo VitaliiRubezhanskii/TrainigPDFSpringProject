@@ -14,7 +14,7 @@ import slidepiper.dataobjects.AlertData;
 import slidepiper.dataobjects.MessageInfo;
 import slidepiper.db.DbLayer;
 import slidepiper.keepalive.KeepAlivePacket;
-import slidepiper.views.HtmlRenderer;
+import slidepiper.ui_rendering.HtmlRenderer;
 
 public class EmailSender {
 
@@ -84,7 +84,9 @@ public class EmailSender {
 			MessageInfo mi = DbLayer.getMessageInfo(p.getMsgId());													
 			AlertData ai = DbLayer.getAlert(p.getSessionId(),mi.getSalesManEmail());					
 			// i=0 not important. no buttons or divs filled with code here. it's email.
-			String msg = "Hello, <BR><BR> This is Jacob Salesmaster. <BR> I am your SlidePiper reports representative. Please carefully review the following report. <BR><BR>";
+			  String logoHtml = "<img src='www.slidepiper.com/img/logoOriginal.png' style='background-color: black;'>SlidePiper</img>";
+			  
+			String msg = logoHtml+ "Hello, <BR><BR> This is Jacob Salesmaster. <BR> I am your SlidePiper reports representative. Please carefully review the following report. <BR><BR>";
 			
 			System.out.println("Getcustname for custemail " +  mi.getCustomerEmail() +" sm email " + mi.getSalesManEmail());
 			String subj = "SlidePiper Report for " +

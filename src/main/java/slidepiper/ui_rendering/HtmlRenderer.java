@@ -1,4 +1,4 @@
-package slidepiper.views;
+package slidepiper.ui_rendering;
 
 import java.util.ArrayList;
 

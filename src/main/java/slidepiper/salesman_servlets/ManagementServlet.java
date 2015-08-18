@@ -1,9 +1,11 @@
 package slidepiper.salesman_servlets;
 
 import java.awt.TrayIcon.MessageType;
+
 import java.io.BufferedReader;
 
 import slidepiper.*;
+import slidepiper.ui_rendering.*;
 import slidepiper.constants.Constants;
 import slidepiper.dataobjects.Customer;
 import slidepiper.dataobjects.Presentation;
@@ -64,8 +66,10 @@ public class ManagementServlet extends HttpServlet {
         super();
     }
 
-	public void init(ServletConfig config) throws ServletException {		
-			DbLayer.init();
+	public void init(ServletConfig config) throws ServletException {
+			System.out.println("Init ManagementServlet");			
+			WebpageToImage.RenderWebpage();
+			DbLayer.init();				
 	}
 	
 	/***********************		GET METHODS		*********************************/

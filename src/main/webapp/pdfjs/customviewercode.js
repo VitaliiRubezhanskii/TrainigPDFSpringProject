@@ -147,19 +147,25 @@ function getSalesmanEmail() {
 
 
 
+preInitDone = false;
+
 // runs BEFORE everything is loaded.
 function preInitView()
 {
-	msgid = getURLParameter("file"); // format /file/123456
-	msgid = msgid.substr(msgid.length - 6); // last 6 chars
-	console.log("msgid is " + msgid);	
-	// immediately send event and message to salesman.
-	
-	browser_data = "Browser name: " + navigator.appName + " " + navigator.appVersion 
-	+ "<BR>Platform: " + navigator.platform + "<BR>";
-	
-	send_event("OPEN_SLIDES", prev_slide, "0", browser_data);
-	getSalesmanEmail();
+	if (preInitDone == false)
+		{
+				msgid = getURLParameter("file"); // format /file/123456
+				msgid = msgid.substr(msgid.length - 6); // last 6 chars
+				console.log("msgid is " + msgid);	
+				// immediately send event and message to salesman.
+				
+				browser_data = "Browser name: " + navigator.appName + " " + navigator.appVersion 
+				+ "<BR>Platform: " + navigator.platform + "<BR>";
+				
+				send_event("OPEN_SLIDES", prev_slide, "0", browser_data);
+				
+				preInitDone = true;
+		}
 }
 
 // run immediately.
@@ -170,6 +176,8 @@ function initView() {
 	console.log("init view");
 
 	preInitView(); //make sure executed.
+	
+	getSalesmanEmail();
 	
 	prev_datetime = new Date();
 	// immediately make this global var.
