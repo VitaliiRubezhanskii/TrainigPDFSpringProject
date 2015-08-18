@@ -614,7 +614,7 @@ public class DbLayer {
 					ex.printStackTrace();
 			}
 			
-			System.out.println("starting load alertdata threads");
+			System.out.println("starting load alertdata threads. number of alerts " + alerts.size());
 			// arraylist of threads
 			ArrayList<LoadAlertDataThread> threads = new ArrayList<LoadAlertDataThread>();
 						
@@ -626,7 +626,7 @@ public class DbLayer {
 					threads.add(alertThread);
 			}
 			
-			//System.out.println("waiting for threads");
+			System.out.println("waiting for threads");
 			// wait for all threads to finish
 			for (LoadAlertDataThread thread : threads)
 			{
@@ -640,9 +640,7 @@ public class DbLayer {
 					System.out.println("Error - interrupted exception in threads " + ie.getStackTrace().toString());
 				}
 			}
-			
-			
-			
+	
 			System.out.println("threads complete. Alerts loaded.");
 			
 			//System.out.println("returning alerts found.");

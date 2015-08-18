@@ -21,11 +21,11 @@ public class LoadAlertDataThread extends Thread {
 
 	   public void run() {
 		   	String sessid = alertData.getSession_id();
-		   	System.out.println("In thread for session " + sessid + " now getcustname");
+		   	//System.out.println("In thread for session " + sessid + " now getcustname");
 				String customer_name = DbLayer.getCustomerName(alertData.getCustomer_email(), salesman_email);
-				System.out.println("In thread for session " + sessid + " now getactions");
+				//System.out.println("In thread for session " + sessid + " now getactions");
 				ArrayList<String> actions = DbLayer.getActions(sessid);
-				System.out.println("In thread for session " + sessid + " now getqs");
+				//System.out.println("In thread for session " + sessid + " now getqs");
 				ArrayList<String> questions = DbLayer.getQuestions(sessid);
 				System.out.println("In thread for session " + sessid + " DONE");
 				
