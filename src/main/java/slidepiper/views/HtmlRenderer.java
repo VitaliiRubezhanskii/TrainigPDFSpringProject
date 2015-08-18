@@ -112,11 +112,19 @@ public class HtmlRenderer {
 				+ "</div>"														 
 				+ "<div class=\"ui-block-a\">"
 				+ "<div class=\"d3barchart" + i + "\">BARCHART HERE</div>"
-				+ "</div>" 			
+				+ "</div>"
+				
 				+ "<BR> <div class=\"ui-block-a\">"
 				+ "<u>Original e-mail sent: </u> <BR>" 
 				+ ai.getMessage_text()
-				+ "</div></div></li>";
+				+ "</div>"
+				
+   			+ "<BR> <div class=\"ui-block-a\">"
+				+ "<u>Customer's Device Information: </u> <BR>" 
+				+ ai.getAll_browser_data()
+				+ "</div>"
+				
+				+ "</div></li>";
 			// end main responsive div, and listitem element.
 			
 			return alertHTML;			

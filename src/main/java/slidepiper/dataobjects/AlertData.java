@@ -3,21 +3,19 @@ package slidepiper.dataobjects;
 import java.util.ArrayList;
 
 public class AlertData {
-	String session_id, browser, os, open_time, message_text,  customer_email, customer_name, send_time, slides_id;
-	String slides_name;
-	public String getSlides_name() {
-		return slides_name;
-	}
-
+	String session_id, browser, os, all_browser_data, open_time, message_text,  customer_email, customer_name, send_time, slides_id;
+	
+	
 	public AlertData(String session_id, String browser, String os,
-			String open_time, String message_text, String customer_email,
-			String customer_name, String send_time, String slides_id,
-			String slides_name, ArrayList<String> actions,
+			String all_browser_data, String open_time, String message_text,
+			String customer_email, String customer_name, String send_time,
+			String slides_id, String slides_name, ArrayList<String> actions,
 			ArrayList<String> questions) {
 		super();
 		this.session_id = session_id;
 		this.browser = browser;
 		this.os = os;
+		this.all_browser_data = all_browser_data;
 		this.open_time = open_time;
 		this.message_text = message_text;
 		this.customer_email = customer_email;
@@ -29,6 +27,19 @@ public class AlertData {
 		this.questions = questions;
 	}
 
+	public String getAll_browser_data() {
+		return all_browser_data;
+	}
+
+	public void setAll_browser_data(String all_browser_data) {
+		this.all_browser_data = all_browser_data;
+	}
+
+	String slides_name;
+	public String getSlides_name() {
+		return slides_name;
+	}
+	
 	public String getCustomer_name() {
 		return customer_name;
 	}
@@ -127,11 +138,11 @@ public class AlertData {
 	@Override
 	public String toString() {
 		return "AlertData [session_id=" + session_id + ", browser=" + browser
-				+ ", os=" + os + ", open_time=" + open_time + ", message_text="
-				+ message_text + ", customer_email=" + customer_email
-				+ ", customer_name=" + customer_name + ", send_time="
-				+ send_time + ", slides_id=" + slides_id + ", slides_name="
-				+ slides_name + ", actions=" + actions + ", questions="
-				+ questions + "]";
+				+ ", os=" + os + ", all_browser_data=" + all_browser_data
+				+ ", open_time=" + open_time + ", message_text=" + message_text
+				+ ", customer_email=" + customer_email + ", customer_name="
+				+ customer_name + ", send_time=" + send_time + ", slides_id="
+				+ slides_id + ", slides_name=" + slides_name + ", actions="
+				+ actions + ", questions=" + questions + "]";
 	}			
 }

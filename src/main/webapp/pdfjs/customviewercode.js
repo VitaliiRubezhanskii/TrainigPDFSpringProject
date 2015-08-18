@@ -75,6 +75,7 @@ function checkCursor() {
 
 ipaddr = "1.2.3.4";
 prev_slide = $("#pageNumber").val();
+
 prev_datetime = new Date(); // immediately make this global var.
 
 // hide after 5sec.
@@ -151,9 +152,17 @@ function preInitView()
 {
 	msgid = getURLParameter("file"); // format /file/123456
 	msgid = msgid.substr(msgid.length - 6); // last 6 chars
-	console.log("msgid is " + msgid);
+	console.log("msgid is " + msgid);	
+	// immediately send event and message to salesman.
+	
+	browser_data = "Browser name: " + navigator.appName + " " + navigator.appVersion 
+	+ "<BR>Platform: " + navigator.platform + "<BR>";
+	
+	send_event("OPEN_SLIDES", prev_slide, "0", browser_data);
+	getSalesmanEmail();
 }
 
+// run immediately.
 preInitView();
 
 // initialize everything
@@ -168,12 +177,9 @@ function initView() {
 	// first slide in its view time.
 
 	// alert("file: "+ getURLParameter("file"));
+	
 	send_event("INIT_SLIDES", "0", "0", ipaddr);
-
-	getSalesmanEmail();
-
-	send_event("OPEN_SLIDES", prev_slide, "0", ipaddr);
-
+		
 	console.log("binding sendmsg click");
 	$("#sendq").unbind(); // first unbind all.
 	$("#sendq").bind(
@@ -200,11 +206,11 @@ function initView() {
 			});
 	console.log("binding sendmsg click - DONE OK");
 
-	// request fullscreen after 1 sec
-	setTimeout(function() {
+	// request pagefit after 1 sec
+	/*setTimeout(function() {
 		$("#scaleSelectContainer").value = "page-fit";
 		$("#scaleSelectContainer").selectedIndex = 2; // pagefit option
-	}, 1000);
+	}, 1000);*/
 	// every 1/3 sec check for updates in slide num.
 
 	// for now, use the current page, not necessarily 1.
@@ -266,9 +272,10 @@ function initView() {
 	view_initialized = 1;
 }
 
- document.addEventListener("pagerendered", function(e) {
-		initView(); //runs whhen pdf is visible, after it's loaded from server.
+ //document.addEventListener("pagerendered", function(e) {
+		//initView(); //runs whhen pdf is visible, after it's loaded from server.
 		//alert("rendered");
- });
+//initView is exec in viewer.js, look for it. run after pdf is rendered!
+ //});
 
 // initView(); // just run ONCE - no duplicates (hopefully).

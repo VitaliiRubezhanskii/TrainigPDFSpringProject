@@ -56,7 +56,7 @@ public class CustomerLogger {
 										statement.setString(3, sessionId);
 										statement.setString(4, "browser");
 										statement.setString(5, "os");
-										statement.setString(6, "alldata");																	
+										statement.setString(6, param3);																	
 										// sends the statement to the database server
 										row = statement.executeUpdate();
 										if (row > 0) { 

@@ -564,7 +564,7 @@ public class DbLayer {
 			
 			String reportSQL =
 					" SELECT cs.session_id AS 'session_id', cs.browser AS 'browser', "
-					+" cs.operating_system AS 'os', cs.timestamp AS 'open_time', "
+					+" cs.operating_system AS 'os', cs.all_browser_data AS 'all_browser_data', cs.timestamp AS 'open_time', "
 					+" mi.msg_text as 'message_text', mi.customer_email as 'customer_email', " 
 					+" mi.timestamp as 'send_time', mi.slides_id as 'slides_id' "
 					+" FROM customer_sessions cs, msg_info mi " 
@@ -586,11 +586,12 @@ public class DbLayer {
 						String session_id = resultset.getString(1);
 								String browser = resultset.getString(2);
 								String os = resultset.getString(3);
-								String open_time = resultset.getString(4);
-								String message_text =resultset.getString(5);
-								String customer_email = resultset.getString(6);
-								String send_time =resultset.getString(7);
-								String slides_id =resultset.getString(8);
+								String all_browser_data = resultset.getString(4);
+								String open_time = resultset.getString(5);
+								String message_text =resultset.getString(6);
+								String customer_email = resultset.getString(7);
+								String send_time =resultset.getString(8);
+								String slides_id =resultset.getString(9);
 								String slides_name = getSlidesName(slides_id);
 								
 					//			System.out.println("alerts data received");
@@ -598,7 +599,7 @@ public class DbLayer {
 																
 								// without customer_name, actions, questions 
 								// these need to be pulled out in many concurrent threads.
-								AlertData alert = new AlertData(session_id, browser, os, open_time, 
+								AlertData alert = new AlertData(session_id, browser, os, all_browser_data, open_time, 
 								message_text, customer_email, null, send_time, slides_id, 
 								slides_name, null, null);
 								
@@ -655,7 +656,7 @@ public class DbLayer {
 			
 			String alertSQL =
 					" SELECT cs.session_id AS 'session_id', cs.browser AS 'browser', "
-					+" cs.operating_system AS 'os', cs.timestamp AS 'open_time', " 
+					+" cs.operating_system AS 'os', cs.all_browser_data AS 'all_browser_data', cs.timestamp AS 'open_time', " 
 			   	+"	mi.msg_text as 'message_text', mi.customer_email as 'customer_email', " 
 					+" mi.timestamp as 'send_time', mi.slides_id as 'slides_id' " 
 					+" FROM customer_sessions cs, msg_info mi "
@@ -676,11 +677,12 @@ public class DbLayer {
 						String session_id = resultset.getString(1);
 								String browser = resultset.getString(2);
 								String os = resultset.getString(3);
-								String open_time = resultset.getString(4);
-								String message_text =resultset.getString(5);
-								String customer_email = resultset.getString(6);
-								String send_time =resultset.getString(7);
-								String slides_id =resultset.getString(8);
+								String all_browser_data = resultset.getString(4);
+								String open_time = resultset.getString(5);
+								String message_text =resultset.getString(6);
+								String customer_email = resultset.getString(7);
+								String send_time =resultset.getString(8);
+								String slides_id =resultset.getString(9);
 								String slides_name = getSlidesName(slides_id);
 								
 					//			System.out.println("alerts data received");
@@ -688,7 +690,7 @@ public class DbLayer {
 																
 								// without customer_name, actions, questions 
 								// these need to be pulled out in many concurrent threads.
-							  ad = new AlertData(session_id, browser, os, open_time, 
+							  ad = new AlertData(session_id, browser, os, all_browser_data, open_time, 
 								message_text, customer_email, null, send_time, slides_id, 
 								slides_name, null, null);
 								

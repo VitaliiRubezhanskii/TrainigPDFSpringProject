@@ -66,17 +66,11 @@ public class EmailSender {
 		  MessageInfo mi = DbLayer.getMessageInfo(id);
 		  System.out.println("alert email to : " + mi.getSalesManEmail());
 		  
-		  String logoHtml = "<img src='img/logoOriginal.png'>SP Logo1</img>";
-		  String logoHtml2 = "<img src='/img/logoOriginal.png'>SP Logo2</img>";
-		  String logoHtml3 = "<img src='../img/logoOriginal.png'>SP Logo3</img>";
-		  String logoHtml4 = "<img src='img/logoOriginal.png'>SP Logo4</img>";
+		  String logoHtml = "<img src='www.slidepiper.com/img/logoOriginal.png' style='background-color: black;'>SlidePiper</img>";
 		  
 			EmailSender.sendEmail(mi.getSalesManEmail(), 
 					"SlidePiper Alert for email " + mi.getCustomerEmail(),
 					logoHtml +
-					logoHtml2 +
-					logoHtml3 +
-					logoHtml4 +
 					"Hello, <BR><BR>This is Jacob Salesmaster. <BR>I am your customer alerts representative.<BR><BR>" + mi.getCustomerEmail() + " has just clicked on the link you sent him! <BR><BR>"
 					+"<u>What to do next?</u><BR><a href=''>Connect to Chat</a><a href=''>View Current Report</a>"
 					+"<BR><BR> Glad to serve you, <BR>Jacob Salesmaster<BR>SlidePiper Alerts System"

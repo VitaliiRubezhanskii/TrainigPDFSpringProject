@@ -4916,6 +4916,8 @@ var PDFViewer = (function pdfViewer() {
       if (pageView) {
         this._ensurePdfPageLoaded(pageView).then(function () {
           this.renderingQueue.renderView(pageView);
+//                    alert("pdf loaded");
+                                initView(); //this is THE PLACE!!! run after pdf is shown.
         }.bind(this));
         return true;
       }
