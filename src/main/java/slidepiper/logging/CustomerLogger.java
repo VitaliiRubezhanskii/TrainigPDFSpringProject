@@ -80,19 +80,7 @@ public class CustomerLogger {
 						    }
 						}          
 				}
-				
-				/// send email if opened presentation
-				if (event_name.equalsIgnoreCase("OPEN_SLIDES"))
-				{								
-						System.out.println("open slides event - sending email");						
-					  MessageInfo mi = DbLayer.getMessageInfo(id);
-					  System.out.println("email to : " + mi.getSalesManEmail());
-						EmailSender.sendEmail(mi.getSalesManEmail(), 
-								"SlidePiper Alert for email " + mi.getCustomerEmail(),
-								"Hello, <BR><BR>This is Jacob Salesmaster. <BR>I am your customer alerts representative.<BR><BR>" + mi.getCustomerEmail() + " has just clicked on the link you sent him! <BR><BR> Glad to serve you, <BR>Jacob Salesmaster<BR>SlidePiper Alerts System"
-								);
-				}
-				
+								
 				/// send email for Contact us button
 				if (event_name.equalsIgnoreCase("CONTACT_US"))
 				{								
