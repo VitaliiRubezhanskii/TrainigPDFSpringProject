@@ -64,13 +64,13 @@ public class HtmlRenderer {
 			}
 
 									
-			String emailmailto = "<a style=\"color:grey\" href=\"mailto:"
+			String emailmailto = "<a style=\"color:yellow\" href=\"mailto:"
 					+ ai.getCustomer_email()
 					+ "?Subject=Followup to our last email.\">"
 					+ ai.getCustomer_email() + "</a>";
 			
-			String reco_text = "Send e-mail to ";
-			if (!qs.isEmpty()) reco_text = "Call ";
+			String reco_text = "<u> Recommendation:</u> Send e-mail to ";
+			if (!qs.isEmpty()) reco_text = "<u> Recommendation: </u> Call ";
 			
 			recommendation_text = "<div class=\"recommendation" + i
 					+ "\">" + reco_text + ai.getCustomer_name() + " ("

@@ -47,23 +47,8 @@ public class KeepAliveTask extends TimerTask {
 				if (p.isPacketDead())
 				{
 					System.out.println("dead packet " + p.toString());
-					
-					MessageInfo mi = DbLayer.getMessageInfo(p.getMsgId());
-													
-					AlertData ai = DbLayer.getAlert(p.sessionId,mi.getSalesManEmail());					
-					// i=0 not important. no buttons or divs filled with code here. it's email.
-					String msg = "Hello, <BR><BR> This is Jacob Salesmaster. <BR> I am your SlidePiper reports representative. Please carefully review the following report. <BR><BR>";
-					
-					System.out.println("Getcustname for custemail " +  mi.getCustomerEmail() +" sm email " + mi.getSalesManEmail());
-					String subj = "SlidePiper Report for " +
-							DbLayer.getCustomerName(mi.getCustomerEmail(),mi.getSalesManEmail()) +
-							" (" + mi.getCustomerEmail() + ")";
-							
-					msg += HtmlRenderer.GenerateAlertHtml(ai, 0);					
-					msg += "<BR><BR>Glad to serve you, <BR>Jacob Salesmaster<BR>SlidePiper Reports Team";
-					
-					EmailSender.sendEmail(mi.getSalesManEmail(), subj , msg);
-					
+					EmailSender.sendReportEmail(p);
+														
 					// log last slide event.
 					// it's a regular slide view event, only detected in a different way.
 					CustomerLogger.LogEvent(p.getMsgId(), "VIEW_SLIDE", 
