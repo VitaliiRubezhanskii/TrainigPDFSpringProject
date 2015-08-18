@@ -640,6 +640,78 @@ public class DbLayer {
 			return alerts;
 		}
 		///*********************************************************
+		
+		// GET ALERT	 FOR SALESMAN. one alert
+		public static AlertData getAlert(String sessionId, String salesman_email){
+				
+			System.out.println("start get ALERT (one)");
+			AlertData ad = null;
+			
+			String alertSQL =
+					" SELECT cs.session_id AS 'session_id', cs.browser AS 'browser', "
+					+" cs.operating_system AS 'os', cs.timestamp AS 'open_time', " 
+			   	+"	mi.msg_text as 'message_text', mi.customer_email as 'customer_email', " 
+					+" mi.timestamp as 'send_time', mi.slides_id as 'slides_id' " 
+					+" FROM customer_sessions cs, msg_info mi "
+					+" WHERE cs.msg_id=mi.id AND cs.session_id=? LIMIT 1; ";					
+						 						
+			
+			Connection conn=null;
+			try 
+			{
+				try{
+				//System.out.println("alerts connect db");
+				conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
+				PreparedStatement statement = conn.prepareStatement(alertSQL);				
+				statement.setString(1, sessionId);								
+			 	ResultSet resultset = statement.executeQuery();
+				System.out.println("one alert exec done");
+					while (resultset.next()) {
+						String session_id = resultset.getString(1);
+								String browser = resultset.getString(2);
+								String os = resultset.getString(3);
+								String open_time = resultset.getString(4);
+								String message_text =resultset.getString(5);
+								String customer_email = resultset.getString(6);
+								String send_time =resultset.getString(7);
+								String slides_id =resultset.getString(8);
+								String slides_name = getSlidesName(slides_id);
+								
+					//			System.out.println("alerts data received");
+						//		System.out.println("alerts ");								
+																
+								// without customer_name, actions, questions 
+								// these need to be pulled out in many concurrent threads.
+							  ad = new AlertData(session_id, browser, os, open_time, 
+								message_text, customer_email, null, send_time, slides_id, 
+								slides_name, null, null);
+								
+								System.out.println("ONE Alert obj: " + ad.toString());
+															
+   			    //System.out.println("Found alert: cust " + cust_email + " sl name " + slides_name + "msgtext" + msgtext + " msgid " + msg_id + " open " + open_time + " send " + send_time + " sess id " + sessId);
+					}
+				} finally{ if(conn!=null){ conn.close();}	}
+			} catch (Exception ex) {
+					System.out.println("exception in getAlert (one)");
+					ex.printStackTrace();
+			}
+			
+			LoadAlertDataThread alertThread = new LoadAlertDataThread(ad, salesman_email);
+			alertThread.start();
+			try
+			{
+					alertThread.join(); // wait to finish.
+			}
+			catch (InterruptedException ie)
+			{
+				System.out.println("Error - interrupted exception in threads " + ie.getStackTrace().toString());
+			}
+			System.out.println("returning alert");
+			return ad;
+		}
+		///*********************************************************
+
+		
 
 		
 		// insert into database presentation share with customer. 

@@ -47,14 +47,6 @@ public class CustomerLoggingServlet extends HttpServlet {
 			    		
 			    		int timezone_offset = Integer.parseInt(request.getParameter("timezone_offset_min")); 
 			    		
-	//		    		System.out.println("Writing customer event:");
-		//	    		System.out.println("id " + id );
-			//    		System.out.println("ev name " + event_name );
-			  //  		System.out.println("param1 " + param1 );
-			    //		System.out.println("param2 " + param2 );
-			    	//	System.out.println("param3 " + param3 );			    		
-			    		//System.out.println("sessid " + sessionId );
-			    		
 			    		CustomerLogger.LogEvent(id, event_name, param1, param2, param3, sessionId, timezone_offset);    
     	}
 }

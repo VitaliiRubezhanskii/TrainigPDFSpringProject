@@ -21,7 +21,7 @@ public class HtmlRenderer {
 						alertsHTML += GenerateAlertHtml(ai, i);
 						i++;						
 					}		
-					System.out.println("Alerts html: " + alertsHTML);
+//					System.out.println("Alerts html: " + alertsHTML);
 					return alertsHTML;
 		}
 		
@@ -39,7 +39,7 @@ public class HtmlRenderer {
 			ArrayList<String> qs = ai.getQuestions();
 			if (!qs.isEmpty())
 			{
-				 messagesHtml = "The customer sent these messages: <BR>";
+				 messagesHtml = "<u>The customer sent these messages: </u><BR>";
 				 for(String q : qs)
 					{
 						messagesHtml += q;
@@ -51,7 +51,7 @@ public class HtmlRenderer {
 			ArrayList<String> actions = ai.getActions();
 			if (!actions.isEmpty())
 			{
-				 actionsHtml = "Actions performed: ";
+				 actionsHtml = "<u> Actions performed: </u>";
 				 for(String action : actions)
 					{
 								 switch (action)
@@ -78,7 +78,7 @@ public class HtmlRenderer {
 			alertHTML += "<li data-role=\"list-divider\">"
 					+ recommendation_text + " </li>";
 			
-			description_text = "Viewed presentation: \""
+			description_text = "Viewed presentation: \"	"
 					+ ai.getSlides_name() + "\"";
 			clicked_text = "Opened at " + ai.getOpen_time() + "<BR>";
 			
@@ -113,7 +113,7 @@ public class HtmlRenderer {
 				+ "<div class=\"ui-block-b\">"
 				+ "<div class=\"d3barchart" + i + "\"></div>"
 				+ "</div></div></li>" 			
-				+ "<BR><BR> Original e-mail sent: <BR>" +
+				+ "<BR><BR> <u>Original e-mail sent: </u> <BR>" +
 				ai.getMessage_text() + "<BR>";
 			// end main responsive div, and listitem element.
 			

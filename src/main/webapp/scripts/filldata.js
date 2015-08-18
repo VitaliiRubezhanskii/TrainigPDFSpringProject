@@ -138,6 +138,7 @@ function fillAlerts() {
 									// small delay, may help with listview refresh. 
 					//console.log("fillAlertsHtml ajax returned done.");										
 					alertsloaded = true;
+					hideLoadingMsgIfFullyLoaded();
 					console.log("AlertsHtml loaded successfully");//(without q's and barcharts)					
 				} // success func
 

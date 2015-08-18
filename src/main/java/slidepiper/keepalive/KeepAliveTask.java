@@ -1,10 +1,15 @@
 package slidepiper.keepalive;
 
+import slidepiper.dataobjects.*;
+
 import java.util.Iterator;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.TimerTask;
 
+import slidepiper.db.DbLayer;
+import slidepiper.email.EmailSender;
 import slidepiper.logging.CustomerLogger;
+import slidepiper.views.HtmlRenderer;
 
 
 // -- this is the class for the keepalive thread
@@ -43,12 +48,27 @@ public class KeepAliveTask extends TimerTask {
 				{
 					System.out.println("dead packet " + p.toString());
 					
+					MessageInfo mi = DbLayer.getMessageInfo(p.getMsgId());
+													
+					AlertData ai = DbLayer.getAlert(p.sessionId);					
+					// i=0 not important. no buttons or divs filled with code here. it's email.
+					String msg = "Hello, <BR><BR> This is Jacob Salesmaster. <BR> I am your SlidePiper reports representative. Please carefully review the following report. <BR>";
+					
+					String subj = "SlidePiper Report for " +
+							DbLayer.getCustomerName(mi.getCustomerEmail(),mi.getSalesManEmail()) +
+							" (" + mi.getCustomerEmail() + ")";
+							
+					msg += HtmlRenderer.GenerateAlertHtml(ai, 0);
+					EmailSender.sendEmail(mi.getSalesManEmail(), subj , msg);
+					
 					// log last slide event.
 					// it's a regular slide view event, only detected in a different way.
 					CustomerLogger.LogEvent(p.getMsgId(), "VIEW_SLIDE", 
 							Integer.toString(p.getSlideNumber()), 
 							Double.toString(p.getEstimatedTimeViewed()+1.5), "LAST_SLIDE", 
 							p.getSessionId(), p.getTimezoneOffsetMin());
+					
+					
 					
 					// remove current element in 
 					// thread-safe, collection-safe, hash-safe, iterator-safe way.
