@@ -69,6 +69,7 @@ public class ManagementServlet extends HttpServlet {
 	public void init(ServletConfig config) throws ServletException {
 			System.out.println("Init ManagementServlet");			
 			WebpageToImage.RenderWebpage();
+			System.out.println("Done render web page");
 			DbLayer.init();				
 	}
 	
