@@ -111,9 +111,8 @@ public class HtmlRenderer {
 				
 				+ "</div>"														 
 				+ "<div class=\"ui-block-a\">"
-				+ "<div class=\"d3barchart" + i + "\">BARCHART HERE</div>"
-				+ "</div>"
-				
+				//+ "<div class=\"d3barchart" + i + "\">BARCHART HERE</div>"
+			//	+ "</div>"				
 				+ "<BR> <div class=\"ui-block-a\">"
 				+ "<u>Original e-mail sent: </u> <BR>" 
 				+ ai.getMessage_text()
