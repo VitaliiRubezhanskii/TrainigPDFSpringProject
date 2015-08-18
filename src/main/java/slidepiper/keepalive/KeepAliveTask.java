@@ -52,14 +52,16 @@ public class KeepAliveTask extends TimerTask {
 													
 					AlertData ai = DbLayer.getAlert(p.sessionId,mi.getSalesManEmail());					
 					// i=0 not important. no buttons or divs filled with code here. it's email.
-					String msg = "Hello, <BR><BR> This is Jacob Salesmaster. <BR> I am your SlidePiper reports representative. Please carefully review the following report. <BR><BR>My Recommendation:";
+					String msg = "Hello, <BR><BR> This is Jacob Salesmaster. <BR> I am your SlidePiper reports representative. Please carefully review the following report. <BR><BR>";
 					
 					System.out.println("Getcustname for custemail " +  mi.getCustomerEmail() +" sm email " + mi.getSalesManEmail());
 					String subj = "SlidePiper Report for " +
 							DbLayer.getCustomerName(mi.getCustomerEmail(),mi.getSalesManEmail()) +
 							" (" + mi.getCustomerEmail() + ")";
 							
-					msg += HtmlRenderer.GenerateAlertHtml(ai, 0);
+					msg += HtmlRenderer.GenerateAlertHtml(ai, 0);					
+					msg += "<BR><BR>Glad to serve you, <BR>Jacob Salesmaster<BR>SlidePiper Reports Team";
+					
 					EmailSender.sendEmail(mi.getSalesManEmail(), subj , msg);
 					
 					// log last slide event.
@@ -68,9 +70,7 @@ public class KeepAliveTask extends TimerTask {
 							Integer.toString(p.getSlideNumber()), 
 							Double.toString(p.getEstimatedTimeViewed()+1.5), "LAST_SLIDE", 
 							p.getSessionId(), p.getTimezoneOffsetMin());
-					
-					
-					
+															
 					// remove current element in 
 					// thread-safe, collection-safe, hash-safe, iterator-safe way.
 					iter.remove(); 					

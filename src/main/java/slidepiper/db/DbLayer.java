@@ -133,7 +133,7 @@ public class DbLayer {
 			String msginfoQuery = "SELECT id, sales_man_email, customer_email, slides_id, msg_text, timestamp " + 
 			" FROM msg_info " + 
 			" WHERE id=? LIMIT 1;"; // take only 1 result. SHOULD be one.
-			System.out.println("running query to get message info: " + msginfoQuery);
+			//System.out.println("running query to get message info: " + msginfoQuery);
 
 			Connection conn=null;
 			try 
@@ -159,7 +159,7 @@ public class DbLayer {
 							}
 							if (rows!=1)
 							{
-								System.out.println("Error in getMessageInfo for msgid " + msgid + " number of rows is not 1, it is "+rows); 
+								System.out.println("Error in getMessageInfo for msgid " + msgid + " number of rows is not 1, it is "+rows); 								
 							}							
 				} finally{ if(conn!=null){ conn.close();}	}
 			} catch (Exception ex) {
@@ -650,7 +650,7 @@ public class DbLayer {
 		// GET ALERT	 FOR SALESMAN. one alert
 		public static AlertData getAlert(String sessionId, String salesman_email){
 				
-			System.out.println("start get ALERT (one)");
+			//System.out.println("start get ALERT (one)");
 			AlertData ad = null;
 			
 			String alertSQL =
@@ -671,7 +671,7 @@ public class DbLayer {
 				PreparedStatement statement = conn.prepareStatement(alertSQL);				
 				statement.setString(1, sessionId);								
 			 	ResultSet resultset = statement.executeQuery();
-				System.out.println("one alert exec done");
+				//System.out.println("one alert exec done");
 					while (resultset.next()) {
 						String session_id = resultset.getString(1);
 								String browser = resultset.getString(2);
@@ -712,7 +712,7 @@ public class DbLayer {
 			{
 				System.out.println("Error - interrupted exception in threads " + ie.getStackTrace().toString());
 			}
-			System.out.println("returning alert (one)");
+			//System.out.println("returning alert (one)");
 			return ad;
 		}
 		///*********************************************************
