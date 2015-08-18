@@ -25,7 +25,7 @@ public class EmailSender {
 		  props.put("mail.smtp.auth", "true");
 		  props.put("mail.smtp.port", "465");	    
 		  
-	    System.out.println("email login with user " + username + " pw " + password);
+	    //System.out.println("email login with user " + username + " pw " + password);
 		  Session session = Session.getDefaultInstance(props,
 		  new javax.mail.Authenticator() {
 		             protected PasswordAuthentication getPasswordAuthentication() {
@@ -45,7 +45,7 @@ public class EmailSender {
 		       Transport.send(emessage);
 		       			       
 		       	 
-		       System.out.println("EmailSender Cust alert mail sent succesfully! msg " + msg);
+		       System.out.println("Sent ALERT email. msg=" + msg);
 		   } catch (MessagingException e) {		   			
 			   		System.out.println("ERROR sending message " + e.getMessage() + " stack: " + e.getStackTrace());
 		        throw new RuntimeException(e);

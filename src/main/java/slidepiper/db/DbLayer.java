@@ -154,7 +154,7 @@ public class DbLayer {
 							  msgText = resultset.getString(5);
 								timestamp = resultset.getString(6);
 								MessageInfo mi = new MessageInfo(id, salesManEmail, customerEmail, slidesId, msgText, timestamp);
-								System.out.println("Got msginfo " + mi.toString());
+								//System.out.println("Got msginfo " + mi.toString());
 								return mi;
 							}
 							if (rows!=1)
