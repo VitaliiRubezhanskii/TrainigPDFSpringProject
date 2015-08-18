@@ -626,6 +626,10 @@ public class DbLayer {
 					alertThread.threadidx = threadidx;
 					alertThread.start();					
 					threads.add(alertThread);
+					
+					// This is VERY important - run threads in batches of 20.
+					// otherwise there's an exception of too many threads.
+					// this SOLVES IT completely.
 					if ((threadidx%20) ==0) 
 					{						
 							// wait for it to finish before continuing.
@@ -642,7 +646,7 @@ public class DbLayer {
 					threadidx++;
 			}
 			
-			System.out.println("waiting for threads");
+			System.out.println("waiting for last threads to finish.");
 			// wait for all threads to finish
 			for (LoadAlertDataThread thread : threads)
 			{
