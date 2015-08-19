@@ -135,39 +135,36 @@ public class HtmlRenderer {
 		public static String getRoundedCornersStyle()
 		{			
 				return 
-						" <style> \n"
-						+".rcorners { \n"
-				    +" border-radius: 25px;\n "
-				    +" border: 2px solid #8AC007; \n"
-				    +" padding: 20px; } \n"
-				    +" </style>";    
+						" style='"
+						+".rcorners { "
+				    +" border-radius: 25px;"
+				    +" border: 2px solid #8AC007;"
+				    +" padding: 20px; ' ";				       
 		}
 		
 		public static String getLinkableButtonStyle()
 		{
 			return 
-			"<style>"
-			+".my_linkable_button {"
+			" style='"
 			+"	    background: none repeat scroll 0 0 #075482;"
 			+"	    border: medium none;"
 			+"	    color: #FFFFFF;"
 			+"	    cursor: pointer;"
 			+"	    margin-bottom: 26px;"
 			+"	    padding: 8px;"
-			+"}"
-			+"</style>";
+		   +" '  ";		
 		}
 		
 		public static String getButtonHtml(String url, String text)
 		{
 			return 
 				"<form action=\"" +url+ "\" method=\"get\">"
-				+"<button class=\"my_linkable_button\">"+text+"</button>"
+				+"<button " + getLinkableButtonStyle() + ">"+text+"</button>"
 				+"</form>";
 		}
 		
 		public static String addEnclosingCorners(String a)		
 		{
-				return "<div class='rcorners'>" + a + "</div>"; 
+				return "<div " + getRoundedCornersStyle() + ">" + a + "</div>"; 
 		}
 }

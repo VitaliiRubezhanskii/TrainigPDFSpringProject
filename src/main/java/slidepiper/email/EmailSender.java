@@ -99,10 +99,8 @@ public class EmailSender {
 					" (" + mi.getCustomerEmail() + ")";
 					  			  
 			EmailSender.sendEmail(mi.getSalesManEmail(), 
-					subj,
-					HtmlRenderer.getRoundedCornersStyle()
-					+HtmlRenderer.getLinkableButtonStyle()
-					+logoHtml 
+					subj,					
+					logoHtml 
 					+"Hello, <BR><BR>This is Jacob Salesmaster. <BR>I am your customer alerts representative.<BR><BR>"  
 					+HtmlRenderer.addEnclosingCorners(mi.getCustomerEmail() + " has just clicked on the link you sent him!")
 					+" <BR><BR>"
@@ -129,21 +127,18 @@ public class EmailSender {
 
 			String barChartImageHtml = "<img src='"+barchartImageUrl+"'></img>";
 			
-			String msg=HtmlRenderer.getRoundedCornersStyle()
-					+HtmlRenderer.getLinkableButtonStyle();
-			
-			msg += logoHtml+ "Hello, <BR><BR> This is Jacob Salesmaster. <BR> I am your SlidePiper reports representative. Please carefully review the following report. <BR><BR>";
+			String msg = logoHtml+ "Hello, <BR><BR> This is Jacob Salesmaster. <BR> I am your SlidePiper reports representative. Please carefully review the following report. <BR><BR>"
+					+HtmlRenderer.addEnclosingCorners(
+							barChartImageHtml) 
+							+HtmlRenderer.addEnclosingCorners(
+									HtmlRenderer.GenerateAlertHtml(ai, 0))+
+					 "<BR><BR>Glad to serve you, <BR>Jacob Salesmaster<BR>SlidePiper Reports Team";
 			
 			System.out.println("Getcustname for custemail " +  mi.getCustomerEmail() +" sm email " + mi.getSalesManEmail());
 			String subj = "SlidePiper Report for " +
 					DbLayer.getCustomerName(mi.getCustomerEmail(),mi.getSalesManEmail()) +
 					" (" + mi.getCustomerEmail() + ")";
-		
-			msg += HtmlRenderer.addEnclosingCorners(
-					barChartImageHtml+ 
-					HtmlRenderer.GenerateAlertHtml(ai, 0));					
-		
-			msg += "<BR><BR>Glad to serve you, <BR>Jacob Salesmaster<BR>SlidePiper Reports Team";
+					 
 			EmailSender.sendEmail(mi.getSalesManEmail(), subj , msg);
 	}
 }
