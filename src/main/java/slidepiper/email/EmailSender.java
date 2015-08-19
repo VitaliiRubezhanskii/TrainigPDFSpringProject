@@ -100,13 +100,15 @@ public class EmailSender {
 					  			  
 			EmailSender.sendEmail(mi.getSalesManEmail(), 
 					subj,
-					HtmlRenderer.getRoundedCornersStyle() 
+					HtmlRenderer.getRoundedCornersStyle()
+					+HtmlRenderer.getLinkableButtonStyle()
 					+logoHtml 
 					+"Hello, <BR><BR>This is Jacob Salesmaster. <BR>I am your customer alerts representative.<BR><BR>"  
 					+HtmlRenderer.addEnclosingCorners(mi.getCustomerEmail() + " has just clicked on the link you sent him!")
 					+" <BR><BR>"
-					+HtmlRenderer.addEnclosingCorners("<u>What would you like do next?</u><BR><button href='"+chatlink+"'>Connect to Chat</a><BR>"
-					+"<button href='"+currentviewslink+"'>View Current Report</a>")
+					+HtmlRenderer.addEnclosingCorners("<u>What would you like do next?</u><BR>"
+							+HtmlRenderer.getButtonHtml(chatlink, "Connect to Chat")+"<BR>"
+					+ HtmlRenderer.getButtonHtml(currentviewslink, "View Current Report"))
 					+"<BR><BR> Glad to serve you, <BR>Jacob Salesmaster<BR>SlidePiper Alerts System"
 					);
 
@@ -127,7 +129,8 @@ public class EmailSender {
 
 			String barChartImageHtml = "<img src='"+barchartImageUrl+"'></img>";
 			
-			String msg=HtmlRenderer.getRoundedCornersStyle();
+			String msg=HtmlRenderer.getRoundedCornersStyle()
+					+HtmlRenderer.getLinkableButtonStyle();
 			
 			msg += logoHtml+ "Hello, <BR><BR> This is Jacob Salesmaster. <BR> I am your SlidePiper reports representative. Please carefully review the following report. <BR><BR>";
 			

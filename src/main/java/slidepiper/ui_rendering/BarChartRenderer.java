@@ -47,7 +47,7 @@ public class BarChartRenderer {
 						
 						// based on: 
 						// http://www.mkyong.com/java/how-to-send-http-request-getpost-in-java/
-							URL obj = new URL(url);					
+							URL obj = new URL(imageCaptureUrl);					
 							HttpURLConnection con = (HttpURLConnection) obj.openConnection();													
 							con.setRequestMethod("GET");
 							con.setRequestProperty("User-Agent", USER_AGENT);
