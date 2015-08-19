@@ -66,10 +66,15 @@ public class ManagementServlet extends HttpServlet {
     }
 
 	public void init(ServletConfig config) throws ServletException {
+		// to start auto put in web.xml:
+/*
+<servlet>
+    <servlet-name>ManagementServlet</servlet-name>
+    <servlet-class>slidepiper.salesman_servlets.ManagementServlet</servlet-class>
+    <load-on-startup>1</load-on-startup>
+</servlet>
+*/
 			System.out.println("Init ManagementServlet");
-			ChatServer.main(null);
-			//WebpageToImage.RenderWebpage(); // not working well. stucks.
-			//System.out.println("Done render web page");
 			DbLayer.init();				
 	}
 		
