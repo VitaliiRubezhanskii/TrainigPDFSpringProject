@@ -1,4 +1,4 @@
-package admin_servlets;
+package slidepiper.admin_servlets;
 
 import java.io.*;
 

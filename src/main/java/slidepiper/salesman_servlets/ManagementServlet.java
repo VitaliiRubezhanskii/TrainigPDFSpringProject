@@ -1,11 +1,11 @@
 package slidepiper.salesman_servlets;
 
 import java.awt.TrayIcon.MessageType;
-
 import java.io.BufferedReader;
 
 import slidepiper.*;
 import slidepiper.ui_rendering.*;
+import slidepiper.chat.ChatServer;
 import slidepiper.constants.Constants;
 import slidepiper.dataobjects.Customer;
 import slidepiper.dataobjects.Presentation;
@@ -47,7 +47,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 @WebServlet("/ManagementServlet")
-
 public class ManagementServlet extends HttpServlet {
 	
 	private static final long serialVersionUID = 1L;
@@ -67,7 +66,8 @@ public class ManagementServlet extends HttpServlet {
     }
 
 	public void init(ServletConfig config) throws ServletException {
-			System.out.println("Init ManagementServlet");			
+			System.out.println("Init ManagementServlet");
+			ChatServer.main(null);
 			//WebpageToImage.RenderWebpage(); // not working well. stucks.
 			//System.out.println("Done render web page");
 			DbLayer.init();				

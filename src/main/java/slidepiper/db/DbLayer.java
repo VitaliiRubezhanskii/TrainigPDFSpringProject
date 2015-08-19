@@ -46,7 +46,9 @@ public class DbLayer {
 					}
 				  Constants.updateConstants();		
 					initialized = true;
+					System.out.println("Initialized DBLayer: registered driver and updated constants.");
 	  	}
+	 	
   	}
 
 	public static void deleteCustomer(String customer_email, String salesman_email ){
