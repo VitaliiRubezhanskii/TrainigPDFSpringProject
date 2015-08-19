@@ -75,7 +75,7 @@
       <u>Legend: </u><BR>
       	Blue - slide viewed for the 1st time<BR>
       	Orange - slide viewed for the 2nd time<BR>
-				Green - slide viewed for the 3nd time<BR>
+				Green - slide viewed for the 3rd time<BR>
 				White - slide viewed 4 or more times<BR>
 				X - time spend outside of the browser window<BR>      	      	
 			</div>
