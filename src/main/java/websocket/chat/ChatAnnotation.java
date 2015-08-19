@@ -21,6 +21,8 @@
 // https://tomcat.apache.org/tomcat-7.0-doc/web-socket-howto.html
 
 	
+// LEAVE THIS PACKAGE NAME! It is used in the ExamplesConfig.java
+// file to configure it on websocket.
 package websocket.chat;
 
 import java.io.IOException;

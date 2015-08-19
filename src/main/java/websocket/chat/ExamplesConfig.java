@@ -61,6 +61,9 @@ public class ExamplesConfig implements ServerApplicationConfig {
         // Deploy all WebSocket endpoints defined by annotations in the examples
         // web application. Filter out all others to avoid issues when running
         // tests on Gump
+    	
+     		System.out.println(" setting endpoints. ");
+     		
         Set<Class<?>> results = new HashSet<Class<?>>();
         for (Class<?> clazz : scanned) {
             if (clazz.getPackage().getName().startsWith("websocket.")) {
