@@ -157,10 +157,17 @@ public class HtmlRenderer {
 		
 		public static String getButtonHtml(String url, String text)
 		{
+			/* not good, submitting to external page. (shows msg)
 			return 
 				"<form action=\"" +url+ "\" method=\"get\">"
 				+"<button " + getLinkableButtonStyle() + ">"+text+"</button>"
 				+"</form>";
+			*/
+			return 
+					// illegal html - button inside a, but may work.
+					"<a href='" +url+ "'>" 
+					+"<button " + getLinkableButtonStyle() + ">"+text+"</button>"
+					+"</a>";
 		}
 		
 		public static String addEnclosingCorners(String a)		
