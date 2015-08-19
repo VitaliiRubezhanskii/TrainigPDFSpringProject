@@ -131,10 +131,10 @@ public class EmailSender {
 			String barChartImageHtml = "<img src='"+barchartImageUrl+"'></img>";			
 			String msg = 
 					HtmlRenderer.addEnclosingHtml(
-							logoHtml+ "Hello, <BR><BR> This is Jacob Salesmaster. <BR> I am your SlidePiper reports representative. Please carefully review the following report. <BR><BR>"							
-									+barChartImageHtml 
+							logoHtml+ "Hello, <BR><BR> This is Jacob Salesmaster. <BR> I am your SlidePiper reports representative. Please carefully review the following report. <BR><BR>"									
 									+HtmlRenderer.addEnclosingBorders(
 											HtmlRenderer.GenerateAlertHtml(ai, 0))+
+											barChartImageHtml+
 							 "<BR><BR>Glad to serve you, <BR>Jacob Salesmaster<BR>SlidePiper Reports Team"
 					);
 			

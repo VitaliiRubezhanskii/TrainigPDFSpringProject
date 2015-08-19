@@ -68,8 +68,7 @@
 </head>
 
     <!-- *************************************** body ********************************** -->
-<body>
-                  
+<body>                 
            	            <div id="barchartDiv"></div>
         <!-- *************************************** INCLUDE SCRIPTS ********************************** -->
 <script type="text/javascript" src="scripts/d3utils.js"></script>
