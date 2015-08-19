@@ -44,6 +44,9 @@ public class BarChartRenderer {
 					imageCaptureUrl="http://codemongo-spdomain.rhcloud.com/?url=\""+url+"\"";
 					try
 					{
+						
+						// based on: 
+						// http://www.mkyong.com/java/how-to-send-http-request-getpost-in-java/
 							URL obj = new URL(url);					
 							HttpURLConnection con = (HttpURLConnection) obj.openConnection();													
 							con.setRequestMethod("GET");

@@ -132,10 +132,17 @@ public class HtmlRenderer {
 		
 		
 		
+		public static String getRoundedCornersStyle()
+		{			
+				return 
+						" .rcorners { "
+				    +" border-radius: 25px; "
+				    +" border: 2px solid #8AC007; "
+				    +" padding: 20px; ";    
+		}
 		
-		
-		
-		
-	
-
+		public static String addEnclosingCorners(String a)		
+		{
+				return "<div class='rcorners'>" + a + "</div>"; 
+		}
 }

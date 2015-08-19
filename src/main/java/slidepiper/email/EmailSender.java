@@ -100,9 +100,13 @@ public class EmailSender {
 					  			  
 			EmailSender.sendEmail(mi.getSalesManEmail(), 
 					subj,
-					logoHtml +
-					"Hello, <BR><BR>This is Jacob Salesmaster. <BR>I am your customer alerts representative.<BR><BR>" + mi.getCustomerEmail() + " has just clicked on the link you sent him! <BR><BR>"
-					+"<u>What would you like do next?</u><BR><a href='"+chatlink+"'>Connect to Chat</a><BR><a href='"+currentviewslink+"'>View Current Report</a>"
+					HtmlRenderer.getRoundedCornersStyle() 
+					+logoHtml 
+					+"Hello, <BR><BR>This is Jacob Salesmaster. <BR>I am your customer alerts representative.<BR><BR>"  
+					+HtmlRenderer.addEnclosingCorners(mi.getCustomerEmail() + " has just clicked on the link you sent him!")
+					+" <BR><BR>"
+					+HtmlRenderer.addEnclosingCorners("<u>What would you like do next?</u><BR><button href='"+chatlink+"'>Connect to Chat</a><BR>"
+					+"<button href='"+currentviewslink+"'>View Current Report</a>")
 					+"<BR><BR> Glad to serve you, <BR>Jacob Salesmaster<BR>SlidePiper Alerts System"
 					);
 
@@ -123,15 +127,18 @@ public class EmailSender {
 
 			String barChartImageHtml = "<img src='"+barchartImageUrl+"'></img>";
 			
-			String msg = logoHtml+ "Hello, <BR><BR> This is Jacob Salesmaster. <BR> I am your SlidePiper reports representative. Please carefully review the following report. <BR><BR>";
+			String msg=HtmlRenderer.getRoundedCornersStyle();
+			
+			msg += logoHtml+ "Hello, <BR><BR> This is Jacob Salesmaster. <BR> I am your SlidePiper reports representative. Please carefully review the following report. <BR><BR>";
 			
 			System.out.println("Getcustname for custemail " +  mi.getCustomerEmail() +" sm email " + mi.getSalesManEmail());
 			String subj = "SlidePiper Report for " +
 					DbLayer.getCustomerName(mi.getCustomerEmail(),mi.getSalesManEmail()) +
 					" (" + mi.getCustomerEmail() + ")";
 		
-			msg += barChartImageHtml;
-			msg += HtmlRenderer.GenerateAlertHtml(ai, 0);					
+			msg += HtmlRenderer.addEnclosingCorners(
+					barChartImageHtml+ 
+					HtmlRenderer.GenerateAlertHtml(ai, 0));					
 		
 			msg += "<BR><BR>Glad to serve you, <BR>Jacob Salesmaster<BR>SlidePiper Reports Team";
 			EmailSender.sendEmail(mi.getSalesManEmail(), subj , msg);
