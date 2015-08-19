@@ -103,10 +103,10 @@ public class EmailSender {
 					HtmlRenderer.addEnclosingHtml(
 								logoHtml 
 								+"Hello, <BR><BR>This is Jacob Salesmaster. <BR>I am your customer alerts representative.<BR><BR>"  
-								+HtmlRenderer.addEnclosingCorners(mi.getCustomerEmail() + " has just clicked on the link you sent him!")
+								+HtmlRenderer.addEnclosingBorders(mi.getCustomerEmail() + " has just clicked on the link you sent him!")
 								+" <BR><BR>"
-								+HtmlRenderer.addEnclosingCorners(
-								 HtmlRenderer.getButtonHtml(chatlink, "Connect to Chat")
+								+HtmlRenderer.addEnclosingBorders(
+								 HtmlRenderer.getButtonHtml(chatlink, "Connect to Chat") +"<BR>"
 								+ HtmlRenderer.getButtonHtml(currentviewslink, "View Current Report"))
 								+"<BR><BR> Glad to serve you, <BR>Jacob Salesmaster<BR>SlidePiper Alerts System"
 					)
@@ -131,9 +131,9 @@ public class EmailSender {
 			String msg = 
 					HtmlRenderer.addEnclosingHtml(
 							logoHtml+ "Hello, <BR><BR> This is Jacob Salesmaster. <BR> I am your SlidePiper reports representative. Please carefully review the following report. <BR><BR>"
-							+HtmlRenderer.addEnclosingCorners(
+							+HtmlRenderer.addEnclosingBorders(
 									barChartImageHtml) 
-									+HtmlRenderer.addEnclosingCorners(
+									+HtmlRenderer.addEnclosingBorders(
 											HtmlRenderer.GenerateAlertHtml(ai, 0))+
 							 "<BR><BR>Glad to serve you, <BR>Jacob Salesmaster<BR>SlidePiper Reports Team"
 					);

@@ -131,7 +131,8 @@ public class HtmlRenderer {
 		
 		
 		
-		
+		/*
+		 * doesn't work in email html
 		public static String getRoundedCornersStyle()
 		{			
 				return 
@@ -141,6 +142,7 @@ public class HtmlRenderer {
 				    +" border: 2px solid #8AC007;"
 				    +" padding: 20px; ' ";				       
 		}
+		*/
 		
 		public static String getLinkableButtonStyle()
 		{
@@ -154,6 +156,7 @@ public class HtmlRenderer {
 			+"	    padding: 8px;"
 		   +" '  ";		
 		}
+		
 		
 		public static String getButtonHtml(String url, String text)
 		{
@@ -170,9 +173,17 @@ public class HtmlRenderer {
 					+"</a>";
 		}
 		
-		public static String addEnclosingCorners(String a)		
+		public static String addEnclosingBorders(String a)		
 		{
-				return "<div " + getRoundedCornersStyle() + ">" + a + "</div>"; 
+			// does not work in html email
+			//				return "<div " + getRoundedCornersStyle() + ">" + a + "</div>";
+									
+			//according to tips here: http://chipcullen.com/html-email-and-borders/
+			return  "<table>"+
+				"<td style=\"border-left: solid 1px #e9e9e9; background: #ffffff\" bgcolor=\"ffffff\">" 
+			+a+ "&nbsp;</td>  </table>";
+			
+			// can also put:  width="20"
 		}
 		
 		public static String addEnclosingHtml(String a)
