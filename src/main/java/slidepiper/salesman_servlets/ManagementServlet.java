@@ -1,11 +1,11 @@
 package slidepiper.salesman_servlets;
 
 import java.awt.TrayIcon.MessageType;
+
 import java.io.BufferedReader;
 
 import slidepiper.*;
 import slidepiper.ui_rendering.*;
-import slidepiper.chat.ChatServer;
 import slidepiper.constants.Constants;
 import slidepiper.dataobjects.Customer;
 import slidepiper.dataobjects.Presentation;
