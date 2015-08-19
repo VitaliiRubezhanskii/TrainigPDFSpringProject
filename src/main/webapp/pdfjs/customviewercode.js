@@ -1,3 +1,5 @@
+
+
 // this runs ONCE for each page refresh - 
 // and this will make ONE report entry in the smart alerts.
 thisSessionId = Math.random().toString();
@@ -81,8 +83,8 @@ prev_datetime = new Date(); // immediately make this global var.
 // hide after 5sec.
 setTimeout(function() {
 	// alert("hiding");
-	$("#privacyMessage")[0].style.display = "none";
-	$("#privacyMessage")[0].style.visibility = "hidden";
+	$("#logoMessage")[0].style.display = "none";
+	$("#logoMessage")[0].style.visibility = "hidden";
 }, 5000);
 
 // initial value for leaving page - time. (sometimes
@@ -162,8 +164,7 @@ function preInitView()
 				browser_data = "Browser name: " + navigator.appName + " " + navigator.appVersion 
 				+ "<BR>Platform: " + navigator.platform + "<BR>";
 				
-				send_event("OPEN_SLIDES", prev_slide, "0", browser_data);
-				
+				send_event("OPEN_SLIDES", prev_slide, "0", browser_data);									
 				preInitDone = true;
 		}
 }
@@ -275,6 +276,13 @@ function initView() {
 
 	console.log("init view done");
 	send_event("INIT_SLIDES_DONE", "0", "0", ipaddr);
+
+	// last thing: display privacy msg.
+	privacyDiv = $("#privacyMessage")[0];
+	maxY = window.innerHeight;
+	divHeight = privacyDiv.offsetHeight;
+	privacyDiv.style.top = (maxY - divHeight)+"px";
+	privacyDiv.style.visibility = "visible";
 	
 	// now blur and focus will work:
 	view_initialized = 1;
