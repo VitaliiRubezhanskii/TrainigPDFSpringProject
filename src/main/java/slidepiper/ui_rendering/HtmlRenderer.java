@@ -137,7 +137,7 @@ public class HtmlRenderer {
 		{			
 				return 
 						" style='"
-						+ " background: none repeat scroll 0 0 #8282ff;"
+						+ " background: none repeat scroll 0 0 #aabbff;"
 				    +" border-radius: 25px;"
 				    +" border: 2px solid #8AC007;"
 				    +" padding: 20px; ' ";				       
