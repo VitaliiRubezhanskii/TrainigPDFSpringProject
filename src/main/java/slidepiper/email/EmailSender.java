@@ -125,9 +125,10 @@ public class EmailSender {
 			// i=0 not important. no buttons or divs filled with code here. it's email.
 			String logoHtml = "<img src='www.slidepiper.com/img/logoOriginal.png' style='background-color: black;'></img>";
 
-			String barChartImageHtml = "<img src='"+barchartImageUrl+"'></img>";
-			
-			String msg = logoHtml+ "Hello, <BR><BR> This is Jacob Salesmaster. <BR> I am your SlidePiper reports representative. Please carefully review the following report. <BR><BR>"
+			String barChartImageHtml = "<img src='"+barchartImageUrl+"'></img>";			
+			String msg = 
+					
+					logoHtml+ "Hello, <BR><BR> This is Jacob Salesmaster. <BR> I am your SlidePiper reports representative. Please carefully review the following report. <BR><BR>"
 					+HtmlRenderer.addEnclosingCorners(
 							barChartImageHtml) 
 							+HtmlRenderer.addEnclosingCorners(

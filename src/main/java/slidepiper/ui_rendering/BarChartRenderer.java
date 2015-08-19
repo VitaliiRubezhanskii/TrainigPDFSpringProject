@@ -41,7 +41,7 @@ public class BarChartRenderer {
 					url += ("/viewbarchart.jsp?session_id="+sessionId);
 					
 					// make the full url for img capture.
-					imageCaptureUrl="http://codemongo-spdomain.rhcloud.com/?url=\""+url+"\"";
+					imageCaptureUrl="http://codemongo-spdomain.rhcloud.com/?url="+url;
 					try
 					{
 						
@@ -68,7 +68,7 @@ public class BarChartRenderer {
 							
 							String imageCode=response.toString().trim();
 							
-							imageUrl = "http://codemongo-spdomain.rhcloud.com/" + imageCode;
+							imageUrl = "http://codemongo-spdomain.rhcloud.com/" + imageCode + ".png";
 							System.out.println("final url " + imageUrl);
 					} catch (Exception ex) {
 								System.out.println("exception rendering barchart link");
