@@ -167,4 +167,19 @@ public class HtmlRenderer {
 		{
 				return "<div " + getRoundedCornersStyle() + ">" + a + "</div>"; 
 		}
+		
+		public static String addEnclosingHtml(String a)
+		{
+			return 
+					
+			"<!DOCTYPE html>"
+			+"<html>"			    
+			+"<head>"				
+		  +"<meta http-equiv='Content-Type' content='text/html;charset=ISO 8859-8' >"
+			+"</head>"
+		  +"<body>"
+			+ a
+			+"</body>"
+			+"</html>";
+		}
 }
