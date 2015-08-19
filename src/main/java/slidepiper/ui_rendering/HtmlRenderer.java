@@ -64,7 +64,7 @@ public class HtmlRenderer {
 			}
 
 									
-			String emailmailto = "<a style=\"color:yellow\" href=\"mailto:"
+			String emailmailto = "<a style=\"color:black\" href=\"mailto:"
 					+ ai.getCustomer_email()
 					+ "?Subject=Followup to our last email.\">"
 					+ ai.getCustomer_email() + "</a>";
@@ -137,7 +137,7 @@ public class HtmlRenderer {
 		{			
 				return 
 						" style='"
-						+ " background: none repeat scroll 0 0 #072442;"
+						+ " background: none repeat scroll 0 0 #8282ff;"
 				    +" border-radius: 25px;"
 				    +" border: 2px solid #8AC007;"
 				    +" padding: 20px; ' ";				       
