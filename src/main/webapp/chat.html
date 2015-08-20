@@ -85,7 +85,19 @@
     console.log("opening socket");
     //on http server use document.domain instead od "localhost"
     //Start the websocket client
-    socket = new SockJS("http://" +document.domain + ":8080/sp/chat");
+    if (document.domain == 'localhost')
+    	{
+    	// on localhost
+    		socketString = "http://" +document.domain + ":8080/sp/chat";
+    	}
+    else
+    	{
+    	// on openshift, no sp.
+				socketString = "http://" +document.domain + ":8080/chat";
+    	}
+    
+    console.log("connecting to socket " + socketString);
+    socket = new SockJS(socketString);
     
     //When the connection is opened, login.
     socket.onopen = function() { 

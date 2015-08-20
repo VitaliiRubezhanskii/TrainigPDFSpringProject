@@ -4,7 +4,6 @@ package springsockets.config;
 import javax.servlet.ServletRegistration.Dynamic;
 
 
-
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 
