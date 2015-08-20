@@ -1934,29 +1934,36 @@ InfoReceiver.prototype.doXhr = function(base_url, AjaxObject) {
 		console.log("running InfoReceiver.prototype.doXhr");
     var that = this;
     var t0 = (new Date()).getTime();
-    var xo = new AjaxObject('GET', base_url + '/info');
+    
+    // DON'T DO THIS - ASSUME WE HAVE WEBSOCKETS AND IT'S OK!    
+   // var xo = new AjaxObject('GET', base_url + '/info');
 
-    var tref = utils.delay(8000,
-                           function(){xo.ontimeout();});
+    //var tref = utils.delay(8000,
+    //                       function(){xo.ontimeout();});
 
-    xo.onfinish = function(status, text) {
-        clearTimeout(tref);
-        tref = null;
-        if (status === 200) {
+    //xo.onfinish = function(status, text) {
+    //    clearTimeout(tref);
+     //   tref = null;
+     //   if (status === 200) {
             var rtt = (new Date()).getTime() - t0;
-            var info = JSON.parse(text);
-            console.log("info rcvd " + info);	
-            if (typeof info !== 'object') info = {};
-            that.emit('finish', info, rtt);
-        } else {
-            that.emit('finish');
-        }
-    };
-    xo.ontimeout = function() {
-        xo.close();
-        that.emit('finish');
-        console.log("getting info - timeout.");
-    };
+      //      var info = JSON.parse(text);
+      //      console.log("info rcvd " + info);	
+      //      if (typeof info !== 'object') info = {};
+      //      that.emit('finish', info, rtt);
+            myInfo ='{"entropy":915177400,"origins":["*:*"],"cookie_needed":true,"websocket":true}'; 
+    console.log("Emitting websockets response " + myInfo + " " + rtt);
+    //new line:
+    	that.emit('finish',myInfo,rtt);
+    	
+       // } else {
+      //      that.emit('finish');
+        //}
+    //};
+    //xo.ontimeout = function() {
+        //xo.close();
+      //  that.emit('finish');
+//        console.log("getting info - timeout.");
+    //};
 };
 
 var InfoReceiverIframe = function(base_url) {
@@ -2007,12 +2014,12 @@ InfoReceiverFake.prototype = new EventEmitter(['finish']);
 var createInfoReceiver = function(base_url) {
 		console.log("createInfoReceiver");
 		
-		console.log("defaulting to ajax for now");		
+		console.log("defaulting to ajax for now. CANCELLED. not defaulting.");		
 		// SD: for now ONLY - we don't use WEBSOCKETS - 
 		// I copied this line from below, so that it automatically
 		// used ajax and ignores the websocket options/detection.
 		// so no /info checking done, etc. should work.
-		return new InfoReceiver(base_url, utils.XHRLocalObject);
+//		return new InfoReceiver(base_url, utils.XHRLocalObject);
 		
 		
     if (utils.isSameOriginUrl(base_url)) {
