@@ -92,8 +92,8 @@
     	}
     else
     	{
-    	// on openshift, no sp.
-				socketString = "http://" +document.domain + ":8080/chat";
+    	// on openshift, no sp. and port is 8000 for ws, 8443 for wss.
+				socketString = "http://" +document.domain + ":8000/chat";
     	}
     
     console.log("connecting to socket " + socketString);
