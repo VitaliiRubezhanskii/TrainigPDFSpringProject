@@ -81,6 +81,16 @@
   var socket;
   var registered = false;
   
+  // CAREFUL with this function - freezes browser for x milliseconds
+  function sleepFreeze(milliseconds) {
+	  var start = new Date().getTime();
+	  for (var i = 0; i < 1e7; i++) {
+	    if ((new Date().getTime() - start) > milliseconds){
+	      break;
+	    }
+	  }
+	}
+  
   function startClient() {
     console.log("opening socket");
     //on http server use document.domain instead od "localhost"
@@ -159,7 +169,10 @@
         //init everything
         
         $('#login_modal').modal('hide');
-        startClient();
+        
+        // SD : wait a little, maybe will solve "CLOSED SOCKET" message.
+        setTimeout(startClient, 1000);
+        //startClient();
       }
     });
     
