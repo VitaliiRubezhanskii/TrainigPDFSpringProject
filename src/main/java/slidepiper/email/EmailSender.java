@@ -106,7 +106,7 @@ public class EmailSender {
 								+HtmlRenderer.addEnclosingBorders(mi.getCustomerEmail() + " has just clicked on the link you sent him!")
 								+" <BR><BR>"
 								+HtmlRenderer.addEnclosingBorders(
-								"What next?<BR><BR>"
+								"<u>What next?</u><BR><BR>"
 								+HtmlRenderer.getButtonHtml(chatlink, "Connect to Chat") +"<BR>"
 								+ HtmlRenderer.getButtonHtml(currentviewslink, "View Current Report"))
 								+"<BR><BR> Glad to serve you, <BR>Jacob Salesmaster<BR>SlidePiper Alerts System"
