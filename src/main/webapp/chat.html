@@ -105,13 +105,18 @@
     if (document.domain == 'localhost')
     	{
     	// on localhost
-    		socketString = "http://" +document.domain + ":8080/sp/chat";
+    		socketString = document.domain + ":8080/sp/chat";
     	}
     else
     	{
     	// on openshift, no sp. and port is 8000 for ws, 8443 for wss.
-				socketString = "http://" +document.domain + ":8000/chat";
+				socketString = document.domain + ":8000/chat";
     	}
+    
+    socketString = "http://" + socketString;
+    
+    // try ws url
+    //socketString = "ws://" + socketString;
     
     console.log("connecting to socket " + socketString);
     
