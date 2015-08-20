@@ -93,7 +93,7 @@
       <artifactId>javax.servlet-api</artifactId>
       <version>3.1.0</version>
       <scope>provided</scope>
-    </dependency>-
+    </dependency>
 
     <!-- For SockJS -->
     <!-- http://jira.codehaus.org/browse/JACKSON-884 -->
