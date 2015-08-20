@@ -1931,6 +1931,7 @@ var InfoReceiver = function(base_url, AjaxObject) {
 InfoReceiver.prototype = new EventEmitter(['finish']);
 
 InfoReceiver.prototype.doXhr = function(base_url, AjaxObject) {
+		console.log("running InfoReceiver.prototype.doXhr");
     var that = this;
     var t0 = (new Date()).getTime();
     var xo = new AjaxObject('GET', base_url + '/info');
@@ -1954,6 +1955,7 @@ InfoReceiver.prototype.doXhr = function(base_url, AjaxObject) {
     xo.ontimeout = function() {
         xo.close();
         that.emit('finish');
+        console.log("getting info - timeout.");
     };
 };
 
@@ -1966,6 +1968,7 @@ var InfoReceiverIframe = function(base_url) {
             if (typeof r === 'string' && r.substr(0,1) === 'm') {
                 var d = JSON.parse(r.substr(1));
                 var info = d[0], rtt = d[1];
+                console.log("InfoReceiverIframe - info is " + info);
                 that.emit('finish', info, rtt);
             } else {
                 that.emit('finish');
@@ -1993,6 +1996,7 @@ var InfoReceiverFake = function() {
     // It may not be possible to do cross domain AJAX to get the info
     // data, for example for IE7. But we want to run JSONP, so let's
     // fake the response, with rtt=2s (rto=6s).
+		console.log("InfoReceiverFake");
     var that = this;
     utils.delay(function() {
         that.emit('finish', {}, 2000);
@@ -2001,11 +2005,22 @@ var InfoReceiverFake = function() {
 InfoReceiverFake.prototype = new EventEmitter(['finish']);
 
 var createInfoReceiver = function(base_url) {
+		console.log("createInfoReceiver");
+		
+		
+		// SD: for now ONLY - we don't use WEBSOCKETS - 
+		// I copied this line from below, so that it automatically
+		// used ajax and ignores the websocket options/detection.
+		// so no /info checking done, etc. should work.
+		return new InfoReceiver(base_url, utils.XHRLocalObject);
+		
+		
     if (utils.isSameOriginUrl(base_url)) {
         // If, for some reason, we have SockJS locally - there's no
         // need to start up the complex machinery. Just use ajax.
         return new InfoReceiver(base_url, utils.XHRLocalObject);
     }
+    // SD: check all the capable receivers.
     switch (utils.isXHRCorsCapable()) {
     case 1:
         // XHRLocalObject -> no_credentials=true
