@@ -5,11 +5,16 @@
  -->
   <title>Chat</title>
   <link rel="stylesheet" href="bootstrap-3.0.3/css/bootstrap.css">
-  
+  <script>
+  console.log("Loading js");
+  </script>	
   <script src="jquery/jquery-1.10.2.js"></script>
   <script src="bootstrap-3.0.3/js/bootstrap.js"></script>
   <script src="sockjs/sockjs-0.3.js"></script>
   
+  <script>
+  console.log("Loaded 3 js");
+  </script>
   <style>
     .contentDiv {
       width:100%;
@@ -78,7 +83,9 @@
   
   <script>
   
-  var socket;
+  //var socket;  not used. instead:
+  socket=null; //global var
+  
   var registered = false;
   
   // CAREFUL with this function - freezes browser for x milliseconds
@@ -107,49 +114,55 @@
     	}
     
     console.log("connecting to socket " + socketString);
-    socket = new SockJS(socketString);
     
-    //When the connection is opened, login.
-    socket.onopen = function() { 
-      console.log("Opened socket.");
-      //register the user
-      var nickname = $("#nickname").val();
-      socket.send(nickname);
-    };
-    
-    //When received a message, parse it and either add/remove user or post message.
-    socket.onmessage = function(a) {
-      //process the message here
-      console.log("received message: " + a.data);
-      var message = JSON.parse(a.data);
-      if (message.addUser) {
-        var d = document.createElement('div');
-        $(d).addClass("username user").text(message.addUser).attr("data-user", message.addUser).appendTo("#nicknamesBox");
-      } else if (message.removeUser) {
-        $(".user[data-user="+message.removeUser+"]").remove();
-      } else if (message.message) {
-        var d = document.createElement('div');
-        var suser = document.createElement('span');
-        var smessage = document.createElement('span');
+    // timeout because I see msgs in reverse order.
+    // first I see console log and then GET.
+    // maybe this will help it appear in correct order.
+    // AND - solve HTTP FORBIDDEN issue (only on openshift)
+    setTimeout(function() {
+    	socket = new SockJS(socketString);
         
-        $(suser).addClass("username").text(message.nickname+" : ").appendTo($(d));
-        $(smessage).text(message.message).appendTo($(d));
-        $(d).appendTo("#chatBox");
-        $("#chatBox").scrollTop($("#chatBox")[0].scrollHeight);
-      }
-      
-    }
-    socket.onclose = function() { document.write("Closed socket."); };
-    socket.onerror = function() { document.write("Error during transfer."); };
-    
-    $('#txtMessage').keyup(function(e){
-      if (e.keyCode == 13) {
-        sendMessage();
-      }
-    });
-    $("#btnSend").click(function() {
-      sendMessage();
-    });
+        //When the connection is opened, login.
+        	socket.onopen = function() { 
+          console.log("Opened socket.");
+          //register the user
+          var nickname = $("#nickname").val();
+          socket.send(nickname);
+          
+          
+          //When received a message, parse it and either add/remove user or post message.
+          socket.onmessage = function(a) {
+            //process the message here
+            console.log("received message: " + a.data);
+            var message = JSON.parse(a.data);
+            if (message.addUser) {
+              var d = document.createElement('div');
+              $(d).addClass("username user").text(message.addUser).attr("data-user", message.addUser).appendTo("#nicknamesBox");
+            } else if (message.removeUser) {
+              $(".user[data-user="+message.removeUser+"]").remove();
+            } else if (message.message) {
+              var d = document.createElement('div');
+              var suser = document.createElement('span');
+              var smessage = document.createElement('span');
+              
+              $(suser).addClass("username").text(message.nickname+" : ").appendTo($(d));
+              $(smessage).text(message.message).appendTo($(d));
+              $(d).appendTo("#chatBox");
+              $("#chatBox").scrollTop($("#chatBox")[0].scrollHeight);
+            				}      
+    		      	}
+          socket.onclose = function() { document.write("Closed socket."); };
+          socket.onerror = function() { document.write("Error during transfer."); };
+          
+          $('#txtMessage').keyup(function(e){
+            if (e.keyCode == 13) {
+              sendMessage();
+		            	}});
+		          $("#btnSend").click(function() {
+		            sendMessage();
+		          	});          
+        		}
+    	},  1000);
     
   }
   
@@ -169,7 +182,8 @@
         //init everything
         
         $('#login_modal').modal('hide');
-        
+  
+        alert("starting client");
         // SD : wait a little, maybe will solve "CLOSED SOCKET" message.
         setTimeout(startClient, 1000);
         //startClient();
