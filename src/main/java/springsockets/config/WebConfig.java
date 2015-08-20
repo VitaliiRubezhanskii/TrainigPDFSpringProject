@@ -18,15 +18,17 @@ import org.springframework.web.socket.handler.PerConnectionWebSocketHandler;
 @Configuration
 @EnableWebMvc
 @EnableWebSocket
-@ComponentScan(basePackages={"mk.hsilomedus.springsockets.service"})
+@ComponentScan(basePackages={"springsockets.service"})
 public class WebConfig extends WebMvcConfigurerAdapter implements WebSocketConfigurer {
 
   public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
+	  System.out.println("WEBSOCKETS: adding chat handler");
     registry.addHandler(chatWebSocketHandler(), "/chat").withSockJS();
   }
   
   @Bean
   public WebSocketHandler chatWebSocketHandler() {
+	  System.out.println("WEBSOCKETS: returning chat ws handler");
     return new PerConnectionWebSocketHandler(ChatWebSocketHandler.class);
   }
 
@@ -34,6 +36,7 @@ public class WebConfig extends WebMvcConfigurerAdapter implements WebSocketConfi
   // Allow serving HTML files through the default Servlet
   @Override
   public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
+	  System.out.println("WEBSOCKETS: enabling configurer");
           configurer.enable();
   }
 

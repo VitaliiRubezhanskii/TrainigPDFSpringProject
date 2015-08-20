@@ -34,7 +34,8 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.source>1.7</maven.compiler.source>
 		<maven.compiler.target>1.7</maven.compiler.target>
-    <org.springframework-version>4.0.0.RC2</org.springframework-version>
+    <!--<org.springframework-version>4.0.0.RC2</org.springframework-version>-->
+    <org.springframework-version>4.2.0.RELEASE</org.springframework-version>
 	</properties>
 	<dependencies>
 
@@ -60,12 +61,12 @@
 			<artifactId>mysql-connector-java</artifactId>
 			<version>5.1.25</version>
 		</dependency>     
-		<dependency>
+<!--		<dependency> newer below
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
 			<version>3.0.1</version>
 			<scope>provided</scope>
-		</dependency>
+		</dependency>   -->
 
 <!-- dependencies for websockets chat: -->
 
@@ -95,6 +96,14 @@
       <version>3.1.0</version>
       <scope>provided</scope>
     </dependency>
+
+<!-- added, needed to compile. -->
+<dependency>
+	<groupId>org.springframework</groupId>
+	<artifactId>spring-beans</artifactId>
+      <version>${org.springframework-version}</version>
+</dependency>
+
 
     <!-- For SockJS -->
     <!-- http://jira.codehaus.org/browse/JACKSON-884 -->
