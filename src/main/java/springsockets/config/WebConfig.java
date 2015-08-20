@@ -23,11 +23,12 @@ public class WebConfig extends WebMvcConfigurerAdapter implements WebSocketConfi
 
   public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
 	  System.out.println("WEBSOCKETS: adding chat handler");
-    registry.addHandler(chatWebSocketHandler(), "/chat").withSockJS();
-
-    // very important: allow all origins, otherwise it's forbidden 403
-    // when used on openshift.
-    registry.addHandler(chatWebSocketHandler(), "/chat").setAllowedOrigins("*");
+	  
+	  // very important: allow all origins, otherwise it's forbidden 403
+	    // when used on openshift.
+	  // added the .setallowed inside. 
+    registry.addHandler(chatWebSocketHandler(), "/chat")    
+    .setAllowedOrigins("*").withSockJS();
   }
   
   @Bean
