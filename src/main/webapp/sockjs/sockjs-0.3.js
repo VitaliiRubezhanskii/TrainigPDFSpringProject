@@ -1944,6 +1944,7 @@ InfoReceiver.prototype.doXhr = function(base_url, AjaxObject) {
         if (status === 200) {
             var rtt = (new Date()).getTime() - t0;
             var info = JSON.parse(text);
+            console.log("info rcvd " + info);	
             if (typeof info !== 'object') info = {};
             that.emit('finish', info, rtt);
         } else {
