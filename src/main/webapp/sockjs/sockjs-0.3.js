@@ -1936,42 +1936,42 @@ InfoReceiver.prototype.doXhr = function(base_url, AjaxObject) {
     var t0 = (new Date()).getTime();
     
     // DON'T DO THIS - ASSUME WE HAVE WEBSOCKETS AND IT'S OK!    
-   // var xo = new AjaxObject('GET', base_url + '/info');
+    var xo = new AjaxObject('GET', base_url + '/info');
 
-    //var tref = utils.delay(8000,
-    //                       function(){xo.ontimeout();});
+    var tref = utils.delay(8000,
+                           function(){xo.ontimeout();});
 
-    //xo.onfinish = function(status, text) {
-    //    clearTimeout(tref);
-     //   tref = null;
-     //   if (status === 200) {
+    xo.onfinish = function(status, text) {
+        clearTimeout(tref);
+        tref = null;
+        if (status === 200) {
             var rtt = (new Date()).getTime() - t0;
-      //      var info = JSON.parse(text);
-      //      console.log("info rcvd " + info);	
-      //      if (typeof info !== 'object') info = {};
-      //      that.emit('finish', info, rtt);
+            var info = JSON.parse(text);
+            console.log("info rcvd " + info);	
+            if (typeof info !== 'object') info = {};
+            that.emit('finish', info, rtt);
             
             //new lines:
             // this is NOT good, because still openshift throws error
             // when initializing websockets HTTP FORBIDDEN.
             // websocket true:
-            myInfo ='{"entropy":915177400,"origins":["*:*"],"cookie_needed":true,"websocket":true}';                   
+      //      myInfo ='{"entropy":915177400,"origins":["*:*"],"cookie_needed":true,"websocket":true}';                   
             //websocket false:
             //myInfo ='{"entropy":915177400,"origins":["*:*"],"cookie_needed":true,"websocket":false}';
             //console.log("Emitting websockets response " + myInfo + " " + rtt);
-    				that.emit('finish',myInfo,rtt);
+    		//		that.emit('finish',myInfo,rtt);
     				
     				
     	
-       // } else {
-      //      that.emit('finish');
-        //}
-    //};
-    //xo.ontimeout = function() {
-        //xo.close();
-      //  that.emit('finish');
-//        console.log("getting info - timeout.");
-    //};
+        } else {
+            that.emit('finish');
+        		}    
+    	};
+    xo.ontimeout = function() {
+        xo.close();
+        that.emit('finish');
+       console.log("getting info - timeout.");
+    	};
 };
 
 var InfoReceiverIframe = function(base_url) {
@@ -2022,7 +2022,7 @@ InfoReceiverFake.prototype = new EventEmitter(['finish']);
 var createInfoReceiver = function(base_url) {
 		console.log("createInfoReceiver");
 		
-		console.log("defaulting to ajax for now. CANCELLED");		
+		//console.log("defaulting to ajax for now. CANCELLED");		
 		// SD: for now ONLY - we don't use WEBSOCKETS - 
 		// I copied this line from below, so that it automatically
 		// used ajax and ignores the websocket options/detection.
