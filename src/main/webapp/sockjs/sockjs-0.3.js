@@ -1954,7 +1954,10 @@ InfoReceiver.prototype.doXhr = function(base_url, AjaxObject) {
             //new lines:
             // this is NOT good, because still openshift throws error
             // when initializing websockets HTTP FORBIDDEN.
-            myInfo ='{"entropy":915177400,"origins":["*:*"],"cookie_needed":true,"websocket":true}';                   
+            // websocket true:
+            //myInfo ='{"entropy":915177400,"origins":["*:*"],"cookie_needed":true,"websocket":true}';                   
+            //websocket false:
+            myInfo ='{"entropy":915177400,"origins":["*:*"],"cookie_needed":true,"websocket":false}';
             console.log("Emitting websockets response " + myInfo + " " + rtt);
     				that.emit('finish',myInfo,rtt);
     				
