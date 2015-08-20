@@ -2007,7 +2007,7 @@ InfoReceiverFake.prototype = new EventEmitter(['finish']);
 var createInfoReceiver = function(base_url) {
 		console.log("createInfoReceiver");
 		
-		
+		console.log("defaulting to ajax for now");		
 		// SD: for now ONLY - we don't use WEBSOCKETS - 
 		// I copied this line from below, so that it automatically
 		// used ajax and ignores the websocket options/detection.
