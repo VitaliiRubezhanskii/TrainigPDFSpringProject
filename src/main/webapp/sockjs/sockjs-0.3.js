@@ -1950,10 +1950,15 @@ InfoReceiver.prototype.doXhr = function(base_url, AjaxObject) {
       //      console.log("info rcvd " + info);	
       //      if (typeof info !== 'object') info = {};
       //      that.emit('finish', info, rtt);
-            myInfo ='{"entropy":915177400,"origins":["*:*"],"cookie_needed":true,"websocket":true}'; 
-    console.log("Emitting websockets response " + myInfo + " " + rtt);
-    //new line:
-    	that.emit('finish',myInfo,rtt);
+            
+            //new lines:
+            // this is NOT good, because still openshift throws error
+            // when initializing websockets HTTP FORBIDDEN.
+            myInfo ='{"entropy":915177400,"origins":["*:*"],"cookie_needed":true,"websocket":true}';                   
+            console.log("Emitting websockets response " + myInfo + " " + rtt);
+    				that.emit('finish',myInfo,rtt);
+    				
+    				
     	
        // } else {
       //      that.emit('finish');
@@ -2014,13 +2019,12 @@ InfoReceiverFake.prototype = new EventEmitter(['finish']);
 var createInfoReceiver = function(base_url) {
 		console.log("createInfoReceiver");
 		
-		console.log("defaulting to ajax for now. CANCELLED. not defaulting.");		
+		console.log("defaulting to ajax for now.");		
 		// SD: for now ONLY - we don't use WEBSOCKETS - 
 		// I copied this line from below, so that it automatically
 		// used ajax and ignores the websocket options/detection.
 		// so no /info checking done, etc. should work.
-//		return new InfoReceiver(base_url, utils.XHRLocalObject);
-		
+		return new InfoReceiver(base_url, utils.XHRLocalObject);		
 		
     if (utils.isSameOriginUrl(base_url)) {
         // If, for some reason, we have SockJS locally - there's no
