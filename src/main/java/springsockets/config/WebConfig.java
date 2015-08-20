@@ -26,7 +26,9 @@ public class WebConfig extends WebMvcConfigurerAdapter implements WebSocketConfi
 	  
 	  // very important: allow all origins, otherwise it's forbidden 403
 	    // when used on openshift.
-	  // added the .setallowed inside. 
+	  // added the .setallowed inside.	  
+	  	//	  http://docs.spring.io/spring/docs/current/spring-framework-reference/htmlsingle/#websocket-server-allowed-origins
+	  	  
     registry.addHandler(chatWebSocketHandler(), "/chat")    
     .setAllowedOrigins("*").withSockJS();
   }
