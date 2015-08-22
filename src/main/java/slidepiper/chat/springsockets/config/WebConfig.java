@@ -1,7 +1,7 @@
 
-package springsockets.config;
+package slidepiper.chat.springsockets.config;
 
-import springsockets.handler.ChatWebSocketHandler;
+import slidepiper.chat.springsockets.handler.ChatWebSocketHandler;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -18,7 +18,7 @@ import org.springframework.web.socket.handler.PerConnectionWebSocketHandler;
 @Configuration
 @EnableWebMvc
 @EnableWebSocket
-@ComponentScan(basePackages={"springsockets.service"})
+@ComponentScan(basePackages={"slidepiper.chat.springsockets.service"})
 public class WebConfig extends WebMvcConfigurerAdapter implements WebSocketConfigurer {
 
   public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {

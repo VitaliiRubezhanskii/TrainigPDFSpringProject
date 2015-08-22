@@ -1,5 +1,5 @@
 
-package springsockets.config;
+package slidepiper.chat.springsockets.config;
 
 import javax.servlet.ServletRegistration.Dynamic;
 

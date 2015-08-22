@@ -1,11 +1,7 @@
 
-package springsockets.handler;
+package slidepiper.chat.springsockets.handler;
 
-import springsockets.service.ChatService;
-
-
-
-
+import slidepiper.chat.springsockets.service.ChatService;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +38,7 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
   
   @Override
   protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {	  
-    System.out.println("WEBSOCKETS: New message: " + message.getPayload());
+    System.out.println("WEBSOCKETS: New message sending to process: " + message.getPayload());
     chatService.processMessage(session, message.getPayload());
   }
 
