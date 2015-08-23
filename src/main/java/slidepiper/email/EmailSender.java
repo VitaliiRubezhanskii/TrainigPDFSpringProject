@@ -68,31 +68,38 @@ public class EmailSender {
 		  System.out.println("alert email to : " + mi.getSalesManEmail());
 		  
 		  String logoHtml = "<img src='www.slidepiper.com/img/logoOriginal.png' style='background-color: black;'></img>";
-
 		  
 		  String appname = System.getenv("OPENSHIFT_APP_NAME");									
 			String currentviewslink;
-			String chatlink = "www.google.com";
+			String chatlink;
+			String urlprefix;			
+			
 			if (appname==null) //running locally
 			{
-				currentviewslink = "localhost:8080/sp/viewbarchart.jsp?session_id=" + sessionId;				
+				urlprefix = "localhost:8080/sp/";				 
 			}
 			else
 			{
 				 if (appname.equalsIgnoreCase("slidepipertest"))
 				 {
-					 currentviewslink = "http://slidepipertest-slidepiper.rhcloud.com/viewbarchart.jsp?session_id=" + sessionId;
+					 urlprefix = "http://slidepipertest-slidepiper.rhcloud.com/"; 					 
 				 }
 				 else
 					 if (appname.equalsIgnoreCase("sp")) 
 					 {
-						 currentviewslink = "http://www.slidepiper.com/viewbarchart.jsp?session_id=" + sessionId;
+						 urlprefix = "http://www.slidepiper.com/";						 
 					 }
 					 else
 					 {
-						 	currentviewslink = "CANNOT MAKE LINK";
+						 urlprefix="???? unknown ???";						 
 					 }							 
 			}
+			
+			currentviewslink = urlprefix + "viewbarchart.jsp?session_id=" + sessionId;
+			
+			chatlink = urlprefix + "pdfjs/chatwindow.html?sessionid="+sessionId+"&username="+DbLayer.getSalesmanName(mi.getSalesManEmail())+"&role=1";
+			
+			String fullchatlink= chatlink;
 			
 			String subj = "SlidePiper Alert for " +
 					DbLayer.getCustomerName(mi.getCustomerEmail(),mi.getSalesManEmail()) +
@@ -107,7 +114,8 @@ public class EmailSender {
 								+" <BR><BR>"
 								+HtmlRenderer.addEnclosingBorders(
 								"<u>What next?</u><BR><BR>"
-								+HtmlRenderer.getButtonHtml(chatlink, "Connect to Chat") +"<BR>"
+								+HtmlRenderer.getButtonHtml(chatlink, "Connect to QuickChat") +"<BR>"
+								+HtmlRenderer.getButtonHtml(fullchatlink, "Connect to Full Chat with Slides Control") +"<BR>"
 								+ HtmlRenderer.getButtonHtml(currentviewslink, "View Current Report"))
 								+"<BR><BR> Glad to serve you, <BR>Jacob Salesmaster<BR>SlidePiper Alerts System"
 					)

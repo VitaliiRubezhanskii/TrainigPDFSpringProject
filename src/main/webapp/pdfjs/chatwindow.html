@@ -46,7 +46,7 @@ http://slidepipertest-slidepiper.rhcloud.com/chatwindow.html
   <div class="chatcontainer chatcorners">    
     <div class="row">
       <div class="col-xs-12">
-        <div class="col-xs-11"><h5><b>Chat with Shauli Daon</b></h5></div>
+        <div class="col-xs-11" id="chatWith">Chat with ...</div>
         <div class="col-xs-1"><button id="btnClose" class="btn btn-primary" style="width:100%;">X</button></div>
         <div class="chatcontentDiv col-xs-9" id="chatBox">
         </div>
@@ -82,13 +82,36 @@ http://slidepipertest-slidepiper.rhcloud.com/chatwindow.html
       console.log("Opened socket.");
       //register the user
       //var nickname = $("#nickname").val();
-      var username = getURLParameter("username"); 
+      var customername = getURLParameter("customername"); 
     	var sessionid = getURLParameter("sessionid");
     	var role = getURLParameter("role");
-      user = { "username" : username,
-    		       "sessionid" : sessionid,
-    		       "role" : role
-    		                  };          
+    	var salesman = getURLParameter("salesman");
+    	
+    	if (customername=="") alert("Error, no customer name parameter");
+    	if (sessionid=="") alert("Error, no sessid parameter");
+    	if (role=="") alert("Error, no role parameter");
+    	if (salesman=="") alert("error, no salesman parameter");
+    	
+    	// customer sees chatting with salesman
+    	if (role=="0")
+    			{
+    				user = { "username" : customername,
+     		       "sessionid" : sessionid,
+     		       "role" : role
+     		                  };
+    				$("#chatWith").val("Chatting with " + salesman);
+    			}
+    	
+    	//salesman sees chatting with customer
+    	if (role=="1")
+			{
+    			user = { "username" : salesman,
+    			       "sessionid" : sessionid,
+    			       "role" : role
+    			                  };
+					$("#chatWith").val("Chatting with " + customername);
+			}
+
       socket.send(JSON.stringify(user));
                 
       //When received a message, parse it and either add/remove user or post message.

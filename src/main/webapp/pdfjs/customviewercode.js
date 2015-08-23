@@ -284,7 +284,11 @@ function initView() {
 		
 			// load chat window into chatdiv.
 			chatDiv = $("#chatDiv")[0];
-			$("#chatDiv").load("chatwindow.html?sessionid=1&username=Ashauli1&role=0",
+			customername="custy";
+			salesman="salesy";
+			role="0"; // customer role.
+			$("#chatDiv").load("chatwindow.html?sessionid="+thisSessionId+"&salesman="+salesman+"&customername="+customername+"&role="+role,					
+					//function to run after loading chat window
 					function()
 					{
 								//load completed.								

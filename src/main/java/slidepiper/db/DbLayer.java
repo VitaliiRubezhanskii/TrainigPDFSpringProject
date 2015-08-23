@@ -470,6 +470,33 @@ public class DbLayer {
 		return mailtype;
 	}
 	
+	public static String getSalesmanName(String smemail){		
+		String name="";		
+						
+		String query =
+				"select name from sales_men where email=? LIMIT 1;";
+		
+		Connection conn=null;
+		try 
+		{ 
+			try
+			{
+					  conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
+						PreparedStatement statement = conn.prepareStatement(query);				
+						statement.setString(1, smemail);								
+				 		ResultSet resultset = statement.executeQuery();								
+						// should run only once, limit 1 above.
+							while (resultset.next()) {
+								name = resultset.getString(1);					   			   
+							}
+			} finally{ if(conn!=null){ conn.close();}	}
+		} catch (Exception ex) {
+				System.out.println("exception in getsm mailtype");
+				ex.printStackTrace();
+		}
+		return name;
+	}
+	
 	public static String getSalesmanPassword(String salesman_email){		
 		String pwd = "";		
 						
