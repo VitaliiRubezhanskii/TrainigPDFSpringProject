@@ -15,7 +15,7 @@ http://slidepipertest-slidepiper.rhcloud.com/chatwindow.html
   <script src="sockjs/sockjs-0.3.js"></script>  
   <style>
   	.chatcontainer {
-  			width:30%;
+  			width:100%;
   	    height:220px;
   		}
     .chatcontentDiv {
@@ -73,6 +73,113 @@ http://slidepipertest-slidepiper.rhcloud.com/chatwindow.html
   socket=null; //global var  
   var registered = false;
   
+  function connectSocket()
+  	{
+		
+		socket = new SockJS(socketString);        
+    //When the connection is opened, login.
+    	socket.onopen = function() { 
+      console.log("Opened socket.");
+      //register the user
+      //var nickname = $("#nickname").val();
+      var username = getURLParameter("username"); 
+    	var sessionid = getURLParameter("sessionid");
+    	var role = getURLParameter("role");
+      user = { "username" : username,
+    		       "sessionid" : sessionid,
+    		       "role" : role
+    		                  };          
+      socket.send(JSON.stringify(user));
+                
+      //When received a message, parse it and either add/remove user or post message.
+      socket.onmessage = function(a) {
+        //process the message here
+        console.log("parsing JSON message: " + a.data);
+                    
+        var message = JSON.parse(a.data);            
+        //console.log("msg is: " + message.toString());
+              
+        console.log("message is " + JSON.stringify(message));
+        
+        //console.log("CHECKING PROPERTIES: ");
+        //onsole.log(message.hasOwnProperty("addUser"));
+        //console.log(message.hasOwnProperty("removeUser"));
+        //console.log(message.hasOwnProperty("message"));
+        
+        //for (var key in Object.keys(message)) {
+       // 	console.log("property in json: " + key);
+	            //if (obj.hasOwnProperty(key)) {
+	            //        /* useful code here */
+	            		    //}
+        			//}
+                               
+        // all messages I receive are already filtered by
+        // server to sessionid so should be displayed.
+        if (message.hasOwnProperty("addUser")) {
+        	console.log("addUser detected");
+          var d = document.createElement('div');
+          $(d).addClass("chatusername user").text(message.addUser.username).attr("data-user", message.addUser.username.toString()).appendTo("#nicknamesBox");
+
+          if (message.addUser.username != username) // it's not me
+          				{	
+	              // add online msg to chatbox
+	              var d = document.createElement('div');
+	              var sonline = document.createElement('span');                            
+	              $(sonline).addClass("chatusername").text(message.addUser.username + " is online.").appendTo($(d));
+	              $(d).appendTo("#chatBox");
+	              $("#chatBox").scrollTop($("#chatBox")[0].scrollHeight);
+	              		}
+          
+          console.log("Added user " + message.addUser.username);
+        } else if (message.hasOwnProperty("removeUser")) {
+        	
+            if (message.removeUser.username != username) // it's not me
+  						{	
+           		// add offline msg to chatbox
+              var d = document.createElement('div');
+              var soffline = document.createElement('span');                            
+              $(soffline).addClass("chatusername").text(message.removeUser.username + " is offline.").appendTo($(d));
+              $(d).appendTo("#chatBox");
+              $("#chatBox").scrollTop($("#chatBox")[0].scrollHeight);
+  						}
+              
+          	console.log("removeUser detected");
+            $(".user[data-user="+message.removeUser.username+"]").remove();
+            console.log("Removed user " + message.removeUser.username);
+
+        } else             	
+        // only regular msgs are sent - 
+        if (message.hasOwnProperty("message")) {
+        	console.log("regular message detected");
+        	//regular message - we have
+        	// message JSON with message and user insude.
+          var d = document.createElement('div');
+          var suser = document.createElement('span');
+          var smessage = document.createElement('span');              
+          $(suser).addClass("username").text(message.message.user.username+" : ").appendTo($(d));
+          $(smessage).text(message.message.messagetext).appendTo($(d));
+          $(d).appendTo("#chatBox");
+          $("#chatBox").scrollTop($("#chatBox")[0].scrollHeight);
+        				}      
+        else {alert("unknown message type" + message.toString());}
+		      	}
+      socket.onclose = function() { 
+    	  		console.log("socket closed. trying to reconnect");
+    	  		connectSocket();
+    	  		};
+    	  		
+      socket.onerror = function() { alert("Error transmitting chat content"); };
+      
+      $('#txtMessage').keyup(function(e){
+        if (e.keyCode == 13) {
+          sendMessage();
+	            	}});
+	          $("#btnSend").click(function() {
+	            sendMessage();
+	          	});          
+    	}
+   
+  
   function startClient() {
     console.log("opening socket");
     //on http server use document.domain instead od "localhost"
@@ -96,107 +203,7 @@ http://slidepipertest-slidepiper.rhcloud.com/chatwindow.html
     // AND - solve HTTP FORBIDDEN issue (only on openshift)
     // SOLVED: I just put allowedRegion=*.
     // Also I don't chat to appear immediately.
-    setTimeout(function() {
-    	socket = new SockJS(socketString);
-        
-        //When the connection is opened, login.
-        	socket.onopen = function() { 
-          console.log("Opened socket.");
-          //register the user
-          //var nickname = $("#nickname").val();
-          var username = getURLParameter("username"); 
-        	var sessionid = getURLParameter("sessionid");
-        	var role = getURLParameter("role");
-          user = { "username" : username,
-        		       "sessionid" : sessionid,
-        		       "role" : role
-        		                  };          
-          socket.send(JSON.stringify(user));
-                    
-          //When received a message, parse it and either add/remove user or post message.
-          socket.onmessage = function(a) {
-            //process the message here
-            console.log("parsing JSON message: " + a.data);
-                        
-            var message = JSON.parse(a.data);            
-            //console.log("msg is: " + message.toString());
-                  
-            console.log("message is " + JSON.stringify(message));
-            
-            //console.log("CHECKING PROPERTIES: ");
-            //onsole.log(message.hasOwnProperty("addUser"));
-            //console.log(message.hasOwnProperty("removeUser"));
-            //console.log(message.hasOwnProperty("message"));
-            
-            //for (var key in Object.keys(message)) {
-           // 	console.log("property in json: " + key);
-		            //if (obj.hasOwnProperty(key)) {
-		            //        /* useful code here */
-		            		    //}
-            			//}
-                                   
-            // all messages I receive are already filtered by
-            // server to sessionid so should be displayed.
-            if (message.hasOwnProperty("addUser")) {
-            	console.log("addUser detected");
-              var d = document.createElement('div');
-              $(d).addClass("chatusername user").text(message.addUser.username).attr("data-user", message.addUser.username.toString()).appendTo("#nicknamesBox");
-
-              if (message.addUser.username != username) // it's not me
-              				{	
-		              // add online msg to chatbox
-		              var d = document.createElement('div');
-		              var sonline = document.createElement('span');                            
-		              $(sonline).addClass("chatusername").text(message.addUser.username + " is online.").appendTo($(d));
-		              $(d).appendTo("#chatBox");
-		              $("#chatBox").scrollTop($("#chatBox")[0].scrollHeight);
-		              		}
-              
-              console.log("Added user " + message.addUser.username);
-            } else if (message.hasOwnProperty("removeUser")) {
-            	
-	            if (message.removeUser.username != username) // it's not me
-	  						{	
-	           		// add offline msg to chatbox
-	              var d = document.createElement('div');
-	              var soffline = document.createElement('span');                            
-	              $(soffline).addClass("chatusername").text(message.removeUser.username + " is offline.").appendTo($(d));
-	              $(d).appendTo("#chatBox");
-	              $("#chatBox").scrollTop($("#chatBox")[0].scrollHeight);
-	  						}
-	              
-	          	console.log("removeUser detected");
-	            $(".user[data-user="+message.removeUser.username+"]").remove();
-	            console.log("Removed user " + message.removeUser.username);
-
-            } else             	
-            // only regular msgs are sent - 
-            if (message.hasOwnProperty("message")) {
-            	console.log("regular message detected");
-            	//regular message - we have
-            	// message JSON with message and user insude.
-              var d = document.createElement('div');
-              var suser = document.createElement('span');
-              var smessage = document.createElement('span');              
-              $(suser).addClass("username").text(message.message.user.username+" : ").appendTo($(d));
-              $(smessage).text(message.message.messagetext).appendTo($(d));
-              $(d).appendTo("#chatBox");
-              $("#chatBox").scrollTop($("#chatBox")[0].scrollHeight);
-            				}      
-            else {alert("unknown message type" + message.toString());}
-    		      	}
-          socket.onclose = function() { alert("Chat connection terminated."); };
-          socket.onerror = function() { alert("Error transmitting chat content"); };
-          
-          $('#txtMessage').keyup(function(e){
-            if (e.keyCode == 13) {
-              sendMessage();
-		            	}});
-		          $("#btnSend").click(function() {
-		            sendMessage();
-		          	});          
-        		}
-    	},  4000);    
+    setTimeout(connectSocket,  5000);    
   } // of startClient
   
   function sendMessage() {

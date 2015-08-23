@@ -31,6 +31,7 @@ public class WebConfig extends WebMvcConfigurerAdapter implements WebSocketConfi
 	  	  
     registry.addHandler(chatWebSocketHandler(), "/chat")    
     .setAllowedOrigins("*").withSockJS();
+        
   }
   
   @Bean
