@@ -4,8 +4,6 @@
 // and this will make ONE report entry in the smart alerts.
 thisSessionId = Math.random().toString();
 
-view_initialized = 0;
-
 function keepalive_event(estimatedTimeViewed_param, slideNum_param) {
 	urlval = "../KeepAliveServlet";
 	// if (document.location.hostname == "localhost")
@@ -94,8 +92,12 @@ left_datetime = new Date();
 // code for leaving and returning to browser - detecting this.
 is_in_browser = 1; // start by default, in browser (true).
 
+// booleans for initializations, make sure I initialize once.
+preInitDone = false;
+initDone = false;
+
 function onBlur() { // leaving window
-	if (view_initialized ==1)
+	if (initDone==true)
 		{
 				left_datetime = new Date();
 				send_event("LEFT_WINDOW", "0", "0", ipaddr);
@@ -103,7 +105,7 @@ function onBlur() { // leaving window
 		}
 };
 function onFocus() { // refocusing on window
-	if (view_initialized ==1)
+	if (initDone==true)
 	{
 			focus_datetime = new Date();
 		
@@ -149,7 +151,6 @@ function getSalesmanEmail() {
 
 
 
-preInitDone = false;
 
 // runs BEFORE everything is loaded.
 function preInitView()
@@ -174,118 +175,122 @@ preInitView();
 
 // initialize everything
 function initView() {
-	console.log("init view");
-
-	preInitView(); //make sure executed.
 	
-	getSalesmanEmail();
-	
-	prev_datetime = new Date();
-	// immediately make this global var.
-	// change it now that it's loaded so that I don't count time until loading
-	// first slide in its view time.
-
-	// alert("file: "+ getURLParameter("file"));
-	
-	send_event("INIT_SLIDES", "0", "0", ipaddr);
+	if (initDone == false)
+	{
+			console.log("init view");
 		
-	console.log("binding sendmsg click");
-	$("#sendq").unbind(); // first unbind all.
-	$("#sendq").bind(
-			"click",
-			function(event, ui) {
-				// event of clicking on button.
-				send_event("CUSTOMER_QUESTION_CLICKED", "0", "0", "");
-
-				var q = window.prompt("Please enter your question.", "");
-				if (q != null)
-					//
-					// salesman_email = getCookie("salesman_email");
-					mailtourl = "mailto:" + salesman_email
-							+ "?Subject=Message from customer " +
-							// $("#cust_email").text() +
-							"&body=" + q;
-				// mailtourl = "mailto:david.salesmaster@gmail.com"
-				send_event("CUSTOMER_QUESTION", "0", "0", "[slide "
-						+ $("#pageNumber").val() + "]: " + q);
-				// alert("Sending message for q " + $("#cust_question").val());
-				setTimeout(function() {
-					// location.href = mailtourl;
-				}, 2000);
-			});
-	console.log("binding sendmsg click - DONE OK");
-
-	// request pagefit after 1 sec
-	/*setTimeout(function() {
-		$("#scaleSelectContainer").value = "page-fit";
-		$("#scaleSelectContainer").selectedIndex = 2; // pagefit option
-	}, 1000);*/
-	// every 1/3 sec check for updates in slide num.
-
-	// for now, use the current page, not necessarily 1.
-	currentPageIndex = $("#pageNumber").val();
-	cur_slide = currentPageIndex;
-	prev_slide = cur_slide; // for first slide, make it same.
-
-	window.setInterval(function() {
-		cursorX = 5;
-		cursorY = 99;
-
-		var now_datetime = new Date();
-
-		// PDFViewerApplication.page = 1;
-		cur_slide = $("#pageNumber").val();
-		if (is_in_browser == 0) // browser not in focus?
-		{
-			cur_slide = -1; // -1 signifies we're outside of the browser.
-		}
-
-		// new slide. if outside of browser slide is -1 and it ends the current
-		// view event.
-		// make sure no extra spaces make these 2 slides "different".x
-		if (cur_slide.toString().trim() != prev_slide.toString().trim()) {
-
-			// changed slide - immediately hide privacy message.
-			// alert("aahiding privacy msg" + cur_slide + " " + prev_slide);
-
-			// calc seconds viewed
-			var seconds_viewed = (now_datetime - prev_datetime) / 1000;
-
-			// make POST req
-			send_event("VIEW_SLIDE", prev_slide, seconds_viewed, "1.2.3.4");
-
-			// update prev variables.
-			prev_slide = cur_slide;
-			prev_datetime = now_datetime;
-		}
-	}, 333); // 3 times in sec.
-
-	// send periodic keepalive event, for registering
-	// last slide viewed.
-	setInterval(function() {
-		// calculate sec viewed for current slide
-		var now_datetime = new Date();
-		var seconds_viewed = (now_datetime - prev_datetime) / 1000;
-		// get cur slide num
-		var slide_viewed_now = $("#pageNumber").val();
-		// send all these in an event, every 3sec.
-		keepalive_event(seconds_viewed, slide_viewed_now);
-	}, 3000);
-
-	// this.close();
-
-	console.log("init view done");
-	send_event("INIT_SLIDES_DONE", "0", "0", ipaddr);
-
-	// last thing: display privacy msg.
-	privacyDiv = $("#privacyMessage")[0];
-	maxY = window.innerHeight;
-	divHeight = privacyDiv.offsetHeight;
-	privacyDiv.style.top = (maxY - divHeight)+"px";
-	privacyDiv.style.visibility = "visible";
-	
-	// now blur and focus will work:
-	view_initialized = 1;
+			preInitView(); //make sure executed.
+			
+			getSalesmanEmail();
+			
+			prev_datetime = new Date();
+			// immediately make this global var.
+			// change it now that it's loaded so that I don't count time until loading
+			// first slide in its view time.
+		
+			// alert("file: "+ getURLParameter("file"));
+			
+			send_event("INIT_SLIDES", "0", "0", ipaddr);
+				
+			console.log("binding sendmsg click");
+			$("#sendq").unbind(); // first unbind all.
+			$("#sendq").bind(
+					"click",
+					function(event, ui) {
+						// event of clicking on button.
+						send_event("CUSTOMER_QUESTION_CLICKED", "0", "0", "");
+		
+						var q = window.prompt("Please enter your question.", "");
+						if (q != null)
+							//
+							// salesman_email = getCookie("salesman_email");
+							mailtourl = "mailto:" + salesman_email
+									+ "?Subject=Message from customer " +
+									// $("#cust_email").text() +
+									"&body=" + q;
+						// mailtourl = "mailto:david.salesmaster@gmail.com"
+						send_event("CUSTOMER_QUESTION", "0", "0", "[slide "
+								+ $("#pageNumber").val() + "]: " + q);
+						// alert("Sending message for q " + $("#cust_question").val());
+						setTimeout(function() {
+							// location.href = mailtourl;
+						}, 2000);
+					});
+			console.log("binding sendmsg click - DONE OK");
+		
+			// request pagefit after 1 sec
+			/*setTimeout(function() {
+				$("#scaleSelectContainer").value = "page-fit";
+				$("#scaleSelectContainer").selectedIndex = 2; // pagefit option
+			}, 1000);*/
+			// every 1/3 sec check for updates in slide num.
+		
+			// for now, use the current page, not necessarily 1.
+			currentPageIndex = $("#pageNumber").val();
+			cur_slide = currentPageIndex;
+			prev_slide = cur_slide; // for first slide, make it same.
+		
+			window.setInterval(function() {
+				cursorX = 5;
+				cursorY = 99;
+		
+				var now_datetime = new Date();
+		
+				// PDFViewerApplication.page = 1;
+				cur_slide = $("#pageNumber").val();
+				if (is_in_browser == 0) // browser not in focus?
+				{
+					cur_slide = -1; // -1 signifies we're outside of the browser.
+				}
+		
+				// new slide. if outside of browser slide is -1 and it ends the current
+				// view event.
+				// make sure no extra spaces make these 2 slides "different".x
+				if (cur_slide.toString().trim() != prev_slide.toString().trim()) {
+		
+					// changed slide - immediately hide privacy message.
+					// alert("aahiding privacy msg" + cur_slide + " " + prev_slide);
+		
+					// calc seconds viewed
+					var seconds_viewed = (now_datetime - prev_datetime) / 1000;
+		
+					// make POST req
+					send_event("VIEW_SLIDE", prev_slide, seconds_viewed, "1.2.3.4");
+		
+					// update prev variables.
+					prev_slide = cur_slide;
+					prev_datetime = now_datetime;
+				}
+			}, 333); // 3 times in sec.
+		
+			// send periodic keepalive event, for registering
+			// last slide viewed.
+			setInterval(function() {
+				// calculate sec viewed for current slide
+				var now_datetime = new Date();
+				var seconds_viewed = (now_datetime - prev_datetime) / 1000;
+				// get cur slide num
+				var slide_viewed_now = $("#pageNumber").val();
+				// send all these in an event, every 3sec.
+				keepalive_event(seconds_viewed, slide_viewed_now);
+			}, 3000);
+		
+			// this.close();
+		
+			console.log("init view done");
+			send_event("INIT_SLIDES_DONE", "0", "0", ipaddr);
+		
+			// last thing: display privacy msg.
+			privacyDiv = $("#privacyMessage")[0];
+			maxY = window.innerHeight;
+			divHeight = privacyDiv.offsetHeight;
+			privacyDiv.style.top = (maxY - divHeight)+"px";
+			privacyDiv.style.visibility = "visible";
+			
+			// now blur and focus will work:
+			initDone = true;			
+	}
 }
 
  //document.addEventListener("pagerendered", function(e) {
