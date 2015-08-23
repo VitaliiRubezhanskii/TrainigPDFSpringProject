@@ -35,7 +35,7 @@ public class ChatService {
       String messageToSend = "{\"removeUser\":" + user.toJSON() + "}";
       for (WebSocketSession sock : conns) {
         try {
-        	System.out.println("WEBSOCKETS: sending message ");
+        	System.out.println("WEBSOCKETS: sending message " + messageToSend);
           sock.sendMessage(new TextMessage(messageToSend));
         } catch (IOException e) {
           System.out.println("IO exception when sending remove user message");
@@ -101,8 +101,8 @@ public class ChatService {
       	{
       //Broadcast the message
 	   // just send a message string from this user.
-      String messageToSend = "{\"user\":" + users.get(session).toJSON()
-          + ", \"message\":\"" + message.replace("\"", "\\\"") +"\"}";
+      String messageToSend = "{\"message\": {\"user\":" + users.get(session).toJSON()
+          + ", \"messagetext\":\"" + message.replace("\"", "\\\"") +"\"} }";
       for (WebSocketSession sock : conns) {
     	  ChatUser user = users.get(sock); // user for this socket.
     	  if (user.getSessionid().equalsIgnoreCase(users.get(session).getSessionid()))

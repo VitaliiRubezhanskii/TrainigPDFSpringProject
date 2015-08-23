@@ -262,7 +262,7 @@ function initView() {
 					prev_slide = cur_slide;
 					prev_datetime = now_datetime;
 				}
-			}, 333); // 3 times in sec.
+			}, 200); // 3 times in sec.
 		
 			// send periodic keepalive event, for registering
 			// last slide viewed.
