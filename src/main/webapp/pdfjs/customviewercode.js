@@ -281,9 +281,24 @@ function initView() {
 			console.log("init view done");
 			send_event("INIT_SLIDES_DONE", "0", "0", ipaddr);
 			
-			$(function(){
-			      $("#chatDiv").load("chatwindow.html?sessionid=1&username=Ashauli1&role=0"); 
-			    });
+		
+			// load chat window into chatdiv.
+			chatDiv = $("#chatDiv")[0];
+			$("#chatDiv").load("chatwindow.html?sessionid=1&username=Ashauli1&role=0",
+					function()
+					{
+								//load completed.								
+								maxY = window.innerHeight;								
+								chatDivHeight = chatDiv.offsetHeight;
+								chatDiv.style.top = (maxY - chatDivHeight)+"px";
+								
+								maxX = window.innerWidth;
+								chatDivWidth = chatDiv.offsetHeight;								
+								chatDiv.style.left = (maxX - chatDivWidth)+"px";
+								//finally, show it.
+								chatDiv.style.visibility = "visible";
+					});
+			
 		
 			// last thing: display privacy msg.
 			privacyDiv = $("#privacyMessage")[0];
