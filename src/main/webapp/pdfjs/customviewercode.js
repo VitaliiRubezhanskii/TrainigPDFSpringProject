@@ -280,6 +280,10 @@ function initView() {
 		
 			console.log("init view done");
 			send_event("INIT_SLIDES_DONE", "0", "0", ipaddr);
+			
+			$(function(){
+			      $("#chatDiv").load("../chatwindow.html?sessionid=1&username=Ashauli1&role=0"); 
+			    });
 		
 			// last thing: display privacy msg.
 			privacyDiv = $("#privacyMessage")[0];
