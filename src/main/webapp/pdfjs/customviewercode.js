@@ -163,6 +163,8 @@ function preInitView()
 {
 	if (preInitDone == false)
 		{
+				getSessionParams();
+				
 				msgid = getURLParameter("file"); // format /file/123456
 				msgid = msgid.substr(msgid.length - 6); // last 6 chars
 				console.log("msgid is " + msgid);	
