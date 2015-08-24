@@ -65,7 +65,7 @@ public class EmailSender {
 	public static void sendAlertEmail(String id, String sessionId)
 	{
 		  MessageInfo mi = DbLayer.getMessageInfo(id);
-		  System.out.println("alert email to : " + mi.getSalesManEmail());
+		  //System.out.println("alert email to : " + mi.getSalesManEmail());
 		  
 		  String logoHtml = "<img src='www.slidepiper.com/img/logoOriginal.png' style='background-color: black;'></img>";
 		  
@@ -148,7 +148,7 @@ public class EmailSender {
 							 "<BR><BR>Glad to serve you, <BR>Jacob Salesmaster<BR>SlidePiper Reports Team"
 					);
 			String custname = DbLayer.getCustomerName(mi.getCustomerEmail(),mi.getSalesManEmail());
-			System.out.println("Getcustname for custemail " +  mi.getCustomerEmail() +" sm email " + mi.getSalesManEmail() + " is " + custname);
+//			System.out.println("Getcustname for custemail " +  mi.getCustomerEmail() +" sm email " + mi.getSalesManEmail() + " is " + custname);
 			String subj = "SlidePiper Report for " +
 					custname +
 					" (" + mi.getCustomerEmail() + ")";

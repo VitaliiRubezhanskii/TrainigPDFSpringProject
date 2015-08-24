@@ -84,7 +84,7 @@ public class CustomerLogger {
 				/// send email for Contact us button
 				if (event_name.equalsIgnoreCase("CONTACT_US"))
 				{								
-						System.out.println("open slides event - sending email");											
+						System.out.println("contact us - sending email");											
 						EmailSender.sendEmail("info@slidepiper.com", 
 								"Contact us has been clicked",
 								"Hello, <BR><BR>This is Jacob Salesmaster. <BR>I am your website alerts representative.<BR><BR>The contact us button has been clicked. This is the message:<BR> "+ param3 + "<BR><BR> Glad to serve you, <BR>Jacob Salesmaster<BR>SlidePiper Alerts System"

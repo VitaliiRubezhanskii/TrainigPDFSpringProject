@@ -60,7 +60,7 @@ public class GetMessageDataServlet extends HttpServlet {
 				
 		StringBuffer jb = new StringBuffer();
 		Constants.updateConstants();
-		System.out.println("get sm email from msgid servlet");
+		
 	    String line = null;
 	    try {
 	    	BufferedReader reader = request.getReader();
@@ -76,7 +76,7 @@ public class GetMessageDataServlet extends HttpServlet {
 					
 					String smemail = DbLayer.getSalesmanEmailFromMsgId(input.getString("msgid"));					
 					output.put("salesman_email", smemail);
-					System.out.println("found salesman email " + smemail + " for msgid " + input.getString("msgid"));
+					//System.out.println("found salesman email " + smemail + " for msgid " + input.getString("msgid"));
 					
 					MessageInfo mi = DbLayer.getMessageInfo(msgid);					
 					String customername = DbLayer.getCustomerName(mi.getCustomerEmail(), mi.getSalesManEmail());					
