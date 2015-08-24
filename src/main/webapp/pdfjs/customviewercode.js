@@ -298,8 +298,10 @@ function loadChatWindow()
 	// load chat window into chatdiv.
 	chatDiv = $("#chatDiv")[0];
 	
+	alert("get url for cust name is " + getURLParameter("customername"));
+	
 	// if we have parameters in url (meaning it's salesman session)
-	if (getURLParameter("customername")!="")
+	if (getURLParameter("customername")!=null)
 		{
 				customername=getURLParameter("customername");
 				salesman=getURLParameter("salesman");
