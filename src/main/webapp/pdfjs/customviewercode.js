@@ -320,13 +320,16 @@ function loadChatWindow()
 		}	
 	//encodeuricomponent replaces the spaces with %20 and other required stuff for uri.
 	
-	getParams = "sessionid="+thisSessionId+"&salesman="+encodeURIComponent(salesman.trim())+"&customername="+encodeURIComponent(customername.trim())+"&role="+role;
-	console.log("Get parameters to chat: " +getParams );
+	getParams = "sessionid="+thisSessionId+"&salesman="+encodeURIComponent(salesman.trim())+"&customername="+encodeURIComponent(customername.trim())+"&role="+role;	
+	loadurl = "chatwindow.html?"+getParams;
+	
+	console.log("jquery load url " + loadurl);
 			
-	$("#chatDiv").load("chatwindow.html?"+getParams,					
+	$("#chatDiv").load(loadurl,
 			//function to run after loading chat window
 			function()
 			{
+						console.log("finished loading chat html");
 						// final callback on finishing to load chat window.
 						//load completed.								
 						maxY = window.innerHeight;								
