@@ -216,6 +216,10 @@ http://slidepipertest-slidepiper.rhcloud.com/chatwindow.html
           var smessage = document.createElement('span');              
           $(suser).addClass("chatusername").text(message.message.user.username+" : ").appendTo($(d));
           $(smessage).addClass("msgtext").text(message.message.messagetext).appendTo($(d));
+          // not adding msg yet to chatbox - 
+          // checking if it should be - maybe
+          // slide changes should be changed and not
+          // added.
           
           	if (quickchatmode==0) 
           				//not quickchat, need to change slides!
