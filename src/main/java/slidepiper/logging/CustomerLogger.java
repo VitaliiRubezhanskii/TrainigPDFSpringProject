@@ -18,7 +18,7 @@ public class CustomerLogger {
 	
 	public static void LogEvent(String id, String event_name, String param1, String param2, String param3, String sessionId, int timezone_offset_min)
 	{
-				System.out.println("Parameters to CustomerLogger.LogEvent: id ..." +id + "event " + event_name +  " param1 " + param1  + " param2 " + param2 + " param3 " + param3 + " timezone offset: " + timezone_offset_min);
+				//System.out.println("CustLog: id " +id + "event " + event_name +  " prm1 " + param1  + " prm2 " + param2 + " prm3 " + param3 + " timezone offs: " + timezone_offset_min);
 				Constants.updateConstants();
 				Connection conn = null; // connection to the database
 				
@@ -40,7 +40,7 @@ public class CustomerLogger {
 							// sends the statement to the database server
 							int row = statement.executeUpdate();
 							if (row > 0) { 
-								String message = "Logged customer event. id " +id + "event " + event_name +  " param1 " + param1  + " param2 " + param2 + " param3 " + param3 ;
+								String message = "custlog: id " +id + " evt " + event_name +  " prm1 " + param1  + " prm2 " + param2 + " prm3 " + param3 ;
 								System.out.println(message);								
 							}							
 							
@@ -49,7 +49,7 @@ public class CustomerLogger {
 							{							
 										sql = "INSERT INTO customer_sessions (msg_id, ipaddr, session_id, browser, operating_system, all_browser_data, done, timestamp) values "
 												+ "		(?, ?, ?, ?, ?, ?, 0, DATE_ADD(UTC_TIMESTAMP(),INTERVAL "+ (-timezone_offset_min)+" MINUTE) )";
-										System.out.println("sql for OEN_SLIDES is " + sql);
+										//System.out.println("sql for OEN_SLIDES is " + sql);
 										statement = conn.prepareStatement(sql);
 										statement.setString(1, id);						
 										statement.setString(2, "1.2.3.4");
@@ -60,7 +60,7 @@ public class CustomerLogger {
 										// sends the statement to the database server
 										row = statement.executeUpdate();
 										if (row > 0) { 
-											String message = "NEW SESSION!. id " +id + "event " + event_name +  " param1 " + param1  + " param2 " + param2 + " param3 " + param3 ;
+											String message = "CustLog: NEW SESSION!. id " +id + "event " + event_name +  " param1 " + param1  + " param2 " + param2 + " param3 " + param3 ;
 											System.out.println(message);								
 										}
 							}														

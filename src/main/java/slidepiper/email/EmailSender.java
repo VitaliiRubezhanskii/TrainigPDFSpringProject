@@ -53,7 +53,7 @@ public class EmailSender {
 		       Transport.send(emessage);
 		       			       
 		       	 
-		       System.out.println("Sent ALERT email. msg=" + msg);
+		       //System.out.println("Sent ALERT email. msg=" + msg);
 		   } catch (MessagingException e) {		   			
 			   		System.out.println("ERROR sending message " + e.getMessage() + " stack: " + e.getStackTrace());
 		        throw new RuntimeException(e);
@@ -96,15 +96,17 @@ public class EmailSender {
 			}
 			
 			currentviewslink = urlprefix + "viewbarchart.jsp?session_id=" + sessionId;
-			
-			chatlink = urlprefix + "pdfjs/chatwindow.html?sessionid="+sessionId+"&username="+DbLayer.getSalesmanName(mi.getSalesManEmail())+"&role=1";
-			
-			String fullchatlink= chatlink;
+
+			String custname = DbLayer.getCustomerName(mi.getCustomerEmail(), mi.getSalesManEmail());
+			String getParams = "sessionid="+sessionId+"&salesman="+DbLayer.getSalesmanName(mi.getSalesManEmail())+"&custname="+ custname +"&role=1";
+			chatlink = urlprefix + "pdfjs/chatwindow.html?" + getParams;			
+			String fullchatlink= urlprefix+"pdfjs/viewer.html?file=/file/" + mi.getId() + "&" + getParams;
 			
 			String subj = "SlidePiper Alert for " +
 					DbLayer.getCustomerName(mi.getCustomerEmail(),mi.getSalesManEmail()) +
 					" (" + mi.getCustomerEmail() + ")";
 					  			  
+
 			EmailSender.sendEmail(mi.getSalesManEmail(), 
 					subj,				
 					HtmlRenderer.addEnclosingHtml(
@@ -114,8 +116,8 @@ public class EmailSender {
 								+" <BR><BR>"
 								+HtmlRenderer.addEnclosingBorders(
 								"<u>What next?</u><BR><BR>"
-								+HtmlRenderer.getButtonHtml(chatlink, "Connect to QuickChat") +"<BR>"
-								+HtmlRenderer.getButtonHtml(fullchatlink, "Connect to Full Chat with Slides Control") +"<BR>"
+								+HtmlRenderer.getButtonHtml(chatlink, "<u>Quick Chat</u> with " + custname) + "<BR>"
+								+HtmlRenderer.getButtonHtml(fullchatlink, "<u>Full Chat</u> + <u>Live Pitch</u> with " + custname) +"<BR>"
 								+ HtmlRenderer.getButtonHtml(currentviewslink, "View Current Report"))
 								+"<BR><BR> Glad to serve you, <BR>Jacob Salesmaster<BR>SlidePiper Alerts System"
 					)

@@ -1,17 +1,10 @@
 package slidepiper.db;
 
 import java.io.PrintWriter;
-
-
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Properties;
+import java.util.concurrent.Semaphore;
 
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -494,6 +487,7 @@ public class DbLayer {
 				System.out.println("exception in getsm mailtype");
 				ex.printStackTrace();
 		}
+		System.out.println("GetSalesmanName found name " + name + " for email " + smemail);
 		return name;
 	}
 	

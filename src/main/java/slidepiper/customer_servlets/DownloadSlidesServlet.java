@@ -34,13 +34,13 @@ public class DownloadSlidesServlet extends HttpServlet {
         // get upload id from URL's parameters
         //int uploadId = Integer.parseInt(request.getParameter("id"));
     	
-  	  System.out.println("DownloadSlidesServlet doGet");
+//  	  System.out.println("DownloadSlidesServlet doGet");
     	
     	// new way to get parameter, not with get
     	String msgid = request.getPathInfo().substring(1);
     	// now I can access servlet as name/5  where 5 is the parameter!
     	// no ? for get request! this allows to use this with pdfjs.
-    	  System.out.println("parameter to Slides servlet: " + msgid);
+    	  //System.out.println("parameter to Slides servlet: " + msgid);
     	  
         Connection conn = null; // connection to the database
         String slides_id;
@@ -64,7 +64,7 @@ public class DownloadSlidesServlet extends HttpServlet {
             if (result.next()) {
                 // gets file name and file blob data
                 slides_id = result.getString("slides_id");
-                System.out.println("id of slides: " + slides_id);
+                System.out.println("slides id: " + slides_id + " msgid: " + msgid);
             			}
 
             // make another query for the slides blob
@@ -76,7 +76,7 @@ public class DownloadSlidesServlet extends HttpServlet {
             result = statement.executeQuery();            
             if (result.next()) {
                 // gets file name and file blob data                
-                System.out.println("downloading blob");                                                
+//                System.out.println("downloading blob");                                                
                 Blob blob = result.getBlob("file");
                 InputStream inputStream = blob.getBinaryStream();
                 int fileLength = inputStream.available();                 

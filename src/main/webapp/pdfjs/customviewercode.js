@@ -126,15 +126,15 @@ if (/* @cc_on!@ */false) { // check for Internet Explorer
 	window.onblur = onBlur;
 }
 
-function getSalesmanEmail() {
+function getSalesmanData() {
 
-	jsondata = '{"action":"getSalesmanEmail",' + '"msgid":"' + msgid + '" }';
+	jsondata = '{"msgid":"' + msgid + '" }';
 
 	// alert("json msg " + jsondata);
 	console.log("get salesman email ajax");
 	$.ajax({
 		type : "POST",
-		url : "../GetSalesmanEmailFromMsgIdServlet",
+		url : "../GetSalesmanDataServlet",
 		data : jsondata,
 		contentType : "application/json; charset=utf-8",
 		processData : false,
@@ -142,9 +142,13 @@ function getSalesmanEmail() {
 			alert('get sm email from msgid error from returned json' + error);
 		},
 		success : function(msg) {
-			// JSONobj = JSON.parse(jsondata);
 			salesman_email = msg.salesman_email;
-			console.log("rcvd salesman email " + msg.salesman_email);
+			customername = msg.customername;
+			salesman = msg.salesman;
+			console.log("rcvd salesman data: smemail " + salesman_email + " custname: "+ customername +" sm name:"+ salesman);
+			
+			// I need this loaded data for the chat window.
+			loadChatWindow();
 		}
 	}); // end of ajax call
 }
@@ -182,8 +186,6 @@ function initView() {
 		
 			preInitView(); //make sure executed.
 			
-			getSalesmanEmail();
-			
 			prev_datetime = new Date();
 			// immediately make this global var.
 			// change it now that it's loaded so that I don't count time until loading
@@ -191,7 +193,11 @@ function initView() {
 		
 			// alert("file: "+ getURLParameter("file"));
 			
-			send_event("INIT_SLIDES", "0", "0", ipaddr);
+			// load salesman data, and afterwards in callback,
+			// load the chat window.
+			getSalesmanData();
+			
+			send_event("INIT_SLIDES", "0", "0", ipaddr);			
 				
 			console.log("binding sendmsg click");
 			$("#sendq").unbind(); // first unbind all.
@@ -281,39 +287,57 @@ function initView() {
 			console.log("init view done");
 			send_event("INIT_SLIDES_DONE", "0", "0", ipaddr);
 			
-		
-			// load chat window into chatdiv.
-			chatDiv = $("#chatDiv")[0];
-			customername="custy";
-			salesman="salesy";
-			role="0"; // customer role.
-			$("#chatDiv").load("chatwindow.html?sessionid="+thisSessionId+"&salesman="+salesman+"&customername="+customername+"&role="+role,					
-					//function to run after loading chat window
-					function()
-					{
-								//load completed.								
-								maxY = window.innerHeight;								
-								chatDivHeight = chatDiv.offsetHeight;
-								chatDiv.style.top = (maxY - chatDivHeight)+"px";
-								
-								maxX = window.innerWidth;
-								chatDivWidth = chatDiv.offsetHeight;								
-								chatDiv.style.left = (maxX - chatDivWidth)+"px";
-								//finally, show it.
-								chatDiv.style.visibility = "visible";
-					});
-			
-		
-			// last thing: display privacy msg.
-			privacyDiv = $("#privacyMessage")[0];
-			maxY = window.innerHeight;
-			divHeight = privacyDiv.offsetHeight;
-			privacyDiv.style.top = (maxY - divHeight)+"px";
-			privacyDiv.style.visibility = "visible";
-			
-			// now blur and focus will work:
-			initDone = true;			
+			// this is done here, but continues in getSalesmanData
+				// and its callback to load chat window, and 
+			// in the end set initialized to true.
 	}
+}
+
+function loadChatWindow()
+{
+	// load chat window into chatdiv.
+	chatDiv = $("#chatDiv")[0];
+	
+	// if we have parameters in url (meaning it's salesman session)
+	if (getURLParameter("customername")!="")
+		{
+				customername=getURLParameter("customername");
+				salesman=getURLParameter("salesman");
+				role=getURLParameter(role); // salesman - 1
+		}
+	else
+		{ 	// no params in url
+				// variables should have already been initialized
+				// 	in getSalesmanData
+				role="0"; // just make the role 0 - customer.
+		}
+	$("#chatDiv").load("chatwindow.html?sessionid="+thisSessionId+"&salesman="+salesman+"&customername="+customername+"&role="+role,					
+			//function to run after loading chat window
+			function()
+			{
+						// final callback on finishing to load chat window.
+						//load completed.								
+						maxY = window.innerHeight;								
+						chatDivHeight = chatDiv.offsetHeight;
+						chatDiv.style.top = (maxY - chatDivHeight)+"px";
+						
+						maxX = window.innerWidth;
+						chatDivWidth = chatDiv.offsetHeight;								
+						chatDiv.style.left = (maxX - chatDivWidth)+"px";
+						//finally, show it.
+						chatDiv.style.visibility = "visible";
+			});
+	
+
+	// last thing: display privacy msg.
+	privacyDiv = $("#privacyMessage")[0];
+	maxY = window.innerHeight;
+	divHeight = privacyDiv.offsetHeight;
+	privacyDiv.style.top = (maxY - divHeight)+"px";
+	privacyDiv.style.visibility = "visible";
+	
+	// now blur and focus will work:
+	initDone = true;				
 }
 
  //document.addEventListener("pagerendered", function(e) {
