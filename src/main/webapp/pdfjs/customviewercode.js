@@ -182,6 +182,8 @@ function initView() {
 	
 	if (initDone == false)
 	{
+		// immediately set to true, to prevent it from running again.
+			initDone = true;
 			console.log("init view");
 		
 			preInitView(); //make sure executed.
