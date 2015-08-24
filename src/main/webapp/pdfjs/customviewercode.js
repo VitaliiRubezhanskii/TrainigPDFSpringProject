@@ -134,7 +134,7 @@ function getSalesmanData() {
 	console.log("get salesman email ajax");
 	$.ajax({
 		type : "POST",
-		url : "../GetSalesmanDataServlet",
+		url : "../GetMessageDataServlet",
 		data : jsondata,
 		contentType : "application/json; charset=utf-8",
 		processData : false,
