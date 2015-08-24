@@ -90,10 +90,10 @@ http://slidepipertest-slidepiper.rhcloud.com/chatwindow.html
 			    	var role = getURLParameter("role");
 			    	var salesman = getURLParameter("salesman");
 			    	
-			    	if (customername=="") alert("Error, no customer name parameter");
-			    	if (sessionid=="") alert("Error, no sessid parameter");
-			    	if (role=="") alert("Error, no role parameter");
-			    	if (salesman=="") alert("error, no salesman parameter");
+			    	if (customername==null) alert("Error, no customer name parameter");
+			    	if (sessionid==null) alert("Error, no sessid parameter");
+			    	if (role==null) alert("Error, no role parameter");
+			    	if (salesman==null) alert("error, no salesman parameter");
 			    	
 			    	// customer sees chatting with salesman
 			    	if (role=="0")
@@ -103,6 +103,7 @@ http://slidepipertest-slidepiper.rhcloud.com/chatwindow.html
 			     		       "role" : role
 			     		                  };
 			    				$("#chatWith").val("Chatting with " + salesman);
+			    				username = customername;
 			    			}
 			    	
 			    	//salesman sees chatting with customer
@@ -112,6 +113,7 @@ http://slidepipertest-slidepiper.rhcloud.com/chatwindow.html
 			    			       "sessionid" : sessionid,
 			    			       "role" : role
 			    			                  };
+			    			username=salesman;
 								$("#chatWith").val("Chatting with " + customername);
 						}
 			
@@ -134,7 +136,7 @@ http://slidepipertest-slidepiper.rhcloud.com/chatwindow.html
         	console.log("addUser detected");
           var d = document.createElement('div');
           $(d).addClass("chatusername user").text(message.addUser.username).attr("data-user", message.addUser.username.toString()).appendTo("#nicknamesBox");
-
+          			
           if (message.addUser.username != username) // it's not me
           				{	
 	              // add online msg to chatbox
@@ -183,7 +185,8 @@ http://slidepipertest-slidepiper.rhcloud.com/chatwindow.html
       
       socket.onclose = function() { 
     	  		console.log("socket closed. trying to reconnect");
-    	  		connectSocket();
+    	  		// retry in 20sec.
+    	  		setTimeout(connectSocket, 20000);    	  		
     	  		};
     	  		
       socket.onerror = function() { alert("Error transmitting chat content"); };
