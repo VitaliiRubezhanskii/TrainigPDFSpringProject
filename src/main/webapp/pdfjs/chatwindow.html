@@ -74,6 +74,8 @@ http://slidepipertest-slidepiper.rhcloud.com/chatwindow.html
   </div>
   <script>
 
+  socketconnected = 0;
+  
   // parameter from url: session id, username role
   // if no parameter found returns null.
   function getURLParameter(name) {
@@ -88,7 +90,8 @@ http://slidepipertest-slidepiper.rhcloud.com/chatwindow.html
   	{			  
 		socket = new SockJS(socketString);        
     //When the connection is opened, login.
-    	socket.onopen = function() { 
+    	socket.onopen = function() {
+    				socketconnected = 1;
 			      console.log("Opened socket.");
 			      showChat();
 			      //register the user
@@ -158,6 +161,7 @@ http://slidepipertest-slidepiper.rhcloud.com/chatwindow.html
                 
       //When received a message, parse it and either add/remove user or post message.
       socket.onmessage = function(a) {
+    		socketconnected = 1;
     		showChat();
         //process the message here
         console.log("parsing JSON message: " + a.data);
@@ -238,13 +242,14 @@ http://slidepipertest-slidepiper.rhcloud.com/chatwindow.html
       
       
       
-      socket.onclose = function() { 
+      socket.onclose = function() {
+    	  		socketconnected = 0;
     	  		console.log("socket closed. trying to reconnect");
     	  		// retry in 20sec.
     	  		setTimeout(connectSocket, 20000);    	  		
     	  		};
     	  		
-      socket.onerror = function() { alert("Error transmitting chat content"); };
+      socket.onerror = function() { alert("Error transmitting chat content"); socketconnected = 0;};
       
       $('#txtMessage').keyup(function(e){
         if (e.keyCode == 13) {
@@ -292,10 +297,11 @@ http://slidepipertest-slidepiper.rhcloud.com/chatwindow.html
       $("#txtMessage").val("");
     	}
     }
-  
+
   // only in non-quickchat mode, exchange slides between partners.
   function sendSlideNum()
-  {	  
+  {
+	  
     socket.send("Changed to slide #" + prev_slide).val());
   }
   

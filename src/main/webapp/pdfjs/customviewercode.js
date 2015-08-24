@@ -1,5 +1,7 @@
 
 
+socketconnected=0; // will be set to 1 in chatwindow
+
 // this runs ONCE for each page refresh - 
 // and this will make ONE report entry in the smart alerts.
 thisSessionId = Math.random().toString();
@@ -269,9 +271,15 @@ function initView() {
 		
 					// make POST req
 					send_event("VIEW_SLIDE", prev_slide, seconds_viewed, "1.2.3.4");
-					
+
+					function isFunction(possibleFunction) {
+						  return typeof(possibleFunction) === typeof(Function);
+						}
 					// send the current slide num to others in chat.
-					sendSlideNum();
+					if (socketconnected ==1) // only if set to 1 in chatwindow
+						{					
+								sendSlideNum();
+						}
 		
 					// update prev variables.
 					prev_slide = cur_slide;

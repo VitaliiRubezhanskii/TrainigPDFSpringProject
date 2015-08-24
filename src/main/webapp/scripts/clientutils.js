@@ -89,3 +89,7 @@ function parse(val) {
     });
     return result;
 }
+
+function isFunction(possibleFunction) {
+	  return typeof(possibleFunction) === typeof(Function);
+	}
