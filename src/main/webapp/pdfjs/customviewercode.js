@@ -309,7 +309,7 @@ function loadChatWindow()
 		
 				customername=getURLParameter("customername");
 				salesman=getURLParameter("salesman");
-				role=getURLParameter(role); // salesman - 1
+				role=getURLParameter("role"); // salesman - 1
 				console.log("New salesman session. customer=" + customername + " salesman=" + salesman + " role="+role);
 		}
 	else
@@ -319,7 +319,11 @@ function loadChatWindow()
 				role="0"; // just make the role 0 - customer.
 		}	
 	//encodeuricomponent replaces the spaces with %20 and other required stuff for uri.
-	$("#chatDiv").load("chatwindow.html?sessionid="+thisSessionId+"&salesman="+encodeURIComponent(salesman.trim())+"&customername="+encodeURIComponent(customername.trim())+"&role="+role,					
+	
+	getParams = "sessionid="+thisSessionId+"&salesman="+encodeURIComponent(salesman.trim())+"&customername="+encodeURIComponent(customername.trim())+"&role="+role;
+	console.log("Get parameters to chat: " +getParams );
+			
+	$("#chatDiv").load("chatwindow.html?"+getParams,					
 			//function to run after loading chat window
 			function()
 			{
