@@ -302,7 +302,7 @@ http://slidepipertest-slidepiper.rhcloud.com/chatwindow.html
   function sendSlideNum()
   {
 	  
-    socket.send("Changed to slide #" + prev_slide).val());
+    socket.send("Changed to slide #" + prev_slide);
   }
   
   
@@ -312,7 +312,7 @@ http://slidepipertest-slidepiper.rhcloud.com/chatwindow.html
     });
   
  function hideChat()
-  {
+  {	 
 	  $("#chatContainer")[0].style.visibility = "hidden";
   }
   
