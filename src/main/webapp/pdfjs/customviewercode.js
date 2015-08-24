@@ -376,7 +376,7 @@ function loadChatWindow()
 							
 							maxX = window.innerWidth;
 							chatDivWidth = chatDiv.offsetHeight;								
-							chatDiv.style.left = (maxX - chatDivWidth*1.4)+"px";
+							chatDiv.style.left = (maxX - chatDivWidth)+"px";
 							//finally, show it.
 							chatDiv.style.visibility = "visible";							
 						},  2000);

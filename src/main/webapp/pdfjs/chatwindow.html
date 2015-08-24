@@ -56,7 +56,7 @@ http://slidepipertest-slidepiper.rhcloud.com/chatwindow.html
   <div class="chatcontainer chatcorners" id="chatContainer">    
     <div class="row">
       <div class="col-xs-12">
-        <div class="col-xs-10" id="chatWith">Chat with ...</div>
+        <div class="col-xs-10" id="chatWith" style="word-wrap: break-word;">Chat with ...</div>
         <div class="col-xs-1"><button id="btnClose" class="btn btn-primary" style="width:100%;">X</button></div>
         <div class="chatcontentDiv col-xs-9" id="chatBox">
         </div>
@@ -257,7 +257,10 @@ http://slidepipertest-slidepiper.rhcloud.com/chatwindow.html
           					if (slidenum>0)
           								{
           								if (is_in_browser)
-		          									{	
+		          									{
+          									// change page number in PDF!          									
+          								    	PDFViewerApplication.page = (slidenum | 0);
+          									// and in textbox:
           											$("#pageNumber").val(slidenum);
           											// to avoid having the engine
               										// read this as slide change event
