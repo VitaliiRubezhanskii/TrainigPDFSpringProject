@@ -126,6 +126,8 @@ if (/* @cc_on!@ */false) { // check for Internet Explorer
 	window.onblur = onBlur;
 }
 
+// data for this msg id - 
+// cust name, salesman name, role. 
 function getSalesmanData() {
 
 	jsondata = '{"msgid":"' + msgid + '" }';
@@ -295,18 +297,19 @@ function initView() {
 	}
 }
 
-function loadChatWindow()
+// set parameters from url, if given.
+// if not, it's a customer session and it's initialized
+// in getSalesmanData
+function getSessionParams()
 {
-	// load chat window into chatdiv.
-	chatDiv = $("#chatDiv")[0];
-	
-//	alert("get url for cust name is " + getURLParameter("customername"));
-	// returns null if there's no parameter with that name.
-	
 	// if we have parameters in url (meaning it's salesman session)
 	if (getURLParameter("customername")!=null)
 		{
-		
+				sessionid=getURLParameter("sessionid");
+				
+				// erase current session id, put the given parameter id.
+				thisSessionId = sessionid; 
+				
 				customername=getURLParameter("customername");
 				salesman=getURLParameter("salesman");
 				role=getURLParameter("role"); // salesman - 1
@@ -316,11 +319,22 @@ function loadChatWindow()
 		{ 	// no params in url
 				// variables should have already been initialized
 				// 	in getSalesmanData
+				sessionid = thisSessionId;
 				role="0"; // just make the role 0 - customer.
 		}	
 	//encodeuricomponent replaces the spaces with %20 and other required stuff for uri.
+}
+
+// runs at the end, after everything has been initialized. 
+function loadChatWindow()
+{
+	// load chat window into chatdiv.
+	chatDiv = $("#chatDiv")[0];
 	
-	getParams = "sessionid="+thisSessionId+"&salesman="+encodeURIComponent(salesman.trim())+"&customername="+encodeURIComponent(customername.trim())+"&role="+role;	
+//	alert("get url for cust name is " + getURLParameter("customername"));
+	// returns null if there's no parameter with that name.
+	
+	getParams = "sessionid="+sessionid+"&salesman="+encodeURIComponent(salesman.trim())+"&customername="+encodeURIComponent(customername.trim())+"&role="+role;	
 	loadurl = "chatwindow.html?"+getParams;
 	
 	console.log("jquery load url " + loadurl);
