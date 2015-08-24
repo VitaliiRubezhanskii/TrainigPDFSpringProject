@@ -98,7 +98,7 @@ public class EmailSender {
 			currentviewslink = urlprefix + "viewbarchart.jsp?session_id=" + sessionId;
 
 			String custname = DbLayer.getCustomerName(mi.getCustomerEmail(), mi.getSalesManEmail());
-			String getParams = "sessionid="+sessionId+"&salesman="+DbLayer.getSalesmanName(mi.getSalesManEmail())+"&custname="+ custname +"&role=1";
+			String getParams = "sessionid="+sessionId+"&salesman="+DbLayer.getSalesmanName(mi.getSalesManEmail())+"&customername="+ custname +"&role=1";
 			chatlink = urlprefix + "pdfjs/chatwindow.html?" + getParams;			
 			String fullchatlink= urlprefix+"pdfjs/viewer.html?file=/file/" + mi.getId() + "&" + getParams;
 			
