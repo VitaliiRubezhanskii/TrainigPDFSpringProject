@@ -298,7 +298,8 @@ function loadChatWindow()
 	// load chat window into chatdiv.
 	chatDiv = $("#chatDiv")[0];
 	
-	alert("get url for cust name is " + getURLParameter("customername"));
+//	alert("get url for cust name is " + getURLParameter("customername"));
+	// returns null if there's no parameter with that name.
 	
 	// if we have parameters in url (meaning it's salesman session)
 	if (getURLParameter("customername")!=null)
@@ -312,8 +313,9 @@ function loadChatWindow()
 				// variables should have already been initialized
 				// 	in getSalesmanData
 				role="0"; // just make the role 0 - customer.
-		}
-	$("#chatDiv").load("chatwindow.html?sessionid="+thisSessionId+"&salesman="+salesman+"&customername="+customername+"&role="+role,					
+		}	
+	//encodeuricomponent replaces the spaces with %20 and other required stuff for uri.
+	$("#chatDiv").load("chatwindow.html?sessionid="+thisSessionId+"&salesman="+encodeURIComponent(salesman.trim())+"&customername="+encodeURIComponent(customername.trim())+"&role="+role,					
 			//function to run after loading chat window
 			function()
 			{
