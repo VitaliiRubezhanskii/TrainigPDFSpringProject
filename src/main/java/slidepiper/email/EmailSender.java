@@ -116,8 +116,8 @@ public class EmailSender {
 								+" <BR><BR>"
 								+HtmlRenderer.addEnclosingBorders(
 								"<u>What next?</u><BR><BR>"
-								+HtmlRenderer.getButtonHtml(chatlink, "<u>Quick Chat</u> with " + custname) + "<BR>"
-								+HtmlRenderer.getButtonHtml(fullchatlink, "<u>Full Chat</u> + <u>Live Pitch</u> with " + custname) +"<BR>"
+								+HtmlRenderer.getButtonHtml(chatlink, "<b>Quick Chat</b> with " + custname) + "<BR>"
+								+HtmlRenderer.getButtonHtml(fullchatlink, "<b>Full Chat</b> + <b>Live Pitch</b> with " + custname) +"<BR>"
 								+ HtmlRenderer.getButtonHtml(currentviewslink, "View Current Report"))
 								+"<BR><BR> Glad to serve you, <BR>Jacob Salesmaster<BR>SlidePiper Alerts System"
 					)
@@ -147,10 +147,10 @@ public class EmailSender {
 											barChartImageHtml+
 							 "<BR><BR>Glad to serve you, <BR>Jacob Salesmaster<BR>SlidePiper Reports Team"
 					);
-			
-			System.out.println("Getcustname for custemail " +  mi.getCustomerEmail() +" sm email " + mi.getSalesManEmail());
+			String custname = DbLayer.getCustomerName(mi.getCustomerEmail(),mi.getSalesManEmail());
+			System.out.println("Getcustname for custemail " +  mi.getCustomerEmail() +" sm email " + mi.getSalesManEmail() + " is " + custname);
 			String subj = "SlidePiper Report for " +
-					DbLayer.getCustomerName(mi.getCustomerEmail(),mi.getSalesManEmail()) +
+					custname +
 					" (" + mi.getCustomerEmail() + ")";
 					 
 			EmailSender.sendEmail(mi.getSalesManEmail(), subj , msg);

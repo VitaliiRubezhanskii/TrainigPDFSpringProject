@@ -17,10 +17,10 @@ http://slidepipertest-slidepiper.rhcloud.com/chatwindow.html
   	.chatcontainer {
   			width:100%;
   	    height:220px;
-  	    opacity:0.7%;
+  	    opacity:0.7;
   		}
     .chatcontentDiv {
-    	opacity:0.7%;
+    	opacity:0.7;
       width:100%;
       height:130px;
       border-color: #000000;
@@ -67,6 +67,7 @@ http://slidepipertest-slidepiper.rhcloud.com/chatwindow.html
   <script>
 
   // parameter from url: session id, username role
+  // if no parameter found returns null.
   function getURLParameter(name) {
 	  return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search)||[,""])[1].replace(/\+/g, '%20'))||null
 	}
@@ -81,40 +82,41 @@ http://slidepipertest-slidepiper.rhcloud.com/chatwindow.html
 		socket = new SockJS(socketString);        
     //When the connection is opened, login.
     	socket.onopen = function() { 
-      console.log("Opened socket.");
-      //register the user
-      //var nickname = $("#nickname").val();
-      var customername = getURLParameter("customername"); 
-    	var sessionid = getURLParameter("sessionid");
-    	var role = getURLParameter("role");
-    	var salesman = getURLParameter("salesman");
-    	
-    	if (customername=="") alert("Error, no customer name parameter");
-    	if (sessionid=="") alert("Error, no sessid parameter");
-    	if (role=="") alert("Error, no role parameter");
-    	if (salesman=="") alert("error, no salesman parameter");
-    	
-    	// customer sees chatting with salesman
-    	if (role=="0")
-    			{
-    				user = { "username" : customername,
-     		       "sessionid" : sessionid,
-     		       "role" : role
-     		                  };
-    				$("#chatWith").val("Chatting with " + salesman);
-    			}
-    	
-    	//salesman sees chatting with customer
-    	if (role=="1")
-			{
-    			user = { "username" : salesman,
-    			       "sessionid" : sessionid,
-    			       "role" : role
-    			                  };
-					$("#chatWith").val("Chatting with " + customername);
-			}
-
-      socket.send(JSON.stringify(user));
+			      console.log("Opened socket.");
+			      //register the user
+			      //var nickname = $("#nickname").val();
+			      var customername = getURLParameter("customername"); 
+			    	var sessionid = getURLParameter("sessionid");
+			    	var role = getURLParameter("role");
+			    	var salesman = getURLParameter("salesman");
+			    	
+			    	if (customername=="") alert("Error, no customer name parameter");
+			    	if (sessionid=="") alert("Error, no sessid parameter");
+			    	if (role=="") alert("Error, no role parameter");
+			    	if (salesman=="") alert("error, no salesman parameter");
+			    	
+			    	// customer sees chatting with salesman
+			    	if (role=="0")
+			    			{
+			    				user = { "username" : customername,
+			     		       "sessionid" : sessionid,
+			     		       "role" : role
+			     		                  };
+			    				$("#chatWith").val("Chatting with " + salesman);
+			    			}
+			    	
+			    	//salesman sees chatting with customer
+			    	if (role=="1")
+						{
+			    			user = { "username" : salesman,
+			    			       "sessionid" : sessionid,
+			    			       "role" : role
+			    			                  };
+								$("#chatWith").val("Chatting with " + customername);
+						}
+			
+			      socket.send(JSON.stringify(user));
+    		} // onopen
                 
       //When received a message, parse it and either add/remove user or post message.
       socket.onmessage = function(a) {
@@ -125,19 +127,7 @@ http://slidepipertest-slidepiper.rhcloud.com/chatwindow.html
         //console.log("msg is: " + message.toString());
               
         console.log("message is " + JSON.stringify(message));
-        
-        //console.log("CHECKING PROPERTIES: ");
-        //onsole.log(message.hasOwnProperty("addUser"));
-        //console.log(message.hasOwnProperty("removeUser"));
-        //console.log(message.hasOwnProperty("message"));
-        
-        //for (var key in Object.keys(message)) {
-       // 	console.log("property in json: " + key);
-	            //if (obj.hasOwnProperty(key)) {
-	            //        /* useful code here */
-	            		    //}
-        			//}
-                               
+                                       
         // all messages I receive are already filtered by
         // server to sessionid so should be displayed.
         if (message.hasOwnProperty("addUser")) {
@@ -185,9 +175,12 @@ http://slidepipertest-slidepiper.rhcloud.com/chatwindow.html
           $(smessage).text(message.message.messagetext).appendTo($(d));
           $(d).appendTo("#chatBox");
           $("#chatBox").scrollTop($("#chatBox")[0].scrollHeight);
-        				}      
+        		}      
         else {alert("unknown message type" + message.toString());}
 		      	}
+      
+      
+      
       socket.onclose = function() { 
     	  		console.log("socket closed. trying to reconnect");
     	  		connectSocket();

@@ -540,6 +540,8 @@ public class DbLayer {
 				System.out.println("exception in getCustomerName");
 				ex.printStackTrace();
 		}
+		
+		
 		return name;
 	}
 	

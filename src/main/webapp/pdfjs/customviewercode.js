@@ -286,8 +286,8 @@ function initView() {
 		
 			// this.close();
 		
-			console.log("init view done");
-			send_event("INIT_SLIDES_DONE", "0", "0", ipaddr);
+			//console.log("init view done");
+			//send_event("INIT_SLIDES_DONE", "0", "0", ipaddr);
 			
 			// this is done here, but continues in getSalesmanData
 				// and its callback to load chat window, and 
