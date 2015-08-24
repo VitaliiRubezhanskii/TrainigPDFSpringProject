@@ -366,7 +366,8 @@ function loadChatWindow()
 			{
 						// run after 2 seconds, maybe the chat window 
 						// 	will stabilize its position.
-						setTimeout(function() {							
+						// 	the timeout screws up the UI...
+						//setTimeout(function() {							
 							console.log("finished loading chat html");
 							// final callback on finishing to load chat window.
 							//load completed.								
@@ -379,7 +380,7 @@ function loadChatWindow()
 							chatDiv.style.left = (maxX - chatDivWidth)+"px";
 							//finally, show it.
 							chatDiv.style.visibility = "visible";							
-						},  2000);
+						//},  2000);
 			});
 	
 
