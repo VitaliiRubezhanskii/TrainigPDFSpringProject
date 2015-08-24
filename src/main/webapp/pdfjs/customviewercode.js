@@ -269,6 +269,9 @@ function initView() {
 		
 					// make POST req
 					send_event("VIEW_SLIDE", prev_slide, seconds_viewed, "1.2.3.4");
+					
+					// send the current slide num to others in chat.
+					sendSlideNum();
 		
 					// update prev variables.
 					prev_slide = cur_slide;
@@ -304,7 +307,7 @@ function initView() {
 // in getSalesmanData
 function getSessionParams()
 {
-	// if we have parameters in url (meaning it's salesman session)
+	// if we have parameters in url (meaning it's salesman session).
 	if (getURLParameter("customername")!=null)
 		{
 				sessionid=getURLParameter("sessionid");
@@ -315,7 +318,7 @@ function getSessionParams()
 				customername=getURLParameter("customername");
 				salesman=getURLParameter("salesman");
 				role=getURLParameter("role"); // salesman - 1
-				console.log("New salesman session. customer=" + customername + " salesman=" + salesman + " role="+role);
+				console.log("New salesman session. customer=" + customername + " salesman=" + salesman + " role="+role);				 
 		}
 	else
 		{ 	// no params in url
@@ -323,7 +326,13 @@ function getSessionParams()
 				// 	in getSalesmanData
 				sessionid = thisSessionId;
 				role="0"; // just make the role 0 - customer.
-		}	
+				
+				// this is customer, using full mode - of course he's 
+				// viewing the pdf.				
+		}
+	
+	// we're in this file - it's not quickchat.
+	quickchatmode = 0;
 	//encodeuricomponent replaces the spaces with %20 and other required stuff for uri.
 }
 

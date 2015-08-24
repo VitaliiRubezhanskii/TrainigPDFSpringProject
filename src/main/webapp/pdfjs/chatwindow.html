@@ -85,11 +85,12 @@ http://slidepipertest-slidepiper.rhcloud.com/chatwindow.html
   var registered = false;
   
   function connectSocket()
-  	{		
+  	{			  
 		socket = new SockJS(socketString);        
     //When the connection is opened, login.
     	socket.onopen = function() { 
 			      console.log("Opened socket.");
+			      showChat();
 			      //register the user
 			      //var nickname = $("#nickname").val();
 			      			    	
@@ -103,12 +104,14 @@ http://slidepipertest-slidepiper.rhcloud.com/chatwindow.html
 			    		// the main page, so I can simply take these global variables:
 			    			
 			    			sessionid = thisSessionId;
+			    					    		
+			    			quickchatmode = 0;
 			    		
 			    		// other global variables are already set at customviewercode.js
 			    		
 			    		//alert("Error, no customer name parameter");
 			    		}
-			    	else //we have params in url!
+			    	else //we have params in url! quickchat mode
 			    		{
 			    		// run this only we have params.
 			    		// otherwise it erases the loaded data in
@@ -118,6 +121,7 @@ http://slidepipertest-slidepiper.rhcloud.com/chatwindow.html
 				    	salesman = getURLParameter("salesman");
 				    	
 				    	sessionid = getURLParameter("sessionid");
+				    	quickchatmode = 1;
 			    		}
 			    	if (sessionid==null) alert("Error, no sessid parameter for chat");
 			    	if (role==null) alert("Error, no role parameter for chat");
@@ -150,6 +154,7 @@ http://slidepipertest-slidepiper.rhcloud.com/chatwindow.html
                 
       //When received a message, parse it and either add/remove user or post message.
       socket.onmessage = function(a) {
+    		showChat();
         //process the message here
         console.log("parsing JSON message: " + a.data);
                     
@@ -160,8 +165,7 @@ http://slidepipertest-slidepiper.rhcloud.com/chatwindow.html
                                        
         // all messages I receive are already filtered by
         // server to sessionid so should be displayed.
-        if (message.hasOwnProperty("addUser")) {
-        	showChat();
+        if (message.hasOwnProperty("addUser")) {        
         	console.log("addUser detected");
           var d = document.createElement('div');
           $(d).addClass("chatusername user").text(message.addUser.username).attr("data-user", message.addUser.username.toString()).appendTo("#nicknamesBox");
@@ -195,8 +199,7 @@ http://slidepipertest-slidepiper.rhcloud.com/chatwindow.html
 
         } else             	
         // only regular msgs are sent - 
-        if (message.hasOwnProperty("message")) {
-        	showChat();
+        if (message.hasOwnProperty("message")) {        	
         	console.log("regular message detected");
         	//regular message - we have
         	// message JSON with message and user insude.
@@ -207,6 +210,24 @@ http://slidepipertest-slidepiper.rhcloud.com/chatwindow.html
           $(smessage).addClass("msgtext").text(message.message.messagetext).appendTo($(d));
           $(d).appendTo("#chatBox");
           $("#chatBox").scrollTop($("#chatBox")[0].scrollHeight);
+          
+          	if (quickchatmode==0) 
+          				//not quickchat, need to change slides!
+          				{
+          				// change slide message
+          				if (message.message.messagetext.substring(0,18)
+          						== "Changed to slide #") // 18 chars. 0..17
+          						
+          					{
+          					var slidenum = message.message.messagetext.substring(18);
+          					console.log("changing to slide # " + slidenum);
+          								// really change slide here too!
+          								
+          								// we're in full chat mode, so this should
+          								// work - we have pdf viewer.
+          					$("#pageNumber").val(slidenum);
+          					}
+          				}
         		}      
         else {alert("unknown message type" + message.toString());}
 		      	}
@@ -227,6 +248,7 @@ http://slidepipertest-slidepiper.rhcloud.com/chatwindow.html
 	            	}});
 	      $("#btnSend").click(function() {
 	          sendMessage();
+	          showChat();
 	          	});          
 	      $("#btnClose").click(function() {
 		            hideChat();
@@ -266,6 +288,12 @@ http://slidepipertest-slidepiper.rhcloud.com/chatwindow.html
       $("#txtMessage").val("");
     	}
     }
+  
+  // only in non-quickchat mode, exchange slides between partners.
+  function sendSlideNum()
+  {	  
+    socket.send($("Changed to slide #" + prev_slide + ".").val());
+  }
   
   
   //startup
