@@ -101,8 +101,22 @@ http://slidepipertest-slidepiper.rhcloud.com/chatwindow.html
 			      showChat();
 			      //register the user
 			      //var nickname = $("#nickname").val();
+			      
+			      if (window.location.toString().indexOf("viewer.html"))
+			    	  {	
+			    	  // we're in pdf viewer
+			    	  		quickchatmode = 0;
+			    	  console.log("PDF viewer mode");
+			    	  
+			    	  }
+			      else
+			    	  {
+			    	  				//we're in small chat window.
+			    	  			quickchatmode = 1;
+			    	  			console.log("quickchat window mode");			    	  			
+			    	  }
 			      			    	
-			    	if (getURLParameter("customername")==null) 
+			    	if ( getURLParameter("customername") == null)
 			    		{
 			    		//this means we couldn't take the parameters from the 
 			    		// url. In that case it means that it's in the pdf 
@@ -112,9 +126,7 @@ http://slidepipertest-slidepiper.rhcloud.com/chatwindow.html
 			    		// the main page, so I can simply take these global variables:
 			    			
 			    			sessionid = thisSessionId;
-			    					    		
-			    			quickchatmode = 0;
-			    		
+			    					    					    						    		
 			    		// other global variables are already set at customviewercode.js
 			    		
 			    		//alert("Error, no customer name parameter");
@@ -128,8 +140,7 @@ http://slidepipertest-slidepiper.rhcloud.com/chatwindow.html
 				    	role = getURLParameter("role");
 				    	salesman = getURLParameter("salesman");
 				    	
-				    	sessionid = getURLParameter("sessionid");
-				    	quickchatmode = 1;
+				    	sessionid = getURLParameter("sessionid");				    	
 			    		}
 			    	if (sessionid==null) alert("Error, no sessid parameter for chat");
 			    	if (role==null) alert("Error, no role parameter for chat");
@@ -229,7 +240,7 @@ http://slidepipertest-slidepiper.rhcloud.com/chatwindow.html
           // slide changes should be changed and not
           // added.
           
-          	if (quickchatmode==0) 
+           	if (quickchatmode==0) 
           				//not quickchat, need to change slides!
           				{
           				// change slide message

@@ -354,7 +354,7 @@ function loadChatWindow()
 	// returns null if there's no parameter with that name.
 	
 	//getParams = "sessionid="+sessionid+"&salesman="+encodeURIComponent(salesman.trim())+"&customername="+encodeURIComponent(customername.trim())+"&role="+role;	
-	loadurl = "chatwindow.html?"; //+getParams;
+	loadurl = "chatwindow.html"; //+"?"+getParams;
 	// the params are not needed and not used.
 	// in full chat mode they are received from getSalesmanDataServlet
 	
