@@ -84,15 +84,36 @@ http://slidepipertest-slidepiper.rhcloud.com/chatwindow.html
 			      console.log("Opened socket.");
 			      //register the user
 			      //var nickname = $("#nickname").val();
-			      var customername = getURLParameter("customername"); 
-			    	var sessionid = getURLParameter("sessionid");
-			    	var role = getURLParameter("role");
-			    	var salesman = getURLParameter("salesman");
-			    	
-			    	if (customername==null) alert("Error, no customer name parameter");
-			    	if (sessionid==null) alert("Error, no sessid parameter");
-			    	if (role==null) alert("Error, no role parameter");
-			    	if (salesman==null) alert("error, no salesman parameter");
+			      			    	
+			    	if (getURLParameter("customername")==null) 
+			    		{
+			    		//this means we couldn't take the parameters from the 
+			    		// url. In that case it means that it's in the pdf 
+			    		// viewer and it tries to take the url of the top page.
+			    		// and it has other get parameters. 
+			    		// In this case, we have shared global variables with
+			    		// the main page, so I can simply take these global variables:
+			    			
+			    			sessionid = thisSessionId;
+			    		
+			    		// other global variables are already set at customviewercode.js
+			    		
+			    		//alert("Error, no customer name parameter");
+			    		}
+			    	else //we have params in url!
+			    		{
+			    		// run this only we have params.
+			    		// otherwise it erases the loaded data in
+			    		// customviewercode.
+			    		customername = getURLParameter("customername"); 				    	
+				    	role = getURLParameter("role");
+				    	salesman = getURLParameter("salesman");
+				    	
+				    	sessionid = getURLParameter("sessionid");
+			    		}
+			    	if (sessionid==null) alert("Error, no sessid parameter for chat");
+			    	if (role==null) alert("Error, no role parameter for chat");
+			    	if (salesman==null) alert("error, no salesman parameter for chat");
 			    	
 			    	// customer sees chatting with salesman
 			    	if (role=="0")
@@ -101,7 +122,7 @@ http://slidepipertest-slidepiper.rhcloud.com/chatwindow.html
 			     		       "sessionid" : sessionid,
 			     		       "role" : role
 			     		                  };
-			    				$("#chatWith").val("Chatting with " + salesman);
+			    				$("#chatWith")[0].val("Chatting with " + salesman);
 			    				username = customername;
 			    			}
 			    	
