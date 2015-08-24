@@ -77,8 +77,7 @@ http://slidepipertest-slidepiper.rhcloud.com/chatwindow.html
   var registered = false;
   
   function connectSocket()
-  	{
-		
+  	{		
 		socket = new SockJS(socketString);        
     //When the connection is opened, login.
     	socket.onopen = function() { 

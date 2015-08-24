@@ -60,6 +60,6 @@ public class ChatUser {
 			username = json.getString("username");					  
 			sessionid = json.getString("sessionid");
 			role = json.getInt("role");
-			System.out.println("CHATUSER: New Chat User: " + this.toJSON());
+			//System.out.println("CHATUSER: New Chat User: " + this.toJSON());
 	}
 }
