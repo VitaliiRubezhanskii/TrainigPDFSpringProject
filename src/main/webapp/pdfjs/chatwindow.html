@@ -245,15 +245,20 @@ http://slidepipertest-slidepiper.rhcloud.com/chatwindow.html
           								if (is_in_browser)
 		          									{	
           											$("#pageNumber").val(slidenum);
-		          									}          						          									
-          										// to avoid having the engine
-          										// read this as slide change event
-          										// and send another event to others
-          										// in chat, I must do these:
-          									cur_slide = slidenum;
-          									prev_slide = slidenum;
-          									// this way there won't be a slide
-          									// change event registered here.
+          											// to avoid having the engine
+              										// read this as slide change event
+              										// and send another event to others
+              										// in chat, I must do these:
+              									cur_slide = slidenum;
+              									prev_slide = slidenum;
+              									// this way there won't be a slide
+              									// change event registered here.
+              									
+              									// this caused a bug. If I change cur_slide
+              									// then in the slides detection loop it finds I'm out
+              									// of browser, then cur_slide is -1 and prev_slide is set,
+              									// and slide has CHANGED, every time.
+		          									}          						          									          						
           								}
           					else
           								{	
