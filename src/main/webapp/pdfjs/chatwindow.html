@@ -225,8 +225,8 @@ http://slidepipertest-slidepiper.rhcloud.com/chatwindow.html
           				//not quickchat, need to change slides!
           				{
           				// change slide message
-          		if (message.message.messagetext.substring(0,18)
-          						== "Changed to slide #") // 18 chars. 0..17
+          		if (message.message.
+          				messagetext.indexOf("Changed to slide #") > -1) 
           						
           					{
           					var slidenum = message.message.messagetext.substring(18);
