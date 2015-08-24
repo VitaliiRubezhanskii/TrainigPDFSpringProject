@@ -306,9 +306,11 @@ function loadChatWindow()
 	// if we have parameters in url (meaning it's salesman session)
 	if (getURLParameter("customername")!=null)
 		{
+		
 				customername=getURLParameter("customername");
 				salesman=getURLParameter("salesman");
 				role=getURLParameter(role); // salesman - 1
+				console.log("New salesman session. customer=" + customername + " salesman=" + salesman + " role="+role);
 		}
 	else
 		{ 	// no params in url
