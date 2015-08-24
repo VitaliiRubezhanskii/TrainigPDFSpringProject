@@ -260,7 +260,7 @@ function initView() {
 		
 				// new slide. if outside of browser slide is -1 and it ends the current
 				// view event.
-				// make sure no extra spaces make these 2 slides "different".x
+				// make sure no extra spaces make these 2 slides "different".x				
 				if (cur_slide.toString().trim() != prev_slide.toString().trim()) {
 		
 					// changed slide - immediately hide privacy message.

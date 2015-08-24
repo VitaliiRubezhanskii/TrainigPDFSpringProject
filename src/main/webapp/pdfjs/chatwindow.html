@@ -349,7 +349,8 @@ http://slidepipertest-slidepiper.rhcloud.com/chatwindow.html
   // only in non-quickchat mode, exchange slides between partners.
   function sendSlideNum()
   {
-	  	if (prev_slide != -1)
+	  // if in window.
+	  	if (cur_slide != -1)
 	  		{
     			socket.send("Changed to slide #" + $("#pageNumber").val());
 	  		}
