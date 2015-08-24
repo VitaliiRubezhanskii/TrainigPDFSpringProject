@@ -34,8 +34,8 @@ http://slidepipertest-slidepiper.rhcloud.com/chatwindow.html
       overflow: auto;
     }    
     	.chatcorners {    	
-						/*background: none repeat scroll 0 0 #aabbff;*/
-				    border-radius: 3px;
+						background: none repeat scroll 0 0 #aabbff;
+				    border-radius: 10px;
 				    border: 2px solid #ff5544;
 				    padding: 10px;
     		}
@@ -48,7 +48,7 @@ http://slidepipertest-slidepiper.rhcloud.com/chatwindow.html
     	.msgtext {
       font-weight: bold;
       color: #220000;
-    }
+    }	
   
   </style>
 </head>
@@ -134,10 +134,10 @@ http://slidepipertest-slidepiper.rhcloud.com/chatwindow.html
 			     		       "sessionid" : sessionid,
 			     		       "role" : role
 			     		                  };
-			    				$("#chatWith").val("Chatting with " + salesman);
+			    				$("#chatWith").text("Chatting with " + salesman);
 			    				username = customername;
 			    			}
-			    	
+			    	else
 			    	//salesman sees chatting with customer
 			    	if (role=="1")
 						{
@@ -146,8 +146,12 @@ http://slidepipertest-slidepiper.rhcloud.com/chatwindow.html
 			    			       "role" : role
 			    			                  };
 			    			username=salesman;
-								$("#chatWith").val("Chatting with " + customername);
+								$("#chatWith").text("Chatting with " + customername);
 						}
+			    	else
+			    		{
+			    					alert("ERROR - role is not defined.");
+			    		}
 			
 			      socket.send(JSON.stringify(user));
     		} // onopen
@@ -292,7 +296,7 @@ http://slidepipertest-slidepiper.rhcloud.com/chatwindow.html
   // only in non-quickchat mode, exchange slides between partners.
   function sendSlideNum()
   {	  
-    socket.send($("Changed to slide #" + prev_slide + ".").val());
+    socket.send("Changed to slide #" + prev_slide).val());
   }
   
   
@@ -303,12 +307,12 @@ http://slidepipertest-slidepiper.rhcloud.com/chatwindow.html
   
  function hideChat()
   {
-	  $("#chatContainer").style.visibility = "hidden";
+	  $("#chatContainer")[0].style.visibility = "hidden";
   }
   
  function showChat()
   {
-	  $("#chatContainer").style.visibility = "visible";
+	  $("#chatContainer")[0].style.visibility = "visible";
   }
     
   </script>  
