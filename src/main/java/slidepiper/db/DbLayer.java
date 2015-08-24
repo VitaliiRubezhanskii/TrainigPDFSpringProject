@@ -487,7 +487,7 @@ public class DbLayer {
 				System.out.println("exception in getsm mailtype");
 				ex.printStackTrace();
 		}
-		System.out.println("GetSalesmanName found name " + name + " for email " + smemail);
+		//System.out.println("GetSalesmanName found name " + name + " for email " + smemail);
 		return name;
 	}
 	

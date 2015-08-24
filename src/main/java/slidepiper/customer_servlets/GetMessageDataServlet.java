@@ -85,7 +85,7 @@ public class GetMessageDataServlet extends HttpServlet {
 					output.put("customername", customername);
 					output.put("salesman", salesman);
 					
-					System.out.println("GetMessageDataServlet returns " + customername + " " + salesman + " for msgid " + msgid);
+					//System.out.println("GetMessageDataServlet returns " + customername + " " + salesman + " for msgid " + msgid);
 									
 					String res = output.toString();
 					response.setCharacterEncoding("utf-8");

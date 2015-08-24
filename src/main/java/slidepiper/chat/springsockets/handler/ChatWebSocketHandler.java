@@ -18,14 +18,14 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
   
   @Override
   public void afterConnectionEstablished(WebSocketSession session) throws Exception {
-	  System.out.println("WEBSOCKETS: new connection established");    
+	  //System.out.println("WEBSOCKETS: new connection established");    
     chatService.registerOpenConnection(session);
     
   }
   
   @Override
   public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
-	  System.out.println("WEBSOCKETS: afterconnectionclosed");
+	  //System.out.println("WEBSOCKETS: afterconnectionclosed");
     chatService.registerCloseConnection(session);
     
   }

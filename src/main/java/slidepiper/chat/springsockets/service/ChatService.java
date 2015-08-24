@@ -22,12 +22,12 @@ public class ChatService {
   private Map<WebSocketSession, ChatUser> users = new ConcurrentHashMap<WebSocketSession, ChatUser>();
   
   public void registerOpenConnection(WebSocketSession session) {
-	  System.out.println("WEBSOCKETS: register open connection");
+	  System.out.println("WEBSOCKETS: OPENING connection.");
     conns.add(session);
   }
   
   public void registerCloseConnection(WebSocketSession session) {
-	  System.out.println("WEBSOCKETS: register close connection");
+	  System.out.println("WEBSOCKETS: CLOSING connection.");
     ChatUser user = users.get(session);
     conns.remove(session);
     users.remove(session);

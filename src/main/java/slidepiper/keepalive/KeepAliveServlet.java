@@ -77,8 +77,8 @@ public class KeepAliveServlet extends HttpServlet {
     // this runs the first time the servlet is accessed.
 public void init(ServletConfig config) throws ServletException {
 		
-	System.out.println("KeepAliveServlet init");
-	System.out.println("KeepAliveServlet init. Starting timertask every X seconds");
+//	System.out.println("KeepAliveServlet init");
+//	System.out.println("KeepAliveServlet init. Starting timertask every X seconds");
 		Constants.updateConstants();
 		
 		KeepAliveTask task = new KeepAliveTask();
@@ -87,7 +87,7 @@ public void init(ServletConfig config) throws ServletException {
 		// start in 2 seconds, then every 3sec run the task.
 		timer.schedule(task, 2000, 3000);
 						
-		System.out.println("KeepAliveServlet init. done.");
+		System.out.println("KeepAliveServlet init done.");
 }
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
