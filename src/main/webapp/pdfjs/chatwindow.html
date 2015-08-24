@@ -207,7 +207,10 @@ http://slidepipertest-slidepiper.rhcloud.com/chatwindow.html
   						}
               
           	console.log("removeUser detected");
-            $(".user[data-user="+message.removeUser.username+"]").remove();
+          	
+          	// this causes some error, so I commented it.
+          	// users list is not shown anyway.
+            //$(".user[data-user="+message.removeUser.username+"]").remove();
             console.log("Removed user " + message.removeUser.username);
 
         } else             	
