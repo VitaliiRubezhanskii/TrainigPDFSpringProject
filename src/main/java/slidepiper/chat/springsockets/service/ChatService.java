@@ -45,7 +45,7 @@ public class ChatService {
   }
   
   public void processMessage(WebSocketSession session, String message) {
-	  System.out.println("WEBSOCKETS: process msg ");
+	  //System.out.println("WEBSOCKETS: process msg ");
     if (!users.containsKey(session)) {    	
     	// init from JSON.
     	ChatUser newUser = new ChatUser(message);
@@ -73,11 +73,12 @@ public class ChatService {
     
       System.out.println("WEBSOCKETS: New socket user: " + newUser.toJSON());
       users.put(session, newUser);
-      System.out.println("WEBSOCKETS: registered new user. ");
+      //System.out.println("WEBSOCKETS: registered new user. ");
 
    
       //broadcast him to everyone now
       String messageToSend = "{\"addUser\":" + newUser.toJSON() + "}";
+      int broadcastmatches = 0;
       for (WebSocketSession sock : conns) {    	  
     	  // get user for this session.
     	  ChatUser user = users.get(sock);
@@ -85,15 +86,17 @@ public class ChatService {
     	  //need to check if current user is in same session
     	  if (user.getSessionid().equalsIgnoreCase(newUser.getSessionid())) 
     	  		{
-  	 	  	  System.out.println("WEBSOCKETS: Found matching sessionid " + user.getSessionid() + " for user " + user.getUsername() + " and user " +newUser.getSessionid() + " broadcasting new user message." );
+    		  	broadcastmatches++;
+  	 	  	  //System.out.println("WEBSOCKETS: Found matching sessionid " + user.getSessionid() + " for user " + user.getUsername() + " and user " +newUser.getSessionid() + " broadcasting new user message." );
 			        try {        	
-			        	System.out.println("WEBSOCKETS: broadcasting new user to everybody in session: sending adduser msg: " + messageToSend);
+			        	//System.out.println("WEBSOCKETS: broadcasting new user to everybody in session: sending adduser msg: " + messageToSend);
 			          sock.sendMessage(new TextMessage(messageToSend));
 			        } catch (IOException e) {
 			          System.out.println("WEBSOCKETS ERROR - Error when sending broadcast addUser message");
 			        		}
     	  } //if
      }//for
+      		System.out.println("WEBSOCKETS: Broadcasted from "+newUser.getUsername()+  " to " + broadcastmatches + " users.");
    }else           
       // else to if sesssion is not registered.
       // this runs if user is already registered in session.        
@@ -103,18 +106,22 @@ public class ChatService {
 	   // just send a message string from this user.
       String messageToSend = "{\"message\": {\"user\":" + users.get(session).toJSON()
           + ", \"messagetext\":\"" + message.replace("\"", "\\\"") +"\"} }";
+      int broadcastnum=0;
       for (WebSocketSession sock : conns) {
     	  ChatUser user = users.get(sock); // user for this socket.
+    	  
     	  if (user.getSessionid().equalsIgnoreCase(users.get(session).getSessionid()))
     	       {
+    		  broadcastnum++;
 			        try {
-			        	System.out.println("WEBSOCKETS: broadcasting msg " + messageToSend);
+			        	//System.out.println("WEBSOCKETS: broadcasting msg " + messageToSend);
 			          sock.sendMessage(new TextMessage(messageToSend));
 			        } catch (IOException e) {
 			          System.out.println("WEBOSCKETS: Error when sending message " + messageToSend);
 			        		}
-    	       }
-      }
+    	       }    	  
+      		}
+      System.out.println("WEBSOCKETS: Broadcasted msg " + messageToSend + " to " + broadcastnum + " users.");      
     }
   }
 
