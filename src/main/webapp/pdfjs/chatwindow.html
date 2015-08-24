@@ -16,11 +16,14 @@ http://slidepipertest-slidepiper.rhcloud.com/chatwindow.html
   <style>
   	.chatcontainer {
   			width:100%;
-  	    height:233px;
-  	    opacity:0.55;
+  	    height:210px;
+  	    opacity:0.76;
+  	    color:black;
+  	    
   		}
     .chatcontentDiv {
-    	opacity:0.55;
+    	opacity:0.75;
+    	color:black;
       width:100%;
       height:130px;
       border-color: #ffffff;
@@ -32,23 +35,28 @@ http://slidepipertest-slidepiper.rhcloud.com/chatwindow.html
     }    
     	.chatcorners {    	
 						/*background: none repeat scroll 0 0 #aabbff;*/
-				    border-radius: 25px;
-				    border: 2px solid #ffaa99;
+				    border-radius: 3px;
+				    border: 2px solid #ff5544;
 				    padding: 10px;
     		}
     
     .chatusername {
       font-weight: bold;
-      color: #555599;
+      color: #000000;
+      font-style : italic;
+    }
+    	.msgtext {
+      font-weight: bold;
+      color: #220000;
     }
   
   </style>
 </head>
 <body>
-  <div class="chatcontainer chatcorners">    
+  <div class="chatcontainer chatcorners" id="chatContainer">    
     <div class="row">
       <div class="col-xs-12">
-        <div class="col-xs-11" id="chatWith">Chat with ...</div>
+        <div class="col-xs-10" id="chatWith">Chat with ...</div>
         <div class="col-xs-1"><button id="btnClose" class="btn btn-primary" style="width:100%;">X</button></div>
         <div class="chatcontentDiv col-xs-9" id="chatBox">
         </div>
@@ -153,6 +161,7 @@ http://slidepipertest-slidepiper.rhcloud.com/chatwindow.html
         // all messages I receive are already filtered by
         // server to sessionid so should be displayed.
         if (message.hasOwnProperty("addUser")) {
+        	showChat();
         	console.log("addUser detected");
           var d = document.createElement('div');
           $(d).addClass("chatusername user").text(message.addUser.username).attr("data-user", message.addUser.username.toString()).appendTo("#nicknamesBox");
@@ -187,14 +196,15 @@ http://slidepipertest-slidepiper.rhcloud.com/chatwindow.html
         } else             	
         // only regular msgs are sent - 
         if (message.hasOwnProperty("message")) {
+        	showChat();
         	console.log("regular message detected");
         	//regular message - we have
         	// message JSON with message and user insude.
           var d = document.createElement('div');
           var suser = document.createElement('span');
           var smessage = document.createElement('span');              
-          $(suser).addClass("username").text(message.message.user.username+" : ").appendTo($(d));
-          $(smessage).text(message.message.messagetext).appendTo($(d));
+          $(suser).addClass("chatusername").text(message.message.user.username+" : ").appendTo($(d));
+          $(smessage).addClass("msgtext").text(message.message.messagetext).appendTo($(d));
           $(d).appendTo("#chatBox");
           $("#chatBox").scrollTop($("#chatBox")[0].scrollHeight);
         		}      
@@ -215,9 +225,12 @@ http://slidepipertest-slidepiper.rhcloud.com/chatwindow.html
         if (e.keyCode == 13) {
           sendMessage();
 	            	}});
-	          $("#btnSend").click(function() {
-	            sendMessage();
+	      $("#btnSend").click(function() {
+	          sendMessage();
 	          	});          
+	      $("#btnClose").click(function() {
+		            hideChat();
+		          	});
     	}
    
   
@@ -259,9 +272,17 @@ http://slidepipertest-slidepiper.rhcloud.com/chatwindow.html
   $(document).ready(function() {
        startClient();    
     });
-    
-  //}); I think it's a mistake.
   
+ function hideChat()
+  {
+	  $("#chatContainer").style.visibility = "hidden";
+  }
+  
+ function showChat()
+  {
+	  $("#chatContainer").style.visibility = "visible";
+  }
+    
   </script>  
 </body>
 
