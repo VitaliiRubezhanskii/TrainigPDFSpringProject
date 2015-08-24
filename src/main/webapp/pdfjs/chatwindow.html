@@ -238,6 +238,16 @@ http://slidepipertest-slidepiper.rhcloud.com/chatwindow.html
           					if (slidenum>0)
           								{
           						$("#pageNumber").val(slidenum);
+          						
+          									
+          										// to avoid having the engine
+          										// read this as slide change event
+          										// and send another event to others
+          										// in chat, I must do these:
+          									cur_slide = slidenum;
+          									prev_slide = slidenum;
+          									// this way there won't be a slide
+          									// change event registered here.
           								}
           					else
           								{	
@@ -330,7 +340,7 @@ http://slidepipertest-slidepiper.rhcloud.com/chatwindow.html
   {
 	  	if (prev_slide != -1)
 	  		{
-    			socket.send("Changed to slide #" + prev_slide);
+    			socket.send("Changed to slide #" + $("#pageNumber").val());
 	  		}
   }
   

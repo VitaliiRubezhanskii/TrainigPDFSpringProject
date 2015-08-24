@@ -364,22 +364,20 @@ function loadChatWindow()
 			{
 						// run after 2 seconds, maybe the chat window 
 						// 	will stabilize its position.
-						setTimeout(function() {
+						setTimeout(function() {							
+							console.log("finished loading chat html");
+							// final callback on finishing to load chat window.
+							//load completed.								
+							maxY = window.innerHeight;								
+							chatDivHeight = chatDiv.offsetHeight;
+							chatDiv.style.top = (maxY - chatDivHeight)+"px";
 							
+							maxX = window.innerWidth;
+							chatDivWidth = chatDiv.offsetHeight;								
+							chatDiv.style.left = (maxX - chatDivWidth*1.4)+"px";
+							//finally, show it.
+							chatDiv.style.visibility = "visible";							
 						},  2000);
-						
-						console.log("finished loading chat html");
-						// final callback on finishing to load chat window.
-						//load completed.								
-						maxY = window.innerHeight;								
-						chatDivHeight = chatDiv.offsetHeight;
-						chatDiv.style.top = (maxY - chatDivHeight)+"px";
-						
-						maxX = window.innerWidth;
-						chatDivWidth = chatDiv.offsetHeight;								
-						chatDiv.style.left = (maxX - chatDivWidth*1.4)+"px";
-						//finally, show it.
-						chatDiv.style.visibility = "visible";
 			});
 	
 
