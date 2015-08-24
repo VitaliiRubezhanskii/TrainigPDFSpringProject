@@ -208,7 +208,7 @@ http://slidepipertest-slidepiper.rhcloud.com/chatwindow.html
         } else             	
         // only regular msgs are sent - 
         if (message.hasOwnProperty("message")) {        	
-        	console.log("regular message detected");
+        	console.log("regular message detected (also slide change)");
         	//regular message - we have
         	// message JSON with message and user insude.
           var d = document.createElement('div');
@@ -216,14 +216,12 @@ http://slidepipertest-slidepiper.rhcloud.com/chatwindow.html
           var smessage = document.createElement('span');              
           $(suser).addClass("chatusername").text(message.message.user.username+" : ").appendTo($(d));
           $(smessage).addClass("msgtext").text(message.message.messagetext).appendTo($(d));
-          $(d).appendTo("#chatBox");
-          $("#chatBox").scrollTop($("#chatBox")[0].scrollHeight);
           
           	if (quickchatmode==0) 
           				//not quickchat, need to change slides!
           				{
           				// change slide message
-          				if (message.message.messagetext.substring(0,18)
+          		if (message.message.messagetext.substring(0,18)
           						== "Changed to slide #") // 18 chars. 0..17
           						
           					{
@@ -233,10 +231,35 @@ http://slidepipertest-slidepiper.rhcloud.com/chatwindow.html
           								
           								// we're in full chat mode, so this should
           								// work - we have pdf viewer.
-          					$("#pageNumber").val(slidenum);
+          					if (slidenum>0)
+          								{
+          						$("#pageNumber").val(slidenum);
+          								}
+          					else
+          								{	
+	          					alert("bad slidenum " + slidenum);
+          								}
+          								
+          								// full chat - I DON'T show slidechange 
+													//messages - I just CHANGE slides.          								
+          					}
+          		else
+          					{
+          				//regular msg - display it anyway.
+          				$(d).appendTo("#chatBox");          			
           					}
           				}
-        		}      
+          	else
+          				{
+          						//quickchat mode -- always show messages
+          						// include slide changes.
+          			// append the message as real text message.
+          			$(d).appendTo("#chatBox");
+          				}
+          	// anyway, move chatbox as needed.
+            $("#chatBox").scrollTop($("#chatBox")[0].scrollHeight);
+            
+        }      // of regular msg
         else {alert("unknown message type" + message.toString());}
 		      	}
       
@@ -301,8 +324,10 @@ http://slidepipertest-slidepiper.rhcloud.com/chatwindow.html
   // only in non-quickchat mode, exchange slides between partners.
   function sendSlideNum()
   {
-	  
-    socket.send("Changed to slide #" + prev_slide);
+	  	if (prev_slide != -1)
+	  		{
+    			socket.send("Changed to slide #" + prev_slide);
+	  		}
   }
   
   
