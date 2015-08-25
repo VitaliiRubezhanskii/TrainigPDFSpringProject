@@ -150,9 +150,17 @@ function getSalesmanData() {
 			customername = msg.customername;
 			salesman = msg.salesman;
 			console.log("rcvd salesman data: smemail " + salesman_email + " custname: "+ customername +" sm name:"+ salesman);
-			
-			// I need this loaded data for the chat window.
-			loadChatWindow();
+
+			if (mobilecheck() == true)
+				{
+							console.log("loading chat. mobilecheck " + mobilecheck());
+					// 		I need this loaded data for the chat window.
+						loadChatWindow();
+				}
+			else
+				{
+						console.log("NOT loading chat. mobilecheck " + mobilecheck());
+				}
 		}
 	}); // end of ajax call
 }
@@ -379,7 +387,7 @@ function loadChatWindow()
 // start chat client.	
 								// it must be visible before calling width/height
 							//methods.
-							chatDiv[0].style.visibility = "visible";				
+							showChat();				
 				// position it correctly
 							maxY = window.outerHeight;								
 							chatDivHeight = chatDiv.outerHeight();
