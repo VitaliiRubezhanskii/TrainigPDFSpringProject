@@ -122,7 +122,7 @@ function addAlertBarChart(element, jsonTable)
 			      .attr("width", x.rangeBand())
 			      .attr("y", function(d) {
 			    	  			var yval =y(d.time);  
-			    	  			if (yval > 90) { yval=90;} // cutoff of 90
+			    	  			if (yval > 90) { yval=90.0;} // cutoff of 90
 			    	  			//otherwise return the time.
 			    	  return yval;
 			    	  })
