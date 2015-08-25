@@ -2,7 +2,10 @@
 package slidepiper.chat.springsockets.service;
 
 import java.io.IOException;
+
 import slidepiper.chat.*;
+import slidepiper.logging.CustomerLogger;
+
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -101,11 +104,36 @@ public class ChatService {
       // else to if sesssion is not registered.
       // this runs if user is already registered in session.        
     // this is a regular message, send it to session users.
-      	{
+      	{	   
       //Broadcast the message
 	   // just send a message string from this user.
       String messageToSend = "{\"message\": {\"user\":" + users.get(session).toJSON()
           + ", \"messagetext\":\"" + message.replace("\"", "\\\"") +"\"} }";
+      
+     	if (message.contains("Changed to slide #"))
+		   	{
+     				String[] parts = message.split("#");
+     				String part1 = parts[0]; // changed to slide 
+     				String part2 = parts[1]; // slide num
+     				int slidenum = Integer.parseInt(part2);
+     				users.get(session).setCurrentSlide(slidenum);
+     				System.out.println("WEBSOCKETS: found slidechange msg for user " + users.get(session).getUsername() +" slidenum " + slidenum);     				
+		   	}
+      else // it's not slidechange msg - just send it
+		    {		      
+		      String slideStr = "[slide #" + users.get(session).getCurrentSlide() + "] ";
+		      
+		      // no slide info for salesman messages.
+		      if (users.get(session).getRole() ==ChatUser.SALESMAN_ROLE)
+		      			{
+		    	  			slideStr = "";
+		      			}
+		      
+		      // NOTICE: msg here is WRONG
+		      // timezone offset is WRONG
+		      // If I need these in the future, NEED TO FIX.   
+		      CustomerLogger.LogEvent("chatmsgid", "CHAT_MESSAGE", "", "","<i>"+ users.get(session).getUsername() + "</i>: " +slideStr + message, users.get(session).getSessionid(), 0);
+		   	}
       int broadcastnum=0;
       for (WebSocketSession sock : conns) {
     	  ChatUser user = users.get(sock); // user for this socket.

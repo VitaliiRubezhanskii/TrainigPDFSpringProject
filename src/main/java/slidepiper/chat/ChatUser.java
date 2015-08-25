@@ -12,11 +12,20 @@ public class ChatUser {
 	String username;
 	String sessionid;
 	int role; // 0 - customer, 1 - salesman.
+	int currentSlide = 1;
 	
 	// role constants
 	public static final int CUSTOMER_ROLE = 0;
-	public static final int SALESMAN_RULE_ROLE = 0;
+	public static final int SALESMAN_ROLE = 1;
 	
+	
+	
+	public int getCurrentSlide() {
+		return currentSlide;
+	}
+	public void setCurrentSlide(int currentSlide) {
+		this.currentSlide = currentSlide;
+	}
 	public String getUsername() {
 		return username;
 	}

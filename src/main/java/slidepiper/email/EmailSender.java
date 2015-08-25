@@ -11,6 +11,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 import slidepiper.dataobjects.AlertData;
+import slidepiper.dataobjects.CustomerSession;
 import slidepiper.dataobjects.MessageInfo;
 import slidepiper.db.DbLayer;
 import slidepiper.keepalive.KeepAlivePacket;
@@ -106,6 +107,27 @@ public class EmailSender {
 					DbLayer.getCustomerName(mi.getCustomerEmail(),mi.getSalesManEmail()) +
 					" (" + mi.getCustomerEmail() + ")";
 					  			  
+			String whatNextBox = 
+							"<u>What next?</u><BR><BR>"
+							+HtmlRenderer.getButtonHtml(currentviewslink, "View Current Slides Report");
+			
+			CustomerSession cs = DbLayer.getSessionData(sessionId);
+			
+			System.out.println("Detecting mobile/PC device: browser data is " + cs.getAll_browser_data());
+			
+			if (cs.getAll_browser_data().contains("Is mobile device: true"))
+			{
+					System.out.println("Detected mobile device");
+					whatNextBox = whatNextBox + "<BR>Chat with customers is not available on mobile devices.<BR>";
+			}
+			else
+			{
+				System.out.println("Detected PC, not mobile.");
+				whatNextBox = whatNextBox	+HtmlRenderer.getButtonHtml(chatlink, "<b>Quick Chat</b> with " + custname) + "<BR>"
+						+HtmlRenderer.getButtonHtml(fullchatlink, "<b>Full Chat</b> + <b>Live Pitch</b> with " + custname) +"<BR>";
+			}
+						 							
+			whatNextBox = HtmlRenderer.addEnclosingBorders(whatNextBox);
 
 			EmailSender.sendEmail(mi.getSalesManEmail(), 
 					subj,				
@@ -114,11 +136,7 @@ public class EmailSender {
 								+"Hello, <BR><BR>This is Jacob Salesmaster. <BR>I am your customer alerts representative.<BR><BR>"  
 								+HtmlRenderer.addEnclosingBorders(mi.getCustomerEmail() + " has just clicked on the link you sent him!")
 								+" <BR><BR>"
-								+HtmlRenderer.addEnclosingBorders(
-								"<u>What next?</u><BR><BR>"
-								+HtmlRenderer.getButtonHtml(chatlink, "<b>Quick Chat</b> with " + custname) + "<BR>"
-								+HtmlRenderer.getButtonHtml(fullchatlink, "<b>Full Chat</b> + <b>Live Pitch</b> with " + custname) +"<BR>"
-								+ HtmlRenderer.getButtonHtml(currentviewslink, "View Current Report"))
+								+ whatNextBox 
 								+"<BR><BR> Glad to serve you, <BR>Jacob Salesmaster<BR>SlidePiper Alerts System"
 					)
 			);

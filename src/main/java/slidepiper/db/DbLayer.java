@@ -15,13 +15,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 import slidepiper.constants.Constants;
-import slidepiper.dataobjects.AlertData;
-import slidepiper.dataobjects.Customer;
-import slidepiper.dataobjects.MessageInfo;
-import slidepiper.dataobjects.Presentation;
-import slidepiper.dataobjects.Salesman;
-import slidepiper.dataobjects.SlideView;
-import slidepiper.dataobjects.HistoryItem;
+import slidepiper.dataobjects.*;
 
 public class DbLayer {
 	
@@ -119,7 +113,7 @@ public class DbLayer {
 			return 0;
 		}		
 	}
-	
+		
 	
 	public static MessageInfo getMessageInfo(String msgid)
 	{
@@ -463,6 +457,44 @@ public class DbLayer {
 		return mailtype;
 	}
 	
+	public static CustomerSession getSessionData(String session_id){												
+		String query =
+				"select * from customer_sessions where session_id=? LIMIT 1;";
+		CustomerSession s =null;
+		Connection conn=null;
+		try 
+		{ 
+			try
+			{
+					  conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
+						PreparedStatement statement = conn.prepareStatement(query);				
+						statement.setString(1, session_id);								
+				 		ResultSet resultset = statement.executeQuery();								
+						// should run only once, limit 1 above.
+							while (resultset.next()) {
+								String msg_id = resultset.getString(1);					   			   
+								String ipaddr= resultset.getString(2);
+								String found_session_id = resultset.getString(3);
+								String browser= resultset.getString(4);
+								String os= resultset.getString(5);
+								String all_browser_data= resultset.getString(6);
+								int done= resultset.getInt(7);
+								String timestamp= resultset.getString(8);								
+								s = new CustomerSession(msg_id, ipaddr, found_session_id, browser, os, all_browser_data, done, timestamp);
+							}
+			} finally{ if(conn!=null){ conn.close();}	}
+		} catch (Exception ex) {
+				System.out.println("exception in getsm mailtype");
+				ex.printStackTrace();
+		}
+		if (s==null)
+		{		
+			System.out.println("ERROR! cannot find customersession " + session_id);
+		}		
+		return s;
+	}
+
+	
 	public static String getSalesmanName(String smemail){		
 		String name="";		
 						
@@ -595,8 +627,7 @@ public class DbLayer {
 					+" FROM customer_sessions cs, msg_info mi " 
 					+" WHERE cs.done=0 AND cs.msg_id=mi.id AND mi.sales_man_email=? "
 					+" ORDER BY cs.timestamp DESC;";
-						 						
-			
+						 									
 			Connection conn=null;
 			try 
 			{
