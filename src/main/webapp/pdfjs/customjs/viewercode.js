@@ -151,7 +151,7 @@ function getSalesmanData() {
 			salesman = msg.salesman;
 			console.log("rcvd salesman data: smemail " + salesman_email + " custname: "+ customername +" sm name:"+ salesman);
 
-			if (mobilecheck() == true)
+			if (mobilecheck() == false)
 				{
 							console.log("loading chat. mobilecheck " + mobilecheck());
 					// 		I need this loaded data for the chat window.
@@ -159,6 +159,7 @@ function getSalesmanData() {
 				}
 			else
 				{
+						hideChat();
 						console.log("NOT loading chat. mobilecheck " + mobilecheck());
 				}
 		}
