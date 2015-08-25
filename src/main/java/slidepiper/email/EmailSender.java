@@ -109,8 +109,8 @@ public class EmailSender {
 					" (" + mi.getCustomerEmail() + ")";
 					  			  
 			String whatNextBox = 
-							"<u>What next?</u><BR><BR>"
-							+HtmlRenderer.getButtonHtml(currentviewslink, "View Current Slides Report");
+							"<u><b>What next?</b></u><BR><BR>"
+							+HtmlRenderer.getButtonHtml(currentviewslink, "View Current Slides Report")+"<BR>";
 			
 			CustomerSession cs = DbLayer.getSessionData(sessionId);
 			
@@ -169,7 +169,7 @@ public class EmailSender {
 			
 			if (msgs.isEmpty()) chatMessages = "No messages.";
 			
-			chatMessages = HtmlRenderer.addEnclosingBorders("<u>Messages in chat window:</u> <BR><BR>" + chatMessages);
+			chatMessages = HtmlRenderer.addEnclosingBorders("<u>Messages in chat window:</u> <BR>" + chatMessages);
 			
 			String msg = 
 					HtmlRenderer.addEnclosingHtml(
