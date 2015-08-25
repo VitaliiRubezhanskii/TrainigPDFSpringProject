@@ -126,7 +126,11 @@ function addAlertBarChart(element, jsonTable)
 			    	  			//otherwise return the time.
 			    	  return yval;
 			    	  })
-			      .attr("height", function(d) { return height - y(d.time); })
+			      .attr("height", function(d) {
+			    	  var yval =y(d.time);  
+	    	  		if (yval > 90) { yval=90.0;} // cutoff of 90
+			    	  return height - yval; 
+			    	  })
 			      .style("fill",function(d,i){return d.color;})			 
 			 .on("mouseover", function() {
 				    d3.select(this).classed("highlight", true);
