@@ -121,9 +121,10 @@ function addAlertBarChart(element, jsonTable)
 			      .attr("x", function(d) { return x(d.slide); })
 			      .attr("width", x.rangeBand())
 			      .attr("y", function(d) {
-			    	  			if (y(d.time) > 90) return 90; // cutoff of 90
+			    	  			var yval =y(d.time);  
+			    	  			if (yval > 90) { yval=90;} // cutoff of 90
 			    	  			//otherwise return the time.
-			    	  return y(d.time); 
+			    	  return yval;
 			    	  })
 			      .attr("height", function(d) { return height - y(d.time); })
 			      .style("fill",function(d,i){return d.color;})			 
@@ -147,7 +148,7 @@ function addAlertBarChart(element, jsonTable)
 			   	.attr("y", function(d) {
 			   			// make the cutoff on the height.
 			   		    var yval = y(d.time);
-			   		    if (yval>90) yval = 90;
+			   		    if (yval>90.0) {yval = 90.0;}
 			   		return yval - ytimeoffset;
 			   		})			   
 			   //.attr("font-family", "sans-serif")

@@ -119,7 +119,7 @@ public class EmailSender {
 			if (cs.getAll_browser_data().contains("Is mobile device: true"))
 			{
 					System.out.println("Detected mobile device");
-					whatNextBox = whatNextBox + "<BR>Chat with customers is not available on mobile devices.<BR>";
+					whatNextBox = whatNextBox + "<BR>Customer is using a mobile device, chat is not available for mobile devices.<BR>";
 			}
 			else
 			{
