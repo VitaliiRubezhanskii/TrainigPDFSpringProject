@@ -1,5 +1,4 @@
 git add .
-git commit -m "changed htmls"
+git commit -m "slidepipertest automatic commit"
 git push
-rhc tail -a sp
 
