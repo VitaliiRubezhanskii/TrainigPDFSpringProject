@@ -28,7 +28,9 @@ public class WebConfig extends WebMvcConfigurerAdapter implements WebSocketConfi
 	        ServletServerContainerFactoryBean container = new ServletServerContainerFactoryBean();
 	        
 	        // 10sec timeout - should be enough.
-	        container.setMaxSessionIdleTimeout(10000);
+	        // NOT GOOD - if no msgs in 10sec it disconnects.
+	        // Let's make it 1 hour.
+	        container.setMaxSessionIdleTimeout(1000 * 60 * 60);
 	        
 //	        container.setMaxTextMessageBufferSize(8192);
 	//        container.setMaxBinaryMessageBufferSize(8192);
