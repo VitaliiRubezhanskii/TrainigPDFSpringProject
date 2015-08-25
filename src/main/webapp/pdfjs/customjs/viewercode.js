@@ -184,8 +184,11 @@ function preInitView()
 				browser_data = "Browser name: " + navigator.appName + " " + navigator.appVersion 
 				+ "<BR>Platform: " + navigator.platform 
 				+ "<BR>Is mobile device: " + mobilecheck() + "<BR>";
-				
-				send_event("OPEN_SLIDES", prev_slide, "0", browser_data);									
+
+				if  (role==0) //send events only for customer, not salesman
+					{
+				send_event("OPEN_SLIDES", prev_slide, "0", browser_data);
+					}
 				preInitDone = true;
 		}
 }
@@ -280,7 +283,10 @@ function initView() {
 					var seconds_viewed = (now_datetime - prev_datetime) / 1000;
 		
 					// make POST req
+					if  (role==0) //send events only for customer, not salesman
+						{
 					send_event("VIEW_SLIDE", prev_slide, seconds_viewed, "1.2.3.4");
+						}
 
 					function isFunction(possibleFunction) {
 						  return typeof(possibleFunction) === typeof(Function);
@@ -305,8 +311,12 @@ function initView() {
 				var seconds_viewed = (now_datetime - prev_datetime) / 1000;
 				// get cur slide num
 				var slide_viewed_now = $("#pageNumber").val();
-				// send all these in an event, every 3sec.
-				keepalive_event(seconds_viewed, slide_viewed_now);
+				
+				if  (role==0) //send events only for customer, not salesman
+					{
+						// 	send all these in an event, every 3sec.
+						keepalive_event(seconds_viewed, slide_viewed_now);
+					}
 			}, 3000);
 		
 			// this.close();
