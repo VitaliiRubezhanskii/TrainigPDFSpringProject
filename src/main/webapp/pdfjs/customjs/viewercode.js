@@ -367,7 +367,8 @@ function loadChatWindow()
 						// run after 2 seconds, maybe the chat window 
 						// 	will stabilize its position.
 						// 	the timeout screws up the UI...
-						//setTimeout(function() {							
+					startClient();
+						setTimeout(function() {							
 		//					console.log("finished loading chat html");
 							// final callback on finishing to load chat window.
 							//load completed.
@@ -375,19 +376,20 @@ function loadChatWindow()
 	
 	
 // start chat client.	
-				startClient();
-				// position it correctly.
-							maxY = window.innerHeight;								
-							chatDivHeight = chatDiv.offsetHeight;
+								// it must be visible before calling width/height
+							//methods.
+							chatDiv.style.visibility = "visible";				
+				// position it correctly
+							maxY = window.outerHeight(true);								
+							chatDivHeight = chatDiv.outerHeight(true);
 							chatDiv.style.top = (maxY - chatDivHeight)+"px";
 							
-							maxX = window.innerWidth;
-							chatDivWidth = chatDiv.offsetHeight;								
+							maxX = window.outerWidth(true);
+							chatDivWidth = chatDiv.outerWidth(true);								
 							chatDiv.style.left = (maxX - chatDivWidth)+"px";
-							//finally, show it.
-							// removed this:  visibility: hidden
-							//chatDiv.style.visibility = "visible";							
-						//},  2000);
+							//finally, show it.							
+											
+						},  2000);
 	//		});
 	
 
