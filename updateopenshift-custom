@@ -1,0 +1,6 @@
+git pull
+git add .
+git commit -m "STABLE ver before Sivan returns."
+git push
+rhc tail -a slidepipertest -n slidepiper
+
