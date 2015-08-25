@@ -182,7 +182,7 @@ function preInitView()
 				// immediately send event and message to salesman.
 				
 				browser_data = "Browser name: " + navigator.appName + " " + navigator.appVersion 
-				+ "<BR>Platform: " + navigator.platform + "<BR>"
+				+ "<BR>Platform: " + navigator.platform 
 				+ "<BR>Is mobile device: " + mobilecheck() + "<BR>";
 				
 				send_event("OPEN_SLIDES", prev_slide, "0", browser_data);									
