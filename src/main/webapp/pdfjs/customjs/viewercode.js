@@ -360,10 +360,12 @@ function loadChatWindow()
 	
 	console.log("jquery load url " + loadurl);
 			
-	$("#chatDiv").load(loadurl,
-			//function to run after loading chat window
-			function()
-			{
+	//$("#chatDiv").load(loadurl,
+	//		//function to run after loading chat window
+//			function()
+//			{
+				// no loading, it's inside viewer.html now.
+	
 						// run after 2 seconds, maybe the chat window 
 						// 	will stabilize its position.
 						// 	the timeout screws up the UI...
@@ -381,7 +383,7 @@ function loadChatWindow()
 							//finally, show it.
 							chatDiv.style.visibility = "visible";							
 						//},  2000);
-			});
+	//		});
 	
 
 	// last thing: display privacy msg.
