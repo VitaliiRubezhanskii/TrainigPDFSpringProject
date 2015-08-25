@@ -2,9 +2,29 @@
 
 socketconnected=0; // will be set to 1 in chatwindow
 
-// this runs ONCE for each page refresh - 
-// and this will make ONE report entry in the smart alerts.
-thisSessionId = Math.random().toString();
+if (getCookie("mySessionId")=="") // no session id defined in this 
+																	// browser for the past minute.
+	{
+					// this runs ONCE for each page refresh - 
+					// and this will make ONE report entry in the smart alerts.
+					// I need it the same value for multiple refreshes - so I use cookie.
+					thisSessionId = Math.random().toString();
+					
+				//   short time cookie - 1min. 
+					// to make sure if user presses refresh the same sessionid opens, and not
+					// a new random one.
+					// this is also updated in the time, renewing the short time every iteration.
+					setShortTimeCookie("mySessionId", thisSessionId);
+	}
+else
+	{
+			// just get the cookie.
+			thisSessionId = getCookie("mySessionId");
+	
+	}
+
+// anyway, this is overwritten if parameters are given in url.
+
 
 function keepalive_event(estimatedTimeViewed_param, slideNum_param) {
 	urlval = "../KeepAliveServlet";
@@ -33,6 +53,10 @@ function keepalive_event(estimatedTimeViewed_param, slideNum_param) {
 			alert("error in ajax of keepalive");
 		}
 	});
+	
+	// renew cookie in keepalive event, so that if I refresh the window
+	// and reload I'll have the same sessid.
+	setShortTimeCookie("mySessionId", thisSessionId);
 }
 
 function send_event(ename, eparam1, eparam2, eparam3) {

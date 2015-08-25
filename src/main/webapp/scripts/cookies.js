@@ -6,6 +6,18 @@ function setCookie(cname, cvalue, exdays) {
     document.cookie = cname + "=" + cvalue + "; " + expires;
 }
 
+
+//   short time cookie - 1min. 
+function setShortTimeCookie(cname, cvalue) {
+    var d = new Date();
+    d.setTime(d.getTime() 
+    		+ 60000 // 1 minute
+    	//	(exdays*24*60*60*1000) //this is milliseconds
+    		);
+    var expires = "expires="+d.toUTCString();
+    document.cookie = cname + "=" + cvalue + "; " + expires;
+}
+
 function getCookie(cname) {
     var name = cname + "=";
     var ca = document.cookie.split(';');
