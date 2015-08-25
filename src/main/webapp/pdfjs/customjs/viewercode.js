@@ -383,12 +383,12 @@ function loadChatWindow()
 				// position it correctly
 							maxY = window.outerHeight;								
 							chatDivHeight = chatDiv.outerHeight;
-							var topVal = (maxY - chatDivHeight)+"px";
+							var topVal = (maxY - chatDivHeight).toString()+"px";
 							
 							
 							maxX = window.outerWidth;
-							chatDivWidth = chatDiv.outerWidth;
-							var leftVal = (maxX - chatDivWidth)+"px";
+							chatDivWidth = chatDiv.outerWidth;							
+							var leftVal = (maxX - chatDivWidth).toString()+"px";
 							
 							console.log("Setting chatDiv top " + topVal + " left " + leftVal);
 							
