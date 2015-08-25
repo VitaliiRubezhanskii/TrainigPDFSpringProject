@@ -384,14 +384,16 @@ function loadChatWindow()
 							maxY = window.outerHeight;								
 							chatDivHeight = chatDiv.outerHeight();
 							//console.log("maxY " + maxY + " chatDivHeight " + chatDivHeight);
-							topVal = maxY - chatDivHeight;
 							
 							
 							maxX = window.outerWidth;
 							chatDivWidth = chatDiv.outerWidth();							
 							//console.log("maxX " + maxX + " chatDivWidth " + chatDivWidth);
-							leftVal = maxX - chatDivWidth;
 							
+							
+							leftVal = maxX - chatDivWidth-25;
+							//topVal = maxY - chatDivHeight;
+							topVal = maxY - chatDivWidth;
 							//console.log("Setting chatDiv top " + topVal + " left " + leftVal);
 							
 							chatDiv[0].style.top = topVal+"px";
