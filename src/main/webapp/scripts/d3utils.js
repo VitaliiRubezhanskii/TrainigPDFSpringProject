@@ -120,7 +120,11 @@ function addAlertBarChart(element, jsonTable)
 			      .attr("class", "bar")
 			      .attr("x", function(d) { return x(d.slide); })
 			      .attr("width", x.rangeBand())
-			      .attr("y", function(d) { return y(d.time); })
+			      .attr("y", function(d) {
+			    	  			if (y(d.time) > 90) return 90; // cutoff of 90
+			    	  			//otherwise return the time.
+			    	  return y(d.time); 
+			    	  })
 			      .attr("height", function(d) { return height - y(d.time); })
 			      .style("fill",function(d,i){return d.color;})			 
 			 .on("mouseover", function() {
@@ -140,7 +144,12 @@ function addAlertBarChart(element, jsonTable)
 		    	  		return d.time;
 		    		  	})
 			   	.attr("x", function(d) { return x(d.slide) + x.rangeBand()/2; })
-			   	.attr("y", function(d) { return y(d.time) - ytimeoffset;})			   
+			   	.attr("y", function(d) {
+			   			// make the cutoff on the height.
+			   		    var yval = y(d.time);
+			   		    if (yval>90) yval = 90;
+			   		return yval - ytimeoffset;
+			   		})			   
 			   //.attr("font-family", "sans-serif")
 			   .attr("font-size", "9px")			   
 			   .style("text-anchor", "middle")
