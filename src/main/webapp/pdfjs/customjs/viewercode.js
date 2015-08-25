@@ -379,18 +379,18 @@ function loadChatWindow()
 // start chat client.	
 								// it must be visible before calling width/height
 							//methods.
-							chatDiv.style.visibility = "visible";				
+							chatDiv[0].style.visibility = "visible";				
 				// position it correctly
 							maxY = window.outerHeight;								
 							chatDivHeight = chatDiv.outerHeight();
 							//console.log("maxY " + maxY + " chatDivHeight " + chatDivHeight);
-							var topVal = maxY - chatDivHeight;
+							topVal = maxY - chatDivHeight;
 							
 							
 							maxX = window.outerWidth;
 							chatDivWidth = chatDiv.outerWidth();							
 							//console.log("maxX " + maxX + " chatDivWidth " + chatDivWidth);
-							var leftVal = maxX - chatDivWidth;
+							leftVal = maxX - chatDivWidth;
 							
 							//console.log("Setting chatDiv top " + topVal + " left " + leftVal);
 							
