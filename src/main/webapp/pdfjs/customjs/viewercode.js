@@ -382,13 +382,13 @@ function loadChatWindow()
 							chatDiv.style.visibility = "visible";				
 				// position it correctly
 							maxY = window.outerHeight;								
-							chatDivHeight = chatDiv.outerHeight;
+							chatDivHeight = chatDiv.offsetHeight;
 							console.log("maxY " + maxY + " chatDivHeight " + chatDivHeight);
 							var topVal = maxY - chatDivHeight;
 							
 							
 							maxX = window.outerWidth;
-							chatDivWidth = chatDiv.outerWidth;							
+							chatDivWidth = chatDiv.offsetWidth;							
 							console.log("maxX " + maxX + " chatDivWidth " + chatDivWidth);
 							var leftVal = maxX - chatDivWidth;
 							
