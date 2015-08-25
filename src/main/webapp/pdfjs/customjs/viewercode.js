@@ -348,7 +348,7 @@ function getSessionParams()
 function loadChatWindow()
 {
 	// load chat window into chatdiv.
-	//chatDiv = $("#chatDiv")[0];	
+	chatDiv = $("#chatDiv")[0];	
 //	alert("get url for cust name is " + getURLParameter("customername"));
 	// returns null if there's no parameter with that name.	
 	//getParams = "sessionid="+sessionid+"&salesman="+encodeURIComponent(salesman.trim())+"&customername="+encodeURIComponent(customername.trim())+"&role="+role;	
@@ -380,12 +380,12 @@ function loadChatWindow()
 							//methods.
 							chatDiv.style.visibility = "visible";				
 				// position it correctly
-							maxY = window.outerHeight;								
-							chatDivHeight = chatDiv.outerHeight;
+							maxY = window.outerHeight(true);								
+							chatDivHeight = chatDiv.outerHeight(true);
 							chatDiv.style.top = (maxY - chatDivHeight)+"px";
 							
-							maxX = window.outerWidth;
-							chatDivWidth = chatDiv.outerWidth;								
+							maxX = window.outerWidth(true);
+							chatDivWidth = chatDiv.outerWidth(true);								
 							chatDiv.style.left = (maxX - chatDivWidth)+"px";
 							//finally, show it.							
 											
