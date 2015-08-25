@@ -128,12 +128,19 @@ public class ChatService {
 		      			{
 		    	  			slideStr = "";
 		      			}
-		      
+		      System.out.println("getting sessid");
 		      // NOTICE: msg here is WRONG
 		      // timezone offset is WRONG
-		      // If I need these in the future, NEED TO FIX.   
-		      CustomerLogger.LogEvent("chatmsgid", "CHAT_MESSAGE", "", "","<i>"+ users.get(session).getUsername() + "</i>: " +slideStr + message, users.get(session).getSessionid(), 0);
+		      // If I need these in the future, NEED TO FIX.
+		      String sessid = users.get(session).getSessionid();
+		      System.out.println("WEBSOCKETS: making chatline");
+		      String chatline = "<i>"+ users.get(session).getUsername() + "</i>: " +slideStr + message;
+		      System.out.println("WEBSOCKETS: chatline is " + chatline);
+		      System.out.println("WEBSOCKETS: logging chat msg event");
+		      CustomerLogger.LogEvent("chatmsgid", "CHAT_MESSAGE", "", "",chatline, sessid, 0);
+		      System.out.println("WEBSOCKETS: logged chat msg event. DONE");
 		   	}
+     	
       int broadcastnum=0;
       for (WebSocketSession sock : conns) {
     	  ChatUser user = users.get(sock); // user for this socket.
