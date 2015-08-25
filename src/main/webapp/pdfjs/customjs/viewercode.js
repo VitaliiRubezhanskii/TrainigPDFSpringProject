@@ -358,7 +358,7 @@ function loadChatWindow()
 	// the params are not needed and not used.
 	// in full chat mode they are received from getSalesmanDataServlet
 	
-	console.log("jquery load url " + loadurl);
+	//console.log("jquery load url " + loadurl);
 			
 	//$("#chatDiv").load(loadurl,
 	//		//function to run after loading chat window
@@ -370,7 +370,7 @@ function loadChatWindow()
 						// 	will stabilize its position.
 						// 	the timeout screws up the UI...
 						//setTimeout(function() {							
-							console.log("finished loading chat html");
+		//					console.log("finished loading chat html");
 							// final callback on finishing to load chat window.
 							//load completed.								
 							maxY = window.innerHeight;								
@@ -381,7 +381,8 @@ function loadChatWindow()
 							chatDivWidth = chatDiv.offsetHeight;								
 							chatDiv.style.left = (maxX - chatDivWidth)+"px";
 							//finally, show it.
-							chatDiv.style.visibility = "visible";							
+							// removed this:  visibility: hidden
+							//chatDiv.style.visibility = "visible";							
 						//},  2000);
 	//		});
 	
