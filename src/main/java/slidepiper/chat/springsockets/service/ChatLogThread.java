@@ -17,8 +17,8 @@ public class ChatLogThread implements Runnable {
 	   }
 
 	   public void run() {
-		   System.out.println("CHATLOGTHREAD: Writing to log in thread");
-		   CustomerLogger.LogEvent("chatmsgid", "CHAT_MESSAGE", "", "",chatline, session_id, 0);
+		   System.out.println("CHATLOGTHREAD: Writing to log in thread. sessid " + session_id + " chatline: " + chatline);
+		   CustomerLogger.LogEvent("chatmsgid", "CHAT_MESSAGE", "0", "0",chatline, session_id, 0);
 		   System.out.println("CHATLOGTHREAD: Finished writing to log in thread");
 	   }
 	}
