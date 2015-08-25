@@ -1,5 +1,6 @@
 package slidepiper.email;
 
+import java.util.ArrayList;
 import java.util.Properties;
 
 import javax.mail.Message;
@@ -156,13 +157,27 @@ public class EmailSender {
 			// i=0 not important. no buttons or divs filled with code here. it's email.
 			String logoHtml = "<img src='www.slidepiper.com/img/logoOriginal.png' style='background-color: black;'></img>";
 
-			String barChartImageHtml = "<img src='"+barchartImageUrl+"'></img>";			
+			String barChartImageHtml = "<img src='"+barchartImageUrl+"'></img>";
+			
+			String chatMessages = "";
+			ArrayList<String> msgs = DbLayer.getChatMessages(p.getSessionId());
+			
+			for(String msg : msgs)
+			{
+				chatMessages += ("<BR>"+msg);
+			}
+			
+			if (msgs.isEmpty()) chatMessages = "No messages.";
+			
+			chatMessages = HtmlRenderer.addEnclosingBorders("<u>Messages in chat window:</u> <BR><BR>" + chatMessages);
+			
 			String msg = 
 					HtmlRenderer.addEnclosingHtml(
 							logoHtml+ "Hello, <BR><BR> This is Jacob Salesmaster. <BR> I am your SlidePiper reports representative. Please carefully review the following report. <BR><BR>"									
 									+HtmlRenderer.addEnclosingBorders(
 											HtmlRenderer.GenerateAlertHtml(ai, 0))+
 											barChartImageHtml+
+											chatMessages+
 							 "<BR><BR>Glad to serve you, <BR>Jacob Salesmaster<BR>SlidePiper Reports Team"
 					);
 			String custname = DbLayer.getCustomerName(mi.getCustomerEmail(),mi.getSalesManEmail());

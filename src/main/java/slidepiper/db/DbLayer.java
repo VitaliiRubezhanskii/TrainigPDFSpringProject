@@ -404,6 +404,36 @@ public class DbLayer {
 		return qs;
 	}
 	
+	public static ArrayList<String> getChatMessages(String sessionId){		
+		ArrayList<String> msgs = new ArrayList<String>();		
+						
+		String msgsQuery = "SELECT param3str as 'message' " +   
+		" FROM customer_events " + 
+		" WHERE event_name='CHAT_MESSAGE' "+ 
+		" AND session_id=?";
+		
+		Connection conn =null;
+		try 
+		{ 
+			try
+			{
+						conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
+						PreparedStatement statement = conn.prepareStatement(msgsQuery);				
+						statement.setString(1, sessionId);								
+				 		ResultSet resultset = statement.executeQuery();					
+						String msg;
+							while (resultset.next()) {
+								msg = resultset.getString(1);
+								msgs.add(msg);   			    
+							}
+			} finally{ if(conn!=null){ conn.close();}	}
+		} catch (Exception ex) {
+				System.out.println("exception in getqs");
+				ex.printStackTrace();
+		}
+		return msgs;
+	}
+	
 	public static String getSlidesName(String slidesId){		
 		String name = "";		
 						
