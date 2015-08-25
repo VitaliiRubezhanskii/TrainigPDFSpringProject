@@ -348,13 +348,11 @@ function getSessionParams()
 function loadChatWindow()
 {
 	// load chat window into chatdiv.
-	chatDiv = $("#chatDiv")[0];
-	
+	//chatDiv = $("#chatDiv")[0];	
 //	alert("get url for cust name is " + getURLParameter("customername"));
-	// returns null if there's no parameter with that name.
-	
+	// returns null if there's no parameter with that name.	
 	//getParams = "sessionid="+sessionid+"&salesman="+encodeURIComponent(salesman.trim())+"&customername="+encodeURIComponent(customername.trim())+"&role="+role;	
-	loadurl = "chatwindow.html"; //+"?"+getParams;
+	//loadurl = "chatwindow.html"; //+"?"+getParams;
 	// the params are not needed and not used.
 	// in full chat mode they are received from getSalesmanDataServlet
 	
@@ -372,7 +370,13 @@ function loadChatWindow()
 						//setTimeout(function() {							
 		//					console.log("finished loading chat html");
 							// final callback on finishing to load chat window.
-							//load completed.								
+							//load completed.
+	
+	
+	
+// start chat client.	
+				startClient();
+				// position it correctly.
 							maxY = window.innerHeight;								
 							chatDivHeight = chatDiv.offsetHeight;
 							chatDiv.style.top = (maxY - chatDivHeight)+"px";

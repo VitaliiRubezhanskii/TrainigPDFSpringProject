@@ -24,21 +24,7 @@ is_in_browser = 1;
 			      console.log("Opened socket.");
 			      showChat();
 			      //register the user
-			      //var nickname = $("#nickname").val();
-			      
-			      if (window.location.toString().indexOf("viewer.html"))
-			    	  {	
-			    	  // we're in pdf viewer
-			    	  		quickchatmode = 0;
-			    	  console.log("PDF viewer mode");
-			    	  
-			    	  }
-			      else
-			    	  {
-			    	  				//we're in small chat window.
-			    	  			quickchatmode = 1;
-			    	  			console.log("quickchat window mode");			    	  			
-			    	  }
+			      //var nickname = $("#nickname").val();			      
 			      			    	
 			    	if ( getURLParameter("customername") == null)
 			    		{
@@ -276,8 +262,8 @@ is_in_browser = 1;
     // maybe this will help it appear in correct order.
     // AND - solve HTTP FORBIDDEN issue (only on openshift)
     // SOLVED: I just put allowedRegion=*.
-    // Also I don't chat to appear immediately.
-    setTimeout(connectSocket,  5000);    
+    // Also I don't want chat to appear immediately.
+    setTimeout(connectSocket,  300);    
   } // of startClient
   
   function sendMessage() {
@@ -296,14 +282,7 @@ is_in_browser = 1;
     			socket.send("Changed to slide #" + $("#pageNumber").val());
 	  		}
   }
-  
-  
-  //startup
-  $(document).ready(function() {
-       startClient();    
-    });
-  
- function hideChat()
+  function hideChat()
   {	 
 	  $("#chatContainer")[0].style.visibility = "hidden";
   }
@@ -312,3 +291,27 @@ is_in_browser = 1;
   {
 	  $("#chatContainer")[0].style.visibility = "visible";
   }
+
+  
+  
+  /******************** RUN ON STARTUP *****************/
+ // check if quickchat or not, and act accordingly.
+  if (window.location.toString().indexOf("viewer.html") > -1)
+  {	
+  // we're in pdf viewer
+  		quickchatmode = 0;
+  		console.log("PDF viewer mode");
+  		//startClient will be run from viewercode.js
+  }
+else
+  {
+  				//we're in small chat window.
+  			quickchatmode = 1;
+  			console.log("quickchat window mode");
+  		  //startup
+  		  $(document).ready(function() {
+  		       startClient();    
+  		  		});  		  
+  }
+
+  
