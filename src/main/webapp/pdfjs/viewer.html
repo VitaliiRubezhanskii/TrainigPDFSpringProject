@@ -35,12 +35,15 @@ http://sourceforge.net/adobe/cmap/wiki/License/
 <link rel="resource" type="application/l10n" href="locale/locale.properties"/>
 <script src="l10n.js"></script>
 <script src="../build/pdf.js"></script>
-
-
-
     <script src="debugger.js"></script>
     <script src="viewer.js"></script>
-
+    
+    <!-- scripts for chat (one more at the end) -->   
+  <link rel="stylesheet" href="bootstrap-3.0.3/css/bootstrap.css">
+  <script type="text/javascript" src="../jqm/jquery.js"></script>
+  <script src="sockjs/sockjs-0.3.js"></script>  
+  <link rel="stylesheet" href="customcss/chat.css"/>
+    
   </head>
 
   <body tabindex="1" class="loadingInProgress">
@@ -49,17 +52,47 @@ http://sourceforge.net/adobe/cmap/wiki/License/
     <div id="outerContainer">
     <div style="z-index: 1000; position: relative;  opacity: 0.9; min-height:7%; width: 99%; text-align: right;">	  		  											
 		</div>		
-			<div style="z-index: 1000; position: relative;  opacity: 0.9; min-height:30%; width: 99%; text-align: right;">	  		  
+	<!-- 		<div style="z-index: 1000; position: relative;  opacity: 0.9; min-height:30%; width: 99%; text-align: right;">	  		  
 				<img  style="vertical-align: bottom; z-index: 1000; position: relative; height: 200px; width: 200px; text-align: right;" id="sendq" src="../img/askmebubble.png"/>							
-	</div>	
-		<BR><BR><BR>
-  	<div id="privacyMessage" style="position: relative; z-index: 1000; opacity: 0.9; text-align: center;">		 	  		 
-				<font color="white" style="font-size:x-small">- By using this website you agree to the <a href="../privacy.html"> Terms of Use.</a></font> 							
+				</div> -->
+				
+				<!--  *********************************** CHAT DIV -->
+		<div id="chatDiv" style="position: absolute; z-index:1000; width: 25%;  visibility: hidden;">
+		 <div class="chatcontainer chatcorners" id="chatContainer">    
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="col-xs-10" id="chatWith" style="word-wrap: break-word;">Chat with ...</div>
+        <div class="col-xs-1"><button id="btnClose" class="btn btn-primary" style="width:100%;">X</button></div>
+        <div class="chatcontentDiv col-xs-9" id="chatBox">
+        </div>
+      </div>
+      <div class="col-xs-3" style="display: none;">
+        <div><h3>Users</h3></div>
+        <div class="chatcontentDiv" id="nicknamesBox" >
+        </div>
+      </div>
+    </div>
+    <div class="row" style="margin-top:3px;">
+      <div class="col-xs-9"><input type="text" id="txtMessage" class="form-control" placeholder="Type message"/></div>
+      <div class="col-xs-3"><button id="btnSend" class="btn btn-primary" style="width:100%;">Send</button></div>
+    </div>
+  </div>	
+		</div>
+		<!-- ************************ END CHAT DIV -->
+				
+  	<div id="logoMessage" style="position: relative; z-index: 1000; opacity: 0.9; text-align: center; background-color: rgba(0, 0, 0, 0.0);">
+  		<img src='../img/logoOriginal.png'></img><BR>
+  		<font color="black" style="font-size:large; background-color: rgba(0, 0, 0, 0.0);">SlidePiper Engagement Platform</a></font><BR><BR>
+  		</div>
+  		<div id="privacyMessage" style="position: absolute; text-align: center; font-size:x-small; z-index:1000; visibility: hidden;">		 	  		 
+				<font color="black" >
+				- By using this website you agree to the <a href="../privacy.html"> Terms of Use.</a></font> 							
 		</div>		    		    	 
 			
       <div id="sidebarContainer">
         <div id="toolbarSidebar">
-          <div class="splitToolbarButton toggled">
+          <div class="splitToolbarButton toggled
+          ">
             <button id="viewThumbnail" class="toolbarButton group toggled" title="Show Thumbnails" tabindex="2" data-l10n-id="thumbs">
                <span data-l10n-id="thumbs_label">Thumbnails</span>
             </button>
@@ -426,12 +459,14 @@ http://sourceforge.net/adobe/cmap/wiki/License/
   </div>
 </div>
 
-
+<!--  additional scripts -->
 	<script type="text/javascript" src="../jqm/jquery.js"></script>
 	<script src="../scripts/cookies.js"></script>
 	<script src="../scripts/clientutils.js"></script>
-	<script src="../scripts/timezone.js"></script>	
-	<script type="text/javascript" src="customviewercode.js"></script>
+	<script src="../scripts/timezone.js"></script>
+	<script type="text/javascript" src="customjs/chat.js"></script>	
+	<script type="text/javascript" src="customjs/viewercode.js"></script>
+	  
 
 
 <!--this is the Google analytics tracking code-->

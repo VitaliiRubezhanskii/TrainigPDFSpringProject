@@ -3,6 +3,12 @@
 	$("#gotoManage").bind(
 			"click",
 			function(event, ui) {
+								
+				if (navigator.cookieEnabled==false)
+					{
+						swal("Login Error", "You must enable cookies in your browser to use the system.", "error");								
+					}
+				
 				emailval = $("#usernamefield").val().toLowerCase();
 				passwordval = $("#passwordfield").val();
 

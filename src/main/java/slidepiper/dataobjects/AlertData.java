@@ -1,32 +1,98 @@
 package slidepiper.dataobjects;
 
+import java.util.ArrayList;
+
 public class AlertData {
-			public AlertData() {
+	String session_id, browser, os, all_browser_data, open_time, message_text,  customer_email, customer_name, send_time, slides_id;
+	
+	
+	public AlertData(String session_id, String browser, String os,
+			String all_browser_data, String open_time, String message_text,
+			String customer_email, String customer_name, String send_time,
+			String slides_id, String slides_name, ArrayList<String> actions,
+			ArrayList<String> questions) {
 		super();
-	}
-
-			public String getCustomer_email() {
-		return customer_email;
-	}
-
-	public void setCustomer_email(String customer_email) {
+		this.session_id = session_id;
+		this.browser = browser;
+		this.os = os;
+		this.all_browser_data = all_browser_data;
+		this.open_time = open_time;
+		this.message_text = message_text;
 		this.customer_email = customer_email;
+		this.customer_name = customer_name;
+		this.send_time = send_time;
+		this.slides_id = slides_id;
+		this.slides_name = slides_name;
+		this.actions = actions;
+		this.questions = questions;
 	}
 
+	public String getAll_browser_data() {
+		return all_browser_data;
+	}
+
+	public void setAll_browser_data(String all_browser_data) {
+		this.all_browser_data = all_browser_data;
+	}
+
+	String slides_name;
 	public String getSlides_name() {
 		return slides_name;
+	}
+	
+	public String getCustomer_name() {
+		return customer_name;
+	}
+
+	public void setCustomer_name(String customer_name) {
+		this.customer_name = customer_name;
 	}
 
 	public void setSlides_name(String slides_name) {
 		this.slides_name = slides_name;
 	}
 
-	public String getMsg_text() {
-		return msg_text;
+	ArrayList<String> actions = new ArrayList<String>();
+	ArrayList<String> questions = new ArrayList<String>();
+	
+	public ArrayList<String> getActions() {
+		return actions;
 	}
 
-	public void setMsg_text(String msg_text) {
-		this.msg_text = msg_text;
+	public void setActions(ArrayList<String> actions) {
+		this.actions = actions;
+	}
+
+	public ArrayList<String> getQuestions() {
+		return questions;
+	}
+
+	public void setQuestions(ArrayList<String> questions) {
+		this.questions = questions;
+	}
+
+	public String getSession_id() {
+		return session_id;
+	}
+
+	public void setSession_id(String session_id) {
+		this.session_id = session_id;
+	}
+
+	public String getBrowser() {
+		return browser;
+	}
+
+	public void setBrowser(String browser) {
+		this.browser = browser;
+	}
+
+	public String getOs() {
+		return os;
+	}
+
+	public void setOs(String os) {
+		this.os = os;
 	}
 
 	public String getOpen_time() {
@@ -37,6 +103,22 @@ public class AlertData {
 		this.open_time = open_time;
 	}
 
+	public String getMessage_text() {
+		return message_text;
+	}
+
+	public void setMessage_text(String message_text) {
+		this.message_text = message_text;
+	}
+
+	public String getCustomer_email() {
+		return customer_email;
+	}
+
+	public void setCustomer_email(String customer_email) {
+		this.customer_email = customer_email;
+	}
+
 	public String getSend_time() {
 		return send_time;
 	}
@@ -45,43 +127,22 @@ public class AlertData {
 		this.send_time = send_time;
 	}
 
-	String customer_email, customer_name, slides_name, msg_text, open_time, send_time, msg_id, session_id;
-
-	public String getCustomer_name() {
-		return customer_name;
+	public String getSlides_id() {
+		return slides_id;
 	}
 
-	public void setCustomer_name(String customer_name) {
-		this.customer_name = customer_name;
+	public void setSlides_id(String slides_id) {
+		this.slides_id = slides_id;
 	}
 
-	public AlertData(String customer_email, String customer_name, String slides_name,
-			String msg_text, String open_time, String send_time, String msg_id,
-			String session_id) {
-		super();
-		this.customer_email = customer_email;
-		this.customer_name = customer_name;
-		this.slides_name = slides_name;
-		this.msg_text = msg_text;
-		this.open_time = open_time;
-		this.send_time = send_time;
-		this.msg_id = msg_id;
-		this.session_id = session_id;
-	}
-
-	public String getMsg_id() {
-		return msg_id;
-	}
-
-	public void setMsg_id(String msg_id) {
-		this.msg_id = msg_id;
-	}
-
-	public String getSession_id() {
-		return session_id;
-	}
-
-	public void setSession_id(String session_id) {
-		this.session_id = session_id;
+	@Override
+	public String toString() {
+		return "AlertData [session_id=" + session_id + ", browser=" + browser
+				+ ", os=" + os + ", all_browser_data=" + all_browser_data
+				+ ", open_time=" + open_time + ", message_text=" + message_text
+				+ ", customer_email=" + customer_email + ", customer_name="
+				+ customer_name + ", send_time=" + send_time + ", slides_id="
+				+ slides_id + ", slides_name=" + slides_name + ", actions="
+				+ actions + ", questions=" + questions + "]";
 	}			
 }

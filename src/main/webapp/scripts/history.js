@@ -260,7 +260,7 @@
 		for (var i = 0; i < session_ids.length; i++) {
 			curSessId = session_ids[i];
 			// each has an ajax event to get the data:
-//			console.log("calling getquestions event");
+		// console.log("calling getquestions event");
 			showWaitMsg();
 			$
 					.ajax({

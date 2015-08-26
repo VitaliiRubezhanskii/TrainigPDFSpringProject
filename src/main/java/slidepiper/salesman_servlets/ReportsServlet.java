@@ -2,12 +2,6 @@ package slidepiper.salesman_servlets;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 
 import javax.servlet.ServletConfig;
@@ -26,6 +20,7 @@ import slidepiper.dataobjects.AlertData;
 import slidepiper.dataobjects.HistoryItem;
 import slidepiper.dataobjects.SlideView;
 import slidepiper.db.DbLayer;
+import slidepiper.ui_rendering.*;
 
 /**
  * Servlet implementation class ReportsServlet
@@ -42,9 +37,7 @@ public class ReportsServlet extends HttpServlet {
         // TODO Auto-generated constructor stub
     }
 
-    public void init(ServletConfig config) throws ServletException {
-		
-			Constants.updateConstants();
+    public void init(ServletConfig config) throws ServletException {				
 			DbLayer.init();
     	}
 	
@@ -89,6 +82,15 @@ public class ReportsServlet extends HttpServlet {
 									ArrayList<AlertData> alerts = DbLayer.getAlerts(input.getString("email"));					
 									output.put("alerts", alerts);
 									break;
+							case "getAlertsHtml":											
+								//System.out.println("making alerts HTML");//
+								ArrayList<AlertData> alertlist = DbLayer.getAlerts(input.getString("email"));
+								//System.out.println("rcvd alerts objs");//
+								String alertsHtml = HtmlRenderer.GenerateAlertsHtml(alertlist);
+								//System.out.println("rcvd alerts html: " + alertsHtml);//
+								output.put("alertsHtml", alertsHtml);
+								//System.out.println("Sent alerts html");
+								break;									
 							case "getHistory":					
 								System.out.println("calling getHistory with email " + input.getString("email"));
 								ArrayList<HistoryItem> his = DbLayer.getHistory(input.getString("email"));					
@@ -103,16 +105,14 @@ public class ReportsServlet extends HttpServlet {
 									//	System.out.println("calling get slide views");
 										ArrayList<SlideView> slideviews = DbLayer.getSlideViews(input.getString("sessionId"));
 										//for(SlideView sv : slideviews)
-										//{	
-												//System.out.println("Slideview: num " + sv.getSlideNum() + " time " + sv.getTimeViewed());
-										//}
+										//{System.out.println("Slideview: num " + sv.getSlideNum() + " time " + sv.getTimeViewed());}
 										output.put("slideviews", slideviews);
 									break;
 							case "getQuestions":
-								//System.out.println("calling getQ");
-								ArrayList<String> qs = DbLayer.getQuestions(input.getString("sessionId"));
-								output.put("questions", qs);
-							break;
+									//System.out.println("calling getQ");
+									ArrayList<String> qs = DbLayer.getQuestions(input.getString("sessionId"));
+									output.put("questions", qs);
+									break;
 							case "setDone":
 								System.out.println("calling setDone for sessid " + input.getString("sessionId"));
 								// set done for this session id.

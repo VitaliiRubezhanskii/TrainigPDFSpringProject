@@ -1,9 +1,12 @@
 package slidepiper.salesman_servlets;
 
 import java.awt.TrayIcon.MessageType;
+
+
 import java.io.BufferedReader;
 
 import slidepiper.*;
+import slidepiper.ui_rendering.*;
 import slidepiper.constants.Constants;
 import slidepiper.dataobjects.Customer;
 import slidepiper.dataobjects.Presentation;
@@ -45,7 +48,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 @WebServlet("/ManagementServlet")
-
 public class ManagementServlet extends HttpServlet {
 	
 	private static final long serialVersionUID = 1L;
@@ -64,10 +66,19 @@ public class ManagementServlet extends HttpServlet {
         super();
     }
 
-	public void init(ServletConfig config) throws ServletException {		
-			DbLayer.init();
+	public void init(ServletConfig config) throws ServletException {
+		// to start auto put in web.xml:
+/*
+<servlet>
+    <servlet-name>ManagementServlet</servlet-name>
+    <servlet-class>slidepiper.salesman_servlets.ManagementServlet</servlet-class>
+    <load-on-startup>1</load-on-startup>
+</servlet>
+*/
+			System.out.println("Init ManagementServlet");
+			DbLayer.init();				
 	}
-	
+		
 	/***********************		GET METHODS		*********************************/
 	
 	/***********************		 DO-POST		*********************************/
@@ -93,25 +104,12 @@ public class ManagementServlet extends HttpServlet {
 			
 			switch(action){			
 			case "changeSalesmanPassword":
-				System.out.println("Salesman change pw");				
-				Salesman checkSalesman1 = new Salesman(input.getString("email"), input.getString("oldpassword"), null, null, null);
-				Salesman ourSalesman = null;
-				for(int i = 0; i < DbLayer.salesmen.size(); i++){
-					if (DbLayer.salesmen.get(i).getEmail().equalsIgnoreCase(checkSalesman1.getEmail()))
-					{
-						System.out.println("found correct salesman in db. password is: "+DbLayer.salesmen.get(i).getPassword());
-					}
-					if(DbLayer.salesmen.get(i).getEmail().equals(checkSalesman1.getEmail()) && DbLayer.salesmen.get(i).getPassword().equalsIgnoreCase(checkSalesman1.getPassword())){
-						ourSalesman = DbLayer.salesmen.get(i);
-						salesman_found = 1;
-						break;
-					}
-				}
-				if ((salesman_found==1)&&(ourSalesman!=null))
+				System.out.println("Salesman change pw");
+							
+				// check old pw given and in db
+				if (input.getString("oldpassword").equalsIgnoreCase(DbLayer.getSalesmanPassword(input.getString("email"))))
 				{
-					// set pw both in DB and in local array
-						DbLayer.setPassword(input.getString("email"), input.getString("newpassword"));
-						ourSalesman.setPassword(input.getString("newpassword"));
+						DbLayer.setPassword(input.getString("email"), input.getString("newpassword"));						
 						output.put("success", 1);
 						System.out.println("pw change successfully");
 				}
@@ -122,59 +120,56 @@ public class ManagementServlet extends HttpServlet {
 				}				
 				break;
 						
-				case "customerLogin": ///there's NO customer login at the moment.
-					int customer = 0;
-					String customerEmail = input.getString("email");
-					System.out.println("Login with email:" + customerEmail);
-					//System.out.println("comparing to customers, how many??="+customers.size() );
-					for(int i = 0; i < DbLayer.customers.size(); i++){
-						if(DbLayer.customers.get(i).getEmail().equalsIgnoreCase(customerEmail)){
-							customer = 1;
-							//System.out.println("Login with email:" + customerEmail + " compare to " + DbLayer.customers.get(i).getEmail() + " result " + customer);
-							break;
-						}
-						
-					}
-					output.put("customer", customer);
-					break;
-					
 				case "salesmanLogin":
-					System.out.println("Salesman logging in");					
-					Salesman checkSalesman = new Salesman(input.getString("email"), input.getString("password"), null, null, null);
-					for(int i = 0; i < DbLayer.salesmen.size(); i++){
-						if (DbLayer.salesmen.get(i).getEmail().equalsIgnoreCase(checkSalesman.getEmail()))
-						{
-							System.out.println("found correct salesman in db. password is: "+DbLayer.salesmen.get(i).getPassword());
-						}
-						if(DbLayer.salesmen.get(i).getEmail().equals(checkSalesman.getEmail()) && DbLayer.salesmen.get(i).getPassword().equalsIgnoreCase(checkSalesman.getPassword())){						
-							salesman_found = 1;
-							break;
-						}
-					}
-					output.put("salesman", salesman_found);
+					System.out.println("Salesman logging in");
+					int login_ok = 0;
+					
+					if (DbLayer.getSalesmanPassword(
+							input.getString("email")).equalsIgnoreCase(
+									input.getString("password")))
+					{
+							login_ok = 1;
+					}					
+					output.put("salesman", login_ok);
 					break;
 					
 				case "getSalesmanData":
-					//System.out.println("Sending salesmandata");
-					DbLayer.getPresentations();
+					//System.out.println("Sending salesmandata");				
 					ArrayList<Customer> custs = DbLayer.getMyCustomers(input.getString("email"));
 					//System.out.println("input email: " + input.getString("email") + " # customers: " + custs.size());					 
-					output.put("myCustomers", custs);
-					
+					output.put("myCustomers", custs);					
 					ArrayList<Presentation> mypres = DbLayer.getMyPresentations(input.getString("email"));
 					output.put("presentations", mypres);
 					//System.out.println("Sending salesmandata.done");
 					break;
 					
 				case "sendPresentationToCustomer":									
-					String msgtext = input.getString("msgtext");				    											
-					String msglink = "http://www.slidepiper.com/pdfjs/viewer.html?"
-							//salesman_email="+
-							//input.getString("salesman_email")
-							// cannot put exta param in mailto, 
-							// not & can be in msg body.
-							+ "file=/file/"+
-							input.getString("docid") + "#zoom=page-fit";
+					String msgtext = input.getString("msgtext");
+					
+					String appname = System.getenv("OPENSHIFT_APP_NAME");
+					System.out.println("making link for app appname " + appname);						
+					String msglink;
+					if (appname==null) //running locally
+					{
+						msglink = "localhost:8080/sp/pdfjs/viewer.html?file=/sp/file/"+ input.getString("docid") + "#zoom=page-fit";
+					}
+					else
+					{
+						 if (appname.equalsIgnoreCase("slidepipertest"))
+						 {
+							 msglink = "http://slidepipertest-slidepiper.rhcloud.com/pdfjs/viewer.html?file=/file/"+ input.getString("docid") + "#zoom=page-fit";
+						 }
+						 else
+							 if (appname.equalsIgnoreCase("sp")) 
+							 {
+								 msglink = "http://www.slidepiper.com/pdfjs/viewer.html?file=/file/"+ input.getString("docid") + "#zoom=page-fit";
+							 }
+							 else
+							 {
+								 	msglink = "CANNOT MAKE LINK";
+							 }							 
+					}
+					
 
 					msgtext = msgtext + "<br>" + msglink;
 														
@@ -182,7 +177,7 @@ public class ManagementServlet extends HttpServlet {
 					System.out.println("sending msg from:  "  + input.getString("salesman_email") + " tz offset " + timezone_offset);					
 					
 					//does not really send, just write to db. sent using mailto.
-						DbLayer.sendMessage(input.getString("docid"), input.getString("salesman_email"), "no email password", input.getString("customers"),
+						DbLayer.sendMessage(input.getString("docid"), input.getString("salesman_email"), "no email password", input.getString("customeremails"),
 							input.getString("slides_ids"), msgtext, "", input.getString("msgsubj"), timezone_offset
 							);
 					

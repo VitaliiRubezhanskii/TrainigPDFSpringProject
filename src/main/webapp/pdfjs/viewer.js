@@ -4916,6 +4916,8 @@ var PDFViewer = (function pdfViewer() {
       if (pageView) {
         this._ensurePdfPageLoaded(pageView).then(function () {
           this.renderingQueue.renderView(pageView);
+//                    alert("pdf loaded");
+                                initView(); //this is THE PLACE!!! run after pdf is shown.
         }.bind(this));
         return true;
       }
@@ -5706,7 +5708,8 @@ var PDFViewerApplication = {
   initialize: function pdfViewInitialize() {
     //added:
         // my custom init function.    
-      initView();
+//      initView();
+// I put it elsewhere, where it's run AFTER pdf is visible so that loading time is not counted.
 
     var pdfRenderingQueue = new PDFRenderingQueue();
     pdfRenderingQueue.onIdle = this.cleanup.bind(this);

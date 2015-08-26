@@ -18,7 +18,7 @@ public class CustomerLogger {
 	
 	public static void LogEvent(String id, String event_name, String param1, String param2, String param3, String sessionId, int timezone_offset_min)
 	{
-				System.out.println("Parameters to CustomerLogger.LogEvent: id ..." +id + "event " + event_name +  " param1 " + param1  + " param2 " + param2 + " param3 " + param3 + " timezone offset: " + timezone_offset_min);
+				//System.out.println("CustLog: id " +id + "event " + event_name +  " prm1 " + param1  + " prm2 " + param2 + " prm3 " + param3 + " timezone offs: " + timezone_offset_min);
 				Constants.updateConstants();
 				Connection conn = null; // connection to the database
 				
@@ -40,7 +40,7 @@ public class CustomerLogger {
 							// sends the statement to the database server
 							int row = statement.executeUpdate();
 							if (row > 0) { 
-								String message = "Logged customer event. id " +id + "event " + event_name +  " param1 " + param1  + " param2 " + param2 + " param3 " + param3 ;
+								String message = "custlog: id " +id + " evt " + event_name +  " prm1 " + param1  + " prm2 " + param2 + " prm3 " + param3 ;
 								System.out.println(message);								
 							}							
 							
@@ -49,18 +49,18 @@ public class CustomerLogger {
 							{							
 										sql = "INSERT INTO customer_sessions (msg_id, ipaddr, session_id, browser, operating_system, all_browser_data, done, timestamp) values "
 												+ "		(?, ?, ?, ?, ?, ?, 0, DATE_ADD(UTC_TIMESTAMP(),INTERVAL "+ (-timezone_offset_min)+" MINUTE) )";
-										System.out.println("sql for OEN_SLIDES is " + sql);
+										//System.out.println("sql for OEN_SLIDES is " + sql);
 										statement = conn.prepareStatement(sql);
 										statement.setString(1, id);						
 										statement.setString(2, "1.2.3.4");
 										statement.setString(3, sessionId);
 										statement.setString(4, "browser");
 										statement.setString(5, "os");
-										statement.setString(6, "alldata");																	
+										statement.setString(6, param3);																	
 										// sends the statement to the database server
 										row = statement.executeUpdate();
 										if (row > 0) { 
-											String message = "NEW SESSION!. id " +id + "event " + event_name +  " param1 " + param1  + " param2 " + param2 + " param3 " + param3 ;
+											String message = "CustLog: NEW SESSION!. id " +id + "event " + event_name +  " param1 " + param1  + " param2 " + param2 + " param3 " + param3 ;
 											System.out.println(message);								
 										}
 							}														
@@ -80,23 +80,11 @@ public class CustomerLogger {
 						    }
 						}          
 				}
-				
-				/// send email if opened presentation
-				if (event_name.equalsIgnoreCase("OPEN_SLIDES"))
-				{								
-						System.out.println("open slides event - sending email");						
-					  MessageInfo mi = DbLayer.getMessageInfo(id);
-					  System.out.println("email to : " + mi.getSalesManEmail());
-						EmailSender.sendEmail(mi.getSalesManEmail(), 
-								"SlidePiper Alert for email " + mi.getCustomerEmail(),
-								"Hello, <BR><BR>This is Jacob Salesmaster. <BR>I am your customer alerts representative.<BR><BR>" + mi.getCustomerEmail() + " has just clicked on the link you sent him! <BR><BR> Glad to serve you, <BR>Jacob Salesmaster<BR>SlidePiper Alerts System"
-								);
-				}
-				
+								
 				/// send email for Contact us button
 				if (event_name.equalsIgnoreCase("CONTACT_US"))
 				{								
-						System.out.println("open slides event - sending email");											
+						System.out.println("contact us - sending email");											
 						EmailSender.sendEmail("info@slidepiper.com", 
 								"Contact us has been clicked",
 								"Hello, <BR><BR>This is Jacob Salesmaster. <BR>I am your website alerts representative.<BR><BR>The contact us button has been clicked. This is the message:<BR> "+ param3 + "<BR><BR> Glad to serve you, <BR>Jacob Salesmaster<BR>SlidePiper Alerts System"
