@@ -396,7 +396,9 @@ function loadChatWindow()
 	
 					startClient();
 						setTimeout(function() {
-																												
+										
+							showChat(); // must show before changing properties
+							// otherwise it doesn't change correctly.
 							// position it correctly
 							maxY = window.outerHeight;								
 							chatDivHeight = chatDiv.outerHeight();
@@ -423,13 +425,18 @@ function loadChatWindow()
 									//chatDiv[0].style = "font-size:5px;";
 									//chatDiv[0].style.font-size = "5px;";
 									// but it still transfers slide change msgs.
+									console.log("mobile. hiding chat");
 							}
-						else
+							else
 							{
+								console.log("desktop. showing chat");
 								  showChat(); //desktop device
 							}
 											
-						},  200);
+						},  2000);
+						// 2 seconds are good because the first events
+						// make chat show on mobile. so after 2 sec
+						// it disappears.
 	//		});
 	
 

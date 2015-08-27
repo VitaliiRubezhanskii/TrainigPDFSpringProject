@@ -139,6 +139,7 @@ is_in_browser = 1;
         } else             	
         // only regular msgs are sent - 
         if (message.hasOwnProperty("message")) {
+ //       	if (mobilecheck() == false) {showChat();} // show on desktop
         	showChat();
         	console.log("regular message detected (also slide change)");
         	//regular message - we have
