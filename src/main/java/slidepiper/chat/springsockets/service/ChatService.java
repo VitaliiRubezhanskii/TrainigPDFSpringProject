@@ -4,6 +4,7 @@ package slidepiper.chat.springsockets.service;
 import java.io.IOException;
 
 import slidepiper.chat.*;
+import slidepiper.db.DbLayer;
 import slidepiper.logging.CustomerLogger;
 
 import java.util.HashSet;
@@ -73,6 +74,21 @@ public class ChatService {
 			        		}
     	  		}
             }
+      
+      // now we need to broadcast him all the previous messages
+      for (String msg : DbLayer.getChatMessages(newUser.getSessionid()))
+      		{
+    	  	String messageToSend = "{\"message\": {\"user\":" + newUser.toJSON()
+    	          + ", \"messagetext\":\"" + "Old Message: " + msg.replace("\"", "\\\"") +"\"} }";
+    	  	
+    	  		try {        	
+    	  			session.sendMessage(new TextMessage(messageToSend));
+		        } catch (IOException e) {
+		          System.out.println("Error when sending old history message " + messageToSend);
+		        		}    	  		
+    				System.out.println("WEBSOCKETS: broadcasting msg " + msg + " to new user in chat " + newUser.getUsername());      		
+      		}
+
     
       System.out.println("WEBSOCKETS: New socket user: " + newUser.toJSON());
       users.put(session, newUser);
@@ -99,6 +115,8 @@ public class ChatService {
 			        		}
     	  } //if
      }//for
+      
+
       		System.out.println("WEBSOCKETS: Broadcasted from "+newUser.getUsername()+  " to " + broadcastmatches + " users.");
    }else           
       // else to if sesssion is not registered.
