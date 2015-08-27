@@ -82,7 +82,7 @@ public class ReportsServlet extends HttpServlet {
 									ArrayList<AlertData> alerts = DbLayer.getAlerts(input.getString("email"));					
 									output.put("alerts", alerts);
 									break;
-							case "getAlertsHtml":											
+/*							case "getAlertsHtml":											
 								//System.out.println("making alerts HTML");//
 								ArrayList<AlertData> alertlist = DbLayer.getAlerts(input.getString("email"));
 								//System.out.println("rcvd alerts objs");//
@@ -90,7 +90,7 @@ public class ReportsServlet extends HttpServlet {
 								//System.out.println("rcvd alerts html: " + alertsHtml);//
 								output.put("alertsHtml", alertsHtml);
 								//System.out.println("Sent alerts html");
-								break;									
+								break;*/									
 							case "getHistory":					
 								System.out.println("calling getHistory with email " + input.getString("email"));
 								ArrayList<HistoryItem> his = DbLayer.getHistory(input.getString("email"));					

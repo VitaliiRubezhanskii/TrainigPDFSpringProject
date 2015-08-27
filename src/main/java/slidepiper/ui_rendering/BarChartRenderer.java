@@ -8,6 +8,8 @@ import java.net.URL;
 
 import javax.net.ssl.HttpsURLConnection;
 
+
+// render the barchart using the phantomjs service.
 public class BarChartRenderer {
 	
 			private static final String USER_AGENT = "Mozilla/5.0";

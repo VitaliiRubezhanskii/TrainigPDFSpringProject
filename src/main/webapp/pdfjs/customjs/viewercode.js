@@ -184,7 +184,8 @@ function getSalesmanData() {
 			else
 				{
 						hideChat();
-						console.log("NOT loading chat. mobilecheck " + mobilecheck());
+						console.log("loading chat. mobilecheck " + mobilecheck() + " must load it for the slide changes...");
+						loadChatWindow();
 				}
 		}
 	}); // end of ajax call
@@ -394,46 +395,26 @@ function loadChatWindow()
 	// load chat window into chatdiv.
 	chatDiv = $("#chatDiv");
 	
-//	alert("get url for cust name is " + getURLParameter("customername"));
-	// returns null if there's no parameter with that name.	
-	//getParams = "sessionid="+sessionid+"&salesman="+encodeURIComponent(salesman.trim())+"&customername="+encodeURIComponent(customername.trim())+"&role="+role;	
-	//loadurl = "chatwindow.html"; //+"?"+getParams;
-	// the params are not needed and not used.
-	// in full chat mode they are received from getSalesmanDataServlet
-	
-	//console.log("jquery load url " + loadurl);
-			
-	//$("#chatDiv").load(loadurl,
-	//		//function to run after loading chat window
-//			function()
-//			{
-				// no loading, it's inside viewer.html now.
-	
-						// run after 2 seconds, maybe the chat window 
-						// 	will stabilize its position.
-						// 	the timeout screws up the UI...
 					startClient();
-						setTimeout(function() {							
-		//					console.log("finished loading chat html");
-							// final callback on finishing to load chat window.
-							//load completed.
-	
-	
-	
-// start chat client.	
-								// it must be visible before calling width/height
-							//methods.
-							showChat();				
-				// position it correctly
+						setTimeout(function() {
+							
+							if (mobilecheck() == true)
+								{
+										hideChat(); // hide it on mobile, 
+										// but it still transfers slide change msgs.
+								}
+							else
+								{
+									showChat(); //desktop device
+								}
+							// position it correctly
 							maxY = window.outerHeight;								
 							chatDivHeight = chatDiv.outerHeight();
-							//console.log("maxY " + maxY + " chatDivHeight " + chatDivHeight);
-							
+							//console.log("maxY " + maxY + " chatDivHeight " + chatDivHeight);							
 							
 							maxX = window.outerWidth;
 							chatDivWidth = chatDiv.outerWidth();							
-							//console.log("maxX " + maxX + " chatDivWidth " + chatDivWidth);
-							
+							//console.log("maxX " + maxX + " chatDivWidth " + chatDivWidth);							
 							
 							leftVal = maxX - chatDivWidth-25;
 							//topVal = maxY - chatDivHeight;

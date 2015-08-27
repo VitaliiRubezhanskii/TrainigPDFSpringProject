@@ -63,128 +63,84 @@ public class EmailSender {
 
 	}
 	
+	public static String getUrlPrefix()
+	{
+		  String appname = System.getenv("OPENSHIFT_APP_NAME");
+		  String urlprefix;
+		if (appname==null) //running locally
+		{
+			urlprefix = "localhost:8080/sp/";				 
+		}
+		else
+		{
+			 if (appname.equalsIgnoreCase("slidepipertest"))
+			 {
+				 urlprefix = "http://slidepipertest-slidepiper.rhcloud.com/"; 					 
+			 }
+			 else
+				 if (appname.equalsIgnoreCase("sp")) 
+				 {
+					 urlprefix = "http://www.slidepiper.com/";						 
+				 }
+				 else
+				 {
+					 urlprefix="???? unknown ???";						 
+				 }							 
+		}
+		
+			return urlprefix;
+	}
+	
 	// send alert email
 	public static void sendAlertEmail(String id, String sessionId)
 	{
-		  MessageInfo mi = DbLayer.getMessageInfo(id);
-		  //System.out.println("alert email to : " + mi.getSalesManEmail());
-		  
-		  String logoHtml = "<img src='www.slidepiper.com/img/logoOriginal.png' style='background-color: black;'></img>";
-		  
-		  String appname = System.getenv("OPENSHIFT_APP_NAME");									
+		  MessageInfo mi = DbLayer.getMessageInfo(id);		  		  
 			String currentviewslink;
 			String chatlink;
-			String urlprefix;			
+			String urlprefix = getUrlPrefix();		
 			
-			if (appname==null) //running locally
-			{
-				urlprefix = "localhost:8080/sp/";				 
-			}
-			else
-			{
-				 if (appname.equalsIgnoreCase("slidepipertest"))
-				 {
-					 urlprefix = "http://slidepipertest-slidepiper.rhcloud.com/"; 					 
-				 }
-				 else
-					 if (appname.equalsIgnoreCase("sp")) 
-					 {
-						 urlprefix = "http://www.slidepiper.com/";						 
-					 }
-					 else
-					 {
-						 urlprefix="???? unknown ???";						 
-					 }							 
-			}
-			
-			currentviewslink = urlprefix + "viewbarchart.jsp?session_id=" + sessionId;
-
 			String custname = DbLayer.getCustomerName(mi.getCustomerEmail(), mi.getSalesManEmail());
 			String getParams = "sessionid="+sessionId+"&salesman="+DbLayer.getSalesmanName(mi.getSalesManEmail())+"&customername="+ custname +"&role=1";
+			
+			currentviewslink = urlprefix + "viewbarchart.jsp?session_id=" + sessionId;
 			chatlink = urlprefix + "pdfjs/chatwindow.html?" + getParams;			
 			String fullchatlink= urlprefix+"pdfjs/viewer.html?file=/file/" + mi.getId() + "&" + getParams;
 			
 			String subj = "SlidePiper Alert for " +
 					DbLayer.getCustomerName(mi.getCustomerEmail(),mi.getSalesManEmail()) +
-					" (" + mi.getCustomerEmail() + ")";
-					  			  
-			String whatNextBox = 
-							"<u><b>What next?</b></u><BR><BR>"
-							+HtmlRenderer.getButtonHtml(currentviewslink, "View Current Slides Report")+"<BR>";
-			
+					" (" + mi.getCustomerEmail() + ")";						
+					  			 			
 			CustomerSession cs = DbLayer.getSessionData(sessionId);
 			
-			System.out.println("Detecting mobile/PC device: browser data is " + cs.getAll_browser_data());
+			String msgtext = HtmlRenderer.getAlertHtml(mi, cs, currentviewslink, chatlink, fullchatlink); 
 			
-			if (cs.getAll_browser_data().contains("Is mobile device: true"))
-			{
-					System.out.println("Detected mobile device");
-					whatNextBox = whatNextBox + "<BR>Customer is using a mobile device, chat is not available for mobile devices.<BR>";
-			}
-			else
-			{
-				System.out.println("Detected PC, not mobile.");
-				whatNextBox = whatNextBox	+HtmlRenderer.getButtonHtml(chatlink, "<b>Quick Chat</b> with " + custname) + "<BR>"
-						+HtmlRenderer.getButtonHtml(fullchatlink, "<b>Full Chat</b> + <b>Live Pitch</b> with " + custname) +"<BR>";
-			}
-						 							
-			whatNextBox = HtmlRenderer.addEnclosingBorders(whatNextBox);
-
 			EmailSender.sendEmail(mi.getSalesManEmail(), 
 					subj,				
-					HtmlRenderer.addEnclosingHtml(
-								logoHtml 
-								+"Hello, <BR><BR>This is Jacob Salesmaster. <BR>I am your customer alerts representative.<BR><BR>"  
-								+HtmlRenderer.addEnclosingBorders(mi.getCustomerEmail() + " has just clicked on the link you sent him!")
-								+" <BR><BR>"
-								+ whatNextBox 
-								+"<BR><BR> Glad to serve you, <BR>Jacob Salesmaster<BR>SlidePiper Alerts System"
-					)
-			);
-
+						msgtext
+					);			
 	}
 	// report email after customer stops viewing presentation
 	// called from KeepAliveTask
 	public static void sendReportEmail(KeepAlivePacket p)
 	{					
 			MessageInfo mi = DbLayer.getMessageInfo(p.getMsgId());													
-			AlertData ai = DbLayer.getAlert(p.getSessionId(),mi.getSalesManEmail());
-			
-			// first of all: let's get the url to the barchart image.
-			// session id I have in alertdata.
-			String barchartImageUrl = BarChartRenderer.getBarChartLink(ai.getSession_id());
-			
-			// i=0 not important. no buttons or divs filled with code here. it's email.
-			String logoHtml = "<img src='www.slidepiper.com/img/logoOriginal.png' style='background-color: black;'></img>";
-
-			String barChartImageHtml = "<img src='"+barchartImageUrl+"'></img>";
-			
+			AlertData ai = DbLayer.getAlert(p.getSessionId(),mi.getSalesManEmail());			
 			String chatMessages = "";
-			ArrayList<String> msgs = DbLayer.getChatMessages(p.getSessionId());
-			
+			ArrayList<String> msgs = DbLayer.getChatMessages(p.getSessionId());			
 			for(String msg : msgs)
 			{
 				chatMessages += ("<BR>"+msg);
-			}
-			
+			}			
 			if (msgs.isEmpty()) chatMessages = "No messages.";
 			
-			chatMessages = HtmlRenderer.addEnclosingBorders("<u>Messages in chat window:</u> <BR>" + chatMessages);
-			
-			String msg = 
-					HtmlRenderer.addEnclosingHtml(
-							logoHtml+ "Hello, <BR><BR> This is Jacob Salesmaster. <BR> I am your SlidePiper reports representative. Please carefully review the following report. <BR><BR>"									
-									+HtmlRenderer.addEnclosingBorders(
-											HtmlRenderer.GenerateAlertHtml(ai, 0))+
-											barChartImageHtml+
-											chatMessages+
-							 "<BR><BR>Glad to serve you, <BR>Jacob Salesmaster<BR>SlidePiper Reports Team"
-					);
 			String custname = DbLayer.getCustomerName(mi.getCustomerEmail(),mi.getSalesManEmail());
+			
 //			System.out.println("Getcustname for custemail " +  mi.getCustomerEmail() +" sm email " + mi.getSalesManEmail() + " is " + custname);
 			String subj = "SlidePiper Report for " +
 					custname +
 					" (" + mi.getCustomerEmail() + ")";
+			
+			String msg = HtmlRenderer.getReportHtml(ai, chatMessages);
 					 
 			EmailSender.sendEmail(mi.getSalesManEmail(), subj , msg);
 	}

@@ -23,14 +23,15 @@ function hideWaitMsg()
 //finished loading?
 function isEverythingLoaded()
 {
-		return (alertsloaded && customersloaded && 
+	// no alerts
+		return (customersloaded && 
 				presentationsloaded);
 }
 
 
 function hideLoadingMsgIfFullyLoaded()
 {
-	console.log("checking if all loaded: alerts " + alertsloaded + 			 			
+	console.log("checking if all loaded: "+ 			 			
 			" customers " + customersloaded + 
 			" pres " + presentationsloaded);
 	
@@ -48,15 +49,9 @@ function	 verifyLoaded()
 			if (loggedin == true)
 			{
 					console.log("Verifying loading of data from DB. stack=" + Error().stack);
-					console.log("alerts " + alertsloaded + 							
-							" customers " + customersloaded + 
+					console.log(" customers " + customersloaded + 
 							" pres " + presentationsloaded);
 					
-					if (alertsloaded==false)
-						{
-							//	fillAlerts();
-								swal("Error", "Error loading alerts.", "error");
-						}
 					if ((customersloaded==false) || (presentationsloaded==false))
 						{
 								fillCustomersAndPresentations();
