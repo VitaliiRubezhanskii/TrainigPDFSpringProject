@@ -129,7 +129,7 @@ public class EmailSender {
 			ArrayList<String> msgs = DbLayer.getChatMessages(p.getSessionId());			
 			for(String msg : msgs)
 			{
-				chatMessages += ("<BR>"+msg);
+				chatMessages += (msg+"<BR>");
 			}			
 			if (msgs.isEmpty()) chatMessages = "No messages.";
 			

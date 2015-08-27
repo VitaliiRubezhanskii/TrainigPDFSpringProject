@@ -67,7 +67,6 @@ $(document).on("pagecontainershow", function() {
 				showWaitMsg();	
 				console.log("calling fills");
 				fillCustomersAndPresentations();
-				fillAlerts();
 				console.log("called fills cust+pres and alerts");
 				
 				if (verifyingactivated==false) //only once.

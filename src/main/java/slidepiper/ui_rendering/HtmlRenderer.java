@@ -64,8 +64,8 @@ public class HtmlRenderer {
 			reportHTML = reportTitleRow + 
 					alertRow + 
 					barchartrow +
-					chatMessagesRow +
-					deviceInfoRows +					
+					chatMessagesRow + "<BR>"+
+					deviceInfoRows +	"<BR>" +
 					originalMessageRow; 
 			
 			reportHTML = addEnclosingHtml(reportHTML);
@@ -93,7 +93,7 @@ public class HtmlRenderer {
 			
 			String whatNextTitleRow = getTitleRow("What Next?");
 
-			String whatNextRows = whatNextTitleRow; // start from this
+			String whatNextRows = whatNextTitleRow+"<BR>"; // start from this
 			
 			whatNextRows = whatNextRows + HtmlRenderer.getButtonRow(currentviewslink, "View Current Slides Report ") + "<BR>";
 			
@@ -114,8 +114,9 @@ public class HtmlRenderer {
 			}
 			
 			alertHTML = alertTitleRow + 
-					alertRow + 										
-					originalMessageRow+
+					alertRow +
+					"<BR>"+
+					originalMessageRow+ "<BR>"+
 					whatNextRows;					
 			
 			alertHTML = addEnclosingHtml(alertHTML);
@@ -174,7 +175,7 @@ public class HtmlRenderer {
 		{
 			 
 					String alertrow = "<tr><td> <BR>Your presentation has been " + opened_or_viewed + 
-					"<BR><u>Presentation Name</u>:"+presname
+					"<BR><u>Presentation Name</u>: "+presname
 					+"<BR><u>Customer Name</u>: "+custname;
 			
 					if (!openedat.equalsIgnoreCase(""))
@@ -188,17 +189,17 @@ public class HtmlRenderer {
 					return alertrow;
 		}
 		
-		public static String getMoreInfoRow(String device, String chatmsg, String orig_email)
+/*		public static String getMoreInfoRow(String device, String chatmsg, String orig_email)
 		{
 				return "<tr><td><span style=\"font-family:Arial, Helvetica, sans-serif; font-size:12px; color:#000;\">"         		
 				+"<u>Device Information:</u> <BR>"
 				+device 
-				+"<BR><BR><u>Messages in Chat Window:</u> <BR>"
+				+"<BR><BR><u>Messages in Chat Window:</u><BR>"
 				+chatmsg
 				+"<BR><BR><u>Original e-mail:</u> <BR>"
 				+orig_email
 				+"<BR><BR></span></td></tr>";
-		}
+		}*/
 		
 		public static String getFreeTextRow(String text)
 		{
@@ -216,11 +217,11 @@ public class HtmlRenderer {
 		
 		public static String getButtonRow(String text, String url)
 		{
-			return 
-			  "<tr><td><table width=\"600\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" valign=\"top\" align=\"center\">"    
-			  +"<tr>   <td>    <table border=\"0\" cellspacing=\"0\" cellpadding=\"0\">   <tr>"
-        +"<td align=\"center\" style=\"-webkit-border-radius: 7px; -moz-border-radius: 7px; border-radius: 7px;\" bgcolor=\"#e9703e\"><a href='"+url+"' target=\"_blank\" style=\"font-size: 16px; font-family: Helvetica, Arial, sans-serif; color: #ffffff; text-decoration: none; color: #ffffff; text-decoration: none; -webkit-border-radius: 3px; -moz-border-radius: 3px; border-radius: 3px; padding: 12px 18px; border: 1px solid #e9703e; display: inline-block;\">"
-        +text+" &rarr;</a></td>  </tr>  </table>  </td> </tr> </table> </td></tr>";
+			return					
+			"<tr>		    <td>		      <table border=\"0\" cellspacing=\"0\" cellpadding=\"0\">"
+		   +"     <tr>    <td align=\"center\" style=\"-webkit-border-radius: 7px; -moz-border-radius: 7px; border-radius: 7px;\" bgcolor=\"#e9703e\"><a href=\""+url+"\" target=\"_blank\" style=\"font-size: 16px; font-family: Helvetica, Arial, sans-serif; color: #ffffff; text-decoration: none; color: #ffffff; text-decoration: none; -webkit-border-radius: 3px; -moz-border-radius: 3px; border-radius: 3px; padding: 12px 18px; border: 1px solid #e9703e; display: inline-block;\">"
+		   + text+" &rarr;</a></td>"
+		    + "   </tr>    </table>   </td>  </tr>";
 		}
 		
 }
