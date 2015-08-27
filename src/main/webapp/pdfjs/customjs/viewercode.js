@@ -400,14 +400,17 @@ function loadChatWindow()
 							
 							if (mobilecheck() == true)
 								{
-										hideChat(); // hide it on mobile,
-										$("#chatDiv").style = "font-size:7px;";
+								//		hideChat(); // hide it on mobile,										
+										chatDiv[0].style = "font-size:7px;";
 										// but it still transfers slide change msgs.
 								}
-							else
-								{
-									showChat(); //desktop device
-								}
+							//else
+								//{
+									//showChat(); //desktop device
+//								}
+							
+							
+							showChat(); //show anyway.
 							// position it correctly
 							maxY = window.outerHeight;								
 							chatDivHeight = chatDiv.outerHeight();
