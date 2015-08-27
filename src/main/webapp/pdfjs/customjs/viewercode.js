@@ -182,8 +182,7 @@ function getSalesmanData() {
 						loadChatWindow();
 				}
 			else
-				{
-						hideChat();
+				{					
 						console.log("loading chat. mobilecheck " + mobilecheck() + " must load it for the slide changes...");
 						loadChatWindow();
 				}
@@ -397,20 +396,7 @@ function loadChatWindow()
 	
 					startClient();
 						setTimeout(function() {
-							
-							if (mobilecheck() == true)
-								{
-								//		hideChat(); // hide it on mobile,										
-										chatDiv[0].style = "font-size:7px;";
-										// but it still transfers slide change msgs.
-								}
-							//else
-								//{
-									//showChat(); //desktop device
-//								}
-							
-							
-							showChat(); //show anyway.
+																												
 							// position it correctly
 							maxY = window.outerHeight;								
 							chatDivHeight = chatDiv.outerHeight();
@@ -429,7 +415,19 @@ function loadChatWindow()
 							
 							chatDiv[0].style.top = topVal+"px";
 							chatDiv[0].style.left = leftVal+"px";	
-							//finally, show it.							
+							//finally, show it.
+							
+							if (mobilecheck() == true)
+							{
+									hideChat(); // hide it on mobile,										
+									//chatDiv[0].style = "font-size:5px;";
+									//chatDiv[0].style.font-size = "5px;";
+									// but it still transfers slide change msgs.
+							}
+						else
+							{
+								  showChat(); //desktop device
+							}
 											
 						},  200);
 	//		});

@@ -78,8 +78,10 @@ public class ChatService {
       // now we need to broadcast him all the previous messages
       for (String msg : DbLayer.getChatMessages(newUser.getSessionid()))
       		{
+    	  	String oldmsg = msg.replace("<u>", "");
+    	  	oldmsg = oldmsg.replace("</u>", "");
     	  	String messageToSend = "{\"message\": {\"user\":" + newUser.toJSON()
-    	          + ", \"messagetext\":\"" + "Old Message: " + msg.replace("\"", "\\\"") +"\"} }";
+    	          + ", \"messagetext\":\"" + "Old Message: " + oldmsg.replace("\"", "\\\"") +"\"} }";
     	  	
     	  		try {        	
     	  			session.sendMessage(new TextMessage(messageToSend));

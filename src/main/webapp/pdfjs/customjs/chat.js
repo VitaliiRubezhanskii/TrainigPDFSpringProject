@@ -22,7 +22,7 @@ is_in_browser = 1;
     	socket.onopen = function() {
     				socketconnected = 1;
 			      console.log("Opened socket.");
-			      showChat();
+			      
 			      //register the user
 			      //var nickname = $("#nickname").val();			      
 			      			    	
@@ -88,7 +88,7 @@ is_in_browser = 1;
       //When received a message, parse it and either add/remove user or post message.
       socket.onmessage = function(a) {
     		socketconnected = 1;
-    		showChat();
+		   
         //process the message here
         console.log("parsing JSON message: " + a.data);
                     
@@ -105,7 +105,9 @@ is_in_browser = 1;
           $(d).addClass("chatusername user").text(message.addUser.username).attr("data-user", message.addUser.username.toString()).appendTo("#nicknamesBox");
           			
           if (message.addUser.username != username) // it's not me
-          				{	
+          				{
+        	  		if (mobilecheck() == false){ 	showChat();}
+        	  		
 	              // add online msg to chatbox
 	              var d = document.createElement('div');
 	              var sonline = document.createElement('span');                            
@@ -136,7 +138,8 @@ is_in_browser = 1;
 
         } else             	
         // only regular msgs are sent - 
-        if (message.hasOwnProperty("message")) {        	
+        if (message.hasOwnProperty("message")) {
+        	showChat();
         	console.log("regular message detected (also slide change)");
         	//regular message - we have
         	// message JSON with message and user insude.
