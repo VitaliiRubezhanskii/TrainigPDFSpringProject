@@ -217,8 +217,39 @@ public class HtmlRenderer {
 		    +"</td></tr>";
 		}
 		
-		public static String getButtonRow(String text, String url)
+		
+		public static String getLinkableButtonStyle()
 		{
+			return 
+			" style='"
+			+"	    background: none repeat scroll 0 0 #075482;"
+			+"	    border: medium none;"
+			+"	    color: #FFFFFF;"
+			+"	    cursor: pointer;"
+			+"	    margin-bottom: 26px;"
+			+"	    padding: 8px;"
+		   +" '  ";		
+		}
+		
+		
+		public static String getButtonRow(String url, String text)
+		{
+			/* not good, submitting to external page. (shows msg)
+			return 
+				"<form action=\"" +url+ "\" method=\"get\">"
+				+"<button " + getLinkableButtonStyle() + ">"+text+"</button>"
+				+"</form>";
+			*/
+			return 
+					// illegal html - button inside a, but may work.
+					"<tr><td><a href='" +url+ "'>" 
+					+"<button " + getLinkableButtonStyle() + ">"+text+"</button>"
+					+"</a></td></tr>";
+		}
+
+		
+		//public static String getButtonRow(String text, String url)
+		//{
 //			return					
 	//		"<tr>		    <td>		      <table border=\"0\" cellspacing=\"0\" cellpadding=\"0\">"
 		//   +"     <tr>    <td align=\"center\" style=\"-webkit-border-radius: 7px; -moz-border-radius: 7px; border-radius: 7px;\" bgcolor=\"#e9703e\"><a href=\""+url+"\" target=\"_blank\" style=\"font-size: 16px; font-family: Helvetica, Arial, sans-serif; color: #ffffff; text-decoration: none; color: #ffffff; text-decoration: none; -webkit-border-radius: 3px; -moz-border-radius: 3px; border-radius: 3px; padding: 12px 18px; border: 1px solid #e9703e; display: inline-block;\">"
@@ -250,14 +281,14 @@ public class HtmlRenderer {
 			
 			//return "<table width='600' cellpadding='0' cellspacing='0' border='0' valign='top' align='center'><td align='center' width='300' height='40' bgcolor='#000091' style='-webkit-border-radius: 5px; -moz-border-radius: 5px; border-radius: 5px; color: #ffffff; display: block;'><a href='"+"http://www.google.com"+"' style='font-size:16px; font-weight: bold; font-family: Helvetica, Arial, sans-serif; text-decoration: none; line-height:40px; width:100%; display:inline-block'><span style='color: #FFFFFF'>"+text+"</span></a></td></tr> </table>";
 			
-			return
-			"<table cellpadding='0' cellmargin='0' border='0' height='44' width='178' style='border-collapse: collapse; border:5px solid #c62228'>"+
-			 " <tr>   <td bgcolor='#c62228' valign='middle' align='center' width='174'>"+
-			  "    <div style='font-size: 18px; color: #ffffff; line-height: 1; margin: 0; padding: 0; mso-table-lspace:0; mso-table-rspace:0;'>"+
-			   "     <a href='"+url+"' style='text-decoration: none; color: #ffffff; border: 0; font-family: Arial, arial, sans-serif; mso-table-lspace:0; mso-table-rspace:0;' border='0'>"+text+"</a>"+
-			    "  </div>			    </td>			  </tr>			</table>";
-			
-			
-		}
+		//	return
+		//	"<table cellpadding='0' cellmargin='0' border='0' height='44' width='178' style='border-collapse: collapse; border:5px solid #c62228'>"+
+		//	 " <tr>   <td bgcolor='#c62228' valign='middle' align='center' width='174'>"+
+		//	  "    <div style='font-size: 18px; color: #ffffff; line-height: 1; margin: 0; padding: 0; mso-table-lspace:0; mso-table-rspace:0;'>"+
+		//	   "     <a href='"+url+"' style='text-decoration: none; color: #ffffff; border: 0; font-family: Arial, arial, sans-serif; mso-table-lspace:0; mso-table-rspace:0;' border='0'>"+text+"</a>"+
+	////		    "  </div>			    </td>			  </tr>			</table>";
+		///	
+		//	
+	//	}
 		
 }
