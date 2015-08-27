@@ -139,8 +139,8 @@ is_in_browser = 1;
         } else             	
         // only regular msgs are sent - 
         if (message.hasOwnProperty("message")) {
- //       	if (mobilecheck() == false) {showChat();} // show on desktop
-        	showChat();
+        	if (mobilecheck() == false) {showChat();} // show on desktop
+        	if (mobilecheck() == true) {hideChat();} // show on desktop
         	console.log("regular message detected (also slide change)");
         	//regular message - we have
         	// message JSON with message and user insude.

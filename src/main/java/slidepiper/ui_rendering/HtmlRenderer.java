@@ -95,7 +95,7 @@ public class HtmlRenderer {
 
 			String whatNextRows = whatNextTitleRow+"<BR>"; // start from this
 			
-			whatNextRows = whatNextRows + "</table>"+ HtmlRenderer.getButtonTable(currentviewslink, "View Current Slides Report ") + "<table><BR>";
+			whatNextRows = whatNextRows + HtmlRenderer.getButtonRow(currentviewslink, "View Current Slides Report ") + "<BR>";
 			
 			System.out.println("Detecting mobile/PC device: browser data is " + cs.getAll_browser_data());			
 			if (cs.getAll_browser_data().contains("Is mobile device: true"))
@@ -108,10 +108,10 @@ public class HtmlRenderer {
 			else
 			{
 				System.out.println("Detected PC, not mobile.");
-				whatNextRows = whatNextRows	+
-						 "</table>"+HtmlRenderer.getButtonTable(chatlink, "<b>Quick Chat</b> with " + custname) + "<BR>"
-						+HtmlRenderer.getButtonTable(fullchatlink, "<b>Full Chat</b> + <b>Live Pitch</b> with " + custname) +
-						  "<table>"+"<BR>";
+				whatNextRows = whatNextRows	
+						 +HtmlRenderer.getButtonRow(chatlink, "<b>Quick Chat</b> with " + custname) + "<BR>"
+						+HtmlRenderer.getButtonRow(fullchatlink, "<b>Full Chat</b> + <b>Live Pitch</b> with " + custname) +
+						  "<BR>";
 			}
 			
 			alertHTML = alertTitleRow + 
@@ -121,6 +121,7 @@ public class HtmlRenderer {
 					whatNextRows;					
 			
 			alertHTML = addEnclosingHtml(alertHTML);
+			System.out.println("ALERT HTML **********************\n" + alertHTML);
 			return alertHTML;			
 	}
 		
@@ -216,7 +217,7 @@ public class HtmlRenderer {
 		    +"</td></tr>";
 		}
 		
-		public static String getButtonTable(String text, String url)
+		public static String getButtonRow(String text, String url)
 		{
 //			return					
 	//		"<tr>		    <td>		      <table border=\"0\" cellspacing=\"0\" cellpadding=\"0\">"
@@ -247,7 +248,16 @@ public class HtmlRenderer {
 			
 //			return "<table width='600' cellpadding='0' cellspacing='0' border='0' valign='top' align='center'><td align='center' width='300' height='40' bgcolor='#000091' style='-webkit-border-radius: 5px; -moz-border-radius: 5px; border-radius: 5px; color: #ffffff; display: block;'><a href='"+url+"' style='font-size:16px; font-weight: bold; font-family: Helvetica, Arial, sans-serif; text-decoration: none; line-height:40px; width:100%; display:inline-block'><span style='color: #FFFFFF'>"+text+"</span></a></td></tr> </table>";
 			
-			return "<table width='600' cellpadding='0' cellspacing='0' border='0' valign='top' align='center'><td align='center' width='300' height='40' bgcolor='#000091' style='-webkit-border-radius: 5px; -moz-border-radius: 5px; border-radius: 5px; color: #ffffff; display: block;'><a href='"+"http://www.google.com"+"' style='font-size:16px; font-weight: bold; font-family: Helvetica, Arial, sans-serif; text-decoration: none; line-height:40px; width:100%; display:inline-block'><span style='color: #FFFFFF'>"+text+"</span></a></td></tr> </table>";
+			//return "<table width='600' cellpadding='0' cellspacing='0' border='0' valign='top' align='center'><td align='center' width='300' height='40' bgcolor='#000091' style='-webkit-border-radius: 5px; -moz-border-radius: 5px; border-radius: 5px; color: #ffffff; display: block;'><a href='"+"http://www.google.com"+"' style='font-size:16px; font-weight: bold; font-family: Helvetica, Arial, sans-serif; text-decoration: none; line-height:40px; width:100%; display:inline-block'><span style='color: #FFFFFF'>"+text+"</span></a></td></tr> </table>";
+			
+			return
+			"<table cellpadding='0' cellmargin='0' border='0' height='44' width='178' style='border-collapse: collapse; border:5px solid #c62228'>"+
+			 " <tr>   <td bgcolor='#c62228' valign='middle' align='center' width='174'>"+
+			  "    <div style='font-size: 18px; color: #ffffff; line-height: 1; margin: 0; padding: 0; mso-table-lspace:0; mso-table-rspace:0;'>"+
+			   "     <a href='"+url+"' style='text-decoration: none; color: #ffffff; border: 0; font-family: Arial, arial, sans-serif; mso-table-lspace:0; mso-table-rspace:0;' border='0'>"+text+"</a>"+
+			    "  </div>			    </td>			  </tr>			</table>";
+			
+			
 		}
 		
 }
