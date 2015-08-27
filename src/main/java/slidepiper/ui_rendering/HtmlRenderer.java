@@ -232,7 +232,7 @@ public class HtmlRenderer {
 			    "<w:anchorlock/>"+
 			    "<center style=\"color:#ffffff;font-family:sans-serif;font-size:13px;font-weight:bold;\">"+text+"</center>"+
 			  "</v:roundrect>"+
-			"<![endif]--><a href=\""+url+"\""+
+			"<![endif]--><a href=\""+url+"\" "+
 			"style=\"background-color:#49a9ce;background-image:url(\"http://imgur.com/5BIp9d0.gif\");border-radius:px;color:#ffffff;display:inline-block;font-family:sans-serif;font-size:13px;font-weight:bold;line-height:40px;text-align:center;text-decoration:none;width:200px;-webkit-text-size-adjust:none;mso-hide:all;\">"+text+"</a></div>"
 			
 			//reopen table element.
