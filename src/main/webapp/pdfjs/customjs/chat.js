@@ -141,6 +141,12 @@ is_in_browser = 1;
         if (message.hasOwnProperty("message")) {
         	if (mobilecheck() == false) {showChat();} // show on desktop
         	if (mobilecheck() == true) {hideChat();} // show on desktop
+        	
+        	// if it's salesman, always show chat.
+        	if (role==1)
+        		{
+        		showChat();
+        		}
         	console.log("regular message detected (also slide change)");
         	//regular message - we have
         	// message JSON with message and user insude.
