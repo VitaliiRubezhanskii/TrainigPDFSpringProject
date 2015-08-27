@@ -95,7 +95,7 @@ public class HtmlRenderer {
 
 			String whatNextRows = whatNextTitleRow+"<BR>"; // start from this
 			
-			whatNextRows = whatNextRows + HtmlRenderer.getButtonRow(currentviewslink, "View Current Slides Report ") + "<BR>";
+			whatNextRows = whatNextRows + "</table>"+ HtmlRenderer.getButtonTable(currentviewslink, "View Current Slides Report ") + "<table><BR>";
 			
 			System.out.println("Detecting mobile/PC device: browser data is " + cs.getAll_browser_data());			
 			if (cs.getAll_browser_data().contains("Is mobile device: true"))
@@ -109,8 +109,9 @@ public class HtmlRenderer {
 			{
 				System.out.println("Detected PC, not mobile.");
 				whatNextRows = whatNextRows	+
-						HtmlRenderer.getButtonRow(chatlink, "<b>Quick Chat</b> with " + custname) + "<BR>"
-						+HtmlRenderer.getButtonRow(fullchatlink, "<b>Full Chat</b> + <b>Live Pitch</b> with " + custname) +"<BR>";
+						 "</table>"+HtmlRenderer.getButtonTable(chatlink, "<b>Quick Chat</b> with " + custname) + "<BR>"
+						+HtmlRenderer.getButtonTable(fullchatlink, "<b>Full Chat</b> + <b>Live Pitch</b> with " + custname) +
+						  "<table>"+"<BR>";
 			}
 			
 			alertHTML = alertTitleRow + 
@@ -215,7 +216,7 @@ public class HtmlRenderer {
 		    +"</td></tr>";
 		}
 		
-		public static String getButtonRow(String text, String url)
+		public static String getButtonTable(String text, String url)
 		{
 //			return					
 	//		"<tr>		    <td>		      <table border=\"0\" cellspacing=\"0\" cellpadding=\"0\">"
@@ -224,7 +225,7 @@ public class HtmlRenderer {
 		    //+ "   </tr>    </table>   </td>  </tr>";
 			
 			
-			return 
+			/*return 
 					"</table>"+ //close table element.
 			"<div><!--[if mso]>"+
 			  "<v:roundrect xmlns:v=\"urn:schemas-microsoft-com:vml\" xmlns:w=\"urn:schemas-microsoft-com:office:word\" href=\""+text+"\" style=\"height:40px;v-text-anchor:middle;width:200px;\" arcsize=\"0%\" stroke=\"f\" fill=\"t\">"+
@@ -236,7 +237,12 @@ public class HtmlRenderer {
 			"style=\"background-color:#49a9ce;background-image:url(\"http://imgur.com/5BIp9d0.gif\");border-radius:px;color:#ffffff;display:inline-block;font-family:sans-serif;font-size:13px;font-weight:bold;line-height:40px;text-align:center;text-decoration:none;width:200px;-webkit-text-size-adjust:none;mso-hide:all;\">"+text+"</a></div>"
 			
 			//reopen table element.
-			+"<table width=\"600\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" valign=\"top\" align=\"center\">";
+			+"<table width=\"600\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" valign=\"top\" align=\"center\">";*/
+			
+			return "<table cellspacing=\"0\" cellpadding=\"0\"> <tr>"+ 
+			"<td align=\"center\" width=\"300\" height=\"40\" bgcolor=\"#000091\" style=\"-webkit-border-radius: 5px; -moz-border-radius: 5px; border-radius: 5px; color: #ffffff; display: block;\">"+
+			"<a href=\"" +url+  "\" style=\"font-size:16px; font-weight: bold; font-family: Helvetica, Arial, sans-serif; text-decoration: none; line-height:40px; width:100%; display:inline-block\"><span style=\"color: #FFFFFF\">"+text+"</span></a>"+
+			"</td>	</tr> </table>"; 			
 		}
 		
 }
