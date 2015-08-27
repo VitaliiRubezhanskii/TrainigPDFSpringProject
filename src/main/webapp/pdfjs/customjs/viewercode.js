@@ -400,7 +400,8 @@ function loadChatWindow()
 							
 							if (mobilecheck() == true)
 								{
-										hideChat(); // hide it on mobile, 
+										hideChat(); // hide it on mobile,
+										$("#chatDiv").style = "font-size:7px;";
 										// but it still transfers slide change msgs.
 								}
 							else
