@@ -78,7 +78,8 @@ public class ChatService {
       // now we need to broadcast him all the previous messages
  //						must move this to thread - it disconnects socket.
       for (String msg : DbLayer.getChatMessages(newUser.getSessionid()))
-      		{    	  	    	  	    	  	
+      		{
+    	    System.out.println("Analyzing old message: " + msg);
     	  	String oldmsg = (msg.substring(msg.lastIndexOf(":") + 1));
     	  	
     	  	// Remove stuff from string
@@ -92,6 +93,8 @@ public class ChatService {
 					String[] parts = oldmsg.split(":");
 					String part1 = parts[0]; // username 
 					String part2 = parts[1]; // msg
+					
+					System.out.println("Showing old message: " + part1 + " : " + part2);
 					
 					// role does not matter, it's just for printing.
 					// user obj for sending msg. 
