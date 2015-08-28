@@ -256,8 +256,8 @@
       socket.onclose = function() {
     	  		socketconnected = 0;
     	  		console.log("socket closed. trying to reconnect");
-    	  		// retry in 20sec.
-    	  		setTimeout(connectSocket, 20000);    	  		
+    	  		// retry in 1sec.
+    	  		setTimeout(connectSocket, 1000);    	  		
     	  		};
     	  		
       socket.onerror = function() { alert("Error transmitting chat content"); socketconnected = 0;};

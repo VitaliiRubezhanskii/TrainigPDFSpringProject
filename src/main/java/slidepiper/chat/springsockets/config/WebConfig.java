@@ -30,7 +30,7 @@ public class WebConfig extends WebMvcConfigurerAdapter implements WebSocketConfi
 	        // 10sec timeout - should be enough.
 	        // NOT GOOD - if no msgs in 10sec it disconnects.
 	        // Let's make it 1 min.
-	        container.setMaxSessionIdleTimeout(1000 * 10);
+	        container.setMaxSessionIdleTimeout(1000 * 60);
 	        
 //	        container.setMaxTextMessageBufferSize(8192);
 	//        container.setMaxBinaryMessageBufferSize(8192);
