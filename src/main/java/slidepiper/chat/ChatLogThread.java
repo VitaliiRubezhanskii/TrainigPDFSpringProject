@@ -1,4 +1,4 @@
-package slidepiper.chat.springsockets.service;
+package slidepiper.chat;
 
 import slidepiper.logging.CustomerLogger;
 

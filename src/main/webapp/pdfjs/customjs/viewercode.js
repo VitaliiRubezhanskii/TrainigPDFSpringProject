@@ -15,12 +15,14 @@ if (getCookie("mySessionId")=="") // no session id defined in this
 					// a new random one.
 					// this is also updated in the time, renewing the short time every iteration.
 					setShortTimeCookie("mySessionId", thisSessionId);
+					send_open_slides_event = true; // slides were opened for
+					// first time in this session.
 	}
 else
 	{
 			// just get the cookie.
 			thisSessionId = getCookie("mySessionId");
-	
+			send_open_slides_event = false; // don't send again
 	}
 
 // anyway, this is overwritten if parameters are given in url.
@@ -211,7 +213,11 @@ function preInitView()
 
 				if  (role==0) //send events only for customer, not salesman
 					{
-				send_event("OPEN_SLIDES", prev_slide, "0", browser_data);
+							// send only if it's first init for this session.
+							if (send_open_slides_event==true)
+								{
+										send_event("OPEN_SLIDES", prev_slide, "0", browser_data);
+								}
 					}
 				preInitDone = true;
 		}

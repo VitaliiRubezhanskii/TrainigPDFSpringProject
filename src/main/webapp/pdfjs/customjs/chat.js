@@ -1,4 +1,4 @@
-is_in_browser = 1;
+  is_in_browser = 1;
   // start in browser also her.e
   // this can be changed if inside pdf view.
   
@@ -8,7 +8,7 @@ is_in_browser = 1;
   // parameter from url: session id, username role
   // if no parameter found returns null.
   function getURLParameter(name) {
-	  return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search)||[,""])[1].replace(/\+/g, '%20'))||null
+	    return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search)||[,""])[1].replace(/\+/g, '%20'))||null
 	}
 
   //var socket;  not used. instead:
@@ -83,7 +83,10 @@ is_in_browser = 1;
 			    		}
 			
 			      socket.send(JSON.stringify(user));
-    		} // onopen
+			      
+			      loadChatHistory();
+			      //socket opened - load history
+    		}; // onopen
                 
       //When received a message, parse it and either add/remove user or post message.
       socket.onmessage = function(a) {
@@ -113,7 +116,9 @@ is_in_browser = 1;
 	              var sonline = document.createElement('span');                            
 	              $(sonline).addClass("chatusername").text(message.addUser.username + " is online.").appendTo($(d));
 	              $(d).appendTo("#chatBox");
-	              $("#chatBox").scrollTop($("#chatBox")[0].scrollHeight);
+	              $("#chatBox").scrollTop($("#chatBox")[0].scrollHeight);	              
+	              
+	              console.log("chatbox html: " + $("#chatBox").innerHTML);
 	              		}
           
           console.log("Added user " + message.addUser.username);
@@ -205,10 +210,31 @@ is_in_browser = 1;
           								// full chat - I DON'T show slidechange 
 													//messages - I just CHANGE slides.          								
           					}
-          		else
+          		else // not change slide msg
           					{
           				//regular msg - display it anyway.
-          				$(d).appendTo("#chatBox");          			
+          					$(d).appendTo("#chatBox");
+          					
+          					if (role==0) // customer
+		          						{
+          							chatBoxHtml =	$("#chatBox").innerHTML;
+          							console.log("Customer chatbox - html is " + chatBoxHtml);
+          							
+          							// cannot find online user in chat history.
+          							if (chatBoxHtml.indexOf(" is online") == -1)
+		          								{
+		          						// add unavailable message
+				    	              var away_div = document.createElement('div');
+				    	              var away_span_ = document.createElement('span');                            
+				    	              $(away_span).addClass("chatusername").text(salesman +  " is not available. You message has been sent to him.").appendTo($(away_div));
+				    	              $(away_div).appendTo("#chatBox");
+				    	              $("#chatBox").scrollTop($("#chatBox")[0].scrollHeight);
+		          								}
+          							else
+		          								{
+          								console.log("salesman is online. not sending away msg.");		          								
+		          								}
+		          						}          			
           					}
           				}
           	else
@@ -251,6 +277,7 @@ is_in_browser = 1;
    
   
   function startClient() {
+	  
     console.log("opening socket");
     //on http server use document.domain instead od "localhost"
     //Start the websocket client
@@ -301,10 +328,40 @@ is_in_browser = 1;
   {
 	  $("#chatContainer")[0].style.visibility = "visible";
   }
+ 
+ function loadChatHistory()
+ {     
+		$.ajax({
+			type : "POST",
+			url : "ChatServlet",
+			data : jsondata,
+			contentType : "application/json; charset=utf-8",
+			processData : false,
+			error : function(XmlHttpRequest,
+					status, error) {
+				swal('chatservlet error from returned json'
+						+ error);
+			},
+			success : function(msg) {
+
+				//JSONobj = JSON.parse(jsondata);
+				his = msg.historyHtml;
+				console.log("chat svlt ret: " + his);
+	              // add msgs to chatbox
+	              var d = document.createElement('div');
+	              var s = document.createElement('span');                            
+	              $(s).addClass("chatusername").text(his).appendTo($(d));
+	              $(d).appendTo("#chatBox");
+	              $("#chatBox").scrollTop($("#chatBox")[0].scrollHeight);
+
+			} // success func
+		}); // end of ajax call
+
+ }
 
   
   
-  /******************** RUN ON STARTUP *****************/
+  /******************* RUN ON STARTUP *****************/
  // check if quickchat or not, and act accordingly.
   if (window.location.toString().indexOf("viewer.html") > -1)
   {	
@@ -323,5 +380,7 @@ else
   		       startClient();    
   		  		});  		  
   }
+
+  
 
   

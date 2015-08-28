@@ -74,48 +74,7 @@ public class ChatService {
 			        		}
     	  		}
             }
-      
-      // now we need to broadcast him all the previous messages
- //						must move this to thread - it disconnects socket.
-      for (String msg : DbLayer.getChatMessages(newUser.getSessionid()))
-      		{
-    	    System.out.println("Analyzing old message: " + msg);
-    	  	String oldmsg = (msg.substring(msg.lastIndexOf(":") + 1));
-    	  	System.out.println("1");
-    	  	// Remove stuff from string
-    	  	oldmsg = oldmsg.replace("</i>", "");
-    	  	oldmsg = oldmsg.replace("<i>", "");
-    	  	System.out.println("2");
-    	  	for(int i=1; i<40; i++)
-    	  			{ //remove all slide
-    	  			oldmsg = oldmsg.replace("[slide #"+i+"]", "");
-    	  			}    	  	
-    	  	System.out.println("3");
-    	  	
-					String[] parts = oldmsg.split(":");
-					String part1 = parts[0]; // username 
-					String part2 = parts[1]; // msg
-					System.out.println("4");
-					
-					System.out.println("Showing old message: " + part1 + " : " + part2);
-					
-					// role does not matter, it's just for printing.
-					// user obj for sending msg. 
-					ChatUser oldUser = new ChatUser(newUser.getSessionid(), 0, part1);
-					System.out.println("5");
-    	  	
-    	  	String messageToSend = "{\"message\": {\"user\":" + oldUser.toJSON()
-    	          + ", \"messagetext\":\"" + "Old Message: " + part2.replace("\"", "\\\"") +"\"} }";
-    	  	
-    	  		try {        	
-    	  			session.sendMessage(new TextMessage(messageToSend));
-		        } catch (IOException e) {
-		          System.out.println("Error when sending old history message " + messageToSend);
-		        		}    	  		
-    				System.out.println("WEBSOCKETS: broadcasting msg " + msg + " to new user in chat " + newUser.getUsername());      		
-      		}
-
-    
+          
       System.out.println("WEBSOCKETS: New socket user: " + newUser.toJSON());
       users.put(session, newUser);
       //System.out.println("WEBSOCKETS: registered new user. ");
