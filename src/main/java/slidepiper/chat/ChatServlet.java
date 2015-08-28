@@ -54,7 +54,7 @@ public class ChatServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 
-	   		
+		System.out.println("DOPOST CHATSERVLET");
 
 		StringBuffer jb = new StringBuffer();
 		DbLayer.init();
