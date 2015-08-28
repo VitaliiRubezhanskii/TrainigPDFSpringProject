@@ -54,8 +54,8 @@ public class BarChartRenderer {
 							con.setRequestMethod("GET");
 							con.setRequestProperty("User-Agent", USER_AGENT);
 							int responseCode = con.getResponseCode();
-							System.out.println("\nBARCHARTRENDER: Sending 'GET' request to URL : " + imageCaptureUrl);
-							System.out.println("Response Code : " + responseCode);
+							//System.out.println("\nBARCHARTRENDER: Sending 'GET' request to URL : " + imageCaptureUrl);
+							//System.out.println("Response Code : " + responseCode);
 							
 							BufferedReader in = new BufferedReader(
 							        new InputStreamReader(con.getInputStream()));

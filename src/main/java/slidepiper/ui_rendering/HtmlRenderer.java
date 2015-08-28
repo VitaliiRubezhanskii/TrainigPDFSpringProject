@@ -59,10 +59,24 @@ public class HtmlRenderer {
 			String barchartrow = getImageRow(barchartImageUrl);
 									
 			String originalMessageRow = getFreeTextRow("<u>Original Message</u>")
-					+getFreeTextRow(ai.getMessage_text());			
+					+getFreeTextRow(ai.getMessage_text());
 			
-			reportHTML = reportTitleRow + 
-					alertRow + 
+			String recotext = "<u>Recommendation: </u>";
+			
+			if (chatMessages.contains("No messages"))
+			{
+						recotext = recotext+ "Send e-mail to " + custname;
+			}
+			else
+			{
+				recotext = recotext+ "Call " + custname;
+			}
+			
+			String recommendationRow = getBoldBigRow(recotext);
+			
+			reportHTML = reportTitleRow +
+					recommendationRow +
+					alertRow +					 
 					barchartrow +
 					chatMessagesRow + "<BR>"+
 					deviceInfoRows +	"<BR>" +
@@ -121,7 +135,9 @@ public class HtmlRenderer {
 					whatNextRows;					
 			
 			alertHTML = addEnclosingHtml(alertHTML);
-			System.out.println("ALERT HTML **********************\n" + alertHTML);
+			System.out.println("ALERT HTML SENT **********************\n" 
+			//+ alertHTML
+					);
 			return alertHTML;			
 	}
 		
@@ -207,6 +223,12 @@ public class HtmlRenderer {
 		{
 				return "<tr><td><span style=\"font-family:Arial, Helvetica, sans-serif; font-size:12px; color:#000;\">"   
 						+text+"</span></td></tr>";
+		}
+		
+		public static String getBoldBigRow(String text)
+		{
+				return "<tr><td><span style=\"font-family:Arial, Helvetica, sans-serif; font-size:15px; color:#000;\">"   
+						+"<b>"+text+"</b></span></td></tr>";
 		}
 
 		
