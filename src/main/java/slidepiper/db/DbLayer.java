@@ -374,7 +374,7 @@ public class DbLayer {
 	}
 
 
-	public static ArrayList<String> getQuestions(String sessionId){		
+	/*public static ArrayList<String> getQuestions(String sessionId){		
 		ArrayList<String> qs = new ArrayList<String>();		
 						
 		String qsQuery = "SELECT param3str as 'question' " +   
@@ -403,7 +403,7 @@ public class DbLayer {
 		}
 		return qs;
 	}
-	
+	*/
 	public static ArrayList<String> getChatMessages(String sessionId){		
 		ArrayList<String> msgs = new ArrayList<String>();		
 						

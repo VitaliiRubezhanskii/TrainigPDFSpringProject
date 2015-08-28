@@ -108,11 +108,11 @@ public class ReportsServlet extends HttpServlet {
 										//{System.out.println("Slideview: num " + sv.getSlideNum() + " time " + sv.getTimeViewed());}
 										output.put("slideviews", slideviews);
 									break;
-							case "getQuestions":
+	/*						case "getQuestions":
 									//System.out.println("calling getQ");
 									ArrayList<String> qs = DbLayer.getQuestions(input.getString("sessionId"));
 									output.put("questions", qs);
-									break;
+									break;*/
 							case "setDone":
 								System.out.println("calling setDone for sessid " + input.getString("sessionId"));
 								// set done for this session id.
