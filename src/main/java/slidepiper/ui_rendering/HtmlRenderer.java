@@ -61,7 +61,7 @@ public class HtmlRenderer {
 			String originalMessageRow = getFreeTextRow("<u>Original Message</u>")
 					+getFreeTextRow(ai.getMessage_text());
 			
-			String recotext = "<u>Recommendation: </u>";
+			String recotext = "<u>Recommendation</u>: ";
 			
 			if (chatMessages.contains("No messages"))
 			{
@@ -74,7 +74,7 @@ public class HtmlRenderer {
 			
 			String recommendationRow = getBoldBigRow(recotext);
 			
-			reportHTML = reportTitleRow +
+			reportHTML = reportTitleRow + "<BR>" +
 					recommendationRow +
 					alertRow +					 
 					barchartrow +
