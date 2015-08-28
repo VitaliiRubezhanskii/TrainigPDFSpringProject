@@ -351,7 +351,7 @@
 	              // add msgs to chatbox
 	              var d = document.createElement('div');
 	              var s = document.createElement('span');                            
-	              $(s).addClass("chatusername").text(his).appendTo($(d));
+	              $(s).addClass("chatusername").html(his).appendTo($(d));
 	              $("#chatBox").empty();
 	              $(d).appendTo("#chatBox");
 	              $("#chatBox").scrollTop($("#chatBox")[0].scrollHeight);
