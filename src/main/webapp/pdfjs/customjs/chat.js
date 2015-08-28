@@ -217,7 +217,7 @@
           					
           					if (role==0) // customer
 		          						{
-          							chatBoxHtml =	$("#chatBox").innerHTML;
+          							chatBoxHtml =	$("#chatBox").html();
           							console.log("Customer chatbox - html is " + chatBoxHtml);
           							
           							// cannot find online user in chat history.
@@ -333,7 +333,7 @@
  {     	 	 
 		$.ajax({
 			type : "POST",
-			url : "ChatServlet",
+			url : "../ChatServlet",
 			data :'{"action":"getChatMessages", "session_id":"'
 				+ sessionid + '"}',
 			contentType : "application/json; charset=utf-8",
@@ -352,6 +352,7 @@
 	              var d = document.createElement('div');
 	              var s = document.createElement('span');                            
 	              $(s).addClass("chatusername").text(his).appendTo($(d));
+	              $("#chatBox").empty();
 	              $(d).appendTo("#chatBox");
 	              $("#chatBox").scrollTop($("#chatBox")[0].scrollHeight);
 
