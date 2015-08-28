@@ -177,11 +177,12 @@
           					console.log("changing to slide # " + slidenum);
           								// really change slide here too!
           								
-          								// we're in full chat mode, so this should
-          								// work - we have pdf viewer.
+    								// we're in full chat mode, so this should
+     								// work - we have pdf viewer.
           					if (slidenum>0)
           								{
-          								if (is_in_browser)
+          								//if (is_in_browser)
+          								// I want this to work also out of browser.
 		          									{
           									// change page number in PDF!          									
           								    	PDFViewerApplication.page = (slidenum | 0);
@@ -199,7 +200,9 @@
               									// this caused a bug. If I change cur_slide
               									// then in the slides detection loop it finds I'm out
               									// of browser, then cur_slide is -1 and prev_slide is set,
-              									// and slide has CHANGED, every time.
+              									// and slide has CHANGED, every time.              									
+              									// to fix this: 
+              									slides_controlled = true;
 		          									}          						          									          						
           								}
           					else

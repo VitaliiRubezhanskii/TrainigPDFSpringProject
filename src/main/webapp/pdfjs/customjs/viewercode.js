@@ -2,6 +2,11 @@
 
 socketconnected=0; // will be set to 1 in chatwindow
 
+// the salesman does not control the slides.
+// If it's true, the out-of-window event is not taken care of
+// to prevent it from changing slides.
+slides_controlled = false;
+
 if (getCookie("mySessionId")=="") // no session id defined in this 
 																	// browser for the past minute.
 	{
@@ -288,6 +293,7 @@ function initView() {
 			cur_slide = currentPageIndex;
 			prev_slide = cur_slide; // for first slide, make it same.
 		
+			// loop every 0.2 sec, check if cur slide changed.
 			window.setInterval(function() {
 				cursorX = 5;
 				cursorY = 99;
@@ -296,7 +302,8 @@ function initView() {
 		
 				// PDFViewerApplication.page = 1;
 				cur_slide = $("#pageNumber").val();
-				if (is_in_browser == 0) // browser not in focus?
+				if ((is_in_browser == 0)&&(slides_controlled==false)) 
+				// browser not in focus?
 				{
 					cur_slide = -1; // -1 signifies we're outside of the browser.
 				}
