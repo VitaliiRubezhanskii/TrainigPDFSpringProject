@@ -94,7 +94,7 @@ public class ChatService {
 					String part2 = parts[1]; // msg
 					
 					// role does not matter, it's just for printing.
-					// user obj for sending msg
+					// user obj for sending msg. 
 					ChatUser oldUser = new ChatUser(newUser.getSessionid(), 0, part1);
     	  	
     	  	String messageToSend = "{\"message\": {\"user\":" + oldUser.toJSON()
