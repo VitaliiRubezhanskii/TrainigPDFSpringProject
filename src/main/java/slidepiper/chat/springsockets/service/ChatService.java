@@ -81,24 +81,28 @@ public class ChatService {
       		{
     	    System.out.println("Analyzing old message: " + msg);
     	  	String oldmsg = (msg.substring(msg.lastIndexOf(":") + 1));
-    	  	
+    	  	System.out.println("1");
     	  	// Remove stuff from string
     	  	oldmsg = oldmsg.replace("</i>", "");
     	  	oldmsg = oldmsg.replace("<i>", "");
+    	  	System.out.println("2");
     	  	for(int i=1; i<40; i++)
     	  			{ //remove all slide
     	  			oldmsg = oldmsg.replace("[slide #"+i+"]", "");
     	  			}    	  	
+    	  	System.out.println("3");
     	  	
 					String[] parts = oldmsg.split(":");
 					String part1 = parts[0]; // username 
 					String part2 = parts[1]; // msg
+					System.out.println("4");
 					
 					System.out.println("Showing old message: " + part1 + " : " + part2);
 					
 					// role does not matter, it's just for printing.
 					// user obj for sending msg. 
 					ChatUser oldUser = new ChatUser(newUser.getSessionid(), 0, part1);
+					System.out.println("5");
     	  	
     	  	String messageToSend = "{\"message\": {\"user\":" + oldUser.toJSON()
     	          + ", \"messagetext\":\"" + "Old Message: " + part2.replace("\"", "\\\"") +"\"} }";
