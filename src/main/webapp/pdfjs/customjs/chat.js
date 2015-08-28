@@ -330,16 +330,17 @@
   }
  
  function loadChatHistory()
- {     
+ {     	 	 
 		$.ajax({
 			type : "POST",
 			url : "ChatServlet",
-			data : jsondata,
+			data :'{"action":"getChatMessages", "session_id":"'
+				+ sessionid + '"}',
 			contentType : "application/json; charset=utf-8",
 			processData : false,
 			error : function(XmlHttpRequest,
 					status, error) {
-				swal('chatservlet error from returned json'
+				alert('chatservlet error from returned json'
 						+ error);
 			},
 			success : function(msg) {

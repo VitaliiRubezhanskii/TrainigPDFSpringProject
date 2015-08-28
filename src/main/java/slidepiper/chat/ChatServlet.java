@@ -54,6 +54,8 @@ public class ChatServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 
+	   		
+
 		StringBuffer jb = new StringBuffer();
 		DbLayer.init();
 		//System.out.println("post req");
@@ -65,6 +67,9 @@ public class ChatServlet extends HttpServlet {
 	    } catch (Exception e) {
 	    	System.out.println("problem here! doGet chatservlet");
 	    }
+	    
+	    System.out.println("chatservlet parameters received: " +jb.toString());
+	    
 	    try{			
 			JSONObject input = new JSONObject(jb.toString());
 			String action = input.getString("action");
