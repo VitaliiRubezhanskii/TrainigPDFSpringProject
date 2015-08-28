@@ -1073,6 +1073,41 @@ public class DbLayer {
 					}
 					return HTML;
 			}
+			
+			public static Boolean isSessionDead(String sessid){		
+
+				// if one line is returned, session dead.
+				// only zero --> alive.
+				String query =
+						"select param3str from customer_events where session_id=? AND param3str='LAST_SLIDE';";
+								
+				Boolean is_dead = false;
+				
+				System.out.println("Checking Session " + sessid + ". Is it dead or alive?");
+				
+				Connection conn=null;
+				try 
+				{ 
+					try
+					{
+							  conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
+								PreparedStatement statement = conn.prepareStatement(query);				
+								statement.setString(1, sessid);								
+						 		ResultSet resultset = statement.executeQuery();								
+
+									while (resultset.next()) {
+										// got into here--> session is dead!!
+										is_dead = true;
+									}
+					} finally{ if(conn!=null){ conn.close();}	}
+				} catch (Exception ex) {
+						System.out.println("exception in getsm mailtype");
+						ex.printStackTrace();
+				}
+
+				System.out.println("Session " + sessid + " dead? " + is_dead);
+				return is_dead;
+			}
 
 }
 
