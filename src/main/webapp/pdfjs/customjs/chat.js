@@ -226,7 +226,7 @@
 		          						// add unavailable message
 				    	              var away_div = document.createElement('div');
 				    	              var away_span = document.createElement('span');                            
-				    	              $(away_span).addClass("chatusername").text(salesman +  " is not available. You message has been sent to him.").appendTo($(away_div));
+				    	              $(away_span).addClass("chatusername").text(salesman +  " is offline. Message saved.").appendTo($(away_div));
 				    	              $(away_div).appendTo("#chatBox");
 				    	              $("#chatBox").scrollTop($("#chatBox")[0].scrollHeight);
 		          								}

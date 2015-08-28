@@ -86,7 +86,8 @@ public class ChatServlet extends HttpServlet {
 			      for (String msg : DbLayer.getChatMessages(sessid))
 			      		{
 			    	    System.out.println("Analyzing old message: " + msg);
-			    	  	String oldmsg = (msg.substring(msg.lastIndexOf(":") + 1));
+			    	  	//String oldmsg = (msg.substring(msg.lastIndexOf(":") + 1));
+			    	    String oldmsg = msg;
 			    	  	System.out.println("1");
 			    	  	// Remove stuff from string
 			    	  	oldmsg = oldmsg.replace("</i>", "");
