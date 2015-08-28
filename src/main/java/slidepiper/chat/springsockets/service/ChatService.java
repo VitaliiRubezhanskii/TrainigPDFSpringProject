@@ -75,7 +75,7 @@ public class ChatService {
     	  		}
             }
       
-      // now we need to broadcast him all the previous messages
+/*      // now we need to broadcast him all the previous messages
       for (String msg : DbLayer.getChatMessages(newUser.getSessionid()))
       		{    	  	    	  	    	  	
     	  	String oldmsg = (msg.substring(msg.lastIndexOf(":") + 1));
@@ -106,7 +106,7 @@ public class ChatService {
 		        		}    	  		
     				System.out.println("WEBSOCKETS: broadcasting msg " + msg + " to new user in chat " + newUser.getUsername());      		
       		}
-
+*/
     
       System.out.println("WEBSOCKETS: New socket user: " + newUser.toJSON());
       users.put(session, newUser);
