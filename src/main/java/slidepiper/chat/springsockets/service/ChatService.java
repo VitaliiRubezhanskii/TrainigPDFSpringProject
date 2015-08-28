@@ -79,15 +79,25 @@ public class ChatService {
       for (String msg : DbLayer.getChatMessages(newUser.getSessionid()))
       		{    	  	    	  	    	  	
     	  	String oldmsg = (msg.substring(msg.lastIndexOf(":") + 1));
+    	  	
+    	  	// Remove stuff from string
     	  	oldmsg = oldmsg.replace("</i>", "");
     	  	oldmsg = oldmsg.replace("<i>", "");
-    	  	oldmsg = oldmsg.replace("[slide #1]", "");
-    	  	oldmsg = oldmsg.replace("[slide #2]", "");
-    	  	oldmsg = oldmsg.replace("[slide #", "");
-    	  	oldmsg = oldmsg.replace("]", "");
+    	  	for(int i=1; i<40; i++)
+    	  			{ //remove all slide
+    	  			oldmsg = oldmsg.replace("[slide #"+i+"]", "");
+    	  			}    	  	
     	  	
-    	  	String messageToSend = "{\"message\": {\"user\":" + newUser.toJSON()
-    	          + ", \"messagetext\":\"" + "Old Message: " + oldmsg.replace("\"", "\\\"") +"\"} }";
+					String[] parts = oldmsg.split(":");
+					String part1 = parts[0]; // username 
+					String part2 = parts[1]; // msg
+					
+					// role does not matter, it's just for printing.
+					// user obj for sending msg
+					ChatUser oldUser = new ChatUser(newUser.getSessionid(), 0, part1);
+    	  	
+    	  	String messageToSend = "{\"message\": {\"user\":" + oldUser.toJSON()
+    	          + ", \"messagetext\":\"" + "Old Message: " + part2.replace("\"", "\\\"") +"\"} }";
     	  	
     	  		try {        	
     	  			session.sendMessage(new TextMessage(messageToSend));
