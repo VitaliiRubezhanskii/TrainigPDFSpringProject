@@ -117,7 +117,9 @@ public class EmailSender {
 			EmailSender.sendEmail(mi.getSalesManEmail(), 
 					subj,				
 						msgtext
-					);			
+					);
+			
+			System.out.println("********** SENT ALERT EMAIL for " + mi.getSalesManEmail());
 	}
 	// report email after customer stops viewing presentation
 	// called from KeepAliveTask
@@ -145,5 +147,7 @@ public class EmailSender {
 			DbLayer.updateSessionReport(p.getSessionId(), msg);
 					 
 			EmailSender.sendEmail(mi.getSalesManEmail(), subj , msg);
+			
+			System.out.println("********** SENT REPORT EMAIL for " + mi.getSalesManEmail());
 	}
 }
