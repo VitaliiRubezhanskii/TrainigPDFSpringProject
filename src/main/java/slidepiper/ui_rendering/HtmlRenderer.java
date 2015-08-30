@@ -237,7 +237,7 @@ public class HtmlRenderer {
 		public static String getImageRow(String url)
 		{
 			return " <tr><td width=\"100%\" valign=\"top\">"  
-		    +"<img src='"+url+"' height=\"100\" width=\"550\" border=\"0\" hspace=\"5\" vspace=\"5\" align=\"left\"></img>"       
+		    +"<img src='"+url+"' height=\"500\" width=\"550\" border=\"0\" hspace=\"5\" vspace=\"5\" align=\"left\"></img>"       
 		    +"</td></tr>";
 		}
 		

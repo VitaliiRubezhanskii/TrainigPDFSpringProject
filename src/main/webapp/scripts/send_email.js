@@ -36,8 +36,19 @@
 										pres1.push(slidesid);
 									}
 								});
+						
 						msgtext = $("#msgtext1").val();
 						msgsubj = $("#subject1").val();
+						
+						// problem with " quotation marks
+						
+						msgtext = msgtext.replace("\"", "");
+						msgsubj = msgsubj.replace("\"", "");
+																		
+						// grashim  -- '  are ok (tested).
+						
+						msgtext = encodeURIComponent(msgtext);
+						msgsubj = encodeURIComponent(msgsubj);											
 
 						// first make some validations on the input.
 						if (!((customers.length == 1) && (pres1.length == 1))) {
@@ -50,8 +61,8 @@
 							docid = randomHash();
 
 							// replace newlines with <br>
-							msgtext = msgtext.replace(/(?:\r\n|\r|\n)/g,
-									'<br />');
+							//msgtext = msgtext.replace(/(?:\r\n|\r|\n)/g,
+								//	'<br />');
 
 							/*
 							 * // if RTL, make it RTL: if

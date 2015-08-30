@@ -15,6 +15,17 @@
   socket=null; //global var  
   var registered = false;
   
+  
+function addChatLine(line)
+{
+			//add online msg to chatbox
+			  var d = document.createElement('div');
+			  var sonline = document.createElement('span');                            
+			  $(sonline).addClass("chatusername").text(chatline).appendTo($(d));
+			  $(d).appendTo("#chatBox");
+			  $("#chatBox").scrollTop($("#chatBox")[0].scrollHeight);
+  }
+  
   function connectSocket()
   	{			  
 		socket = new SockJS(socketString);        
@@ -259,8 +270,9 @@
       socket.onclose = function() {
     	  		socketconnected = 0;
     	  		console.log("socket closed. trying to reconnect");
+    	  		addChatLine("Chat disconnected.");
     	  		// retry in 1sec.
-    	  		setTimeout(connectSocket, 1000);    	  		
+    	  		setTimeout(connectSocket, 5000);    	  		
     	  		};
     	  		
       socket.onerror = function() { alert("Error transmitting chat content"); socketconnected = 0;};

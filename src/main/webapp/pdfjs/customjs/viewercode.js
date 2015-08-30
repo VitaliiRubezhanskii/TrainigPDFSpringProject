@@ -1,5 +1,10 @@
 
 
+if(window.ActiveXObject || "ActiveXObject" in window){
+    // Always true if browser is Internet Explorer
+		alert("This website does not support Internet Explorer. Please switch to a different browser.");
+}
+
 socketconnected=0; // will be set to 1 in chatwindow
 
 // the salesman does not control the slides.

@@ -11,7 +11,9 @@ function setCookie(cname, cvalue, exdays) {
 function setShortTimeCookie(cname, cvalue) {
     var d = new Date();
     d.setTime(d.getTime() 
-    		+ 60000 // 1 minute
+    		+ 20000 //20sec ls
+    		
+    		// 1 minute
     	//	(exdays*24*60*60*1000) //this is milliseconds
     		);
     var expires = "expires="+d.toUTCString();

@@ -95,10 +95,14 @@ public class ManagementServlet extends HttpServlet {
 	    } catch (Exception e) {
 	    	System.out.println("problem here!");
 	    }
+	    
+	    System.out.println("JSON received at MgmtServlet: " + jb.toString());
 	    try{			
 			JSONObject input = new JSONObject(jb.toString());
 			String action = input.getString("action");
 			JSONObject output = new JSONObject();
+			
+			System.out.println("action at MgmtServlet: " + action);
 			
 			int salesman_found = 0;
 			
