@@ -95,9 +95,9 @@ public class HtmlRenderer {
 		{											
 			String alertHTML="";			
 												
-			String emailmailto = "<a style=\"color:white\" href=\"mailto:"
+			String emailmailto = "(<a style=\"color:white\" href=\"mailto:"
 					+ mi.getCustomerEmail()
-					+ "?Subject=Followup to our last email.\">"
+					+ "?Subject=Followup to our last email.\">)"
 					+ mi.getCustomerEmail() + "</a>";											
 			String custname = DbLayer.getCustomerName(mi.getCustomerEmail(),mi.getSalesManEmail()) + emailmailto;
 					
@@ -223,7 +223,7 @@ public class HtmlRenderer {
 		
 		public static String getFreeTextRow(String text)
 		{
-				return "<tr><td><span style=\"font-family:Arial, Helvetica, sans-serif; font-size:12px; color:#000;\">"   
+				return "<tr><td><span style=\"font-family:Arial, Helvetica, sans-serif; font-size:12px; color:#000; background-color: #ffffaa;\">"   
 						+text+"</span></td></tr>";
 		}
 		
