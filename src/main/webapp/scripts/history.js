@@ -58,7 +58,8 @@
 					},
 					success : function(msg) {
 						console.log("fillHistory ajax returned");
-						historyHTML = msg.his;
+						historyHTML = msg.history;
+						$("#historyDiv").hide().html(historyHTML).fadeIn('fast');
 						hideWaitMsg();
 					}
 				});
