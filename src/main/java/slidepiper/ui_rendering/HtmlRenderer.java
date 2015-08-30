@@ -39,7 +39,7 @@ public class HtmlRenderer {
 		{											
 			String reportHTML="";			
 												
-			String emailmailto = "<a style=\"color:white\" href=\"mailto:"
+			String emailmailto = "<a style=\"color:grey\" href=\"mailto:"
 					+ ai.getCustomer_email()
 					+ "?Subject=Followup to our last email.\">"
 					+ ai.getCustomer_email() + "</a>";											
@@ -272,14 +272,13 @@ public class HtmlRenderer {
 		}
 		
 		
+		// like accordion html
 		public static String getCollapsibleItem(String heading, String content)
 		{
-				return 
-			   "<div data-demo-html='true'>"
-	       +"<div data-role='collapsible'>"
-			   +"<h4>"+heading+"</h4>"
-			   +"<p>"+content+"</p></div>"
-			   +"</div>";	        
+				return						
+				"<details>"
+				+"<summary>"+heading+"</summary>"
+				+"<p>"+content+"</p></details>";			   	        
 		}
 		
 		/// generate history report for salesman
@@ -291,8 +290,8 @@ public class HtmlRenderer {
 			for(HistoryItem hi : his)
 			{
 						String msgtitle = 
-								"Presentation <u>" + hi.getSlidesName() + "</u> sent to <u>" + hi.getCustomerName() + "</u> ("
-								+ hi.getCustomerEmail() + ") at " + hi.getTimestamp();
+								"<b><u>" + hi.getSlidesName() + "</u> sent to <u>" + hi.getCustomerName() + "</u> ("
+								+ hi.getCustomerEmail() + ") at " + hi.getTimestamp() +"</b>";
 						
 						System.out.println("Title for history item: " + msgtitle);																		
 						
