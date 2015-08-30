@@ -91,27 +91,38 @@ public class DbLayer {
 	
 	//add new customer.
 	public static int addNewCustomer(String salesMan, String name, String company, String email){
-		String query = "INSERT INTO customers(email, name, sales_man, company) VALUES (?, ?, ?, ?)";
-		try (Connection conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);) 
-			{			
-			try{
-					PreparedStatement preparedStatement = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-					preparedStatement.setString(1, email);
-					preparedStatement.setString(2, name);
-					preparedStatement.setString(3, salesMan);
-					preparedStatement.setString(4, company);
-					preparedStatement.executeUpdate();
-					preparedStatement.close();
-					conn.close();
-					System.out.println("new customer inserted! name=" + name + " company: " + company);
-					return 1;
-			}
-			finally{ if(conn!=null){ conn.close();}	}
-		} catch (Exception ex) {
-			System.out.println("exception in addNewCust");
-			ex.printStackTrace();
+		
+		// customer does not exist.
+		if (getCustomerName(salesMan, email) == null)
+		{
+		
+				String query = "INSERT INTO customers(email, name, sales_man, company) VALUES (?, ?, ?, ?)";
+				try (Connection conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);) 
+					{			
+					try{
+							PreparedStatement preparedStatement = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+							preparedStatement.setString(1, email);
+							preparedStatement.setString(2, name);
+							preparedStatement.setString(3, salesMan);
+							preparedStatement.setString(4, company);
+							preparedStatement.executeUpdate();
+							preparedStatement.close();
+							conn.close();
+							System.out.println("new customer inserted! name=" + name + " company: " + company);
+							return 1;
+					}
+					finally{ if(conn!=null){ conn.close();}	}
+				} catch (Exception ex) {
+					System.out.println("exception in addNewCust");
+					ex.printStackTrace();
+					return 0;
+				}		
+		}
+		else
+		{
+			// customer already exists.
 			return 0;
-		}		
+		}
 	}
 		
 	
@@ -374,7 +385,7 @@ public class DbLayer {
 	}
 
 
-	public static ArrayList<String> getQuestions(String sessionId){		
+	/*public static ArrayList<String> getQuestions(String sessionId){		
 		ArrayList<String> qs = new ArrayList<String>();		
 						
 		String qsQuery = "SELECT param3str as 'question' " +   
@@ -403,7 +414,7 @@ public class DbLayer {
 		}
 		return qs;
 	}
-	
+	*/
 	public static ArrayList<String> getChatMessages(String sessionId){		
 		ArrayList<String> msgs = new ArrayList<String>();		
 						
@@ -578,8 +589,9 @@ public class DbLayer {
 		return pwd;
 	}
 	
+	// if no cust, returns null.
 	public static String getCustomerName(String customer_email, String salesman_email){		
-		String name = "";		
+		String name = null;		
 						
 		String query =		
 				"SELECT name FROM customers WHERE email=? AND sales_man=? LIMIT 1;";
@@ -601,9 +613,9 @@ public class DbLayer {
 		} catch (Exception ex) {
 				System.out.println("exception in getCustomerName");
 				ex.printStackTrace();
+								
 		}
-		
-		
+			
 		return name;
 	}
 	
@@ -870,39 +882,28 @@ public class DbLayer {
 				
 			System.out.println("start get history for email " + salesman_email);
 			ArrayList<HistoryItem> his = new ArrayList<HistoryItem>();						
-			String historySQL=
-					" SELECT DISTINCT customers.name AS 'customer_name', customers.email AS 'customer_email', "+
-				  " msg_info.msg_text AS 'message_text', msg_info.id as 'msgid', "+
-					" slides.name AS 'slides_name', msg_info.timestamp " +	
-					" FROM msg_info, customers, slides " +
-					" WHERE " +
-					" customers.email=msg_info.customer_email " +
-					" AND " +
-					" msg_info.slides_id = slides.id " +
-					" AND msg_info.sales_man_email='"+ salesman_email + "' " + 
-					" ORDER BY " +
-					" timestamp DESC";
+			String historySQL=					
+					" SELECT DISTINCT customers.name AS 'customer_name', customers.email AS 'customer_email', " 
+					  + " msg_info.msg_text AS 'message_text', msg_info.id AS 'msgid',  "
+						+ " slides.name AS 'slides_name', msg_info.timestamp  "
+						+ " FROM msg_info, customers, slides "
+						+ " WHERE "
+						+ " customers.email=msg_info.customer_email "
+						+ "	AND	customers.sales_man = ? "
+						+ " AND msg_info.slides_id = slides.id " 
+						+ " AND msg_info.sales_man_email=? " 
+						+" ORDER BY timestamp DESC;";
 			
-			/* original query tested:
-			 * SELECT DISTINCT customers.name AS 'customer_name', customers.email AS 'customer_email', 
-				   msg_info.msg_text AS 'message_text', msg_info.id AS 'msgid', 
-					 slides.name AS 'slides_name', msg_info.timestamp 
-					 FROM msg_info, customers, slides 
-					 WHERE 
-					 customers.email=msg_info.customer_email
-					 AND 
-					 msg_info.slides_id = slides.id
-					 AND msg_info.sales_man_email='shauli.daon@gmail.com' 
-					ORDER BY
-					 timestamp DESC;*/
 			Connection conn=null;
 			try 
 			{
 				try
 				{
-						conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);		
-						Statement statement = conn.createStatement();
-						ResultSet resultset = statement.executeQuery(historySQL);
+						conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
+						PreparedStatement statement = conn.prepareStatement(historySQL);				
+						statement.setString(1, salesman_email);								
+						statement.setString(2, salesman_email);
+						ResultSet resultset = statement.executeQuery();
 		//				System.out.println("query done");
 						HistoryItem hi;
 						String cust_name, cust_email, msgtext, msg_id, slides_name, send_time;
@@ -919,14 +920,14 @@ public class DbLayer {
 				//			  System.out.println("query done, values set");
 							  // I don't save msg_id and sessId but maybe USE THEM LATER.					    
 							  his.add(hi);
-		   			    //System.out.println("Found alert: cust " + cust_email + " sl name " + slides_name + "msgtext" + msgtext + " msgid " + msg_id + " open " + open_time + " send " + send_time + " sess id " + sessId);
+		//   			    System.out.println("Found hist item: " + hi.toString());
 							}
 				} finally{ if(conn!=null){ conn.close();}	}
 			} catch (Exception ex) {
 					System.out.println("exception in getHistory");
 					ex.printStackTrace();
 			}
-			//System.out.println("returning alerts found.");
+//			System.out.println("returning history items: " + his.toString());
 			return his;
 		}
 		///*********************************************************
@@ -962,6 +963,39 @@ public class DbLayer {
 			return sessArr;
 		}
 		///*********************************************************
+		
+		// Get session report htmls for msgid
+		public static ArrayList<String> getSessionReportsByMsgId(String msgid)
+		{		
+			//System.out.println("start get sess for msgid " + msgid);
+			ArrayList<String> reportsArr = new ArrayList<String>();
+						
+			String sessSQL=
+					"SELECT report_html FROM customer_sessions WHERE msg_id=?";
+			try 
+			{ 
+				Connection conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
+				PreparedStatement statement = conn.prepareStatement(sessSQL);				
+				statement.setString(1, msgid);								
+		 		ResultSet resultset = statement.executeQuery();				
+				String reporthtml;
+		//			System.out.println("LOOPING ON QUERY RESULTS");
+					while (resultset.next()) {
+						reporthtml = resultset.getString(1);
+					 	
+					 reportsArr.add(reporthtml);		
+				//    System.out.println("Found sessid for history. sessid " + sessid + " msgid " + msgid);
+					}
+					conn.close();
+			} catch (Exception ex) {
+					System.out.println("exception in getHistory");
+					ex.printStackTrace();
+			}
+			//System.out.println("returning alerts found.");
+			return reportsArr;
+		}
+		///*********************************************************
+
 		
 		// helper function to convert resultset to html
 		// used in AdminReportsServlet 
@@ -1073,6 +1107,88 @@ public class DbLayer {
 					}
 					return HTML;
 			}
+			
+			public static Boolean isSessionDead(String sessid){		
+
+				// if one line is returned, session dead.
+				// only zero --> alive.
+				String query =
+						"select param3str from customer_events where session_id=? AND param3str='LAST_SLIDE';";
+								
+				Boolean is_dead = false;
+				
+				System.out.println("Checking Session " + sessid + ". Is it dead or alive?");
+				
+				Connection conn=null;
+				try 
+				{ 
+					try
+					{
+							  conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
+								PreparedStatement statement = conn.prepareStatement(query);				
+								statement.setString(1, sessid);								
+						 		ResultSet resultset = statement.executeQuery();								
+
+									while (resultset.next()) {
+										// got into here--> session is dead!!
+										is_dead = true;
+									}
+					} finally{ if(conn!=null){ conn.close();}	}
+				} catch (Exception ex) {
+						System.out.println("exception in getsm mailtype");
+						ex.printStackTrace();
+				}
+
+				System.out.println("Session " + sessid + " dead? " + is_dead);
+				return is_dead;
+			}
+			
+			
+			
+			// set rows for this sessionId as done. 
+			// will not appear in recommendations. 
+			public static void updateSessionReport(String sessionId, String reportHtml)
+			{
+				System.out.println("setting report for session " + sessionId);
+				Constants.updateConstants();
+				Connection conn = null; // connection to the database	
+				
+				try {
+				// connects to the database
+							conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
+															
+							String sql = "UPDATE customer_sessions " + 
+							" SET report_html = ? " + 
+						  " WHERE session_id = ?";									
+							PreparedStatement statement = conn.prepareStatement(sql);
+							statement.setString(1, reportHtml);
+							statement.setString(2, sessionId);						
+							
+							// sends the statement to the database server
+							int row = statement.executeUpdate();
+							if (row > 0) {
+								System.out.println("set reporthtml in cust sess - rows updated: " + row);
+								//String message = "updated done.";
+							}
+							
+				}            
+				catch (SQLException ex) {
+				ex.printStackTrace();
+				System.out.println("SQL ERROR in updateSessionReport" + ex.getMessage());
+					} 
+				finally {
+						if (conn != null) {
+						    // closes the database connection
+						    try {
+						        conn.close();
+						    } catch (SQLException ex) {
+						        ex.printStackTrace();
+						        }
+						}
+			    }
+			}
+			
+
 
 }
 

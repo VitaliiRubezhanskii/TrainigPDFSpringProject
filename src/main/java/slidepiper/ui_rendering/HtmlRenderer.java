@@ -2,53 +2,22 @@ package slidepiper.ui_rendering;
 
 import java.util.ArrayList;
 
-
 import slidepiper.dataobjects.*;
+import slidepiper.db.DbLayer;
 
 // this whole thing needs to use StringBuilder to be faster. In the future...
 
 // this class renders HTML from objects when needed.
 // first: need to generate report HTML from the AlertData object.
 public class HtmlRenderer {
-		public static String GenerateAlertsHtml(ArrayList<AlertData> alertsdata)
+	
+	
+	
+		public static String getActionsRow(AlertData ai)
 		{
-					String alertsHTML ="";
-									
-					// loop on alerts
-					int i=0;
-					for(AlertData ai : alertsdata)
-					{
-						alertsHTML += GenerateAlertHtml(ai, i);
-						i++;						
-					}		
-//					System.out.println("Alerts html: " + alertsHTML);
-					return alertsHTML;
-		}
-		
-		/// generate for alertdata. i is index in list.
-		public static String GenerateAlertHtml(AlertData ai, int i) 
-		{											
-			String description_text;
-			String clicked_text;			
-			String messagesHtml;
-			String actionsHtml;			
-			String recommendation_text;						
-			String alertHTML="";
-			
-			messagesHtml = "";			
-			ArrayList<String> qs = ai.getQuestions();
-			if (!qs.isEmpty())
-			{
-				 messagesHtml = "<u>The customer sent these messages: </u><BR>";
-				 for(String q : qs)
-					{
-						messagesHtml += q;
-						messagesHtml += "<BR>";											
-					}				 
-			}
-			
-			actionsHtml = "";			
-			ArrayList<String> actions = ai.getActions();
+		  // actions
+			String actionsHtml="";						
+			ArrayList<String> actions = ai.getActions();		
 			if (!actions.isEmpty())
 			{
 				 actionsHtml = "<u> Actions performed: </u>";
@@ -62,85 +31,214 @@ public class HtmlRenderer {
 								 }																	
 					}				 
 			}
-
-									
-			String emailmailto = "<a style=\"color:white\" href=\"mailto:"
+			return getFreeTextRow(actionsHtml);
+		}
+	
+		/// generate 
+		public static String getReportHtml(AlertData ai, String chatMessages) 
+		{											
+			String reportHTML="";			
+												
+			String emailmailto = "<a style=\"color:grey\" href=\"mailto:"
 					+ ai.getCustomer_email()
 					+ "?Subject=Followup to our last email.\">"
-					+ ai.getCustomer_email() + "</a>";
-			
-			String reco_text = "<u> Recommendation:</u> Send e-mail to ";
-			if (!qs.isEmpty()) reco_text = "<u> Recommendation: </u> Call ";
-			
-			recommendation_text = "<div class=\"recommendation" + i
-					+ "\">" + reco_text + ai.getCustomer_name() + " ("
-					+ emailmailto + ")" + "</div>";
-			alertHTML += "<li data-role=\"list-divider\">"
-					+ recommendation_text + " </li>";
-			
-			description_text = "Viewed presentation: \"	"
-					+ ai.getSlides_name() + "\"";
-			clicked_text = "Opened at " + ai.getOpen_time() + "<BR>";
-			
-			alertHTML += "<li>";
-			//id is session num, to get it later in history screen.
-			alertHTML += "<div id=\"" + ai.getSession_id() + "\" class=\"ui-grid-b ui-responsive\">";
+					+ ai.getCustomer_email() + "</a>";											
+			String custname = ai.getCustomer_name() + emailmailto;
+					
+			String reportTitleRow = getTitleRow("SlidePiper Report");		
+			String alertRow = getAlertRow("viewed", ai.getSlides_name(), custname, ai.getOpen_time());
+			 
+			String deviceInfoRows =
+					getFreeTextRow("<u>Device Information</u>")+
+					getFreeTextRow(ai.getAll_browser_data());			
+						
+			String chatMessagesRow = getFreeTextRow("<u>Messages in Chat Window:</u>")
+					+getFreeTextRow(chatMessages);
 
-			alertHTML += "<div class=\"ui-block-a\">" 					
-				+ description_text													
-				+ "<BR>" 
-				+ clicked_text
-				+ "<div>"
-				+ messagesHtml
-				+ "</div>"
-				+ "<div>"
-				+ actionsHtml
-				+ "</div>"			
-				// done button: removed for now.
-				/*
-				+ "<a href=\"\" sessId=\""
-				+ ai.getSession_id()
-				+ "\" "
-				+ " class=\"doneButton"
-				+ i
-				+ "\" ui-btn ui-shadow ui-btn-inline ui-mini ui-icon-check ui-btn-icon-left\" data-inline=\"true\" data-mini=\"true\">"
-				+ "<div sessId=\"" + ai.getSession_id() + "\""
-				+ " id=\"" + ai.getSession_id() + "\""
-				+ ">Done</div></a>"
-				*/
-				
-				+ "</div>"														 
-				+ "<div class=\"ui-block-a\">"
-				//+ "<div class=\"d3barchart" + i + "\">BARCHART HERE</div>"
-			//	+ "</div>"				
-				+ "<BR> <div class=\"ui-block-a\">"
-				+ "<u>Original e-mail sent: </u> <BR>" 
-				+ ai.getMessage_text()
-				+ "</div>"
-				
-   			+ "<BR> <div class=\"ui-block-a\">"
-				+ "<u>Customer's Device Information: </u> <BR>" 
-				+ ai.getAll_browser_data()
-				+ "</div>"
-				
-				+ "</div></li>";
-			// end main responsive div, and listitem element.
+			String barchartImageUrl = BarChartRenderer.getBarChartLink(ai.getSession_id());
+			String barchartrow = getImageRow(barchartImageUrl);
+									
+			String originalMessageRow = getFreeTextRow("<u>Original Message</u>")
+					+getFreeTextRow(ai.getMessage_text());
 			
+			String recotext = "<u>Recommendation</u>: ";
+			
+			if (chatMessages.contains("No messages"))
+			{
+						recotext = recotext+ "Send e-mail to " + custname;
+			}
+			else
+			{
+				recotext = recotext+ "Call " + custname;
+			}
+			
+			String recommendationRow = getBoldBigRow(recotext);
+			
+			String actionsRow = getActionsRow(ai);
+			
+			reportHTML = reportTitleRow + "<BR>" +
+					recommendationRow +
+					alertRow +					 
+					actionsRow + 
+					barchartrow +
+					chatMessagesRow + "<BR>"+
+					deviceInfoRows +	"<BR>" +
+					originalMessageRow; 
+						
+			return reportHTML;			
+	}
+		
+		
+
+		
+		public static String getAlertHtml(MessageInfo mi, CustomerSession cs, String currentviewslink, String chatlink, String fullchatlink) 
+		{											
+			String alertHTML="";			
+												
+			String emailmailto = "(<a style=\"color:white\" href=\"mailto:"
+					+ mi.getCustomerEmail()
+					+ "?Subject=Followup to our last email.\">)"
+					+ mi.getCustomerEmail() + "</a>";											
+			String custname = DbLayer.getCustomerName(mi.getCustomerEmail(),mi.getSalesManEmail()) + emailmailto;
+					
+			String alertTitleRow = getTitleRow("SlidePiper Open Alert");		
+			String alertRow = getAlertRow("opened", DbLayer.getSlidesName(mi.getSlidesId()), custname, "");
+			 					
+			String originalMessageRow = getFreeTextRow("<u>Original Message</u>")
+					+getFreeTextRow(mi.getMsgText());
+			
+			String whatNextTitleRow = getTitleRow("What Next?");
+
+			String whatNextRows = whatNextTitleRow+"<BR>"; // start from this
+			
+			whatNextRows = whatNextRows + HtmlRenderer.getButtonRow(currentviewslink, "View Current Slides Report ");
+			
+			System.out.println("Detecting mobile/PC device: browser data is " + cs.getAll_browser_data());			
+			if (cs.getAll_browser_data().contains("Is mobile device: true"))
+			{			
+					System.out.println("Detected mobile device");
+					whatNextRows = 
+							whatNextRows + 
+							getFreeTextRow("<BR>Customer is using a mobile device, chat is not available for mobile devices.<BR>");
+			}
+			else
+			{
+				System.out.println("Detected PC, not mobile.");
+				whatNextRows = whatNextRows	
+						 +HtmlRenderer.getButtonRow(chatlink, "<b>Quick Chat</b>")  
+						+HtmlRenderer.getButtonRow(fullchatlink, "<b>Full Chat</b> + <b>Live Pitch</b>") +
+						  "<BR>";
+			}
+			
+			alertHTML = alertTitleRow + 
+					alertRow +
+					"<BR>"+
+					originalMessageRow+ "<BR>"+
+					whatNextRows;					
+			
+			alertHTML = addEnclosingHtml(alertHTML);
+			System.out.println("ALERT HTML SENT **********************\n" 
+			//+ alertHTML
+					);
 			return alertHTML;			
+	}
+		
+		
+		public static String addEnclosingHtml(String text)
+		{
+			String htmlStart = 
+		    "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">"
+		    +"<html>"
+		    +"<head>"
+		    +"<title>SlidePiper email</title>"
+		    +"</head>"
+		    +"<body leftmargin=\"0\" marginwidth=\"0\" topmargin=\"0\" marginheight=\"0\" offset=\"0\">"
+		    +"<table width=\"600\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" valign=\"top\" align=\"center\">"		        
+		    +"<tr><td width=\"100%\" valign=\"top\">"  
+		    +"<img src='www.slidepiper.com/img/logoOriginal.png' height=\"68\" width=\"400\" border=\"0\" hspace=\"5\" vspace=\"5\" align=\"left\" style='background-color: black;'></img>"       
+		    +"</td></tr>"
+		    + "<tr><td>"
+		    + "<p style=\"font-size:12px; line-height: 14px; font-family:Arial, Helvetica, sans-serif; margin: 0; padding : 0 ; color:#356560;\">"    
+		    + "Hello,<BR>"
+		    +"This is Jacob Salesmaster.<BR>"
+				+"I am your SlidePiper e-mail representative. Please carefully review the following e-mail.<BR><BR></BR></p>"   
+		    +"</td></tr>";
+			
+			// table is still open here at the end!
+			
+			String htmlEnd = 
+						"</table>"
+				    +"<table width=\"600\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" valign=\"top\" align=\"center\">"
+				    +"<tr><td>"
+				    +"<p style=\"font-size:12px; line-height: 14px; font-family:Arial, Helvetica, sans-serif; margin: 0; padding : 0 ; color:#356560;\"><BR>"
+				    +"<BR>Glad to serve you, <BR>Jacob Salesmaster<BR>SlidePiper Email Team</p>"   
+				    +"</td></tr>"
+						+"</table>   " 								   
+				    +"</body>"
+				    +"</html>";
+			
+				return htmlStart + text + htmlEnd;
 		}
 		
+		public static String getTitleRow(String title)	
+		{
+			return 
+		    "<tr>  <td width=\"50%\" style=\"background-color: #075482; height: 28px;\">"
+				+"<span style=\"font-weight: bold; color: #FFFFFF; font-size:15px; line-height: 28px; font-family: Arial, Helvetica, sans-serif;\">"  
+				+title
+				+"</span>"			
+		    +"</td></tr>";		  		    
+		}		
+
 		
+		public static String getAlertRow(String opened_or_viewed, String presname, String custname, String openedat)
+		{
+			 
+					String alertrow = "<tr><td> <BR>Your presentation has been " + opened_or_viewed + 
+					"<BR><u>Presentation Name</u>: "+presname
+					+"<BR><u>Customer Name</u>: "+custname;
+			
+					if (!openedat.equalsIgnoreCase(""))
+					{
+							alertrow = alertrow + "<BR><u>Opened at</u>: " + openedat;
+					}
+
+					
+					alertrow = alertrow	+"<BR> </td></tr>";
+					
+					return alertrow;
+		}
 		
+/*		public static String getMoreInfoRow(String device, String chatmsg, String orig_email)
+		{
+				return "<tr><td><span style=\"font-family:Arial, Helvetica, sans-serif; font-size:12px; color:#000;\">"         		
+				+"<u>Device Information:</u> <BR>"
+				+device 
+				+"<BR><BR><u>Messages in Chat Window:</u><BR>"
+				+chatmsg
+				+"<BR><BR><u>Original e-mail:</u> <BR>"
+				+orig_email
+				+"<BR><BR></span></td></tr>";
+		}*/
 		
-		// * doesn't work in email html
-		public static String getRoundedCornersStyle()
-		{			
-				return 
-						" style='"
-						+ " background: none repeat scroll 0 0 #aabbff;"
-				    +" border-radius: 25px;"
-				    +" border: 2px solid #8AC007;"
-				    +" padding: 20px; ' ";				       
+		public static String getFreeTextRow(String text)
+		{
+				return "<tr><td style=\"style=\"background-color: #ffffaa;\"><span style=\"font-family:Arial, Helvetica, sans-serif; font-size:12px; color:#000;\">"   
+						+text+"</span></td></tr>";
+		}
+		
+		public static String getBoldBigRow(String text)
+		{
+				return "<tr><td><span style=\"font-family:Arial, Helvetica, sans-serif; font-size:15px; color:#000;\">"   
+						+"<b>"+text+"</b></span></td></tr>";
+		}
+
+		
+		public static String getImageRow(String url)
+		{
+			return " <tr><td width=\"100%\" valign=\"top\">"  
+		    +"<img src='"+url+"' height=\"100\" width=\"550\" border=\"0\" hspace=\"5\" vspace=\"5\" align=\"left\"></img>"       
+		    +"</td></tr>";
 		}
 		
 		
@@ -158,7 +256,7 @@ public class HtmlRenderer {
 		}
 		
 		
-		public static String getButtonHtml(String url, String text)
+		public static String getButtonRow(String url, String text)
 		{
 			/* not good, submitting to external page. (shows msg)
 			return 
@@ -168,36 +266,98 @@ public class HtmlRenderer {
 			*/
 			return 
 					// illegal html - button inside a, but may work.
-					"<a href='" +url+ "'>" 
+					"<tr><td><a href='" +url+ "'>" 
 					+"<button " + getLinkableButtonStyle() + ">"+text+"</button>"
-					+"</a>";
+					+"</a></td></tr>";
 		}
 		
-		public static String addEnclosingBorders(String a)		
+		
+		// like accordion html
+		public static String getCollapsibleItem(String heading, String content)
 		{
-			// does not work in html email in gmail.
-							return "<div " + getRoundedCornersStyle() + ">" + a + "</div>";
-									
-/*			//according to tips here: http://chipcullen.com/html-email-and-borders/
-			return  "<table>"+
-				"<td style=\"border-left: solid 1px #e9e9e9; background: #ffffff\" bgcolor=\"ffffff\">" 
-			+a+ "&nbsp;</td>  </table>";*/
+				return						
+				"<details>"
+				+"<summary>"+heading+"</summary>"
+				+"<p>"+content+"</p></details>";			   	        
+		}
+		
+		/// generate history report for salesman
+		public static String getHistoryHtml(String smemail) 
+		{											
+			String reportHTML="";
+																									
+			ArrayList<HistoryItem> his = DbLayer.getHistory(smemail);												
+			for(HistoryItem hi : his)
+			{
+						String msgtitle = 
+								"<b><u>" + hi.getSlidesName() + "</u> sent to <u>" + hi.getCustomerName() + "</u> ("
+								+ hi.getCustomerEmail() + ") at " + hi.getTimestamp() +"</b>";
+						
+						System.out.println("Title for history item: " + msgtitle);																		
+						
+						ArrayList<String> reports = DbLayer.getSessionReportsByMsgId(hi.getMsgId());
+						String itemHTML="";
+						for(String report : reports)
+						{
+									itemHTML += report;						
+						}
+						
+						reportHTML += getCollapsibleItem(msgtitle, itemHTML);
+			}
 			
-			// can also put:  width="20"
-		}
+			// add enclosing table element.
+			//reportHTML = reportHTML;
+			
+			//System.out.println("**************** History HTML is: " + reportHTML);
+						
+			//reportHTML = addEnclosingHtml(reportHTML);
+			return reportHTML;			
+	}
 		
-		public static String addEnclosingHtml(String a)
-		{
-			return 
-					
-			"<!DOCTYPE html>"
-			+"<html>"			    
-			+"<head>"				
-		  +"<meta http-equiv='Content-Type' content='text/html;charset=ISO 8859-8' >"
-			+"</head>"
-		  +"<body>"
-			+ a
-			+"</body>"
-			+"</html>";
-		}
+
+
+		
+		//public static String getButtonRow(String text, String url)
+		//{
+//			return					
+	//		"<tr>		    <td>		      <table border=\"0\" cellspacing=\"0\" cellpadding=\"0\">"
+		//   +"     <tr>    <td align=\"center\" style=\"-webkit-border-radius: 7px; -moz-border-radius: 7px; border-radius: 7px;\" bgcolor=\"#e9703e\"><a href=\""+url+"\" target=\"_blank\" style=\"font-size: 16px; font-family: Helvetica, Arial, sans-serif; color: #ffffff; text-decoration: none; color: #ffffff; text-decoration: none; -webkit-border-radius: 3px; -moz-border-radius: 3px; border-radius: 3px; padding: 12px 18px; border: 1px solid #e9703e; display: inline-block;\">"
+		  // + text+" &rarr;</a></td>"
+		    //+ "   </tr>    </table>   </td>  </tr>";
+			
+			
+			/*return 
+					"</table>"+ //close table element.
+			"<div><!--[if mso]>"+
+			  "<v:roundrect xmlns:v=\"urn:schemas-microsoft-com:vml\" xmlns:w=\"urn:schemas-microsoft-com:office:word\" href=\""+text+"\" style=\"height:40px;v-text-anchor:middle;width:200px;\" arcsize=\"0%\" stroke=\"f\" fill=\"t\">"+
+			    "<v:fill type=\"tile\" src=\"\"http://imgur.com/5BIp9d0.gif\"\" color=\"#49a9ce\" />"+
+			    "<w:anchorlock/>"+
+			    "<center style=\"color:#ffffff;font-family:sans-serif;font-size:13px;font-weight:bold;\">"+text+"</center>"+
+			  "</v:roundrect>"+
+			"<![endif]--><a href=\""+url+"\" "+
+			"style=\"background-color:#49a9ce;background-image:url(\"http://imgur.com/5BIp9d0.gif\");border-radius:px;color:#ffffff;display:inline-block;font-family:sans-serif;font-size:13px;font-weight:bold;line-height:40px;text-align:center;text-decoration:none;width:200px;-webkit-text-size-adjust:none;mso-hide:all;\">"+text+"</a></div>"
+			
+			//reopen table element.
+			+"<table width=\"600\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" valign=\"top\" align=\"center\">";*/
+			
+			//return "<table cellspacing=\"0\" cellpadding=\"0\"> <tr>"+ 
+			//"<td align=\"center\" width=\"300\" height=\"40\" bgcolor=\"#000091\" style=\"-webkit-border-radius: 5px; -moz-border-radius: 5px; border-radius: 5px; color: #ffffff; display: block;\">"+
+			//"<a href=\"" +url+  "\" style=\"font-size:16px; font-weight: bold; font-family: Helvetica, Arial, sans-serif; text-decoration: none; line-height:40px; width:100%; display:inline-block\"><span style=\"color: #FFFFFF\">"+text+"</span></a>"+
+			//"</td>	</tr> </table>";
+			
+			
+//			return "<table width='600' cellpadding='0' cellspacing='0' border='0' valign='top' align='center'><td align='center' width='300' height='40' bgcolor='#000091' style='-webkit-border-radius: 5px; -moz-border-radius: 5px; border-radius: 5px; color: #ffffff; display: block;'><a href='"+url+"' style='font-size:16px; font-weight: bold; font-family: Helvetica, Arial, sans-serif; text-decoration: none; line-height:40px; width:100%; display:inline-block'><span style='color: #FFFFFF'>"+text+"</span></a></td></tr> </table>";
+			
+			//return "<table width='600' cellpadding='0' cellspacing='0' border='0' valign='top' align='center'><td align='center' width='300' height='40' bgcolor='#000091' style='-webkit-border-radius: 5px; -moz-border-radius: 5px; border-radius: 5px; color: #ffffff; display: block;'><a href='"+"http://www.google.com"+"' style='font-size:16px; font-weight: bold; font-family: Helvetica, Arial, sans-serif; text-decoration: none; line-height:40px; width:100%; display:inline-block'><span style='color: #FFFFFF'>"+text+"</span></a></td></tr> </table>";
+			
+		//	return
+		//	"<table cellpadding='0' cellmargin='0' border='0' height='44' width='178' style='border-collapse: collapse; border:5px solid #c62228'>"+
+		//	 " <tr>   <td bgcolor='#c62228' valign='middle' align='center' width='174'>"+
+		//	  "    <div style='font-size: 18px; color: #ffffff; line-height: 1; margin: 0; padding: 0; mso-table-lspace:0; mso-table-rspace:0;'>"+
+		//	   "     <a href='"+url+"' style='text-decoration: none; color: #ffffff; border: 0; font-family: Arial, arial, sans-serif; mso-table-lspace:0; mso-table-rspace:0;' border='0'>"+text+"</a>"+
+	////		    "  </div>			    </td>			  </tr>			</table>";
+		///	
+		//	
+	//	}
+		
 }

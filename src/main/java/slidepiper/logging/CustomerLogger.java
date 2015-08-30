@@ -47,8 +47,8 @@ public class CustomerLogger {
 							// write to sessions table for open slides event
 							if (event_name.equalsIgnoreCase("OPEN_SLIDES"))
 							{							
-										sql = "INSERT INTO customer_sessions (msg_id, ipaddr, session_id, browser, operating_system, all_browser_data, done, timestamp) values "
-												+ "		(?, ?, ?, ?, ?, ?, 0, DATE_ADD(UTC_TIMESTAMP(),INTERVAL "+ (-timezone_offset_min)+" MINUTE) )";
+										sql = "INSERT INTO customer_sessions (msg_id, ipaddr, session_id, browser, operating_system, all_browser_data, done, timestamp, report_html) values "
+												+ "		(?, ?, ?, ?, ?, ?, 0, DATE_ADD(UTC_TIMESTAMP(),INTERVAL "+ (-timezone_offset_min)+" MINUTE) , '')";
 										//System.out.println("sql for OEN_SLIDES is " + sql);
 										statement = conn.prepareStatement(sql);
 										statement.setString(1, id);						

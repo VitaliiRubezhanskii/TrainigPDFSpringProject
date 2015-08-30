@@ -138,7 +138,7 @@
 
                 <div data-role="header" data-theme="b">
 <!-- 	<a href="index.html" data-icon="delete">Back</a> -->
-	<h1>Slidepiper - History</h1>
+	<h1>Slidepiper - History </h1>
 	
 
  </div>
@@ -195,31 +195,27 @@
 
  <div role="main" class="ui-content no-padding-class">           
                 <!-- *************************************** SMART ALERTS ********************************** -->
-<!--  <div class="ui-corner-all custom-corners"> -->
-  <div class="ui-bar ui-bar-a">
+                
+<!--   <div class="ui-bar ui-bar-a" style="visibility: ">
     <h3>Followup Recommendations</h3>
   </div>   
   <div class="ui-body ui-body-a no-padding-class">    		
 
 			<div data-demo-html="true">
-			<ul data-role="listview" data-inset="true" id="smartalerts" style="height:250px; overflow-x:hidden; overflow-y: scroll; padding-bottom:0px;">
-			<!--  smart alerts html here -->
+			<ul data-role="listview" data-inset="true" id="smartalerts" style="height:250px; overflow-x:hidden; overflow-y: scroll; padding-bottom:0px;">	
 			</ul> 
-			</div><!--/demo-html -->
-<!--
- 			  <a href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-bullets ui-btn-inline" data-inline="true">All Recommendations...</a>
- -->
-  </div> <!-- content -->
+			</div>
+  </div> 
   
+ -->
 
-<!--  </div>    -->  <!-- ui corner custom corner -->
             
 
     <!-- *************************************** CUSTOMER MANAGEMENT ********************************** -->
 <br>
 <div class="ui-corner-all custom-corners">
   <div class="ui-bar ui-bar-a">
-      <h3>Customer Management</h3>
+      <h3>Send e-mails to Customers</h3>
   </div>
   <div class="ui-body ui-body-a no-padding-class">
     		<!--  <p>Send tracked messages to your customers.</p> -->        
@@ -230,7 +226,7 @@
   <div class="ui-bar ui-bar-a">
     <h3>Select Customer(s)</h3>
   </div>
-   <div class="ui-body ui-body-a" style="height:250px; overflow-x:hidden; overflow-y: scroll; padding-bottom:10px;" id="customersDiv">
+   <div class="ui-body ui-body-a" style="height:350px; overflow-x:hidden; overflow-y: scroll; padding-bottom:10px;" id="customersDiv">
       </div>
    
                 
@@ -265,7 +261,7 @@
   <div class="ui-bar ui-bar-a">
     <h3>Select Presentation</h3>
   </div>
-  <div class="ui-body ui-body-a" style="height:250px; overflow-x:hidden; overflow-y: scroll; padding-bottom:10px;" id="pres1Div" >    
+  <div class="ui-body ui-body-a" style="height:350px; overflow-x:hidden; overflow-y: scroll; padding-bottom:10px;" id="pres1Div" >    
 </div>      
    <a href="#popupAddPresentation" data-rel="popup" data-position-to="window" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-plus ui-btn-icon-left ui-btn-a" data-transition="pop">Add</a>	             
       <a id="removePresentationButton" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-delete ui-btn-icon-left ui-btn-a" data-transition="pop">Remove</a>	             
@@ -310,7 +306,7 @@
                   <div class="ui-bar ui-bar-a">
                     <h3>Enter Message</h3>
                   </div>
-                  <div class="ui-body ui-body-a" style="height:250px; overflow-x:hidden; overflow-y: scroll; padding-bottom:10px;">
+                  <div class="ui-body ui-body-a" style="height:350px; overflow-x:hidden; overflow-y: scroll; padding-bottom:10px;">
                     <input type="text" name="subject1" id="subject1" value="" placeholder="Subject" />
                     <p><textarea cols="40" rows="8" name="textarea-6" id="msgtext1" placeholder="Message Body" ></textarea></p>
 <!--                    <input name="rtl"  class="" id="rtl" type="checkbox" value="Right to Left Message"> <label for="rtl">Right to Left Message</label>
@@ -359,7 +355,6 @@
 <script type="text/javascript" src="scripts/makecheckboxes.js"></script>
 <script type="text/javascript" src="scripts/load_mgmt_screen.js"></script>
 <script type="text/javascript" src="scripts/d3utils.js"></script>
-<script type="text/javascript" src="scripts/done_button.js"></script>
 <script type="text/javascript" src="scripts/filldata.js"></script>
 <script type="text/javascript" src="scripts/init_page.js"></script>
 <!-- - from here loading from DB should start, meanwhile
@@ -374,8 +369,8 @@
 <script type="text/javascript" src="scripts/remove_presentation.js"></script>
 <script type="text/javascript" src="scripts/send_email.js"></script>
 <script type="text/javascript" src="scripts/add_customer.js"></script>
-<script type="text/javascript" src="scripts/history.js"></script> 
 <script type="text/javascript" src="scripts/account.js"></script>
+<script type="text/javascript" src="scripts/history.js"></script>
 <div id="dialog-confirm"></div>
 
 </body>

@@ -94,8 +94,7 @@
 							showWaitMsg();
 							// alert("json msg " + jsondata);
 							console.log("sendemail ajax");
-							$
-									.ajax({
+							$.ajax({
 										type : "POST",
 										url : "ManagementServlet",
 										data : jsondata,

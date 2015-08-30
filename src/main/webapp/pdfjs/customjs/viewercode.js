@@ -2,6 +2,11 @@
 
 socketconnected=0; // will be set to 1 in chatwindow
 
+// the salesman does not control the slides.
+// If it's true, the out-of-window event is not taken care of
+// to prevent it from changing slides.
+slides_controlled = false;
+
 if (getCookie("mySessionId")=="") // no session id defined in this 
 																	// browser for the past minute.
 	{
@@ -15,12 +20,14 @@ if (getCookie("mySessionId")=="") // no session id defined in this
 					// a new random one.
 					// this is also updated in the time, renewing the short time every iteration.
 					setShortTimeCookie("mySessionId", thisSessionId);
+					send_open_slides_event = true; // slides were opened for
+					// first time in this session.
 	}
 else
 	{
 			// just get the cookie.
 			thisSessionId = getCookie("mySessionId");
-	
+			send_open_slides_event = false; // don't send again
 	}
 
 // anyway, this is overwritten if parameters are given in url.
@@ -182,9 +189,9 @@ function getSalesmanData() {
 						loadChatWindow();
 				}
 			else
-				{
-						hideChat();
-						console.log("NOT loading chat. mobilecheck " + mobilecheck());
+				{					
+						console.log("loading chat. mobilecheck " + mobilecheck() + " must load it for the slide changes...");
+						loadChatWindow();
 				}
 		}
 	}); // end of ajax call
@@ -211,7 +218,11 @@ function preInitView()
 
 				if  (role==0) //send events only for customer, not salesman
 					{
-				send_event("OPEN_SLIDES", prev_slide, "0", browser_data);
+							// send only if it's first init for this session.
+							if (send_open_slides_event==true)
+								{
+										send_event("OPEN_SLIDES", prev_slide, "0", browser_data);
+								}
 					}
 				preInitDone = true;
 		}
@@ -282,6 +293,7 @@ function initView() {
 			cur_slide = currentPageIndex;
 			prev_slide = cur_slide; // for first slide, make it same.
 		
+			// loop every 0.2 sec, check if cur slide changed.
 			window.setInterval(function() {
 				cursorX = 5;
 				cursorY = 99;
@@ -290,7 +302,8 @@ function initView() {
 		
 				// PDFViewerApplication.page = 1;
 				cur_slide = $("#pageNumber").val();
-				if (is_in_browser == 0) // browser not in focus?
+				if ((is_in_browser == 0)&&(slides_controlled==false)) 
+				// browser not in focus?
 				{
 					cur_slide = -1; // -1 signifies we're outside of the browser.
 				}
@@ -394,46 +407,19 @@ function loadChatWindow()
 	// load chat window into chatdiv.
 	chatDiv = $("#chatDiv");
 	
-//	alert("get url for cust name is " + getURLParameter("customername"));
-	// returns null if there's no parameter with that name.	
-	//getParams = "sessionid="+sessionid+"&salesman="+encodeURIComponent(salesman.trim())+"&customername="+encodeURIComponent(customername.trim())+"&role="+role;	
-	//loadurl = "chatwindow.html"; //+"?"+getParams;
-	// the params are not needed and not used.
-	// in full chat mode they are received from getSalesmanDataServlet
-	
-	//console.log("jquery load url " + loadurl);
-			
-	//$("#chatDiv").load(loadurl,
-	//		//function to run after loading chat window
-//			function()
-//			{
-				// no loading, it's inside viewer.html now.
-	
-						// run after 2 seconds, maybe the chat window 
-						// 	will stabilize its position.
-						// 	the timeout screws up the UI...
 					startClient();
-						setTimeout(function() {							
-		//					console.log("finished loading chat html");
-							// final callback on finishing to load chat window.
-							//load completed.
-	
-	
-	
-// start chat client.	
-								// it must be visible before calling width/height
-							//methods.
-							showChat();				
-				// position it correctly
+						setTimeout(function() {
+										
+							showChat(); // must show before changing properties
+							// otherwise it doesn't change correctly.
+							// position it correctly
 							maxY = window.outerHeight;								
 							chatDivHeight = chatDiv.outerHeight();
-							//console.log("maxY " + maxY + " chatDivHeight " + chatDivHeight);
-							
+							//console.log("maxY " + maxY + " chatDivHeight " + chatDivHeight);							
 							
 							maxX = window.outerWidth;
 							chatDivWidth = chatDiv.outerWidth();							
-							//console.log("maxX " + maxX + " chatDivWidth " + chatDivWidth);
-							
+							//console.log("maxX " + maxX + " chatDivWidth " + chatDivWidth);							
 							
 							leftVal = maxX - chatDivWidth-25;
 							//topVal = maxY - chatDivHeight;
@@ -444,9 +430,26 @@ function loadChatWindow()
 							
 							chatDiv[0].style.top = topVal+"px";
 							chatDiv[0].style.left = leftVal+"px";	
-							//finally, show it.							
+							//finally, show it.
+							
+							if (mobilecheck() == true)
+							{
+									hideChat(); // hide it on mobile,										
+								//	chatDiv[0].style = "font-size:5px;";
+								//	chatDiv[0].style.font-size = "5px;";
+									// but it still transfers slide change msgs.
+									console.log("mobile. hiding chat");
+							}
+							else
+							{
+								console.log("desktop. showing chat");
+								  showChat(); //desktop device
+							}
 											
-						},  200);
+						},  2000);
+						// 2 seconds are good because the first events
+						// make chat show on mobile. so after 2 sec
+						// it disappears.
 	//		});
 	
 

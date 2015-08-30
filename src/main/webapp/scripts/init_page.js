@@ -67,7 +67,6 @@ $(document).on("pagecontainershow", function() {
 				showWaitMsg();	
 				console.log("calling fills");
 				fillCustomersAndPresentations();
-				fillAlerts();
 				console.log("called fills cust+pres and alerts");
 				
 				if (verifyingactivated==false) //only once.
@@ -101,7 +100,6 @@ $(document).on("pagecontainershow", function() {
 		}
 		break;
 		
-		
 	case 'history_page':
 		send_salesman_event("OPEN_HISTORY", '0', '0', "");
 		console.log("history check logged in");
@@ -127,6 +125,7 @@ $(document).on("pagecontainershow", function() {
 			}, 2000);
 		}
 		break;
+		
 	default:
 		swal("Error: page id not in case. " + activePageId);
 	}

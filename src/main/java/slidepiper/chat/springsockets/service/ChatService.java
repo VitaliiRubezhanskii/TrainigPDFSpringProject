@@ -4,6 +4,7 @@ package slidepiper.chat.springsockets.service;
 import java.io.IOException;
 
 import slidepiper.chat.*;
+import slidepiper.db.DbLayer;
 import slidepiper.logging.CustomerLogger;
 
 import java.util.HashSet;
@@ -73,7 +74,7 @@ public class ChatService {
 			        		}
     	  		}
             }
-    
+          
       System.out.println("WEBSOCKETS: New socket user: " + newUser.toJSON());
       users.put(session, newUser);
       //System.out.println("WEBSOCKETS: registered new user. ");
@@ -99,6 +100,8 @@ public class ChatService {
 			        		}
     	  } //if
      }//for
+      
+
       		System.out.println("WEBSOCKETS: Broadcasted from "+newUser.getUsername()+  " to " + broadcastmatches + " users.");
    }else           
       // else to if sesssion is not registered.

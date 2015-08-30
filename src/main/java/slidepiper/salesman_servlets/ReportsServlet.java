@@ -82,7 +82,7 @@ public class ReportsServlet extends HttpServlet {
 									ArrayList<AlertData> alerts = DbLayer.getAlerts(input.getString("email"));					
 									output.put("alerts", alerts);
 									break;
-							case "getAlertsHtml":											
+/*							case "getAlertsHtml":											
 								//System.out.println("making alerts HTML");//
 								ArrayList<AlertData> alertlist = DbLayer.getAlerts(input.getString("email"));
 								//System.out.println("rcvd alerts objs");//
@@ -90,12 +90,20 @@ public class ReportsServlet extends HttpServlet {
 								//System.out.println("rcvd alerts html: " + alertsHtml);//
 								output.put("alertsHtml", alertsHtml);
 								//System.out.println("Sent alerts html");
-								break;									
-							case "getHistory":					
-								System.out.println("calling getHistory with email " + input.getString("email"));
-								ArrayList<HistoryItem> his = DbLayer.getHistory(input.getString("email"));					
-								output.put("history",his);
-								break;
+								break;*/									
+//							case "getHistory":					
+	//							System.out.println("calling getHistory with email " + input.getString("email"));
+		//						ArrayList<HistoryItem> his = DbLayer.getHistory(input.getString("email"));					
+			//					output.put("history",his);
+				//				break;
+								
+							case "getHistory": //history html
+								//System.out.println("Sending salesmandata");				
+								String his = HtmlRenderer.getHistoryHtml(input.getString("email"));					 
+								output.put("history", his);					
+							break;
+								
+
 							case "getSessionsByMsgId":					
 								//System.out.println("calling getSessionsByMsgId with msgid " + input.getString("msgid"));
 								ArrayList<String> sessions = DbLayer.getSessionsByMsgId(input.getString("msgid"));					
@@ -108,11 +116,11 @@ public class ReportsServlet extends HttpServlet {
 										//{System.out.println("Slideview: num " + sv.getSlideNum() + " time " + sv.getTimeViewed());}
 										output.put("slideviews", slideviews);
 									break;
-							case "getQuestions":
+	/*						case "getQuestions":
 									//System.out.println("calling getQ");
 									ArrayList<String> qs = DbLayer.getQuestions(input.getString("sessionId"));
 									output.put("questions", qs);
-									break;
+									break;*/
 							case "setDone":
 								System.out.println("calling setDone for sessid " + input.getString("sessionId"));
 								// set done for this session id.

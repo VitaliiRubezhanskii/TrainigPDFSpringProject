@@ -27,10 +27,10 @@ public class LoadAlertDataThread extends Thread {
 				//System.out.println("In thread for session " + sessid + " now getactions");
 				ArrayList<String> actions = DbLayer.getActions(sessid);
 				//System.out.println("In thread for session " + sessid + " now getqs");
-				ArrayList<String> questions = DbLayer.getQuestions(sessid);								
+				//ArrayList<String> questions = DbLayer.getQuestions(sessid);								
 				alertData.setCustomer_name(customer_name);
 				alertData.setActions(actions);
-				alertData.setQuestions(questions);				
+				//alertData.setQuestions(questions);				
 				//System.out.println("In thread for session " + sessid + " idx " + threadidx +" DONE");
 	   }
 	}
