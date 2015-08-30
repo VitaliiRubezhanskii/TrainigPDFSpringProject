@@ -48,7 +48,7 @@ public class CustomerLogger {
 							if (event_name.equalsIgnoreCase("OPEN_SLIDES"))
 							{							
 										sql = "INSERT INTO customer_sessions (msg_id, ipaddr, session_id, browser, operating_system, all_browser_data, done, timestamp) values "
-												+ "		(?, ?, ?, ?, ?, ?, 0, DATE_ADD(UTC_TIMESTAMP(),INTERVAL "+ (-timezone_offset_min)+" MINUTE) )";
+												+ "		(?, ?, ?, ?, ?, ?, 0, DATE_ADD(UTC_TIMESTAMP(),INTERVAL "+ (-timezone_offset_min)+" MINUTE) , '')";
 										//System.out.println("sql for OEN_SLIDES is " + sql);
 										statement = conn.prepareStatement(sql);
 										statement.setString(1, id);						
