@@ -289,6 +289,8 @@ public class HtmlRenderer {
 								"Presentation " + hi.getSlidesName() + " sent to " + hi.getCustomerName() + " ("
 								+ hi.getCustomerEmail() + ") at " + hi.getTimestamp();
 						
+						System.out.println("Title for history item: " + msgtitle);
+						
 						reportHTML += ("<BR>" + getTitleRow(msgtitle) + "<BR>");
 						ArrayList<String> reports = DbLayer.getSessionReportsByMsgId(hi.getMsgId());
 						
@@ -297,6 +299,8 @@ public class HtmlRenderer {
 									reportHTML += report;						
 						}
 			}
+			
+			System.out.println("**************** History HTML is: " + reportHTML);
 						
 			reportHTML = addEnclosingHtml(reportHTML);
 			return reportHTML;			
