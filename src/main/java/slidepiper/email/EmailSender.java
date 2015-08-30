@@ -144,8 +144,10 @@ public class EmailSender {
 			
 			String msg = HtmlRenderer.getReportHtml(ai, chatMessages);
 			
-			DbLayer.updateSessionReport(p.getSessionId(), msg);
+			// write in session without enclosing html. only enclosing table.
+			DbLayer.updateSessionReport(p.getSessionId(), "<table>"+msg+"</table>");
 					 
+			msg = HtmlRenderer.addEnclosingHtml(msg);
 			EmailSender.sendEmail(mi.getSalesManEmail(), subj , msg);
 			
 			System.out.println("********** SENT REPORT EMAIL for " + mi.getSalesManEmail());

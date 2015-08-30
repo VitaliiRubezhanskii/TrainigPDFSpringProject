@@ -84,8 +84,7 @@ public class HtmlRenderer {
 					chatMessagesRow + "<BR>"+
 					deviceInfoRows +	"<BR>" +
 					originalMessageRow; 
-			
-			reportHTML = addEnclosingHtml(reportHTML);
+						
 			return reportHTML;			
 	}
 		
@@ -292,7 +291,7 @@ public class HtmlRenderer {
 			for(HistoryItem hi : his)
 			{
 						String msgtitle = 
-								"Presentation " + hi.getSlidesName() + " sent to " + hi.getCustomerName() + " ("
+								"Presentation <u>" + hi.getSlidesName() + "</u> sent to <u>" + hi.getCustomerName() + "</u> ("
 								+ hi.getCustomerEmail() + ") at " + hi.getTimestamp();
 						
 						System.out.println("Title for history item: " + msgtitle);																		
