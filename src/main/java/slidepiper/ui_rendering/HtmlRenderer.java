@@ -273,15 +273,21 @@ public class HtmlRenderer {
 		}
 		
 		
+		public static String getCollapsibleItem(String heading, String content)
+		{
+				return 
+			   "<div data-demo-html='true'>"
+	       +"<div data-role='collapsible'>"
+			   +"<h4>"+heading+"</h4>"
+			   +"<p>"+content+"</p></div>"
+			   +"</div>";	        
+		}
 		
 		/// generate history report for salesman
 		public static String getHistoryHtml(String smemail) 
 		{											
-			String reportHTML="";			
-																	
-			String reportTitleRow = getTitleRow("SlidePiper History Report");
-			reportHTML = reportTitleRow;
-			
+			String reportHTML="";
+																									
 			ArrayList<HistoryItem> his = DbLayer.getHistory(smemail);												
 			for(HistoryItem hi : his)
 			{
@@ -289,20 +295,24 @@ public class HtmlRenderer {
 								"Presentation " + hi.getSlidesName() + " sent to " + hi.getCustomerName() + " ("
 								+ hi.getCustomerEmail() + ") at " + hi.getTimestamp();
 						
-						System.out.println("Title for history item: " + msgtitle);
+						System.out.println("Title for history item: " + msgtitle);																		
 						
-						reportHTML += ("<BR>" + getTitleRow(msgtitle) + "<BR>");
 						ArrayList<String> reports = DbLayer.getSessionReportsByMsgId(hi.getMsgId());
-						
+						String itemHTML="";
 						for(String report : reports)
 						{
-									reportHTML += report;						
+									itemHTML += report;						
 						}
+						
+						reportHTML += getCollapsibleItem(msgtitle, itemHTML);
 			}
 			
-			System.out.println("**************** History HTML is: " + reportHTML);
+			// add enclosing table element.
+			//reportHTML = reportHTML;
+			
+			//System.out.println("**************** History HTML is: " + reportHTML);
 						
-			reportHTML = addEnclosingHtml(reportHTML);
+			//reportHTML = addEnclosingHtml(reportHTML);
 			return reportHTML;			
 	}
 		

@@ -919,14 +919,14 @@ public class DbLayer {
 				//			  System.out.println("query done, values set");
 							  // I don't save msg_id and sessId but maybe USE THEM LATER.					    
 							  his.add(hi);
-		   			    System.out.println("Found hist item: " + hi.toString());
+		//   			    System.out.println("Found hist item: " + hi.toString());
 							}
 				} finally{ if(conn!=null){ conn.close();}	}
 			} catch (Exception ex) {
 					System.out.println("exception in getHistory");
 					ex.printStackTrace();
 			}
-			System.out.println("returning history items: " + his.toString());
+//			System.out.println("returning history items: " + his.toString());
 			return his;
 		}
 		///*********************************************************
