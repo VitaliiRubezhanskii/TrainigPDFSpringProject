@@ -40,8 +40,15 @@
 						msgtext = $("#msgtext1").val();
 						msgsubj = $("#subject1").val();
 						
+						// problem with " quotation marks
+						
+						msgtext = msgtext.replace("\"", "");
+						msgsubj = msgsubj.replace("\"", "");
+																		
+						// grashim  -- '  are ok (tested).
+						
 						msgtext = encodeURIComponent(msgtext);
-						msgsubj = encodeURIComponent(msgsubj);
+						msgsubj = encodeURIComponent(msgsubj);											
 
 						// first make some validations on the input.
 						if (!((customers.length == 1) && (pres1.length == 1))) {
