@@ -870,38 +870,27 @@ public class DbLayer {
 				
 			System.out.println("start get history for email " + salesman_email);
 			ArrayList<HistoryItem> his = new ArrayList<HistoryItem>();						
-			String historySQL=
-					" SELECT DISTINCT customers.name AS 'customer_name', customers.email AS 'customer_email', "+
-				  " msg_info.msg_text AS 'message_text', msg_info.id as 'msgid', "+
-					" slides.name AS 'slides_name', msg_info.timestamp " +	
-					" FROM msg_info, customers, slides " +
-					" WHERE " +
-					" customers.email=msg_info.customer_email " +
-					" AND " +
-					" msg_info.slides_id = slides.id " +
-					" AND msg_info.sales_man_email='"+ salesman_email + "' " + 
-					" ORDER BY " +
-					" timestamp DESC";
+			String historySQL=					
+					" SELECT DISTINCT customers.name AS 'customer_name', customers.email AS 'customer_email', " 
+					  + " msg_info.msg_text AS 'message_text', msg_info.id AS 'msgid',  "
+						+ " slides.name AS 'slides_name', msg_info.timestamp  "
+						+ " FROM msg_info, customers, slides "
+						+ " WHERE "
+						+ " customers.email=msg_info.customer_email"
+						+ "	AND	customers.sales_man = ?"
+						+ " AND msg_info.slides_id = slides.id"
+						+ " AND msg_info.sales_man_email=?" 
+						+" ORDER BY timestamp DESC;";
 			
-			/* original query tested:
-			 * SELECT DISTINCT customers.name AS 'customer_name', customers.email AS 'customer_email', 
-				   msg_info.msg_text AS 'message_text', msg_info.id AS 'msgid', 
-					 slides.name AS 'slides_name', msg_info.timestamp 
-					 FROM msg_info, customers, slides 
-					 WHERE 
-					 customers.email=msg_info.customer_email
-					 AND 
-					 msg_info.slides_id = slides.id
-					 AND msg_info.sales_man_email='shauli.daon@gmail.com' 
-					ORDER BY
-					 timestamp DESC;*/
 			Connection conn=null;
 			try 
 			{
 				try
 				{
-						conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);		
-						Statement statement = conn.createStatement();
+						conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
+						PreparedStatement statement = conn.prepareStatement(historySQL);				
+						statement.setString(1, salesman_email);								
+						statement.setString(2, salesman_email);
 						ResultSet resultset = statement.executeQuery(historySQL);
 		//				System.out.println("query done");
 						HistoryItem hi;
