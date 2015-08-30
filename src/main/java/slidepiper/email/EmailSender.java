@@ -113,7 +113,7 @@ public class EmailSender {
 			CustomerSession cs = DbLayer.getSessionData(sessionId);
 			
 			String msgtext = HtmlRenderer.getAlertHtml(mi, cs, currentviewslink, chatlink, fullchatlink); 
-			
+						
 			EmailSender.sendEmail(mi.getSalesManEmail(), 
 					subj,				
 						msgtext
@@ -141,6 +141,8 @@ public class EmailSender {
 					" (" + mi.getCustomerEmail() + ")";
 			
 			String msg = HtmlRenderer.getReportHtml(ai, chatMessages);
+			
+			DbLayer.updateSessionReport(p.getSessionId(), msg);
 					 
 			EmailSender.sendEmail(mi.getSalesManEmail(), subj , msg);
 	}

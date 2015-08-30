@@ -1108,6 +1108,53 @@ public class DbLayer {
 				System.out.println("Session " + sessid + " dead? " + is_dead);
 				return is_dead;
 			}
+			
+			
+			
+			// set rows for this sessionId as done. 
+			// will not appear in recommendations. 
+			public static void updateSessionReport(String sessionId, String reportHtml)
+			{
+				System.out.println("setting report for session " + sessionId);
+				Constants.updateConstants();
+				Connection conn = null; // connection to the database	
+				
+				try {
+				// connects to the database
+							conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
+															
+							String sql = "UPDATE customer_sessions " + 
+							" SET report_html = ? " + 
+						  " WHERE session_id = ?";									
+							PreparedStatement statement = conn.prepareStatement(sql);
+							statement.setString(1, reportHtml);
+							statement.setString(2, sessionId);						
+							
+							// sends the statement to the database server
+							int row = statement.executeUpdate();
+							if (row > 0) {
+								System.out.println("set reporthtml in cust sess - rows updated: " + row);
+								//String message = "updated done.";
+							}
+							
+				}            
+				catch (SQLException ex) {
+				ex.printStackTrace();
+				System.out.println("SQL ERROR in updateSessionReport" + ex.getMessage());
+					} 
+				finally {
+						if (conn != null) {
+						    // closes the database connection
+						    try {
+						        conn.close();
+						    } catch (SQLException ex) {
+						        ex.printStackTrace();
+						        }
+						}
+			    }
+			}
+			
+
 
 }
 
