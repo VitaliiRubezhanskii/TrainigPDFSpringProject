@@ -94,12 +94,12 @@ function send_event(ename, eparam1, eparam2, eparam3) {
 }
 
 // get mouse positions into these variables
-var cursorX;
-var cursorY;
-document.onmousemove = function(e) {
-	cursorX = e.pageX;
-	cursorY = e.pageY;
-}
+var cursorX=2;
+var cursorY=3;
+//document.onmousemove = function(e) {
+//	cursorX = e.pageX;
+	//cursorY = e.pageY;
+//}
 
 setInterval("checkCursor()", 1000);
 function checkCursor() {
