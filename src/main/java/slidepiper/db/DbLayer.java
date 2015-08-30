@@ -963,6 +963,39 @@ public class DbLayer {
 		}
 		///*********************************************************
 		
+		// Get session report htmls for msgid
+		public static ArrayList<String> getSessionReportsByMsgId(String msgid)
+		{		
+			//System.out.println("start get sess for msgid " + msgid);
+			ArrayList<String> reportsArr = new ArrayList<String>();
+						
+			String sessSQL=
+					"SELECT report_html FROM customer_sessions WHERE msg_id=?";
+			try 
+			{ 
+				Connection conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
+				PreparedStatement statement = conn.prepareStatement(sessSQL);				
+				statement.setString(1, msgid);								
+		 		ResultSet resultset = statement.executeQuery();				
+				String reporthtml;
+		//			System.out.println("LOOPING ON QUERY RESULTS");
+					while (resultset.next()) {
+						reporthtml = resultset.getString(1);
+					 	
+					 reportsArr.add(reporthtml);		
+				//    System.out.println("Found sessid for history. sessid " + sessid + " msgid " + msgid);
+					}
+					conn.close();
+			} catch (Exception ex) {
+					System.out.println("exception in getHistory");
+					ex.printStackTrace();
+			}
+			//System.out.println("returning alerts found.");
+			return reportsArr;
+		}
+		///*********************************************************
+
+		
 		// helper function to convert resultset to html
 		// used in AdminReportsServlet 
 		private static String getResultSetHTML(java.sql.ResultSet rs)

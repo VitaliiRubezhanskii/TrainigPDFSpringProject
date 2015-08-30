@@ -271,6 +271,38 @@ public class HtmlRenderer {
 					+"<button " + getLinkableButtonStyle() + ">"+text+"</button>"
 					+"</a></td></tr>";
 		}
+		
+		
+		
+		/// generate history report for salesman
+		public static String getHistoryHtml(String smemail) 
+		{											
+			String reportHTML="";			
+																	
+			String reportTitleRow = getTitleRow("SlidePiper History Report");
+			reportHTML = reportTitleRow;
+			
+			ArrayList<HistoryItem> his = DbLayer.getHistory(smemail);												
+			for(HistoryItem hi : his)
+			{
+						String msgtitle = 
+								"Presentation " + hi.getSlidesName() + " sent to " + hi.getCustomerName() + " ("
+								+ hi.getCustomerEmail() + ") at " + hi.getTimestamp();
+						
+						reportHTML += ("<BR>" + getTitleRow(msgtitle) + "<BR>");
+						ArrayList<String> reports = DbLayer.getSessionReportsByMsgId(hi.getMsgId());
+						
+						for(String report : reports)
+						{
+									reportHTML += report;						
+						}
+			}
+						
+			reportHTML = addEnclosingHtml(reportHTML);
+			return reportHTML;			
+	}
+		
+
 
 		
 		//public static String getButtonRow(String text, String url)
