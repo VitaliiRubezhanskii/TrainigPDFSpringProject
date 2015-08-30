@@ -74,9 +74,12 @@ public class HtmlRenderer {
 			
 			String recommendationRow = getBoldBigRow(recotext);
 			
+			String actionsRow = getActionsRow(ai);
+			
 			reportHTML = reportTitleRow + "<BR>" +
 					recommendationRow +
 					alertRow +					 
+					actionsRow + 
 					barchartrow +
 					chatMessagesRow + "<BR>"+
 					deviceInfoRows +	"<BR>" +

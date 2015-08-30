@@ -99,6 +99,33 @@ $(document).on("pagecontainershow", function() {
 			}, 2000);
 		}
 		break;
+		
+	case 'history_page':
+		send_salesman_event("OPEN_HISTORY", '0', '0', "");
+		console.log("history check logged in");
+		// if already logged in
+		if (getCookie("SalesmanEmail") != "") {
+			// set username field.
+			console.log("In History: initPage check logged in - YES - cookie is set");
+			loggedin = true;
+			$("#usernamefield").val(getCookie("SalesmanEmail").toLowerCase());
+			$("#salesman_email").val(getCookie("SalesmanEmail").toLowerCase());
+			$("#myAccount").html(getCookie("SalesmanEmail").toLowerCase());
+			console.log("in history screen. filling. ");
+			showWaitMsg();
+			setTimeout(function() {
+				fillHistory();
+			}, 1000);
+		} else {
+			console.log("History: not logged in.");
+			loggedin = false; // also default
+			swal("Not logged in.", "Redirecting to login screen.", "error");
+			setTimeout(function() {
+				window.location = window.location.pathname;
+			}, 2000);
+		}
+		break;
+		
 	default:
 		swal("Error: page id not in case. " + activePageId);
 	}
