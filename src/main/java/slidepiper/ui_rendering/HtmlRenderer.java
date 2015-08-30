@@ -223,7 +223,7 @@ public class HtmlRenderer {
 		
 		public static String getFreeTextRow(String text)
 		{
-				return "<tr><td><span style=\"font-family:Arial, Helvetica, sans-serif; font-size:12px; color:#000; background-color: #ffffaa;\">"   
+				return "<tr><td style=\"style=\"background-color: #ffffaa;\"><span style=\"font-family:Arial, Helvetica, sans-serif; font-size:12px; color:#000;\">"   
 						+text+"</span></td></tr>";
 		}
 		
