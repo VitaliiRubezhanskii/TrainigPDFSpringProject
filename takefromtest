@@ -1,0 +1,5 @@
+git pull ../slidepipertest
+
+git commit -m "new ver from test instance"
+git push
+
