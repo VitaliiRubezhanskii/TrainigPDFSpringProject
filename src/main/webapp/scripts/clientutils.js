@@ -1,5 +1,11 @@
 //useful stuff for the javascript client
 
+// for internet explorer - shut off console errors
+// but we'd still have no console messages.
+if (typeof console == "undefined") {
+    this.console = { log: function (msg) { alert(msg); } };
+}
+
 window.onerror = function(msg, url, linenumber) {
     //alert('Error message: '+msg+'\nURL: '+url+'\nLine Number: '+linenumber);
 		errmsg = 'Error message: '+msg+'\nURL: '+url+'\nLine Number: '+linenumber + "\n";

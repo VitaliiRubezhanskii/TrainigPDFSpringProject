@@ -1,0 +1,4 @@
+pull ../slidepipertest
+echo PULLED FROM test-------------
+git push
+
