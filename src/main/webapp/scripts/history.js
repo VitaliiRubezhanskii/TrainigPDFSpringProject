@@ -68,7 +68,7 @@
 						success : 
 							function(msg) {						
 										//console.log("Found num sessions " + msg.sessions.length + " for msgid " + this.currentMsgId + " filling..."); 
-										fillQuestions_InHistory(msg.sessions, this.currentMsgId);
+										//fillQuestions_InHistory(msg.sessions, this.currentMsgId);
 										fillBarCharts_InHistory(msg.sessions, this.currentMsgId);
 											//alert("found session " + msg.sessions[i] + " msgid " + msgid);
 						//				console.log("Started filling q's and barcharts");							
