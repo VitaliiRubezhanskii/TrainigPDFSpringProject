@@ -95,7 +95,7 @@ public class DbLayer {
 		// customer does not exist.
 		if (getCustomerName(email, salesMan) == null)
 		{
-		
+		 
 				String query = "INSERT INTO customers(email, name, sales_man, company) VALUES (?, ?, ?, ?)";
 				try (Connection conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);) 
 					{			
