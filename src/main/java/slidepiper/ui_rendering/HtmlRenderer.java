@@ -1,5 +1,7 @@
 package slidepiper.ui_rendering;
 
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 
 import slidepiper.dataobjects.*;
@@ -57,9 +59,20 @@ public class HtmlRenderer {
 
 			String barchartImageUrl = BarChartRenderer.getBarChartLink(ai.getSession_id());
 			String barchartrow = getImageRow(barchartImageUrl);
+					
+			String msgtext = "CANNOT DECODE MESSAGE";
+			try
+			{
+					msgtext = URLDecoder.decode(ai.getMessage_text(), "UTF-8");	
+			}
+			catch (Exception e)
+			{
+				 		System.out.println("Error decoding msg "  + ai.getMessage_text() );
+				 		System.out.println("Error decoding msg " + e.getMessage());
+			}
 									
 			String originalMessageRow = getFreeTextRow("<u>Original Message</u>")
-					+getFreeTextRow(ai.getMessage_text());
+					+getFreeTextRow(msgtext);
 			
 			String recotext = "<u>Recommendation</u>: ";
 			
