@@ -1,5 +1,7 @@
 package slidepiper.ui_rendering;
 
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 
 import slidepiper.dataobjects.*;
@@ -57,7 +59,7 @@ public class HtmlRenderer {
 
 			String barchartImageUrl = BarChartRenderer.getBarChartLink(ai.getSession_id());
 			String barchartrow = getImageRow(barchartImageUrl);
-									
+													
 			String originalMessageRow = getFreeTextRow("<u>Original Message</u>")
 					+getFreeTextRow(ai.getMessage_text());
 			

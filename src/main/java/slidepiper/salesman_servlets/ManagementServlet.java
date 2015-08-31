@@ -1,8 +1,6 @@
 package slidepiper.salesman_servlets;
 
 import java.awt.TrayIcon.MessageType;
-
-
 import java.io.BufferedReader;
 
 import slidepiper.*;
@@ -16,6 +14,7 @@ import slidepiper.logging.CustomerLogger;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URLDecoder;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -149,7 +148,17 @@ public class ManagementServlet extends HttpServlet {
 					
 				case "sendPresentationToCustomer":									
 					String msgtext = input.getString("msgtext");
-					
+										
+					try
+					{
+							msgtext = URLDecoder.decode(msgtext, "UTF-8");	
+					}
+					catch (Exception e)
+					{
+						 		System.out.println("Error decoding msg "  + msgtext);
+						 		System.out.println("Error decoding msg " + e.getMessage());
+					}
+										
 					String appname = System.getenv("OPENSHIFT_APP_NAME");
 					System.out.println("making link for app appname " + appname);						
 					String msglink;

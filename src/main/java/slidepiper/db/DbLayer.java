@@ -93,17 +93,17 @@ public class DbLayer {
 	public static int addNewCustomer(String salesMan, String name, String company, String email){
 		
 		// customer does not exist.
-		if (getCustomerName(salesMan, email) == null)
+		if (getCustomerName(email, salesMan) == null)
 		{
-		
+		 
 				String query = "INSERT INTO customers(email, name, sales_man, company) VALUES (?, ?, ?, ?)";
 				try (Connection conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);) 
 					{			
 					try{
 							PreparedStatement preparedStatement = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-							preparedStatement.setString(1, email);
+							preparedStatement.setString(1, email.toLowerCase());
 							preparedStatement.setString(2, name);
-							preparedStatement.setString(3, salesMan);
+							preparedStatement.setString(3, salesMan.toLowerCase());
 							preparedStatement.setString(4, company);
 							preparedStatement.executeUpdate();
 							preparedStatement.close();
@@ -591,7 +591,9 @@ public class DbLayer {
 	
 	// if no cust, returns null.
 	public static String getCustomerName(String customer_email, String salesman_email){		
-		String name = null;		
+		String name = null;
+		
+		System.out.println("getCustomerName for custemail " + customer_email + " smemail " + salesman_email);
 						
 		String query =		
 				"SELECT name FROM customers WHERE email=? AND sales_man=? LIMIT 1;";
@@ -602,8 +604,8 @@ public class DbLayer {
 			{
 					conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
 					PreparedStatement statement = conn.prepareStatement(query);				
-					statement.setString(1, customer_email);								
-					statement.setString(2, salesman_email);
+					statement.setString(1, customer_email.toLowerCase());								
+					statement.setString(2, salesman_email.toLowerCase());
 			 		ResultSet resultset = statement.executeQuery();								
 					// should run only once, limit 1 above.
 						while (resultset.next()) {
@@ -615,6 +617,8 @@ public class DbLayer {
 				ex.printStackTrace();
 								
 		}
+		
+		System.out.println("getCustomerName for custemail " + customer_email + " smemail " + salesman_email + " NAME FOUND IS: " + name);
 			
 		return name;
 	}
