@@ -155,7 +155,7 @@ public class ManagementServlet extends HttpServlet {
 					}
 					catch (Exception e)
 					{
-						 		System.out.println("Error decoding msg "  + ai.getMessage_text() );
+						 		System.out.println("Error decoding msg "  + msgtext);
 						 		System.out.println("Error decoding msg " + e.getMessage());
 					}
 										
