@@ -148,10 +148,12 @@ public class ManagementServlet extends HttpServlet {
 					
 				case "sendPresentationToCustomer":									
 					String msgtext = input.getString("msgtext");
+					String msgsubj = input.getString("msgsubj");
 										
 					try
 					{
 							msgtext = URLDecoder.decode(msgtext, "UTF-8");	
+							msgsubj = URLDecoder.decode(msgtext, "UTF-8");
 					}
 					catch (Exception e)
 					{
@@ -191,7 +193,7 @@ public class ManagementServlet extends HttpServlet {
 					
 					//does not really send, just write to db. sent using mailto.
 						DbLayer.sendMessage(input.getString("docid"), input.getString("salesman_email"), "no email password", input.getString("customeremails"),
-							input.getString("slides_ids"), msgtext, "", input.getString("msgsubj"), timezone_offset
+							input.getString("slides_ids"), msgtext, "", msgsubj, timezone_offset
 							);
 					
 					// message will be sent using mailto!!!
