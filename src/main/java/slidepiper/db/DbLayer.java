@@ -93,7 +93,7 @@ public class DbLayer {
 	public static int addNewCustomer(String salesMan, String name, String company, String email){
 		
 		// customer does not exist.
-		if (getCustomerName(salesMan, email) == null)
+		if (getCustomerName(email, salesMan) == null)
 		{
 		
 				String query = "INSERT INTO customers(email, name, sales_man, company) VALUES (?, ?, ?, ?)";
