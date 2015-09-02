@@ -25,75 +25,77 @@ function addChatLine(newline)
 			  $(d).appendTo("#chatBox");
 			  $("#chatBox").scrollTop($("#chatBox")[0].scrollHeight);
   }
+
+function setGlobals()
+{
+    //register the user
+    //var nickname = $("#nickname").val();			      
+    			    	
+  	if ( getURLParameter("customername") == null)
+  		{
+  		//this means we couldn't take the parameters from the 
+  		// url. In that case it means that it's in the pdf 
+  		// viewer and it tries to take the url of the top page.
+  		// and it has other get parameters. 
+  		// In this case, we have shared global variables with
+  		// the main page, so I can simply take these global variables:
+  			
+  			sessionid = thisSessionId;
+  					    					    						    		
+  		// other global variables are already set at customviewercode.js
+  		
+  		//alert("Error, no customer name parameter");
+  		}
+  	else //we have params in url! quickchat mode
+  		{
+  		// run this only we have params.
+  		// otherwise it erases the loaded data in
+  		// customviewercode.
+  		customername = getURLParameter("customername"); 				    	
+	    	role = getURLParameter("role");
+	    	salesman = getURLParameter("salesman");
+	    	
+	    	sessionid = getURLParameter("sessionid");				    	
+  		}
+  	if (sessionid==null) alert("Error, no sessid parameter for chat");
+  	if (role==null) alert("Error, no role parameter for chat");
+  	if (salesman==null) alert("error, no salesman parameter for chat");
+  	
+  	// customer sees chatting with salesman
+  	if (role=="0")
+  			{
+  				user = { "username" : customername,
+   		       "sessionid" : sessionid,
+   		       "role" : role
+   		                  };
+  				$("#chatWith").text("Chatting with " + salesman);
+  				username = customername;
+  			}
+  	else
+  	//salesman sees chatting with customer
+  	if (role=="1")
+			{
+  			user = { "username" : salesman,
+  			       "sessionid" : sessionid,
+  			       "role" : role
+  			                  };
+  			username=salesman;
+					$("#chatWith").text("Chatting with " + customername);
+			}
+  	else
+  		{
+  					alert("ERROR - role is not defined.");
+  		}
+}
   
   function connectSocket()
-  	{			  
+  	{			  	  	  	  	 
 	  loadChatHistory();
 		socket = new SockJS(socketString);        
     //When the connection is opened, login.
     	socket.onopen = function() {
     				socketconnected = 1;
-			      console.log("Opened socket.");
-			      
-			      //register the user
-			      //var nickname = $("#nickname").val();			      
-			      			    	
-			    	if ( getURLParameter("customername") == null)
-			    		{
-			    		//this means we couldn't take the parameters from the 
-			    		// url. In that case it means that it's in the pdf 
-			    		// viewer and it tries to take the url of the top page.
-			    		// and it has other get parameters. 
-			    		// In this case, we have shared global variables with
-			    		// the main page, so I can simply take these global variables:
-			    			
-			    			sessionid = thisSessionId;
-			    					    					    						    		
-			    		// other global variables are already set at customviewercode.js
-			    		
-			    		//alert("Error, no customer name parameter");
-			    		}
-			    	else //we have params in url! quickchat mode
-			    		{
-			    		// run this only we have params.
-			    		// otherwise it erases the loaded data in
-			    		// customviewercode.
-			    		customername = getURLParameter("customername"); 				    	
-				    	role = getURLParameter("role");
-				    	salesman = getURLParameter("salesman");
-				    	
-				    	sessionid = getURLParameter("sessionid");				    	
-			    		}
-			    	if (sessionid==null) alert("Error, no sessid parameter for chat");
-			    	if (role==null) alert("Error, no role parameter for chat");
-			    	if (salesman==null) alert("error, no salesman parameter for chat");
-			    	
-			    	// customer sees chatting with salesman
-			    	if (role=="0")
-			    			{
-			    				user = { "username" : customername,
-			     		       "sessionid" : sessionid,
-			     		       "role" : role
-			     		                  };
-			    				$("#chatWith").text("Chatting with " + salesman);
-			    				username = customername;
-			    			}
-			    	else
-			    	//salesman sees chatting with customer
-			    	if (role=="1")
-						{
-			    			user = { "username" : salesman,
-			    			       "sessionid" : sessionid,
-			    			       "role" : role
-			    			                  };
-			    			username=salesman;
-								$("#chatWith").text("Chatting with " + customername);
-						}
-			    	else
-			    		{
-			    					alert("ERROR - role is not defined.");
-			    		}
-			
+			      console.log("Opened socket.");			      			      		
 			      socket.send(JSON.stringify(user));
 			      
 			      //loadChatHistory();
@@ -310,6 +312,8 @@ function addChatLine(newline)
     socketString = "http://" + socketString;    
     console.log("connecting to socket " + socketString);
     
+    setGlobals();
+    
     // timeout because I see msgs in reverse order.
     // first I see console log and then GET.
     // maybe this will help it appear in correct order.
@@ -420,7 +424,7 @@ function addChatLine(newline)
 
   
   
-  /******************* RUN ON STARTUP *****************/
+ /******************* RUN ON STARTUP *****************/
  // check if quickchat or not, and act accordingly.
   if (window.location.toString().indexOf("viewer.html") > -1)
   {	

@@ -36,7 +36,7 @@ public class ChatServlet extends HttpServlet {
     
 
 	public void init(ServletConfig config) throws ServletException {
-			System.out.println("Init ChatServlet");
+			//System.out.println("Init ChatServlet");
 			DbLayer.init();				
 	}
 		
