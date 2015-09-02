@@ -85,13 +85,26 @@
 							//docid = randomHash();
 							docid="";
 							
-							for(i=0; i<2; i++)
+							for( var i=0; i<2; i++)
 								{
+									zeroToNine = Math.floor(Math.random() * 10);
+									if(Math.random() >0.5)
+										{
+												docid = docid + "_";
+										}
+									
+									if(Math.random() >0.5)
+									{
+											docid = docid + zeroToNine;
+									}
+									
 									// 	0 to length-1
-										var num = Math.floor((Math.random() * hashkeywords.length); 
+										var num = Math.floor(Math.random() * hashkeywords.length); 
 										docid = docid + hashkeywords[num];
 								}
-							docid = messageHash(hashkeywords);
+							
+							
+							alert(docid);
 
 							// replace newlines with <br>
 							//msgtext = msgtext.replace(/(?:\r\n|\r|\n)/g,
