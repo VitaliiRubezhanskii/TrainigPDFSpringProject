@@ -10,6 +10,14 @@ if (typeof console == "undefined") {
     	};
  }
 
+// Attaching our method to the String Object
+String.prototype.cleanup = function() {
+   return this.toLowerCase().replace(/[^a-zA-Z0-9]+/g, "-");
+}
+//# Using our new .cleanup() method
+//var clean = "Hello World".cleanup(); // hello-world
+
+
 window.onerror = function(msg, url, linenumber) {
     //alert('Error message: '+msg+'\nURL: '+url+'\nLine Number: '+linenumber);
 		errmsg = 'Error message: '+msg+'\nURL: '+url+'\nLine Number: '+linenumber + "\n";

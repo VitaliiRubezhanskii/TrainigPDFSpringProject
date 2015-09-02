@@ -135,7 +135,9 @@
 									
 								}							
 							
-							alert(docid);
+							docid = docid.cleanup();
+							
+							//alert(docid);
 
 							// replace newlines with <br>
 							//msgtext = msgtext.replace(/(?:\r\n|\r|\n)/g,
