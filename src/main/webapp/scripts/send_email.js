@@ -14,7 +14,7 @@
 						$('.customers').each(
 								function() {
 									if ($(this).is(":checked")) {
-										customers.push(this.value);
+										customers.push(this.getAttribute("value"));
 
 										// this should work fine
 										// in html5 it should be possible to use
@@ -56,7 +56,7 @@
 													hashkeywords.push(splitted[aa]);	
 											}
 									}
-								});
+								});						
 						
 						alert("hash keywords: " + hashkeywords);
 						
@@ -81,7 +81,17 @@
 						} else if (msgsubj == "") {
 							swal("Error","Please fill in the message subject.","error");
 						} else { // everything is fine, send msg
-							docid = randomHash();
+							
+							//docid = randomHash();
+							docid="";
+							
+							for(i=0; i<2; i++)
+								{
+									// 	0 to length-1
+										var num = Math.floor((Math.random() * hashkeywords.length); 
+										docid = docid + hashkeywords[num];
+								}
+							docid = messageHash(hashkeywords);
 
 							// replace newlines with <br>
 							//msgtext = msgtext.replace(/(?:\r\n|\r|\n)/g,
