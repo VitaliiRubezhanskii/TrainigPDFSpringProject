@@ -16,12 +16,12 @@
   var registered = false;
   
   
-function addChatLine(line)
+function addChatLine(newline)
 {
 			//add online msg to chatbox
 			  var d = document.createElement('div');
 			  var sonline = document.createElement('span');                            
-			  $(sonline).addClass("chatusername").text(chatline).appendTo($(d));
+			  $(sonline).addClass("chatusername").text(newline).appendTo($(d));
 			  $(d).appendTo("#chatBox");
 			  $("#chatBox").scrollTop($("#chatBox")[0].scrollHeight);
   }

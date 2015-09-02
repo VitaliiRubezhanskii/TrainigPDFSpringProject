@@ -1,7 +1,11 @@
 	$("#send_email_to_customers")
 			.bind(
 					"click",
-					function(event) {						
+					function(event) {
+						
+						// keywords for making the hash for the docid
+						var hashkeywords = [];
+						
 						console.log("sendemail");
 						// alert('sending email');
 						var customers = [];
@@ -19,6 +23,15 @@
 										// some reason (maybe old Firefox).
 										customeremails.push(this
 												.getAttribute("data-email"));
+										
+										name = this.getAttribute("name");
+										splitted = name.split(" ");
+										var aa;
+										for(aa=0; aa<splitted.length; aa++)
+											{
+													hashkeywords.push(splitted[aa]);	
+											}
+										
 									}
 								});
 						// ("customers selected: " + customers);
@@ -34,8 +47,18 @@
 										console.log("Taking slides with id "
 												+ slidesid);
 										pres1.push(slidesid);
+										
+										presname = this.val();
+										splitted = presname.split(" ");
+										var aa;
+										for(aa=0; aa<splitted.length; aa++)
+											{
+													hashkeywords.push(splitted[aa]);	
+											}
 									}
 								});
+						
+						alert("hash keywords: " + hashkeywords);
 						
 						msgtext = $("#msgtext1").val();
 						msgsubj = $("#subject1").val();
