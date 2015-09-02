@@ -593,7 +593,7 @@ public class DbLayer {
 	public static String getCustomerName(String customer_email, String salesman_email){		
 		String name = null;
 		
-		System.out.println("getCustomerName for custemail " + customer_email + " smemail " + salesman_email);
+		//System.out.println("getCustomerName for custemail " + customer_email + " smemail " + salesman_email);
 						
 		String query =		
 				"SELECT name FROM customers WHERE email=? AND sales_man=? LIMIT 1;";
@@ -618,7 +618,7 @@ public class DbLayer {
 								
 		}
 		
-		System.out.println("getCustomerName for custemail " + customer_email + " smemail " + salesman_email + " NAME FOUND IS: " + name);
+		//System.out.println("getCustomerName for custemail " + customer_email + " smemail " + salesman_email + " NAME FOUND IS: " + name);
 			
 		return name;
 	}

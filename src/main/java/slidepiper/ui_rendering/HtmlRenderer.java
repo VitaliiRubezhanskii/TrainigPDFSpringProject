@@ -47,7 +47,7 @@ public class HtmlRenderer {
 					+ ai.getCustomer_email()
 					+ "?Subject=Followup to our last email.\">"
 					+ ai.getCustomer_email() + "</a>";											
-			String custname = ai.getCustomer_name() + emailmailto;
+			String custname = ai.getCustomer_name() + " (" + emailmailto + ")";
 					
 			String reportTitleRow = getTitleRow("SlidePiper Report");		
 			String alertRow = getAlertRow("viewed", ai.getSlides_name(), custname, ai.getOpen_time());
