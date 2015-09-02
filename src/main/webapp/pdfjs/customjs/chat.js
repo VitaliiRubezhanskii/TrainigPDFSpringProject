@@ -28,6 +28,7 @@ function addChatLine(newline)
   
   function connectSocket()
   	{			  
+	  loadChatHistory();
 		socket = new SockJS(socketString);        
     //When the connection is opened, login.
     	socket.onopen = function() {
@@ -95,7 +96,7 @@ function addChatLine(newline)
 			
 			      socket.send(JSON.stringify(user));
 			      
-			      loadChatHistory();
+			      //loadChatHistory();
 			      //socket opened - load history
     		}; // onopen
                 
@@ -271,7 +272,7 @@ function addChatLine(newline)
     	  		socketconnected = 0;
     	  		console.log("socket closed. trying to reconnect");
     	  		addChatLine("Chat disconnected.");
-    	  		// retry in 1sec.
+     	  		// retry in 5sec.
     	  		setTimeout(connectSocket, 5000);    	  		
     	  		};
     	  		
@@ -319,10 +320,17 @@ function addChatLine(newline)
   } // of startClient
   
   function sendMessage() {
-    if ($("#txtMessage").val()) {
-      socket.send($("#txtMessage").val());
-      $("#txtMessage").val("");
-    	}
+	  if (socketconnected == 0)
+		  {
+		  		addChatLine("Error in chat connection.");
+		  }
+	  else
+		  { //connected
+			    if ($("#txtMessage").val()) {
+			      socket.send($("#txtMessage").val());
+			      $("#txtMessage").val("");
+			    	}
+		  }
     }
 
   // only in non-quickchat mode, exchange slides between partners.
