@@ -94,7 +94,7 @@ function setGlobals()
 		socket = new SockJS(socketString);        
     //When the connection is opened, login.
     	socket.onopen = function() {
-    				socketconnected = 0;
+    				socketconnected = 1;
 			      console.log("Opened socket.");			      			      		
 			      socket.send(JSON.stringify(user));
 			      
@@ -104,7 +104,7 @@ function setGlobals()
                 
       //When received a message, parse it and either add/remove user or post message.
       socket.onmessage = function(a) {
-    		socketconnected = 0;
+    		socketconnected = 1;
 		   
         //process the message here
         console.log("parsing JSON message: " + a.data);
