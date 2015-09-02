@@ -1153,7 +1153,7 @@ public class DbLayer {
 			// will not appear in recommendations. 
 			public static void updateSessionReport(String sessionId, String reportHtml)
 			{
-				System.out.println("setting report for session " + sessionId);
+				//System.out.println("setting report for session " + sessionId);
 				Constants.updateConstants();
 				Connection conn = null; // connection to the database	
 				
@@ -1171,7 +1171,7 @@ public class DbLayer {
 							// sends the statement to the database server
 							int row = statement.executeUpdate();
 							if (row > 0) {
-								System.out.println("set reporthtml in cust sess - rows updated: " + row);
+					//			System.out.println("set reporthtml in cust sess - rows updated: " + row);
 								//String message = "updated done.";
 							}
 							

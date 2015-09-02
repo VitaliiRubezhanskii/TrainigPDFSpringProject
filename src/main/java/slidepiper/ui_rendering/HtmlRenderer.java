@@ -41,7 +41,7 @@ public class HtmlRenderer {
 		{											
 			String reportHTML="";
 			
-			System.out.println("MAKING REPORT HTML: custemail " + ai.getCustomer_email() + " ok");
+			//System.out.println("MAKING REPORT HTML: custemail " + ai.getCustomer_email() + " ok");
 												
 			String emailmailto = "<a style=\"color:grey\" href=\"mailto:"
 					+ ai.getCustomer_email()
@@ -117,7 +117,7 @@ public class HtmlRenderer {
 			
 			whatNextRows = whatNextRows + HtmlRenderer.getButtonRow(currentviewslink, "View Current Slides Report ");
 			
-			System.out.println("Detecting mobile/PC device: browser data is " + cs.getAll_browser_data());			
+			//System.out.println("Detecting mobile/PC device: browser data is " + cs.getAll_browser_data());			
 			if (cs.getAll_browser_data().contains("Is mobile device: true"))
 			{			
 					System.out.println("Detected mobile device");
