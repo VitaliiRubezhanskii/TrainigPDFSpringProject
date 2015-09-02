@@ -213,7 +213,14 @@ function preInitView()
 				getSessionParams();
 				
 				msgid = getURLParameter("file"); // format /file/123456
-				msgid = msgid.substr(msgid.length - 6); // last 6 chars
+				
+				// now we can have more than 6
+				//msgid = msgid.substr(msgid.length - 6); // last 6 chars
+				
+				// here I take the last element in the split
+				splitted = msgid.split("/");
+				msgid = splitted[splitted.length-1];
+				
 				console.log("msgid is " + msgid);	
 				// immediately send event and message to salesman.
 				

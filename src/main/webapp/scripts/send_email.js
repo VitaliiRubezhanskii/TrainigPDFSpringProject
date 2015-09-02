@@ -24,13 +24,18 @@
 										customeremails.push(this
 												.getAttribute("data-email"));
 										
-										name = this.getAttribute("name");
-										splitted = name.split(" ");
-										var aa;
-										for(aa=0; aa<splitted.length; aa++)
-											{
-													hashkeywords.push(splitted[aa]);	
-											}
+										
+										//custemail = this.getAttribute("data-email");
+										//splitted = custemail.split("@");
+										//custemail = splitted[0]; // only before @.
+										//splitted = custemail.split(" ");
+										//var aa;
+										//for(aa=0; aa<splitted.length; aa++)
+										//	{
+										//			//hashkeywords.push(splitted[aa]);	
+										//	}
+										// I will not use it.
+										// customer email is too intrusive.
 										
 									}
 								});
@@ -85,24 +90,47 @@
 							//docid = randomHash();
 							docid="";
 							
+							smname = emailval.toLowerCase();
+							smname = smname.split("@"); 
+							smname = smname[0];
+							
 							for( var i=0; i<2; i++)
 								{
-									zeroToNine = Math.floor(Math.random() * 10);
-									if(Math.random() >0.5)
+										if(Math.random() >0.5)
 										{
-												docid = docid + "_";
+											// 	0 to length-1
+											var num = Math.floor(Math.random() * hashkeywords.length); 
+											docid = docid + hashkeywords[num];
+										}									
+										
+										if(Math.random() >0.5)
+										{
+																	// salesman start of email.
+											docid = docid + smname;
 										}
+										
+										
+										if(Math.random() >0.5)
+											{
+													docid = docid + "_";
+											}
+										
+										if(Math.random() >0.5)
+										{
+												if(Math.random() >0.5)
+												{
+														docid = docid + "_";
+												}
+												zeroToNine = Math.floor(Math.random() * 10);
+												docid = docid + zeroToNine;
+												if(Math.random() >0.5)
+												{
+														docid = docid + "_";
+												}
+										}
+										
 									
-									if(Math.random() >0.5)
-									{
-											docid = docid + zeroToNine;
-									}
-									
-									// 	0 to length-1
-										var num = Math.floor(Math.random() * hashkeywords.length); 
-										docid = docid + hashkeywords[num];
-								}
-							
+								}							
 							
 							alert(docid);
 
