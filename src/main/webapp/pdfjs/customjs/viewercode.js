@@ -1,41 +1,8 @@
 
-
-if(window.ActiveXObject || "ActiveXObject" in window){
-    // Always true if browser is Internet Explorer
-		alert("This website does not support Internet Explorer. Please switch to a different browser.");
-}
-
-socketconnected=0; // will be set to 1 in chatwindow
-
-// the salesman does not control the slides.
-// If it's true, the out-of-window event is not taken care of
-// to prevent it from changing slides.
-slides_controlled = false;
-
-if (getCookie("mySessionId")=="") // no session id defined in this 
-																	// browser for the past minute.
-	{
-					// this runs ONCE for each page refresh - 
-					// and this will make ONE report entry in the smart alerts.
-					// I need it the same value for multiple refreshes - so I use cookie.
-					thisSessionId = Math.random().toString();
-					
-				//   short time cookie - 1min. 
-					// to make sure if user presses refresh the same sessionid opens, and not
-					// a new random one.
-					// this is also updated in the time, renewing the short time every iteration.
-					setShortTimeCookie("mySessionId", thisSessionId);
-					send_open_slides_event = true; // slides were opened for
-					// first time in this session.
-	}
-else
-	{
-			// just get the cookie.
-			thisSessionId = getCookie("mySessionId");
-			send_open_slides_event = false; // don't send again
-	}
-
-// anyway, this is overwritten if parameters are given in url.
+				if(window.ActiveXObject || "ActiveXObject" in window){
+				    // Always true if browser is Internet Explorer
+						alert("This website does not support Internet Explorer. Please switch to a different browser.");
+				}
 
 
 function keepalive_event(estimatedTimeViewed_param, slideNum_param) {
@@ -96,19 +63,6 @@ function send_event(ename, eparam1, eparam2, eparam3) {
 			alert("Error in sending event AJAX");
 		}
 	});
-}
-
-// get mouse positions into these variables
-var cursorX=2;
-var cursorY=3;
-//document.onmousemove = function(e) {
-//	cursorX = e.pageX;
-	//cursorY = e.pageY;
-//}
-
-setInterval("checkCursor()", 1000);
-function checkCursor() {
-	// alert("Cursor at: " + cursorX + ", " + cursorY);
 }
 
 ipaddr = "1.2.3.4";
@@ -227,6 +181,48 @@ function preInitView()
 				browser_data = "Browser name: " + navigator.appName + " " + navigator.appVersion 
 				+ "<BR>Platform: " + navigator.platform 
 				+ "<BR>Is mobile device: " + mobilecheck() + "<BR>";
+				
+
+				socketconnected=0; // will be set to 1 in chatwindow
+
+				// the salesman does not control the slides.
+				// If it's true, the out-of-window event is not taken care of
+				// to prevent it from changing slides.
+				slides_controlled = false;
+
+				if (getCookie("mySessionId")=="") // no session id defined in this 
+																					// browser for the past minute.
+					{
+									// first session for this document. .do it.
+									thisSessionId = Math.random().toString();									
+									setShortTimeCookie("mySessionId", thisSessionId);
+									send_open_slides_event = true; // slides were opened for
+									setShortTimeCookie("msgid", msgid);
+					}
+				else
+					{
+							// we have a cookie - is it for this session?
+							// maybe different msg id?
+					
+							if (getCookie("msgid")==msgid) //same document
+								{
+										// just get the cookie.
+										thisSessionId = getCookie("mySessionId");
+										send_open_slides_event = false; // don't send again								
+								}
+							else
+							// different msgid
+							{
+								// first session for this document. .do it.
+								thisSessionId = Math.random().toString();									
+								setShortTimeCookie("mySessionId", thisSessionId);
+								send_open_slides_event = true; // slides were opened for
+								setShortTimeCookie("msgid", msgid);
+							}							
+					}
+
+				// anyway, this is overwritten if parameters are given in url.
+
 
 				if  (role==0) //send events only for customer, not salesman
 					{
