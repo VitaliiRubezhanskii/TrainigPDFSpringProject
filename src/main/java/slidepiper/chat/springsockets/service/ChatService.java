@@ -131,22 +131,22 @@ public class ChatService {
 		      			{
 		    	  			slideStr = "";
 		      			}
-		      System.out.println("getting sessid");
+		      //System.out.println("getting sessid");
 		      // NOTICE: msg here is WRONG
 		      // timezone offset is WRONG
 		      // If I need these in the future, NEED TO FIX.
 		      String sessid = users.get(session).getSessionid();
-		      System.out.println("WEBSOCKETS: making chatline");
+		      //System.out.println("WEBSOCKETS: making chatline");
 		      String chatline = "<i>"+ users.get(session).getUsername() + "</i>: " +slideStr + message;
 		      System.out.println("WEBSOCKETS: chatline is " + chatline);
-		      System.out.println("WEBSOCKETS: logging chat msg event in different thread.");
+		      //System.out.println("WEBSOCKETS: logging chat msg event in different thread.");
 		  	
 		      // otherwise the socket closes. So I write in thread.
 		      Runnable r = new ChatLogThread(chatline, sessid);
 		  		new Thread(r).start();
 		  		// original line that causes socket to close:
 		      //CustomerLogger.LogEvent("chatmsgid", "CHAT_MESSAGE", "", "",chatline, sessid, 0);		      		      
-		      System.out.println("WEBSOCKETS: logged chat msg event. DONE");
+		      //System.out.println("WEBSOCKETS: logged chat msg event. DONE");
 		   	}
      	
       int broadcastnum=0;

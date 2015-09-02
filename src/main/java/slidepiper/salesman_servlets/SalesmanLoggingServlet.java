@@ -49,18 +49,21 @@ public class SalesmanLoggingServlet extends HttpServlet {
  						
 						String sql = "INSERT INTO salesman_events (email, event_name, param1int, param2float, param3str, notes, timestamp) values (?, ?, ?, ?, ?, '', UTC_TIMESTAMP())";
 						
-						System.out.println("SalesmanLogging: SQL is " + sql);
+						//System.out.println("SalesmanLogging: SQL is " + sql);
+						
+						if (param3.length() > 70)
+						{
+							System.out.println("Very long param3 > 70 chars. cutting it. ORIGINAL: " + param3);
+							//  cut it.
+							param3 = param3.substring(0,70);
+						}					
+
 						PreparedStatement statement = conn.prepareStatement(sql);
 						statement.setString(1, email);						
 						statement.setString(2, event_name);
 						statement.setInt(3, Integer.parseInt(param1));
 						statement.setFloat(4, Float.parseFloat(param2));
 						statement.setString(5, param3);
-						
-						if (param3.length() > 70)
-						{
-							System.out.println("Very long param3 > 70 chars: " + param3);
-						}
 						
 						
 						// sends the statement to the database server

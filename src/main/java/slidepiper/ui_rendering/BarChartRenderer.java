@@ -66,12 +66,12 @@ public class BarChartRenderer {
 							}
 							in.close();
 							//print result
-							System.out.println("Received image code: " + response.toString());
+							//System.out.println("Received image code: " + response.toString());
 							
 							String imageCode=response.toString().trim();
 							
 							imageUrl = "http://codemongo-spdomain.rhcloud.com/" + imageCode + ".png";
-							System.out.println("final url " + imageUrl);
+							//System.out.println("final url " + imageUrl);
 					} catch (Exception ex) {
 								System.out.println("exception rendering barchart link");
 								ex.printStackTrace();
