@@ -90,6 +90,7 @@
 							//docid = randomHash();
 							docid="";
 							
+							emailval = $("#usernamefield").val();
 							smname = emailval.toLowerCase();
 							smname = smname.split("@"); 
 							smname = smname[0];
