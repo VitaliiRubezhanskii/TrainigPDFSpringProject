@@ -16,18 +16,19 @@
   var registered = false;
   
   
-function addChatLine(line)
+function addChatLine(newline)
 {
 			//add online msg to chatbox
 			  var d = document.createElement('div');
 			  var sonline = document.createElement('span');                            
-			  $(sonline).addClass("chatusername").text(chatline).appendTo($(d));
+			  $(sonline).addClass("chatusername").text(newline).appendTo($(d));
 			  $(d).appendTo("#chatBox");
 			  $("#chatBox").scrollTop($("#chatBox")[0].scrollHeight);
   }
   
   function connectSocket()
   	{			  
+	  loadChatHistory();
 		socket = new SockJS(socketString);        
     //When the connection is opened, login.
     	socket.onopen = function() {
@@ -95,7 +96,7 @@ function addChatLine(line)
 			
 			      socket.send(JSON.stringify(user));
 			      
-			      loadChatHistory();
+			      //loadChatHistory();
 			      //socket opened - load history
     		}; // onopen
                 
@@ -271,7 +272,7 @@ function addChatLine(line)
     	  		socketconnected = 0;
     	  		console.log("socket closed. trying to reconnect");
     	  		addChatLine("Chat disconnected.");
-    	  		// retry in 1sec.
+     	  		// retry in 5sec.
     	  		setTimeout(connectSocket, 5000);    	  		
     	  		};
     	  		
@@ -319,10 +320,17 @@ function addChatLine(line)
   } // of startClient
   
   function sendMessage() {
-    if ($("#txtMessage").val()) {
-      socket.send($("#txtMessage").val());
-      $("#txtMessage").val("");
-    	}
+	  if (socketconnected == 0)
+		  {
+		  		addChatLine("Error in chat connection.");
+		  }
+	  else
+		  { //connected
+			    if ($("#txtMessage").val()) {
+			      socket.send($("#txtMessage").val());
+			      $("#txtMessage").val("");
+			    	}
+		  }
     }
 
   // only in non-quickchat mode, exchange slides between partners.

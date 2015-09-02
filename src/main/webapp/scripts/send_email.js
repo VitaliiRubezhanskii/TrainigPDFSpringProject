@@ -1,7 +1,11 @@
 	$("#send_email_to_customers")
 			.bind(
 					"click",
-					function(event) {						
+					function(event) {
+						
+						// keywords for making the hash for the docid
+						var hashkeywords = [];
+						
 						console.log("sendemail");
 						// alert('sending email');
 						var customers = [];
@@ -10,7 +14,7 @@
 						$('.customers').each(
 								function() {
 									if ($(this).is(":checked")) {
-										customers.push(this.value);
+										customers.push(this.getAttribute("value"));
 
 										// this should work fine
 										// in html5 it should be possible to use
@@ -19,6 +23,20 @@
 										// some reason (maybe old Firefox).
 										customeremails.push(this
 												.getAttribute("data-email"));
+										
+										
+										//custemail = this.getAttribute("data-email");
+										//splitted = custemail.split("@");
+										//custemail = splitted[0]; // only before @.
+										//splitted = custemail.split(" ");
+										//var aa;
+										//for(aa=0; aa<splitted.length; aa++)
+										//	{
+										//			//hashkeywords.push(splitted[aa]);	
+										//	}
+										// I will not use it.
+										// customer email is too intrusive.
+										
 									}
 								});
 						// ("customers selected: " + customers);
@@ -34,8 +52,18 @@
 										console.log("Taking slides with id "
 												+ slidesid);
 										pres1.push(slidesid);
+										
+										presname = this.getAttribute("value");
+										splitted = presname.split(" ");
+										var aa;
+										for(aa=0; aa<splitted.length; aa++)
+											{
+													hashkeywords.push(splitted[aa]);	
+											}
 									}
-								});
+								});						
+						
+						//alert("hash keywords: " + hashkeywords);
 						
 						msgtext = $("#msgtext1").val();
 						msgsubj = $("#subject1").val();
@@ -58,7 +86,56 @@
 						} else if (msgsubj == "") {
 							swal("Error","Please fill in the message subject.","error");
 						} else { // everything is fine, send msg
-							docid = randomHash();
+							
+							//docid = randomHash();
+							docid="";
+							
+							emailval = $("#usernamefield").val();
+							smname = emailval.toLowerCase();
+							smname = smname.split("@"); 
+							smname = smname[0];
+							
+							for( var i=0; i<2; i++)
+								{
+										if(Math.random() >0.5)
+										{
+											// 	0 to length-1
+											var num = Math.floor(Math.random() * hashkeywords.length); 
+											docid = docid + hashkeywords[num];
+											docid = docid + "_";
+										}									
+										
+										if(Math.random() >0.5)
+										{
+																	// salesman start of email.
+											docid = docid + smname;
+											docid = docid + "_";
+										}
+										
+										
+										if(Math.random() >0.5)
+											{
+													docid = docid + "_";
+											}
+										
+										if(Math.random() >0.5)
+										{
+												if(Math.random() >0.5)
+												{
+														docid = docid + "_";
+												}
+												zeroToNine = Math.floor(Math.random() * 10);
+												docid = docid + zeroToNine;
+												if(Math.random() >0.5)
+												{
+														docid = docid + "_";
+												}
+										}
+										
+									
+								}							
+							
+							alert(docid);
 
 							// replace newlines with <br>
 							//msgtext = msgtext.replace(/(?:\r\n|\r|\n)/g,
