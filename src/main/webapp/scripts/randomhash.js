@@ -20,3 +20,17 @@ function randomHash() {
 	return text;
 }
 
+function randomLetter()
+{
+		var possible = "abcdefghijklmnopqrstuvwxyz"; //numbers make a problem in the link.
+		
+		return possible.charAt(Math.floor(Math.random() * possible.length));
+}
+
+function randomDigit()
+{
+		var possible = "0123456789"; 
+		
+		return possible.charAt(Math.floor(Math.random() * possible.length));
+}
+

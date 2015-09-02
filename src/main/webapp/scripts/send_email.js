@@ -118,21 +118,27 @@
 													docid = docid + "_";
 											}
 										
-										if(Math.random() >0.5)
-										{
-												if(Math.random() >0.5)
-												{
-														docid = docid + "_";
-												}
-												zeroToNine = Math.floor(Math.random() * 10);
-												docid = docid + zeroToNine;
-												if(Math.random() >0.5)
-												{
-														docid = docid + "_";
-												}
-										}
+										for (twice=0; twice<2; twice++)
+											{
+													if(Math.random() >0.6)
+													{
+															if(Math.random() >0.5)
+															{
+																	docid = docid + "_";
+															}															
+															docid = docid + randomDigit();
+															
+															if(Math.random() >0.5)
+															{
+																	docid = docid + "_";
+															}
+													}
+											}
 										
-									
+										if(Math.random() >0.7)
+											{										
+													docid += randomLetter();
+											}
 								}							
 							
 							docid = docid.cleanup();

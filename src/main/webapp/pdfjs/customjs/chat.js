@@ -322,7 +322,41 @@ function addChatLine(newline)
   function sendMessage() {
 	  if (socketconnected == 0)
 		  {
-		  		addChatLine("Error in chat connection.");
+		  
+		  		chatmsg = $("#txtMessage").val();		  		
+		  		// avoid problems with " and ' in json.
+		  		chatmsg = chatmsg.replace("\"","");
+		  		chatmsg = chatmsg.replace("'","");
+		  		chatmsg = username + ": " + chatmsg;
+		  		
+		  		//addChatLine("Error in chat connection.");
+		  		
+		  		console.log("sending ajax chat msg: " + chatmsg);
+		  
+		  		//send message using ajax:
+		  
+						$.ajax({
+							type : "POST",
+							url : "../ChatServlet",
+							data :'{"action":"addChatMessage", '+
+							  ' "session_id":"'
+								+ sessionid 
+								+'",    ' 
+								+' "msgtext":"'
+								+ chatmsg +
+								'"}',
+							contentType : "application/json; charset=utf-8",
+							processData : false,
+							error : function(XmlHttpRequest,
+									status, error) {
+								alert('chatservlet error from returned json'
+										+ error);
+							},
+							success : function(msg) {								
+								console.log("chat message sent using servlet");						
+							} // success func
+						}); // end of ajax call
+							 
 		  }
 	  else
 		  { //connected
