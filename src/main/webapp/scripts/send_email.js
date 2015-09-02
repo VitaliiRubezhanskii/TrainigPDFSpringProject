@@ -63,7 +63,7 @@
 									}
 								});						
 						
-						alert("hash keywords: " + hashkeywords);
+						//alert("hash keywords: " + hashkeywords);
 						
 						msgtext = $("#msgtext1").val();
 						msgsubj = $("#subject1").val();

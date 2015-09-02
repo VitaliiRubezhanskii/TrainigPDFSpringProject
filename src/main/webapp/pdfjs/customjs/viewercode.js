@@ -163,9 +163,7 @@ function getSalesmanData() {
 function preInitView()
 {
 	if (preInitDone == false)
-		{
-				getSessionParams();
-				
+		{				
 				msgid = getURLParameter("file"); // format /file/123456
 				
 				// now we can have more than 6
@@ -182,7 +180,6 @@ function preInitView()
 				+ "<BR>Platform: " + navigator.platform 
 				+ "<BR>Is mobile device: " + mobilecheck() + "<BR>";
 				
-
 				socketconnected=0; // will be set to 1 in chatwindow
 
 				// the salesman does not control the slides.
@@ -223,7 +220,8 @@ function preInitView()
 
 				// anyway, this is overwritten if parameters are given in url.
 
-
+				getSessionParams();
+				
 				if  (role==0) //send events only for customer, not salesman
 					{
 							// send only if it's first init for this session.
