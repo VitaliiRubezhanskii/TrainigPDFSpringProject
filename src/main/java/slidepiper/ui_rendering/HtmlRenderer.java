@@ -39,7 +39,9 @@ public class HtmlRenderer {
 		/// generate 
 		public static String getReportHtml(AlertData ai, String chatMessages) 
 		{											
-			String reportHTML="";			
+			String reportHTML="";
+			
+			System.out.println("MAKING REPORT HTML: custemail " + ai.getCustomer_email() + " ok");
 												
 			String emailmailto = "<a style=\"color:grey\" href=\"mailto:"
 					+ ai.getCustomer_email()

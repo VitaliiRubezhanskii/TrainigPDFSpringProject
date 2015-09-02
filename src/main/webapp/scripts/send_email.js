@@ -102,12 +102,14 @@
 											// 	0 to length-1
 											var num = Math.floor(Math.random() * hashkeywords.length); 
 											docid = docid + hashkeywords[num];
+											docid = docid + "_";
 										}									
 										
 										if(Math.random() >0.5)
 										{
 																	// salesman start of email.
 											docid = docid + smname;
+											docid = docid + "_";
 										}
 										
 										
