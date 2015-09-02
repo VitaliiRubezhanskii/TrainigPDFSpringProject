@@ -55,7 +55,12 @@ public class SalesmanLoggingServlet extends HttpServlet {
 						statement.setString(2, event_name);
 						statement.setInt(3, Integer.parseInt(param1));
 						statement.setFloat(4, Float.parseFloat(param2));
-						statement.setString(5, param3);												
+						statement.setString(5, param3);
+						
+						if (param3.length() > 70)
+						{
+							System.out.println("Very long param3 > 70 chars: " + param3);
+						}
 						
 						
 						// sends the statement to the database server

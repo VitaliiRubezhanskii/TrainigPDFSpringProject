@@ -120,14 +120,13 @@
 										
 										for (twice=0; twice<2; twice++)
 											{
-													if(Math.random() >0.5)
+													if(Math.random() >0.6)
 													{
 															if(Math.random() >0.5)
 															{
 																	docid = docid + "_";
-															}
-															zeroToNine = Math.floor(Math.random() * 10);
-															docid = docid + zeroToNine;
+															}															
+															docid = docid + randomDigit();
 															
 															if(Math.random() >0.5)
 															{
@@ -136,9 +135,10 @@
 													}
 											}
 										
-										docid += randomLetter();
-										
-									
+										if(Math.random() >0.7)
+											{										
+													docid += randomLetter();
+											}
 								}							
 							
 							docid = docid.cleanup();

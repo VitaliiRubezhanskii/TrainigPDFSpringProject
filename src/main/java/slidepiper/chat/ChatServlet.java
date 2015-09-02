@@ -19,6 +19,7 @@ import slidepiper.dataobjects.Customer;
 import slidepiper.dataobjects.HistoryItem;
 import slidepiper.dataobjects.Presentation;
 import slidepiper.db.DbLayer;
+import slidepiper.logging.CustomerLogger;
 
 // mostly for chat history.
 @WebServlet("/ChatServlet")
@@ -77,10 +78,13 @@ public class ChatServlet extends HttpServlet {
 			
 			String historyHtml = "";
 						
-			switch(action) {			
+			String sessid;
+			
+			switch(action) {
+				//-------------------------------------------
 					case "getChatMessages":
 						System.out.println("getchat msgs (history)");																					
-						String sessid = input.getString("session_id");				
+						sessid = input.getString("session_id");				
 						
 						// now we need to broadcast all the previous messages			 					
 			      for (String msg : DbLayer.getChatMessages(sessid))
@@ -110,6 +114,16 @@ public class ChatServlet extends HttpServlet {
 			      		}
 
 						break;
+						//-------------------------------
+					case "addChatMessage":
+						System.out.println("addchat message using ajax (no socket)");																					
+						sessid = input.getString("session_id");				
+						String msgtext = input.getString("msgtext");
+						
+						CustomerLogger.LogEvent("chatmsgid", "CHAT_MESSAGE", "1", "1",msgtext, sessid, 0);
+						
+						break;
+
 						default: System.out.println("unknown param to ChatServlet: " + action );
 				}
 			
