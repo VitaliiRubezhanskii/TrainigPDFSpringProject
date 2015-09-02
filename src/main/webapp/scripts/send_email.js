@@ -135,6 +135,8 @@
 									
 								}							
 							
+							docid = docid.cleanup();
+							
 							//alert(docid);
 
 							// replace newlines with <br>
