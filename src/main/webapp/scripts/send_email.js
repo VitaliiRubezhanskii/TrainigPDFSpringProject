@@ -48,7 +48,7 @@
 												+ slidesid);
 										pres1.push(slidesid);
 										
-										presname = this.val();
+										presname = this.getAttribute("value");
 										splitted = presname.split(" ");
 										var aa;
 										for(aa=0; aa<splitted.length; aa++)
