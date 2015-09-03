@@ -92,7 +92,11 @@ function onBlur() { // leaving window
 	if (initDone==true)
 		{
 				left_datetime = new Date();
-				send_event("LEFT_WINDOW", "0", "0", ipaddr);
+				
+				if (role==0)
+					{
+							send_event("LEFT_WINDOW", "0", "0", ipaddr);
+					}
 				is_in_browser = 0;
 		}
 };
@@ -103,7 +107,10 @@ function onFocus() { // refocusing on window
 		
 			// calc seconds
 			var left_win_seconds = (focus_datetime - left_datetime) / 1000;
-			send_event("REFOCUSED_WINDOW", "0", left_win_seconds, ipaddr);
+			if (role==0)
+				{
+						send_event("REFOCUSED_WINDOW", "0", left_win_seconds, ipaddr);
+				}
 		
 			is_in_browser = 1;
 	}
@@ -226,7 +233,7 @@ function preInitView()
 					{
 							// send only if it's first init for this session.
 							if (send_open_slides_event==true)
-								{
+								{								
 										send_event("OPEN_SLIDES", prev_slide, "0", browser_data);
 								}
 					}
@@ -258,8 +265,10 @@ function initView() {
 			// load salesman data, and afterwards in callback,
 			// load the chat window.
 			getSalesmanData();
-			
-			send_event("INIT_SLIDES", "0", "0", ipaddr);			
+			if (role==0)
+				{
+						send_event("INIT_SLIDES", "0", "0", ipaddr);
+				}
 				
 			console.log("binding sendmsg click");
 			$("#sendq").unbind(); // first unbind all.
