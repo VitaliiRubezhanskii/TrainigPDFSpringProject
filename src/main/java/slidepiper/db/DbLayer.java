@@ -322,7 +322,7 @@ public class DbLayer {
 	public static ArrayList<Customer> getMyCustomers(String smemail){			
 		ArrayList<Customer> custs = new ArrayList<Customer>();
 				
-		String custsQuery = "SELECT name, email, sales_man "
+		String custsQuery = "SELECT name,company, email, sales_man "
 				+ " FROM customers " 
 				+ " WHERE sales_man=?;";
 		
@@ -335,12 +335,15 @@ public class DbLayer {
 				   statement.setString(1, smemail);								
 		 			 ResultSet resultset = statement.executeQuery();			
 					 Customer cust;
-					 String name, email, sales_man;
+					 String name, company, email, sales_man;
 					 while (resultset.next()) {
 							name = resultset.getString(1);
-							email = resultset.getString(2);
-							sales_man = resultset.getString(3);
-							cust = new Customer(name, email, sales_man);
+							company = resultset.getString(2);							
+							email = resultset.getString(3);
+							sales_man = resultset.getString(4);
+
+							String custname = name + " (" + company + ")";
+							cust = new Customer(custname, email, sales_man);
 							custs.add(cust);					   			   				
 					 }
 			} finally{ if(conn!=null){ conn.close();}	}
