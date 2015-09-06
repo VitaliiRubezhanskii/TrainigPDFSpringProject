@@ -19,7 +19,9 @@ public class HtmlRenderer {
 		{
 		  // actions
 			String actionsHtml="";						
-			ArrayList<String> actions = ai.getActions();		
+			ArrayList<String> actions = ai.getActions();
+			Boolean printAdded = false;
+			Boolean downloadAdded = false;
 			if (!actions.isEmpty())
 			{
 				 actionsHtml = "<u> Actions performed: </u>";
@@ -27,8 +29,20 @@ public class HtmlRenderer {
 					{
 								 switch (action)
 								 {
-								 		case "PRINT": actionsHtml += " print "; 
-								 		case "DOWNLOAD": actionsHtml += " download ";
+								 		case "PRINT":
+								 			if (printAdded == false)
+								 			{
+								 					actionsHtml += " print ";
+								 					printAdded= true;
+								 			}
+								 			break;
+								 		case "DOWNLOAD": 
+								 			if (downloadAdded == false)
+								 			{
+										 			actionsHtml += " download ";
+										 			downloadAdded = true;
+								 			}
+								 			break;
 								 		default: actionsHtml += (" " + action + " ");
 								 }																	
 					}				 
@@ -159,7 +173,7 @@ public class HtmlRenderer {
 		    +"<body leftmargin=\"0\" marginwidth=\"0\" topmargin=\"0\" marginheight=\"0\" offset=\"0\">"
 		    +"<table width=\"600\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" valign=\"top\" align=\"center\">"		        
 		    +"<tr><td width=\"100%\" valign=\"top\">"  
-		    +"<img src='www.slidepiper.com/img/logoOriginal.png' height=\"68\" width=\"400\" border=\"0\" hspace=\"5\" vspace=\"5\" align=\"left\" style='background-color: black;'></img>"       
+		    +"<img src=\"www.slidepiper.com/img/logoOriginal.png\" height=\"68\" width=\"400\" border=\"0\" hspace=\"5\" vspace=\"5\" align=\"left\" style='background-color: black;'></img>"       
 		    +"</td></tr>"
 		    + "<tr><td>"
 		    + "<p style=\"font-size:12px; line-height: 14px; font-family:Arial, Helvetica, sans-serif; margin: 0; padding : 0 ; color:#356560;\">"    
@@ -241,7 +255,7 @@ public class HtmlRenderer {
 		public static String getImageRow(String url)
 		{
 			return " <tr><td width=\"100%\" valign=\"top\">"  
-		    +"<img src='"+url+"' height=\"500\" width=\"550\" border=\"0\" hspace=\"5\" vspace=\"5\" align=\"left\"></img>"       
+		    +"<img src=\""+url+"\" height=\"500\" width=\"550\" border=\"0\" hspace=\"5\" vspace=\"5\" align=\"left\"></img>"       
 		    +"</td></tr>";
 		}
 		
