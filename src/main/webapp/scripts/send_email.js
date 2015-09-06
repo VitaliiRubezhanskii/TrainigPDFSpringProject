@@ -95,17 +95,27 @@
 							smname = smname.split("@"); 
 							smname = smname[0];
 							
-							for( var i=0; i<2; i++)
+							num_elements = Math.floor(Math.random() * 2)+2; // 2 to 3
+							
+							for( var i=0; i<num_elements; i++)
 								{
 										if(Math.random() >0.5)
 										{
 											// 	0 to length-1
 											var num = Math.floor(Math.random() * hashkeywords.length); 
 											docid = docid + hashkeywords[num];
-											docid = docid + "_";
+											
+											if(Math.random() >0.7)
+											{
+													docid = docid + "_";
+											}
+											if(Math.random() >0.7)
+											{
+													docid = docid + "a";
+											}
 										}									
 										
-										if(Math.random() >0.5)
+										if(Math.random() >0.75)
 										{
 																	// salesman start of email.
 											docid = docid + smname;
