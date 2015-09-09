@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-    
+
     <!-- *************************************** head ********************************** -->
 <head>
 	<!--  <meta charset="utf-8"> -->
@@ -11,16 +11,16 @@
   <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,700">
 	<link rel="stylesheet" href="jqm/jquery.mobile-1.4.5.css">
 	<link rel="stylesheet" href="themes/blue-header.min.css" />
-	<link rel="stylesheet" href="themes/jquery.mobile.icons.min.css" />	
+	<link rel="stylesheet" href="themes/jquery.mobile.icons.min.css" />
 	<script src="jqm/jquery.js"></script>
 	<script src="jqm/_assets/js/index.js"></script>
 	<script src="jqm/jquery.mobile-1.4.5.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
-	
-	<!-- <link rel="stylesheet" href="sweetalert/example/example.css"> -->  
+
+	<!-- <link rel="stylesheet" href="sweetalert/example/example.css"> -->
   <script src="sweetalert/dist/sweetalert-dev.js"></script>
-  <link rel="stylesheet" href="sweetalert/dist/sweetalert.css">		
-	
+  <link rel="stylesheet" href="sweetalert/dist/sweetalert.css">
+
 	<style id="custom-icon">
         .ui-icon-custom:after {
 			background-image: url("jqm/_assets/img/glyphish-icons/21-skull.png");
@@ -28,7 +28,7 @@
 			background-size: 70%;
 		}
     </style>
-    
+
     <style type="text/css">
     		.ui-content,.no-padding-class
     			{
@@ -36,8 +36,8 @@
         	padding-left:0px;
         	padding-right:0px;
         	padding-top:0px;
-        		}	
-           
+        		}
+
 					body {
 					    /*background: url(img/background.jpg);*/
 					    background-repeat:repeat-y;
@@ -51,7 +51,7 @@
 					.ui-content{
 					    background: transparent;
 					}
-										
+
 					/* style for barchart*/
   				.bar {
 						  fill: steelblue;
@@ -70,9 +70,9 @@
 						}
 						.x.axis path {
 						  display: none;
-						}																		
+						}
 		</style>
-		
+
 		<!--this is the Google analytics tracking code-->
 		<script>
 		  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -88,21 +88,21 @@
 
     <!-- *************************************** body ********************************** -->
 <body>
-    
-    
+
+
         <!-- *************************************** main page - with login  ********************************** -->
 <div data-role="page" id="main" data-quicklinks="true" data-theme="b">
 
                 <div data-role="header" data-theme="b">
 <!-- 	<a href="index.html" data-icon="delete">Back</a> -->
 	<h1>Slidepiper</h1>
-	
+
 
  </div>
     <!--  ****************************************************************** -->
         <div role="main" class="ui-content jqm-content" data-theme="b">
             <p>Welcome to Slidepiper.</p><br><br>
-           	
+
 <!--   <a href="#popupLogin" data-rel="popup" data-position-to="window" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-check ui-btn-icon-left ui-btn-a" data-transition="pop">Sign in</a>
 -->
 <!--  <div data-role="popup" id="popupLogin" data-theme="b" class="ui-corner-all" data-theme="b">
@@ -114,102 +114,102 @@
             <input name="user" id="usernamefield" value="" placeholder="username" data-theme="b" type="text">
             <label for="pw" class="ui-hidden-accessible">Password:</label>
             <input name="pass" id="passwordfield" value="" placeholder="password" data-theme="b" type="password">
-            <!--<button type="submit" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-check">Sign in</button>-->                       
+            <!--<button type="submit" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-check">Sign in</button>-->
             <a id="gotoManage" data-history="false" data-position-to="window" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-check ui-btn-inline">Login</a></div>
-    </form>    
-<!--  </div>   -->            
- </div>    
- 
+    </form>
+<!--  </div>   -->
+ </div>
+
  <!--  ****************************************************************** -->
- 
-  <!--   <div data-role="footer" data-theme="b"> 
-	<h4>(c) Slidepiper 2015</h4> 
+
+  <!--   <div data-role="footer" data-theme="b">
+	<h4>(c) Slidepiper 2015</h4>
 </div>  -->
-           
+
 </div><!-- /page -->
 
 
 
 
 
-    
+
         <!-- *************************************** history page ********************************** -->
 <div data-role="page" id="history_page" data-quicklinks="true" data-theme="b">
 
                 <div data-role="header" data-theme="b">
 <!-- 	<a href="index.html" data-icon="delete">Back</a> -->
 	<h1>Slidepiper - History </h1>
-	
+
 
  </div>
     <!--  ****************************************************************** -->
-        <div role="main" class="ui-content jqm-content" data-theme="b">            
-           	
+        <div role="main" class="ui-content jqm-content" data-theme="b">
+
 <!--   <a href="#popupLogin" data-rel="popup" data-position-to="window" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-check ui-btn-icon-left ui-btn-a" data-transition="pop">Sign in</a>
 -->
 <!--  <div data-role="popup" id="popupLogin" data-theme="b" class="ui-corner-all" data-theme="b">
  -->
  				<div id="historyDiv">Please wait, loading history.</div>
-        <a id="historyBack" data-history="false" data-position-to="window" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-check ui-btn-inline">Back to Management Console</a>        
-<!--  </div>   -->            
- </div>    
- 
+        <a id="historyBack" data-history="false" data-position-to="window" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-check ui-btn-inline">Back to Management Console</a>
+<!--  </div>   -->
+ </div>
+
  <!--  ****************************************************************** -->
- 
-  <!--   <div data-role="footer" data-theme="b"> 
-	<h4>(c) Slidepiper 2015</h4> 
+
+  <!--   <div data-role="footer" data-theme="b">
+	<h4>(c) Slidepiper 2015</h4>
 </div>  -->
-           
+
 </div><!-- /page -->
-    
+
         <!-- *************************************** manage screen ********************************** -->
 <div data-role="page" id="manage" data-quicklinks="true" data-theme="b">
-    
+
 <div data-role="header" data-theme="b">
 	<!-- <a href="index.html" data-icon="delete">Back</a> -->
 	<button id="logoutTop" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-power ui-btn-inline" data-inline="true">Logout</button>
-	<h1>Slidepiper</h1> 	
+	<h1>Slidepiper</h1>
 	<a id="myAccount" class=	"ui-btn ui-corner-all ui-shadow ui-btn-inline ui-mini ui-icon-carat-r ui-btn-icon-right" data-inline="true" href="#accountPanel">My Account</a>
-	
- 
+
+
 </div>
 
 <div data-role="panel" id="accountPanel" data-position="right" data-display="reveal" data-theme="b">
 
         <h3>Change your password</h3>
-        
+
         <label for="pw" class="ui-hidden-accessible">Old Password:</label>
             <input name="passOld" id="passwordfieldOld" value="" placeholder="Old Password" data-theme="b" type="password">
         <p>Enter your new password.</p>
 <label for="pw" class="ui-hidden-accessible">New Password:</label>
             <input name="passChange" id="passwordfieldChange" value="" placeholder="New Password" data-theme="b" type="password">
-                    
+
             <label for="pw" class="ui-hidden-accessible">Confirm New Password:</label>
             <input name="passChange2" id="passwordfieldChange2" value="" placeholder="Confirm New Password" data-theme="b" type="password">
-            
+
         <a id="changePW" class="ui-btn ui-shadow ui-corner-all ui-btn-a ui-icon-check ui-btn-icon-left ui-btn-inline">Save</a>
         <a href="#demo-links" data-rel="close" class="ui-btn ui-shadow ui-corner-all ui-btn-a ui-icon-delete ui-btn-icon-left ui-btn-inline">Close</a>
 
 	</div><!-- /rightpanel1 -->
-            	
 
- <div role="main" class="ui-content no-padding-class">           
+
+ <div role="main" class="ui-content no-padding-class">
                 <!-- *************************************** SMART ALERTS ********************************** -->
-                
+
 <!--   <div class="ui-bar ui-bar-a" style="visibility: ">
     <h3>Followup Recommendations</h3>
-  </div>   
-  <div class="ui-body ui-body-a no-padding-class">    		
+  </div>
+  <div class="ui-body ui-body-a no-padding-class">
 
 			<div data-demo-html="true">
-			<ul data-role="listview" data-inset="true" id="smartalerts" style="height:250px; overflow-x:hidden; overflow-y: scroll; padding-bottom:0px;">	
-			</ul> 
+			<ul data-role="listview" data-inset="true" id="smartalerts" style="height:250px; overflow-x:hidden; overflow-y: scroll; padding-bottom:0px;">
+			</ul>
 			</div>
-  </div> 
-  
+  </div>
+
  -->
 
-            
+
 
     <!-- *************************************** CUSTOMER MANAGEMENT ********************************** -->
 <br>
@@ -218,8 +218,8 @@
       <h3>Send e-mails to Customers</h3>
   </div>
   <div class="ui-body ui-body-a no-padding-class">
-    		<!--  <p>Send tracked messages to your customers.</p> -->        
-                
+    		<!--  <p>Send tracked messages to your customers.</p> -->
+
 <div class="ui-grid-b">
     <div class="ui-block-a"><div class="ui-bar ui-bar-a no-padding-class" >
 <div class="ui-corner-all custom-corners">
@@ -228,16 +228,16 @@
   </div>
    <div class="ui-body ui-body-a" style="height:350px; overflow-x:hidden; overflow-y: scroll; padding-bottom:10px;" id="customersDiv">
       </div>
-   
-                
+
+
 
 <!--              <ul id="customers" data-role="listview" data-filter="true" data-inset="true">
             </ul>-->
-   
-              
-           <a href="#popupAddCustomer" data-rel="popup" data-position-to="window" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-plus ui-btn-icon-left ui-btn-a" data-transition="pop">Add</a>	             
-           <a id="removeCustButton" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-delete ui-btn-icon-left ui-btn-a">Remove</a>	             
-           <a id="editCustomerButton" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-edit ui-btn-icon-left ui-btn-a">Edit</a>	             
+
+
+           <a href="#popupAddCustomer" data-rel="popup" data-position-to="window" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-plus ui-btn-icon-left ui-btn-a" data-transition="pop">Add</a>
+           <a id="removeCustButton" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-delete ui-btn-icon-left ui-btn-a">Remove</a>
+           <a id="editCustomerButton" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-edit ui-btn-icon-left ui-btn-a">Edit</a>
             <div data-role="popup" id="popupAddCustomer" data-theme="b" class="ui-corner-all" data-dismissible="false">
                 <form>
                     <div style="padding:10px 20px;">
@@ -248,31 +248,31 @@
                         <input name="user" id="newcustemail" value="" placeholder="Email" data-theme="b" type="text">
                          <label for="un" class="ui-hidden-accessible">Company:</label>
                         <input name="user" id="newcustcompany" value="" placeholder="Company" data-theme="b" type="text">
-                        <a id="addCustButton" data-position-to="window" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-check" data-inline="true">Add</a>                                                                                                                    
+                        <a id="addCustButton" data-position-to="window" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-check" data-inline="true">Add</a>
                         <a id="addCustCancel" href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-delete" data-inline="true">Cancel</a>
                     </div>
                 </form>
-            </div>                   
-  
+            </div>
+
 </div>
         </div></div>
-    <div class="ui-block-b"><div class="ui-bar ui-bar-a no-padding-class">          
+    <div class="ui-block-b"><div class="ui-bar ui-bar-a no-padding-class">
     <div class="ui-corner-all custom-corners">
   <div class="ui-bar ui-bar-a">
     <h3>Select Presentation</h3>
   </div>
-  <div class="ui-body ui-body-a" style="height:350px; overflow-x:hidden; overflow-y: scroll; padding-bottom:10px;" id="pres1Div" >    
-</div>      
-   <a href="#popupAddPresentation" data-rel="popup" data-position-to="window" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-plus ui-btn-icon-left ui-btn-a" data-transition="pop">Add</a>	             
-      <a id="removePresentationButton" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-delete ui-btn-icon-left ui-btn-a" data-transition="pop">Remove</a>	             
+  <div class="ui-body ui-body-a" style="height:350px; overflow-x:hidden; overflow-y: scroll; padding-bottom:10px;" id="pres1Div" >
+</div>
+   <a href="#popupAddPresentation" data-rel="popup" data-position-to="window" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-plus ui-btn-icon-left ui-btn-a" data-transition="pop">Add</a>
+      <a id="removePresentationButton" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-delete ui-btn-icon-left ui-btn-a" data-transition="pop">Remove</a>
             <!--  <a href="" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-edit ui-btn-icon-left ui-btn-a" data-transition="pop">Edit</a> -->
-            
-<a href="#popupUpdatePresentation" data-rel="popup" data-position-to="window" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-plus ui-btn-icon-left ui-btn-a" data-transition="pop">Update</a>            	             
+
+<a href="#popupUpdatePresentation" data-rel="popup" data-position-to="window" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-plus ui-btn-icon-left ui-btn-a" data-transition="pop">Update</a>
 
 <div data-role="popup" id="popupAddPresentation" data-theme="b" class="ui-corner-all">
  <!--   <iframe id="uploadframe" src="UploadSlides.jsp"></iframe>   -->
- 
- 
+
+
 		<h1>Upload Presentation</h1>
 		<form method="post" id="uploadform" action="uploadSlides" data-ajax="false"  enctype="multipart/form-data">
 			<table border="0">
@@ -296,14 +296,14 @@
 				</tr>
 			</table>
 		</form>
-	
- 
- 
- 
+
+
+
+
 </div></div></div></div>
-        
+
     <div class="ui-block-c"><div class="ui-bar ui-bar-a no-padding-class">
-            	
+
                 <div class="ui-corner-all custom-corners">
                   <div class="ui-bar ui-bar-a">
                     <h3>Enter Message</h3>
@@ -312,14 +312,14 @@
                     <input type="text" name="subject1" id="subject1" value="" placeholder="Subject" />
                     <p><textarea cols="40" rows="8" name="textarea-6" id="msgtext1" placeholder="Message Body" ></textarea></p>
 <!--                    <input name="rtl"  class="" id="rtl" type="checkbox" value="Right to Left Message"> <label for="rtl">Right to Left Message</label>
-                  </div> --> 
-                    
-<!--                        <a id="clear" data-rel="popup" data-position-to="window" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-tag ui-btn-icon-left ui-btn-a" data-transition="pop">Clear</a> -->	             
-                       <a id="fromTemplate" data-position-to="window" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-bars ui-btn-icon-left ui-btn-a" data-transition="pop">From Template...</a>	             
+                  </div> -->
+
+<!--                        <a id="clear" data-rel="popup" data-position-to="window" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-tag ui-btn-icon-left ui-btn-a" data-transition="pop">Clear</a> -->
+                       <a id="fromTemplate" data-position-to="window" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-bars ui-btn-icon-left ui-btn-a" data-transition="pop">From Template...</a>
                 </div>
-                    
+
         </div></div>
-</div><!-- /grid-b -->                
+</div><!-- /grid-b -->
 <div style="text-align: right">
 <a id="send_email_to_customers" data-history="false" data-position-to="window" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-mail ui-btn-inline">Send e-mail(s)
 </a>
@@ -328,29 +328,29 @@
 </div> <!-- ui corner custom corner -->
 
 
-        
+
                     <!-- *************************************** MORE BUTTONS - HISTORY  & LOGOUT ********************************** -->
-        
-<br>	
+
+<br>
 <button id="history" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-calendar ui-btn-inline" data-inline="true">Show Message History</button>
 <button id="logout" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-power ui-btn-inline" data-inline="true">Logout</button>
 
 	</div><!-- /content -->
-        
-        
-        <div data-role="footer" data-theme="b"> 
-	<h4>(c) Slidepiper 2015</h4> 	
-</div> 
-        
+
+
+        <div data-role="footer" data-theme="b">
+	<h4>(c) Slidepiper 2015</h4>
+</div>
+
 </div><!-- /page -->
 
 
     <!-- *************************************** END OF PAGE ********************************** -->
 
-    
+
         <!-- *************************************** INCLUDE SCRIPTS ********************************** -->
 <script type="text/javascript" src="scripts/globalvars.js"></script>
-<script type="text/javascript" src="scripts/timezone.js"></script>                                 
+<script type="text/javascript" src="scripts/timezone.js"></script>
 <script type="text/javascript" src="scripts/cookies.js"></script>
 <script type="text/javascript" src="scripts/clientutils.js"></script>
 <script type="text/javascript" src="scripts/waitmessage.js"></script>
