@@ -68,7 +68,8 @@ function setGlobals()
    		       "sessionid" : sessionid,
    		       "role" : role
    		                  };
-  				$("#chatWith").text("Chatting with " + salesman);
+  				//$("#chatWith").text("Chatting with " + salesman);
+  				$("#chatWith").html("<b><u>Chatting with " + salesman+"</u></b>");
   				username = customername;
   			}
   	else
@@ -158,10 +159,11 @@ function setGlobals()
         } else             	
         // only regular msgs are sent - 
         if (message.hasOwnProperty("message")) {
-        	if (mobilecheck() == false) {showChat();} // show on desktop
-        	if (mobilecheck() == true) {hideChat();} // show on desktop
+        	
+        	if (mobilecheck() == true) {hideChat();} // hide on mobile
         	
         	// if it's salesman, always show chat.
+        	
         	if (role==1)
         		{
         		showChat();
@@ -183,6 +185,7 @@ function setGlobals()
           				//not quickchat, need to change slides!
           				{
           				// change slide message
+           		// I don't show chat on this kind of events.
           		if (message.message.
           				messagetext.indexOf("Changed to slide #") > -1) 
           						
@@ -229,6 +232,9 @@ function setGlobals()
           					}
           		else // not change slide msg
           					{
+          				//regular msg - show chat.
+                	if (mobilecheck() == false) {showChat();} // show on desktop                	
+
           				//regular msg - display it anyway.
           					$(d).appendTo("#chatBox");
           					
@@ -289,8 +295,11 @@ function setGlobals()
 	          showChat();
 	          	});          
 	      $("#btnClose").click(function() {
-		            hideChat();
+		            minimizeChat();		            
 		          	});
+	      $("#chatWith").click(function() {
+	            showChat();	            
+	          	});
     	}
    
   
@@ -380,14 +389,96 @@ function setGlobals()
     			socket.send("Changed to slide #" + $("#pageNumber").val());
 	  		}
   }
+  
+  function minimizeChat()
+  {
+	 
+	  if (quickchatmode != 1) // not quick chat.
+		  //otherwise we never hide the chat.
+		  {
+						// display chat box
+						// but only the top of it...
+					  chatDiv = $("#chatDiv");		
+				
+					  //$("#chatContainer")[0].style.visibility = "hidden";
+					  
+					  // just hide bottom parts.		
+						chatDiv[0].style.visibility = "visible";
+						$("#chatBottom")[0].style.display = "none";
+						$("#chatBox")[0].style.display = "none";	
+						$("#btnClose")[0].style.display = "none";												
+						
+						chatWith = $("#chatWith")[0];
+						
+						chatWith.style.visibility = "visible";
+						
+						maxY = window.innerHeight;
+						divHeight = chatWith.offsetHeight  * 1.2; // a little more
+												
+						// not full height.
+						$("#chatContainer")[0].style.height = divHeight + "px";
+						chatDiv[0].style.height = divHeight + "px";
+											
+						chatDiv[0].style.top = (maxY - divHeight-10)+"px";
+								
+				//		chatDiv[0].style.top = topVal+"px";
+						chatDiv[0].style.left = leftVal+"px";
+		  }
+  }
+  
   function hideChat()
-  {	 
-	  $("#chatContainer")[0].style.visibility = "hidden";
+  {
+	 
+	  if (quickchatmode != 1) // not quick chat.
+		  //otherwise we never hide the chat.
+		  {
+						// display chat box
+						// but only the top of it...
+					  //chatDiv = $("#chatDiv");		
+				
+					  $("#chatContainer")[0].style.visibility = "hidden";
+					  
+					  // just hide bottom parts.		
+						chatDiv[0].style.visibility = "hidden";
+		  }
   }
   
  function showChat()
-  {
-	  $("#chatContainer")[0].style.visibility = "visible";
+  {			 	 	 
+	 if (quickchatmode==0)
+		 {
+					// display chat box
+				 	chatDiv = $("#chatDiv");		
+					chatDiv[0].style.visibility = "visible";				
+					$("#chatBottom")[0].style.visibility = "visible";
+					$(".chatcontentDiv")[0].style.visibility = "visible";					
+					$("#btnClose")[0].style.visibility = "visible";
+					$("#chatBottom")[0].style.display = "block";
+					$(".chatcontentDiv")[0].style.display = "block";					
+					$("#btnClose")[0].style.display = "block";
+					$("#chatBox")[0].style.display = "block";	
+					
+					// full height
+					$("#chatContainer")[0].style.height = "210px";
+					chatDiv[0].style.height = "210px";
+					
+					maxY = window.innerHeight;
+					divHeight = chatDiv[0].offsetHeight;
+					chatDiv[0].style.top = (maxY - divHeight-10)+"px";
+					
+					maxX = window.outerWidth;
+					chatDivWidth = chatDiv.outerWidth();							
+					//console.log("maxX " + maxX + " chatDivWidth " + chatDivWidth);									
+					leftVal = maxX - chatDivWidth-25;
+					chatDiv[0].style.left = leftVal+"px";
+					// original way to show it 
+				  //$("#chatContainer")[0].style.visibility = "visible";
+		 }
+	 else
+		 {
+		 			// quickchat, just show everything.
+		 		// chat div is NOT DEFINED.				
+		 }
   }
  
  function loadChatHistory()
@@ -443,7 +534,5 @@ else
   		       startClient();    
   		  		});  		  
   }
-
-  
 
   

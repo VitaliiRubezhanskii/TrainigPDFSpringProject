@@ -1,6 +1,6 @@
 git pull
 git add .
-git commit -m "slidepipertest automatic commit"
+git commit -m "slidepipertest automatic commit. corrected chat"
 git push
 rhc tail -a slidepipertest -n slidepiper
 

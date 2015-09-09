@@ -69,7 +69,7 @@ public class EmailSender {
 		  String urlprefix;
 		if (appname==null) //running locally
 		{
-			urlprefix = "localhost:8080/sp/";				 
+			urlprefix = "http://localhost:8080/sp/";				 
 		}
 		else
 		{
