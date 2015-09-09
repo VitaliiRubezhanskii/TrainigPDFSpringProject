@@ -209,12 +209,13 @@ function preInitView()
 							// maybe different msg id?
 					
 							if (getCookie("msgid")==msgid) //same document
-								{
+								{								       
 										// just get the cookie.
 										thisSessionId = getCookie("mySessionId");
 										send_open_slides_event = false; // don't send again								
 								}
 							else
+								
 							// different msgid
 							{
 								// first session for this document. .do it.
@@ -369,6 +370,12 @@ function initView() {
 						// 	send all these in an event, every 3sec.
 						keepalive_event(seconds_viewed, slide_viewed_now);
 					}
+				
+				
+				//renew cookies every 3sec
+				setShortTimeCookie("mySessionId", thisSessionId);				
+				setShortTimeCookie("msgid", msgid);
+				
 			}, 3000);
 		
 			// this.close();
