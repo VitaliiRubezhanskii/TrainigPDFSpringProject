@@ -1,6 +1,10 @@
 git pull
 git add .
+<<<<<<< HEAD
 git commit -m "slidepipertest automatic commit. corrected chat"
+=======
+git commit -m "commit from old laptop"
+>>>>>>> 2841460c2cc3c0229215bc93a847c35bee9eb88e
 git push
 rhc tail -a slidepipertest -n slidepiper
 
