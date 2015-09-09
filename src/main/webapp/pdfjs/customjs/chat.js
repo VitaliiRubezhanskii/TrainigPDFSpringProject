@@ -477,11 +477,7 @@ function setGlobals()
 	 else
 		 {
 		 			// quickchat, just show everything.
-					// display chat box
-				 	chatDiv = $("#chatDiv");		
-					chatDiv[0].style.visibility = "visible";				
-					$("#chatBottom")[0].style.visibility = "visible";
-					$(".chatcontentDiv")[0].style.visibility = "visible";
+		 		// chat div is NOT DEFINED.				
 		 }
   }
  
