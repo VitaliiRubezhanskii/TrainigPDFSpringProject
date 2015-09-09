@@ -295,7 +295,7 @@ function setGlobals()
 	          showChat();
 	          	});          
 	      $("#btnClose").click(function() {
-		            hideChat();		            
+		            minimizeChat();		            
 		          	});
 	      $("#chatWith").click(function() {
 	            showChat();	            
@@ -389,7 +389,7 @@ function setGlobals()
     			socket.send("Changed to slide #" + $("#pageNumber").val());
 	  		}
   }
-  function hideChat()
+  function minimizeChat()
   {
 	 
 	  if (quickchatmode != 1) // not quick chat.
@@ -423,6 +423,22 @@ function setGlobals()
 				//		chatDiv[0].style.top = topVal+"px";
 						chatDiv[0].style.left = leftVal+"px";
 		  }
+  }
+  
+  function hideChat()
+  {
+	 
+	  if (quickchatmode != 1) // not quick chat.
+		  //otherwise we never hide the chat.
+		  {
+						// display chat box
+						// but only the top of it...
+					  //chatDiv = $("#chatDiv");		
+				
+					  $("#chatContainer")[0].style.visibility = "hidden";
+					  
+					  // just hide bottom parts.		
+						chatDiv[0].style.visibility = "hidden";
   }
   
  function showChat()
