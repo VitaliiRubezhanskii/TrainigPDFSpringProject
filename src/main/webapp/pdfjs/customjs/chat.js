@@ -389,6 +389,7 @@ function setGlobals()
     			socket.send("Changed to slide #" + $("#pageNumber").val());
 	  		}
   }
+  
   function minimizeChat()
   {
 	 
@@ -439,6 +440,7 @@ function setGlobals()
 					  
 					  // just hide bottom parts.		
 						chatDiv[0].style.visibility = "hidden";
+		  }
   }
   
  function showChat()
