@@ -419,7 +419,7 @@ function setGlobals()
 						$("#chatContainer")[0].style.height = divHeight + "px";
 						chatDiv[0].style.height = divHeight + "px";
 											
-						chatDiv[0].style.top = (maxY - divHeight-4)+"px";
+						chatDiv[0].style.top = (maxY - divHeight-10)+"px";
 								
 				//		chatDiv[0].style.top = topVal+"px";
 						chatDiv[0].style.left = leftVal+"px";
@@ -464,7 +464,7 @@ function setGlobals()
 					
 					maxY = window.innerHeight;
 					divHeight = chatDiv[0].offsetHeight;
-					chatDiv[0].style.top = (maxY - divHeight-4)+"px";
+					chatDiv[0].style.top = (maxY - divHeight-10)+"px";
 					
 					maxX = window.outerWidth;
 					chatDivWidth = chatDiv.outerWidth();							
