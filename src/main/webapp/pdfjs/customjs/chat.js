@@ -366,7 +366,8 @@ function setGlobals()
 										+ error);
 							},
 							success : function(msg) {								
-								console.log("chat message sent using servlet");						
+								console.log("chat message sent using servlet");
+								$("#txtMessage").val("");
 							} // success func
 						}); // end of ajax call
 							 
