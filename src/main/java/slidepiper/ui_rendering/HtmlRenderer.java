@@ -168,7 +168,7 @@ public class HtmlRenderer {
 		    "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">"
 		    +"<html>"
 		    +"<head>"
-		    +"<title>SlidePiper email</title>"
+		    +"<title>SlidePiper email - look carefully</title>"
 		    +"</head>"
 		    +"<body leftmargin=\"0\" marginwidth=\"0\" topmargin=\"0\" marginheight=\"0\" offset=\"0\">"
 		    +"<table width=\"600\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" valign=\"top\" align=\"center\">"		        
@@ -178,8 +178,8 @@ public class HtmlRenderer {
 		    + "<tr><td>"
 		    + "<p style=\"font-size:12px; line-height: 14px; font-family:Arial, Helvetica, sans-serif; margin: 0; padding : 0 ; color:#356560;\">"    
 		    + "Hello,<BR>"
-		    +"This is Jacob Salesmaster.<BR>"
-				+"I am your SlidePiper e-mail representative. Please carefully review the following e-mail.<BR><BR></BR></p>"   
+		    +"This is David Salesmaster.<BR>"
+				+"I am your SlidePiper e-mail representative. Please carefully review the following information.<BR><BR></BR></p>"   
 		    +"</td></tr>";
 			
 			// table is still open here at the end!
@@ -189,7 +189,7 @@ public class HtmlRenderer {
 				    +"<table width=\"600\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" valign=\"top\" align=\"center\">"
 				    +"<tr><td>"
 				    +"<p style=\"font-size:12px; line-height: 14px; font-family:Arial, Helvetica, sans-serif; margin: 0; padding : 0 ; color:#356560;\"><BR>"
-				    +"<BR>Glad to serve you, <BR>Jacob Salesmaster<BR>SlidePiper Email Team</p>"   
+				    +"<BR>Happy to serve you, <BR>David Salesmaster<BR>SlidePiper Email Team</p>"   
 				    +"</td></tr>"
 						+"</table>   " 								   
 				    +"</body>"
