@@ -448,35 +448,45 @@ function showChat() {
 	chatDiv = $("#chatDiv");
 	
 	if (quickchatmode == 0) {
-		// display chat box		
-		chatDiv[0].style.visibility = "visible";
-		$("#chatBottom")[0].style.visibility = "visible";
-		$(".chatcontentDiv")[0].style.visibility = "visible";
-		$("#btnClose")[0].style.visibility = "visible";
-		$("#chatBottom")[0].style.display = "block";
-		$(".chatcontentDiv")[0].style.display = "block";
-		$("#btnClose")[0].style.display = "block";
-		$("#chatBox")[0].style.display = "block";
-
-		// full height
-		$("#chatContainer")[0].style.height = "210px";
-		chatDiv[0].style.height = "210px";
-
-		maxY = window.innerHeight;
-		divHeight = chatDiv[0].offsetHeight;
-		chatDiv[0].style.top = (maxY - divHeight - 10) + "px";
-
-		maxX = window.outerWidth;
-		chatDivWidth = chatDiv.outerWidth();
-		// console.log("maxX " + maxX + " chatDivWidth " + chatDivWidth);
-		leftVal = maxX - chatDivWidth - 25;
-		chatDiv[0].style.left = leftVal + "px";
-		// original way to show it
-		// $("#chatContainer")[0].style.visibility = "visible";
+		
+		if ((mobilecheck() == true)&&(role==0))
+			{
+						// no chat on mobile!!!
+			}
+		else
+			{
+						// display chat box		
+						chatDiv[0].style.visibility = "visible";
+						$("#chatBottom")[0].style.visibility = "visible";
+						$(".chatcontentDiv")[0].style.visibility = "visible";
+						$("#btnClose")[0].style.visibility = "visible";
+						$("#chatBottom")[0].style.display = "block";
+						$(".chatcontentDiv")[0].style.display = "block";
+						$("#btnClose")[0].style.display = "block";
+						$("#chatBox")[0].style.display = "block";
+				
+						// full height
+						$("#chatContainer")[0].style.height = "210px";
+						chatDiv[0].style.height = "210px";
+				
+						maxY = window.innerHeight;
+						divHeight = chatDiv[0].offsetHeight;
+						chatDiv[0].style.top = (maxY - divHeight - 10) + "px";
+				
+						maxX = window.outerWidth;
+						chatDivWidth = chatDiv.outerWidth();
+						// console.log("maxX " + maxX + " chatDivWidth " + chatDivWidth);
+						leftVal = maxX - chatDivWidth - 25;
+						chatDiv[0].style.left = leftVal + "px";
+						// original way to show it
+						// $("#chatContainer")[0].style.visibility = "visible";
+					
+			}
 	} else {
 		// quickchat, just show everything.
-		// chat div is NOT DEFINED.
+			// chat div is NOT DEFINED.
 	}
+	
 }
 
 function loadChatHistory() {
