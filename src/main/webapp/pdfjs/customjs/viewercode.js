@@ -266,9 +266,14 @@ function initView() {
 			// load salesman data, and afterwards in callback,
 			// load the chat window.
 			getSalesmanData();
+			
+			// customer only
 			if (role==0)
 				{
 						send_event("INIT_SLIDES", "0", "0", ipaddr);
+						
+						if (mobilecheck() == true) {hideChat();} 
+						// hide on mobile
 				}
 				
 			console.log("binding sendmsg click");

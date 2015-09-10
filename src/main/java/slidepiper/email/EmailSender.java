@@ -25,7 +25,7 @@ public class EmailSender {
 	public static void sendEmail(String to, String subj, String msg)
 	{
 		  final String username = "jacob.salesmaster@gmail.com"; 	
-		  final String password = "jacobsales";//"yourpassword";
+		  final String password = "jacobsales2";//"yourpassword";
 		  //System.out.println("user pw for email is: " + salesmanEmailpassword);
 		  Properties props = new Properties();
 		  props.put("mail.smtp.host", "smtp.gmail.com");
