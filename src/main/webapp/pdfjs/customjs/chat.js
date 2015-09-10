@@ -437,6 +437,7 @@ function hideChat() {
 		$("#chatContainer")[0].style.visibility = "hidden";
 		$("#chatContainer")[0].style.display = "none";
 
+		chatDiv = $("#chatDiv");
 		// just hide bottom parts.
 		chatDiv[0].style.visibility = "hidden";		
 		chatDiv[0].style.display = "none";
@@ -444,9 +445,10 @@ function hideChat() {
 }
 
 function showChat() {
+	chatDiv = $("#chatDiv");
+	
 	if (quickchatmode == 0) {
-		// display chat box
-		chatDiv = $("#chatDiv");
+		// display chat box		
 		chatDiv[0].style.visibility = "visible";
 		$("#chatBottom")[0].style.visibility = "visible";
 		$(".chatcontentDiv")[0].style.visibility = "visible";
