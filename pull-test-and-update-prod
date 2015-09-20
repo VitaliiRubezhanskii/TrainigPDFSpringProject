@@ -4,7 +4,7 @@ git add .
 git commit -m "commit to test before taking to prod"
 cd ..
 cd sp
-pull ../slidepipertest
+git pull ../slidepipertest
 echo PULLED FROM test-------------
 git push
 
