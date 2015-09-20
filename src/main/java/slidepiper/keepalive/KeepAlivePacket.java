@@ -78,7 +78,7 @@ public class KeepAlivePacket {
 		
 		public Boolean isPacketDead()
 		{
-				if (this.noKeepAliveSeconds >60) // packet is dead - no keepalive for 10 sec.
+				if (this.noKeepAliveSeconds >20) // packet is dead - no keepalive for 10 sec.
 				{
 					return true;
 				} 	
@@ -87,6 +87,13 @@ public class KeepAlivePacket {
 					return false;
 				}
 		}
+		public int getNoKeepAliveSeconds() {
+			return noKeepAliveSeconds;
+		}
+		public void setNoKeepAliveSeconds(int noKeepAliveSeconds) {
+			this.noKeepAliveSeconds = noKeepAliveSeconds;
+		}
+		
 		
 		
 }

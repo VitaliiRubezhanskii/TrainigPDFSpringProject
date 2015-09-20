@@ -311,7 +311,7 @@ public class HtmlRenderer {
 								"<b><u>" + hi.getSlidesName() + "</u> sent to <u>" + hi.getCustomerName() + "</u> ("
 								+ hi.getCustomerEmail() + ") at " + hi.getTimestamp() +"</b>";
 						
-						System.out.println("Title for history item: " + msgtitle);																		
+						//System.out.println("Title for history item: " + msgtitle);																		
 						
 						ArrayList<String> reports = DbLayer.getSessionReportsByMsgId(hi.getMsgId());
 						String itemHTML="";

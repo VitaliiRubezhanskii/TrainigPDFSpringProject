@@ -30,23 +30,31 @@ public class KeepAliveTask extends TimerTask {
 		ConcurrentHashMap<String, KeepAlivePacket> keepAliveMap = 
 				KeepAliveServlet.getKeepAliveMap();
 		
+		
+		
 		// loop on all packets and propagate time
 		for(KeepAlivePacket p : keepAliveMap.values())
 		{
 				// pass 3 seconds for each packet.
 				p.passSeconds(3);
-		//		System.out.println("Passing 3sec for packet " + p.toString());
 		}
+		
+		
 				
 		// iterator on map, it allows removing.
 		Iterator<KeepAlivePacket> iter = keepAliveMap.values().iterator();
 		// check for dead packets
 		while(iter.hasNext())
 		{
-				KeepAlivePacket p = iter.next(); 
+				KeepAlivePacket p = iter.next();
+				
+				String keepalivemsg = "KEEPALIVE PACKET: ";		
+				keepalivemsg += ("msgid: " + p.msgId + " sess: " + p.getSessionId() + " esttime: " + p.getEstimatedTimeViewed() + " isdead: " + p.isPacketDead() + " nokeepalivesec: " + p.getNoKeepAliveSeconds());
+				System.out.println(keepalivemsg);
+
 				if (p.isPacketDead())
 				{
-					System.out.println("dead packet " + p.toString());					
+					System.out.println("dead packet " + p.toString() + " LOGGING AND EMAILING ");					
 														
 					// log last slide event.
 					// it's a regular slide view event, only detected in a different way.
