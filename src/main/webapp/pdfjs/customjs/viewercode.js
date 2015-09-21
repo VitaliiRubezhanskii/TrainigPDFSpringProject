@@ -489,7 +489,9 @@ function loadChatWindow()
 	privacyDiv.style.visibility = "visible";
 	
 	// now blur and focus will work:
-	initDone = true;				
+	initDone = true;
+	
+	PDFJS.openExternalLinksInNewWindow = true;
 }
 
  //document.addEventListener("pagerendered", function(e) {
