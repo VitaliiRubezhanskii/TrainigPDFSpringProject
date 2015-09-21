@@ -69,7 +69,11 @@ function setGlobals() {
 			"role" : role
 		};
 		// $("#chatWith").text("Chatting with " + salesman);
-		$("#chatWith").html("<b><u>Chatting with " + salesman + "</u></b>");
+		
+		chatWithHtml ="<b><u>Chatting with " + salesman + "</u></b>"; 
+		openChatWithHtml ="<b><u>Open chat with " + salesman + "</u></b>";
+		$("#chatWith").html(chatWithHtml);
+				
 		username = customername;
 	} else
 	// salesman sees chatting with customer
@@ -406,7 +410,11 @@ function minimizeChat() {
 		$("#btnClose")[0].style.display = "none";
 
 		chatWith = $("#chatWith")[0];
-
+		
+		chatWithHtml ="<b><u>Chatting with " + salesman + "</u></b>"; 
+		openChatWithHtml ="<b><u>Open chat with " + salesman + "</u></b>";
+		$("#chatWith").html(openChatWithHtml);
+		
 		chatWith.style.visibility = "visible";
 
 		maxY = window.innerHeight;
@@ -446,6 +454,11 @@ function hideChat() {
 
 function showChat() {
 	chatDiv = $("#chatDiv");
+	
+	chatWith = $("#chatWith")[0];
+	chatWithHtml ="<b><u>Chatting with " + salesman + "</u></b>"; 
+	openChatWithHtml ="<b><u>Open chat with " + salesman + "</u></b>";
+	$("#chatWith").html(chatWithHtml);
 	
 	if (quickchatmode == 0) {
 		

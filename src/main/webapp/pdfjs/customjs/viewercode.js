@@ -437,7 +437,8 @@ function loadChatWindow()
 					startClient();
 						setTimeout(function() {
 										
-							showChat(); // must show before changing properties
+							//showChat(); // must show before changing properties
+							
 							// otherwise it doesn't change correctly.
 							// position it correctly
 							//maxY = window.outerHeight;								
@@ -470,6 +471,7 @@ function loadChatWindow()
 							{
 								console.log("desktop. showing chat");
 								  showChat(); //desktop device
+								  minimizeChat();
 							}
 											
 						},  2000);
