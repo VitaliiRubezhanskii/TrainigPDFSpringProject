@@ -1759,9 +1759,11 @@ PDFJS.maxCanvasPixels = (PDFJS.maxCanvasPixels === undefined ?
 //    false : PDFJS.openExternalLinksInNewWindow);
 
 // change default to open in new window:
-PDFJS.openExternalLinksInNewWindow = (
-		  PDFJS.openExternalLinksInNewWindow === undefined ?
-		    true : PDFJS.openExternalLinksInNewWindow);
+//PDFJS.openExternalLinksInNewWindow = (
+	//	  PDFJS.openExternalLinksInNewWindow === undefined ?
+		//    true : PDFJS.openExternalLinksInNewWindow);
+
+PDFJS.openExternalLinksInNewWindow = true;
 
 /**
  * Document initialization / loading parameters object.
