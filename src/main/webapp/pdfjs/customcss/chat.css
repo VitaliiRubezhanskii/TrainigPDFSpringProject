@@ -30,7 +30,7 @@
       border-width: thin;*/
             
       
-      border-color: #aa00aa; /*maybe purple*/ /*#ffffff;*/
+      border-color: #550055; /*maybe purple*/ /*#ffffff;*/
   	  border-width: 2px; /*thin;*/
       
       border-style: solid;
@@ -40,22 +40,23 @@
       
           padding: 20px;
           font-size: 12px;
-    }    
-    	.chatcorners {    	
+    }
+        
+  .chatcorners {    	
 						background: none repeat scroll 0 0 #aabbff;
 				    border-radius: 3px;
 				    border: 2px solid #777777;
 				    padding: 2px;
     		}
     
-    .chatusername {
+  .chatusername {
       font-weight: bold;
       color: #000000;
       font-style : italic;
     }
-    	.msgtext {
+    
+  .msgtext {
       font-weight: bold;
       color: #220000;
     }	
-  
   
