@@ -91,6 +91,9 @@ function setGlobals() {
 }
 
 function connectSocket() {
+	// just hide it, always. No btn, like in facebook.
+	$("#btnSend")[0].style.visibility = "hidden";
+
 	loadChatHistory();
 	socket = new SockJS(socketString);
 	// When the connection is opened, login.
@@ -477,6 +480,7 @@ function showChat() {
 						$(".chatcontentDiv")[0].style.display = "block";
 						$("#btnClose")[0].style.display = "block";
 						$("#chatBox")[0].style.display = "block";
+					
 				
 						// full height
 						$("#chatContainer")[0].style.height = "210px";
