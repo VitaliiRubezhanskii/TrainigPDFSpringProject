@@ -84,7 +84,14 @@ public class KeepAlivePacket {
 				} 	
 				else
 				{
-					return false;
+					if (this.estimatedTimeViewed > 300)
+					{
+							return true;
+					}
+					else
+					{
+							return false;
+					}
 				}
 		}
 		public int getNoKeepAliveSeconds() {

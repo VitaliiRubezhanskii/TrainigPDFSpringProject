@@ -49,7 +49,10 @@ public class KeepAliveTask extends TimerTask {
 				KeepAlivePacket p = iter.next();
 				
 				String keepalivemsg = "KEEPALIVE PACKET: ";		
-				keepalivemsg += ("msgid: " + p.msgId + " sess: " + p.getSessionId() + " esttime: " + p.getEstimatedTimeViewed() + " isdead: " + p.isPacketDead() + " nokeepalivesec: " + p.getNoKeepAliveSeconds());
+				//if (p.getEstimatedTimeViewed() < 300) 
+				//{
+							keepalivemsg += ("msgid: " + p.msgId + " sess: " + p.getSessionId() + " esttime: " + p.getEstimatedTimeViewed() + " isdead: " + p.isPacketDead() + " nokeepalivesec: " + p.getNoKeepAliveSeconds());
+				//}
 				System.out.println(keepalivemsg);
 
 				if (p.isPacketDead())
