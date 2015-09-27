@@ -21,7 +21,9 @@ import org.json.JSONObject;
 
 
 
+
 import slidepiper.constants.Constants;
+import slidepiper.db.DbLayer;
 
 import java.util.Timer;
 // For ConcurrentHashMap
@@ -132,7 +134,15 @@ public void init(ServletConfig config) throws ServletException {
 											input.getString("sessionId"));										
 						//			System.out.println("packet " + p.toString());
 									// reset old keepalive packet if any, put the new one.
-									keepAliveMap.put(p.sessionId,p);
+									
+									if (DbLayer.isSessionDead(p.getSessionId()))
+									{
+												// dead session, do nothing. ignore keepalive
+									}
+									else
+									{
+											keepAliveMap.put(p.sessionId,p);
+									}
 									break;
 							default: System.out.println("ERROR. unknown action  in KeepAliveServlet" + action);									
 
