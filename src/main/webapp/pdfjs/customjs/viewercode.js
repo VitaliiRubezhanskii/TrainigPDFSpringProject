@@ -326,14 +326,18 @@ function initView() {
 				if ((is_in_browser == 0)&&(slides_controlled==false)) 
 				// browser not in focus?
 				{
-					cur_slide = -1; // -1 signifies we're outside of the browser.
-					
-					var seconds_viewed = (now_datetime - prev_datetime) / 1000;
-					
-					if (seconds_viewed > 60) // 1 min outside of browser
-						{
-								window.close(); //close it!						
-						}
+					cur_slide = -1; // -1 signifies we're outside of the browser.									
+				}
+				
+				if (is_in_browser==0)
+				{
+							var seconds_viewed = (now_datetime - prev_datetime) / 1000;
+							
+							if (seconds_viewed > 60) // 1 min outside of browser
+								{
+										console.log("session timed out. going to closed.html");
+										window.open("closed.htm", '_self');							
+								}
 				}
 		
 				// new slide. if outside of browser slide is -1 and it ends the current
