@@ -128,8 +128,12 @@ function fillBarChart() {
 		
 									var time_viewed = msg.slideviews[j].timeViewed;
 									// put cutoff of 90 of view time.
-									//if (time_viewed > 90) {	time_viewed = 90;}																		
-									jsonItem = {"slide" : slideNumStr,"time" : time_viewed};		
+									if (time_viewed > 90) {	time_viewed = 90;}
+									
+									// without cutoff
+									var real_time_viewed = msg.slideviews[j].timeViewed;
+									
+									jsonItem = {"slide" : slideNumStr,"time" : time_viewed, "real_time" : real_time_viewed};		
 									jsonTable.push(jsonItem);								
 						}
 						
