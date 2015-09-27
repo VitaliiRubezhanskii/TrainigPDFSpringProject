@@ -333,7 +333,7 @@ function initView() {
 				{
 							var seconds_viewed = (now_datetime - prev_datetime) / 1000;
 							
-							if (seconds_viewed > 60) // 1 min outside of browser
+							if (seconds_viewed > (60*5)) // 5 min outside of browser
 								{
 										console.log("session timed out. going to closed.html");
 										window.open("closed.html", '_self');							
