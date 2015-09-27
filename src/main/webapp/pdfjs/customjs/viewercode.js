@@ -327,6 +327,13 @@ function initView() {
 				// browser not in focus?
 				{
 					cur_slide = -1; // -1 signifies we're outside of the browser.
+					
+					var seconds_viewed = (now_datetime - prev_datetime) / 1000;
+					
+					if (seconds_viewed > 60) // 1 min outside of browser
+						{
+								window.close(); //close it!						
+						}
 				}
 		
 				// new slide. if outside of browser slide is -1 and it ends the current
