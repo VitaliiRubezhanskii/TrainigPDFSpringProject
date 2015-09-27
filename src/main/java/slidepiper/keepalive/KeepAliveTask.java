@@ -57,7 +57,7 @@ public class KeepAliveTask extends TimerTask {
 
 				if (p.isPacketDead())
 				{
-					System.out.println("dead packet " + p.toString() + " LOGGING AND EMAILING ");					
+					System.out.println("dead packet " + p.toString());					
 														
 					// log last slide event.
 					// it's a regular slide view event, only detected in a different way.
@@ -70,7 +70,8 @@ public class KeepAliveTask extends TimerTask {
 															
 					// remove current element in 
 					// thread-safe, collection-safe, hash-safe, iterator-safe way.
-					iter.remove(); 					
+					iter.remove(); 				
+					System.out.println("dead packet " + p.toString() + " LOGGED AND EMAILED - DELETED!");	
 				}			
 		}
 
