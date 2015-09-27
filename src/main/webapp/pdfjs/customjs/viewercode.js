@@ -336,7 +336,7 @@ function initView() {
 							if (seconds_viewed > 60) // 1 min outside of browser
 								{
 										console.log("session timed out. going to closed.html");
-										window.open("closed.htm", '_self');							
+										window.open("closed.html", '_self');							
 								}
 				}
 		
