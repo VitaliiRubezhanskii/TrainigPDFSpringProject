@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import slidepiper.*;
 import slidepiper.constants.Constants;
+import slidepiper.db.DbLayer;
 
 import java.util.Random;
 import java.io.*;
@@ -29,7 +30,7 @@ public class UploadCustomers extends HttpServlet {
 		
 		Constants.updateConstants();
 		String salesman_email = request.getParameter("salesman_email");
-		String name = request.getParameter("name");		
+		//String name = request.getParameter("name");		
 		
 		System.out.println("uploadCustomers servlet Parameters - email " + salesman_email );
 		//" name of pres: " + name);
@@ -71,12 +72,28 @@ public class UploadCustomers extends HttpServlet {
 				String cvsSplitBy = ",";
 
 
-        br = new BufferedReader(new InputStreamReader(in, "UTF-8"));					
+        br = new BufferedReader(new InputStreamReader(in, "UTF-8"));
+        line = br.readLine(); // read and ignore first line.
 				while ((line = br.readLine()) != null) {
 				        // use comma as separator
 					String[] splitted = line.split(cvsSplitBy);
 
-					System.out.println("splitted: 0: " + splitted[0] + " 1: "+ splitted[1] + " 2: "+ splitted[2] );				
+					if (splitted.length >=3)
+						// ignore if not enough in splitted.
+					{
+							System.out.println("splitted: 0: " + splitted[0] + " 1: "+ splitted[1] + " 2: "+ splitted[2] );
+							String custname = splitted[0];
+							String email = splitted[1];
+							String company = splitted[2];
+							
+							if (custname.equalsIgnoreCase("")) custname = email;
+							if (company.equalsIgnoreCase("")) company = email;
+							DbLayer.addNewCustomer(salesman_email, custname, company, email);
+					}
+					else
+					{
+						System.out.println("ignoring line with out enough CSV items: " + line );
+					}
 				}
 			} // if
 		}  catch (SQLException ex) 
