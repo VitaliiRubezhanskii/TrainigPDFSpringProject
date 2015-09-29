@@ -6,7 +6,7 @@ $("#removePresentationButton")
 				"click",
 				function(event, ui) {
 					console.log("removing pres");
-					var r = confirm("Are you sure? You may break the link for this presentation.");
+					var r = window.confirm("Are you sure? You may break the link for this presentation.");
 					console.log("after confirm dialog");
 					if (r == true) {
 						x = "You pressed OK!";
@@ -31,7 +31,7 @@ $("#removePresentationButton")
 							swal("Can't do it", "The system currently supports removing one presentation at a time.", "error");
 						} else 
 						{
-							var confirm = prompt("To confirm deleting the presentation, type CONFIRM in the textbox. This will break all the links you've sent for this presentation.", "type here confirm");
+							var confirm = window.prompt("To confirm deleting the presentation, type CONFIRM in the textbox. This will break all the links you've sent for this presentation.", "type here confirm");
 							if (confirm != null) 							
 							{							    
 										if (confirm.toLowerCase() == "confirm")
