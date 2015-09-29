@@ -7,6 +7,7 @@ $("#removePresentationButton")
 				function(event, ui) {
 					console.log("removing pres");
 					var r = confirm("Are you sure? You may break the link for this presentation.");
+					console.log("after confirm dialog");
 					if (r == true) {
 						x = "You pressed OK!";
 
