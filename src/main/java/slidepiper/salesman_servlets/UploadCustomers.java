@@ -21,6 +21,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 
+
+//upload CSV file of customers
 @WebServlet("/uploadCustomers")
 @MultipartConfig(maxFileSize = 16177215)	// upload file's size up to 16MB
 public class UploadCustomers extends HttpServlet {
@@ -72,7 +74,7 @@ public class UploadCustomers extends HttpServlet {
 				String cvsSplitBy = ",";
 
 
-        br = new BufferedReader(new InputStreamReader(in, "UTF-8"));
+        br = new BufferedReader(new InputStreamReader(in/*, "UTF-8"*/));
         line = br.readLine(); // read and ignore first line.
 				while ((line = br.readLine()) != null) {
 				        // use comma as separator
