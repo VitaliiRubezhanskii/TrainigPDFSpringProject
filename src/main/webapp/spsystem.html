@@ -238,6 +238,30 @@
            <a href="#popupAddCustomer" data-rel="popup" data-position-to="window" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-plus ui-btn-icon-left ui-btn-a" data-transition="pop">Add</a>
            <a id="removeCustButton" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-delete ui-btn-icon-left ui-btn-a">Remove</a>
            <a id="editCustomerButton" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-edit ui-btn-icon-left ui-btn-a">Edit</a>
+           <a href="#popupImportCustomers" data-rel="popup" data-position-to="window" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-plus ui-btn-icon-left ui-btn-a" data-transition="pop">Add</a>
+           
+           <div data-role="popup" id="popupImportCustomers" data-theme="b" class="ui-corner-all">
+							<h1>Import Customers from CSV file</h1>
+							<form method="post" id="uploadcustomersform" action="uploadCustomers" data-ajax="false"  enctype="multipart/form-data">
+								<table border="0">
+									<tr>
+										<!-- <td>Your Email (Salesman email, should be hidden): </td> -->
+										<td><input type="hidden" name="salesman_email" id="salesman_email" size="50"/></td>
+									</tr>
+									<tr>
+										<td>Customers File - CSV only <BR> </td>
+										<td><input type="file" name="file" id="file" size="50"/></td>
+									</tr>
+									<tr>
+										<td colspan="2">
+											<input type="submit" value="Upload Customers CSV" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-shop ui-icon-check ui-btn-inline">
+											<a id="UploadCustomersCsvBack" href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-delete">Cancel</a>
+										</td>
+									</tr>
+								</table>
+							</form>
+					</div>
+           
             <div data-role="popup" id="popupAddCustomer" data-theme="b" class="ui-corner-all" data-dismissible="false">
                 <form>
                     <div style="padding:10px 20px;">
@@ -270,9 +294,6 @@
 <a href="#popupUpdatePresentation" data-rel="popup" data-position-to="window" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-plus ui-btn-icon-left ui-btn-a" data-transition="pop">Update</a>
 
 <div data-role="popup" id="popupAddPresentation" data-theme="b" class="ui-corner-all">
- <!--   <iframe id="uploadframe" src="UploadSlides.jsp"></iframe>   -->
-
-
 		<h1>Upload Presentation</h1>
 		<form method="post" id="uploadform" action="uploadSlides" data-ajax="false"  enctype="multipart/form-data">
 			<table border="0">
@@ -296,11 +317,10 @@
 				</tr>
 			</table>
 		</form>
+</div>
 
 
-
-
-</div></div></div></div>
+</div></div></div>
 
     <div class="ui-block-c"><div class="ui-bar ui-bar-a no-padding-class">
 
