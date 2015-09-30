@@ -40,7 +40,7 @@ public class UploadCustomers extends HttpServlet {
 		InputStream inputStream = null;	// input stream of the upload file
 		
 		// obtains the upload file part in this multipart request
-		Part filePart = request.getPart("file");
+		Part filePart = request.getPart("filecsv");
 		
 		System.out.println("req'd file");
 		
@@ -74,7 +74,8 @@ public class UploadCustomers extends HttpServlet {
 				String cvsSplitBy = ",";
 
 
-        br = new BufferedReader(new InputStreamReader(in/*, "UTF-8"*/));
+        br = new BufferedReader(new InputStreamReader(in, "UTF-8"));
+        //br = new BufferedReader(new InputStreamReader(in/*, "UTF-8"*/));
         line = br.readLine(); // read and ignore first line.
 				while ((line = br.readLine()) != null) {
 				        // use comma as separator
