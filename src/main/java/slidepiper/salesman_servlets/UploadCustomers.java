@@ -31,7 +31,7 @@ public class UploadCustomers extends HttpServlet {
 			HttpServletResponse response) throws ServletException, IOException {
 		
 		Constants.updateConstants();
-		String salesman_email = request.getParameter("salesman_email");
+		String salesman_email = request.getParameter("salesman_email_for_csv");
 		//String name = request.getParameter("name");		
 		
 		System.out.println("uploadCustomers servlet Parameters - email " + salesman_email );

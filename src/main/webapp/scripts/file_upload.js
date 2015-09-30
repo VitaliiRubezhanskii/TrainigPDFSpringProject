@@ -30,7 +30,7 @@ $('#uploadform').submit(function() {
 
 $('#uploadcustomersform').submit(function() {
 	  //make sure text field is filled with salesman email (not visible)
-	  $("#salesman_email").val(getCookie("SalesmanEmail").toLowerCase());
+	  $("#salesman_email_for_csv").val(getCookie("SalesmanEmail").toLowerCase());
 	send_salesman_event("UPLOADING_CSV_FILE", '0', '0', "new CSV" + " for email " + getCookie("SalesmanEmail").toLowerCase());
 	
 	if ($("#filecsv").val() == "") 
