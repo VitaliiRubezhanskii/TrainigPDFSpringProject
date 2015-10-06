@@ -67,9 +67,9 @@ $("#template5")
 		function(event, ui) {
 			  $("#msgtext1").val(
 					  "I hope this note finds you well.\n"
-					  +"I’ve been working for a company called [my company] that specializes in [what my company does]\n"
+					  +"I've been working for a company called [my company] that specializes in [what my company does]\n"
 					  +"Thinking about your role at [company], I thought there might be a good fit for your group.\n"
-					  +"Our [product name] is getting a lot of attention in the marketplace and I think it’s something\n" 
+					  +"Our [product name] is getting a lot of attention in the marketplace and I think it's something\n" 
 					  +"that your organization might see immediate value in.\n"
 					  +"Can you help me get in contact with the right decision-maker?\n"
 					  +"Here is a link to our executive summary:\n"
