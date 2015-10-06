@@ -47,7 +47,7 @@ $("#template3")
 );
 
 
-$("#template3")
+$("#template4")
 .bind(
 		"click",
 		function(event, ui) {
@@ -61,7 +61,7 @@ $("#template3")
 );
 
 
-$("#template3")
+$("#template5")
 .bind(
 		"click",
 		function(event, ui) {
@@ -79,7 +79,7 @@ $("#template3")
 );
 
 
-$("#template3")
+$("#template6")
 .bind(
 		"click",
 		function(event, ui) {
@@ -94,3 +94,4 @@ $("#template3")
 			  $( "#popupTemplates" ).popup( "close" );
 		}
 );
+
