@@ -7,7 +7,10 @@
 	 <meta http-equiv='Content-Type' content='text/html;charset=ISO 8859-8' >
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Slidepiper</title>
-	<link rel="shortcut icon" href="../favicon.ico">
+	
+	<link rel="shortcut icon" href="img/splogo.png" type="image/png">
+	<link rel=icon href="img/splogo.png" sizes="600x600" type="image/png">
+	
   <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,700">
 	<link rel="stylesheet" href="jqm/jquery.mobile-1.4.5.css">
 	<link rel="stylesheet" href="themes/blue-header.min.css" />
@@ -333,11 +336,26 @@
                     <p><textarea cols="40" rows="8" name="textarea-6" id="msgtext1" placeholder="Message Body" ></textarea></p>
 <!--                    <input name="rtl"  class="" id="rtl" type="checkbox" value="Right to Left Message"> <label for="rtl">Right to Left Message</label>
                   </div> -->
-
 <!--                        <a id="clear" data-rel="popup" data-position-to="window" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-tag ui-btn-icon-left ui-btn-a" data-transition="pop">Clear</a> -->
-                       <a id="fromTemplate" data-position-to="window" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-bars ui-btn-icon-left ui-btn-a" data-transition="pop">From Template...</a>
-                </div>
 
+                       <!--  
+                       <a id="fromTemplate" data-position-to="window" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-bars ui-btn-icon-left ui-btn-a" data-transition="pop">From Template...</a> 
+                       -->
+             
+             <a href="#popupTemplates" data-rel="popup" data-role="button" data-inline="true">Choose Template...</a>
+                       
+                      <div data-role="popup" id="popupTemplates" data-theme="a">
+													<ul data-role="listview" data-inset="true" style="min-width:210px;" data-theme="b">
+														<li data-role="divider" data-theme="a"><b><u>Templates List</u></b></li>
+														<li><a href="" id="template1">Presentation after conversation</a></li>
+														<li><a href="" id="template2">Cold email</a></li>
+														<li><a href="" id="template3">Before a meeting</a></li>
+														<li><a href="" id="template4">Information requested</a></li>
+														<li><a href="" id="template5">Contact to decisionmaker</a></li>
+														<li><a href="" id="template6">Contact to the guy in charge</a></li>																											
+													</ul>
+											</div>
+                </div>
         </div></div>
 </div><!-- /grid-b -->
 <div style="text-align: right">
@@ -393,6 +411,7 @@
 <script type="text/javascript" src="scripts/add_customer.js"></script>
 <script type="text/javascript" src="scripts/account.js"></script>
 <script type="text/javascript" src="scripts/history.js"></script>
+<script type="text/javascript" src="scripts/templates.js"></script>
 <div id="dialog-confirm"></div>
 
 </body>
