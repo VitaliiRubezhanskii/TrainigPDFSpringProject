@@ -294,7 +294,7 @@
       <a id="removePresentationButton" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-delete ui-btn-icon-left ui-btn-a" data-transition="pop">Remove</a>
             <!--  <a href="" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-edit ui-btn-icon-left ui-btn-a" data-transition="pop">Edit</a> -->
 
-<a href="#popupUpdatePresentation" data-rel="popup" data-position-to="window" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-plus ui-btn-icon-left ui-btn-a" data-transition="pop">Update</a>
+   <a href="#popupUpdatePresentation" data-rel="popup" data-position-to="window" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-plus ui-btn-icon-left ui-btn-a" data-transition="pop">Update</a>
 
 <div data-role="popup" id="popupAddPresentation" data-theme="b" class="ui-corner-all">
 		<h1>Upload Presentation</h1>
@@ -321,6 +321,33 @@
 			</table>
 		</form>
 </div>
+
+<div data-role="popup" id="popupUpdatePresentation" data-theme="b" class="ui-corner-all">
+		<h1>Update Presentation File</h1>
+		<form method="post" id="uploadupdatedpresentationform" action="UploadUpdatedSlides" data-ajax="false"  enctype="multipart/form-data">
+			<table border="0">
+				<tr>
+					<!-- <td>Your Email (Salesman email, should be hidden): </td> -->
+					<td><input type="hidden" name="salesman_email" id="salesman_email" size="50"/></td>
+				</tr>				
+				<tr>
+					<td>Presentation Name: </td>
+					<td><input type="hidden" name="presentation_id" id="presentation_id" size="30"/></td>
+				</tr>
+				<tr>
+					<td>New Presentation File - PDF only: </td>
+					<td><input type="file" name="updatedfile" id="updatedfile" size="50"/></td>
+				</tr>
+				<tr>
+					<td colspan="2">
+						<input type="submit" value="Update Presentation File" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-shop ui-icon-check ui-btn-inline">
+						<a id="UploadUpdatedPresentation" href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-delete">Cancel</a>
+					</td>
+				</tr>
+			</table>
+		</form>
+</div>
+
 
 
 </div></div></div>
@@ -407,6 +434,7 @@
 <script type="text/javascript" src="scripts/file_upload.js"></script>
 <script type="text/javascript" src="scripts/remove_customer.js"></script>
 <script type="text/javascript" src="scripts/remove_presentation.js"></script>
+<script type="text/javascript" src="scripts/update_presentation.js"></script>
 <script type="text/javascript" src="scripts/send_email.js"></script>
 <script type="text/javascript" src="scripts/add_customer.js"></script>
 <script type="text/javascript" src="scripts/account.js"></script>
