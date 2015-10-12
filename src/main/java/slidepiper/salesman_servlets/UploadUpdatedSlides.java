@@ -36,7 +36,7 @@ public class UploadUpdatedSlides extends HttpServlet {
 		InputStream inputStream = null;	// input stream of the upload file
 		
 		// obtains the upload file part in this multipart request
-		Part filePart = request.getPart("file");
+		Part filePart = request.getPart("updatedfile");
 		
 		System.out.println("req'd file");
 		
