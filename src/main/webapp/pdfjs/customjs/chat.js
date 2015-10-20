@@ -471,8 +471,8 @@ function showChat() {
 	chatDiv = $("#chatDiv");
 	
 	chatWith = $("#chatWith")[0];
-	chatWithHtml ="<b><u>Chatting with " + salesman + "</u></b>"; 
-	openChatWithHtml ="<b><u>Open chat with " + salesman + "</u></b>";
+	//chatWithHtml ="<b><u>Chatting with " + salesman + "</u></b>"; 
+	//openChatWithHtml ="<b><u>Open chat with " + salesman + "</u></b>";
 	$("#chatWith").html(chatWithHtml);
 	
 	if (quickchatmode == 0) {
