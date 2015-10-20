@@ -61,6 +61,12 @@ function setGlobals() {
 	if (salesman == null)
 		alert("error, no salesman parameter for chat");
 
+	updateChatWith();
+}
+
+
+function updateChatWith()
+{
 	// customer sees chatting with salesman
 	if (role == "0") {
 		user = {
@@ -70,7 +76,7 @@ function setGlobals() {
 		};
 		// $("#chatWith").text("Chatting with " + salesman);
 		
-		chatWithHtml ="<b><u>Chatting with " + salesman + "</u></b>"; 
+		chatWithHtml ="<b><u>Chatting with " + salesman+ "</u></b>"; 
 		openChatWithHtml ="<b><u>Open chat with " + salesman + "</u></b>";
 		$("#chatWith").html(chatWithHtml);
 				
@@ -84,10 +90,15 @@ function setGlobals() {
 			"role" : role
 		};
 		username = salesman;
-		$("#chatWith").text("Chatting with " + customername);
+		
+		chatWithHtml ="<b><u>Chatting with " + customername+ "</u></b>"; 
+		openChatWithHtml ="<b><u>Open chat with " + customername + "</u></b>";
+		$("#chatWith").html(chatWithHtml);
+		
+	//	$("#chatWith").text("Chatting with " + customername);
 	} else {
 		alert("ERROR - role is not defined.");
-	}
+	}	
 }
 
 function connectSocket() {
@@ -414,8 +425,9 @@ function minimizeChat() {
 
 		chatWith = $("#chatWith")[0];
 		
-		chatWithHtml ="<b><u>Chatting with " + salesman + "</u></b>"; 
-		openChatWithHtml ="<b><u>Open chat with " + salesman + "</u></b>";
+//		chatWithHtml ="<b><u>Chatting with " + salesman + "</u></b>"; 
+	//openChatWithHtml ="<b><u>Open chat with " + salesman + "</u></b>";
+		updateChatWith();
 		$("#chatWith").html(openChatWithHtml);
 		
 		chatWith.style.visibility = "visible";
