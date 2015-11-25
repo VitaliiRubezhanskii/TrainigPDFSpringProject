@@ -338,14 +338,19 @@ function startClient() {
 	console.log("opening socket");
 	// on http server use document.domain instead od "localhost"
 	// Start the websocket client
-	if (document.domain == 'localhost') {
-		// on localhost
-		socketString = document.domain + ":8080/sp/chat";
-	} else {
-		// on openshift, no sp. and port is 8000 for ws, 8443 for wss.
-		socketString = document.domain + ":8000/chat";
-	}
-	socketString = "http://" + socketString;
+	
+	socketString = null;
+	
+	$.ajax({
+		async: false,
+		dataType: "json",
+		url: "../config",
+	}).done(function( data ) {
+		socketString = data.webSocketsUrl.replace(/\/$/, "") + "/chat";
+	}).fail(function( jqXHR, textStatus, errorThrown ) {
+		console.log( textStatus + ": " + errorThrown );
+	});
+		
 	console.log("connecting to socket " + socketString);
 
 	setGlobals();

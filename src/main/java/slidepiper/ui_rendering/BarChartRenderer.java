@@ -8,6 +8,7 @@ import java.net.URL;
 
 import javax.net.ssl.HttpsURLConnection;
 
+import slidepiper.config.ConfigProperties;
 
 // render the barchart using the phantomjs service.
 public class BarChartRenderer {
@@ -20,30 +21,12 @@ public class BarChartRenderer {
 					String imageCaptureUrl;
 					String imageUrl="NOT SET. ERROR";
 					
-				  String appname = System.getenv("OPENSHIFT_APP_NAME");									
-					if (appname==null) //running locally
-					{
-						url = "localhost:8080/sp";				
-					}
-					else
- 				  if (appname.equalsIgnoreCase("slidepipertest"))
-				   {
-					 url = "http://slidepipertest-slidepiper.rhcloud.com";
-				   }
-				 else
-				 if (appname.equalsIgnoreCase("sp")) 
-				 {
-					 url = "http://www.slidepiper.com";
-				 }
-				 else
-				 {
-					 	url = "CANNOT MAKE LINK";
-				 }				
-				
+					url = ConfigProperties.getProperty("app_url");
 					url += ("/viewbarchart.jsp?session_id="+sessionId);
 					
 					// make the full url for img capture.
-					imageCaptureUrl="http://codemongo-spdomain.rhcloud.com/?url="+url;
+					imageCaptureUrl = ConfigProperties.getProperty("scraper_url").replaceAll("/$", "") + "/?url=" + url;
+
 					try
 					{
 						
@@ -70,7 +53,7 @@ public class BarChartRenderer {
 							
 							String imageCode=response.toString().trim();
 							
-							imageUrl = "http://codemongo-spdomain.rhcloud.com/" + imageCode + ".png";
+							imageUrl = ConfigProperties.getProperty("scraper_url").replaceAll("/$", "") + "/" + imageCode + ".png";
 							//System.out.println("final url " + imageUrl);
 					} catch (Exception ex) {
 								System.out.println("exception rendering barchart link");

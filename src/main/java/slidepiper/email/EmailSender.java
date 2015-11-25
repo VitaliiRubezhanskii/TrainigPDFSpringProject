@@ -11,6 +11,7 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+import slidepiper.config.ConfigProperties;
 import slidepiper.dataobjects.AlertData;
 import slidepiper.dataobjects.CustomerSession;
 import slidepiper.dataobjects.MessageInfo;
@@ -65,30 +66,7 @@ public class EmailSender {
 	
 	public static String getUrlPrefix()
 	{
-		  String appname = System.getenv("OPENSHIFT_APP_NAME");
-		  String urlprefix;
-		if (appname==null) //running locally
-		{
-			urlprefix = "http://localhost:8080/sp/";				 
-		}
-		else
-		{
-			 if (appname.equalsIgnoreCase("slidepipertest"))
-			 {
-				 urlprefix = "http://slidepipertest-slidepiper.rhcloud.com/"; 					 
-			 }
-			 else
-				 if (appname.equalsIgnoreCase("sp")) 
-				 {
-					 urlprefix = "http://www.slidepiper.com/";						 
-				 }
-				 else
-				 {
-					 urlprefix="???? unknown ???";						 
-				 }							 
-		}
-		
-			return urlprefix;
+		return ConfigProperties.getProperty("app_url") + "/";
 	}
 	
 	// send alert email
@@ -103,8 +81,8 @@ public class EmailSender {
 			String getParams = "sessionid="+sessionId+"&salesman="+DbLayer.getSalesmanName(mi.getSalesManEmail())+"&customername="+ custname +"&role=1";
 			
 			currentviewslink = urlprefix + "viewbarchart.jsp?session_id=" + sessionId;
-			chatlink = urlprefix + "pdfjs/chatwindow.html?" + getParams;			
-			String fullchatlink= urlprefix+"pdfjs/viewer.html?file=/file/" + mi.getId() + "&" + getParams;
+			chatlink = urlprefix + "pdfjs/chatwindow.html?" + getParams;
+			String fullchatlink= urlprefix+"pdfjs/viewer.html?file=" + ConfigProperties.getProperty("app_url") + "/file/" + mi.getId() + "&" + getParams;
 			
 			String subj = "SlidePiper Alert for " +
 					DbLayer.getCustomerName(mi.getCustomerEmail(),mi.getSalesManEmail()) +

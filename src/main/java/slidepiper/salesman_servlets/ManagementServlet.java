@@ -5,6 +5,7 @@ import java.io.BufferedReader;
 
 import slidepiper.*;
 import slidepiper.ui_rendering.*;
+import slidepiper.config.ConfigProperties;
 import slidepiper.constants.Constants;
 import slidepiper.dataobjects.Customer;
 import slidepiper.dataobjects.Presentation;
@@ -160,31 +161,8 @@ public class ManagementServlet extends HttpServlet {
 						 		System.out.println("Error decoding msg "  + msgtext);
 						 		System.out.println("Error decoding msg " + e.getMessage());
 					}
-										
-					String appname = System.getenv("OPENSHIFT_APP_NAME");
-					System.out.println("making link for app appname " + appname);						
-					String msglink;
-					if (appname==null) //running locally
-					{
-						msglink = "localhost:8080/sp/pdfjs/viewer.html?file=/sp/file/"+ input.getString("docid") + "#zoom=page-fit";
-					}
-					else
-					{
-						 if (appname.equalsIgnoreCase("slidepipertest"))
-						 {
-							 msglink = "http://slidepipertest-slidepiper.rhcloud.com/pdfjs/viewer.html?file=/file/"+ input.getString("docid") + "#zoom=page-fit";
-						 }
-						 else
-							 if (appname.equalsIgnoreCase("sp")) 
-							 {
-								 msglink = "http://www.slidepiper.com/pdfjs/viewer.html?file=/file/"+ input.getString("docid") + "#zoom=page-fit";
-							 }
-							 else
-							 {
-								 	msglink = "CANNOT MAKE LINK";
-							 }							 
-					}
 					
+					String msglink = ConfigProperties.getProperty("app_url") + "/pdfjs/viewer.html?file=" + ConfigProperties.getProperty("app_url") + "/file/" + input.getString("docid") + "#zoom=page-fit";
 
 					msgtext = msgtext + "<br>" + msglink;
 														

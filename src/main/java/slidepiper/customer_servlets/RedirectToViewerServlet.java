@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+
+import slidepiper.config.ConfigProperties;
 import slidepiper.db.DbLayer;
 
 /**
@@ -59,7 +61,7 @@ public class RedirectToViewerServlet extends HttpServlet {
 		// this html is slightly different in that the paths are
 		// relative to the root. because the servlet forwards it but the
 		// working dir remains the root.
-		String newurl = "/pdfjs/viewerThroughServlet.html?file=/file/" + docid + "#zoom=page-fit";
+		String newurl = "/pdfjs/viewerThroughServlet.html?file=" + ConfigProperties.getProperty("app_url") + "/file/" + docid + "#zoom=page-fit";
 		System.out.println("new url to redirect: " + newurl);
 		
 		// I want the url to remain as-as, so:

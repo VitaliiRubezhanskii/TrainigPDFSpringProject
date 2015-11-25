@@ -1,6 +1,8 @@
 package slidepiper.constants;
 
-public class Constants {		  		 		  
+import slidepiper.config.ConfigProperties;
+
+public class Constants {	
 		  public static Boolean constantsSet = false;
 		  public static String MYSQL_USERNAME = System.getenv("OPENSHIFT_MYSQL_DB_USERNAME");
 		  public static String MYSQL_PASSWORD = System.getenv("OPENSHIFT_MYSQL_DB_PASSWORD");
@@ -26,15 +28,21 @@ public class Constants {
 					 if (MYSQL_DATABASE_PORT==null) // no openshift				  
 					  {				  
 						  // for local work - with slidepipertest in openshift
-						  dbUser = "adminS16x82l";
-						  dbPass = "CdikJ1eZlpDy";
+						  //dbUser = "adminS16x82l";
+						  //dbPass = "CdikJ1eZlpDy";
 						  
 						  // for sp in openshift
 						  //dbUser = "adminzQQA9hc";
 						  //dbPass = "P6Qmj1B_lkRi";
 						  
 						  
-						  dbURL = "jdbc:mysql://127.0.0.1:3307/picascrafxzhbcmd?user= " + MYSQL_USERNAME + "&password" + MYSQL_PASSWORD + "&useUnicode=yes&characterEncoding=UTF-8";
+						  String dbHost = ConfigProperties.getProperty("mysql_host").replaceAll("/$", "");
+						  String dbPort = ConfigProperties.getProperty("mysql_port").replaceAll("/$", "");
+						  dbUser = ConfigProperties.getProperty("mysql_user");
+     					  dbPass = ConfigProperties.getProperty("mysql_password");
+     					  String dbDatabase = ConfigProperties.getProperty("mysql_database");
+						 
+     					  dbURL = "jdbc:mysql://" + dbHost + ":" + dbPort + "/" + dbDatabase;
 					  }
 					 else // using openshift:
 					 {
