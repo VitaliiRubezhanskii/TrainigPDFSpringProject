@@ -162,7 +162,7 @@ public class ManagementServlet extends HttpServlet {
 						 		System.out.println("Error decoding msg " + e.getMessage());
 					}
 					
-					String msglink = ConfigProperties.getProperty("app_url") + "/pdfjs/viewer.html?file=" + ConfigProperties.getProperty("app_url") + "/file/" + input.getString("docid") + "#zoom=page-fit";
+					String msglink = "<strong>" + ConfigProperties.getProperty("app_url") + "/pdfjs/viewer.html?file=" + ConfigProperties.getProperty("app_url") + "/file/" + input.getString("docid") + "#zoom=page-fit" + "</strong>";
 
 					msgtext = msgtext + "<br>" + msglink;
 														
@@ -201,6 +201,22 @@ public class ManagementServlet extends HttpServlet {
 				case "deletePresentation":
 					System.out.println("deleting pres " + input.getString("presentation") + " " + input.getString("salesman_email"));
 					DbLayer.deletePresentation(input.getString("presentation"), input.getString("salesman_email"));
+					break;
+					
+				case "add-salesman":
+					String company = input.getString("company");
+					String email = input.getString("email");
+					String emailClient = input.getString("email-client");
+					String firstName = input.getString("first-name");
+					String lastName = input.getString("last-name");
+					String magic = input.getString("magic");
+					String password = input.getString("password");
+					
+					int statusCode = DbLayer.addSalesman(company, email, emailClient, firstName, lastName, magic, password);
+					output.put("statusCode", statusCode);
+
+					//System.out.println("cust data: smemail " + smemail + " cname " + cname + "cust company: " + ccompany + " cu email:" + cemail);
+					//output.put("newCustomer", DbLayer.addNewCustomer(smemail, cname, ccompany, cemail));
 					break;
 			}
 			
