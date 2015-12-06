@@ -1,0 +1,16 @@
+/**
+ * SlidePiper Application Settings
+ *
+ * sp prefix is used to declare a SlidePiper name space.
+ *
+ * For information on the naming convention, see Harry Roberts' style in
+ * https://en.bem.info/method/naming-convention/ .
+ */
+
+.sp--height-100-percent {
+	height: 100%;
+}
+
+.sp-signup-form__logo {
+	width: 250px;
+}
