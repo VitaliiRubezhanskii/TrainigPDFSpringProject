@@ -80,7 +80,30 @@ public class ConfigProperties {
             + System.getenv("OPENSHIFT_WEBSOCKETS_PORT"));
       }
     }
-
+    
+    // Create context path.
+    if (key.equals("app_contextpath")) {
+      if (overrideOpenshiftEv) {
+         
+        // Since app_contextpath is an optional property, we to check if it exists.
+        if (null != props.getProperty(key)) {
+           props.setProperty(key, props.getProperty(key).replaceAll("/$", "") + "/");
+        } else {
+          props.setProperty(key, "");
+        }
+      } else {
+        
+        // OPENSHIFT_APP_CONTEXTPATH is a custom Openshift environment variable.
+        // Since OPENSHIFT_APP_CONTEXTPATH is an optional variable, we to check if it exists.
+        if (null != System.getenv("OPENSHIFT_APP_CONTEXTPATH")) {
+          props.setProperty(key, System.getenv("OPENSHIFT_APP_CONTEXTPATH")
+              .replaceAll("/$", "") + "/");
+        } else {
+          props.setProperty(key, "");
+        }
+      }
+    }
+    
     // Create scraper URL.
     if (key.equals("scraper_url")) {
       if (overrideOpenshiftEv) {

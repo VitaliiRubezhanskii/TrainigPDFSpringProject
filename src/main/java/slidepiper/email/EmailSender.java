@@ -82,7 +82,7 @@ public class EmailSender {
 			
 			currentviewslink = urlprefix + "viewbarchart.jsp?session_id=" + sessionId;
 			chatlink = urlprefix + "pdfjs/chatwindow.html?" + getParams;
-			String fullchatlink= urlprefix+"pdfjs/viewer.html?file=" + ConfigProperties.getProperty("app_url") + "/file/" + mi.getId() + "&" + getParams;
+			String fullchatlink= urlprefix+"pdfjs/viewer.html?file=/" + ConfigProperties.getProperty("app_contextpath") + "file/" + mi.getId() + "&" + getParams;
 			
 			String subj = "SlidePiper Alert for " +
 					DbLayer.getCustomerName(mi.getCustomerEmail(),mi.getSalesManEmail()) +
