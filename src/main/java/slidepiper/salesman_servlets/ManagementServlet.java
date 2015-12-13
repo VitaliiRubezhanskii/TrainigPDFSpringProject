@@ -162,7 +162,7 @@ public class ManagementServlet extends HttpServlet {
 						 		System.out.println("Error decoding msg " + e.getMessage());
 					}
 					
-					String msglink = ConfigProperties.getProperty("app_url") + "/pdfjs/viewer.html?file=" + ConfigProperties.getProperty("app_url") + "/file/" + input.getString("docid") + "#zoom=page-fit";
+					String msglink = ConfigProperties.getProperty("app_url") + "/pdfjs/viewer.html?file=/" + ConfigProperties.getProperty("app_contextpath") + "file/" + input.getString("docid") + "#zoom=page-fit";
 
 					msgtext = msgtext + "<br>" + msglink;
 														
