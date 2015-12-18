@@ -22,7 +22,7 @@ http://sourceforge.net/adobe/cmap/wiki/License/
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <meta name="google" coontent="notranslate">
-    <title>View Presentaion</title>
+    <title>View Presentation</title>
 
 
     <link rel="stylesheet" href="viewer.css"/>
@@ -43,7 +43,9 @@ http://sourceforge.net/adobe/cmap/wiki/License/
   <script type="text/javascript" src="../jqm/jquery.js"></script>
   <script src="sockjs/sockjs-0.3.js"></script>  
   <link rel="stylesheet" href="customcss/chat.css"/>
-    
+  
+  
+    <link rel="stylesheet" href="../assets/styles/sp-chat.css">
   </head>
 
   <body tabindex="1" class="loadingInProgress">
@@ -57,8 +59,44 @@ http://sourceforge.net/adobe/cmap/wiki/License/
 				</div> -->
 				
 				<!--  *********************************** CHAT DIV -->
-		<div id="chatDiv" class="chatDiv" style="position: absolute; z-index:1000; width: 25%;  visibility: hidden;">
-		 <div class="chatcontainer chatcorners" id="chatContainer">    
+		    <div id="sp-live-chat">
+          <header class="sp-clearfix">
+            <!-- Disable chat close functionality for now. <a href="#" class="sp-chat-close">x</a> -->
+            
+            <h4>Loading&hellip;</h4>
+            
+            <!-- Disable chat message counter functionality for now. <span class="sp-chat-message-counter">3</span> -->
+          </header>
+    
+          <div class="sp-chat">
+            <div class="sp-chat-history">
+    				  <div class="sp-chat-message sp-clearfix">
+    					  <div class="sp-chat-avatar"></div>
+                
+    					  <div class="sp-chat-message-content s-pclearfix">
+    						  <!-- Disable chat time functionality for now. <span class="chat-time">13:35</span> -->
+                  
+    						  <h5>Loading&hellip;</h5>
+                  
+    						  <p>Loading&hellip;</p>
+    					  </div>
+                
+                <hr>
+    				  </div>
+    			  </div>
+    
+    			  <!-- Disable chat feedback functionality for now. <p class="sp-chat-feedback">Your partner is typing</p> -->
+            
+            <div class="sp-chat-form">
+              <input id="txtMessage" type="text" placeholder="Type your message&hellip;" autofocus>
+            </div>      
+          </div>
+      	</div>
+		<!-- ************************ END CHAT DIV -->
+    
+    <!--  *********************************** CHAT DIV 2 -->
+    <div id="chatDiv" class="chatDiv" style="position: absolute; z-index:1000; width: 25%;  visibility: hidden; display: none;">
+     <div class="chatcontainer chatcorners" id="chatContainer">    
     <div class="row">
       <div class="col-xs-12">
         <div class="col-xs-10" id="chatWith" style="word-wrap: break-word; font-size: 14px;"><a> Chat with ...</a></div>
@@ -73,12 +111,12 @@ http://sourceforge.net/adobe/cmap/wiki/License/
       </div>
     </div>
     <div class="row" id="chatBottom" style="margin-top:3px;">    
-      <div class="col-xs-11"><input type="text" id="txtMessage" class="form-control" placeholder="Type message" style="font-size: 12px;"/></div>
+      <div class="col-xs-11"><input type="text" id="txtMessage2" class="form-control" placeholder="Type message" style="font-size: 12px;"/></div>
       <div class="col-xs-1"><button id="btnSend" class="btn btn-primary" style="width:0%; font-size: 10px; height: 30px;">Send</button></div>
     </div>
-  </div>	
-		</div>
-		<!-- ************************ END CHAT DIV -->
+  </div>  
+    </div>
+    <!-- ************************ END CHAT DIV 2-->
 				
   	<div id="logoMessage" style="position: relative; z-index: 1000; opacity: 0.9; text-align: center; background-color: rgba(0, 0, 0, 0.0);">
 <!--   		<img src='../img/logoOriginal.png'></img><BR> -->
@@ -465,8 +503,14 @@ http://sourceforge.net/adobe/cmap/wiki/License/
 	<script src="../scripts/cookies.js"></script>
 	<script src="../scripts/clientutils.js"></script>
 	<script src="../scripts/timezone.js"></script>
-	<script type="text/javascript" src="customjs/chat.js"></script>
-	<script type="text/javascript" src="customjs/viewercode.js"></script>
+	
+  
+    <script type="text/javascript" src="customjs/chat.js"></script>
+	  <script type="text/javascript" src="customjs/viewercode.js"></script>
+  
+    
+    
+    
 	  
 
 
