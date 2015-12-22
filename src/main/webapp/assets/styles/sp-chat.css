@@ -1,4 +1,8 @@
-/* Chat CSS settings */
+/**
+ Chat CSS settings
+ 
+ See media queries section below for different viewports settings. 
+ */
 
 @font-face {
   font-family: 'Droid Sans';
@@ -198,3 +202,19 @@
 }
 
 .sp-clearfix:after { clear: both; }
+
+
+/* Media queries */
+@media screen and (max-width: 768px) {
+  #sp-live-chat {
+    right: 0;
+  } 
+ 
+  #sp-live-chat header {
+    border-top-right-radius: 0;
+  }
+  
+  .sp-chat {
+    display: none;
+  }
+}
