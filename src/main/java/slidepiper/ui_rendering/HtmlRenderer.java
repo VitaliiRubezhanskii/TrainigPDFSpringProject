@@ -131,22 +131,14 @@ public class HtmlRenderer {
 			
 			whatNextRows = whatNextRows + HtmlRenderer.getButtonRow(currentviewslink, "View Current Slides Report ");
 			
-			//System.out.println("Detecting mobile/PC device: browser data is " + cs.getAll_browser_data());			
-			if (cs.getAll_browser_data().contains("Is mobile device: true"))
-			{			
-					System.out.println("Detected mobile device");
 					whatNextRows = 
 							whatNextRows + 
 							getFreeTextRow("<BR>Customer is using a mobile device, chat is not available for mobile devices.<BR>");
-			}
-			else
-			{
-				System.out.println("Detected PC, not mobile.");
-				whatNextRows = whatNextRows	
+
+					whatNextRows = whatNextRows	
 						 +HtmlRenderer.getButtonRow(chatlink, "<b>Quick Chat</b>")  
 						+HtmlRenderer.getButtonRow(fullchatlink, "<b>Full Chat</b> + <b>Live Pitch</b>") +
 						  "<BR>";
-			}
 			
 			alertHTML = alertTitleRow + 
 					alertRow +
