@@ -315,7 +315,7 @@ function initView() {
 			prev_slide = cur_slide; // for first slide, make it same.
 		
 			// loop every 0.2 sec, check if cur slide changed.
-			window.setInterval(function() {
+			var timer1 = window.setInterval(function() {
 				cursorX = 5;
 				cursorY = 99;
 		
@@ -336,7 +336,9 @@ function initView() {
 							if (seconds_viewed > (60*5)) // 5 min outside of browser
 								{
 										console.log("session timed out. going to closed.html");
-										window.open("closed.html", '_self');							
+																				
+										clearInterval(timer1);
+										clearInterval(timer2);
 								}
 				}
 		
@@ -374,7 +376,7 @@ function initView() {
 		
 			// send periodic keepalive event, for registering
 			// last slide viewed.
-			setInterval(function() {
+			var timer2 = setInterval(function() {
 				// calculate sec viewed for current slide
 				var now_datetime = new Date();
 				var seconds_viewed = (now_datetime - prev_datetime) / 1000;
