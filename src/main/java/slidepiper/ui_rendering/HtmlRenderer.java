@@ -131,10 +131,6 @@ public class HtmlRenderer {
 			
 			whatNextRows = whatNextRows + HtmlRenderer.getButtonRow(currentviewslink, "View Current Slides Report ");
 			
-					whatNextRows = 
-							whatNextRows + 
-							getFreeTextRow("<BR>Customer is using a mobile device, chat is not available for mobile devices.<BR>");
-
 					whatNextRows = whatNextRows	
 						 +HtmlRenderer.getButtonRow(chatlink, "<b>Quick Chat</b>")  
 						+HtmlRenderer.getButtonRow(fullchatlink, "<b>Full Chat</b> + <b>Live Pitch</b>") +
