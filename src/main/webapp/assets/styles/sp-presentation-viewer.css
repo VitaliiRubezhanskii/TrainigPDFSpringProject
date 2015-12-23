@@ -10,9 +10,10 @@
 #sp-terms-privacy {
   background-color: rgb(255, 255, 255);
   background-color: rgba(255, 255, 255, 0.65);
+  border-top-right-radius: 3px;
   bottom: 0;
   font-size: 12px;
-  margin-left: 5px;
+  padding: 1px 4px;
   position: absolute;
   visibility: hidden;
   z-index: 2; /* TODO: do we really need this declaration? */
