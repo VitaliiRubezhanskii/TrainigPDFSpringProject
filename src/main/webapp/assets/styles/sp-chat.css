@@ -24,7 +24,7 @@
   max-width: 300px;
   position: fixed;
   right: 24px;
-  width: 60%;
+  width: 65%;
   z-index: 1; /* TODO: research for the reason this rule is needed */
 }
 
@@ -96,7 +96,7 @@
   margin: 0;
   padding: 8px;
   outline: none;
-  width: 234px;
+  width: 100%;
 }
 
 #sp-live-chat p { margin: 0; }
@@ -170,7 +170,7 @@
 */
 
 .sp-chat-history {
-	height: 232px;
+	height: 212px;
 	padding: 8px 20px;
 	overflow-y: scroll;
 }
