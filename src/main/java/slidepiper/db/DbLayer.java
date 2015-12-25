@@ -1195,11 +1195,99 @@ public class DbLayer {
 			    }
 			}
 			
+			
+			/*
+			 * Check if a salesman record exists in the DB.
+			 * 
+			 * @param email	The salesman email to be checked.
+			 * 
+			 * @return		True if a record exists in the DB, or false.
+			 */
+			public static boolean isSalesmanExist(String email) {
+				boolean isEmailExist = false;
+				Connection conn = null;
+				String sql = "SELECT email FROM sales_men WHERE email=?";
+				
+				try {
+					conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
+					PreparedStatement stmt = conn.prepareStatement(sql);				
+					stmt.setString(1, email);
+					ResultSet rs = stmt.executeQuery();			
+					
+					rs.last();
+					if (1 == rs.getRow()) {
+						isEmailExist = true;
+					}
+				} catch (SQLException ex) {
+					System.err.println("Error code: " + ex.getErrorCode() + " - " + ex.getMessage());
+				} finally {
+					if (null != conn) {
+						try {
+							conn.close();
+						} catch (SQLException ex) {
+							ex.printStackTrace();
+						}
+					}
+				}
+				
+				return isEmailExist;
+			}
 
-
+			
+			/*
+			 * Add a Salesman to the DB after performing validation tests. 
+			 * 
+			 * @param company		The salesman company.
+			 * @param email			The salesman email.
+			 * @param emailClient	The salesman email client (Gmail or Outlook).
+			 * @param firstName		The salesman first name.
+			 * @param lastName		The salesman last name.
+			 * @param magic			An administrator password.
+			 * @param password		The salesman password for logging in.
+			 * 
+			 * @return		A status code representing possible validation errors,
+			 * 				and addition success.  
+			 */
+			public static int addSalesman(String company, String email,
+					String emailClient, String firstName, String lastName,
+					String magic, String password) {
+				
+				int statusCode = 0;
+				
+				if (isSalesmanExist(email)) {
+					statusCode = 100;
+				} else if (! magic.equals("333")) {
+					statusCode = 101;
+				} else {
+					Connection conn = null;
+					String fullName = firstName + " " + lastName;
+					String sql = "INSERT INTO sales_men (company, email, mailtype, name, password, emailpassword) VALUES (?, ?, ?, ?, ?, 0)";
+					
+					try {
+						conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
+						PreparedStatement stmt = conn.prepareStatement(sql);
+						stmt.setString(1, company);
+						stmt.setString(2, email);
+						stmt.setString(3, emailClient);
+						stmt.setString(4, fullName);
+						stmt.setString(5, password);
+						stmt.executeUpdate();
+							
+						// The user was added successfully.
+						statusCode = 200;
+					} catch (SQLException ex) {
+						System.err.println("Error code: " + ex.getErrorCode() + " - " + ex.getMessage());
+					} finally {
+						if (null != conn) {
+							try {
+								conn.close();
+							} catch (SQLException ex) {
+								ex.printStackTrace();
+							}
+						}
+					}
+				}
+				
+				return statusCode;
+			}
 }
-
-
-
-
-

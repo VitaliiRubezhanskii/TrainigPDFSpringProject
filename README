@@ -1,0 +1,31 @@
+SlidePiper README File
+----------------------
+
+Change Log
+----------
+
+0.2.0
+
+2015-12-23 Yaniv Friedensohn <yanivf@slidepiper.com>
+
+* Removed hard-coding to enable flexible deployment
+
+* Created sign up form
+
+* Replaced old chat design with a new one
+
+* Disabled presentation viewer auto close
+
+* Enabled chat and live pitch for mobile devices
+
+* Added favicon to the presentation viewer
+
+* Changed terms and privacy links design
+
+* Changed presentation viewer title
+
+
+0.1.0
+
+* This version represents all of the development made
+  up until Yaniv Friedensohn joined the project.

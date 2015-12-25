@@ -1,0 +1,36 @@
+/**
+ * SlidePiper Presentation Viewer Settings
+ *
+ * sp prefix is used to declare a SlidePiper name space.
+ *
+ * For information on the naming convention, see Harry Roberts' style in
+ * https://en.bem.info/method/naming-convention/ .
+ */
+
+#sp-terms-privacy {
+  background-color: rgb(255, 255, 255);
+  background-color: rgba(255, 255, 255, 0.65);
+  border-top-right-radius: 3px;
+  bottom: 0;
+  font-size: 12px;
+  padding: 1px 4px;
+  position: absolute;
+  visibility: hidden;
+  z-index: 2; /* TODO: do we really need this declaration? */
+}
+
+#sp-terms-privacy a {
+  color: #474747;
+}
+
+#sp-terms-privacy a:hover {
+  text-decoration: none;
+}
+
+
+/* Media queries */
+@media screen and (max-width: 768px) {
+  #sp-terms-privacy {
+    font-size: 11px;
+  }
+}
