@@ -45,6 +45,6 @@
   padding-left: 20px;  
 }
 
-.ui-block-c textarea {
-  height: 190px;
-} 
+.ui-block-c textarea#msgtext1 {
+  height: 190px !important;
+}
