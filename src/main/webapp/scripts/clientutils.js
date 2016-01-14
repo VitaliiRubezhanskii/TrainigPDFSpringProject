@@ -18,6 +18,7 @@ String.prototype.cleanup = function() {
 //var clean = "Hello World".cleanup(); // hello-world
 
 
+/* This code section hid the underlying reason for execution failures.
 window.onerror = function(msg, url, linenumber) {
     //alert('Error message: '+msg+'\nURL: '+url+'\nLine Number: '+linenumber);
 		errmsg = 'Error message: '+msg+'\nURL: '+url+'\nLine Number: '+linenumber + "\n";
@@ -35,6 +36,7 @@ window.onerror = function(msg, url, linenumber) {
 			}
     return true;
 };
+*/
 
 // placeholder for current page, will change when changepage is called.
 // This way I can know if I should update things on page 

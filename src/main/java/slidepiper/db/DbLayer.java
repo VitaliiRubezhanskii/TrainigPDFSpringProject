@@ -1,19 +1,12 @@
 package slidepiper.db;
 
-import java.io.PrintWriter;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Properties;
-import java.util.concurrent.Semaphore;
+import java.util.Map;
 
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.PasswordAuthentication;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
+import org.hashids.Hashids;
 
+import slidepiper.config.ConfigProperties;
 import slidepiper.constants.Constants;
 import slidepiper.dataobjects.*;
 
@@ -1196,7 +1189,7 @@ public class DbLayer {
 			}
 			
 			
-			/*
+			/**
 			 * Check if a salesman record exists in the DB.
 			 * 
 			 * @param email	The salesman email to be checked.
@@ -1234,7 +1227,7 @@ public class DbLayer {
 			}
 
 			
-			/*
+			/**
 			 * Add a Salesman to the DB after performing validation tests. 
 			 * 
 			 * @param company		The salesman company.
@@ -1290,4 +1283,132 @@ public class DbLayer {
 				
 				return statusCode;
 			}
+			
+			
+			/**
+       * Set the file link hash used for the file viewer,
+       * i.e. www.slidepiper.com/view?f=<file link hash>
+       * 
+       * @param customerEmail The customer email.
+       * @param salesmanEmail The salesman email.
+       * @param fileHash A file hash. 
+       * 
+       * @return      The file link enumerated hash.
+       */
+      public static String setFileLinkHash(String customerEmail, String fileHash,
+          String salesmanEmail) {
+         
+        Connection conn = null;
+      
+        String sqlSelect = "SELECT id FROM msg_info WHERE msg_text IS NULL"
+            + " AND customer_email=? AND slides_id=? AND sales_man_email=?";
+        
+        String sqlInsert = "INSERT INTO msg_info (customer_email, sales_man_email, slides_id)"
+            + " VALUES (?, ?, ?)";
+        
+        String sqlSelectAfterInsert = "SELECT id_ai, id FROM msg_info WHERE id_ai=?";
+        
+        String fileLinkHash = null;
+        try {
+          conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
+          PreparedStatement ps = conn.prepareStatement(sqlSelect);
+          ps.setString(1, customerEmail);
+          ps.setString(2, fileHash);
+          ps.setString(3, salesmanEmail);
+          
+          ResultSet rs = ps.executeQuery();
+          
+          if (rs.next()) {
+            fileLinkHash = rs.getString("id");
+          } else {
+            ps = conn.prepareStatement(sqlInsert, Statement.RETURN_GENERATED_KEYS);                
+          
+            ps.setString(1, customerEmail);
+            ps.setString(2, salesmanEmail);
+            ps.setString(3, fileHash);
+            
+            ps.executeUpdate();
+            rs = ps.getGeneratedKeys();
+            
+            if (rs.next()) {
+              Hashids hashids = new Hashids(ConfigProperties.getProperty("hashids_salt"), 
+                  Integer.parseInt(ConfigProperties.getProperty("hashids_minimum_hash_length")),
+                  ConfigProperties.getProperty("hashids_custom_hash_alphabet"));
+              long generatedKey = rs.getLong(1);
+              String linkHash = hashids.encode(generatedKey);
+              
+              System.out.println("2: " + linkHash);
+              
+              ps = conn.prepareStatement(sqlSelectAfterInsert, ResultSet.TYPE_FORWARD_ONLY,
+                  ResultSet.CONCUR_UPDATABLE);
+              ps.setLong(1, generatedKey);
+              rs = ps.executeQuery();
+              
+              if (rs.next()) {
+                rs.updateString("id", linkHash);
+                rs.updateRow();
+                fileLinkHash = linkHash;
+              }
+            }
+          }
+        } catch (SQLException ex) {
+          System.err.println("Error code: " + ex.getErrorCode() + " - " + ex.getMessage());
+          ex.printStackTrace();
+        } finally {
+          if (null != conn) {
+            try {
+              conn.close();
+            } catch (SQLException ex) {
+              ex.printStackTrace();
+            }
+          }
+        }
+        
+        return fileLinkHash;
+      }
+
+      
+      /**
+       * Add an event to the DB.
+       * 
+       * @param eventName The event name. See config.properties for available event names.
+       * @param eventDataMap A map connecting between salesman_events table column names and values.
+       */
+      public static void setEvent(String eventName, Map<String, String> eventDataMap) {
+        String sqlColumns = "event_name";
+        String sqlValues = "?";
+        for (Map.Entry<String, String> mapEntry : eventDataMap.entrySet()) {
+          sqlColumns += "," + mapEntry.getKey();
+          sqlValues += ",?";
+        }
+          
+        String sqlInsert = "INSERT INTO salesman_events (" + sqlColumns + ") VALUES (" + sqlValues + ")";
+        
+        Connection conn = null;
+        try {
+          conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
+          PreparedStatement ps = conn.prepareStatement(sqlInsert);
+          
+          ps.setString(1, eventName);
+          int i = 2;
+          for (Map.Entry<String, String> mapEntry : eventDataMap.entrySet()) {
+            ps.setString(i , mapEntry.getValue());
+            i++;
+          }
+                   
+          ps.executeUpdate();
+          System.out.println("SP: " + eventName);
+        } catch (SQLException ex) {
+          System.err.println("Error code: " + ex.getErrorCode() + " - " + ex.getMessage());
+          ex.printStackTrace();
+        } finally {
+          if (null != conn) {
+            try {
+              conn.close();
+            } catch (SQLException ex) {
+              ex.printStackTrace();
+            }
+          }
+        }
+      }
 }

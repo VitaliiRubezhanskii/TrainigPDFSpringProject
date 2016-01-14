@@ -1,48 +1,27 @@
 package slidepiper.salesman_servlets;
 
-import java.awt.TrayIcon.MessageType;
 import java.io.BufferedReader;
 
-import slidepiper.*;
-import slidepiper.ui_rendering.*;
 import slidepiper.config.ConfigProperties;
-import slidepiper.constants.Constants;
 import slidepiper.dataobjects.Customer;
 import slidepiper.dataobjects.Presentation;
-import slidepiper.dataobjects.Salesman;
 import slidepiper.db.DbLayer;
-import slidepiper.logging.CustomerLogger;
+import slidepiper.email.EmailSender;
 
-import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.URLDecoder;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Properties;
+import java.util.Map;
 import java.util.Set;
 
-import javax.mail.*;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import java.util.*;
-
-import javax.mail.*;
-import javax.mail.internet.*;
-import javax.activation.*;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -80,6 +59,27 @@ public class ManagementServlet extends HttpServlet {
 	}
 		
 	/***********************		GET METHODS		*********************************/
+	
+	@Override
+	public void doGet(HttpServletRequest request, HttpServletResponse response)
+	    throws IOException, ServletException {
+	
+	  JSONObject data = new JSONObject();
+	  
+	  switch (request.getParameter("action")) {
+	    case "getMailType":
+	      System.out.println(request.getParameter("salesmanEmail"));
+	      String mailType = DbLayer.getSalesmanMailType(request.getParameter("salesmanEmail"));
+	      data.put("mailType", mailType);
+        break;
+	  }
+	  
+	  response.setContentType("application/json"); // TODO: add also charset="UTF-8"?
+    PrintWriter output = response.getWriter(); // TODO: is output redundant as I can write response.getWriter().print(data);
+    output.print(data);  // TODO: is this statment needed?
+    output.close(); // TODO: is this statment needed?
+	}
+	
 	
 	/***********************		 DO-POST		*********************************/
 
@@ -203,6 +203,7 @@ public class ManagementServlet extends HttpServlet {
 					DbLayer.deletePresentation(input.getString("presentation"), input.getString("salesman_email"));
 					break;
 					
+				// TODO: change name to setSalesman	
 				case "add-salesman":
 					String company = input.getString("company");
 					String email = input.getString("email");
@@ -218,6 +219,72 @@ public class ManagementServlet extends HttpServlet {
 					//System.out.println("cust data: smemail " + smemail + " cname " + cname + "cust company: " + ccompany + " cu email:" + cemail);
 					//output.put("newCustomer", DbLayer.addNewCustomer(smemail, cname, ccompany, cemail));
 					break;
+					
+				case "sendEmail":
+				  JSONObject data = input.getJSONObject("data");
+				  String emailBody = URLDecoder.decode(data.getString("emailBody"), "UTF-8");
+          String emailSubject = URLDecoder.decode(data.getString("emailSubject"), "UTF-8");
+          String[] emailMessageArray = {emailSubject, emailBody};
+          
+          // Create a merge tag set.
+          Set<String> mergeTagSet = EmailSender.createMergeTagSet(emailMessageArray);
+				  
+				  // Iterate through customers for replacing merge tags (if any) and sending emails.
+				  JSONArray customerEmailArray = data.getJSONArray("customerEmailArray");
+				  String salesmanEmail = URLDecoder.decode(data.getString("salesmanEmail"), "UTF-8");
+          Map<String, String> eventDataMap = new HashMap<String, String>();
+				  int emailSent = 0;
+          
+          for (int i = 0; i < customerEmailArray.length(); i++) {
+            if (0 < mergeTagSet.size()) {
+              Map<String, String> mergeTagMap = EmailSender.createMergeTagMap(mergeTagSet,
+                customerEmailArray.getString(i), salesmanEmail);
+            
+              emailSubject = EmailSender.searchReplaceMergeTag(mergeTagMap, emailSubject);
+              emailBody = EmailSender.searchReplaceMergeTag(mergeTagMap, emailBody);
+            }
+				    
+				    // Send emails. If an API is not existent, then use below mailto workaround.
+				    boolean isEmailSent = false;
+				    switch(data.getString("salesmanEmailClient")) {
+				      case "gmail":
+				        isEmailSent = EmailSender.sendGmailEmail(customerEmailArray.getString(i),
+				            salesmanEmail, emailSubject, emailBody, data.getString("accessToken"));
+				        break;    
+				    }
+				    
+				    // Record event.
+				    if (isEmailSent) {
+				      eventDataMap.put("param_1_varchar", data.getString("accessToken"));
+				      eventDataMap.put("param_2_varchar", data.getString("salesmanEmailClient"));
+				      eventDataMap.put("param_3_varchar", salesmanEmail);
+				      eventDataMap.put("param_4_varchar", customerEmailArray.getString(i));
+				      eventDataMap.put("param_5_varchar", emailSubject);
+				      eventDataMap.put("param_1_mediumtext", emailBody);
+				      DbLayer.setEvent(ConfigProperties.getProperty("event_sent_email"), eventDataMap);
+              
+				      emailSent++;
+            }
+				    
+				    emailSubject = emailMessageArray[0];
+            emailBody = emailMessageArray[1];
+				  }
+				
+				  // Return response to frontend.
+				  switch(data.getString("salesmanEmailClient")) {
+            case "gmail":
+              output.put("isApi", true);
+              output.put("emailSent", emailSent);
+              break;
+				    
+            // mailto sending emails mechanism.
+				    default:
+				      output.put("isApi", false);
+				      output.put("customerEmail", customerEmailArray.getString(0));
+				      output.put("emailSubject", emailSubject);
+				      output.put("emailBody", emailBody);
+				  }
+				  break;
 			}
 			
 				String res = output.toString();

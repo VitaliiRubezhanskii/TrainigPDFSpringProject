@@ -1,4 +1,7 @@
-	$("#send_email_to_customers")
+/* Global Variables */
+var sp = sp || {};
+
+$("#send_email_to_customers")
 			.bind(
 					"click",
 					function(event) {
@@ -10,6 +13,7 @@
 						// alert('sending email');
 						var customers = [];
 						var customeremails = [];
+						sp.email.customerEmailArray = [];
 						// checkboxes from the customers list
 						$('.customers').each(
 								function() {
@@ -23,6 +27,7 @@
 										// some reason (maybe old Firefox).
 										customeremails.push(this
 												.getAttribute("data-email"));
+										sp.email.customerEmailArray = customeremails;
 										
 										
 										//custemail = this.getAttribute("data-email");
@@ -76,82 +81,31 @@
 						// grashim  -- '  are ok (tested).
 						
 						msgtext = encodeURIComponent(msgtext);
-						msgsubj = encodeURIComponent(msgsubj);											
+						sp.email.emailBody = msgtext;
+						
+						msgsubj = encodeURIComponent(msgsubj);
+						sp.email.emailSubject = msgsubj;
 
 						// first make some validations on the input.
-						if (!((customers.length == 1) && (pres1.length == 1))) {
+						/* if (!((customers.length == 1) && (pres1.length == 1))) {
 							swal("Can't do it.", "The system currently supports sending only one presentation to one customer.","error");
-						} else if (msgtext == "") {
+						} else */
+
+						
+												
+						if (msgtext == "") {
 							swal("Error","Please fill in the message text.","error");
 						} else if (msgsubj == "") {
 							swal("Error","Please fill in the message subject.","error");
-						} else { // everything is fine, send msg
+						} else if (0 == sp.email.customerEmailArray.length) {
+              alert('Please choose at least one customer for sending an email');
+						} else if (50 < sp.email.customerEmailArray.length) {
+              alert('Please choose no more than 50 customers for sending an email');
+						} else {
 							
-							//docid = randomHash();
-							docid="";
-							
-							emailval = $("#usernamefield").val();
-							smname = emailval.toLowerCase();
-							smname = smname.split("@"); 
-							smname = smname[0];
-							
-							num_elements = Math.floor(Math.random() * 2)+2; // 2 to 3
-							
-							for( var i=0; i<num_elements; i++)
-								{
-										if(Math.random() >0.5)
-										{
-											// 	0 to length-1
-											var num = Math.floor(Math.random() * hashkeywords.length); 
-											docid = docid + hashkeywords[num];
-											
-											if(Math.random() >0.7)
-											{
-													docid = docid + "_";
-											}
-											if(Math.random() >0.7)
-											{
-													docid = docid + "a";
-											}
-										}									
-										
-										if(Math.random() >0.75)
-										{
-																	// salesman start of email.
-											docid = docid + smname;
-											docid = docid + "_";
-										}
-										
-										
-										if(Math.random() >0.5)
-											{
-													docid = docid + "_";
-											}
-										
-										for (twice=0; twice<2; twice++)
-											{
-													if(Math.random() >0.6)
-													{
-															if(Math.random() >0.5)
-															{
-																	docid = docid + "_";
-															}															
-															docid = docid + randomDigit();
-															
-															if(Math.random() >0.5)
-															{
-																	docid = docid + "_";
-															}
-													}
-											}
-										
-										if(Math.random() >0.7)
-											{										
-													docid += randomLetter();
-											}
-								}							
-							
-							docid = docid.cleanup();
+						// everything is fine, send msg
+						  
+						//docid = randomHash();
 							
 							//alert(docid);
 
@@ -166,143 +120,40 @@
 							 */
 
 							emailval = $("#usernamefield").val();
+							sp.email.salesmanEmail = emailval;
 
-							jsondata = '{"action":"sendPresentationToCustomer",'
-									+ '"salesman_email":"'
-									+ emailval.toLowerCase()
-									+ '",'
-									+ '"slides_ids":"'
-									+ pres1
-									+ '",'
-									+ '"customers":"'
-									+ customers
-									+ '",'
-									+ '"customeremails":"'
-									+ customeremails
-									+ '",'
-									+ '"msgsubj":"'
-									+ msgsubj
-									+ '",'
-									+ '"msgtext":"'
-									+ msgtext
-									+ '",'
-									+ '"timezone_offset_min":"'
-									+ tz_offset_min
-									+ '",'									
-									+ '"docid":"' + docid 
-									+ '"'
-									+ '}';
+							
 							
 							//alert(jsondata);
 																					
-							send_salesman_event("SEND_EMAIL", '0', '0', jsondata);
+							//send_salesman_event("SEND_EMAIL", '0', '0', jsondata);
 														
-							showWaitMsg();
-							// alert("json msg " + jsondata);
-							console.log("sendemail ajax");
+							//showWaitMsg();
+							
+							// TODO: add email client as a another property to fetch.
 							$.ajax({
-										type : "POST",
-										url : "ManagementServlet",
-										data : jsondata,
-										contentType : "application/json; charset=utf-8",
-										processData : false,
-										error : function(XmlHttpRequest,
-												status, error) {
-											swal('sendCustomerMessage error from returned json'
-													+ error);
-										},
-										success : function(msg) {
-											JSONobj = JSON.parse(jsondata);
-											if (msg.succeeded == 1) {
-												console
-														.log("message registered on server. loading client for " + msg.mailtype);
-												// alert("link is " + msg.link);
-
-												var mailtypemsg = "mailtype: " + msg.mailtype;
-												send_salesman_event("REGISTERED_EMAIL", '0', '0', mailtypemsg);																													
-
-												switch (msg.mailtype)
-												{
-													case "mailto" : 														
-														mailtourl = "mailto:"
-															+ JSONobj.customeremails
-															+ "?Subject="
-															+ JSONobj.msgsubj
-															+ "" +
-															// $("#cust_email").text()
-															// +
-															"&body="
-															+ JSONobj.msgtext + "%0D%0A" + "%0D%0A" //linebreaks
-															+ msg.link + "%0D%0A";
-														break;
-													case "gmail" :
-														mailtourl =	"https://mail.google.com/mail/u/0/?view=cm&fs=1&tf=1&to=" 
-															+ JSONobj.customeremails + 
-															"&su=" + 
-															JSONobj.msgsubj + 
-															"&body=" +
-															JSONobj.msgtext + "%0D%0A" + "%0D%0A" + //linebreaks
-															msg.link + "%0D%0A";														
-														break;														
-														default: swal("Cannot send email.", "Mailtype is not defined correctly - " + msg.mailtype, "error");
-													}
-												
-												send_salesman_event("OPEN_EMAIL_CLIENT", '0', '0', mailtourl.toString());
-												
-												//alert(mailtourl);
-//												alert(JSONobj.toString());
-	//											alert(JSONobj.msgtext);
-		//										alert(JSONobj.msgsubj);
-			//									alert(this.data.toString());
-												
-												mailtourl = mailtourl.replace(" ", "%20");
-												mailtourl = mailtourl.replace("\r\n", "%0D%0A");
-												
-												// someone used this and it was helpful:
-												/*
-												body = body.replaceAll("\\\\", "%5C");
-												body = body.replaceAll(" ", "%20");
-												body = body.replaceAll("\r", "%0D");
-												body = body.replaceAll("\n", "%0A");
-												body = body.replaceAll("\t", "%09");
-												*/																								
-												
-												//alert("mailto is " + mailtourl);
-
-												// open gmail in 2 seconds, to allow logs to update
-												// with messages above. Otherwise the log is not
-												// updated. 
-												//  However this disallows me to open a popup window
-												// because it's not on click.	
-												// need to fix sometime.
-												setTimeout(function() {
-													hideWaitMsg();
-													
-													switch (msg.mailtype)
-													{
-														case "mailto" :
-															location.href = mailtourl;
-															break;
-														case "gmail" :
-															window.open(mailtourl); // 
-															// will not open window because it's not on a click.
-															break;
-													}
-												}, 2000);
-																						
-												// setCookie("SalesmanEmail",
-												// emailval, 2);
-												// alert("Message registered and
-												// sent!");
-												// managementScreen();
-												console
-														.log("send message done. (opened mailto)");
-											} else {
-												swal("Error sending message (error in writing to database)");
-											}
-										} // success func
-									}); // end of ajax call
-						}
-
-					});
-	console.log(" binding sendemail");
+								async: false,
+								url: 'ManagementServlet',
+								dataType: 'json',
+								data: {action: "getMailType", salesmanEmail: sp.email.salesmanEmail.toLowerCase()},
+							}).done(function(data) {
+								sp.email.salesmanEmailClient = data.mailType;
+							}).fail(function(jqXHR, textStatus, errorThrown) {
+								console.log(textStatus + ": " + errorThrown);
+							});
+							
+							switch (sp.email.salesmanEmailClient) {
+						    case 'gmail':
+						      sp.email.gmailAuthorization(true);
+						      // sp.email.sendEmail method takes place under the
+						      // authorization callback function. 
+						      break;
+						    
+						    default:
+						      if (1 == sp.email.customerEmailArray.length) {
+						        sp.email.sendEmail('');
+						      }
+						  }
+						  
+					 }
+});		

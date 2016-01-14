@@ -89,6 +89,26 @@ function fillCustomersAndPresentations() {
 					// after the refreshes, it's all fully loaded.
 										
 					hideLoadingMsgIfFullyLoaded();
+					
+					
+	                /**
+	                 * Add file hash placeholder representation.
+	                 * 
+	                 * Considering UI, perhaps it is better to remove this section.
+	                 */
+					        /*
+	                $('label.ui-btn:not([for^=cust])').each(function() {
+	                  var fileHash = $(this).attr('for').substr(0, $(this).attr('for').length - 2);
+	                  var div = $(this).closest('div');
+	                  var divHeight = div.css('height');
+	                  
+	                  div.after('<div class="sp-file-hash-placeholder">Placeholder: |file='
+	                      + fileHash + '|</div>');
+	                  $('.sp-file-hash-placeholder').css({'height': divHeight, 'line-height': divHeight});
+	                });
+					        */
+	                
+	                
 				}, 2000); // put at end of event queue, after rending checkboxes.
 				// alert("fill cust & pres done");
 			}

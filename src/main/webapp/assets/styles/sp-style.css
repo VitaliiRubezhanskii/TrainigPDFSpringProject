@@ -14,3 +14,37 @@
 .sp-signup-form__logo {
 	width: 250px;
 }
+
+/* TODO: considering UI, perhaps it is better to remove this section. 
+.ui-block-b .ui-checkbox {
+  display: inline-block;
+  width: 60%;
+}
+*/
+
+/* TODO: considering UI, perhaps it is better to remove this section.
+.sp-file-hash-placeholder {
+  display: inline-block;
+  font-size: 14px;
+  font-weight: normal;
+  margin: 8px 0 8px 10px;
+  vertical-align: top;
+}
+*/
+
+#send_email_to_customers {
+  visibility: hidden;
+}
+
+.ui-block-b .ui-btn.ui-checkbox-off:after,
+    .ui-block-b .ui-btn.ui-checkbox-on.ui-checkbox-on:after {
+  display: none;  
+}
+
+.ui-block-b label {
+  padding-left: 20px;  
+}
+
+.ui-block-c textarea {
+  height: 190px;
+} 
