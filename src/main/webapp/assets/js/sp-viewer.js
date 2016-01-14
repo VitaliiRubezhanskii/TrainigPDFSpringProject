@@ -7,7 +7,9 @@ sp.viewer = {
 };
 
 if ('' != sp.viewer.linkHash) {
-  PDFViewerApplication.open(sp.config.appUrl + '/file/' + sp.viewer.linkHash);
+  $.getJSON('../config', function(config) {
+    PDFViewerApplication.open(config.appUrl + '/file/' + sp.viewer.linkHash);
+  });
 }
 
 $(document).prop('title', 'SlidePiper Viewer');
