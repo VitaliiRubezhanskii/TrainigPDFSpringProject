@@ -185,12 +185,9 @@ public class ManagementServlet extends HttpServlet {
 														
 				case "addNewCustomer":
 					System.out.println("addnew cust");
-					String smemail = input.getString("salesmanEmail");
-					String cname = input.getString("customerName");
-					String ccompany = input.getString("customerCompany");
-					String cemail = input.getString("customerEmail");
-					System.out.println("cust data: smemail " + smemail + " cname " + cname + "cust company: " + ccompany + " cu email:" + cemail);
-					output.put("newCustomer", DbLayer.addNewCustomer(smemail, cname, ccompany, cemail));
+					output.put("newCustomer", DbLayer.addNewCustomer(input.getString("salesmanEmail"),
+					    input.getString("customerFirstName"), input.getString("customerLastName"),
+					    input.getString("customerCompany"), input.getString("customerEmail")));
 					break;
 														
 				case "deleteCustomer":
@@ -203,8 +200,8 @@ public class ManagementServlet extends HttpServlet {
 					DbLayer.deletePresentation(input.getString("presentation"), input.getString("salesman_email"));
 					break;
 					
-				// TODO: change name to setSalesman	
-				case "add-salesman":
+					
+				case "setSalesman":
 					String company = input.getString("company");
 					String email = input.getString("email");
 					String emailClient = input.getString("email-client");
@@ -213,7 +210,7 @@ public class ManagementServlet extends HttpServlet {
 					String magic = input.getString("magic");
 					String password = input.getString("password");
 					
-					int statusCode = DbLayer.addSalesman(company, email, emailClient, firstName, lastName, magic, password);
+					int statusCode = DbLayer.setSalesman(company, email, emailClient, firstName, lastName, magic, password);
 					output.put("statusCode", statusCode);
 
 					//System.out.println("cust data: smemail " + smemail + " cname " + cname + "cust company: " + ccompany + " cu email:" + cemail);

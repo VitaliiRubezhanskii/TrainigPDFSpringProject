@@ -47,8 +47,11 @@ public class EmailSender {
   
   /** Merge tag types representations. */
   public static final String MERGE_TAG_FILE = "file";
-      
-
+  public static final String MERGE_TAG_FIRST_NAME = "first-name";
+  public static final String MERGE_TAG_LAST_NAME = "last-name";
+  public static final String MERGE_TAG_SALESMAN_FIRST_NAME = "salesman-first-name";
+  public static final String MERGE_TAG_SALESMAN_LAST_NAME = "salesman-last-name";
+  
   
 	// general send email function, used by the other ones.
 	public static void sendEmail(String to, String subj, String msg)
@@ -205,7 +208,7 @@ public class EmailSender {
 	   for (String mergeTag : mergeTagSet) {
        mergeTagPart = Arrays.asList(mergeTag.split(MERGE_TAG_DELIMITER));
        
-       switch (mergeTagPart.get(0)) {
+       switch (mergeTagPart.get(0).toLowerCase()) {
          case MERGE_TAG_FILE:
            String fileHash = mergeTagPart.get(1);
            String fileLinkHash = DbLayer.setFileLinkHash(customerEmail, fileHash, salesmanEmail);
@@ -215,9 +218,27 @@ public class EmailSender {
                + fileLinkHash;
            mergeTagMap.put(mergeTag, fileLink);
            break;
+           
+         case MERGE_TAG_FIRST_NAME:     
+           mergeTagMap.put(mergeTag, DbLayer.getCustomer(customerEmail, salesmanEmail)
+               .get("first_name"));
+           break;
+           
+         case MERGE_TAG_LAST_NAME:
+           mergeTagMap.put(mergeTag, DbLayer.getCustomer(customerEmail, salesmanEmail)
+               .get("last_name"));
+           break;
+           
+         case MERGE_TAG_SALESMAN_FIRST_NAME:     
+           mergeTagMap.put(mergeTag, DbLayer.getSalesman(salesmanEmail).get("first_name"));
+           break;
+           
+         case MERGE_TAG_SALESMAN_LAST_NAME:
+           mergeTagMap.put(mergeTag, DbLayer.getSalesman(salesmanEmail).get("last_name"));
+           break;
        }
      }
-     
+        
      return mergeTagMap;
    }
 	 

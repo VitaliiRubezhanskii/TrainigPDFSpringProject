@@ -93,7 +93,7 @@ $(document).ready(function() {
 	 */
 	$('#sp-signup').submit(function(event) {
 		
-		var formData = {action: 'add-salesman'};
+		var formData = {action: 'setSalesman'};
 		 $('input:not([type=submit]), select').each(function(index){
 			 formData[$(this).attr('id')] = this.value;
 		 });
