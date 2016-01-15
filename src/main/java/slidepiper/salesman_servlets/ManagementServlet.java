@@ -264,12 +264,11 @@ public class ManagementServlet extends HttpServlet {
 				      DbLayer.setEvent(ConfigProperties.getProperty("event_sent_email"), eventDataMap);
               
 				      emailSent++;
+				      emailSubject = emailMessageArray[0];
+	            emailBody = emailMessageArray[1];
             }
-				    
-				    emailSubject = emailMessageArray[0];
-            emailBody = emailMessageArray[1];
 				  }
-				
+          
 				  // Return response to frontend.
 				  switch(data.getString("salesmanEmailClient")) {
             case "gmail":

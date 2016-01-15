@@ -152,6 +152,8 @@ $("#send_email_to_customers")
 						    default:
 						      if (1 == sp.email.customerEmailArray.length) {
 						        sp.email.sendEmail('');
+						      } else {
+						        alert('Please select only one customer for sending an email');
 						      }
 						  }
 						  

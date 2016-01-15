@@ -9,10 +9,9 @@ sp.viewer = {
 if ('' != sp.viewer.linkHash) {
   $.getJSON('../config', function(config) {
     PDFViewerApplication.open(config.appUrl + '/file/' + sp.viewer.linkHash);
+    $(document).prop('title', 'SlidePiper Viewer');
   });
 }
-
-$(document).prop('title', 'SlidePiper Viewer');
 
 
 /**

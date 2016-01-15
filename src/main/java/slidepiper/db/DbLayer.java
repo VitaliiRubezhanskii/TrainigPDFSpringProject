@@ -1337,8 +1337,6 @@ public class DbLayer {
               long generatedKey = rs.getLong(1);
               String linkHash = hashids.encode(generatedKey);
               
-              System.out.println("2: " + linkHash);
-              
               ps = conn.prepareStatement(sqlSelectAfterInsert, ResultSet.TYPE_FORWARD_ONLY,
                   ResultSet.CONCUR_UPDATABLE);
               ps.setLong(1, generatedKey);
