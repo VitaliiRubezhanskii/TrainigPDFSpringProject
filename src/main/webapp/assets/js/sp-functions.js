@@ -76,10 +76,10 @@ sp = {
       if (true == data.isApi) {
         alert("Successfully sent " + data.emailSent + " email(s) out of " + sp.email.customerEmailArray.length);
       } else {
-        mailTo = encodeURI('mailto:' + data.customerEmail
-            + '?subject=' + data.emailSubject
-            + '&body='  + data.emailBody);
-        location.href = mailTo;
+        location.href =
+            'mailto:' + data.customerEmail
+            + '?subject=' + encodeURIComponent(data.emailSubject)
+            + '&body='  + encodeURIComponent(data.emailBody);;
       }
     }
   }
@@ -154,7 +154,7 @@ $(document).ready(function() {
         var focusedElementText = focusedElement.val();
         var textToAdd = sp.config.email.mergeTagStartCharacter
             + sp.config.email.mergeTagFile + sp.config.email.mergeTagDelimiter + fileHash
-            + sp.config.email.mergeTagEndCharacter;
+            + sp.config.email.mergeTagEndCharacter + ' ';
         
         focusedElement.val(focusedElementText.substring(0, caretStart) + textToAdd
             + focusedElementText.substring(caretEnd));
