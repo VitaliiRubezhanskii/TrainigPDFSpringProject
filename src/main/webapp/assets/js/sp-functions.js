@@ -79,7 +79,7 @@ sp = {
         location.href =
             'mailto:' + data.customerEmail
             + '?subject=' + encodeURIComponent(data.emailSubject)
-            + '&body='  + encodeURIComponent(data.emailBody);;
+            + '&body='  + encodeURIComponent(data.emailBody);
       }
     }
   }
