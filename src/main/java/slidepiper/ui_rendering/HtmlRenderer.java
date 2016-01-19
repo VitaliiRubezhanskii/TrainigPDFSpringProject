@@ -75,9 +75,6 @@ public class HtmlRenderer {
 
 			String barchartImageUrl = BarChartRenderer.getBarChartLink(ai.getSession_id());
 			String barchartrow = getImageRow(barchartImageUrl);
-													
-			String originalMessageRow = getFreeTextRow("<u>Original Message</u>")
-					+getFreeTextRow(ai.getMessage_text());
 			
 			String recotext = "<u>Recommendation</u>: ";
 			
@@ -100,8 +97,7 @@ public class HtmlRenderer {
 					actionsRow + 
 					barchartrow +
 					chatMessagesRow + "<BR>"+
-					deviceInfoRows +	"<BR>" +
-					originalMessageRow; 
+					deviceInfoRows; 
 						
 			return reportHTML;			
 	}
@@ -113,17 +109,14 @@ public class HtmlRenderer {
 		{											
 			String alertHTML="";			
 												
-			String emailmailto = "(<a style=\"color:white\" href=\"mailto:"
+			String emailmailto = "<a style=\"color:grey\" href=\"mailto:"
 					+ mi.getCustomerEmail()
-					+ "?Subject=Followup to our last email.\">)"
-					+ mi.getCustomerEmail() + "</a>";											
-			String custname = DbLayer.getCustomerName(mi.getCustomerEmail(),mi.getSalesManEmail()) + emailmailto;
+					+ "?Subject=Followup to our last email.\">"
+					+ mi.getCustomerEmail() + "</a>";					
+			String custname = DbLayer.getCustomerName(mi.getCustomerEmail(),mi.getSalesManEmail()) + " (" + emailmailto + ")";
 					
 			String alertTitleRow = getTitleRow("SlidePiper Open Alert");		
 			String alertRow = getAlertRow("opened", DbLayer.getSlidesName(mi.getSlidesId()), custname, "");
-			 					
-			String originalMessageRow = getFreeTextRow("<u>Original Message</u>")
-					+getFreeTextRow(mi.getMsgText());
 			
 			String whatNextTitleRow = getTitleRow("What Next?");
 
@@ -139,7 +132,6 @@ public class HtmlRenderer {
 			alertHTML = alertTitleRow + 
 					alertRow +
 					"<BR>"+
-					originalMessageRow+ "<BR>"+
 					whatNextRows;					
 			
 			alertHTML = addEnclosingHtml(alertHTML);

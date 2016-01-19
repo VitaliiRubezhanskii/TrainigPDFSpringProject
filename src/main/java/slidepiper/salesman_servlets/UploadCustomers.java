@@ -84,14 +84,15 @@ public class UploadCustomers extends HttpServlet {
 					if (splitted.length >=3)
 						// ignore if not enough in splitted.
 					{
-							System.out.println("splitted: 0: " + splitted[0] + " 1: "+ splitted[1] + " 2: "+ splitted[2] );
-							String custname = splitted[0];
-							String email = splitted[1];
-							String company = splitted[2];
+							//System.out.println("splitted: 0: " + splitted[0] + " 1: "+ splitted[1] + " 2: "+ splitted[2] );
+							String firstName = splitted[0];
+							String lastName = splitted[1];
+							String email = splitted[2];
+							String company = splitted[3];
 							
-							if (custname.equalsIgnoreCase("")) custname = email;
+							//if (custname.equalsIgnoreCase("")) custname = email;
 							if (company.equalsIgnoreCase("")) company = email;
-							DbLayer.addNewCustomer(salesman_email, custname, company, email);
+							DbLayer.addNewCustomer(salesman_email, firstName, lastName, company, email);
 					}
 					else
 					{

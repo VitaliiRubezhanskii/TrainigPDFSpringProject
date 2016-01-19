@@ -87,6 +87,9 @@
 		  ga('send', 'pageview');
 
 		</script>
+  
+  <script src="assets/js/sp-functions.js"></script>
+  <link rel="stylesheet" href="assets/styles/sp-style.css">
 </head>
 
     <!-- *************************************** body ********************************** -->
@@ -269,8 +272,10 @@
                 <form>
                     <div style="padding:10px 20px;">
                         <h3>Customer Information</h3>
-                        <label for="un" class="ui-hidden-accessible">Name:</label>
-                        <input name="user" id="newcustname" value="" placeholder="Name" data-theme="b" type="text">
+                        <label for="un" class="ui-hidden-accessible">First Name:</label>
+                        <input name="user" id="newcustfirstname" value="" placeholder="First Name" data-theme="b" type="text">
+                        <label for="un" class="ui-hidden-accessible">Last Name:</label>
+                        <input name="user" id="newcustlastname" value="" placeholder="Last Name" data-theme="b" type="text">
                         <label for="un" class="ui-hidden-accessible">Email:</label>
                         <input name="user" id="newcustemail" value="" placeholder="Email" data-theme="b" type="text">
                          <label for="un" class="ui-hidden-accessible">Company:</label>
@@ -286,7 +291,7 @@
     <div class="ui-block-b"><div class="ui-bar ui-bar-a no-padding-class">
     <div class="ui-corner-all custom-corners">
   <div class="ui-bar ui-bar-a">
-    <h3>Select Presentation</h3>
+    <h3>Select Presentation (click on the document you want to add)</h3>
   </div>
   <div class="ui-body ui-body-a" style="height:350px; overflow-x:hidden; overflow-y: scroll; padding-bottom:10px;" id="pres1Div" >
 </div>
@@ -435,6 +440,9 @@
 <script type="text/javascript" src="scripts/remove_customer.js"></script>
 <script type="text/javascript" src="scripts/remove_presentation.js"></script>
 <script type="text/javascript" src="scripts/update_presentation.js"></script>
+
+<script src="https://apis.google.com/js/client.js"></script>
+
 <script type="text/javascript" src="scripts/send_email.js"></script>
 <script type="text/javascript" src="scripts/add_customer.js"></script>
 <script type="text/javascript" src="scripts/account.js"></script>

@@ -171,6 +171,10 @@ function preInitView()
 {
     if (preInitDone == false)
         {               
+                
+          if ('' != sp.viewer.linkHash) {
+            msgid = sp.viewer.linkHash;
+          } else {
                 msgid = getURLParameter("file"); // format /file/123456
                 
                 // now we can have more than 6
@@ -180,6 +184,8 @@ function preInitView()
                 splitted = msgid.split("/");
                 msgid = splitted[splitted.length-1];
                 
+          }
+          
                 console.log("msgid is " + msgid);   
                 // immediately send event and message to salesman.
                 

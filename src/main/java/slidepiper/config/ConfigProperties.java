@@ -5,6 +5,10 @@ import java.io.InputStream;
 import java.util.Properties;
 
 public class ConfigProperties {
+  
+  // This constant is declared because the value of the URL pattern
+  // attribute of the WebServlet annotation must be a constant expression.
+  public static final String FILE_VIEWER_PATH = "/view";
 
   /*
    *  Get the config.properties file properties.
@@ -50,34 +54,39 @@ public class ConfigProperties {
     if (null == System.getenv("OPENSHIFT_APP_NAME")
         || props.getProperty("override_openshift_ev").equals("true")) {
 
-      overrideOpenshiftEv = true;
+      overrideOpenshiftEv = true;  
     }
 
     // Create application and web sockets URLs.
     if (key.equals("app_url") || key.equals("websockets_url")) {
       if (overrideOpenshiftEv) {
         String appScheme = props.getProperty("app_scheme");
-        String appServer = props.getProperty("app_server").replaceAll("/$", "");
+        String appHost = (null != props.getProperty("app_alias")) 
+            ? props.getProperty("app_alias").replaceAll("/$", "")
+            : props.getProperty("app_server").replaceAll("/$", "");
         String appPort = props.getProperty("app_port", "80");
         String appContextPath = ("/" + props.getProperty("app_contextpath", ""))
             .replaceAll("/$", "");
         String webSocketsPort = props.getProperty("websockets_port", "80");
 
-        props.setProperty("app_url", appScheme + "://" + appServer + ":" + appPort
+        props.setProperty("app_url", appScheme + "://" + appHost + ":" + appPort
             + appContextPath);
 
-        props.setProperty("websockets_url", appScheme + "://" + appServer + ":"
+        props.setProperty("websockets_url", appScheme + "://" + appHost + ":"
             + webSocketsPort + appContextPath);
       } else {
-
+        
+        // OPENSHIFT_CUSTOM_APP_ALIAS is a custom Openshift environment variable.
+        String openshiftHost = (null != System.getenv("OPENSHIFT_CUSTOM_APP_ALIAS")) 
+            ? System.getenv("OPENSHIFT_CUSTOM_APP_ALIAS").replaceAll("/$", "")
+            : System.getenv("OPENSHIFT_APP_DNS").replaceAll("/$", "");
+        
         // OPENSHIFT_APP_SCHEME is a custom Openshift environment variable.
-        props.setProperty("app_url", System.getenv("OPENSHIFT_APP_SCHEME") + "://"
-            + System.getenv("OPENSHIFT_APP_DNS").replaceAll("/$", ""));
+        props.setProperty("app_url", System.getenv("OPENSHIFT_APP_SCHEME") + "://" + openshiftHost);
 
         // OPENSHIFT_WEBSOCKETS_PORT is a custom Openshift environment variable.
         props.setProperty("websockets_url", System.getenv("OPENSHIFT_APP_SCHEME") + "://"
-            + System.getenv("OPENSHIFT_APP_DNS").replaceAll("/$", "") + ":"
-            + System.getenv("OPENSHIFT_WEBSOCKETS_PORT"));
+            + openshiftHost + ":" + System.getenv("OPENSHIFT_WEBSOCKETS_PORT"));
       }
     }
     
@@ -85,7 +94,7 @@ public class ConfigProperties {
     if (key.equals("app_contextpath")) {
       if (overrideOpenshiftEv) {
          
-        // Since app_contextpath is an optional property, we to check if it exists.
+        // Since app_contextpath is an optional property, we need to check if it exists.
         if (null != props.getProperty(key)) {
            props.setProperty(key, props.getProperty(key).replaceAll("/$", "") + "/");
         } else {
@@ -94,7 +103,7 @@ public class ConfigProperties {
       } else {
         
         // OPENSHIFT_APP_CONTEXTPATH is a custom Openshift environment variable.
-        // Since OPENSHIFT_APP_CONTEXTPATH is an optional variable, we to check if it exists.
+        // Since OPENSHIFT_APP_CONTEXTPATH is an optional variable, we need to check if it exists.
         if (null != System.getenv("OPENSHIFT_APP_CONTEXTPATH")) {
           props.setProperty(key, System.getenv("OPENSHIFT_APP_CONTEXTPATH")
               .replaceAll("/$", "") + "/");
