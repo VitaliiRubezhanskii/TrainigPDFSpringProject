@@ -1,7 +1,17 @@
 package slidepiper.email;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -10,6 +20,10 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+
+import com.google.api.client.auth.oauth2.Credential;
+import com.google.api.client.googleapis.json.GoogleJsonResponseException;
+import com.google.api.services.gmail.Gmail;
 
 import slidepiper.config.ConfigProperties;
 import slidepiper.dataobjects.AlertData;
@@ -21,7 +35,24 @@ import slidepiper.ui_rendering.BarChartRenderer;
 import slidepiper.ui_rendering.HtmlRenderer;
 
 public class EmailSender {
-
+  
+  /** A regex for capturing a merge tag. */
+  private static final String MERGE_TAG_REGEX =
+      "\\" + ConfigProperties.getProperty("merge_tag_start_character") + "(.+?)"
+      + "\\" + ConfigProperties.getProperty("merge_tag_end_character");
+  
+  /** The delimiter used for separating the merge tag parts. */
+  private static final String MERGE_TAG_DELIMITER =
+      ConfigProperties.getProperty("merge_tag_delimiter");
+  
+  /** Merge tag types representations. */
+  public static final String MERGE_TAG_FILE = "file";
+  public static final String MERGE_TAG_FIRST_NAME = "first-name";
+  public static final String MERGE_TAG_LAST_NAME = "last-name";
+  public static final String MERGE_TAG_SALESMAN_FIRST_NAME = "salesman-first-name";
+  public static final String MERGE_TAG_SALESMAN_LAST_NAME = "salesman-last-name";
+  
+  
 	// general send email function, used by the other ones.
 	public static void sendEmail(String to, String subj, String msg)
 	{
@@ -37,7 +68,7 @@ public class EmailSender {
 		  props.put("mail.smtp.port", "465");	    
 		  
 	    //System.out.println("email login with user " + username + " pw " + password);
-		  Session session = Session.getDefaultInstance(props,
+		  Session session = Session.getInstance(props,
 		  new javax.mail.Authenticator() {
 		             protected PasswordAuthentication getPasswordAuthentication() {
 		             return new PasswordAuthentication(username,password);
@@ -82,7 +113,9 @@ public class EmailSender {
 			
 			currentviewslink = urlprefix + "viewbarchart.jsp?session_id=" + sessionId;
 			chatlink = urlprefix + "pdfjs/chatwindow.html?" + getParams;
-			String fullchatlink= urlprefix+"pdfjs/viewer.html?file=/" + ConfigProperties.getProperty("app_contextpath") + "file/" + mi.getId() + "&" + getParams;
+			String fullchatlink = urlprefix.replaceAll("/$", "") + ConfigProperties.FILE_VIEWER_PATH
+			    + "?" + ConfigProperties.getProperty("file_viewer_query_parameter") + "=" + mi.getId()
+			    + "&" + getParams;
 			
 			String subj = "SlidePiper Alert for " +
 					DbLayer.getCustomerName(mi.getCustomerEmail(),mi.getSalesManEmail()) +
@@ -130,4 +163,136 @@ public class EmailSender {
 			
 			System.out.println("********** SENT REPORT EMAIL for " + mi.getSalesManEmail());
 	}
+	
+	
+	/**
+   * Create a merge tag set.
+   *    
+   * @param inputText An array containing text strings to be searched for merge tags.
+   * 
+   * @return A unique set containing MERGE_TAG_REGEX merge tags that were found in
+   * inputText strings.
+   */
+	 public static Set<String> createMergeTagSet(String[] inputTextArray) {
+	   Matcher matcher;
+	   Pattern pattern = Pattern.compile(MERGE_TAG_REGEX, Pattern.CASE_INSENSITIVE);
+     Set<String> mergeTagSet = new HashSet<String>();
+	   
+	   for (int i = 0; i < inputTextArray.length; i++) {
+       matcher = pattern.matcher(inputTextArray[i]);
+       
+       while (matcher.find()) {
+         mergeTagSet.add(matcher.group(1));
+       }
+     }
+	   
+	   return mergeTagSet;
+	 }
+	
+	 
+	 /**
+	  * Create a merge tag map.
+	  * 
+	  * @param mergeTagSet A merge tag set. 
+	  * @param customerEmail The customer email.
+	  * @param salesmanEmail The salesman email.
+	  * 
+	  * @return A map containing merge tags and their replacements.
+	  */
+	 public static Map<String, String> createMergeTagMap(Set<String> mergeTagSet,
+	     String customerEmail, String salesmanEmail) {
+     
+	   List<String> mergeTagPart = new ArrayList<String>();
+	   Map<String, String> mergeTagMap = new HashMap<String, String>();
+     
+	   for (String mergeTag : mergeTagSet) {
+       mergeTagPart = Arrays.asList(mergeTag.split(MERGE_TAG_DELIMITER));
+       
+       switch (mergeTagPart.get(0).toLowerCase()) {
+         case MERGE_TAG_FILE:
+           String fileHash = mergeTagPart.get(1);
+           String fileLinkHash = DbLayer.setFileLinkHash(customerEmail, fileHash, salesmanEmail);
+           String fileLink = ConfigProperties.getProperty("app_url")
+               + ConfigProperties.FILE_VIEWER_PATH + "?"
+               + ConfigProperties.getProperty("file_viewer_query_parameter") + "="
+               + fileLinkHash;
+           mergeTagMap.put(mergeTag, fileLink);
+           break;
+           
+         case MERGE_TAG_FIRST_NAME:     
+           mergeTagMap.put(mergeTag, DbLayer.getCustomer(customerEmail, salesmanEmail)
+               .get("first_name"));
+           break;
+           
+         case MERGE_TAG_LAST_NAME:
+           mergeTagMap.put(mergeTag, DbLayer.getCustomer(customerEmail, salesmanEmail)
+               .get("last_name"));
+           break;
+           
+         case MERGE_TAG_SALESMAN_FIRST_NAME:     
+           mergeTagMap.put(mergeTag, DbLayer.getSalesman(salesmanEmail).get("first_name"));
+           break;
+           
+         case MERGE_TAG_SALESMAN_LAST_NAME:
+           mergeTagMap.put(mergeTag, DbLayer.getSalesman(salesmanEmail).get("last_name"));
+           break;
+       }
+     }
+        
+     return mergeTagMap;
+   }
+	 
+	 
+	/**
+	 * Search for merge tags in a given text and replace them with their replacements.
+	 * 
+	 * @param searchReplaceMap A merge tag map.
+   * @param inputText The text to be processed for searching and replacing merge tags.
+   * 
+	 * @return A processed inputText where merge tags were replaced with their replacements.
+	 */
+	public static String searchReplaceMergeTag(Map<String, String> searchReplaceMap,
+	    String inputText) {
+  	
+	  Pattern pattern = Pattern.compile(MERGE_TAG_REGEX, Pattern.CASE_INSENSITIVE); 
+	  Matcher matcher = pattern.matcher(inputText);
+    StringBuffer sb = new StringBuffer();
+    
+    while (matcher.find()) {
+      String replacement = searchReplaceMap.get(matcher.group(1));
+      if (null != replacement) {    
+        matcher.appendReplacement(sb, replacement);
+      }
+    }
+    
+    return matcher.appendTail(sb).toString();
+  }
+	
+	
+	/**
+	 * Send a Gmail email via Google Gmail API.
+	 * 
+	 * @param customerEmail The customer email, i.e. the "to:" address.
+	 * @param salesmanEmail The customer email, i.e. the "from:" address.
+	 * @param emailSubject The email subject.
+	 * @param emailBody The email body.
+	 * @param emailBody The email body.
+	 * 
+	 * @return True or false whether an email was sent or not.
+	 */
+  public static boolean sendGmailEmail(String customerEmail, String salesmanEmail,
+      String emailSubject, String emailBody, String accessToken) throws IOException, MessagingException {
+    
+    Credential credential = gmail.createGoogleCredential(accessToken);
+    Gmail gmailService = gmail.getGmailService(credential);
+    MimeMessage email = gmail.createEmail(customerEmail, salesmanEmail, emailSubject, emailBody);
+    
+    try {
+      gmail.sendMessage(gmailService, "me", email);
+      return true;
+    } catch(GoogleJsonResponseException ex) {
+      System.err.println(ex.getMessage());
+      return false;
+    }
+  }
 }

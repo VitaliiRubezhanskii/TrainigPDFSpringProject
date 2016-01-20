@@ -6,17 +6,20 @@ $("#addCustButton")  // add customer
 					console.log("adding customer");
 					var salesmanEmail = getCookie("SalesmanEmail");
 					salesmanEmail = salesmanEmail.toLowerCase();
-					var customerName = $("#newcustname").val();
+					var customerFirstName = $("#newcustfirstname").val();
+					var customerLastName = $("#newcustlastname").val();
 					var customerCompany = $("#newcustcompany").val();
 					var customerEmail = $("#newcustemail").val();
 					customerEmail = customerEmail.toLowerCase();
-					console.log("adding customer ajax: name " + customerName + " company " + customerCompany + " email " + customerEmail );
+					//console.log("adding customer ajax: name " + customerName + " company " + customerCompany + " email " + customerEmail );
 					showWaitMsg();
 					
 					jsondata='{"action":"addNewCustomer", "salesmanEmail":"'
 						+ salesmanEmail
-						+ '", "customerName":"'
-						+ customerName
+						+ '", "customerFirstName":"'
+						+ customerFirstName
+						+ '", "customerLastName":"'
+            + customerLastName
 						+ '", "customerCompany":"'
 						+ customerCompany
 						+ '", "customerEmail":"'
@@ -39,7 +42,7 @@ $("#addCustButton")  // add customer
 									console
 											.log("adding customer ajax returned");
 									if (msg.newCustomer == 1) {
-										swal(" New Customer ", customerName + "  was created! ", "success");
+										swal(" New Customer ", customerFirstName + " " + customerLastName + "  was created! ", "success");
 										//alert('New customer -->' + customerName
 										//		+ "<-- was added successfully.");
 										$("#newcustname").val("");

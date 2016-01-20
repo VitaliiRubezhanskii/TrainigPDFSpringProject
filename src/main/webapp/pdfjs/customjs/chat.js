@@ -633,6 +633,9 @@ function loadChatHistory() {
 }
 
 /** ***************** RUN ON STARTUP **************** */
+
+quickchatmode = 0;
+/*
 // check if quickchat or not, and act accordingly.
 if (window.location.toString().indexOf("viewer.html") > -1) {
         // we're in pdf viewer
@@ -648,6 +651,8 @@ if (window.location.toString().indexOf("viewer.html") > -1) {
                 startClient();
         });
 }
+*/
+
 
 /*
  * Create a chat message in the presentation viewer chat.

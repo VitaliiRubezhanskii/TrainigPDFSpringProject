@@ -1,19 +1,13 @@
 package slidepiper.db;
 
-import java.io.PrintWriter;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Properties;
-import java.util.concurrent.Semaphore;
+import java.util.HashMap;
+import java.util.Map;
 
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.PasswordAuthentication;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
+import org.hashids.Hashids;
 
+import slidepiper.config.ConfigProperties;
 import slidepiper.constants.Constants;
 import slidepiper.dataobjects.*;
 
@@ -90,25 +84,27 @@ public class DbLayer {
 	
 	
 	//add new customer.
-	public static int addNewCustomer(String salesMan, String name, String company, String email){
+	public static int addNewCustomer(String salesMan, String firstName, String lastName, String company, String email){
 		
 		// customer does not exist.
 		if (getCustomerName(email, salesMan) == null)
 		{
 		 
-				String query = "INSERT INTO customers(email, name, sales_man, company) VALUES (?, ?, ?, ?)";
+				String query = "INSERT INTO customers(email, name, first_name, last_name, sales_man, company) VALUES (?, ?, ?, ?, ?, ?)";
 				try (Connection conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);) 
 					{			
 					try{
 							PreparedStatement preparedStatement = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 							preparedStatement.setString(1, email.toLowerCase());
-							preparedStatement.setString(2, name);
-							preparedStatement.setString(3, salesMan.toLowerCase());
-							preparedStatement.setString(4, company);
+							preparedStatement.setString(2, firstName + " " + lastName);
+							preparedStatement.setString(3, firstName);
+							preparedStatement.setString(4, lastName);
+							preparedStatement.setString(5, salesMan.toLowerCase());
+							preparedStatement.setString(6, company);
 							preparedStatement.executeUpdate();
 							preparedStatement.close();
 							conn.close();
-							System.out.println("new customer inserted! name=" + name + " company: " + company);
+							//System.out.println("new customer inserted! name=" + name + " company: " + company);
 							return 1;
 					}
 					finally{ if(conn!=null){ conn.close();}	}
@@ -1196,7 +1192,7 @@ public class DbLayer {
 			}
 			
 			
-			/*
+			/**
 			 * Check if a salesman record exists in the DB.
 			 * 
 			 * @param email	The salesman email to be checked.
@@ -1232,62 +1228,280 @@ public class DbLayer {
 				
 				return isEmailExist;
 			}
-
 			
-			/*
-			 * Add a Salesman to the DB after performing validation tests. 
+      
+      /**
+       * Get data about a specific customer such as his first name. 
+       * 
+       * @param customerEmail The customer email address.
+       * @param salesmanEmail The salesman email address.
+       * 
+       * @return A map containing data about a specific customer. 
+       */
+      public static Map<String, String> getCustomer(String customerEmail, String salesmanEmail) {
+        
+        Connection conn = null;
+        Map<String, String> salesmanMap = new HashMap<String, String>();
+        String sql = "SELECT * FROM customers WHERE sales_man=? AND email=?";
+        
+        try {
+          conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
+          PreparedStatement ps = conn.prepareStatement(sql);
+          ps.setString(1, salesmanEmail);
+          ps.setString(2, customerEmail);
+          
+          ResultSet rs = ps.executeQuery();
+          ResultSetMetaData md = rs.getMetaData();
+          int columnCount = md.getColumnCount();
+          
+          if (rs.next()) {
+            for (int i = 1; i <= columnCount; i++) {
+              salesmanMap.put(md.getColumnLabel(i), rs.getString(i));
+            }
+          }
+        } catch (SQLException ex) {
+          System.err.println("Error code: " + ex.getErrorCode() + " - " + ex.getMessage());
+          ex.printStackTrace();
+        } finally {
+          if (null != conn) {
+            try {
+              conn.close();
+            } catch (SQLException ex) {
+              ex.printStackTrace();
+            }
+          }
+        }
+        
+        return salesmanMap;
+      }
+      
+      
+			/**
+			 * Get data about a specific salesman such as his first name. 
 			 * 
-			 * @param company		The salesman company.
-			 * @param email			The salesman email.
-			 * @param emailClient	The salesman email client (Gmail or Outlook).
-			 * @param firstName		The salesman first name.
-			 * @param lastName		The salesman last name.
-			 * @param magic			An administrator password.
-			 * @param password		The salesman password for logging in.
+			 * @param salesmanEmail The salesman email address.
 			 * 
-			 * @return		A status code representing possible validation errors,
-			 * 				and addition success.  
+			 * @return A map containing data about a specific salesman. 
 			 */
-			public static int addSalesman(String company, String email,
-					String emailClient, String firstName, String lastName,
-					String magic, String password) {
-				
-				int statusCode = 0;
-				
-				if (isSalesmanExist(email)) {
-					statusCode = 100;
-				} else if (! magic.equals("333")) {
-					statusCode = 101;
-				} else {
-					Connection conn = null;
-					String fullName = firstName + " " + lastName;
-					String sql = "INSERT INTO sales_men (company, email, mailtype, name, password, emailpassword) VALUES (?, ?, ?, ?, ?, 0)";
-					
-					try {
-						conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
-						PreparedStatement stmt = conn.prepareStatement(sql);
-						stmt.setString(1, company);
-						stmt.setString(2, email);
-						stmt.setString(3, emailClient);
-						stmt.setString(4, fullName);
-						stmt.setString(5, password);
-						stmt.executeUpdate();
-							
-						// The user was added successfully.
-						statusCode = 200;
-					} catch (SQLException ex) {
-						System.err.println("Error code: " + ex.getErrorCode() + " - " + ex.getMessage());
-					} finally {
-						if (null != conn) {
-							try {
-								conn.close();
-							} catch (SQLException ex) {
-								ex.printStackTrace();
-							}
-						}
-					}
-				}
-				
-				return statusCode;
-			}
+      public static Map<String, String> getSalesman(String salesmanEmail) {
+        
+        Connection conn = null;
+        Map<String, String> salesmanMap = new HashMap<String, String>();
+        String sql = "SELECT * FROM sales_men WHERE email=?";
+        
+        try {
+          conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
+          PreparedStatement ps = conn.prepareStatement(sql);
+          ps.setString(1, salesmanEmail);
+          
+          ResultSet rs = ps.executeQuery();
+          ResultSetMetaData md = rs.getMetaData();
+          int columnCount = md.getColumnCount();
+          
+          if (rs.next()) {
+            for (int i = 1; i <= columnCount; i++) {
+              salesmanMap.put(md.getColumnLabel(i), rs.getString(i));
+            }
+          }
+        } catch (SQLException ex) {
+          System.err.println("Error code: " + ex.getErrorCode() + " - " + ex.getMessage());
+          ex.printStackTrace();
+        } finally {
+          if (null != conn) {
+            try {
+              conn.close();
+            } catch (SQLException ex) {
+              ex.printStackTrace();
+            }
+          }
+        }
+        
+        return salesmanMap;
+      }
+      
+      
+      /**
+       * Add an event to the DB.
+       * 
+       * @param eventName The event name. See config.properties for available event names.
+       * @param eventDataMap A map connecting between salesman_events table column names and values.
+       */
+      public static void setEvent(String eventName, Map<String, String> eventDataMap) {
+        String sqlColumns = "event_name";
+        String sqlValues = "?";
+        for (Map.Entry<String, String> mapEntry : eventDataMap.entrySet()) {
+          sqlColumns += "," + mapEntry.getKey();
+          sqlValues += ",?";
+        }
+          
+        String sqlInsert = "INSERT INTO salesman_events (" + sqlColumns + ") VALUES (" + sqlValues + ")";
+        
+        Connection conn = null;
+        try {
+          conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
+          PreparedStatement ps = conn.prepareStatement(sqlInsert);
+          
+          ps.setString(1, eventName);
+          int i = 2;
+          for (Map.Entry<String, String> mapEntry : eventDataMap.entrySet()) {
+            ps.setString(i , mapEntry.getValue());
+            i++;
+          }
+                   
+          ps.executeUpdate();
+          System.out.println("SP: " + eventName);
+        } catch (SQLException ex) {
+          System.err.println("Error code: " + ex.getErrorCode() + " - " + ex.getMessage());
+          ex.printStackTrace();
+        } finally {
+          if (null != conn) {
+            try {
+              conn.close();
+            } catch (SQLException ex) {
+              ex.printStackTrace();
+            }
+          }
+        }
+      }
+      
+      
+			/**
+       * Set the file link hash used for the file viewer,
+       * i.e. www.slidepiper.com/view?f=<file link hash>
+       * 
+       * @param customerEmail The customer email.
+       * @param salesmanEmail The salesman email.
+       * @param fileHash A file hash. 
+       * 
+       * @return      The file link enumerated hash.
+       */
+      public static String setFileLinkHash(String customerEmail, String fileHash,
+          String salesmanEmail) {
+         
+        Connection conn = null;
+      
+        String sqlSelect = "SELECT id FROM msg_info WHERE msg_text IS NULL"
+            + " AND customer_email=? AND slides_id=? AND sales_man_email=?";
+        
+        String sqlInsert = "INSERT INTO msg_info (customer_email, sales_man_email, slides_id)"
+            + " VALUES (?, ?, ?)";
+        
+        String sqlSelectAfterInsert = "SELECT id_ai, id FROM msg_info WHERE id_ai=?";
+        
+        String fileLinkHash = null;
+        try {
+          conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
+          PreparedStatement ps = conn.prepareStatement(sqlSelect);
+          ps.setString(1, customerEmail);
+          ps.setString(2, fileHash);
+          ps.setString(3, salesmanEmail);
+          
+          ResultSet rs = ps.executeQuery();
+          
+          if (rs.next()) {
+            fileLinkHash = rs.getString("id");
+          } else {
+            ps = conn.prepareStatement(sqlInsert, Statement.RETURN_GENERATED_KEYS);                
+          
+            ps.setString(1, customerEmail);
+            ps.setString(2, salesmanEmail);
+            ps.setString(3, fileHash);
+            
+            ps.executeUpdate();
+            rs = ps.getGeneratedKeys();
+            
+            if (rs.next()) {
+              Hashids hashids = new Hashids(ConfigProperties.getProperty("hashids_salt"), 
+                  Integer.parseInt(ConfigProperties.getProperty("hashids_minimum_hash_length")),
+                  ConfigProperties.getProperty("hashids_custom_hash_alphabet"));
+              long generatedKey = rs.getLong(1);
+              String linkHash = hashids.encode(generatedKey);
+              
+              ps = conn.prepareStatement(sqlSelectAfterInsert, ResultSet.TYPE_FORWARD_ONLY,
+                  ResultSet.CONCUR_UPDATABLE);
+              ps.setLong(1, generatedKey);
+              rs = ps.executeQuery();
+              
+              if (rs.next()) {
+                rs.updateString("id", linkHash);
+                rs.updateRow();
+                fileLinkHash = linkHash;
+              }
+            }
+          }
+        } catch (SQLException ex) {
+          System.err.println("Error code: " + ex.getErrorCode() + " - " + ex.getMessage());
+          ex.printStackTrace();
+        } finally {
+          if (null != conn) {
+            try {
+              conn.close();
+            } catch (SQLException ex) {
+              ex.printStackTrace();
+            }
+          }
+        }
+        
+        return fileLinkHash;
+      }
+
+      
+      /**
+       * Add a Salesman to the DB after performing validation tests. 
+       * 
+       * @param company   The salesman company.
+       * @param email     The salesman email.
+       * @param emailClient The salesman email client (Gmail or Outlook).
+       * @param firstName   The salesman first name.
+       * @param lastName    The salesman last name.
+       * @param magic     An administrator password.
+       * @param password    The salesman password for logging in.
+       * 
+       * @return    A status code representing possible validation errors,
+       *        and addition success.  
+       */
+      public static int setSalesman(String company, String email,
+          String emailClient, String firstName, String lastName,
+          String magic, String password) {
+        
+        int statusCode = 0;
+        
+        if (isSalesmanExist(email)) {
+          statusCode = 100;
+        } else if (! magic.equals("333")) {
+          statusCode = 101;
+        } else {
+          Connection conn = null;
+          String fullName = firstName + " " + lastName;
+          String sql = "INSERT INTO sales_men (company, email, mailtype, name, first_name, last_name, password, emailpassword) VALUES (?, ?, ?, ?, ?, ?, ?, 0)";
+          
+          try {
+            conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, company);
+            stmt.setString(2, email);
+            stmt.setString(3, emailClient);
+            stmt.setString(4, fullName);
+            stmt.setString(5, firstName);
+            stmt.setString(6, lastName);
+            stmt.setString(7, password);
+            stmt.executeUpdate();
+              
+            // The user was added successfully.
+            statusCode = 200;
+          } catch (SQLException ex) {
+            System.err.println("Error code: " + ex.getErrorCode() + " - " + ex.getMessage());
+          } finally {
+            if (null != conn) {
+              try {
+                conn.close();
+              } catch (SQLException ex) {
+                ex.printStackTrace();
+              }
+            }
+          }
+        }
+        
+        return statusCode;
+      }
 }

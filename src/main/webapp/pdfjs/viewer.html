@@ -19,6 +19,21 @@ http://sourceforge.net/adobe/cmap/wiki/License/
 -->
 <html dir="ltr" mozdisallowselectionprint moznomarginboxes>
   <head>
+    <base href="pdfjs/">
+    <script>
+    /**
+     * A solution for the file viewer's deprecated file URL format.
+     *
+     * The reason this function resides within the HTML code 
+     * is since all of the JS files are linked through relative paths.
+     */
+    (function(){
+      var pathArray = window.location.pathname.split('/');
+      if ('viewer.html' == pathArray.pop()) {
+        document.getElementsByTagName('base')[0].setAttribute('href', '');
+      }
+    })();
+    </script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <meta name="google" coontent="notranslate">
@@ -506,6 +521,9 @@ http://sourceforge.net/adobe/cmap/wiki/License/
 	
   
     <script type="text/javascript" src="customjs/chat.js"></script>
+    
+    <script src="../assets/js/sp-viewer.js"></script>
+    
 	  <script type="text/javascript" src="customjs/viewercode.js"></script>
   
     
@@ -527,7 +545,7 @@ http://sourceforge.net/adobe/cmap/wiki/License/
 		</script>
 
 
-	<script src="../assets/js/sp-viewer.js"></script>
+	
   </body>
 </html>
 
