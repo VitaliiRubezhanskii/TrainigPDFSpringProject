@@ -1,10 +1,65 @@
 SlidePiper README File
-----------------------
+======================
 
 Change Log
 ----------
 
-0.2.0
+### 0.3.0
+
+2016-01-17 Yaniv Friedensohn <yanivf@slidepiper.com>
+
+* Enabled GET method request handling within ManagmentServlet.java for the use of jQuery's
+  $.getJSON() method.
+
+* Enabled support for an application domain alias (if set), both for Openshift and locally. 
+
+* Replaced frontend file links hash creation mechanism with a backend hashids.org implementation.  
+  Also, instead of creating unique file links hashes every time an email is sent, now a file link
+  hash is created only for every new salesman-file-customer relationship.
+
+* Replaced the file viewer's file URL format to <host>/view?f=<file link hash>, e.g.
+  http://www.slidepiper.com/view?f=9dg5
+  
+* Previous file links with a now obsolete file link hash and file viewer URL format are preserved
+  and will continue to work correctly.
+
+* Created a merge tag mechanism which enables to place merge tags in the email composer. Merge tags
+  will be replaced according to their respective customer values.
+  Currently, only file, customer first and last name, and salesman first and last name merge tags
+  are supported.
+
+* Replaced Gmail email sending mechanism with Gmail API which reduces the need to send an email
+  twice (once via SlidePiper system, and then via the email client), and enables 1-to-many sending
+  capabilities (currently limited by us to 50 emails per one send).
+
+* Created DbLayer.setEvent() method and a number of new parameters columns in salesman_events 
+  table, which allows for a flexible mechanism for recording events.
+  
+* Created the SENT_MAIL event which records the following parameters after an email was sent
+  (currently supported for Gmail only as we cannot be sure an email was actually sent using the
+  mailto mechanism):
+    1. Access token.
+    2. Salesman email client.
+    3. Salesman email address.
+    4. Customer email address.
+    5. Email subject.
+    6. Email body.
+
+* Removed "Original Message" section from the salesman alert and report email. The logic behind
+  this action is due to replacing the mechanism which creates unique hashes every time an email is
+  sent (see above). Thus, it wouldn't be possible to know which sent email (if any) is related to
+  opening the file link.
+
+* Fixed customer name representation in the salesman alert email. (Used the salesman report email
+  solution)
+
+* Customer first and last name can now be entered manually or via an import, and are saved
+  separately.
+
+* Enlarged the email composer email's body textarea element height.
+
+
+### 0.2.0
 
 2015-12-23 Yaniv Friedensohn <yanivf@slidepiper.com>
 
@@ -25,7 +80,7 @@ Change Log
 * Changed presentation viewer title
 
 
-0.1.0
+### 0.1.0
 
 * This version represents all of the development made
   up until Yaniv Friedensohn joined the project.
