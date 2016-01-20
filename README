@@ -4,6 +4,14 @@ SlidePiper README File
 Change Log
 ----------
 
+### 0.3.1
+
+2016-01-20 Yaniv Friedensohn <yanivf@slidepiper.com>
+
+* Updated some of the email composer templates placeholders with their respective available merge
+  tags.
+
+
 ### 0.3.0
 
 2016-01-17 Yaniv Friedensohn <yanivf@slidepiper.com>
