@@ -44,6 +44,10 @@ public class ConfigPropertiesServlt extends HttpServlet {
 	    email.put("mergeTagEndCharacter", ConfigProperties.getProperty("merge_tag_end_character"));
 	    email.put("mergeTagDelimiter", ConfigProperties.getProperty("merge_tag_delimiter"));
 	    email.put("mergeTagFile", EmailSender.MERGE_TAG_FILE);
+	    email.put("mergeTagFirstName", EmailSender.MERGE_TAG_FIRST_NAME);
+	    email.put("mergeTagLastName", EmailSender.MERGE_TAG_LAST_NAME);
+	    email.put("mergeTagSalesmanFirstName", EmailSender.MERGE_TAG_SALESMAN_FIRST_NAME);
+	    email.put("mergeTagSalesmanLastName", EmailSender.MERGE_TAG_SALESMAN_LAST_NAME);
 	    data.put("email", email);
 	    
 			out.println(data);

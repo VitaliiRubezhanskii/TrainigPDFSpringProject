@@ -6,7 +6,7 @@ $("#template1")
 				"click",
 				function(event, ui) {
 					  $("#msgtext1").val(
-							  "Hi [Customer]\n"
+							  "Hi " + sp.config.email.mergeTagStartCharacter + sp.config.email.mergeTagFirstName + sp.config.email.mergeTagEndCharacter + ",\n"
 							  +"I hope you are well.\n"
 							  +"Following our conversation I am sending you our presentation in the following link:\n"	  
 					  );
@@ -19,8 +19,9 @@ $("#template2")
 		"click",
 		function(event, ui) {
 			  $("#msgtext1").val(
-					  "Hi [Customer],\n"
-					  +"My name is [Salesman].\n"
+					  "Hi " + sp.config.email.mergeTagStartCharacter + sp.config.email.mergeTagFirstName + sp.config.email.mergeTagEndCharacter + ",\n"
+					  +"My name is " + sp.config.email.mergeTagStartCharacter + sp.config.email.mergeTagSalesmanFirstName + sp.config.email.mergeTagEndCharacter + " "
+					  + sp.config.email.mergeTagStartCharacter + sp.config.email.mergeTagSalesmanLastName + sp.config.email.mergeTagEndCharacter + ".\n"
 					  +"I wanted to know if your company would be interested in our services.\n"
 					  +"We specialize in [what your company does]\n"
 					  +"Here is a link to our portfolio presentation:\n"						  			 
@@ -35,9 +36,9 @@ $("#template3")
 		"click",
 		function(event, ui) {
 			  $("#msgtext1").val(
-					  "Hi [Customer],\n"
+					  "Hi " + sp.config.email.mergeTagStartCharacter + sp.config.email.mergeTagFirstName + sp.config.email.mergeTagEndCharacter + ",\n"
 					  +"How are you?\n"
-					  +"We are meeting at {meeting time}.\n"
+					  +"We are meeting at [meeting time].\n"
 					  +"I am sending you a presentation beforehand, it would be great if you could glance through it.\n"
 					  +"See you soon.\n"
 					  +"Link:\n"
@@ -52,7 +53,7 @@ $("#template4")
 		"click",
 		function(event, ui) {
 			  $("#msgtext1").val(
-					  "Hi [Customer],\n"
+					  "Hi " + sp.config.email.mergeTagStartCharacter + sp.config.email.mergeTagFirstName + sp.config.email.mergeTagEndCharacter + ",\n"
 					  +"I hope you are well.\n" 
 					  +"I am sending you the information you requested in the following link:\n"
 					  );
@@ -84,7 +85,7 @@ $("#template6")
 		"click",
 		function(event, ui) {
 			  $("#msgtext1").val(
-					  "Hi [Customer Name]\n"
+					  "Hi " + sp.config.email.mergeTagStartCharacter + sp.config.email.mergeTagFirstName + sp.config.email.mergeTagEndCharacter + "\n"
 					  +"It was great meeting you and I hope you are well.\n"
 					  +"We spoke about [my company name] that does [what my company does].\n"
 					  +"Could you please refer me to your colleague [colleague name], you mentioned he would\n" 
