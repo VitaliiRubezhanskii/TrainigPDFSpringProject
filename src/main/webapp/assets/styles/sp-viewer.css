@@ -7,6 +7,26 @@
  * https://en.bem.info/method/naming-convention/ .
  */
 
+/**
+ * Templating settings.
+ */
+#loadingBar, #toolbarContainer, #toolbarSidebar {
+  visibility: hidden;
+}
+
+#toolbarViewerRight .splitToolbarButton:first-of-type {
+  display: none;
+}
+
+.sp-toolbar-logo img {
+  max-height: 28px;
+  margin: 2px 0;
+}
+
+
+/**
+ * SlidePiper settings.
+ */
 #sp-terms-privacy {
   background-color: rgb(255, 255, 255);
   background-color: rgba(255, 255, 255, 0.65);

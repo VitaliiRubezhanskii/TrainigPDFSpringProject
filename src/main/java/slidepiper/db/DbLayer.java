@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.xml.bind.DatatypeConverter;
+
 import org.hashids.Hashids;
 
 import slidepiper.config.ConfigProperties;
@@ -1281,7 +1283,8 @@ public class DbLayer {
 			 * 
 			 * @param salesmanEmail The salesman email address.
 			 * 
-			 * @return A map containing data about a specific salesman. 
+			 * @return A map containing data about a specific salesman. Both keys and values are of type
+			 * String. Binary values retrieved from the DB are converted to a Base64 string.
 			 */
       public static Map<String, String> getSalesman(String salesmanEmail) {
         
@@ -1300,7 +1303,12 @@ public class DbLayer {
           
           if (rs.next()) {
             for (int i = 1; i <= columnCount; i++) {
-              salesmanMap.put(md.getColumnLabel(i), rs.getString(i));
+              if (null != rs.getString(i) && md.getColumnClassName(i).equals("java.lang.String")) {
+                salesmanMap.put(md.getColumnLabel(i), rs.getString(i));
+              } else if (null != rs.getBytes(i) && md.getColumnClassName(i).equals("[B")) {
+                  salesmanMap.put(md.getColumnLabel(i),
+                      DatatypeConverter.printBase64Binary(rs.getBytes(i)));
+              }
             }
           }
         } catch (SQLException ex) {
