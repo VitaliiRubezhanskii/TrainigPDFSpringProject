@@ -1,7 +1,68 @@
 /**
- Chat CSS settings
- 
- See media queries section below for different viewports settings. 
+ * SlidePiper Presentation Viewer Settings
+ *
+ * sp prefix is used to declare a SlidePiper name space.
+ *
+ * For information on the naming convention, see Harry Roberts' style in
+ * https://en.bem.info/method/naming-convention/ .
+ */
+
+/**
+ * Templating settings.
+ */
+#loadingBar, #toolbarContainer, #toolbarSidebar {
+  visibility: hidden;
+}
+
+#toolbarViewerRight .splitToolbarButton:first-of-type {
+  display: none;
+}
+
+.sp-toolbar-logo img {
+  max-height: 28px;
+  margin: 2px 0;
+}
+
+
+/**
+ * SlidePiper settings.
+ */
+#sp-terms-privacy {
+  background-color: rgb(255, 255, 255);
+  background-color: rgba(255, 255, 255, 0.65);
+  border-top-right-radius: 3px;
+  bottom: 0;
+  font-size: 12px;
+  padding: 1px 4px;
+  position: absolute;
+  visibility: hidden;
+  z-index: 2; /* TODO: do we really need this declaration? */
+}
+
+#sp-terms-privacy a {
+  color: #474747;
+}
+
+#sp-terms-privacy a:hover {
+  text-decoration: none;
+}
+
+.sp-powered-by {
+  font-weight: bold;
+}
+
+/* Media queries */
+@media screen and (max-width: 768px) {
+  #sp-terms-privacy {
+    font-size: 11px;
+  }
+}
+
+
+/**
+ * Chat CSS settings
+ *
+ * See media queries section below for different viewports settings. 
  */
 
 @font-face {
@@ -24,6 +85,7 @@
   max-width: 300px;
   position: fixed;
   right: 24px;
+  visibility: hidden;
   width: 65%;
   z-index: 1; /* TODO: research for the reason this rule is needed */
 }
@@ -105,6 +167,7 @@
   background: #fff;
   border-left: 1px solid #e9e9e9;
   border-right: 1px solid #e9e9e9;
+  display: none;
 }
 
 .sp-chat-avatar {
@@ -213,9 +276,5 @@
  
   #sp-live-chat header {
     border-top-right-radius: 0;
-  }
-  
-  .sp-chat {
-    display: none;
   }
 }
