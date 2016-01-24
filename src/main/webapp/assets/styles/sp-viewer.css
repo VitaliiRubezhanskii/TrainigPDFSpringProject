@@ -47,10 +47,234 @@
   text-decoration: none;
 }
 
+.sp-powered-by {
+  font-weight: bold;
+}
 
 /* Media queries */
 @media screen and (max-width: 768px) {
   #sp-terms-privacy {
     font-size: 11px;
+  }
+}
+
+
+/**
+ * Chat CSS settings
+ *
+ * See media queries section below for different viewports settings. 
+ */
+
+@font-face {
+  font-family: 'Droid Sans';
+  src: url(../fonts/droid-sans/DroidSans.ttf);
+}
+
+@font-face {
+  font-family: 'Droid Sans';
+  src: url(../fonts/droid-sans/DroidSans-Bold.ttf);
+  font-weight: bold;
+}
+
+#sp-live-chat {
+  background: #e9e9e9;
+  bottom: 0;
+  color: #9a9a9a;
+  font: 12px/2em 'Droid Sans', sans-serif;
+  margin: 0;
+  max-width: 300px;
+  position: fixed;
+  right: 24px;
+  visibility: hidden;
+  width: 65%;
+  z-index: 1; /* TODO: research for the reason this rule is needed */
+}
+
+#sp-live-chat a { text-decoration: none; }
+
+#sp-live-chat h4, #sp-live-chat h5 {
+  font: 12px/2em 'Droid Sans', sans-serif; /* TODO: research for the reason this rule is needed as it is already declared in #sp-live-chat */
+  font-weight: bold;
+  line-height: 1.5em;
+  margin: 0;
+}
+
+#sp-live-chat h4 {
+  font-size: 12px;
+}
+
+#sp-live-chat h4:before {
+	background: #c00000;
+	border-radius: 50%;
+	content: "";
+	display: inline-block;
+	height: 8px;
+	margin: 0 8px 0 0;
+	width: 8px;
+}
+
+#sp-live-chat h4.sp-chat-user-status:before {
+  background: #1a8a34;
+}
+
+#sp-live-chat h5 {
+	font-size: 10px;
+}
+
+#sp-live-chat header {
+	/* background: #293239; default value */
+	border-radius: 3px 3px 0 0;
+	color: #fff;
+	cursor: pointer;
+	padding: 8px 20px;
+	background-color: #474747; /* pdf.js project value */
+    background-image: url(images/texture.png), linear-gradient(hsla(0,0%,32%,.99), hsla(0,0%,27%,.95)); /* pdf.js project value */
+}
+
+#sp-live-chat hr {
+  background: #e9e9e9;
+  border: 0;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+  height: 1px;
+  margin: 0;
+  min-height: 1px;
+}
+
+#sp-live-chat img {
+  border: 0;
+  display: block;
+  height: auto;
+  max-width: 100%;
+}
+
+#sp-live-chat input {
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  color: inherit;
+  font-family: inherit;
+  font-size: 100%;
+  line-height: normal;
+  margin: 0;
+  padding: 8px;
+  outline: none;
+  width: 100%;
+}
+
+#sp-live-chat p { margin: 0; }
+
+.sp-chat {
+  background: #fff;
+  border-left: 1px solid #e9e9e9;
+  border-right: 1px solid #e9e9e9;
+  display: none;
+}
+
+.sp-chat-avatar {
+  background: #ff9999;
+  border-radius: 50%;
+  color: #fff;
+  float: left;
+  font: 16px Ariel, sans-serif;
+  height: 32px;
+  line-height: 33px; /* TODO: shouldn't it be 32px? */
+  text-align: center;
+  width: 32px;
+}
+
+.sp-chat-avatar--customer {
+  background: #99ccff;
+}
+
+/* Disable chat feedback functionality for now. 
+.sp-chat-feedback {
+	font-style: italic;	
+	margin: 0 0 0 80px;
+}
+*/
+
+.sp-chat-form {
+	padding: 24px;
+}
+
+/* Disable chat message counter functionality for now.
+.sp-chat-message-counter {
+	background: #e62727;
+	border: 1px solid #fff;
+	border-radius: 50%;
+	display: none;
+	font-size: 12px;
+	font-weight: bold;
+	height: 28px;
+	left: 0;
+	line-height: 28px;
+	margin: -15px 0 0 -15px;
+	position: absolute;
+	text-align: center;
+	top: 0;
+	width: 28px;
+}
+*/
+
+/* Disable chat close functionality for now.
+.sp-chat-close {	
+	background: #1b2126;
+	border-radius: 50%;
+	color: #fff;
+	display: block;
+	float: right;
+	font-size: 10px;
+	height: 16px;
+	line-height: 16px;
+	margin: 2px 0 0 0;
+	text-align: center;
+	width: 16px;
+}
+*/
+
+.sp-chat-history {
+	height: 212px;
+	padding: 8px 20px;
+	overflow-y: scroll;
+}
+
+.sp-chat-message {
+	margin: 16px 0;
+}
+
+.sp-chat-message img {
+	border-radius: 50%;
+	float: left;
+}
+
+.sp-chat-message-content {
+	margin: 0 0 16px 52px;
+}
+
+/* Disable chat time functionality for now.
+.sp-chat-time {
+	float: right;
+	font-size: 10px;
+}
+*/
+
+.sp-clearfix { *zoom: 1; } /* For IE 6/7 */
+
+.sp-clearfix:before, .clearfix:after {
+  content: "";
+  display: table;
+}
+
+.sp-clearfix:after { clear: both; }
+
+
+/* Media queries */
+@media screen and (max-width: 768px) {
+  #sp-live-chat {
+    right: 0;
+  } 
+ 
+  #sp-live-chat header {
+    border-top-right-radius: 0;
   }
 }

@@ -3,7 +3,8 @@ DEFAULT_URL = '';
 
 var sp = sp || {};
 sp.viewer = {
-  linkHash: getParameterByName('f')
+  linkHash: getParameterByName('f'),
+  breakPoint: 768
 };
 
 if ('' != sp.viewer.linkHash) {
@@ -116,6 +117,15 @@ if ('' != sp.viewer.linkHash) {
     
     function loadToolbar() {
       $('#toolbarContainer, #toolbarSidebar').css('visibility', 'visible');
+    }
+    
+    // Chat settings.
+    if (true == config.viewer.isChatEnabled) {
+      if (true == config.viewer.isChatOpen && sp.viewer.breakPoint < $(window).width()) {
+        $('.sp-chat').css('display', 'block');
+      }
+      
+      $('#sp-live-chat').css('visibility', 'visible');
     }
   });
 }
