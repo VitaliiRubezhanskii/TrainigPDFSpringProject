@@ -46,7 +46,8 @@ public class UploadCustomers extends HttpServlet {
 		// obtains the upload file part in this multipart request
 		Part filePart = request.getPart("filecsv");
 		
-		CSVParser parser = CSVParser.parse(IOUtils.toString(filePart.getInputStream()), CSVFormat.DEFAULT);
+		CSVParser parser = CSVParser.parse(IOUtils.toString(filePart.getInputStream(), "UTF-8"),
+		    CSVFormat.DEFAULT);
     for (CSVRecord csvRecord : parser) {
       if (1 < csvRecord.getRecordNumber() && 4 <= csvRecord.size()
           && isValidEmailAddress(csvRecord.get(2).trim())) {
