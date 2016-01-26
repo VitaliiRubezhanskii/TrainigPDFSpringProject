@@ -48,3 +48,7 @@
 .ui-block-c textarea#msgtext1 {
   height: 190px !important;
 }
+
+#newpresname {
+  overflow-y: scroll;
+}

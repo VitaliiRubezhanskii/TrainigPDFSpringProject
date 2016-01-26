@@ -1,12 +1,14 @@
 package slidepiper.db;
 
+import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-
 import javax.xml.bind.DatatypeConverter;
 
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.io.IOUtils;
 import org.hashids.Hashids;
 
 import slidepiper.config.ConfigProperties;
@@ -1373,6 +1375,67 @@ public class DbLayer {
       }
       
       
+      /**
+       * Set the uploaded file and the file hash referring to it.
+       * 
+       * @param file A file object received from uploading a file via the frontend.
+       * @param salesmanEmail The salesman email address.
+       * 
+       * @return The file enumerated hash.
+       * @throws IOException
+       */
+      public static String setFileHash(FileItem file, String salesmanEmail) throws IOException {
+        
+        Connection conn = null;
+        String sqlInsert = "INSERT INTO slides (file, sales_man_email, name) VALUES (?, ?, ?)";
+        String sqlSelectAfterInsert = "SELECT id_ai, id FROM slides WHERE id_ai=?";
+        String fileHash = null;
+        
+        try {
+          Constants.updateConstants();
+          conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
+          PreparedStatement ps = conn.prepareStatement(sqlInsert, Statement.RETURN_GENERATED_KEYS);                
+          
+          ps.setBytes(1, IOUtils.toByteArray(file.getInputStream()));
+          ps.setString(2, salesmanEmail);
+          ps.setString(3, file.getName());
+          ps.executeUpdate();
+          ResultSet rs = ps.getGeneratedKeys();
+          
+          if (rs.next()) {
+            Hashids hashids = new Hashids(ConfigProperties.getProperty("hashids_salt"), 
+                Integer.parseInt(ConfigProperties.getProperty("hashids_minimum_file_hash_length")),
+                ConfigProperties.getProperty("hashids_custom_hash_alphabet"));
+            long generatedKey = rs.getLong(1);
+            fileHash = hashids.encode(generatedKey);
+            
+            ps = conn.prepareStatement(sqlSelectAfterInsert, ResultSet.TYPE_FORWARD_ONLY,
+                ResultSet.CONCUR_UPDATABLE);
+            ps.setLong(1, generatedKey);
+            rs = ps.executeQuery();
+            
+            if (rs.next()) {
+              rs.updateString("id", fileHash);
+              rs.updateRow();
+            }
+          }
+        } catch (SQLException ex) {
+          System.err.println("Error code: " + ex.getErrorCode() + " - " + ex.getMessage());
+          ex.printStackTrace();
+        } finally {
+          if (null != conn) {
+            try {
+              conn.close();
+            } catch (SQLException ex) {
+              ex.printStackTrace();
+            }
+          }
+        }
+        
+        return fileHash;
+      }
+      
+      
 			/**
        * Set the file link hash used for the file viewer,
        * i.e. www.slidepiper.com/view?f=<file link hash>
@@ -1381,7 +1444,7 @@ public class DbLayer {
        * @param salesmanEmail The salesman email.
        * @param fileHash A file hash. 
        * 
-       * @return      The file link enumerated hash.
+       * @return The file link enumerated hash.
        */
       public static String setFileLinkHash(String customerEmail, String fileHash,
           String salesmanEmail) {
@@ -1400,10 +1463,10 @@ public class DbLayer {
         try {
           conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
           PreparedStatement ps = conn.prepareStatement(sqlSelect);
+          
           ps.setString(1, customerEmail);
           ps.setString(2, fileHash);
           ps.setString(3, salesmanEmail);
-          
           ResultSet rs = ps.executeQuery();
           
           if (rs.next()) {
@@ -1414,16 +1477,15 @@ public class DbLayer {
             ps.setString(1, customerEmail);
             ps.setString(2, salesmanEmail);
             ps.setString(3, fileHash);
-            
             ps.executeUpdate();
             rs = ps.getGeneratedKeys();
             
             if (rs.next()) {
               Hashids hashids = new Hashids(ConfigProperties.getProperty("hashids_salt"), 
-                  Integer.parseInt(ConfigProperties.getProperty("hashids_minimum_hash_length")),
+                  Integer.parseInt(ConfigProperties.getProperty("hashids_minimum_file_link_hash_length")),
                   ConfigProperties.getProperty("hashids_custom_hash_alphabet"));
               long generatedKey = rs.getLong(1);
-              String linkHash = hashids.encode(generatedKey);
+              fileLinkHash = hashids.encode(generatedKey);
               
               ps = conn.prepareStatement(sqlSelectAfterInsert, ResultSet.TYPE_FORWARD_ONLY,
                   ResultSet.CONCUR_UPDATABLE);
@@ -1431,9 +1493,8 @@ public class DbLayer {
               rs = ps.executeQuery();
               
               if (rs.next()) {
-                rs.updateString("id", linkHash);
+                rs.updateString("id", fileLinkHash);
                 rs.updateRow();
-                fileLinkHash = linkHash;
               }
             }
           }

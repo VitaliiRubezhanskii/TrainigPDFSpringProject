@@ -3,8 +3,7 @@
 
     <!-- *************************************** head ********************************** -->
 <head>
-	<!--  <meta charset="utf-8"> -->
-	 <meta http-equiv='Content-Type' content='text/html;charset=ISO 8859-8' >
+	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Slidepiper</title>
 	
@@ -302,20 +301,20 @@
    <a href="#popupUpdatePresentation" data-rel="popup" data-position-to="window" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-plus ui-btn-icon-left ui-btn-a" data-transition="pop">Update</a>
 
 <div data-role="popup" id="popupAddPresentation" data-theme="b" class="ui-corner-all">
-		<h1>Upload Presentation</h1>
+		<h1>Upload Presentations</h1>
 		<form method="post" id="uploadform" action="uploadSlides" data-ajax="false"  enctype="multipart/form-data">
 			<table border="0">
 				<tr>
 					<!-- <td>Your Email (Salesman email, should be hidden): </td> -->
 					<td><input type="hidden" name="salesman_email" id="salesman_email" size="50"/></td>
 				</tr>
-				<tr>
-					<td>Presentation Name: </td>
-					<td><input type="text" name="name" id="newpresname" size="30"/></td>
+                <tr>
+					<td>Presentations Names: </td>
+					<td><textarea name="name" id="newpresname" readonly></textarea></td>
 				</tr>
 				<tr>
-					<td>Presentation File - PDF only <BR> (recommended size - up to 2MB): </td>
-					<td><input type="file" name="file" id="file" size="50"/></td>
+					<td>Presentations Files - PDF only <BR> (recommended size - up to 2MB): </td>
+					<td><input type="file" name="file" id="file" size="50" multiple accept=".pdf"/></td>
 				</tr>
 				<tr>
 					<td colspan="2">

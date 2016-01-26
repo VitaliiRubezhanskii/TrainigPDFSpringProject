@@ -164,4 +164,17 @@ $(document).ready(function() {
       }
 	});
 	
+	
+	/**
+	 * List the files to be uploaded.
+	 * 
+	 * @see http://stackoverflow.com/questions/13652955/get-all-values-of-multiple-file-select-with-jquery
+	 */
+	$('form[id="uploadform"] input[id="file"]').change(function() {
+	  var filesNames = "";
+	  for (var i = 0; i < $(this)[0].files.length; i++) {
+	    filesNames += $(this)[0].files[i].name + "\n";
+	  }
+	  $("#newpresname").val(filesNames);
+	});
 });
