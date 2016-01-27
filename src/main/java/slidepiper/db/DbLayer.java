@@ -3,8 +3,11 @@ package slidepiper.db;
 import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
 import javax.xml.bind.DatatypeConverter;
 
 import org.apache.commons.fileupload.FileItem;
@@ -95,12 +98,17 @@ public class DbLayer {
 		{
 		 
 				String query = "INSERT INTO customers(email, name, first_name, last_name, sales_man, company) VALUES (?, ?, ?, ?, ?, ?)";
+				String fullName = null;
 				try (Connection conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);) 
 					{			
 					try{
 							PreparedStatement preparedStatement = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+							
+							if (null != firstName && null != lastName) {
+							  fullName = firstName + " " + lastName;
+							}
 							preparedStatement.setString(1, email.toLowerCase());
-							preparedStatement.setString(2, firstName + " " + lastName);
+							preparedStatement.setString(2, fullName);
 							preparedStatement.setString(3, firstName);
 							preparedStatement.setString(4, lastName);
 							preparedStatement.setString(5, salesMan.toLowerCase());
@@ -1195,45 +1203,85 @@ public class DbLayer {
 			    }
 			}
 			
+			 
+			/**
+       * Check if a customer record exists in the DB.
+       * 
+       * @param customerEmail The customer email.
+       * @param salesmanEmail The salesman email.
+       * 
+       * @return True if a record exists in the DB, otherwise false.
+       */
+			public static boolean isCustomerExist(String customerEmail, String salesmanEmail) {
+        boolean isEmailExist = false;
+        Connection conn = null;
+        String sql = "SELECT email FROM customers WHERE email=? AND sales_man=?";
+        
+        try {
+          conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
+          PreparedStatement stmt = conn.prepareStatement(sql);        
+          stmt.setString(1, customerEmail);
+          stmt.setString(2, salesmanEmail);
+          ResultSet rs = stmt.executeQuery();     
+          
+          rs.last();
+          if (1 == rs.getRow()) {
+            isEmailExist = true;
+          }
+        } catch (SQLException ex) {
+          System.err.println("Error code: " + ex.getErrorCode() + " - " + ex.getMessage());
+        } finally {
+          if (null != conn) {
+            try {
+              conn.close();
+            } catch (SQLException ex) {
+              ex.printStackTrace();
+            }
+          }
+        }
+        
+        return isEmailExist;
+      }
+			
 			
 			/**
-			 * Check if a salesman record exists in the DB.
-			 * 
-			 * @param email	The salesman email to be checked.
-			 * 
-			 * @return		True if a record exists in the DB, or false.
-			 */
-			public static boolean isSalesmanExist(String email) {
-				boolean isEmailExist = false;
-				Connection conn = null;
-				String sql = "SELECT email FROM sales_men WHERE email=?";
-				
-				try {
-					conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
-					PreparedStatement stmt = conn.prepareStatement(sql);				
-					stmt.setString(1, email);
-					ResultSet rs = stmt.executeQuery();			
-					
-					rs.last();
-					if (1 == rs.getRow()) {
-						isEmailExist = true;
-					}
-				} catch (SQLException ex) {
-					System.err.println("Error code: " + ex.getErrorCode() + " - " + ex.getMessage());
-				} finally {
-					if (null != conn) {
-						try {
-							conn.close();
-						} catch (SQLException ex) {
-							ex.printStackTrace();
-						}
-					}
-				}
-				
-				return isEmailExist;
-			}
+       * Check if a salesman record exists in the DB.
+       * 
+       * @param email The salesman email to be checked.
+       * 
+       * @return True if a record exists in the DB, otherwise false.
+       */
+      public static boolean isSalesmanExist(String email) {
+        boolean isEmailExist = false;
+        Connection conn = null;
+        String sql = "SELECT email FROM sales_men WHERE email=?";
+        
+        try {
+          conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
+          PreparedStatement stmt = conn.prepareStatement(sql);        
+          stmt.setString(1, email);
+          ResultSet rs = stmt.executeQuery();     
+          
+          rs.last();
+          if (1 == rs.getRow()) {
+            isEmailExist = true;
+          }
+        } catch (SQLException ex) {
+          System.err.println("Error code: " + ex.getErrorCode() + " - " + ex.getMessage());
+        } finally {
+          if (null != conn) {
+            try {
+              conn.close();
+            } catch (SQLException ex) {
+              ex.printStackTrace();
+            }
+          }
+        }
+        
+        return isEmailExist;
+      }
 			
-      
+			
       /**
        * Get data about a specific customer such as his first name. 
        * 
@@ -1277,6 +1325,64 @@ public class DbLayer {
         }
         
         return salesmanMap;
+      }
+      
+      
+      /**
+       * Retrieve a salesman customer file links.
+       * 
+       * @param customerEmail The customer email address.
+       * @param salesmanEmail The salesman email address
+       * 
+       * @return The salesman customer file links.
+       */
+      public static List<String[]> getFileLinks(String customerEmail, String salesmanEmail) {
+        Connection conn = null;
+        String sql = "SELECT msg_info.id, slides.name FROM msg_info"
+            + " INNER JOIN slides ON msg_info.slides_id=slides.id"
+            + " WHERE msg_info.customer_email=? AND msg_info.sales_man_email=?";
+        List<String[]> fileLinkList = new ArrayList<String[]>();
+        
+        try {
+          Constants.updateConstants();
+          
+          try {
+            Class.forName("com.mysql.jdbc.Driver");
+          } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+          }
+          
+          conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
+          PreparedStatement ps = conn.prepareStatement(sql);
+          ps.setString(1, customerEmail);
+          ps.setString(2, salesmanEmail);
+          
+          ResultSet rs = ps.executeQuery();
+          while (rs.next()) {
+            String[] row = {
+                ConfigProperties.getProperty("app_url")
+                    + ConfigProperties.FILE_VIEWER_PATH + "?"
+                    + ConfigProperties.getProperty("file_viewer_query_parameter") + "="
+                    + rs.getString(1),
+                rs.getString(2)};
+
+            fileLinkList.add(row);
+          }
+          
+        } catch (SQLException ex) {
+          System.err.println("Error code: " + ex.getErrorCode() + " - " + ex.getMessage());
+          ex.printStackTrace();
+        } finally {
+          if (null != conn) {
+            try {
+              conn.close();
+            } catch (SQLException ex) {
+              ex.printStackTrace();
+            }
+          }
+        }
+        
+        return fileLinkList;
       }
       
       

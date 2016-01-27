@@ -15,6 +15,8 @@ function initPage() {
 
 	$("#salesman_email").val(getCookie("SalesmanEmail").toLowerCase());
 	$("#myAccount").html(getCookie("SalesmanEmail").toLowerCase());
+	$('#sp-download-file-links').attr('href', 'download-file-links?salesman-email='
+      + getCookie("SalesmanEmail").toLowerCase());
 }
 
 // run init on event.
