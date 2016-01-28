@@ -13,6 +13,8 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
@@ -20,6 +22,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
+
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVRecord;
+import org.apache.commons.io.IOUtils;
 
 
 //upload CSV file of customers
@@ -30,97 +37,46 @@ public class UploadCustomers extends HttpServlet {
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		
-		Constants.updateConstants();
 		String salesman_email = request.getParameter("salesman_email_for_csv");
 		//String name = request.getParameter("name");		
 		
 		System.out.println("uploadCustomers servlet Parameters - email " + salesman_email );
 		//" name of pres: " + name);
-			
-		InputStream inputStream = null;	// input stream of the upload file
 		
 		// obtains the upload file part in this multipart request
 		Part filePart = request.getPart("filecsv");
 		
-		System.out.println("req'd file");
+		CSVParser parser = CSVParser.parse(IOUtils.toString(filePart.getInputStream(), "UTF-8"),
+		    CSVFormat.DEFAULT);
+    for (CSVRecord csvRecord : parser) {
+      if (1 < csvRecord.getRecordNumber() && 4 <= csvRecord.size()
+          && isValidEmailAddress(csvRecord.get(2).trim())) {
+        DbLayer.addNewCustomer(salesman_email, csvRecord.get(0).trim(), csvRecord.get(1).trim(),
+            csvRecord.get(3).trim(), csvRecord.get(2).trim());
+      }
+    }
 		
-		if (filePart != null) {
-			// prints out some information for debugging
-			System.out.println(filePart.getName());
-			System.out.println(filePart.getSize());
-			System.out.println(filePart.getContentType());
-			
-			// obtains input stream of the upload file
-			inputStream = filePart.getInputStream();
-		}
-		
-		Connection conn = null;	// connection to the database
-		String message = null;	// message will be sent back to client
-		
-		try {
-			// connects to the database
-			DriverManager.registerDriver(new com.mysql.jdbc.Driver());
-			conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);						
-			
-			if (inputStream != null) {
-				// fetches input stream of the upload file for the blob column
-				// setBlob not in my jdbc driver, so I get AbstractMethodError
-				//statement.setBlob(3, inputStream);
-
-				InputStream in = inputStream;
-				
-				BufferedReader br = null;
-				String line = "";
-				String cvsSplitBy = ",";
-
-
-        br = new BufferedReader(new InputStreamReader(in, "UTF-8"));
-        //br = new BufferedReader(new InputStreamReader(in/*, "UTF-8"*/));
-        line = br.readLine(); // read and ignore first line.
-				while ((line = br.readLine()) != null) {
-				        // use comma as separator
-					String[] splitted = line.split(cvsSplitBy);
-
-					if (splitted.length >=3)
-						// ignore if not enough in splitted.
-					{
-							//System.out.println("splitted: 0: " + splitted[0] + " 1: "+ splitted[1] + " 2: "+ splitted[2] );
-							String firstName = splitted[0];
-							String lastName = splitted[1];
-							String email = splitted[2];
-							String company = splitted[3];
-							
-							//if (custname.equalsIgnoreCase("")) custname = email;
-							if (company.equalsIgnoreCase("")) company = email;
-							DbLayer.addNewCustomer(salesman_email, firstName, lastName, company, email);
-					}
-					else
-					{
-						System.out.println("ignoring line with out enough CSV items: " + line );
-					}
-				}
-			} // if
-		}  catch (SQLException ex) 
-				{
-								message = "ERROR: " + ex.getMessage();
-								ex.printStackTrace();
-				} finally {
-								if (conn != null) {
-									// closes the database connection
-									try {
-										conn.close();
-									} catch (SQLException ex) {
-										ex.printStackTrace();
-									}
-								}
-				 }				
-		 			
-
-		// top level in func
-			// sets the message in request scope
-			request.setAttribute("Message", message);
-						
-			// back to system page
-			getServletContext().getRequestDispatcher("/uploadcustomersmessage.html").forward(request, response);		
+    getServletContext().getRequestDispatcher("/uploadcustomersmessage.html").forward(request, response);
+	}
+	
+	
+	/**
+	 * Check weather an email address is valid or not.
+	 * 
+	 * @see http://stackoverflow.com/questions/624581/what-is-the-best-java-email-address-validation-method
+	 * 
+	 * @param email The tested email address.
+	 * 
+	 * @return True if email is a valid email address, false otherwise.
+	 */
+	public static boolean isValidEmailAddress(String email) {
+	   boolean result = true;
+	   try {
+	      InternetAddress emailAddr = new InternetAddress(email);
+	      emailAddr.validate();
+	   } catch (AddressException ex) {
+	      result = false;
+	   }
+	   return result;
 	}
 }
