@@ -1,6 +1,7 @@
 package slidepiper.db;
 
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -1504,7 +1505,7 @@ public class DbLayer {
           
           ps.setBytes(1, IOUtils.toByteArray(file.getInputStream()));
           ps.setString(2, salesmanEmail);
-          ps.setString(3, file.getName());
+          ps.setString(3, Paths.get(file.getName()).getFileName().toString());
           ps.executeUpdate();
           ResultSet rs = ps.getGeneratedKeys();
           

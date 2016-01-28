@@ -2,6 +2,7 @@ package slidepiper.salesman_servlets;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Paths;
 
 import slidepiper.config.ConfigProperties;
 import slidepiper.db.DbLayer;
@@ -90,7 +91,7 @@ public class UploadSlides extends HttpServlet {
           if (null != fileHash) {
             eventDataMap.put("param_1_varchar", salesmanEmail);
             eventDataMap.put("param_2_varchar", fileHash);
-            eventDataMap.put("param_3_varchar", file.getName());
+            eventDataMap.put("param_3_varchar", Paths.get(file.getName()).getFileName().toString());
             eventDataMap.put("param_4_varchar", Long.toString(file.getSize()));
             DbLayer.setEvent(ConfigProperties.getProperty("event_upload_file"), eventDataMap);
           }
