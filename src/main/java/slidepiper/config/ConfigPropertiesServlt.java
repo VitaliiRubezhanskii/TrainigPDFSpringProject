@@ -40,7 +40,8 @@ public class ConfigPropertiesServlt extends HttpServlet {
       google.put("scopes", ConfigProperties.getProperty("google_scopes")); 
       data.put("google", google);
 	    
-	    email.put("mergeTagStartCharacter", ConfigProperties.getProperty("merge_tag_start_character")); 
+      email.put("defaultCustomerEmail", ConfigProperties.getProperty("default_customer_email"));
+      email.put("mergeTagStartCharacter", ConfigProperties.getProperty("merge_tag_start_character")); 
 	    email.put("mergeTagEndCharacter", ConfigProperties.getProperty("merge_tag_end_character"));
 	    email.put("mergeTagDelimiter", ConfigProperties.getProperty("merge_tag_delimiter"));
 	    email.put("mergeTagFile", EmailSender.MERGE_TAG_FILE);
