@@ -4,6 +4,13 @@ SlidePiper README File
 Change Log
 ----------
 
+### 0.3.2
+
+2016-01-28 Yaniv Friedensohn <yanivf@slidepiper.com>
+
+* Fixed customers import mechanism.
+
+
 ### 0.3.1
 
 2016-01-20 Yaniv Friedensohn <yanivf@slidepiper.com>
