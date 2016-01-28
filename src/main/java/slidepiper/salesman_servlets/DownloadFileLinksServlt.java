@@ -30,11 +30,11 @@ public class DownloadFileLinksServlt extends HttpServlet {
     String[] titleArray = {"File Link", "File Name"};
     fileLinkList.add(0, titleArray);
     
-    response.setContentType("text/csv");
+    response.setContentType("text/csv; charset=UTF-8");
     response.setHeader("Content-Disposition", "attachment; filename=\"file-links.csv\"");
     PrintWriter pw = response.getWriter();
     CSVPrinter printer = new CSVPrinter(pw, CSVFormat.DEFAULT);
-    for (String[] row: fileLinkList) {     
+    for (String[] row: fileLinkList) {
       printer.printRecord((Object[]) row);
     }
     
