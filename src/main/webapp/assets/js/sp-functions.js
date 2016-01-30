@@ -4,10 +4,6 @@ sp = {
   config: {},  
   
   init: (function() {
-    
-    // Since sp-functions.js is loaded at the end of index.html, it is safe to put here this CSS rule.
-    $('form[role="search"], .navbar-right, .profile-element .text-muted').css('visibility', 'hidden');
-    
     var path = window.location.pathname.split( '/' ).splice(-2).join('/');
     var configUrl = 'config';
     if ('dashboard/index.html' == path || 'dashboard/' == path) {
@@ -20,29 +16,6 @@ sp = {
         $('#send_email_to_customers').css('visibility', 'visible');
         $('#sp-salesman-full-name strong').text(sp.config.salesman.name);
         sp.table.setFilesData();
-        //var table = $('#sp-files-data__table').DataTable();
-        
-        /*
-        var data = table.buttons.exportData( {
-            format: {
-                header: function ( data, columnIdx ) {
-                    return columnIdx +': '+ data;
-                }
-            }
-        } );
-        */
-        /*
-        var table = sp.table.setFilesData();
-        var data = table.buttons.exportData({
-          format: {
-            body: function(data, columnIndex, rowIndex) {
-              if (1 == columnIndex) {  
-                return columnIdx +': '+ data;
-              }
-            }
-          }
-        });
-        */
         new Clipboard('.sp-copy__button');
       });
     });
@@ -240,11 +213,7 @@ sp = {
              'targets': 4
           }
         ],
-        dom: '<"html5buttons"B>lTfgitp',
-        initComplete: function(settings, json) {
-          //alert( 'DataTables has finished its initialisation.' );
-          $('.sp-copy__button').css('float', 'right');
-        }
+        dom: '<"html5buttons"B>lTfgitp'
       });
     }
   }
