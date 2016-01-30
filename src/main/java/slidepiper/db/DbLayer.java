@@ -1387,6 +1387,50 @@ public class DbLayer {
       }
       
       
+      /**
+       * Get event related tabular data from the DB.
+       * 
+       * @param salesmanEmail The salesman email.
+       * @param sql The SQL query to execute.
+       * 
+       * @return The fetched tabular data from the DB.
+       */
+      public static List<String[]> getEventData(String salesmanEmail, String sql) {
+        Connection conn = null;
+        List<String[]> dataEventList = new ArrayList<String[]>();
+        
+        try {
+          Constants.updateConstants();
+          conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
+          PreparedStatement ps = conn.prepareStatement(sql);
+          ps.setString(1, salesmanEmail);
+          
+          ResultSet rs = ps.executeQuery();
+          while (rs.next()) {
+            String[] row = new String[rs.getMetaData().getColumnCount()];
+            for (int i = 0; i < row.length; i++) {
+              row[i] = rs.getString(i + 1);
+            }
+            dataEventList.add(row);
+          }
+          
+        } catch (SQLException ex) {
+          System.err.println("Error code: " + ex.getErrorCode() + " - " + ex.getMessage());
+          ex.printStackTrace();
+        } finally {
+          if (null != conn) {
+            try {
+              conn.close();
+            } catch (SQLException ex) {
+              ex.printStackTrace();
+            }
+          }
+        }
+        
+        return dataEventList;
+      }
+
+      
 			/**
 			 * Get data about a specific salesman such as his first name. 
 			 * 
@@ -1396,10 +1440,16 @@ public class DbLayer {
 			 * String. Binary values retrieved from the DB are converted to a Base64 string.
 			 */
       public static Map<String, String> getSalesman(String salesmanEmail) {
-        
         Connection conn = null;
         Map<String, String> salesmanMap = new HashMap<String, String>();
         String sql = "SELECT * FROM sales_men WHERE email=?";
+        
+        Constants.updateConstants();
+        try {
+          Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+          e.printStackTrace();
+        }
         
         try {
           conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);

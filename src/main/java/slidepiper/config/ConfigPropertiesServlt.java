@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONObject;
 
+import slidepiper.constants.Constants;
+import slidepiper.db.DbLayer;
 import slidepiper.email.EmailSender;
 
 @SuppressWarnings("serial")
@@ -24,8 +26,8 @@ public class ConfigPropertiesServlt extends HttpServlet {
 	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
-	
-		response.setContentType("application/json");
+	  
+		response.setContentType("application/json; charset=UTF-8");
 		PrintWriter out = response.getWriter();
 		
 		try {
@@ -34,7 +36,12 @@ public class ConfigPropertiesServlt extends HttpServlet {
 		  JSONObject google = new JSONObject();
 			
 		  data.put("appUrl", ConfigProperties.getProperty("app_url"));
+		  data.put("viewerUrlWithoutFileLink",
+		      ConfigProperties.getProperty("app_url")
+          + ConfigProperties.FILE_VIEWER_PATH + "?"
+          + ConfigProperties.getProperty("file_viewer_query_parameter") + "=");
 		  data.put("webSocketsUrl", ConfigProperties.getProperty("websockets_url"));
+		  data.put("salesman", DbLayer.getSalesman(request.getParameter("salesmanEmail")));
 		  
 		  google.put("clientId", ConfigProperties.getProperty("google_client_id"));
       google.put("scopes", ConfigProperties.getProperty("google_scopes")); 

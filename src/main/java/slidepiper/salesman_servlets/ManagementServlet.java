@@ -5,6 +5,7 @@ import java.io.BufferedReader;
 import slidepiper.config.ConfigProperties;
 import slidepiper.dataobjects.Customer;
 import slidepiper.dataobjects.Presentation;
+import slidepiper.db.Analytics;
 import slidepiper.db.DbLayer;
 import slidepiper.email.EmailSender;
 
@@ -13,6 +14,7 @@ import java.io.PrintWriter;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -72,9 +74,16 @@ public class ManagementServlet extends HttpServlet {
 	      String mailType = DbLayer.getSalesmanMailType(request.getParameter("salesmanEmail"));
 	      data.put("mailType", mailType);
         break;
+        
+	    case "getFilesData":  
+        List<String[]> filesData = DbLayer.getEventData(
+            request.getParameter("salesmanEmail"),
+            Analytics.sqlFileData);
+        data.put("filesData", filesData);
+        break;
 	  }
 	  
-	  response.setContentType("application/json"); // TODO: add also charset="UTF-8"?
+	  response.setContentType("application/json; charset=UTF-8");
     PrintWriter output = response.getWriter(); // TODO: is output redundant as I can write response.getWriter().print(data);
     output.print(data);  // TODO: is this statment needed?
     output.close(); // TODO: is this statment needed?

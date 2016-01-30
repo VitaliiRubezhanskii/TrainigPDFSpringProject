@@ -4,9 +4,47 @@ sp = {
   config: {},  
   
   init: (function() {
-    $.getJSON('config', function(data) {
+    
+    // Since sp-functions.js is loaded at the end of index.html, it is safe to put here this CSS rule.
+    $('form[role="search"], .navbar-right, .profile-element .text-muted').css('visibility', 'hidden');
+    
+    var path = window.location.pathname.split( '/' ).splice(-2).join('/');
+    var configUrl = 'config';
+    if ('dashboard/index.html' == path || 'dashboard/' == path) {
+      configUrl = '../' + configUrl;  
+    }
+    $.getJSON(configUrl, {salesmanEmail: $.cookie("SalesmanEmail")}, function(data) {
       sp.config = data;
-      $('#send_email_to_customers').css('visibility', 'visible');
+      
+      $(document).ready(function() {
+        $('#send_email_to_customers').css('visibility', 'visible');
+        $('#sp-salesman-full-name strong').text(sp.config.salesman.name);
+        sp.table.setFilesData();
+        //var table = $('#sp-files-data__table').DataTable();
+        
+        /*
+        var data = table.buttons.exportData( {
+            format: {
+                header: function ( data, columnIdx ) {
+                    return columnIdx +': '+ data;
+                }
+            }
+        } );
+        */
+        /*
+        var table = sp.table.setFilesData();
+        var data = table.buttons.exportData({
+          format: {
+            body: function(data, columnIndex, rowIndex) {
+              if (1 == columnIndex) {  
+                return columnIdx +': '+ data;
+              }
+            }
+          }
+        });
+        */
+        new Clipboard('.sp-copy__button');
+      });
     });
   })(),
   
@@ -81,6 +119,133 @@ sp = {
             + '?subject=' + encodeURIComponent(data.emailSubject)
             + '&body='  + encodeURIComponent(data.emailBody);
       }
+    }
+  },
+  
+  table: {
+    
+    /**
+     * 
+     */
+    setFilesData: function() {
+      table = $('#sp-files-data__table').DataTable({
+        ajax: {
+          url: '../ManagementServlet',
+          data: {action: 'getFilesData', salesmanEmail: sp.config.salesman.email},
+          dataSrc: 'filesData'
+        },      
+        buttons: [
+          {
+            extend: 'copy',
+            exportOptions: {
+              format: {
+                body: function(data, columnIndex, rowIndex) {
+                  if (1 == columnIndex) {  
+                    return data.match(/^(.+?)<button/).pop();
+                  } else {
+                    return data;
+                  }
+                }
+              }
+            }
+          },
+          {
+            extend: 'csv',
+            title: 'files-data',
+            exportOptions: {
+              format: {
+                body: function(data, columnIndex, rowIndex) {
+                  if (1 == columnIndex) {  
+                    return data.match(/^(.+?)<button/).pop();
+                  } else {
+                    return data;
+                  }
+                }
+              }
+            }
+          },
+          {
+            extend: 'excel',
+            title: 'files-data',
+            exportOptions: {
+              format: {
+                body: function(data, columnIndex, rowIndex) {
+                  if (1 == columnIndex) {  
+                    return data.match(/^(.+?)<button/).pop();
+                  } else {
+                    return data;
+                  }
+                }
+              }
+            }
+          },
+          {
+            extend: 'pdf',
+            title: 'files-data',
+            exportOptions: {
+              format: {
+                body: function(data, columnIndex, rowIndex) {
+                  if (1 == columnIndex) {  
+                    return data.match(/^(.+?)<button/).pop();
+                  } else {
+                    return data;
+                  }
+                }
+              }
+            }
+          },
+          {
+            extend: 'print',
+            exportOptions: {
+              format: {
+                body: function(data, columnIndex, rowIndex) {
+                  if (1 == columnIndex) {  
+                    return data.match(/^(.+?)<button/).pop();
+                  } else {
+                    return data;
+                  }
+                }
+              }
+            },
+            customize: function (win){
+              $(win.document.body).addClass('white-bg');
+              $(win.document.body).css('font-size', '10px');
+              $(win.document.body).find('table')
+                .addClass('compact')
+                .css('font-size', 'inherit');
+            }
+          }
+        ],
+        columnDefs: [
+          {
+            'render': function (data, type, row) {
+              return sp.config.viewerUrlWithoutFileLink + data
+                  + '<button class="btn btn-white btn-xs sp-copy__button" data-clipboard-text="'
+                  + sp.config.viewerUrlWithoutFileLink + data + '">'
+                  + '<i class="fa fa-copy"></i> Copy</button>';
+          },
+            'sClass': 'sp-file-link__td',
+            'targets': 1
+          },
+          {
+            'render': function (data, type, row) {
+              return (parseFloat(data) * 100).toFixed(2) + '%';
+            },
+            'targets': 3
+          },
+          {
+            'render': function (data, type, row) {
+              return parseFloat(data).toFixed(2);
+             },
+             'targets': 4
+          }
+        ],
+        dom: '<"html5buttons"B>lTfgitp',
+        initComplete: function(settings, json) {
+          //alert( 'DataTables has finished its initialisation.' );
+          $('.sp-copy__button').css('float', 'right');
+        }
+      });
     }
   }
 };
