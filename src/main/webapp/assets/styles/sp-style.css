@@ -62,3 +62,20 @@ form[role="search"], .navbar-right, .profile-element .text-muted {
 .sp-copy__button {
   float: right; 
 }
+
+.sp-display-on {
+  display: block;
+}
+
+.sp-display-off {
+  display: none;
+}
+
+.sp-dashboard-progress { 
+  margin-bottom: 3px; 
+}
+
+.sp-chart-title-fa {
+  float: left;
+  margin-right: 10px;
+}

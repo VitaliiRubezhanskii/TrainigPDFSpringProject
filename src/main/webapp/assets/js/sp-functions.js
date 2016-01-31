@@ -12,11 +12,60 @@ sp = {
     $.getJSON(configUrl, {salesmanEmail: $.cookie("SalesmanEmail")}, function(data) {
       sp.config = data;
       
+      $.getJSON('../ManagementServlet',
+          {action: "getFileList", salesmanEmail: $.cookie("SalesmanEmail")}, function(data) {
+        if (0 < data.fileList.length) {
+          $('#sp-nav-files__li a').append('<span class="fa arrow"></span>');
+          $('#sp-nav-files__li a').after('<ul class="nav nav-second-level">');
+          
+          var firstFile = null;
+          $.each(data.fileList, function(index, row) {
+            $('#sp-nav-files__li ul').append('<li><a href="#" data-file-hash="' + row[0] + '">' + row[1] + '</a></li>');
+            if (0 == index) {
+              firstFile = row[0];
+              //$('#sp-nav-files__li li').addClass("active");
+            }
+          });
+          
+          $('#sp-nav-files__li a[data-file-hash]').click(function() {
+            //$(this).toggleClass('active');
+            $('.sp-display--on').removeClass('sp-display--on').addClass('sp-display--off');
+            $('#sp-file-dashboard').removeClass('sp-display--off').addClass('sp-display--on');
+            
+            $.getJSON('../ManagementServlet',
+                {
+                  action: "getFileData",
+                  fileHash: $(this).attr('data-file-hash'),
+                  salesmanEmail: $.cookie("SalesmanEmail")
+                },
+                function(data) {
+                  if (typeof data.fileData[0] !== 'undefined' ) {
+                    $('#sp-widget-total-views').text(data.fileData[0][0]);
+                    $('#sp-widget-bounce-rate').text(parseFloat(data.fileData[0][1]).toFixed(2) + '%');
+                  } else {
+                    $('#sp-widget-total-views').text('-');
+                    $('#sp-widget-bounce-rate').text('-');
+                  }
+                }
+            );
+            sp.graph.setFileLineChart(this);
+          });
+          $('#sp-nav-files__li a[data-file-hash="' + firstFile + '"]').click();
+        }
+        
+        $('#side-menu').metisMenu();        
+      });
+      
       $(document).ready(function() {
         $('#send_email_to_customers').css('visibility', 'visible');
         $('#sp-salesman-full-name strong').text(sp.config.salesman.name);
         sp.table.setFilesData();
         new Clipboard('.sp-copy__button');
+        
+        $('#sp-file-links-data').click(function(){
+          $('.sp-display--on').removeClass('sp-display--on').addClass('sp-display--off');
+          $('#sp-file-links-data').removeClass('sp-display--off').addClass('sp-display--on');
+        });
       });
     });
   })(),
@@ -104,8 +153,8 @@ sp = {
       table = $('#sp-files-data__table').DataTable({
         ajax: {
           url: '../ManagementServlet',
-          data: {action: 'getFilesData', salesmanEmail: sp.config.salesman.email},
-          dataSrc: 'filesData'
+          data: {action: 'getFileLinksData', salesmanEmail: sp.config.salesman.email},
+          dataSrc: 'fileLinksData'
         },      
         buttons: [
           {
@@ -216,7 +265,79 @@ sp = {
         dom: '<"html5buttons"B>lTfgitp'
       });
     }
+  },
+  
+  graph: {
+    
+    /**
+     * Set file line chart.
+     */
+    setFileLineChart: function(clickedElement) {
+      $.getJSON('../ManagementServlet', {action: "getFileLineChart",
+          fileHash: $(clickedElement).attr('data-file-hash'), salesmanEmail: $.cookie("SalesmanEmail")},
+          function(data) {
+            if (typeof data.fileLineChart[0] !== 'undefined' ) {
+              
+              var dataLabels = [];
+              var dataLine1 = [];
+              var dataLine2 = [];
+              $.each(data.fileLineChart, function(index) {
+                dataLabels.push(data.fileLineChart[index][3]);
+                dataLine1.push(data.fileLineChart[index][0]);
+                dataLine2.push(data.fileLineChart[index][2]);
+              });
+              
+              var lineData = {
+                  labels: dataLabels,
+                  datasets: [
+                     {
+                         label: "Example dataset",
+                         fillColor: "rgba(220,220,220,0.5)",
+                         strokeColor: "rgba(220,220,220,1)",
+                         pointColor: "rgba(220,220,220,1)",
+                         pointStrokeColor: "#fff",
+                         pointHighlightFill: "#fff",
+                         pointHighlightStroke: "rgba(220,220,220,1)",
+                         data: dataLine1
+                     },
+                     {
+                         label: "Example dataset",
+                         fillColor: "rgba(26,179,148,0.5)",
+                         strokeColor: "rgba(26,179,148,0.7)",
+                         pointColor: "rgba(26,179,148,1)",
+                         pointStrokeColor: "#fff",
+                         pointHighlightFill: "#fff",
+                         pointHighlightStroke: "rgba(26,179,148,1)",
+                         data: dataLine2
+                     }
+                 ]
+              };
+                
+    
+              var lineOptions = {
+                  scaleShowGridLines: true,
+                  scaleGridLineColor: "rgba(0,0,0,.05)",
+                  scaleGridLineWidth: 1,
+                  bezierCurve: true,
+                  bezierCurveTension: 0.4,
+                  pointDot: true,
+                  pointDotRadius: 4,
+                  pointDotStrokeWidth: 1,
+                  pointHitDetectionRadius: 20,
+                  datasetStroke: true,
+                  datasetStrokeWidth: 2,
+                  datasetFill: true,
+                  responsive: true,
+              }; 
+            }
+            
+            var ctx = document.getElementById("lineChart").getContext("2d");
+            var myNewChart = new Chart(ctx).Line(lineData, lineOptions);
+          }
+      );
+    }
   }
+
 };
 
 

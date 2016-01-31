@@ -67,6 +67,8 @@ public class ManagementServlet extends HttpServlet {
 	    throws IOException, ServletException {
 	
 	  JSONObject data = new JSONObject();
+	  ArrayList<String> parameterList = new ArrayList<String>();
+	  List<String[]> sqlData = new ArrayList<String[]>();
 	  
 	  switch (request.getParameter("action")) {
 	    case "getMailType":
@@ -74,12 +76,31 @@ public class ManagementServlet extends HttpServlet {
 	      String mailType = DbLayer.getSalesmanMailType(request.getParameter("salesmanEmail"));
 	      data.put("mailType", mailType);
         break;
+	    
+	    case "getFileData":
+        parameterList.add(request.getParameter("salesmanEmail"));
+        parameterList.add(request.getParameter("fileHash"));
+        sqlData = DbLayer.getEventData(parameterList, Analytics.sqlFileData);
+        data.put("fileData", sqlData);
+        break;
         
-	    case "getFilesData":  
-        List<String[]> filesData = DbLayer.getEventData(
-            request.getParameter("salesmanEmail"),
-            Analytics.sqlFileData);
-        data.put("filesData", filesData);
+	    case "getFileLineChart":
+        parameterList.add(request.getParameter("salesmanEmail"));
+        parameterList.add(request.getParameter("fileHash"));
+        sqlData = DbLayer.getEventData(parameterList, Analytics.sqlFileLineChart);
+        data.put("fileLineChart", sqlData);
+        break;
+        
+	    case "getFileLinksData":
+	      parameterList.add(request.getParameter("salesmanEmail"));
+        sqlData = DbLayer.getEventData(parameterList, Analytics.sqlFileLinksData);
+        data.put("fileLinksData", sqlData);
+        break;
+        
+	    case "getFileList":
+        parameterList.add(request.getParameter("salesmanEmail"));
+        sqlData = DbLayer.getEventData(parameterList, Analytics.sqlFileList);
+        data.put("fileList", sqlData);
         break;
 	  }
 	  

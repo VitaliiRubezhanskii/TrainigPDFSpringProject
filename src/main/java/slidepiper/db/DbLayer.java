@@ -1390,12 +1390,12 @@ public class DbLayer {
       /**
        * Get event related tabular data from the DB.
        * 
-       * @param salesmanEmail The salesman email.
+       * @param parameterList A list of parameters required for the SQL query.
        * @param sql The SQL query to execute.
        * 
        * @return The fetched tabular data from the DB.
        */
-      public static List<String[]> getEventData(String salesmanEmail, String sql) {
+      public static List<String[]> getEventData(ArrayList<String> parameterList, String sql) {
         Connection conn = null;
         List<String[]> dataEventList = new ArrayList<String[]>();
         
@@ -1403,7 +1403,9 @@ public class DbLayer {
           Constants.updateConstants();
           conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
           PreparedStatement ps = conn.prepareStatement(sql);
-          ps.setString(1, salesmanEmail);
+          for (int i = 0; i < parameterList.size(); i++) {
+            ps.setString(i + 1, parameterList.get(i));
+          }
           
           ResultSet rs = ps.executeQuery();
           while (rs.next()) {
