@@ -1,71 +1,92 @@
 /* Global Variables */
 var sp = sp || {};
 sp = {
-  config: {},  
   
-  init: (function() {
+  init: (function(fileHash) {
     var path = window.location.pathname.split( '/' ).splice(-2).join('/');
     var configUrl = 'config';
+    var isDashboard = false;
     if ('dashboard/index.html' == path || 'dashboard/' == path) {
-      configUrl = '../' + configUrl;  
+      configUrl = '../' + configUrl;
+      isDashboard = true;
     }
-    $.getJSON(configUrl, {salesmanEmail: $.cookie("SalesmanEmail")}, function(data) {
+    
+    $.getJSON(configUrl, {salesmanEmail: $.cookie('SalesmanEmail')}, function(data) {
       sp.config = data;
       
-      $.getJSON('../ManagementServlet',
-          {action: "getFileList", salesmanEmail: $.cookie("SalesmanEmail")}, function(data) {
-        if (0 < data.fileList.length) {
-          $('#sp-nav-files__li a').append('<span class="fa arrow"></span>');
-          $('#sp-nav-files__li a').after('<ul class="nav nav-second-level">');
-          
-          var firstFile = null;
-          $.each(data.fileList, function(index, row) {
-            $('#sp-nav-files__li ul').append('<li><a href="#" data-file-hash="' + row[0] + '">' + row[1] + '</a></li>');
-            if (0 == index) {
-              firstFile = row[0];
-              //$('#sp-nav-files__li li').addClass("active");
-            }
-          });
-          
-          $('#sp-nav-files__li a[data-file-hash]').click(function() {
-            //$(this).toggleClass('active');
-            $('.sp-display--on').removeClass('sp-display--on').addClass('sp-display--off');
-            $('#sp-file-dashboard').removeClass('sp-display--off').addClass('sp-display--on');
-            
-            $.getJSON('../ManagementServlet',
-                {
-                  action: "getFileData",
-                  fileHash: $(this).attr('data-file-hash'),
-                  salesmanEmail: $.cookie("SalesmanEmail")
-                },
-                function(data) {
-                  if (typeof data.fileData[0] !== 'undefined' ) {
-                    $('#sp-widget-total-views').text(data.fileData[0][0]);
-                    $('#sp-widget-bounce-rate').text(parseFloat(data.fileData[0][1]).toFixed(2) + '%');
-                  } else {
-                    $('#sp-widget-total-views').text('-');
-                    $('#sp-widget-bounce-rate').text('-');
-                  }
-                }
-            );
-            sp.graph.setFileLineChart(this);
-          });
-          $('#sp-nav-files__li a[data-file-hash="' + firstFile + '"]').click();
+      if (isDashboard) {
+        if (typeof $.cookie('SalesmanEmail') === 'undefined') {
+          window.location.href = sp.config.appUrl;
         }
         
-        $('#side-menu').metisMenu();        
-      });
+        $.getJSON(
+            '../ManagementServlet',
+            {action: 'getFilesData', salesmanEmail: sp.config.salesman.email},
+            function(data) {
+          var filesData = data.filesData;
+          
+          if (0 < filesData.length) {
+            $('#sp-nav-files__li a')
+                .append('<span class="fa arrow"></span>')
+                .after('<ul class="nav nav-second-level">');
+            
+            /**
+             * Set the file dashboard.
+             */
+            function setFileDashboard() {
+              if (typeof $.cookie('SalesmanEmail') === 'undefined') {
+                window.location.href = sp.config.appUrl;
+              }
+              
+              // Build side menu.
+              $('#sp-nav-files__li ul').empty();
+              
+              // Try to set fileHash.
+              var fileHash = $(this).children().attr('data-file-hash');
+              if (typeof fileHash === 'undefined' && typeof sp.filesTable !== 'undefined') {
+                fileHash = sp.filesTable.row($(this).parent()).data()[0];
+              }
+              
+              var files = [];
+              for (var i = 0; i < filesData.length; i++) {
+                
+                $('#sp-nav-files__li ul').append('<li><a href="#" data-file-hash="'
+                    + filesData[i][0] + '">' + filesData[i][1] + '</a></li>');
+                
+                if (typeof fileHash === 'undefined' || filesData[i][0] == fileHash) {
+                  fileHash = filesData[i][0];
+                  files[fileHash] = filesData[i];
+                  
+                  // A workaround for metisMenu dysfunctionality.
+                  $('#sp-nav-files__li li:has(a[data-file-hash="' + fileHash + '"])')
+                      .addClass("active");
+                }
+              }
+
+              // Build metrics.
+              sp.metric.setFileMetrics(files[fileHash]);
+              sp.graph.setFileLineChart(fileHash);
+              sp.graph.setFileBarChart(fileHash);
+              sp.table.setFilesTable(filesData);
+              
+              // Move to the top of the page.
+              $('html, body').animate({scrollTop: 0}, 'fast');
+            }
+            
+            // Run once.
+            setFileDashboard();
+            
+            // .click() cannot be used since '#sp-nav-files__li li' haven't been created yet.
+            $(document).on('click', '#sp-nav-files__li li, td.sp-file-hash', setFileDashboard);
+          }
+        });
+      }
       
       $(document).ready(function() {
         $('#send_email_to_customers').css('visibility', 'visible');
-        $('#sp-salesman-full-name strong').text(sp.config.salesman.name);
-        sp.table.setFilesData();
-        new Clipboard('.sp-copy__button');
         
-        $('#sp-file-links-data').click(function(){
-          $('.sp-display--on').removeClass('sp-display--on').addClass('sp-display--off');
-          $('#sp-file-links-data').removeClass('sp-display--off').addClass('sp-display--on');
-        });
+        $('#side-menu').metisMenu();
+        $('#sp-salesman-full-name strong').text(sp.config.salesman.name);
       });
     });
   })(),
@@ -113,7 +134,7 @@ sp = {
      */
     sendEmail: function(accessToken) {
       var data = {
-        action: "sendEmail",
+        action: 'sendEmail',
         data: {
           accessToken: accessToken,
           customerEmailArray: sp.email.customerEmailArray,
@@ -124,7 +145,7 @@ sp = {
         }
       };
           
-      $.post("ManagementServlet", JSON.stringify(data), this.sendEmailCallback, "json");
+      $.post('ManagementServlet', JSON.stringify(data), this.sendEmailCallback, 'json');
     },
     
     
@@ -134,7 +155,7 @@ sp = {
     // TODO: manage textStatus and jqXHR.
     sendEmailCallback: function(data, textStatus, jqXHR) {
       if (true == data.isApi) {
-        alert("Successfully sent " + data.emailSent + " email(s) out of " + sp.email.customerEmailArray.length);
+        alert('Successfully sent ' + data.emailSent + ' email(s) out of ' + sp.email.customerEmailArray.length);
       } else {
         location.href =
             'mailto:' + data.customerEmail
@@ -144,205 +165,291 @@ sp = {
     }
   },
   
+  metric: {
+    
+    /**
+     * Set the file metrics data. 
+     */
+    setFileMetrics: function(fileData) {
+      if (typeof fileData !== 'undefined' ) {
+        $('#sp-widget-total-views').text(fileData[3]);
+        $('#sp-widget-bounce-rate').text(parseFloat(fileData[4]).toFixed(2) + '%');
+      } else {
+        $('#sp-widget-total-views').text('0');
+        $('#sp-widget-bounce-rate').text('N/A');
+      }
+    }
+  },
+  
   table: {
     
     /**
+     * Set the files table into the sp.filesTable variable.
      * 
+     * @param object filesData A 2d array consisting of files data.
      */
-    setFilesData: function() {
-      table = $('#sp-files-data__table').DataTable({
-        ajax: {
-          url: '../ManagementServlet',
-          data: {action: 'getFileLinksData', salesmanEmail: sp.config.salesman.email},
-          dataSrc: 'fileLinksData'
-        },      
-        buttons: [
-          {
-            extend: 'copy',
-            exportOptions: {
-              format: {
-                body: function(data, columnIndex, rowIndex) {
-                  if (1 == columnIndex) {  
-                    return data.match(/^(.+?)<button/).pop();
-                  } else {
-                    return data;
-                  }
-                }
-              }
-            }
-          },
-          {
-            extend: 'csv',
-            title: 'files-data',
-            exportOptions: {
-              format: {
-                body: function(data, columnIndex, rowIndex) {
-                  if (1 == columnIndex) {  
-                    return data.match(/^(.+?)<button/).pop();
-                  } else {
-                    return data;
-                  }
-                }
-              }
-            }
-          },
-          {
-            extend: 'excel',
-            title: 'files-data',
-            exportOptions: {
-              format: {
-                body: function(data, columnIndex, rowIndex) {
-                  if (1 == columnIndex) {  
-                    return data.match(/^(.+?)<button/).pop();
-                  } else {
-                    return data;
-                  }
-                }
-              }
-            }
-          },
-          {
-            extend: 'pdf',
-            title: 'files-data',
-            exportOptions: {
-              format: {
-                body: function(data, columnIndex, rowIndex) {
-                  if (1 == columnIndex) {  
-                    return data.match(/^(.+?)<button/).pop();
-                  } else {
-                    return data;
-                  }
-                }
-              }
-            }
-          },
-          {
-            extend: 'print',
-            exportOptions: {
-              format: {
-                body: function(data, columnIndex, rowIndex) {
-                  if (1 == columnIndex) {  
-                    return data.match(/^(.+?)<button/).pop();
-                  } else {
-                    return data;
+    setFilesTable: function(filesData) {
+      if ($.fn.dataTable.isDataTable('#sp-files-data__table')) {
+        sp.filesTable = $('#sp-files-data__table').DataTable()
+            .clear()
+            .rows.add(filesData)
+            .draw();
+      } else {
+        var fileLinkColumnIndex = 2;
+        sp.filesTable = $('#sp-files-data__table').DataTable({
+          data: filesData,
+          buttons: [
+            {
+              extend: 'copy',
+              exportOptions: {
+                format: {
+                  body: function(data, columnIndex, rowIndex) {
+                    if (fileLinkColumnIndex == columnIndex) {  
+                      return data.match(/^(.+?)<button/).pop();
+                    } else {
+                      return data;
+                    }
                   }
                 }
               }
             },
-            customize: function (win){
-              $(win.document.body).addClass('white-bg');
-              $(win.document.body).css('font-size', '10px');
-              $(win.document.body).find('table')
-                .addClass('compact')
-                .css('font-size', 'inherit');
-            }
-          }
-        ],
-        columnDefs: [
-          {
-            'render': function (data, type, row) {
-              return sp.config.viewerUrlWithoutFileLink + data
-                  + '<button class="btn btn-white btn-xs sp-copy__button" data-clipboard-text="'
-                  + sp.config.viewerUrlWithoutFileLink + data + '">'
-                  + '<i class="fa fa-copy"></i> Copy</button>';
-          },
-            'sClass': 'sp-file-link__td',
-            'targets': 1
-          },
-          {
-            'render': function (data, type, row) {
-              return (parseFloat(data) * 100).toFixed(2) + '%';
+            {
+              extend: 'csv',
+              title: 'files-data',
+              exportOptions: {
+                format: {
+                  body: function(data, columnIndex, rowIndex) {
+                    if (fileLinkColumnIndex == columnIndex) {  
+                      return data.match(/^(.+?)<button/).pop();
+                    } else {
+                      return data;
+                    }
+                  }
+                }
+              }
             },
-            'targets': 3
-          },
-          {
-            'render': function (data, type, row) {
-              return parseFloat(data).toFixed(2);
-             },
-             'targets': 4
-          }
-        ],
-        dom: '<"html5buttons"B>lTfgitp'
-      });
+            {
+              extend: 'excel',
+              title: 'files-data',
+              exportOptions: {
+                format: {
+                  body: function(data, columnIndex, rowIndex) {
+                    if (fileLinkColumnIndex == columnIndex) {  
+                      return data.match(/^(.+?)<button/).pop();
+                    } else {
+                      return data;
+                    }
+                  }
+                }
+              }
+            },
+            {
+              extend: 'pdf',
+              title: 'files-data',
+              exportOptions: {
+                format: {
+                  body: function(data, columnIndex, rowIndex) {
+                    if (fileLinkColumnIndex == columnIndex) {  
+                      return data.match(/^(.+?)<button/).pop();
+                    } else {
+                      return data;
+                    }
+                  }
+                }
+              }
+            },
+            {
+              extend: 'print',
+              exportOptions: {
+                format: {
+                  body: function(data, columnIndex, rowIndex) {
+                    if (fileLinkColumnIndex == columnIndex) {  
+                      return data.match(/^(.+?)<button/).pop();
+                    } else {
+                      return data;
+                    }
+                  }
+                }
+              },
+              customize: function (win){
+                $(win.document.body).addClass('white-bg');
+                $(win.document.body).css('font-size', '10px');
+                $(win.document.body).find('table')
+                  .addClass('compact')
+                  .css('font-size', 'inherit');
+              }
+            }
+          ],
+          columnDefs: [
+              {
+                visible: false,
+                targets: 0
+              },
+              {
+                className: 'sp-file-hash',
+                targets: 1
+              },
+              {
+                render: function (data, type, row) {
+                  return sp.config.viewerUrlWithoutFileLink + data
+                      + '<button class="btn btn-white btn-xs sp-copy__button" data-clipboard-text="'
+                      + sp.config.viewerUrlWithoutFileLink + data + '">'
+                      + '<i class="fa fa-copy"></i> Copy</button>';
+                },
+                className: 'sp-file-link__td',
+                targets: 2
+              },
+              {
+                render: function (data, type, row) {
+                  return (parseFloat(data) * 100).toFixed(2) + '%';
+                },
+                targets: 4
+              },
+              {
+                defaultContent: '',
+                targets: 5
+              }
+          ],
+          dom: '<"html5buttons"B>lTfgitp',
+          order: [[ 1, 'asc' ]]
+        });
+      
+        new Clipboard('.sp-copy__button');
+      }
     }
   },
   
   graph: {
     
     /**
-     * Set file line chart.
+     * Set the file bar chart.
      */
-    setFileLineChart: function(clickedElement) {
-      $.getJSON('../ManagementServlet', {action: "getFileLineChart",
-          fileHash: $(clickedElement).attr('data-file-hash'), salesmanEmail: $.cookie("SalesmanEmail")},
-          function(data) {
-            if (typeof data.fileLineChart[0] !== 'undefined' ) {
-              
-              var dataLabels = [];
-              var dataLine1 = [];
-              var dataLine2 = [];
-              $.each(data.fileLineChart, function(index) {
-                dataLabels.push(data.fileLineChart[index][3]);
-                dataLine1.push(data.fileLineChart[index][0]);
-                dataLine2.push(data.fileLineChart[index][2]);
-              });
-              
-              var lineData = {
-                  labels: dataLabels,
-                  datasets: [
-                     {
-                         label: "Example dataset",
-                         fillColor: "rgba(220,220,220,0.5)",
-                         strokeColor: "rgba(220,220,220,1)",
-                         pointColor: "rgba(220,220,220,1)",
-                         pointStrokeColor: "#fff",
-                         pointHighlightFill: "#fff",
-                         pointHighlightStroke: "rgba(220,220,220,1)",
-                         data: dataLine1
-                     },
-                     {
-                         label: "Example dataset",
-                         fillColor: "rgba(26,179,148,0.5)",
-                         strokeColor: "rgba(26,179,148,0.7)",
-                         pointColor: "rgba(26,179,148,1)",
-                         pointStrokeColor: "#fff",
-                         pointHighlightFill: "#fff",
-                         pointHighlightStroke: "rgba(26,179,148,1)",
-                         data: dataLine2
-                     }
-                 ]
-              };
-                
+    setFileBarChart: function(fileHash) {
+      $.getJSON('../ManagementServlet', {action: 'getFileBarChart',
+          fileHash: fileHash, salesmanEmail: sp.config.salesman.email}, function(data) {
+          
+        if (typeof sp.graph.fileBarChart !== 'undefined') {
+          sp.graph.fileBarChart.destroy();
+        }
+      
+        var barData = {
+            labels: [],
+            datasets: [
+                {
+                    label: "My Second dataset",
+                    fillColor: "rgba(26,179,148,0.5)",
+                    strokeColor: "rgba(26,179,148,0.8)",
+                    highlightFill: "rgba(26,179,148,0.75)",
+                    highlightStroke: "rgba(26,179,148,1)",
+                    data: []
+                }
+            ]
+        };
+  
+        var barOptions = {
+            scaleBeginAtZero: true,
+            scaleShowGridLines: true,
+            scaleGridLineColor: "rgba(0,0,0,.05)",
+            scaleGridLineWidth: 1,
+            barShowStroke: true,
+            barStrokeWidth: 2,
+            barValueSpacing: 15,
+            barDatasetSpacing: 1,
+            responsive: true,
+            tooltipTemplate: "<%if (label){%><%='Page ' + label%>: <%}%><%= value + ' sec.' %>"
+        };
+        
+        if (typeof data.fileBarChart[0] !== 'undefined' ) {
+          $.each(data.fileBarChart, function(index, value) {
+            barData.labels.push(parseInt(value[0]));
+            barData.datasets[0].data.push(parseFloat(value[1]).toFixed(1));
+          });
+        }
+        
+        
+        var ctx = $('#barChart')[0].getContext('2d');
+        sp.graph.fileBarChart = new Chart(ctx).Bar(barData, barOptions);
+      });
+    },
     
-              var lineOptions = {
-                  scaleShowGridLines: true,
-                  scaleGridLineColor: "rgba(0,0,0,.05)",
-                  scaleGridLineWidth: 1,
-                  bezierCurve: true,
-                  bezierCurveTension: 0.4,
-                  pointDot: true,
-                  pointDotRadius: 4,
-                  pointDotStrokeWidth: 1,
-                  pointHitDetectionRadius: 20,
-                  datasetStroke: true,
-                  datasetStrokeWidth: 2,
-                  datasetFill: true,
-                  responsive: true,
-              }; 
-            }
+    
+    /**
+     * Set the file line chart.
+     */
+    setFileLineChart: function(fileHash) {
+      $.getJSON('../ManagementServlet', {action: 'getFileLineChart',
+          fileHash: fileHash, salesmanEmail: sp.config.salesman.email}, function(data) {
             
-            var ctx = document.getElementById("lineChart").getContext("2d");
-            var myNewChart = new Chart(ctx).Line(lineData, lineOptions);
-          }
-      );
+        if (typeof sp.graph.fileLineChart !== 'undefined') {
+          sp.graph.fileLineChart.destroy();
+        }
+        
+        var lineData = {
+            labels: [],
+            datasets: [
+                {
+                    label: "Total views",
+                    fillColor: "rgba(220,220,220,0.5)",
+                    strokeColor: "rgba(220,220,220,1)",
+                    pointColor: "rgba(220,220,220,1)",
+                    pointStrokeColor: "#fff",
+                    pointHighlightFill: "#fff",
+                    pointHighlightStroke: "rgba(220,220,220,1)",
+                    data: []
+                },
+                {
+                    label: "Actual views",
+                    fillColor: "rgba(26,179,148,0.5)",
+                    strokeColor: "rgba(26,179,148,0.7)",
+                    pointColor: "rgba(26,179,148,1)",
+                    pointStrokeColor: "#fff",
+                    pointHighlightFill: "#fff",
+                    pointHighlightStroke: "rgba(26,179,148,1)",
+                    data: []
+                }
+            ]
+        };
+          
+        var lineOptions = {
+            scaleShowGridLines: true,
+            scaleGridLineColor: "rgba(0,0,0,.05)",
+            scaleGridLineWidth: 1,
+            bezierCurve: true,
+            bezierCurveTension: 0.4,
+            pointDot: true,
+            pointDotRadius: 4,
+            pointDotStrokeWidth: 1,
+            pointHitDetectionRadius: 20,
+            datasetStroke: true,
+            datasetStrokeWidth: 2,
+            datasetFill: true,
+            responsive: true,
+            multiTooltipTemplate: "<%= datasetLabel + ': ' + value %>"
+        };
+          
+        if (typeof data.fileLineChart[0] !== 'undefined' ) {
+          $.each(data.fileLineChart, function(index, value) {
+            dateParts = value[0].split('-');
+            lineData.labels.push(dateParts[2] + '-' + dateParts[1] + '-' + dateParts[0]);
+            lineData.datasets[0].data.push(parseInt(value[1]));
+            lineData.datasets[1].data.push(parseInt(value[2]));
+          });
+        }
+          
+        var ctx = $('#lineChart')[0].getContext('2d');
+        sp.graph.fileLineChart = new Chart(ctx).Line(lineData, lineOptions);
+      });
     }
+    
+  // End graph.
   }
-
+  
+// End sp.
 };
 
 
 $(document).ready(function() {
- 
+  
 	/**
 	 * Add a salesman to the DB.
 	 */
@@ -377,10 +484,10 @@ $(document).ready(function() {
 					break;
 					
 				default:
-					alert('The user was not added. Error code: ' + data.statusCode + ".");
+					alert('The user was not added. Error code: ' + data.statusCode + '.');
 			}
 		}).fail(function(jqXHR, textStatus, errorThrown) {
-			console.log(textStatus + ": " + errorThrown);
+			console.log(textStatus + ': ' + errorThrown);
 		});
 		
 		event.preventDefault();
@@ -426,10 +533,10 @@ $(document).ready(function() {
 	 * @see http://stackoverflow.com/questions/13652955/get-all-values-of-multiple-file-select-with-jquery
 	 */
 	$('form[id="uploadform"] input[id="file"]').change(function() {
-	  var filesNames = "";
+	  var filesNames = '';
 	  for (var i = 0; i < $(this)[0].files.length; i++) {
-	    filesNames += $(this)[0].files[i].name + "\n";
+	    filesNames += $(this)[0].files[i].name + '\n';
 	  }
-	  $("#newpresname").val(filesNames);
+	  $('#newpresname').val(filesNames);
 	});
 });

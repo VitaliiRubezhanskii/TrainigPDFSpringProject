@@ -9,10 +9,11 @@
     <title>SlidePiper Analytics</title>
 
     <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet">
 
     <link href="css/animate.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
+    <link href="css/plugins/metisMenu/metisMenu.min.css" rel="stylesheet">
     <link href="css/plugins/datatables/datatables.min.css" rel="stylesheet">
     
     <!-- SlidePiper scripts -->
@@ -42,7 +43,7 @@
                     </div>
                 </li>
                 <li class="active" id="sp-nav-files__li">
-                    <a href="#"><i class="fa fa-file"></i> <span class="nav-label">Files</span></a>
+                    <a href="#" aria-expanded="true"><i class="fa fa-file"></i> <span class="nav-label">Files</span></a>
                 </li>
                 <!-- 
                 <li class="">
@@ -80,11 +81,11 @@
             <!-- File dashboard -->
             <div id="sp-file-dashboard">
                 <div class="row">
-                    <div class="col-lg-3">
+                    <div class="col-lg-2">
                         <div class="widget style1 blue-bg">
                             <div class="row">
                                 <div class="col-xs-4">
-                                    <i class="fa fa-eye fa-5x"></i>
+                                    <i class="fa fa-eye fa-3x"></i>
                                 </div>
                                 <div class="col-xs-8 text-right">
                                     <span>Total views</span>
@@ -93,11 +94,11 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-3">
+                    <div class="col-lg-2">
                         <div class="widget style1 navy-bg">
                             <div class="row">
                                 <div class="col-xs-4">
-                                    <i class="fa fa-external-link fa-5x"></i>
+                                    <i class="fa fa-external-link fa-3x"></i>
                                 </div>
                                 <div class="col-xs-8 text-right">
                                     <span>Bounce rate</span>
@@ -106,28 +107,54 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-3">
+                    <div class="col-lg-2">
                         <div class="widget style1 yellow-bg">
                             <div class="row">
                                 <div class="col-xs-4">
-                                    <i class="fa fa-user-plus fa-5x"></i>
+                                    <i class="fa fa-hourglass-end fa-3x"></i>
                                 </div>
                                 <div class="col-xs-8 text-right">
-                                    <span>Registrations (coming soon)</span>
-                                    <h2 class="font-bold">-</h2>
+                                    <span>View duration</span>
+                                    <h2 class="font-bold">CS</h2>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-3">
+                    <div class="col-lg-2">
+                        <div class="widget style1 lazur-bg">
+                            <div class="row">
+                                <div class="col-xs-4">
+                                    <i class="fa fa-clone fa-3x"></i>
+                                </div>
+                                <div class="col-xs-8 text-right">
+                                    <span>Pages viewed</span>
+                                    <h2 class="font-bold">CS</h2>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-2">
                         <div class="widget style1 red-bg">
                             <div class="row">
                                 <div class="col-xs-4">
-                                    <i class="fa fa-users fa-5x"></i>
+                                    <i class="fa fa-external-link-square fa-3x"></i>
                                 </div>
                                 <div class="col-xs-8 text-right">
-                                    <span>Unique visitors (coming soon)</span>
-                                    <h2 class="font-bold">-</h2>
+                                    <span>Top exit page</span>
+                                    <h2 class="font-bold">CS</h2>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-2">
+                        <div class="widget style1 blue-bg">
+                            <div class="row">
+                                <div class="col-xs-4">
+                                    <i class="fa fa-user-plus fa-3x"></i>
+                                </div>
+                                <div class="col-xs-8 text-right">
+                                    <span>Users CTA</span>
+                                    <h2 class="font-bold">CS</h2>
                                 </div>
                             </div>
                         </div>
@@ -150,9 +177,8 @@
                     <div class="col-lg-6">
                         <div class="ibox float-e-margins">
                             <div class="ibox-title">
-                                <span class="label label-info pull-right">Coming soon</span>
                                 <i class="fa fa-bar-chart-o fa-2x sp-chart-title-fa"></i>
-                                <h4>Average view slide duration</h4>
+                                <h4>Average view page duration</h4>
                             </div>
                             <div class="ibox-content">
                                 <div>
@@ -224,11 +250,12 @@
                                     <table class="table table-striped table-bordered table-hover" id="sp-files-data__table">
                                         <thead>
                                             <tr>
+                                                <th>File hash</th>
                                                 <th>File name</th>
-                                                <th>File link</th>
-                                                <th>Sum openings</th>
+                                                <th>File link (general)</th>
+                                                <th>Total views</th>
                                                 <th>Bounce rate</th>
-                                                <th>Average slide view duration (sec.)</th>
+                                                <th>Performance <span class="label label-info pull-right">Coming soon</span></th>
                                             </tr>
                                         </thead>
                                     </table>
@@ -254,7 +281,7 @@
 <!-- Mainly scripts -->
 <script src="js/jquery-2.1.1.js"></script>
 <script src="js/bootstrap.min.js"></script>
-<script src="js/plugins/metisMenu/jquery.metisMenu.js"></script>
+<script src="js/plugins/metisMenu/metisMenu.min.js"></script>
 <script src="js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
 
 <!-- SlidePiper scripts -->

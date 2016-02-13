@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONObject;
 
-import slidepiper.constants.Constants;
 import slidepiper.db.DbLayer;
 import slidepiper.email.EmailSender;
 
@@ -34,14 +33,15 @@ public class ConfigPropertiesServlt extends HttpServlet {
 		  JSONObject data = new JSONObject();
 		  JSONObject email = new JSONObject();
 		  JSONObject google = new JSONObject();
+		  String salesmanEmail = request.getParameter("salesmanEmail");
 			
 		  data.put("appUrl", ConfigProperties.getProperty("app_url"));
 		  data.put("viewerUrlWithoutFileLink",
-		      ConfigProperties.getProperty("app_url")
+		      ConfigProperties.getProperty("viewer_url", salesmanEmail)
           + ConfigProperties.FILE_VIEWER_PATH + "?"
           + ConfigProperties.getProperty("file_viewer_query_parameter") + "=");
 		  data.put("webSocketsUrl", ConfigProperties.getProperty("websockets_url"));
-		  data.put("salesman", DbLayer.getSalesman(request.getParameter("salesmanEmail")));
+		  data.put("salesman", DbLayer.getSalesman(salesmanEmail));
 		  
 		  google.put("clientId", ConfigProperties.getProperty("google_client_id"));
       google.put("scopes", ConfigProperties.getProperty("google_scopes")); 

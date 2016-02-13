@@ -89,6 +89,8 @@ public class DownloadSlidesServlet extends HttpServlet {
                 }              
                  
                 // set content properties and header attributes for the response
+                response.setHeader("Access-Control-Allow-Origin", "*");
+                response.setHeader("Access-Control-Expose-Headers", "Accept-Ranges");
                 response.setContentType(mimeType);
                 response.setContentLength(fileLength);
                 String headerKey = "Content-Disposition";

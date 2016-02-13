@@ -1359,9 +1359,10 @@ public class DbLayer {
           ps.setString(2, salesmanEmail);
           
           ResultSet rs = ps.executeQuery();
+          String viewerUrl = ConfigProperties.getProperty("viewer_url", salesmanEmail);
           while (rs.next()) {
             String[] row = {
-                ConfigProperties.getProperty("app_url")
+                viewerUrl
                     + ConfigProperties.FILE_VIEWER_PATH + "?"
                     + ConfigProperties.getProperty("file_viewer_query_parameter") + "="
                     + rs.getString(1),

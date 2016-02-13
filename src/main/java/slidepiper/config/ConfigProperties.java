@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+import slidepiper.db.DbLayer;
+
 public class ConfigProperties {
   
   // This constant is declared because the value of the URL pattern
@@ -58,7 +60,7 @@ public class ConfigProperties {
     }
 
     // Create application and web sockets URLs.
-    if (key.equals("app_url") || key.equals("websockets_url")) {
+    if (key.equals("app_url") || key.equals("subdomain_app_url") || key.equals("websockets_url")) {
       if (overrideOpenshiftEv) {
         String appScheme = props.getProperty("app_scheme");
         String appHost = (null != props.getProperty("app_alias")) 
@@ -76,10 +78,17 @@ public class ConfigProperties {
             + webSocketsPort + appContextPath);
       } else {
         
-        // OPENSHIFT_CUSTOM_APP_ALIAS is a custom Openshift environment variable.
-        String openshiftHost = (null != System.getenv("OPENSHIFT_CUSTOM_APP_ALIAS")) 
-            ? System.getenv("OPENSHIFT_CUSTOM_APP_ALIAS").replaceAll("/$", "")
-            : System.getenv("OPENSHIFT_APP_DNS").replaceAll("/$", "");
+        // OPENSHIFT_CUSTOM_<> are custom Openshift environment variables.
+        String openshiftHost = null;
+        if (null != System.getenv("OPENSHIFT_CUSTOM_APP_DOMAIN")) {
+          openshiftHost = System.getenv("OPENSHIFT_CUSTOM_APP_DOMAIN");
+          
+          if (null != System.getenv("OPENSHIFT_CUSTOM_APP_SUBDOMAIN")) {
+            openshiftHost = System.getenv("OPENSHIFT_CUSTOM_APP_SUBDOMAIN") + "." + openshiftHost;
+          }
+        } else {
+          openshiftHost = System.getenv("OPENSHIFT_APP_DNS").replaceAll("/$", "");
+        }
         
         // OPENSHIFT_APP_SCHEME is a custom Openshift environment variable.
         props.setProperty("app_url", System.getenv("OPENSHIFT_APP_SCHEME") + "://" + openshiftHost);
@@ -124,6 +133,86 @@ public class ConfigProperties {
       }
     }
 
+    return props.getProperty(key);
+  }
+  
+  
+  /**
+   * Get a property value based upon the config.properties file and the salesman email.
+   * The property key may not be predefined in the config.properties file.
+   * 
+   * @param key A property key.
+   * @param salesmanEmail The salesman email address.
+   * 
+   * @return THe property value.
+   */
+  public static String getProperty(String key, String salesmanEmail) {
+    ConfigProperties configProps = new ConfigProperties();
+    Properties props = configProps.getProperties();
+
+    boolean overrideOpenshiftEv = false;
+    if (null == System.getenv("OPENSHIFT_APP_NAME")
+        || props.getProperty("override_openshift_ev").equals("true")) {
+
+      overrideOpenshiftEv = true;  
+    }
+    
+    if (key.equals("viewer_url")) {
+      if (overrideOpenshiftEv) {
+        String appScheme = props.getProperty("app_scheme");
+        String appHost = (null != props.getProperty("app_alias")) 
+            ? props.getProperty("app_alias").replaceAll("/$", "")
+            : props.getProperty("app_server").replaceAll("/$", "");
+        String appPort = props.getProperty("app_port", "80");
+        String appContextPath = ("/" + props.getProperty("app_contextpath", ""))
+            .replaceAll("/$", "");
+
+        props.setProperty("app_url", appScheme + "://" + appHost + ":" + appPort
+            + appContextPath);
+        
+        if (key.equals("viewer_url")) {
+          String subdomain = DbLayer.getSalesman(salesmanEmail).get("subdomain");
+          if (null != subdomain) {
+            props.setProperty("viewer_url",
+                appScheme + "://" 
+                + subdomain.replaceAll("\\.$", "") + "."
+                + appHost + ":" + appPort + appContextPath);
+          } else {
+            props.setProperty("viewer_url", props.getProperty("app_url"));
+          }
+        }
+      } else {
+        
+        // OPENSHIFT_CUSTOM_<> are custom Openshift environment variables.
+        String openshiftHost = null;
+        String openshiftDomain = null;
+        if (null != System.getenv("OPENSHIFT_CUSTOM_APP_DOMAIN")) {
+          openshiftHost = openshiftDomain = System.getenv("OPENSHIFT_CUSTOM_APP_DOMAIN");
+          
+          if (null != System.getenv("OPENSHIFT_CUSTOM_APP_SUBDOMAIN")) {
+            openshiftHost = System.getenv("OPENSHIFT_CUSTOM_APP_SUBDOMAIN") + "." + openshiftHost;
+          }
+        } else {
+          openshiftHost = openshiftDomain = System.getenv("OPENSHIFT_APP_DNS").replaceAll("/$", "");
+        }
+        
+        // OPENSHIFT_APP_SCHEME is a custom Openshift environment variable.
+        props.setProperty("app_url", System.getenv("OPENSHIFT_APP_SCHEME") + "://" + openshiftHost);
+        
+        if (key.equals("viewer_url")) {
+          String subdomain = DbLayer.getSalesman(salesmanEmail).get("subdomain");
+          if (null != subdomain) {
+            props.setProperty("viewer_url",
+                System.getenv("OPENSHIFT_APP_SCHEME") + "://" 
+                + subdomain.replaceAll("\\.$", "") + "."
+                + openshiftDomain);
+          } else {
+            props.setProperty("viewer_url", props.getProperty("app_url"));
+          }
+        }
+      }
+    }
+        
     return props.getProperty(key);
   }
 }

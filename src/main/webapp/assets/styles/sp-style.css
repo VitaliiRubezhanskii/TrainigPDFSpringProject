@@ -55,20 +55,12 @@
 
 
 /* Dashboard settings */
-form[role="search"], .navbar-right, .profile-element .text-muted {
+form[role="search"], .navbar-right, .profile-element .text-muted, .arrow {
   visibility: hidden;
 }
 
 .sp-copy__button {
   float: right; 
-}
-
-.sp-display-on {
-  display: block;
-}
-
-.sp-display-off {
-  display: none;
 }
 
 .sp-dashboard-progress { 
@@ -78,4 +70,13 @@ form[role="search"], .navbar-right, .profile-element .text-muted {
 .sp-chart-title-fa {
   float: left;
   margin-right: 10px;
+}
+
+td.sp-file-hash {
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+#lineChart2, #barChart2 {
+  height: 50px !important;
 }
