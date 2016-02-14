@@ -5,7 +5,7 @@
 function logout(event, ui) {
 	console.log("logout");
 	// this logs me off.
-	//setCookie("SalesmanEmail", "", 2);
+	setCookie("SalesmanEmail", "", 2);
 	swal("Logged out.\n Thanks for using SlidePiper!");
 
 	// reloads page with the redirect (with #)

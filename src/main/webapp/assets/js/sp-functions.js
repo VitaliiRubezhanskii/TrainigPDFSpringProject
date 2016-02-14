@@ -171,11 +171,10 @@ sp = {
      * Set the file metrics data. 
      */
     setFileMetrics: function(fileData) {
-      if (typeof fileData !== 'undefined' ) {
-        $('#sp-widget-total-views').text(fileData[3]);
+      $('#sp-widget-total-views').text(fileData[3]);
+      if (null != fileData[4]) {
         $('#sp-widget-bounce-rate').text(parseFloat(fileData[4]).toFixed(2) + '%');
       } else {
-        $('#sp-widget-total-views').text('0');
         $('#sp-widget-bounce-rate').text('N/A');
       }
     }
@@ -301,7 +300,11 @@ sp = {
               },
               {
                 render: function (data, type, row) {
-                  return (parseFloat(data) * 100).toFixed(2) + '%';
+                  if (null != data) {
+                    return (parseFloat(data) * 100).toFixed(2) + '%';
+                  } else {
+                    return 'N/A';
+                  }
                 },
                 targets: 4
               },

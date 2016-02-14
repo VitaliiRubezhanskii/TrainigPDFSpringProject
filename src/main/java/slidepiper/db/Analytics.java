@@ -30,18 +30,18 @@ public class Analytics {
    * The query only returns the default_customer_email file links.
    */
   public static final String sqlFilesData =
-      "SELECT\n"
-    + "  file_hash,\n"
-    + "  slides.name AS file_name,\n"
-    + "  file_link,\n"
-    + "  SUM(IF(event_name = 'OPEN_SLIDES', 1, 0)) AS sum_file_open,\n"
-    + "  (SUM(IF(`event_name` = 'OPEN_SLIDES',1,0)) - SUM(IF(event_name = 'VIEW_SLIDE' AND count_event>1,1,0))) / SUM(IF(event_name = 'OPEN_SLIDES',1,0)) AS file_bounce_rate\n"
-    + "FROM view_file_agg_by_session_event_name_min_1_sec_min_1_page\n"
-    + "INNER JOIN slides ON slides.id = file_hash\n"
-    + "INNER JOIN msg_info ON msg_info.slides_id = file_hash\n"
-    + "WHERE salesman_email=? AND salesman_email != '' AND msg_info.customer_email='" + ConfigProperties.getProperty("default_customer_email") + "'\n"
-    + "GROUP BY file_link\n"
-    + "ORDER BY file_name";
+        "SELECT\n"
+      + "  slides.id AS file_hash,\n"
+      + "  slides.name AS file_name,\n"
+      + "  msg_info.id AS file_link,\n"
+      + "  SUM(IF(event_name = 'OPEN_SLIDES', 1, 0)) AS sum_file_open,\n"
+      + "  (SUM(IF(`event_name` = 'OPEN_SLIDES',1,0)) - SUM(IF(event_name = 'VIEW_SLIDE' AND count_event>1,1,0))) / SUM(IF(event_name = 'OPEN_SLIDES',1,0)) AS file_bounce_rate\n"
+    + "  FROM view_file_agg_by_session_event_name_min_1_sec_min_1_page\n"
+    + "  RIGHT JOIN slides ON slides.id = file_hash\n"
+    + "  INNER JOIN msg_info ON msg_info.slides_id = slides.id\n"
+    + "  WHERE msg_info.sales_man_email=? AND msg_info.sales_man_email != '' AND msg_info.customer_email='default@example.com'\n"
+    + "  GROUP BY msg_info.id\n"
+    + "  ORDER BY slides.name";
   
   
   public static final String sqlFileBarChart =
