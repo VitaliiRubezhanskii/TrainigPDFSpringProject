@@ -61,23 +61,27 @@ $(document).ready(function () {
         SmoothlyMenu();
     });
 
+    /*
     // Run menu of canvas
     $('body.canvas-menu .sidebar-collapse').slimScroll({
         height: '100%',
         railOpacity: 0.9
     });
+    */
 
     // Open close right sidebar
     $('.right-sidebar-toggle').click(function () {
         $('#right-sidebar').toggleClass('sidebar-open');
     });
 
+    /*
     // Initialize slimscroll for right sidebar
     $('.sidebar-container').slimScroll({
         height: '100%',
         railOpacity: 0.4,
         wheelStep: 10
     });
+    */
 
     // Open close small chat
     $('.open-small-chat').click(function () {
@@ -85,11 +89,13 @@ $(document).ready(function () {
         $('.small-chat-box').toggleClass('active');
     });
 
+    /*
     // Initialize slimscroll for small chat
     $('.small-chat-box .content').slimScroll({
         height: '234px',
         railOpacity: 0.4
     });
+    */
 
     // Small todo handler
     $('.check-link').click(function () {
@@ -174,10 +180,12 @@ $(document).ready(function () {
     $("[data-toggle=popover]")
         .popover();
 
+    /*
     // Add slimscroll to element
     $('.full-height-scroll').slimscroll({
         height: '100%'
     })
+    */
 });
 
 
