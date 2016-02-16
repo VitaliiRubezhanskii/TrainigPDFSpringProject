@@ -19,37 +19,35 @@ sp = {
           window.location.href = sp.config.appUrl;
         }
         
-        $.getJSON(
-            '../ManagementServlet',
-            {action: 'getFilesData', salesmanEmail: sp.config.salesman.email},
-            function(data) {
-          var filesData = data.filesData;
+        /**
+         * Set the file dashboard.
+         */
+        function setFileDashboard() {
+          // Set fileHash.
+          var fileHash = $(this).children().attr('data-file-hash');
+          if (typeof fileHash === 'undefined' && typeof sp.filesTable !== 'undefined') {
+            fileHash = sp.filesTable.row($(this).parent()).data()[0];
+          }
           
-          if (0 < filesData.length) {
-            $('#sp-nav-files__li a')
-                .append('<span class="fa arrow"></span>')
-                .after('<ul class="nav nav-second-level">');
-            
-            /**
-             * Set the file dashboard.
-             */
-            function setFileDashboard() {
-              if (typeof $.cookie('SalesmanEmail') === 'undefined') {
-                window.location.href = sp.config.appUrl;
-              }
-              
+          $.getJSON(
+              '../ManagementServlet',
+              {action: 'getFilesData', salesmanEmail: sp.config.salesman.email},
+              function(data) {
+            var filesData = data.filesData;
+          
+            if (0 < filesData.length) {
               // Build side menu.
-              $('#sp-nav-files__li ul').empty();
-              
-              // Try to set fileHash.
-              var fileHash = $(this).children().attr('data-file-hash');
-              if (typeof fileHash === 'undefined' && typeof sp.filesTable !== 'undefined') {
-                fileHash = sp.filesTable.row($(this).parent()).data()[0];
-              }
+              $('#sp-nav-files__li')
+                  .empty()
+                  .append(
+                      '<a href="#" aria-expanded="true"><i class="fa fa-file"></i> '
+                      + '<span class="nav-label">Files</span></a>'
+                      + '<span class="fa arrow"></span>'
+                      + '<ul class="nav nav-second-level">'
+                  );
               
               var files = [];
               for (var i = 0; i < filesData.length; i++) {
-                
                 $('#sp-nav-files__li ul').append('<li><a href="#" data-file-hash="'
                     + filesData[i][0] + '">' + filesData[i][1] + '</a></li>');
                 
@@ -63,31 +61,32 @@ sp = {
                 }
               }
 
-              // Build metrics.
-              sp.metric.setFileMetrics(files[fileHash]);
-              sp.graph.setFileLineChart(fileHash);
-              sp.graph.setFileBarChart(fileHash);
-              sp.table.setFilesTable(filesData);
+              // Build dashboard.
+              sp.metric.fileMetrics(files[fileHash]);
+              sp.graph.getFileLineChart(fileHash);
+              sp.graph.getFileBarChart(fileHash);
+              sp.table.filesTable(filesData);
               
               // Move to the top of the page.
               $('html, body').animate({scrollTop: 0}, 'fast');
             }
+          });
+        }
             
-            // Run once.
-            setFileDashboard();
-            
-            // .click() cannot be used since '#sp-nav-files__li li' haven't been created yet.
-            $(document).on('click', '#sp-nav-files__li li, td.sp-file-hash', setFileDashboard);
-          }
-        });
-      }
-      
-      $(document).ready(function() {
-        $('#send_email_to_customers').css('visibility', 'visible');
+        // Run once.
+        setFileDashboard();
         
-        $('#side-menu').metisMenu();
-        $('#sp-salesman-full-name strong').text(sp.config.salesman.name);
-      });
+        // .click() cannot be used since '#sp-nav-files__li li' haven't been created yet.
+        $(document).on('click', '#sp-nav-files__li li, td.sp-file-hash', setFileDashboard);
+      }
+    });
+  
+      
+    $(document).ready(function() {
+      $('#send_email_to_customers').css('visibility', 'visible');
+      
+      $('#side-menu').metisMenu();
+      $('#sp-salesman-full-name strong').text(sp.config.salesman.name);
     });
   })(),
   
@@ -168,12 +167,12 @@ sp = {
   metric: {
     
     /**
-     * Set the file metrics data. 
+     * Display the selected file data metrics. 
      */
-    setFileMetrics: function(fileData) {
+    fileMetrics: function(fileData) {
       $('#sp-widget-total-views').text(fileData[3]);
       if (null != fileData[4]) {
-        $('#sp-widget-bounce-rate').text(parseFloat(fileData[4]).toFixed(2) + '%');
+        $('#sp-widget-bounce-rate').text(parseFloat(fileData[4] * 100).toFixed(2) + '%');
       } else {
         $('#sp-widget-bounce-rate').text('N/A');
       }
@@ -183,11 +182,11 @@ sp = {
   table: {
     
     /**
-     * Set the files table into the sp.filesTable variable.
+     * Place the files data into the DataTables plugin.
      * 
      * @param object filesData A 2d array consisting of files data.
      */
-    setFilesTable: function(filesData) {
+    filesTable: function(filesData) {
       if ($.fn.dataTable.isDataTable('#sp-files-data__table')) {
         sp.filesTable = $('#sp-files-data__table').DataTable()
             .clear()
@@ -325,9 +324,9 @@ sp = {
   graph: {
     
     /**
-     * Set the file bar chart.
+     * Get the file bar chart.
      */
-    setFileBarChart: function(fileHash) {
+    getFileBarChart: function(fileHash) {
       $.getJSON('../ManagementServlet', {action: 'getFileBarChart',
           fileHash: fileHash, salesmanEmail: sp.config.salesman.email}, function(data) {
           
@@ -377,9 +376,9 @@ sp = {
     
     
     /**
-     * Set the file line chart.
+     * Get the file line chart.
      */
-    setFileLineChart: function(fileHash) {
+    getFileLineChart: function(fileHash) {
       $.getJSON('../ManagementServlet', {action: 'getFileLineChart',
           fileHash: fileHash, salesmanEmail: sp.config.salesman.email}, function(data) {
             
