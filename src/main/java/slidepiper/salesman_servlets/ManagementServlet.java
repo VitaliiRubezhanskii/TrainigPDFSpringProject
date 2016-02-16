@@ -5,6 +5,7 @@ import java.io.BufferedReader;
 import slidepiper.config.ConfigProperties;
 import slidepiper.dataobjects.Customer;
 import slidepiper.dataobjects.Presentation;
+import slidepiper.db.Analytics;
 import slidepiper.db.DbLayer;
 import slidepiper.email.EmailSender;
 
@@ -13,6 +14,7 @@ import java.io.PrintWriter;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -65,6 +67,8 @@ public class ManagementServlet extends HttpServlet {
 	    throws IOException, ServletException {
 	
 	  JSONObject data = new JSONObject();
+	  ArrayList<String> parameterList = new ArrayList<String>();
+	  List<String[]> sqlData = new ArrayList<String[]>();
 	  
 	  switch (request.getParameter("action")) {
 	    case "getMailType":
@@ -72,9 +76,52 @@ public class ManagementServlet extends HttpServlet {
 	      String mailType = DbLayer.getSalesmanMailType(request.getParameter("salesmanEmail"));
 	      data.put("mailType", mailType);
         break;
+	    
+	    case "getFileData":
+        parameterList.add(request.getParameter("salesmanEmail"));
+        parameterList.add(request.getParameter("fileHash"));
+        sqlData = DbLayer.getEventData(parameterList, Analytics.sqlFileData);
+        data.put("fileData", sqlData);
+        break;
+        
+	    case "getFilesData":
+        parameterList.add(request.getParameter("salesmanEmail"));
+        sqlData = DbLayer.getEventData(parameterList, Analytics.sqlFilesData);        
+        data.put("filesData", sqlData);
+        break;
+        
+	    case "getFileBarChart":
+        parameterList.add(request.getParameter("salesmanEmail"));
+        parameterList.add(request.getParameter("fileHash"));
+        sqlData = DbLayer.getEventData(parameterList, Analytics.sqlFileBarChart);
+        data.put("fileBarChart", sqlData);
+        break;
+	    
+	    case "getFileLineChart":
+        parameterList.add(request.getParameter("salesmanEmail"));
+        parameterList.add(request.getParameter("fileHash"));
+        sqlData = DbLayer.getEventData(parameterList, Analytics.sqlFileLineChart);
+        data.put("fileLineChart", sqlData);
+        break;
+      
+      /*
+	    case "getFileLinksData":
+	      parameterList.add(request.getParameter("salesmanEmail"));
+        sqlData = DbLayer.getEventData(parameterList, Analytics.sqlFileLinksData);
+        data.put("fileLinksData", sqlData);
+        break;
+      */
+        
+      /*
+	    case "getFileList":
+        parameterList.add(request.getParameter("salesmanEmail"));
+        sqlData = DbLayer.getEventData(parameterList, Analytics.sqlFileList);
+        data.put("fileList", sqlData);
+        break;
+      */
 	  }
 	  
-	  response.setContentType("application/json"); // TODO: add also charset="UTF-8"?
+	  response.setContentType("application/json; charset=UTF-8");
     PrintWriter output = response.getWriter(); // TODO: is output redundant as I can write response.getWriter().print(data);
     output.print(data);  // TODO: is this statment needed?
     output.close(); // TODO: is this statment needed?
