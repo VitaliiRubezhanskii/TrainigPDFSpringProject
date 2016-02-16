@@ -1,408 +1,767 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Bootbusiness | Short description about company">
-    <meta name="author" content="Your name">
-    <title>SlidePiper | Follow Along</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>SlidePiper - Follow along</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="assets/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Animation CSS -->
+    <link href="assets/css/animate.css" rel="stylesheet">
+    <link href="assets/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="assets/css/style.css" rel="stylesheet">
     
-    <link rel="shortcut icon" href="img/splogo.png" type="image/png">
-	<link rel=icon href="img/splogo.png" sizes="600x600" type="image/png">
-    <!-- Bootstrap -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <!-- Bootstrap responsive -->
-    <link href="css/bootstrap-responsive.min.css" rel="stylesheet">
-    <!-- Font awesome - iconic font with IE7 support --> 
-    <link href="css/font-awesome.css" rel="stylesheet">
-    <link href="css/font-awesome-ie7.css" rel="stylesheet">
-    <!-- Bootbusiness theme -->
-    <link href="css/boot-business.css" rel="stylesheet">
-	
-
-
-  </head>
-  <body>
-    <!-- Start: HEADER -->
-    <header>
-      <!-- Start: Navigation wrapper -->
-      <div class="navbar navbar-fixed-top" style="vertical-align: middle">
-        <div class="navbar-inner" style="padding-bottom: 0px;padding-top: 0px" style="vertical-align: middle">
-          <div class="container">
-            <a href="index.html" class="brand brand-bootbus"><img src="img/logo.png"></a>
-            <!-- Below button used for responsive navigation -->
-            <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse" style="vertical-align:middle">
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-            </button>
-            <!-- Start: Primary navigation -->
-            <div class="nav-collapse collapse" style="vertical-align: middle;">        
-              <ul class="nav pull-right" style="display:table-cell; vertical-align: middle">
-                <li class="dropdown">
-                  <a href="#" class="dropdown-toggle" data-toggle="dropdown">Products and Benefits<b class="caret"></b></a>
-                  <ul class="dropdown-menu">
-                    <li class="nav-header">PRODUCTS</li>
-                    <li><a href="product.html">SlidePiper Sales</a></li>
-                   <li><a href="product.html">SlidePiper Training</a></li>
-                   <li><a href="product.html">SlidePiper Collaboration</a></li>
-                <!--<li><a href="all_products.html">All products</a></li> -->            
-                    <li class="divider"></li>
-                    <li class="nav-header">SlidePiper Benefits</li>
-                    <li><a href="service.html">Sales Acceleration</a></li>
-                    <li><a href="service.html">Analytical Reports </a></li>
-                    <li><a href="service.html">Recommendation Engine</a></li>
-                <!--    <li><a href="all_services.html">All services</a></li> -->
-                  </ul>                  
-                </li>
-                <li class="dropdown">
-                  <a href="#" class="dropdown-toggle" data-toggle="dropdown">About<b class="caret"></b></a>
-                  <ul class="dropdown-menu">
-                   <!--  <li><a href="our_works.html">Our works</a></li>
-                    <li><a href="patnerships.html">Parnerships</a></li> -->
-                    <li><a href="leadership.html">Leadership</a></li>
-					<li><a href="careers.html">Careers</a></li>
-<!--                     <li><a href="news.html">News</a></li>
-                    <li><a href="events.html">Events</a></li> -->
-                    <!-- <li><a href="blog.html">Blog</a></li> -->
-                  </ul>
-                </li>
-                <li><a href="faq.html">FAQ</a></li>
-                <li><a href="contact_us.html">Contact us</a></li>
-               <!--  <li><a href="signup.html">Sign up</a></li> -->
-                <li><a href="spsystem.html">Sign in</a></li>
-              </ul>
+    <!-- Google Analytics -->
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    
+      ga('create', 'UA-64949615-2', 'auto');
+      ga('send', 'pageview');
+    
+    </script>
+</head>
+<body id="page-top" class="landing-page">
+<div class="navbar-wrapper">
+        <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+            <div class="container">
+                <div class="navbar-header page-scroll">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <!-- <a href="index.html"><img src="assets/img/logo.png"></a> -->
+                    <!-- <a class="navbar-brand" href="index.html"><img src="assets/img/logo.png"></a> -->
+                    <a href="index.html"><img src="assets/img/logo.png"></a>
+                    
+                </div>
+                <div id="navbar" class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a class="page-scroll" href="#page-top">Home</a></li>
+                        <li><a class="page-scroll" href="#features">Features</a></li>
+                        <!--<li><a class="page-scroll" href="#testimonials">Testimonials</a></li>-->
+                        <li><a class="page-scroll" href="#pricing">Pricing</a></li>
+                        <li><a class="page-scroll" href="#team">Team</a></li>
+                        <li><a class="page-scroll" href="#contact">Contact</a></li>
+                        <li><a class="page-scroll" href="spsystem.html">Sign in</a></li>
+                    </ul>
+                </div>
             </div>
-          </div>
-        </div>
-      </div>
-      <!-- End: Navigation wrapper -->  
-
-	<!--this is the Google analytics tracking code-->
-		<script>
-		  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-		  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-		  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-		  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-		  ga('create', 'UA-64949615-2', 'auto');
-		  ga('send', 'pageview');
-
-		</script>
-	  
-    </header>
-    <!-- End: HEADER -->
-    <!-- Start: MAIN CONTENT -->
-    <div class="content">
-      <!-- Start: slider -->
-      <div class="slider">
-        <div class="container-fluid">
-          <div id="heroSlider" class="carousel slide">
-
-            <div class="carousel-inner">
-			   <div class="active item">
-                <div class="hero-unit">
-                  <div class="row-fluid">
-                    <div class="span7 marketting-info">
-                      <h1>SlidePiper helps you engage and communicate better with your customers</h1>
-                      <p>
-                        <h2>Personal engagement helps drive better business results.</h2> 
-                        
-                      </p>
-                      <h3>
-                        <a href="product.html" class="btn">Learn more</a>
-                      </h3>                      
-                    </div>
-                    <div class="span5">
-                      <img src="img/communication470.png" class="thumbnail">
-                    </div>
-                  </div>                  
+        </nav>
+</div>
+<div id="inSlider" class="carousel carousel-fade" data-ride="carousel">
+    <ol class="carousel-indicators">
+        <li data-target="#inSlider" data-slide-to="0" class="active"></li>
+        <li data-target="#inSlider" data-slide-to="1"></li>
+    </ol>
+    <div class="carousel-inner" role="listbox">
+        <div class="item active">
+            <div class="container">
+                <div class="carousel-caption">
+                    <h1>We track<br/>
+                        any document sent <br/>
+                        to a customer<br/>
+                        White papers, presentations<br/>
+                     one-pagers etc.</h1>
+                    <p>Real-time analytics of what actually happens with them.</p>
+                    <p>
+                        <a class="btn btn-lg btn-primary" href="#" role="button">LEARN MORE</a>
+                        <!-- <a class="caption-link" href="#" role="button">SlidePiper</a> -->
+                    </p>
                 </div>
-              </div>
-              <div class="item">
-                <div class="hero-unit">
-                  <div class="row-fluid">
-                    <div class="span7 marketting-info">
-                      <h1>Accelerate your sales!</h1>
-                      <p>
-                        <h2>Identify and focus on your most interested customer.</h2>
-                      </p>
-                      <h3>
-                        <a href="service.html" class="btn">Learn more</a>
-                      </h3>                      
-                    </div>
-                    <div class="span5">
-                      <img src="img/theOne470.png" class="thumbnail">
-                    </div>
-                  </div>                  
+                <div class="carousel-image wow zoomIn">
+                    <img src="assets/img/landing/laptop.png" alt="laptop"/>
                 </div>
-              </div>
-              <div class="item">
-                <div class="hero-unit">
-                  <div class="row-fluid">
-                    <div class="span7 marketting-info">
-                      <h1>What happens after you press send?</h1>
-                      <p>
-                        <h2>Emailing campaigns and cold calls are just not good enough</h2> 
-                      </p>
-                      <h3>
-                        <!-- <a href="contact_us.html" class="btn btn-primary">Buy now</a> -->
-                        <a href="product.html" class="btn">Learn more</a>
-                      </h3>                      
-                    </div>
-                    <div class="span5">
-                      <img src="img/sendingEmails470.png" class="thumbnail">
-                    </div>
-                  </div>                  
-                </div>
-              </div>
-              <div class="item">
-                <div class="hero-unit">
-                  <div class="row-fluid">
-                    <div class="span7 marketting-info">
-                      <h1>Focus on your interested customers first</h1>
-                      <p>
-                       <h2> If you've ever felt that you are reaching out blindly, we have the solution.</h2>
-                      </p>
-                      <h3>
-                        <a href="contact_us.html" class="btn btn-primary">Buy now</a>
-                        <a href="product.html" class="btn">Learn more</a>
-                      </h3>                      
-                    </div>
-                    <div class="span5">
-                      <img src="img/writingonglass2customers3470.png" class="thumbnail">
-                    </div>
-                  </div>                  
-                </div>
-              </div>
             </div>
-            <a class="left carousel-control" href="#heroSlider" data-slide="prev">‹</a>
-            <a class="right carousel-control" href="#heroSlider" data-slide="next">›</a>
-          </div>
+            <!-- Set background for slide in css -->
+            <div class="header-back one"></div>
+
         </div>
-      </div>
-      <!-- End: slider -->
-      <!-- Start: PRODUCT LIST -->
-        <div class="container">
-          <div class="page-header">
-            <h2>Our products</h2>
-          </div>
-          <div class="row-fluid">
-            <ul class="thumbnails">
-              <li class="span4">
-                <div class="thumbnail">
-                  <img src="img/slidePiperSales360x200.png" alt="product name">
-                  <div class="caption">
-                    <h3>SlidePiper Sales</h3>
-                    <p>
-                     With "SlidePiper Sales", your organization will achieve a higher level of customer engagement and communication. 
-                      It will help concentrate on the most interested customer - with the right product, at the right time.
-                    </p> 
-                  </div>
-                  <div class="widget-footer">
-                    <p>
-                      <a href="contact_us.html" class="btn btn-primary">Buy now</a>&nbsp;
-                      <a href="product.html" class="btn">Read more</a>
-                    </p>
-                  </div>
+        <div class="item">
+            <div class="container">
+                <div class="carousel-caption blank">
+                    <h1>We enable engagement <br/> through your documents.</h1>
+                    <p>Gather questions, insights and help you focus on what matters.</p>
+                    <p><a class="btn btn-lg btn-primary" href="#" role="button">Learn more</a></p>
                 </div>
-              </li>
-              <li class="span4">
-                <div class="thumbnail">
-                  <img src="img/SPTraining-360x200.png" alt="product name">
-                  <div class="caption">
-                    <h3>SlidePiper Training</h3>
-                    <p>
-                      "SlidePiper Training" will help your organization achieve higher levels of engaged training and learning. 
-                      We enable an integrative platform that helps understand which areas need to be strengthened.
-					  
-                    </p>
-                  </div>
-                  <div class="widget-footer">
-                    <p>
-                      <a href="contact_us.html" class="btn btn-primary">Buy now</a>&nbsp;
-                      <a href="product.html" class="btn">Read more</a>
-                    </p>
-                  </div>
-                </div>
-              </li>
-              <li class="span4">
-                <div class="thumbnail">
-                  <img src="img/SPCollaboration-360x200.jpg" alt="product name">
-                  <div class="caption">
-                    <h3>SlidePiper Collaboration</h3>
-                    <p>
-                     Collaboration amongst employees is critical to get a complicated task planned, done, managed and reviewed. It can be a mess, and is also time consuming.
-                      SlidePiper Collaboration organizes collaboration and provides a more analytical insight towards understanding the process.
-                    </p>
-                  </div>
-                  <div class="widget-footer">
-                    <p>
-                      <a href="contact_us.html" class="btn btn-primary">Buy now</a>&nbsp;
-                      <a href="product.html" class="btn">Read more</a>
-                    </p>
-                  </div>
-                </div>
-              </li>
-            </ul>
-          </div>
-          <div class="page-header">
-            <h2>SlidePiper Benefits</h2>
-          </div>
-          <div class="row-fluid">
-            <ul class="thumbnails">
-              <li class="span4">
-                <div class="thumbnail">
-                  <img src="img/ar_handshake360x200.jpg" alt="product name">
-                  <div class="caption">
-                    <h3>Sales Acceleration</h3>
-                    <p>
-                      SlidePiper Sales provides our proprietary sales acceleration technology.  Your sales team will achieve higher levels  of efficiency and higher closure rates.
-                    </p>
-                  </div>
-                  <div class="widget-footer">
-                    <p>
-                      <a href="contact_us.html" class="btn btn-primary">Try for free</a>&nbsp;
-                      <a href="product.html" class="btn">Read more</a>
-                    </p>
-                  </div>
-                </div>
-              </li>
-              <li class="span4">
-                <div class="thumbnail">
-                  <img src="img/bar-chart-297122_1280_360x200.png" alt="product name">
-                  <div class="caption">
-                    <h3>Analytical Reports</h3>
-                    <p>
-                      We provide real-time customized reports on customer engagement with sales collateral and sales representatives. With this information we help classify sales leads.
-                    </p>
-                  </div>
-                  <div class="widget-footer">
-                    <p>
-                      <a href="contact_us.html" class="btn btn-primary">Try for free</a>&nbsp;
-                      <a href="product.html" class="btn">Read more</a>
-                    </p>
-                  </div>
-                </div>
-              </li>
-              <li class="span4">
-                <div class="thumbnail">
-                  <img src="img/Follow-your-customers360x200.png" alt="product name">
-                  <div class="caption">
-                    <h3>Recommendation Engine</h3>
-                    <p>
-                      Our state-of-the-art recommendation engine integrates our proprietary machine learning algorithms, and recommends the next step in your sales process. We optimize your sales process for more sales!
-                    </p>
-                  </div>
-                  <div class="widget-footer">
-                    <p>
-                      <a href="contact_us.html" class="btn btn-primary">Try for free</a>&nbsp;
-                      <a href="product.html" class="btn">Read more</a>
-                    </p>
-                  </div>
-                </div>
-              </li>
-            </ul>
-          </div>
+            </div>
+            <!-- Set background for slide in css -->
+            <div class="header-back two"></div>
         </div>
-      <!-- End: PRODUCT LIST -->
     </div>
-    <!-- End: MAIN CONTENT -->
-    <!-- Start: FOOTER -->
-    <footer>
-      <div class="container">
-        <div class="row">
-          <div class="span2">
-            <h4><i class="icon-star icon-white"></i> Products</h4>
-            <nav>
-              <ul class="quick-links">
-                <li><a href="product.html">SlidePiper Sales</a></li>
-                <li><a href="product.html">SlidePiper Training</a></li>
-                <li><a href="product.html">SlidePiper Collaboration</a></li>
-            <!--   <li><a href="all_products.html">All products</a></li> -->
-              </ul>
-            </nav>
-            <h4><i class="icon-cogs icon-white"></i> Benefits</h4>
-            <nav>
-              <ul class="quick-links">
-                <li><a href="service.html">Sales Acceleration</a></li>
-                <li><a href="service.html">Analytical Reports</a></li>
-                <li><a href="service.html">Recommendation Engine</a></li>
-             <!--    <li><a href="all_services.html">All services</a></li>    -->           
-              </ul>
-            </nav>
-          </div>
-          <div class="span2">
-            <h4><i class="icon-beaker icon-white"></i> About</h4>
-            <nav>
-              <ul class="quick-links">
-               <!--  <li><a href="our_works.html">Our works</a></li>
-                <li><a href="patnerships.html">Patnerships</a></li> -->
-                <li><a href="leadership.html">Leadership</a></li>
-				<li><a href="careers.html">Careers</a></li>
-               <!--  <li><a href="news.html">News</a></li>
-                <li><a href="events.html">Events</a></li>
-                <li><a href="blog.html">Blog</a></li> -->
-              <ul>
-            </nav>          
-          </div>
-          <div class="span2">
-            <h4><i class="icon-thumbs-up icon-white"></i> Support</h4>
-            <nav>
-              <ul class="quick-links">
-                <li><a href="faq.html">FAQ</a></li>
-                <li><a href="contact_us.html">Contact us</a></li>            
-              </ul>
-            </nav>
-            <!-- <h4><i class="icon-legal icon-white"></i> Legal</h4> -->
-            <nav>
-              <ul class="quick-links">
-                <!--<li><a href="#">License</a></li> -->
-                <li><a href="tou.html">Terms of Use</a></li>
-                <li><a href="privacy.html">Privacy Policy</a></li>
-                <!-- <li><a href="#">Security</a></li>  -->     
-              </ul>
-            </nav>            
-          </div>
-          <div class="span3">
-            <h4>Get in touch</h4>
-            <div class="social-icons-row">
-              <!-- <a href="#"><i class="icon-twitter"></i></a> -->
-              <a href="https://www.facebook.com/slidepiper"><i class="icon-facebook"></i></a>
-             <!--  <a href="#"><i class="icon-linkedin"></i></a>                                         
-            </div>
-            <div class="social-icons-row">
-              <a href="#"><i class="icon-google-plus"></i></a>   -->            
-              <!--<a href="#"><i class="icon-github"></i></a>-->
-              <a href="mailto:info@slidepiper.com"><i class="icon-envelope"></i></a>        
-            </div>
-            <div class="social-icons-row">
-              <i class="icon-phone icon-large phone-number"></i> +972(0)546815095
-            </div>
-          </div>      
-          <div class="span3">
-            <h4>Get updated by email</h4>            
-              <input type="text" name="emailaddr" id="emailaddr" placeholder="Email address">
-              <input type="button" class="btn btn-primary" value="Subscribe" onClick="send_email_address();">            
-          </div>
+    <a class="left carousel-control" href="#inSlider" role="button" data-slide="prev">
+        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+    </a>
+    <a class="right carousel-control" href="#inSlider" role="button" data-slide="next">
+        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+    </a>
+</div>
+
+
+<section id="features" class="container services">
+    <div class="row">
+        <div class="col-sm-2">
+            <h2>Real time alerts</h2>
+            <p>When a document is opened we can immediate alert you so you know when would be the best time to contact and engage with your customer.</p>
+            <p><a class="navy-link" href="#" role="button">Details &raquo;</a></p>
         </div>
-      </div>
-      <hr class="footer-divider">
-      <div class="container">
-        <p>
-          &copy; 2015 SlidePiper, Inc. All Rights Reserved.
-        </p>
-      </div>
-    </footer>
-    <!-- End: FOOTER -->
-    <script type="text/javascript" src="js/jquery.min.js"></script>
-    <script type="text/javascript" src="js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="js/boot-business.js"></script>
-    <script type="text/javascript" src="js/send_event.js"></script>
-    <script type="text/javascript" src="js/send_email_address.js"></script>
-	
-	
+        <div class="col-sm-2">
+            <h2>Page by page tracking</h2>
+            <p>Get analytics on every page that matters, when they are opened, how long it's viewed, points of interest and much more.</p>
+            <p><a class="navy-link" href="#" role="button">Details &raquo;</a></p>
+        </div>
+        <div class="col-sm-2">
+            <h2>Predictive analytics</h2>
+            <p>With our proprietary patented algorithms, we know who is your most interested customer and what they are most interested in.</p>
+            <p><a class="navy-link" href="#" role="button">Details &raquo;</a></p>
+        </div>
+        <div class="col-sm-2">
+            <h2>IRM Features</h2>
+            <p>Information Rights Management helps protect sensitive documents. Our technology tracks who and how many viewers are allowed for a specific document. The document can literally be "shut down" whenever needed.</p>
+            <p><a class="navy-link" href="#" role="button">Details &raquo;</a></p>
+        </div>
+        <div class="col-sm-2">
+            <h2>A/B testing</h2>
+            <p>We give you aggregative insights, dashboards and benchmarks on document views as a whole that you can compare and know what works best.</p>
+            <p><a class="navy-link" href="#" role="button">Details &raquo;</a></p>
+        </div>
+        <div class="col-sm-2">
+            <h2>Live engagement</h2>
+            <p>each of your documents turns into an engagement with your customer with Live chat, screen control and personalization of your own viewer.</p>
+            <p><a class="navy-link" href="#" role="button">Details &raquo;</a></p>
+        </div>
 
 
-  </body>
+    </div>
+</section>
+
+<section  class="container features">
+    <div class="row">
+        <div class="col-lg-12 text-center">
+            <div class="navy-line"></div>
+            <h1><br/> <span class="navy"> <strong>Today everything is tracked, we believe that documents should be too.</strong></strong></span> </h1>
+            <h2>“When performance is measured, performance improves. When performance is measured and reported, the rate of improvement accelerates. ” — Thomas Monson</h2>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3 text-center wow fadeInLeft">
+            <div>
+                <i class="fa fa-eye features-icon"></i>
+                <h2>Total views</h2>
+                <p>How many people really open the documents you attach, what is the bounce rate.</p>
+            </div>
+            <div class="m-t-lg">
+                <i class="fa fa-bar-chart features-icon"></i>
+                <h2>What pages are interesting</h2>
+                <p>Have your documents been viewed through, how long was spent on each page, what is the "Top Exit" page.</p>
+            </div>
+          
+        </div>
+        <div class="col-md-6 text-center  wow zoomIn">
+            <img src="assets/img/landing/perspective.png" alt="dashboard" class="img-responsive">
+        </div>
+        <div class="col-md-3 text-center wow fadeInRight">
+            <div>
+                <i class="fa fa-map-marker features-icon"></i>
+                <h2>Where is your document being viewed</h2>
+                <p>Know what part of the world / market is viewing your document.</p>
+            </div>
+            <div class="m-t-lg">
+                <i class="fa fa-signal features-icon"></i>
+                <h2>Benchmark across the board</h2>
+                <p>See what works best and what is the relative performance of your documents.</p>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12 text-center">
+            <div class="navy-line"></div>
+            <h1>Aggregative dashboards that make sense</h1>
+            <p>We've worked hard to make sure you get all that you need. </p>
+        </div>
+    </div>
+    <div class="row features-block">
+        <div class="col-lg-6 features-text wow fadeInLeft">
+            <small>SlidePiper</small>
+            <h2>Perfectly designed </h2>
+            <p>SlidePiper is a premium solution for tracking any document in the business world. Whether you're a business development, sales rep or a marketing Mgr. you will have all that you need to do your job better with more insight and data. </p>
+            <a href="" class="btn btn-primary">Learn more</a>
+        </div>
+        <div class="col-lg-6 text-right wow fadeInRight">
+            <img src="assets/img/landing/dashboard.png" alt="dashboard" class="img-responsive pull-right">
+        </div>
+    </div>
+</section>
+
+
+
+<section class="features">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <div class="navy-line"></div>
+                <h1>SlidePiper is all cloud and web based</h1>
+                <p>We offer a SaaS solution, scalable to fit all your needs. </p>
+            </div>
+        </div>
+        <div class="row features-block">
+            <div class="col-lg-3 features-text wow fadeInLeft">
+                <small>SlidePiper</small>
+                <h2>No installation requiered</h2>
+                <p>Works on the web with all browsers. We've taken the most powerful prgram that is already on every machine and used it to enable a well rounded solution that is avilable to all users and viewers right out of the box.</p>
+                <a href="" class="btn btn-primary">Learn more</a>
+            </div>
+            <div class="col-lg-6 text-right m-t-n-lg wow zoomIn">
+                <img src="assets/img/landing/iphone.jpg" class="img-responsive" alt="dashboard">
+            </div>
+            <div class="col-lg-3 features-text text wow fadeInRight">
+                <small>SlidePiper</small>
+                <h2>Responsive design </h2>
+                <p>We've used the latest and most powerful web technologies to make your experiance amazing, and enabling you to take the insights where ever you go. Try it on your tablet, cell and PC.</p>
+                <a href="" class="btn btn-primary">Learn more</a>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+
+<section class="timeline gray-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <div class="navy-line"></div>
+                <h1>Our workflow</h1>
+                <p>You can be using SlidePiper in minutes</p>
+            </div>
+        </div>
+        <div class="row features-block">
+
+            <div class="col-lg-12">
+                <div id="vertical-timeline" class="vertical-container light-timeline center-orientation">
+                    <div class="vertical-timeline-block">
+                        <div class="vertical-timeline-icon navy-bg">
+                            <i class="fa fa-briefcase"></i>
+                        </div>
+
+                        <div class="vertical-timeline-content">
+                            <h2>Onboarding</h2>
+                            <p>Signup, get your user id and login. Upload your email addresses directly and seamlessly from your Outlook or Gmail.
+                            </p>
+                            <a href="#" class="btn btn-xs btn-primary"> More info</a>
+                            <span class="vertical-date"> Time needed <br/> <small>5 minutes</small> </span>
+                        </div>
+                    </div>
+
+                    <div class="vertical-timeline-block">
+                        <div class="vertical-timeline-icon navy-bg">
+                            <i class="fa fa-file-text"></i>
+                        </div>
+
+                        <div class="vertical-timeline-content">
+                            <h2>Upload Documents</h2>
+                            <p>Upload as many documents as you need and send them to your contacts.</p>
+                            <a href="#" class="btn btn-xs btn-primary"> More info</a>
+                            <span class="vertical-date"> Automatic mass mailing <br/> <small> Custom templates</small> </span>
+                        </div>
+                    </div>
+
+                    <div class="vertical-timeline-block">
+                        <div class="vertical-timeline-icon navy-bg">
+                            <i class="fa fa-cogs"></i>
+                        </div>
+
+                        <div class="vertical-timeline-content">
+                            <h2>See the performance</h2>
+                            <p>Open your dashboard and see how your documents perform, whom your latest viewers were and much more.  </p>
+                            <a href="#" class="btn btn-xs btn-primary"> More info</a>
+                            <span class="vertical-date"> You'll also get alerts <br/> <small>Real-time viewers you can engage</small> </span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</section>
+
+
+
+<!--
+    <section id="testimonials" class="navy-section testimonials" style="margin-top: 0">
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 text-center wow zoomIn">
+                <i class="fa fa-comment big-icon"></i>
+                <h1>
+                    What our users say
+                </h1>
+                <div class="testimonials-text">
+                    <i>"Becouse of SlidePiper our customers ask us questions directly throught the document, we answer either realtime or later and this is very powerfull for our sales effort"</i>
+                </div>
+                <small>
+                    <strong> </n> </strong>
+                </small>
+                <small>
+                    <strong>01.2016 - Gil Azrak Sqream Technologies</strong>
+                </small>
+                <div class="testimonials-text">
+                    <i>SlidePiper has changed the way we use our collateral and the way we engage with customers through it. We now use better and more engaging documents because of the analytics we see and we close deals more often."</i>
+                </div>
+                <small>
+                    <strong>02.2016 - Natalie Halimi SimilarWeb</strong>
+                </small>
+            </div>
+        </div>
+    </div>
+
+</section>
+-->
+
+<!--<section class="comments gray-section" style="margin-top: 0">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <div class="navy-line"></div>
+                <h1>What our partners say</h1>
+                <p>Donec sed odio dui. Etiam porta sem malesuada. </p>
+            </div>
+        </div>
+        <div class="row features-block">
+            <div class="col-lg-4">
+                <div class="bubble">
+                    "Uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like)."
+                </div>
+                <div class="comments-avatar">
+                    <a href="" class="pull-left">
+                        <img alt="image" src="assets/img/landing/avatar3.jpg">
+                    </a>
+                    <div class="media-body">
+                        <div class="commens-name">
+                            Andrew Williams
+                        </div>
+                        <small class="text-muted">Company X from California</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="bubble">
+                    "Uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like)."
+                </div>
+                <div class="comments-avatar">
+                    <a href="" class="pull-left">
+                        <img alt="image" src="assets/img/landing/Sivanpicweb.jpg">
+                    </a>
+                    <div class="media-body">
+                        <div class="commens-name">
+                            Andrew Williams
+                        </div>
+                        <small class="text-muted">Company X from California</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="bubble">
+                    "Uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like)."
+                </div>
+                <div class="comments-avatar">
+                    <a href="" class="pull-left">
+                        <img alt="image" src="assets/img/landing/avatar2.jpg">
+                    </a>
+                    <div class="media-body">
+                        <div class="commens-name">
+                            Andrew Williams
+                        </div>
+                        <small class="text-muted">Company X from California</small>
+                    </div>
+                </div>
+            </div>
+
+
+
+        </div>
+    </div>
+
+</section>
+-->
+<!--
+<section class="features">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <div class="navy-line"></div>
+                <h1>More and more extra great feautres</h1>
+                <p>Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. </p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-5 col-lg-offset-1 features-text">
+                <small>INSPINIA</small>
+                <h2>Perfectly designed </h2>
+                <i class="fa fa-bar-chart big-icon pull-right"></i>
+                <p>INSPINIA Admin Theme is a premium admin dashboard template with flat design concept. It is fully responsive admin dashboard template built with Bootstrap 3+ Framework, HTML5 and CSS3, Media query. It has a huge collection of reusable UI components and integrated with.</p>
+            </div>
+            <div class="col-lg-5 features-text">
+                <small>INSPINIA</small>
+                <h2>Perfectly designed </h2>
+                <i class="fa fa-bolt big-icon pull-right"></i>
+                <p>INSPINIA Admin Theme is a premium admin dashboard template with flat design concept. It is fully responsive admin dashboard template built with Bootstrap 3+ Framework, HTML5 and CSS3, Media query. It has a huge collection of reusable UI components and integrated with.</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-5 col-lg-offset-1 features-text">
+                <small>INSPINIA</small>
+                <h2>Perfectly designed </h2>
+                <i class="fa fa-clock-o big-icon pull-right"></i>
+                <p>INSPINIA Admin Theme is a premium admin dashboard template with flat design concept. It is fully responsive admin dashboard template built with Bootstrap 3+ Framework, HTML5 and CSS3, Media query. It has a huge collection of reusable UI components and integrated with.</p>
+            </div>
+            <div class="col-lg-5 features-text">
+                <small>INSPINIA</small>
+                <h2>Perfectly designed </h2>
+                <i class="fa fa-users big-icon pull-right"></i>
+                <p>INSPINIA Admin Theme is a premium admin dashboard template with flat design concept. It is fully responsive admin dashboard template built with Bootstrap 3+ Framework, HTML5 and CSS3, Media query. It has a huge collection of reusable UI components and integrated with.</p>
+            </div>
+        </div>
+    </div>
+
+</section>
+    -->
+<section id="pricing" class="pricing">
+    <div class="container">
+        <div class="row m-b-lg">
+            <div class="col-lg-12 text-center">
+                <div class="navy-line"></div>
+                <h1>SlidePiper Pricing</h1>
+                <p>Within an organization you can have different users. Contact us and we'll set you up with exactly what your team needs.</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-4 wow zoomIn">
+                <ul class="pricing-plan list-unstyled">
+                    <li class="pricing-title">
+                        Basic
+                    </li>
+                    <li class="pricing-desc">
+                        Start tracking all your documents now, alerts, live engagement, analytics and data for each view.
+                    </li>
+                    <li class="pricing-price">
+                        <span>$30</span> / month / user
+                    </li>
+                    <li>
+                        Document tracking
+                    </li>
+                    <li>
+                        Live engagement
+                    </li>
+                    <li>
+                        Realtime alerts
+                    </li>
+                    <li>
+                        Document dashboard
+                    </li>
+                    <li>
+                        Online support
+                    </li>
+                    <li>
+                        <a class="btn btn-primary btn-xs" href="mailto:info@slidepiper.com">Contact us</a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="col-lg-4 wow zoomIn">
+                <ul class="pricing-plan list-unstyled selected">
+                    <li class="pricing-title">
+                        Standard
+                    </li>
+                    <li class="pricing-desc">
+                        Get everything in the basic plan + customizable viewer to suit your companies look and feel and an agregative dashboard to understand the total performance of all your documents.
+                    </li>
+                    <li class="pricing-price">
+                        <span>$45</span> / month / user
+                    </li>
+                    <li>
+                        Document tracking
+                    </li>
+                    <li>
+                        Live engagement
+                    </li>
+                    <li>
+                        <strong>Customized viewer</strong>
+                    </li>
+                    <li>
+                        Realtime alerts
+                    </li>
+                    <li>
+                        Document dashboard
+                    </li>
+                    <li>
+                        <strong>Agregative dashboard</strong>
+                    </li>
+                    <li>
+                        Online support
+                    </li>
+                    <li class="plan-action">
+                        <a class="btn btn-primary btn-xs" href="mailto:info@slidepiper.com">Contact us</a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="col-lg-4 wow zoomIn">
+                <ul class="pricing-plan list-unstyled">
+                    <li class="pricing-title">
+                        Premium
+                    </li>
+                    <li class="pricing-desc">
+                        Everything in "Standard" plan + access management and personalized features.
+                    </li>
+                    <li class="pricing-price">
+                        <span>$60</span> / month / user
+                    </li>
+                    <li>
+                        Everything in standard plann +
+                    </li>
+                    <li>
+                        Access management
+                    </li>
+                    <li>
+                        Extra Personalized features
+                    </li>
+                    <li>
+                        talk with us for more info
+                    </li>
+                    <li>
+                        Online support
+                    </li>
+                    <li>
+                        <a class="btn btn-primary btn-xs" href="mailto:info@slidepiper.com">Contact us</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="row m-t-lg">
+            <div class="col-lg-8 col-lg-offset-2 text-center m-t-lg">
+                <h4>*We also offer special services, integration with other systems and modifications if required.</h4>
+                <h4><span class="navy">On-Premise installation</span>  is also available, contact us for more information.</h4>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+    <section id="team" class="gray-section team">
+        <div class="container">
+            <div class="row m-b-lg">
+                <div class="col-lg-12 text-center">
+                    <div class="navy-line"></div>
+                    <h1>Our Team</h1>
+                    <p>Dedicated to excellence and building great business products.</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-4 wow fadeInLeft">
+                    <div class="team-member">
+                        <img src="assets/img/landing/avatar3.jpg" class="img-responsive img-circle img-small" alt="">
+                        <h4><span class="navy">Now Hiring</span></h4>
+                        <h4>CMO</h4>
+                        <p>We are searching for a talented and creative M&S wizard to join our team, if you think your it contact us.</p>
+                        <ul class="list-inline social-icon">
+                            <li>
+                                <a href="#"><i class="fa fa-twitter"></i></a>
+                            </li>
+                            <li>
+                                <a href="#"><i class="fa fa-facebook"></i></a>
+                            </li>
+                            <li>
+                                <a href="#"><i class="fa fa-linkedin"></i></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="team-member wow zoomIn">
+                        <img src="assets/img/landing/Sivanpicweb.jpg" class="img-responsive img-circle" alt="">
+                        <h4><span class="navy">Sivan Bender</span></h4>
+                        <h4>Founder & CEO</h4>
+                        <p>SlidePiper is a solution to a challenge Sivan faced during his EA consulting career. Sivan is an I&M engineer with strong physics and computer science background.</p>
+                        <ul class="list-inline social-icon">
+                            <li>
+                                <a href="https://twitter.com/sivanbdr"><i class="fa fa-twitter"></i></a>
+                            </li>
+                            <li>
+                                <a href="https://www.facebook.com/sivan.bender"><i class="fa fa-facebook"></i></a>
+                            </li>
+                            <li>
+                                <a href="https://il.linkedin.com/in/sivanbender"><i class="fa fa-linkedin"></i></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-sm-4 wow fadeInRight">
+                    <div class="team-member">
+                        <img src="assets/img/landing/Yaniv.jpg" class="img-responsive img-circle img-small" alt="">
+                        <h4><span class="navy">Yaniv Friedensohn</span></h4>
+                        <h4>Co-Founder & CTO</h4>
+                        <p>Yaniv has over 10 years of development experience with a strong background of marketing and business experience.</p>
+                        <ul class="list-inline social-icon">
+                            <!--
+                            <li>
+                                <a href="#"><i class="fa fa-twitter"></i></a>
+                            </li>
+                            -->
+                            <li>
+                                <a href="https://www.facebook.com/fr.yaniv"><i class="fa fa-facebook"></i></a>
+                            </li>
+                            <li>
+                                <a href="https://il.linkedin.com/in/yanivf"><i class="fa fa-linkedin"></i></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 text-center m-t-lg m-b-lg">
+                    <p>We are looking to hire several positions on our team in the near future, CMO, Sales & BusDev, Developers: front end, Java and full stack.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+<section id="contact" class="gray-section contact">
+    <div class="container">
+        <div class="row m-b-lg">
+            <div class="col-lg-12 text-center">
+                <div class="navy-line"></div>
+                <h1>Contact Us</h1>
+                <p>Our team is always willing to engage with you and assist, contact us :-)</p>
+            </div>
+        </div>
+        <div class="row m-b-lg">
+            <div class="col-lg-3 col-lg-offset-3">
+                <address>
+                    <strong><span class="navy">SlidePiper, LTD.</span></strong><br/>
+                    38 Gilad St.<br/>
+                    Kochav Yair, Israel<br/>
+                    <abbr title="Phone">P:+972-(0)54-6815-095</abbr> 
+                </address>
+            </div>
+            <div class="col-lg-4">
+                <p class="text-color">
+                    We appreciate your feedback and interest. Please feel free to send us ideas and questions, we always respond and we are fun and nice about it too.
+                </p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <a href="mailto:info@slidepiper.com" class="btn btn-primary">Send us mail</a>
+                <!--
+                <p class="m-t-sm">
+                    Or follow us on social platform
+                </p>
+                <ul class="list-inline social-icon">
+                    <li><a href="#"><i class="fa fa-twitter"></i></a>
+                    </li>
+                    <li><a href="#"><i class="fa fa-facebook"></i></a>
+                    </li>
+                    <li><a href="#"><i class="fa fa-linkedin"></i></a>
+                    </li>
+                </ul>
+                -->
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 text-center m-t-lg m-b-lg">
+                <p><strong>&copy; 2015 SlidePiper LTD.</strong><br/> </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Mainly scripts -->
+<script src="assets/js/jquery-2.1.1.js"></script>
+<script src="assets/js/bootstrap.min.js"></script>
+<script src="assets/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+<!-- <script src="js/plugins/slimscroll/jquery.slimscroll.min.js"></script> -->
+
+<!-- Custom and plugin javascript -->
+<script src="assets/js/inspinia.js"></script>
+<script src="assets/js/plugins/pace/pace.min.js"></script>
+<script src="assets/js/plugins/wow/wow.min.js"></script>
+
+
+<script>
+
+    $(document).ready(function () {
+
+        $('body').scrollspy({
+            target: '.navbar-fixed-top',
+            offset: 80
+        });
+
+        // Page scrolling feature
+        $('a.page-scroll').bind('click', function(event) {
+            var link = $(this);
+            $('html, body').stop().animate({
+                scrollTop: $(link.attr('href')).offset().top - 50
+            }, 500);
+            event.preventDefault();
+            $("#navbar").collapse('hide');
+        });
+    });
+
+    var cbpAnimatedHeader = (function() {
+        var docElem = document.documentElement,
+                header = document.querySelector( '.navbar-default' ),
+                didScroll = false,
+                changeHeaderOn = 200;
+        function init() {
+            window.addEventListener( 'scroll', function( event ) {
+                if( !didScroll ) {
+                    didScroll = true;
+                    setTimeout( scrollPage, 250 );
+                }
+            }, false );
+        }
+        function scrollPage() {
+            var sy = scrollY();
+            if ( sy >= changeHeaderOn ) {
+                $(header).addClass('navbar-scroll')
+            }
+            else {
+                $(header).removeClass('navbar-scroll')
+            }
+            didScroll = false;
+        }
+        function scrollY() {
+            return window.pageYOffset || docElem.scrollTop;
+        }
+        init();
+
+    })();
+
+    // Activate WOW.js plugin for animation on scrol
+    new WOW().init();
+
+</script>
+
+</body>
 </html>
