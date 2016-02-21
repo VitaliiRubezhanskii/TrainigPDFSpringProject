@@ -65,10 +65,14 @@ public class ConfigViewerServlt extends HttpServlet {
           Boolean.parseBoolean(salesman.get("viewer_is_chat_open")));
       
       // CTA buttons.
-      viewer.put("toolbarCtaFont",
-          salesman.get("viewer_toolbar_cta_font"));
       viewer.put("toolbarCtaBorderRadius",
           salesman.get("viewer_toolbar_cta_border_radius"));
+      viewer.put("toolbarCtaFont",
+          salesman.get("viewer_toolbar_cta_font"));
+      viewer.put("toolbarCtaMargin",
+          salesman.get("viewer_toolbar_cta_margin"));
+      viewer.put("toolbarCtaPadding",
+          salesman.get("viewer_toolbar_cta_padding"));
       
       // CTA1.
       viewer.put("isCta1Enabled",

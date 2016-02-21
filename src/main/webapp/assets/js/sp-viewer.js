@@ -86,12 +86,20 @@ if ('' != sp.viewer.linkHash) {
     }
     
     // CTA buttons.
+    if (typeof config.viewer.toolbarCtaBorderRadius !== 'undefined') {
+      $('.sp-cta').css('border-radius', config.viewer.toolbarCtaBorderRadius);
+    }
+    
     if (typeof config.viewer.toolbarCtaFont !== 'undefined') {
       $('.sp-cta').css('font', config.viewer.toolbarCtaFont);
     }
     
-    if (typeof config.viewer.toolbarCtaBorderRadius !== 'undefined') {
-      $('.sp-cta').css('border-radius', config.viewer.toolbarCtaBorderRadius);
+    if (typeof config.viewer.toolbarCtaMargin !== 'undefined') {
+      $('.sp-cta').css('margin', config.viewer.toolbarCtaMargin);
+    }
+    
+    if (typeof config.viewer.toolbarCtaPadding !== 'undefined') {
+      $('.sp-cta').css('padding', config.viewer.toolbarCtaPadding);
     }
     
     // CTA1.
