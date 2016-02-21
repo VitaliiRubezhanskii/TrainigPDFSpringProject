@@ -449,7 +449,7 @@ function sendMessage() {
                         contentType : "application/json; charset=utf-8",
                         processData : false,
                         error : function(XmlHttpRequest, status, error) {
-                                alert('chatservlet error from returned json' + error);
+                                //alert('chatservlet error from returned json' + error);
                         },
                         success : function(msg) {
                                 console.log("chat message sent using servlet");
@@ -595,7 +595,7 @@ function loadChatHistory() {
                                 contentType : "application/json; charset=utf-8",
                                 processData : false,
                                 error : function(XmlHttpRequest, status, error) {
-                                        alert('chatservlet error from returned json' + error);
+                                        //alert('chatservlet error from returned json' + error);
                                 },
                                 success : function(msg) {
 

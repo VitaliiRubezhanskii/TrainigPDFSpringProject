@@ -428,7 +428,7 @@ var ProgressBar = (function ProgressBarClosure() {
 var DEFAULT_PREFERENCES = {
   showPreviousViewOnLoad: true,
 //  defaultZoomValue: '',
-  defaultZoomValue: 'page-fit',
+  defaultZoomValue: 'page-actual',
   sidebarViewOnLoad: 0,
   enableHandToolOnLoad: false,
   enableWebGL: false,
@@ -5879,7 +5879,7 @@ var PDFViewerApplication = {
       newScale = Math.ceil(newScale * 10) / 10;
       newScale = Math.min(MAX_SCALE, newScale);
     } while (--ticks && newScale < MAX_SCALE);
-   // this.setScale(newScale, true);
+      this.setScale(newScale, true);
   },
 
   zoomOut: function pdfViewZoomOut(ticks) {
@@ -5889,7 +5889,7 @@ var PDFViewerApplication = {
       newScale = Math.floor(newScale * 10) / 10;
       newScale = Math.max(MIN_SCALE, newScale);
     } while (--ticks && newScale > MIN_SCALE);
-    //this.setScale(newScale, true);
+      this.setScale(newScale, true);
   },
 
   get currentScaleValue() {
