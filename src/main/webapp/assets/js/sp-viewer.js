@@ -12,42 +12,39 @@ if ('' != sp.viewer.linkHash) {
     PDFViewerApplication.open(config.appUrl + '/file/' + sp.viewer.linkHash);
     $(document).prop('title', 'SlidePiper Viewer');
     
-    // Template settings.
-    if (typeof config.viewer.toolbarBackgroundImage !== 'undefined') {
+    // Customization settings.
+    if (typeof config.viewer.toolbarBackground !== 'undefined') {
       $('#toolbarContainer, #toolbarSidebar, #secondaryToolbar')
-          .css('background-image', config.viewer.toolbarBackgroundImage);
+          .css('background', config.viewer.toolbarBackground);
     }
     
-    if (typeof config.viewer.toolbarBackgroundColor !== 'undefined') {
-      $('#toolbarContainer, #toolbarSidebar, #scaleSelect > option, #secondaryToolbar')
-          .css('background-color', config.viewer.toolbarBackgroundColor);
-    }
-    
-    if (typeof config.viewer.toolbarButtonBackgroundColor !== 'undefined') {
+    if (typeof config.viewer.toolbarButtonBackground !== 'undefined') {
       $('.toolbarButton, .secondaryToolbarButton')
-          .css('background-color', config.viewer.toolbarButtonBackgroundColor);
+          .css('background', config.viewer.toolbarButtonBackground);
     
-      if (typeof config.viewer.toolbarButtonHoverBackgroundColor !== 'undefined') {
+      if (typeof config.viewer.toolbarButtonHoverBackground !== 'undefined') {
         $('.toolbarButton, .secondaryToolbarButton').hover(
           function() {
-            $(this).css('background-color', config.viewer.toolbarButtonHoverBackgroundColor);
+            $(this).css('background', config.viewer.toolbarButtonHoverBackground);
           },function() {
-            $(this).css('background-color', config.viewer.toolbarButtonBackgroundColor);
-          });
+            $(this).css('background', config.viewer.toolbarButtonBackground);
+          }
+        );
       }
     }
     
-    if (typeof config.viewer.toolbarButtonBorderColor !== 'undefined') {
+    if (typeof config.viewer.toolbarButtonBorder !== 'undefined') {
       $('.toolbarButton, .secondaryToolbarButton')
-          .css('border-color', config.viewer.toolbarButtonBorderColor);
+          .css('border', config.viewer.toolbarButtonBorder);
     
-      if (typeof config.viewer.toolbarButtonHoverBorderColor !== 'undefined') {
+      if (typeof config.viewer.toolbarButtonHoverBorder !== 'undefined') {
         $('.toolbarButton, .secondaryToolbarButton').hover(
           function() {
-            $(this).css('border-color', config.viewer.toolbarButtonHoverBorderColor);
+            $(this).css('border', config.viewer.toolbarButtonHoverBorder);
           },function() {
-            $(this).css('border-color', config.viewer.toolbarButtonBorderColor);
-          });
+            $(this).css('border', config.viewer.toolbarButtonBorder);
+          }
+        );
       }
     }
     
@@ -61,7 +58,8 @@ if ('' != sp.viewer.linkHash) {
             $(this).css('box-shadow', config.viewer.toolbarButtonHoverBoxShadow);
           },function() {
             $(this).css('box-shadow', config.viewer.toolbarButtonBoxShadow);
-          });
+          }
+        );
       }
     }
     
@@ -74,12 +72,208 @@ if ('' != sp.viewer.linkHash) {
       });
     }
     
+    if (typeof config.viewer.toolbarFindColor !== 'undefined') {
+      $('#findbar .toolbarLabel').css('color', config.viewer.toolbarFindColor);
+    }
+    
     if (typeof config.viewer.toolbarLogoImage !== 'undefined') {
       $('.sp-toolbar-logo img')
           .attr('src', 'data:image/png;base64,' + config.viewer.toolbarLogoImage);
       
       if (typeof config.viewer.toolbarLogoLink !== 'undefined') {
         $('.sp-toolbar-logo a').attr('href', config.viewer.toolbarLogoLink);
+      }
+    }
+    
+    // CTA buttons.
+    if (typeof config.viewer.toolbarCtaFont !== 'undefined') {
+      $('.sp-cta').css('font', config.viewer.toolbarCtaFont);
+    }
+    
+    if (typeof config.viewer.toolbarCtaBorderRadius !== 'undefined') {
+      $('.sp-cta').css('border-radius', config.viewer.toolbarCtaBorderRadius);
+    }
+    
+    // CTA1.
+    if (true == config.viewer.isCta1Enabled) {
+      $('#sp-cta-secondary-toolbar-separator').addClass('visibleLargeView');
+      
+      if (typeof config.viewer.cta1CollapseMaxWidth !== 'undefined') {
+        $('body').append(
+            '<style>@media all and (max-width: ' + config.viewer.cta1CollapseMaxWidth
+            + ') {#sp-cta1 {display: none;}}</style>');
+      }
+      
+      if (typeof config.viewer.toolbarCta1Background !== 'undefined') {
+        $('#sp-cta1').css('background', config.viewer.toolbarCta1Background);
+        
+        if (typeof config.viewer.toolbarCta1HoverBackground !== 'undefined') {
+          $('#sp-cta1').hover(
+            function() {
+              $(this).css('background', config.viewer.toolbarCta1HoverBackground);
+            },function() {
+              $(this).css('background', config.viewer.toolbarCta1Background);
+            }
+          );
+        }
+      }
+      
+      if (typeof config.viewer.toolbarCta1Border !== 'undefined') {
+        $('#sp-cta1').css('border', config.viewer.toolbarCta1Border);
+        
+        if (typeof config.viewer.toolbarCta1HoverBorder !== 'undefined') {
+          $('#sp-cta1').hover(
+            function() {
+              $(this).css('border', config.viewer.toolbarCta1HoverBorder);
+            },function() {
+              $(this).css('border', config.viewer.toolbarCta1Border);
+            }
+          );
+        }
+      }
+      
+      if (typeof config.viewer.toolbarCta1Color !== 'undefined') {
+        $('#sp-cta1').css('color', config.viewer.toolbarCta1Color);
+        
+        if (typeof config.viewer.toolbarCta1HoverColor !== 'undefined') {
+          $('#sp-cta1').hover(
+            function() {
+              $(this).css('color', config.viewer.toolbarCta1HoverColor);
+            },function() {
+              $(this).css('color', config.viewer.toolbarCta1Color);
+            }
+          );
+        }
+      }
+      
+      if (typeof config.viewer.toolbarCta1Text !== 'undefined') {
+        $('#sp-cta1, #sp-secondary-cta1').text(config.viewer.toolbarCta1Text);
+        
+        if (typeof config.viewer.toolbarCta1Link !== 'undefined') {
+          $('#sp-cta1, #sp-secondary-cta1').attr('href', config.viewer.toolbarCta1Link);
+        }
+      }
+    }
+    
+    // CTA2.
+    if (true == config.viewer.isCta2Enabled) {
+      $('#sp-cta-secondary-toolbar-separator').addClass('visibleLargeView');
+      
+      if (typeof config.viewer.cta2CollapseMaxWidth !== 'undefined') {
+        $('body').append(
+            '<style>@media all and (max-width: ' + config.viewer.cta2CollapseMaxWidth
+            + ') {#sp-cta2 {display: none;}}</style>');
+      }
+      
+      if (typeof config.viewer.toolbarCta2Background !== 'undefined') {
+        $('#sp-cta2').css('background', config.viewer.toolbarCta2Background);
+        
+        if (typeof config.viewer.toolbarCta2HoverBackground !== 'undefined') {
+          $('#sp-cta2').hover(
+            function() {
+              $(this).css('background', config.viewer.toolbarCta2HoverBackground);
+            },function() {
+              $(this).css('background', config.viewer.toolbarCta2Background);
+            }
+          );
+        }
+      }
+      
+      if (typeof config.viewer.toolbarCta2Border !== 'undefined') {
+        $('#sp-cta2').css('border', config.viewer.toolbarCta2Border);
+        
+        if (typeof config.viewer.toolbarCta2HoverBorder !== 'undefined') {
+          $('#sp-cta2').hover(
+            function() {
+              $(this).css('border', config.viewer.toolbarCta2HoverBorder);
+            },function() {
+              $(this).css('border', config.viewer.toolbarCta2Border);
+            }
+          );
+        }
+      }
+      
+      if (typeof config.viewer.toolbarCta2Color !== 'undefined') {
+        $('#sp-cta2').css('color', config.viewer.toolbarCta2Color);
+        
+        if (typeof config.viewer.toolbarCta2HoverColor !== 'undefined') {
+          $('#sp-cta2').hover(
+            function() {
+              $(this).css('color', config.viewer.toolbarCta2HoverColor);
+            },function() {
+              $(this).css('color', config.viewer.toolbarCta2Color);
+            }
+          );
+        }
+      }
+      
+      if (typeof config.viewer.toolbarCta2Text !== 'undefined') {
+        $('#sp-cta2, #sp-secondary-cta2').text(config.viewer.toolbarCta2Text);
+        
+        if (typeof config.viewer.toolbarCta2Link !== 'undefined') {
+          $('#sp-cta2, #sp-secondary-cta2').attr('href', config.viewer.toolbarCta2Link);
+        }
+      }
+    }
+    
+    // CTA3.
+    if (true == config.viewer.isCta3Enabled) {
+      $('#sp-cta-secondary-toolbar-separator').addClass('visibleLargeView');
+      
+      if (typeof config.viewer.cta3CollapseMaxWidth !== 'undefined') {
+        $('body').append(
+            '<style>@media all and (max-width: ' + config.viewer.cta3CollapseMaxWidth
+            + ') {#sp-cta3 {display: none;}}</style>');
+      }
+      
+      if (typeof config.viewer.toolbarCta3Background !== 'undefined') {
+        $('#sp-cta3').css('background', config.viewer.toolbarCta3Background);
+        
+        if (typeof config.viewer.toolbarCta3HoverBackground !== 'undefined') {
+          $('#sp-cta3').hover(
+            function() {
+              $(this).css('background', config.viewer.toolbarCta3HoverBackground);
+            },function() {
+              $(this).css('background', config.viewer.toolbarCta3Background);
+            }
+          );
+        }
+      }
+      
+      if (typeof config.viewer.toolbarCta3Border !== 'undefined') {
+        $('#sp-cta3').css('border', config.viewer.toolbarCta3Border);
+        
+        if (typeof config.viewer.toolbarCta3HoverBorder !== 'undefined') {
+          $('#sp-cta3').hover(
+            function() {
+              $(this).css('border', config.viewer.toolbarCta3HoverBorder);
+            },function() {
+              $(this).css('border', config.viewer.toolbarCta3Border);
+            }
+          );
+        }
+      }
+      
+      if (typeof config.viewer.toolbarCta3Color !== 'undefined') {
+        $('#sp-cta3').css('color', config.viewer.toolbarCta3Color);
+        
+        if (typeof config.viewer.toolbarCta3HoverColor !== 'undefined') {
+          $('#sp-cta3').hover(
+            function() {
+              $(this).css('color', config.viewer.toolbarCta3HoverColor);
+            },function() {
+              $(this).css('color', config.viewer.toolbarCta3Color);
+            }
+          );
+        }
+      }
+      
+      if (typeof config.viewer.toolbarCta3Text !== 'undefined') {
+        $('#sp-cta3, #sp-secondary-cta3').text(config.viewer.toolbarCta3Text);
+        
+        if (typeof config.viewer.toolbarCta3Link !== 'undefined') {
+          $('#sp-cta3, #sp-secondary-cta3').attr('href', config.viewer.toolbarCta3Link);
+        }
       }
     }
     

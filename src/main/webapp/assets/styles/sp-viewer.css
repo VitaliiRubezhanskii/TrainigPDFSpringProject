@@ -7,15 +7,35 @@
  * https://en.bem.info/method/naming-convention/ .
  */
 
+
 /**
- * Templating settings.
+ * Customization settings.
  */
 #loadingBar, #toolbarContainer, #toolbarSidebar {
   visibility: hidden;
 }
 
-#toolbarViewerRight .splitToolbarButton:first-of-type {
-  display: none;
+#pageNumber {
+  width: 36px;
+}
+
+#viewFind {
+  margin-left: 4px;
+}
+
+@media all and (max-width: 600px) {
+  #zoomOut {
+    margin-left: 4px;
+  }
+  
+  #zoomIn {
+    margin-right: 1px;
+  }
+}
+
+.outerCenter {
+  float: right !important;
+  left: auto !important;
 }
 
 .sp-toolbar-logo img {
@@ -23,6 +43,42 @@
   margin: 2px 0;
 }
 
+/* CTA */
+#sp-cta-secondary-toolbar-separator {
+  display: inherit;
+}
+
+.sp-cta {
+  cursor: pointer;
+  margin: 5px 10px 0 0;
+  padding: 1px 10px 2px;
+  width: auto;
+}
+
+.sp-secondary-cta {
+  display: inherit;
+  padding-top: 6px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.sp-secondary-cta::before {
+  content: url(../../pdfjs/images/findbarButton-next.png);
+}
+
+@media screen and (min-resolution: 2dppx) {
+  .sp-secondary-cta::before {
+    content: url(../../pdfjs/images/findbarButton-next@2x.png);
+  }
+}
+
+.sp-secondary-cta:link, .sp-secondary-cta:visited, .sp-secondary-cta:hover, .sp-secondary-cta:active {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.sp-cta:link, .sp-cta:visited, .sp-cta:hover, .sp-cta:active,
+.sp-secondary-cta:link, .sp-secondary-cta:visited, .sp-secondary-cta:hover, .sp-secondary-cta:active {
+  text-decoration: none;
+}
 
 /**
  * SlidePiper settings.
