@@ -6,15 +6,15 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>SlidePiper Analytics</title>
+    <title>SlidePiper Dashboard</title>
 
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <link href="../assets/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../assets/font-awesome/css/font-awesome.min.css" rel="stylesheet">
 
-    <link href="css/animate.css" rel="stylesheet">
-    <link href="css/style.css" rel="stylesheet">
-    <link href="css/plugins/metisMenu/metisMenu.min.css" rel="stylesheet">
-    <link href="css/plugins/datatables/datatables.min.css" rel="stylesheet">
+    <link href="../assets/css/animate.css" rel="stylesheet">
+    <link href="../assets/css/style.css" rel="stylesheet">
+    <link href="../assets/css/plugins/metisMenu/metisMenu.min.css" rel="stylesheet">
+    <link href="../assets/css/plugins/datatables/datatables.min.css" rel="stylesheet">
     
     <!-- SlidePiper scripts -->
     <link rel="shortcut icon" type="image/png" href="../img/splogo.png" />
@@ -43,7 +43,7 @@
                     </div>
                 </li>
                 <li id="sp-admin">
-                    <a href="../spsystem.html"><i class="fa fa-external-link"></i> <span class="nav-label">Admin</span></a>
+                    <a href="../spsystem.html"><i class="fa fa-cloud-upload"></i> <span class="nav-label">Admin</span></a>
                 </li>
                 <li class="active" id="sp-nav-files__li">
                     <a href="#" aria-expanded="true"><i class="fa fa-file"></i> <span class="nav-label">Files</span></a>
@@ -117,8 +117,8 @@
                                     <i class="fa fa-hourglass-end fa-3x"></i>
                                 </div>
                                 <div class="col-xs-8 text-right">
-                                    <span>View duration</span>
-                                    <h2 class="font-bold">CS</h2>
+                                    <span>Avg. view duration</span>
+                                    <h2 class="font-bold" id="sp-widget-average-view-duration"></h2>
                                 </div>
                             </div>
                         </div>
@@ -181,7 +181,7 @@
                         <div class="ibox float-e-margins">
                             <div class="ibox-title">
                                 <i class="fa fa-bar-chart-o fa-2x sp-chart-title-fa"></i>
-                                <h4>Average view page duration</h4>
+                                <h4>Average view duration per page (sec.)</h4>
                             </div>
                             <div class="ibox-content">
                                 <div>
@@ -282,16 +282,16 @@
 </div>
 
 <!-- Mainly scripts -->
-<script src="js/jquery-2.1.1.js"></script>
-<script src="js/bootstrap.min.js"></script>
-<script src="js/plugins/metisMenu/metisMenu.min.js"></script>
+<script src="../assets/js/jquery-2.1.1.js"></script>
+<script src="../assets/js/bootstrap.min.js"></script>
+<script src="../assets/js/plugins/metisMenu/metisMenu.min.js"></script>
 
 <!-- Custom and plugin javascript -->
-<script src="js/inspinia.js"></script>
-<script src="js/plugins/pace/pace.min.js"></script>
-<script src="js/plugins/clipboard/clipboard.min.js"></script>
-<script src="js/plugins/datatables/datatables.min.js"></script>
-<script src="js/plugins/chartjs/chart.min.js"></script>
+<script src="../assets/js/inspinia.js"></script>
+<script src="../assets/js/plugins/pace/pace.min.js"></script>
+<script src="../assets/js/plugins/clipboard/clipboard.min.js"></script>
+<script src="../assets/js/plugins/datatables/datatables.min.js"></script>
+<script src="../assets/js/plugins/chartjs/chart.min.js"></script>
 
 <!-- SlidePiper scripts -->
 <script src="../assets/js/jquery.cookie.js"></script>

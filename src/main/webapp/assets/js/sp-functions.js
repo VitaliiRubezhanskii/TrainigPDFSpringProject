@@ -175,6 +175,29 @@ sp = {
       } else {
         $('#sp-widget-bounce-rate').text('N/A');
       }
+      if (null != fileData[5]) {
+        /**
+         * @see http://stackoverflow.com/questions/6312993/javascript-seconds-to-time-string-with-format-hhmmss
+         */
+        var totalSeconds = parseInt(fileData[5], 10);
+        var hours   = Math.floor(totalSeconds / 3600);
+        var minutes = Math.floor((totalSeconds - (hours * 3600)) / 60);
+        var seconds = totalSeconds - (hours * 3600) - (minutes * 60);
+
+        if (hours < 10) {
+          hours = '0' + hours;
+        }
+        if (minutes < 10) {
+          minutes = '0' + minutes;
+        }
+        if (seconds < 10) {
+          seconds = '0' + seconds;
+        }
+        var time    = hours+':'+minutes+':'+seconds;
+        $('#sp-widget-average-view-duration').text(hours + ':' + minutes + ':' + seconds);
+      } else {
+        $('#sp-widget-average-view-duration').text('00:00:00');
+      }
     }
   },
   
