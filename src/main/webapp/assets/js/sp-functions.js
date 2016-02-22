@@ -330,7 +330,9 @@ sp = {
                 targets: 4
               },
               {
-                defaultContent: '',
+                render: function (data, type, row) {
+                  return '';
+                },
                 targets: 5
               }
           ],
