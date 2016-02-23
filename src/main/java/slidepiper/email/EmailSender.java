@@ -95,10 +95,6 @@ public class EmailSender {
 
 	}
 	
-	public static String getUrlPrefix()
-	{
-		return ConfigProperties.getProperty("app_url") + "/";
-	}
 	
 	// send alert email
 	public static void sendAlertEmail(String id, String sessionId)
@@ -106,7 +102,7 @@ public class EmailSender {
 		  MessageInfo mi = DbLayer.getMessageInfo(id);		  		  
 			String currentviewslink;
 			String chatlink;
-			String urlprefix = getUrlPrefix();		
+			String urlprefix = ConfigProperties.getProperty("viewer_url", mi.getSalesManEmail()) + "/";
 			
 			String custname = DbLayer.getCustomerName(mi.getCustomerEmail(), mi.getSalesManEmail());
 			String getParams = "sessionid="+sessionId+"&salesman="+DbLayer.getSalesmanName(mi.getSalesManEmail())+"&customername="+ custname +"&role=1";
@@ -212,7 +208,7 @@ public class EmailSender {
          case MERGE_TAG_FILE:
            String fileHash = mergeTagPart.get(1);
            String fileLinkHash = DbLayer.setFileLinkHash(customerEmail, fileHash, salesmanEmail);
-           String fileLink = ConfigProperties.getProperty("app_url")
+           String fileLink = ConfigProperties.getProperty("viewer_url", salesmanEmail)
                + ConfigProperties.FILE_VIEWER_PATH + "?"
                + ConfigProperties.getProperty("file_viewer_query_parameter") + "="
                + fileLinkHash;
