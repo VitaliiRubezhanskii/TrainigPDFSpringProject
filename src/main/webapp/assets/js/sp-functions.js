@@ -79,9 +79,7 @@ sp = {
         // .click() cannot be used since '#sp-nav-files__li li' haven't been created yet.
         $(document).on('click', '#sp-nav-files__li li, td.sp-file-hash', setFileDashboard);
       
-        $(document).ready(function() {
-          $('#send_email_to_customers').css('visibility', 'visible');
-          
+        $(document).ready(function() { 
           $('#side-menu').metisMenu();
           $('#sp-salesman-full-name strong').text(sp.config.salesman.name);
         });
@@ -475,6 +473,8 @@ sp = {
 
 
 $(document).ready(function() {
+  $('#send_email_to_customers').css('visibility', 'visible');
+  
   
 	/**
 	 * Add a salesman to the DB.
