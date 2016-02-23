@@ -75,13 +75,6 @@ public class ManagementServlet extends HttpServlet {
 	      String mailType = DbLayer.getSalesmanMailType(request.getParameter("salesmanEmail"));
 	      data.put("mailType", mailType);
         break;
-	    
-	    case "getFileData":
-        parameterList.add(request.getParameter("salesmanEmail"));
-        parameterList.add(request.getParameter("fileHash"));
-        sqlData = DbLayer.getEventData(parameterList, Analytics.sqlFileData);
-        data.put("fileData", sqlData);
-        break;
         
 	    case "getFilesData":
         parameterList.add(request.getParameter("salesmanEmail"));
@@ -90,15 +83,15 @@ public class ManagementServlet extends HttpServlet {
         break;
         
 	    case "getFileBarChart":
-        parameterList.add(request.getParameter("salesmanEmail"));
-        parameterList.add(request.getParameter("fileHash"));
+	      parameterList.add(request.getParameter("fileHash"));
+	      parameterList.add(request.getParameter("salesmanEmail"));
         sqlData = DbLayer.getEventData(parameterList, Analytics.sqlFileBarChart);
         data.put("fileBarChart", sqlData);
         break;
 	    
 	    case "getFileLineChart":
-        parameterList.add(request.getParameter("salesmanEmail"));
-        parameterList.add(request.getParameter("fileHash"));
+	      parameterList.add(request.getParameter("fileHash"));
+	      parameterList.add(request.getParameter("salesmanEmail"));
         sqlData = DbLayer.getEventData(parameterList, Analytics.sqlFileLineChart);
         data.put("fileLineChart", sqlData);
         break;
