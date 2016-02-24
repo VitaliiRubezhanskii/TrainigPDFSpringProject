@@ -74,7 +74,7 @@ if ('' != sp.viewer.linkHash) {
     
     // Find toolbar.
     if (typeof config.viewer.toolbarFindColor !== 'undefined') {
-      $('#findbar .toolbarLabel').css('color', config.viewer.toolbarFindColor);
+      $('#findbar .toolbarLabel, #findInput').css('color', config.viewer.toolbarFindColor);
     }
     
     if (typeof config.viewer.toolbarFindBackground !== 'undefined') {
