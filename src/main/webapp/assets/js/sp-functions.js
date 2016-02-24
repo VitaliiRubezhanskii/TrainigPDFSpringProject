@@ -78,15 +78,12 @@ sp = {
         
         // .click() cannot be used since '#sp-nav-files__li li' haven't been created yet.
         $(document).on('click', '#sp-nav-files__li li, td.sp-file-hash', setFileDashboard);
+      
+        $(document).ready(function() { 
+          $('#side-menu').metisMenu();
+          $('#sp-salesman-full-name strong').text(sp.config.salesman.name);
+        });
       }
-    });
-  
-      
-    $(document).ready(function() {
-      $('#send_email_to_customers').css('visibility', 'visible');
-      
-      $('#side-menu').metisMenu();
-      $('#sp-salesman-full-name strong').text(sp.config.salesman.name);
     });
   })(),
   
@@ -175,6 +172,29 @@ sp = {
         $('#sp-widget-bounce-rate').text(parseFloat(fileData[4] * 100).toFixed(2) + '%');
       } else {
         $('#sp-widget-bounce-rate').text('N/A');
+      }
+      if (null != fileData[5]) {
+        /**
+         * @see http://stackoverflow.com/questions/6312993/javascript-seconds-to-time-string-with-format-hhmmss
+         */
+        var totalSeconds = parseInt(fileData[5], 10);
+        var hours   = Math.floor(totalSeconds / 3600);
+        var minutes = Math.floor((totalSeconds - (hours * 3600)) / 60);
+        var seconds = totalSeconds - (hours * 3600) - (minutes * 60);
+
+        if (hours < 10) {
+          hours = '0' + hours;
+        }
+        if (minutes < 10) {
+          minutes = '0' + minutes;
+        }
+        if (seconds < 10) {
+          seconds = '0' + seconds;
+        }
+        var time    = hours+':'+minutes+':'+seconds;
+        $('#sp-widget-average-view-duration').text(hours + ':' + minutes + ':' + seconds);
+      } else {
+        $('#sp-widget-average-view-duration').text('00:00:00');
       }
     }
   },
@@ -308,7 +328,9 @@ sp = {
                 targets: 4
               },
               {
-                defaultContent: '',
+                render: function (data, type, row) {
+                  return '';
+                },
                 targets: 5
               }
           ],
@@ -451,6 +473,8 @@ sp = {
 
 
 $(document).ready(function() {
+  $('#send_email_to_customers').css('visibility', 'visible');
+  
   
 	/**
 	 * Add a salesman to the DB.

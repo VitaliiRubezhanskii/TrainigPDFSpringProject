@@ -72,16 +72,8 @@ public class ManagementServlet extends HttpServlet {
 	  
 	  switch (request.getParameter("action")) {
 	    case "getMailType":
-	      System.out.println(request.getParameter("salesmanEmail"));
 	      String mailType = DbLayer.getSalesmanMailType(request.getParameter("salesmanEmail"));
 	      data.put("mailType", mailType);
-        break;
-	    
-	    case "getFileData":
-        parameterList.add(request.getParameter("salesmanEmail"));
-        parameterList.add(request.getParameter("fileHash"));
-        sqlData = DbLayer.getEventData(parameterList, Analytics.sqlFileData);
-        data.put("fileData", sqlData);
         break;
         
 	    case "getFilesData":
@@ -91,34 +83,18 @@ public class ManagementServlet extends HttpServlet {
         break;
         
 	    case "getFileBarChart":
-        parameterList.add(request.getParameter("salesmanEmail"));
-        parameterList.add(request.getParameter("fileHash"));
+	      parameterList.add(request.getParameter("fileHash"));
+	      parameterList.add(request.getParameter("salesmanEmail"));
         sqlData = DbLayer.getEventData(parameterList, Analytics.sqlFileBarChart);
         data.put("fileBarChart", sqlData);
         break;
 	    
 	    case "getFileLineChart":
-        parameterList.add(request.getParameter("salesmanEmail"));
-        parameterList.add(request.getParameter("fileHash"));
+	      parameterList.add(request.getParameter("fileHash"));
+	      parameterList.add(request.getParameter("salesmanEmail"));
         sqlData = DbLayer.getEventData(parameterList, Analytics.sqlFileLineChart);
         data.put("fileLineChart", sqlData);
         break;
-      
-      /*
-	    case "getFileLinksData":
-	      parameterList.add(request.getParameter("salesmanEmail"));
-        sqlData = DbLayer.getEventData(parameterList, Analytics.sqlFileLinksData);
-        data.put("fileLinksData", sqlData);
-        break;
-      */
-        
-      /*
-	    case "getFileList":
-        parameterList.add(request.getParameter("salesmanEmail"));
-        sqlData = DbLayer.getEventData(parameterList, Analytics.sqlFileList);
-        data.put("fileList", sqlData);
-        break;
-      */
 	  }
 	  
 	  response.setContentType("application/json; charset=UTF-8");

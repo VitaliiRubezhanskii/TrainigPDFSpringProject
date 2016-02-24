@@ -72,10 +72,16 @@ if ('' != sp.viewer.linkHash) {
       });
     }
     
+    // Find toolbar.
     if (typeof config.viewer.toolbarFindColor !== 'undefined') {
       $('#findbar .toolbarLabel').css('color', config.viewer.toolbarFindColor);
     }
     
+    if (typeof config.viewer.toolbarFindBackground !== 'undefined') {
+      $('#findbar').css('background', config.viewer.toolbarFindBackground);
+    }
+    
+    // Logo.
     if (typeof config.viewer.toolbarLogoImage !== 'undefined') {
       $('.sp-toolbar-logo img')
           .attr('src', 'data:image/png;base64,' + config.viewer.toolbarLogoImage);
@@ -104,7 +110,7 @@ if ('' != sp.viewer.linkHash) {
     
     // CTA1.
     if (true == config.viewer.isCta1Enabled) {
-      $('#sp-cta-secondary-toolbar-separator').addClass('visibleLargeView');
+      $('#sp-cta-secondary-toolbar-separator').show();
       
       if (typeof config.viewer.cta1CollapseMaxWidth !== 'undefined') {
         $('body').append(
@@ -123,6 +129,10 @@ if ('' != sp.viewer.linkHash) {
               $(this).css('background', config.viewer.toolbarCta1Background);
             }
           );
+          
+          $('#sp-cta1').click(function() {
+            $(this).css('background', config.viewer.toolbarCta1Background);
+          });
         }
       }
       
@@ -137,6 +147,10 @@ if ('' != sp.viewer.linkHash) {
               $(this).css('border', config.viewer.toolbarCta1Border);
             }
           );
+          
+          $('#sp-cta1').click(function() {
+            $(this).css('border', config.viewer.toolbarCta1Border);
+          });
         }
       }
       
@@ -151,6 +165,10 @@ if ('' != sp.viewer.linkHash) {
               $(this).css('color', config.viewer.toolbarCta1Color);
             }
           );
+          
+          $('#sp-cta1').click(function() {
+            $(this).css('color', config.viewer.toolbarCta1Color);
+          });
         }
       }
       
@@ -161,11 +179,13 @@ if ('' != sp.viewer.linkHash) {
           $('#sp-cta1, #sp-secondary-cta1').attr('href', config.viewer.toolbarCta1Link);
         }
       }
+    } else {
+      $('#sp-cta1, #sp-secondary-cta1').hide();
     }
     
     // CTA2.
     if (true == config.viewer.isCta2Enabled) {
-      $('#sp-cta-secondary-toolbar-separator').addClass('visibleLargeView');
+      $('#sp-cta-secondary-toolbar-separator').show();
       
       if (typeof config.viewer.cta2CollapseMaxWidth !== 'undefined') {
         $('body').append(
@@ -184,6 +204,10 @@ if ('' != sp.viewer.linkHash) {
               $(this).css('background', config.viewer.toolbarCta2Background);
             }
           );
+          
+          $('#sp-cta2').click(function() {
+            $(this).css('background', config.viewer.toolbarCta2Background);
+          });
         }
       }
       
@@ -198,6 +222,10 @@ if ('' != sp.viewer.linkHash) {
               $(this).css('border', config.viewer.toolbarCta2Border);
             }
           );
+          
+          $('#sp-cta2').click(function() {
+            $(this).css('border', config.viewer.toolbarCta2Border);
+          });
         }
       }
       
@@ -212,6 +240,10 @@ if ('' != sp.viewer.linkHash) {
               $(this).css('color', config.viewer.toolbarCta2Color);
             }
           );
+          
+          $('#sp-cta2').click(function() {
+            $(this).css('color', config.viewer.toolbarCta2Color);
+          });
         }
       }
       
@@ -222,11 +254,13 @@ if ('' != sp.viewer.linkHash) {
           $('#sp-cta2, #sp-secondary-cta2').attr('href', config.viewer.toolbarCta2Link);
         }
       }
+    } else {
+      $('#sp-cta2, #sp-secondary-cta2').hide();
     }
     
     // CTA3.
     if (true == config.viewer.isCta3Enabled) {
-      $('#sp-cta-secondary-toolbar-separator').addClass('visibleLargeView');
+      $('#sp-cta-secondary-toolbar-separator').show();
       
       if (typeof config.viewer.cta3CollapseMaxWidth !== 'undefined') {
         $('body').append(
@@ -245,6 +279,10 @@ if ('' != sp.viewer.linkHash) {
               $(this).css('background', config.viewer.toolbarCta3Background);
             }
           );
+          
+          $('#sp-cta3').click(function() {
+            $(this).css('background', config.viewer.toolbarCta3Background);
+          });
         }
       }
       
@@ -259,6 +297,10 @@ if ('' != sp.viewer.linkHash) {
               $(this).css('border', config.viewer.toolbarCta3Border);
             }
           );
+          
+          $('#sp-cta3').click(function() {
+            $(this).css('border', config.viewer.toolbarCta3Border);
+          });
         }
       }
       
@@ -273,6 +315,10 @@ if ('' != sp.viewer.linkHash) {
               $(this).css('color', config.viewer.toolbarCta3Color);
             }
           );
+          
+          $('#sp-cta3').click(function() {
+            $(this).css('color', config.viewer.toolbarCta3Color);
+          });
         }
       }
       
@@ -283,6 +329,8 @@ if ('' != sp.viewer.linkHash) {
           $('#sp-cta3, #sp-secondary-cta3').attr('href', config.viewer.toolbarCta3Link);
         }
       }
+    } else {
+      $('#sp-cta3, #sp-secondary-cta3').hide();
     }
     
     // Since loading fonts is currently done asynchronous, this section

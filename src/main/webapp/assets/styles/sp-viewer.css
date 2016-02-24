@@ -45,7 +45,7 @@
 
 /* CTA */
 #sp-cta-secondary-toolbar-separator {
-  display: inherit;
+  display: none;
 }
 
 .sp-cta {
@@ -56,7 +56,6 @@
 .sp-secondary-cta {
   display: inherit;
   padding-top: 6px;
-  color: rgba(255, 255, 255, 0.8);
 }
 
 .sp-secondary-cta::before {
@@ -71,7 +70,7 @@
 
 .sp-secondary-cta:link, .sp-secondary-cta:visited, .sp-secondary-cta:hover, .sp-secondary-cta:active {
   color: rgba(255, 255, 255, 0.8);
-}
+} 
 
 .sp-cta:link, .sp-cta:visited, .sp-cta:hover, .sp-cta:active,
 .sp-secondary-cta:link, .sp-secondary-cta:visited, .sp-secondary-cta:hover, .sp-secondary-cta:active {

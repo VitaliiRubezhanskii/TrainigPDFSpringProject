@@ -16,8 +16,13 @@ $(document).ready(function () {
         $('body').removeClass('body-small')
     }
 
-    // MetsiMenu
-    $('#side-menu').metisMenu();
+     // MetsiMenu
+    /**
+     * Moved command to sp-functions.js to be run after dynamic navs had been created.
+     *
+     * @authour Yaniv Friedensohnn <yanivf@slidepiper.com>
+     */
+    //$('#side-menu').metisMenu();
 
     // Collapse ibox function
     $('.collapse-link').click(function () {
