@@ -60,7 +60,7 @@ public class ConfigProperties {
     }
 
     // Create application and web sockets URLs.
-    if (key.equals("app_url") || key.equals("subdomain_app_url") || key.equals("websockets_url")) {
+    if (key.equals("app_url") || key.equals("websockets_url")) {
       if (overrideOpenshiftEv) {
         String appScheme = props.getProperty("app_scheme");
         String appHost = (null != props.getProperty("app_alias")) 
