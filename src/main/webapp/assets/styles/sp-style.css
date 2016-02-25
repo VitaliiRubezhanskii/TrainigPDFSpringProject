@@ -48,3 +48,35 @@
 .ui-block-c textarea#msgtext1 {
   height: 190px !important;
 }
+
+#newpresname {
+  overflow-y: scroll;
+}
+
+
+/* Dashboard settings */
+form[role="search"], .navbar-right, .profile-element .text-muted, .arrow {
+  visibility: hidden;
+}
+
+.sp-copy__button {
+  float: right; 
+}
+
+.sp-dashboard-progress { 
+  margin-bottom: 3px; 
+}
+
+.sp-chart-title-fa {
+  float: left;
+  margin-right: 10px;
+}
+
+td.sp-file-hash {
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+#lineChart2, #barChart2 {
+  height: 50px !important;
+}

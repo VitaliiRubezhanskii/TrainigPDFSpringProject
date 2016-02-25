@@ -1,10 +1,18 @@
 package slidepiper.db;
 
+import java.io.IOException;
+import java.nio.file.Paths;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import javax.xml.bind.DatatypeConverter;
+
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.io.IOUtils;
 import org.hashids.Hashids;
 
 import slidepiper.config.ConfigProperties;
@@ -91,12 +99,17 @@ public class DbLayer {
 		{
 		 
 				String query = "INSERT INTO customers(email, name, first_name, last_name, sales_man, company) VALUES (?, ?, ?, ?, ?, ?)";
+				String fullName = null;
 				try (Connection conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);) 
 					{			
 					try{
 							PreparedStatement preparedStatement = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+							
+							if (null != firstName && null != lastName) {
+							  fullName = firstName + " " + lastName;
+							}
 							preparedStatement.setString(1, email.toLowerCase());
-							preparedStatement.setString(2, firstName + " " + lastName);
+							preparedStatement.setString(2, fullName);
 							preparedStatement.setString(3, firstName);
 							preparedStatement.setString(4, lastName);
 							preparedStatement.setString(5, salesMan.toLowerCase());
@@ -1191,45 +1204,85 @@ public class DbLayer {
 			    }
 			}
 			
+			 
+			/**
+       * Check if a customer record exists in the DB.
+       * 
+       * @param customerEmail The customer email.
+       * @param salesmanEmail The salesman email.
+       * 
+       * @return True if a record exists in the DB, otherwise false.
+       */
+			public static boolean isCustomerExist(String customerEmail, String salesmanEmail) {
+        boolean isEmailExist = false;
+        Connection conn = null;
+        String sql = "SELECT email FROM customers WHERE email=? AND sales_man=?";
+        
+        try {
+          conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
+          PreparedStatement stmt = conn.prepareStatement(sql);        
+          stmt.setString(1, customerEmail);
+          stmt.setString(2, salesmanEmail);
+          ResultSet rs = stmt.executeQuery();     
+          
+          rs.last();
+          if (1 == rs.getRow()) {
+            isEmailExist = true;
+          }
+        } catch (SQLException ex) {
+          System.err.println("Error code: " + ex.getErrorCode() + " - " + ex.getMessage());
+        } finally {
+          if (null != conn) {
+            try {
+              conn.close();
+            } catch (SQLException ex) {
+              ex.printStackTrace();
+            }
+          }
+        }
+        
+        return isEmailExist;
+      }
+			
 			
 			/**
-			 * Check if a salesman record exists in the DB.
-			 * 
-			 * @param email	The salesman email to be checked.
-			 * 
-			 * @return		True if a record exists in the DB, or false.
-			 */
-			public static boolean isSalesmanExist(String email) {
-				boolean isEmailExist = false;
-				Connection conn = null;
-				String sql = "SELECT email FROM sales_men WHERE email=?";
-				
-				try {
-					conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
-					PreparedStatement stmt = conn.prepareStatement(sql);				
-					stmt.setString(1, email);
-					ResultSet rs = stmt.executeQuery();			
-					
-					rs.last();
-					if (1 == rs.getRow()) {
-						isEmailExist = true;
-					}
-				} catch (SQLException ex) {
-					System.err.println("Error code: " + ex.getErrorCode() + " - " + ex.getMessage());
-				} finally {
-					if (null != conn) {
-						try {
-							conn.close();
-						} catch (SQLException ex) {
-							ex.printStackTrace();
-						}
-					}
-				}
-				
-				return isEmailExist;
-			}
+       * Check if a salesman record exists in the DB.
+       * 
+       * @param email The salesman email to be checked.
+       * 
+       * @return True if a record exists in the DB, otherwise false.
+       */
+      public static boolean isSalesmanExist(String email) {
+        boolean isEmailExist = false;
+        Connection conn = null;
+        String sql = "SELECT email FROM sales_men WHERE email=?";
+        
+        try {
+          conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
+          PreparedStatement stmt = conn.prepareStatement(sql);        
+          stmt.setString(1, email);
+          ResultSet rs = stmt.executeQuery();     
+          
+          rs.last();
+          if (1 == rs.getRow()) {
+            isEmailExist = true;
+          }
+        } catch (SQLException ex) {
+          System.err.println("Error code: " + ex.getErrorCode() + " - " + ex.getMessage());
+        } finally {
+          if (null != conn) {
+            try {
+              conn.close();
+            } catch (SQLException ex) {
+              ex.printStackTrace();
+            }
+          }
+        }
+        
+        return isEmailExist;
+      }
 			
-      
+			
       /**
        * Get data about a specific customer such as his first name. 
        * 
@@ -1276,18 +1329,130 @@ public class DbLayer {
       }
       
       
+      /**
+       * Retrieve a salesman customer file links.
+       * 
+       * @param customerEmail The customer email address.
+       * @param salesmanEmail The salesman email address
+       * 
+       * @return The salesman customer file links.
+       */
+      public static List<String[]> getFileLinks(String customerEmail, String salesmanEmail) {
+        Connection conn = null;
+        String sql = "SELECT msg_info.id, slides.name FROM msg_info"
+            + " INNER JOIN slides ON msg_info.slides_id=slides.id"
+            + " WHERE msg_info.customer_email=? AND msg_info.sales_man_email=?";
+        List<String[]> fileLinkList = new ArrayList<String[]>();
+        
+        try {
+          Constants.updateConstants();
+          
+          try {
+            Class.forName("com.mysql.jdbc.Driver");
+          } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+          }
+          
+          conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
+          PreparedStatement ps = conn.prepareStatement(sql);
+          ps.setString(1, customerEmail);
+          ps.setString(2, salesmanEmail);
+          
+          ResultSet rs = ps.executeQuery();
+          String viewerUrl = ConfigProperties.getProperty("viewer_url", salesmanEmail);
+          while (rs.next()) {
+            String[] row = {
+                viewerUrl
+                    + ConfigProperties.FILE_VIEWER_PATH + "?"
+                    + ConfigProperties.getProperty("file_viewer_query_parameter") + "="
+                    + rs.getString(1),
+                rs.getString(2)};
+
+            fileLinkList.add(row);
+          }
+          
+        } catch (SQLException ex) {
+          System.err.println("Error code: " + ex.getErrorCode() + " - " + ex.getMessage());
+          ex.printStackTrace();
+        } finally {
+          if (null != conn) {
+            try {
+              conn.close();
+            } catch (SQLException ex) {
+              ex.printStackTrace();
+            }
+          }
+        }
+        
+        return fileLinkList;
+      }
+      
+      
+      /**
+       * Get event related tabular data from the DB.
+       * 
+       * @param parameterList A list of parameters required for the SQL query.
+       * @param sql The SQL query to execute.
+       * 
+       * @return The fetched tabular data from the DB.
+       */
+      public static List<String[]> getEventData(ArrayList<String> parameterList, String sql) {
+        Connection conn = null;
+        List<String[]> dataEventList = new ArrayList<String[]>();
+        
+        try {
+          Constants.updateConstants();
+          conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
+          PreparedStatement ps = conn.prepareStatement(sql);
+          for (int i = 0; i < parameterList.size(); i++) {
+            ps.setString(i + 1, parameterList.get(i));
+          }
+          
+          ResultSet rs = ps.executeQuery();
+          while (rs.next()) {
+            String[] row = new String[rs.getMetaData().getColumnCount()];
+            for (int i = 0; i < row.length; i++) {
+              row[i] = rs.getString(i + 1);
+            }
+            dataEventList.add(row);
+          }
+          
+        } catch (SQLException ex) {
+          System.err.println("Error code: " + ex.getErrorCode() + " - " + ex.getMessage());
+          ex.printStackTrace();
+        } finally {
+          if (null != conn) {
+            try {
+              conn.close();
+            } catch (SQLException ex) {
+              ex.printStackTrace();
+            }
+          }
+        }
+        
+        return dataEventList;
+      }
+
+      
 			/**
 			 * Get data about a specific salesman such as his first name. 
 			 * 
 			 * @param salesmanEmail The salesman email address.
 			 * 
-			 * @return A map containing data about a specific salesman. 
+			 * @return A map containing data about a specific salesman. Both keys and values are of type
+			 * String. Binary values retrieved from the DB are converted to a Base64 string.
 			 */
       public static Map<String, String> getSalesman(String salesmanEmail) {
-        
         Connection conn = null;
         Map<String, String> salesmanMap = new HashMap<String, String>();
         String sql = "SELECT * FROM sales_men WHERE email=?";
+        
+        Constants.updateConstants();
+        try {
+          Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+          e.printStackTrace();
+        }
         
         try {
           conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
@@ -1300,7 +1465,12 @@ public class DbLayer {
           
           if (rs.next()) {
             for (int i = 1; i <= columnCount; i++) {
-              salesmanMap.put(md.getColumnLabel(i), rs.getString(i));
+              if (null != rs.getString(i) && md.getColumnClassName(i).equals("java.lang.String")) {
+                salesmanMap.put(md.getColumnLabel(i), rs.getString(i));
+              } else if (null != rs.getBytes(i) && md.getColumnClassName(i).equals("[B")) {
+                  salesmanMap.put(md.getColumnLabel(i),
+                      DatatypeConverter.printBase64Binary(rs.getBytes(i)));
+              }
             }
           }
         } catch (SQLException ex) {
@@ -1365,6 +1535,67 @@ public class DbLayer {
       }
       
       
+      /**
+       * Set the uploaded file and the file hash referring to it.
+       * 
+       * @param file A file object received from uploading a file via the frontend.
+       * @param salesmanEmail The salesman email address.
+       * 
+       * @return The file enumerated hash.
+       * @throws IOException
+       */
+      public static String setFileHash(FileItem file, String salesmanEmail) throws IOException {
+        
+        Connection conn = null;
+        String sqlInsert = "INSERT INTO slides (file, sales_man_email, name) VALUES (?, ?, ?)";
+        String sqlSelectAfterInsert = "SELECT id_ai, id FROM slides WHERE id_ai=?";
+        String fileHash = null;
+        
+        try {
+          Constants.updateConstants();
+          conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
+          PreparedStatement ps = conn.prepareStatement(sqlInsert, Statement.RETURN_GENERATED_KEYS);                
+          
+          ps.setBytes(1, IOUtils.toByteArray(file.getInputStream()));
+          ps.setString(2, salesmanEmail);
+          ps.setString(3, Paths.get(file.getName()).getFileName().toString());
+          ps.executeUpdate();
+          ResultSet rs = ps.getGeneratedKeys();
+          
+          if (rs.next()) {
+            Hashids hashids = new Hashids(ConfigProperties.getProperty("hashids_salt"), 
+                Integer.parseInt(ConfigProperties.getProperty("hashids_minimum_file_hash_length")),
+                ConfigProperties.getProperty("hashids_custom_hash_alphabet"));
+            long generatedKey = rs.getLong(1);
+            fileHash = hashids.encode(generatedKey);
+            
+            ps = conn.prepareStatement(sqlSelectAfterInsert, ResultSet.TYPE_FORWARD_ONLY,
+                ResultSet.CONCUR_UPDATABLE);
+            ps.setLong(1, generatedKey);
+            rs = ps.executeQuery();
+            
+            if (rs.next()) {
+              rs.updateString("id", fileHash);
+              rs.updateRow();
+            }
+          }
+        } catch (SQLException ex) {
+          System.err.println("Error code: " + ex.getErrorCode() + " - " + ex.getMessage());
+          ex.printStackTrace();
+        } finally {
+          if (null != conn) {
+            try {
+              conn.close();
+            } catch (SQLException ex) {
+              ex.printStackTrace();
+            }
+          }
+        }
+        
+        return fileHash;
+      }
+      
+      
 			/**
        * Set the file link hash used for the file viewer,
        * i.e. www.slidepiper.com/view?f=<file link hash>
@@ -1373,7 +1604,7 @@ public class DbLayer {
        * @param salesmanEmail The salesman email.
        * @param fileHash A file hash. 
        * 
-       * @return      The file link enumerated hash.
+       * @return The file link enumerated hash.
        */
       public static String setFileLinkHash(String customerEmail, String fileHash,
           String salesmanEmail) {
@@ -1392,10 +1623,10 @@ public class DbLayer {
         try {
           conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
           PreparedStatement ps = conn.prepareStatement(sqlSelect);
+          
           ps.setString(1, customerEmail);
           ps.setString(2, fileHash);
           ps.setString(3, salesmanEmail);
-          
           ResultSet rs = ps.executeQuery();
           
           if (rs.next()) {
@@ -1406,16 +1637,15 @@ public class DbLayer {
             ps.setString(1, customerEmail);
             ps.setString(2, salesmanEmail);
             ps.setString(3, fileHash);
-            
             ps.executeUpdate();
             rs = ps.getGeneratedKeys();
             
             if (rs.next()) {
               Hashids hashids = new Hashids(ConfigProperties.getProperty("hashids_salt"), 
-                  Integer.parseInt(ConfigProperties.getProperty("hashids_minimum_hash_length")),
+                  Integer.parseInt(ConfigProperties.getProperty("hashids_minimum_file_link_hash_length")),
                   ConfigProperties.getProperty("hashids_custom_hash_alphabet"));
               long generatedKey = rs.getLong(1);
-              String linkHash = hashids.encode(generatedKey);
+              fileLinkHash = hashids.encode(generatedKey);
               
               ps = conn.prepareStatement(sqlSelectAfterInsert, ResultSet.TYPE_FORWARD_ONLY,
                   ResultSet.CONCUR_UPDATABLE);
@@ -1423,9 +1653,8 @@ public class DbLayer {
               rs = ps.executeQuery();
               
               if (rs.next()) {
-                rs.updateString("id", linkHash);
+                rs.updateString("id", fileLinkHash);
                 rs.updateRow();
-                fileLinkHash = linkHash;
               }
             }
           }

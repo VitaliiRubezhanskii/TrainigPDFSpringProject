@@ -40,7 +40,7 @@
 							success : function(msg) {
 								if (msg.salesman == 1) {
 									setCookie("SalesmanEmail",
-											this.local_emailval, 2);
+											this.local_emailval, 120);
 									// alert("set cookie emailsales to "
 									// +this.local_emailval );
 									// this looks OK

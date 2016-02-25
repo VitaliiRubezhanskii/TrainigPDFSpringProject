@@ -27,9 +27,12 @@ function fillCustomersAndPresentations() {
 					for (var i = 0; i < msg.myCustomers.length; i++) {
 						// console.log("adding customer " +
 						// msg.myCustomers[i].name);
-						custCheckboxes += makeCustomerCb('cust' + i,
-								msg.myCustomers[i].name, 'customers',
-								msg.myCustomers[i].email);
+						
+					  if (sp.config.email.defaultCustomerEmail != msg.myCustomers[i].email) {
+					    custCheckboxes += makeCustomerCb('cust' + i,
+					        msg.myCustomers[i].name, 'customers',
+					        msg.myCustomers[i].email);
+					  }
 
 						// alert('cust email ' + msg.myCustomers[i].email);
 					}

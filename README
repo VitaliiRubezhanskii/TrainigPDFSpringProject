@@ -4,6 +4,47 @@ SlidePiper README File
 Change Log
 ----------
 
+### 0.4.0
+
+2016-02-24 Yaniv Friedensohn <yanivf@slidepiper.com>
+
+* Enabled multiple file upload.
+
+* Enabled a backend validation mechanism which inserts the DB only PDF
+files. On the frontend enabled a UI mechanism to show the user only
+PDF files by default (though the user can choose any file to upload).
+
+* Enabled support for uploading files with files names written in any
+language other than English (UTF-8 support).
+
+* Replaced file hash creation mechanism with a hashids.org
+implementation in order to disable the previous mechanism possibility
+of creating the same hash, and removing its finite hash possibilities
+limit.
+
+* Replaced frontend uploading a file event with a backend, reliable,
+and more richer event named FILE_UPLOADED which includes the following
+parameters:
+1. File hash.
+2. File name.
+3. File size (in bytes).
+
+* Created a mechanism which auto creates a file link for a default (generic) customer when a file 
+has been upload. Also created a feature which enables to download all the generic file links (and 
+their respective file names) of a salesman. 
+
+* Replaced the old website with a new one.
+
+* Added the ability to customize the file viewer and add up to 3 responsive CTA buttons.
+
+* Redirected slidepiper.com users to www.slidepiper.com
+
+* Developed an analytics dashboard containing various analytics metrics, charts, and table.
+
+* Added subdomain support so that now file links could be represented as:  
+http://<subdomain>.slidepiper.com/view?f=<file-link-hash>
+
+
 ### 0.3.2
 
 2016-01-28 Yaniv Friedensohn <yanivf@slidepiper.com>
