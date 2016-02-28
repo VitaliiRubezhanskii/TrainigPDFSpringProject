@@ -50,4 +50,14 @@ public class Analytics {
       + "FROM view_file_agg_by_session_event_name_date\n"
       + "WHERE file_hash=? AND salesman_email=?\n"
       + "GROUP BY date";
+  
+  
+  public static final String sqlTopExitPage =
+        "SELECT param1int AS top_exit_page\n"
+      + "FROM customer_events\n"
+      + "INNER JOIN msg_info ON msg_info.id = customer_events.msg_id\n"
+      + "WHERE msg_info.slides_id=? AND msg_info.sales_man_email=? AND param3str = 'LAST_SLIDE' AND param1int >= 1 AND param2float >= 1\n"
+      + "GROUP by param1int\n"
+      + "ORDER BY COUNT(param1int) DESC, SUM(param2float), param1int DESC\n"
+      + "LIMIT 1";
 }
