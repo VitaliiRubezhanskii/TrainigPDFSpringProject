@@ -275,6 +275,8 @@ public class ManagementServlet extends HttpServlet {
 				    
 				    // Record event.
 				    if (isEmailSent) {
+				      eventDataMap.put("email", salesmanEmail);
+				      
 				      eventDataMap.put("param_1_varchar", data.getString("accessToken"));
 				      eventDataMap.put("param_2_varchar", data.getString("salesmanEmailClient"));
 				      eventDataMap.put("param_3_varchar", salesmanEmail);
