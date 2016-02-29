@@ -102,6 +102,13 @@ public class ManagementServlet extends HttpServlet {
         sqlData = DbLayer.getEventData(parameterList, Analytics.sqlTopExitPage);
         data.put("topExitPage", sqlData);
         break;
+        
+	    case "getUsersCta":
+        parameterList.add(request.getParameter("fileHash"));
+        parameterList.add(request.getParameter("salesmanEmail"));
+        sqlData = DbLayer.getEventData(parameterList, Analytics.sqlUsersCta);
+        data.put("usersCta", sqlData);
+        break;
 	  }
 	  
 	  response.setContentType("application/json; charset=UTF-8");
