@@ -30,25 +30,25 @@ import org.json.JSONObject;
 
 @WebServlet("/ManagementServlet")
 public class ManagementServlet extends HttpServlet {
-	
-	private static final long serialVersionUID = 1L;
-	//private final String MAIL_HOST = "smtp.gmail.com";
+  
+  private static final long serialVersionUID = 1L;
+  //private final String MAIL_HOST = "smtp.gmail.com";
    // private final String MAIL_FROM = "slidepiper";
    // private final String MAIL_PASSWORD = "p57nXU4N";
     
     //static File[] listOfFiles;
-	//static File folder;
-//	static HashMap<String, int[]> map;
-//	boolean repeatFunction = false;
-//	Thread thread;
-//	static ArrayList<String[]> data;
-	
-    public ManagementServlet() {    	
+  //static File folder;
+//  static HashMap<String, int[]> map;
+//  boolean repeatFunction = false;
+//  Thread thread;
+//  static ArrayList<String[]> data;
+  
+    public ManagementServlet() {      
         super();
     }
 
-	public void init(ServletConfig config) throws ServletException {
-		// to start auto put in web.xml:
+  public void init(ServletConfig config) throws ServletException {
+    // to start auto put in web.xml:
 /*
 <servlet>
     <servlet-name>ManagementServlet</servlet-name>
@@ -56,42 +56,42 @@ public class ManagementServlet extends HttpServlet {
     <load-on-startup>1</load-on-startup>
 </servlet>
 */
-			System.out.println("Init ManagementServlet");
-			DbLayer.init();				
-	}
-		
-	/***********************		GET METHODS		*********************************/
-	
-	@Override
-	public void doGet(HttpServletRequest request, HttpServletResponse response)
-	    throws IOException, ServletException {
-	
-	  JSONObject data = new JSONObject();
-	  ArrayList<String> parameterList = new ArrayList<String>();
-	  List<String[]> sqlData = new ArrayList<String[]>();
-	  
-	  switch (request.getParameter("action")) {
-	    case "getMailType":
-	      String mailType = DbLayer.getSalesmanMailType(request.getParameter("salesmanEmail"));
-	      data.put("mailType", mailType);
+      System.out.println("Init ManagementServlet");
+      DbLayer.init();       
+  }
+    
+  /***********************    GET METHODS   *********************************/
+  
+  @Override
+  public void doGet(HttpServletRequest request, HttpServletResponse response)
+      throws IOException, ServletException {
+  
+    JSONObject data = new JSONObject();
+    ArrayList<String> parameterList = new ArrayList<String>();
+    List<String[]> sqlData = new ArrayList<String[]>();
+    
+    switch (request.getParameter("action")) {
+      case "getMailType":
+        String mailType = DbLayer.getSalesmanMailType(request.getParameter("salesmanEmail"));
+        data.put("mailType", mailType);
         break;
         
-	    case "getFilesData":
+      case "getFilesData":
         parameterList.add(request.getParameter("salesmanEmail"));
         sqlData = DbLayer.getEventData(parameterList, Analytics.sqlFilesData);        
         data.put("filesData", sqlData);
         break;
         
-	    case "getFileBarChart":
-	      parameterList.add(request.getParameter("fileHash"));
-	      parameterList.add(request.getParameter("salesmanEmail"));
+      case "getFileBarChart":
+        parameterList.add(request.getParameter("fileHash"));
+        parameterList.add(request.getParameter("salesmanEmail"));
         sqlData = DbLayer.getEventData(parameterList, Analytics.sqlFileBarChart);
         data.put("fileBarChart", sqlData);
         break;
-	    
-	    case "getFileLineChart":
-	      parameterList.add(request.getParameter("fileHash"));
-	      parameterList.add(request.getParameter("salesmanEmail"));
+      
+      case "getFileLineChart":
+        parameterList.add(request.getParameter("fileHash"));
+        parameterList.add(request.getParameter("salesmanEmail"));
         sqlData = DbLayer.getEventData(parameterList, Analytics.sqlFileLineChart);
         data.put("fileLineChart", sqlData);
         break;
@@ -102,165 +102,187 @@ public class ManagementServlet extends HttpServlet {
         sqlData = DbLayer.getEventData(parameterList, Analytics.sqlTopExitPage);
         data.put("topExitPage", sqlData);
         break;
+        
+	    case "getUsersCta":
+        parameterList.add(request.getParameter("fileHash"));
+        parameterList.add(request.getParameter("salesmanEmail"));
+        sqlData = DbLayer.getEventData(parameterList, Analytics.sqlUsersCta);
+        data.put("usersCta", sqlData);
+        break;
 	  }
 	  
 	  response.setContentType("application/json; charset=UTF-8");
     PrintWriter output = response.getWriter(); // TODO: is output redundant as I can write response.getWriter().print(data);
     output.print(data);  // TODO: is this statment needed?
     output.close(); // TODO: is this statment needed?
-	}
-	
-	
-	/***********************		 DO-POST		*********************************/
+  }
+  
+  
+  /***********************     DO-POST    *********************************/
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		StringBuffer jb = new StringBuffer();
-		DbLayer.init();
-		//System.out.println("post req");
-	    String line = null;
-	    try {
-	    	BufferedReader reader = request.getReader();
-	        while ((line = reader.readLine()) != null)
-	        	jb.append(line);
-	    } catch (Exception e) {
-	    	System.out.println("problem here!");
-	    }
-	    
-	    System.out.println("JSON received at MgmtServlet: " + jb.toString());
-	    try{			
-			JSONObject input = new JSONObject(jb.toString());
-			String action = input.getString("action");
-			JSONObject output = new JSONObject();
-			
-			System.out.println("action at MgmtServlet: " + action);
-			
-			int salesman_found = 0;
-			
-			switch(action){			
-			case "changeSalesmanPassword":
-				System.out.println("Salesman change pw");
-							
-				// check old pw given and in db
-				if (input.getString("oldpassword").equalsIgnoreCase(DbLayer.getSalesmanPassword(input.getString("email"))))
-				{
-						DbLayer.setPassword(input.getString("email"), input.getString("newpassword"));						
-						output.put("success", 1);
-						System.out.println("pw change successfully");
-				}
-				else
-				{
-					output.put("success", 0);
-					System.out.println("error changing pw");
-				}				
-				break;
-						
-				case "salesmanLogin":
-					System.out.println("Salesman logging in");
-					int login_ok = 0;
-					
-					if (DbLayer.getSalesmanPassword(
-							input.getString("email")).equalsIgnoreCase(
-									input.getString("password")))
-					{
-							login_ok = 1;
-					}					
-					output.put("salesman", login_ok);
-					break;
-					
-				case "getSalesmanData":
-					//System.out.println("Sending salesmandata");				
-					ArrayList<Customer> custs = DbLayer.getMyCustomers(input.getString("email"));
-					//System.out.println("input email: " + input.getString("email") + " # customers: " + custs.size());					 
-					output.put("myCustomers", custs);					
-					ArrayList<Presentation> mypres = DbLayer.getMyPresentations(input.getString("email"));
-					output.put("presentations", mypres);
-					//System.out.println("Sending salesmandata.done");
-					break;
-					
-				case "sendPresentationToCustomer":									
-					String msgtext = input.getString("msgtext");
-					String msgsubj = input.getString("msgsubj");
-										
-					try
-					{
-							msgtext = URLDecoder.decode(msgtext, "UTF-8");	
-							msgsubj = URLDecoder.decode(msgtext, "UTF-8");
-					}
-					catch (Exception e)
-					{
-						 		System.out.println("Error decoding msg "  + msgtext);
-						 		System.out.println("Error decoding msg " + e.getMessage());
-					}
-					
-					String msglink = ConfigProperties.getProperty("app_url") + "/pdfjs/viewer.html?file=/" + ConfigProperties.getProperty("app_contextpath") + "file/" + input.getString("docid") + "#zoom=page-fit";
+  protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    StringBuffer jb = new StringBuffer();
+    DbLayer.init();
+    //System.out.println("post req");
+      String line = null;
+      try {
+        BufferedReader reader = request.getReader();
+          while ((line = reader.readLine()) != null)
+            jb.append(line);
+      } catch (Exception e) {
+        System.out.println("problem here!");
+      }
+      
+      System.out.println("JSON received at MgmtServlet: " + jb.toString());
+      try{      
+      JSONObject input = new JSONObject(jb.toString());
+      String action = input.getString("action");
+      JSONObject output = new JSONObject();
+      
+      System.out.println("action at MgmtServlet: " + action);
+      
+      int salesman_found = 0;
+      
+      JSONObject data = input.has("data") ? input.getJSONObject("data") : null; 
+      Map<String, String> eventDataMap = new HashMap<String, String>();
+      switch(action){     
+      case "changeSalesmanPassword":
+        System.out.println("Salesman change pw");
+              
+        // check old pw given and in db
+        if (input.getString("oldpassword").equalsIgnoreCase(DbLayer.getSalesmanPassword(input.getString("email"))))
+        {
+            DbLayer.setPassword(input.getString("email"), input.getString("newpassword"));            
+            output.put("success", 1);
+            System.out.println("pw change successfully");
+        }
+        else
+        {
+          output.put("success", 0);
+          System.out.println("error changing pw");
+        }       
+        break;
+            
+        case "salesmanLogin":
+          System.out.println("Salesman logging in");
+          int login_ok = 0;
+          
+          if (DbLayer.getSalesmanPassword(
+              input.getString("email")).equalsIgnoreCase(
+                  input.getString("password")))
+          {
+              login_ok = 1;
+          }         
+          output.put("salesman", login_ok);
+          break;
+          
+        case "getSalesmanData":
+          //System.out.println("Sending salesmandata");       
+          ArrayList<Customer> custs = DbLayer.getMyCustomers(input.getString("email"));
+          //System.out.println("input email: " + input.getString("email") + " # customers: " + custs.size());          
+          output.put("myCustomers", custs);         
+          ArrayList<Presentation> mypres = DbLayer.getMyPresentations(input.getString("email"));
+          output.put("presentations", mypres);
+          //System.out.println("Sending salesmandata.done");
+          break;
+          
+        case "sendPresentationToCustomer":                  
+          String msgtext = input.getString("msgtext");
+          String msgsubj = input.getString("msgsubj");
+                    
+          try
+          {
+              msgtext = URLDecoder.decode(msgtext, "UTF-8");  
+              msgsubj = URLDecoder.decode(msgtext, "UTF-8");
+          }
+          catch (Exception e)
+          {
+                System.out.println("Error decoding msg "  + msgtext);
+                System.out.println("Error decoding msg " + e.getMessage());
+          }
+          
+          String msglink = ConfigProperties.getProperty("app_url") + "/pdfjs/viewer.html?file=/" + ConfigProperties.getProperty("app_contextpath") + "file/" + input.getString("docid") + "#zoom=page-fit";
 
-					msgtext = msgtext + "<br>" + msglink;
-														
-		    	int timezone_offset = Integer.parseInt(input.getString("timezone_offset_min"));
-					System.out.println("sending msg from:  "  + input.getString("salesman_email") + " tz offset " + timezone_offset);					
-					
-					//does not really send, just write to db. sent using mailto.
-						DbLayer.sendMessage(input.getString("docid"), input.getString("salesman_email"), "no email password", input.getString("customeremails"),
-							input.getString("slides_ids"), msgtext, "", msgsubj, timezone_offset
-							);
-					
-					// message will be sent using mailto!!!
-												
-					System.out.println("In sendPresToCust done.");
-					output.put("succeeded", 1); //success signal					
-					// important --> link is used in mailto
-					output.put("link", msglink); //link for message
-					output.put("mailtype", DbLayer.getSalesmanMailType(input.getString("salesman_email"))); //link for message
-					break;
-														
-				case "addNewCustomer":
-					System.out.println("addnew cust");
-					output.put("newCustomer", DbLayer.addNewCustomer(input.getString("salesmanEmail"),
-					    input.getString("customerFirstName"), input.getString("customerLastName"),
-					    input.getString("customerCompany"), input.getString("customerEmail")));
-					break;
-														
-				case "deleteCustomer":
-					System.out.println("deleting cust " + input.getString("customer_email") + " " + input.getString("salesman_email"));
-					DbLayer.deleteCustomer(input.getString("customer_email"),input.getString("salesman_email"));
-					break;					
+          msgtext = msgtext + "<br>" + msglink;
+                            
+          int timezone_offset = Integer.parseInt(input.getString("timezone_offset_min"));
+          System.out.println("sending msg from:  "  + input.getString("salesman_email") + " tz offset " + timezone_offset);         
+          
+          //does not really send, just write to db. sent using mailto.
+            DbLayer.sendMessage(input.getString("docid"), input.getString("salesman_email"), "no email password", input.getString("customeremails"),
+              input.getString("slides_ids"), msgtext, "", msgsubj, timezone_offset
+              );
+          
+          // message will be sent using mailto!!!
+                        
+          System.out.println("In sendPresToCust done.");
+          output.put("succeeded", 1); //success signal          
+          // important --> link is used in mailto
+          output.put("link", msglink); //link for message
+          output.put("mailtype", DbLayer.getSalesmanMailType(input.getString("salesman_email"))); //link for message
+          break;
+                            
+        case "addNewCustomer":
+          System.out.println("addnew cust");
+          output.put("newCustomer", DbLayer.addNewCustomer(input.getString("salesmanEmail"),
+              input.getString("customerFirstName"), input.getString("customerLastName"),
+              input.getString("customerCompany"), input.getString("customerEmail")));
+          break;
+                            
+        case "deleteCustomer":
+          System.out.println("deleting cust " + input.getString("customer_email") + " " + input.getString("salesman_email"));
+          DbLayer.deleteCustomer(input.getString("customer_email"),input.getString("salesman_email"));
+          break;          
 
-				case "deletePresentation":
-					System.out.println("deleting pres " + input.getString("presentation") + " " + input.getString("salesman_email"));
-					DbLayer.deletePresentation(input.getString("presentation"), input.getString("salesman_email"));
-					break;
-					
-					
-				case "setSalesman":
-					String company = input.getString("company");
-					String email = input.getString("email");
-					String emailClient = input.getString("email-client");
-					String firstName = input.getString("first-name");
-					String lastName = input.getString("last-name");
-					String magic = input.getString("magic");
-					String password = input.getString("password");
-					
-					int statusCode = DbLayer.setSalesman(company, email, emailClient, firstName, lastName, magic, password);
-					output.put("statusCode", statusCode);
+        case "deletePresentation":
+          System.out.println("deleting pres " + input.getString("presentation") + " " + input.getString("salesman_email"));
+          DbLayer.deletePresentation(input.getString("presentation"), input.getString("salesman_email"));
+          break;
+        
+        
+        case "setCustomerEvent":
+          eventDataMap.put("msg_id", URLDecoder.decode(data.getString("linkHash"), "UTF-8"));
+          eventDataMap.put("session_id", URLDecoder.decode(data.getString("sessionId"), "UTF-8"));
+          
+          eventDataMap.put("param_1_varchar",
+              URLDecoder.decode(data.getString("id"), "UTF-8"));
+          eventDataMap.put("param_2_varchar",
+              URLDecoder.decode(data.getString("buttonText"), "UTF-8"));
+          eventDataMap.put("param_3_varchar",
+              URLDecoder.decode(data.getString("destinationUrl"), "UTF-8"));
+          
+          DbLayer.setEvent(DbLayer.CUSTOMER_EVENT_TABLE,
+              URLDecoder.decode(data.getString("eventName"), "UTF-8"), eventDataMap);
+          break;
+          
+        case "setSalesman":
+          String company = input.getString("company");
+          String email = input.getString("email");
+          String emailClient = input.getString("email-client");
+          String firstName = input.getString("first-name");
+          String lastName = input.getString("last-name");
+          String magic = input.getString("magic");
+          String password = input.getString("password");
+          
+          int statusCode = DbLayer.setSalesman(company, email, emailClient, firstName, lastName, magic, password);
+          output.put("statusCode", statusCode);
 
-					//System.out.println("cust data: smemail " + smemail + " cname " + cname + "cust company: " + ccompany + " cu email:" + cemail);
-					//output.put("newCustomer", DbLayer.addNewCustomer(smemail, cname, ccompany, cemail));
-					break;
-					
-				case "sendEmail":
-				  JSONObject data = input.getJSONObject("data");
-				  String emailBody = URLDecoder.decode(data.getString("emailBody"), "UTF-8");
+          //System.out.println("cust data: smemail " + smemail + " cname " + cname + "cust company: " + ccompany + " cu email:" + cemail);
+          //output.put("newCustomer", DbLayer.addNewCustomer(smemail, cname, ccompany, cemail));
+          break;
+          
+        case "sendEmail":
+          String emailBody = URLDecoder.decode(data.getString("emailBody"), "UTF-8");
           String emailSubject = URLDecoder.decode(data.getString("emailSubject"), "UTF-8");
           String[] emailMessageArray = {emailSubject, emailBody};
           
           // Create a merge tag set.
           Set<String> mergeTagSet = EmailSender.createMergeTagSet(emailMessageArray);
-				  
-				  // Iterate through customers for replacing merge tags (if any) and sending emails.
-				  JSONArray customerEmailArray = data.getJSONArray("customerEmailArray");
-				  String salesmanEmail = URLDecoder.decode(data.getString("salesmanEmail"), "UTF-8");
-          Map<String, String> eventDataMap = new HashMap<String, String>();
-				  int emailSent = 0;
+          
+          // Iterate through customers for replacing merge tags (if any) and sending emails.
+          JSONArray customerEmailArray = data.getJSONArray("customerEmailArray");
+          String salesmanEmail = URLDecoder.decode(data.getString("salesmanEmail"), "UTF-8");
+          int emailSent = 0;
           
           for (int i = 0; i < customerEmailArray.length(); i++) {
             if (0 < mergeTagSet.size()) {
@@ -270,59 +292,61 @@ public class ManagementServlet extends HttpServlet {
               emailSubject = EmailSender.searchReplaceMergeTag(mergeTagMap, emailSubject);
               emailBody = EmailSender.searchReplaceMergeTag(mergeTagMap, emailBody);
             }
-				    
-				    // Send emails. If an API is not existent, then use below mailto workaround.
-				    boolean isEmailSent = false;
-				    switch(data.getString("salesmanEmailClient")) {
-				      case "gmail":
-				        isEmailSent = EmailSender.sendGmailEmail(customerEmailArray.getString(i),
-				            salesmanEmail, emailSubject, emailBody, data.getString("accessToken"));
-				        break;    
-				    }
-				    
-				    // Record event.
-				    if (isEmailSent) {
-				      eventDataMap.put("email", salesmanEmail);
-				      
-				      eventDataMap.put("param_1_varchar", data.getString("accessToken"));
-				      eventDataMap.put("param_2_varchar", data.getString("salesmanEmailClient"));
-				      eventDataMap.put("param_3_varchar", salesmanEmail);
-				      eventDataMap.put("param_4_varchar", customerEmailArray.getString(i));
-				      eventDataMap.put("param_5_varchar", emailSubject);
-				      eventDataMap.put("param_1_mediumtext", emailBody);
-				      DbLayer.setEvent(ConfigProperties.getProperty("event_sent_email"), eventDataMap);
-              
-				      emailSent++;
-				      emailSubject = emailMessageArray[0];
-	            emailBody = emailMessageArray[1];
+            
+            // Send emails. If an API is not existent, then use below mailto workaround.
+            boolean isEmailSent = false;
+            switch(data.getString("salesmanEmailClient")) {
+              case "gmail":
+                isEmailSent = EmailSender.sendGmailEmail(customerEmailArray.getString(i),
+                    salesmanEmail, emailSubject, emailBody, data.getString("accessToken"));
+                break;    
             }
-				  }
+            
+            // Record event.
+            if (isEmailSent) {
+              eventDataMap.put("email", salesmanEmail);
+              
+              eventDataMap.put("param_1_varchar", data.getString("accessToken"));
+              eventDataMap.put("param_2_varchar", data.getString("salesmanEmailClient"));
+              eventDataMap.put("param_3_varchar", salesmanEmail);
+              eventDataMap.put("param_4_varchar", customerEmailArray.getString(i));
+              eventDataMap.put("param_5_varchar", emailSubject);
+              eventDataMap.put("param_1_mediumtext", emailBody);
+              
+              DbLayer.setEvent(DbLayer.SALESMAN_EVENT_TABLE,
+                  ConfigProperties.getProperty("event_sent_email"), eventDataMap);
+              
+              emailSent++;
+              emailSubject = emailMessageArray[0];
+              emailBody = emailMessageArray[1];
+            }
+          }
           
-				  // Return response to frontend.
-				  switch(data.getString("salesmanEmailClient")) {
+          // Return response to frontend.
+          switch(data.getString("salesmanEmailClient")) {
             case "gmail":
               output.put("isApi", true);
               output.put("emailSent", emailSent);
               break;
-				    
+            
             // mailto sending emails mechanism.
-				    default:
-				      output.put("isApi", false);
-				      output.put("customerEmail", customerEmailArray.getString(0));
-				      output.put("emailSubject", emailSubject);
-				      output.put("emailBody", emailBody);
-				  }
-				  break;
-			}
-			
-				String res = output.toString();
-				response.setCharacterEncoding("utf-8");
-		    response.setContentType("application/json");
-		    response.getWriter().write(res);
-		    response.getWriter().flush();
-	    } catch(Exception e){
-	    	System.out.println("problem form doPost method: ");
-	    	e.printStackTrace();
-	    }
-	}		
+            default:
+              output.put("isApi", false);
+              output.put("customerEmail", customerEmailArray.getString(0));
+              output.put("emailSubject", emailSubject);
+              output.put("emailBody", emailBody);
+          }
+          break;
+      }
+      
+        String res = output.toString();
+        response.setCharacterEncoding("utf-8");
+        response.setContentType("application/json");
+        response.getWriter().write(res);
+        response.getWriter().flush();
+      } catch(Exception e){
+        System.out.println("problem form doPost method: ");
+        e.printStackTrace();
+      }
+  }   
 }

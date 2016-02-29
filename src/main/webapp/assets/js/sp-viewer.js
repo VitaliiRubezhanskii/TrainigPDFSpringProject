@@ -3,8 +3,45 @@ DEFAULT_URL = '';
 
 var sp = sp || {};
 sp.viewer = {
+  breakPoint: 768,
+  eventName: {
+    clickedCta: 'CLICKED_CTA'
+  },
   linkHash: getParameterByName('f'),
-  breakPoint: 768
+  
+  init: (function() {
+    $(document).ready(function() {
+      $('.sp-cta, .sp-secondary-cta').click(function() {
+        var eventData = {
+          buttonText: $(this).text(),
+          destinationUrl: $(this).attr('href'),
+          eventName: sp.viewer.eventName.clickedCta,
+          id: $(this).attr('id'),
+          linkHash: sp.viewer.linkHash,
+          sessionId: sessionid
+        };
+        
+        sp.viewer.setCustomerEvent(eventData);
+      });
+    });
+  })(),
+  
+  /**
+   * Set a customer event in the DB.
+   * 
+   * @param {String} eventName The event name.
+   * @param {Object} eventData The event data.
+   */
+  setCustomerEvent: function(eventData) {
+    if ("0" == role) {
+      var data = {
+        action: 'setCustomerEvent',
+        data: eventData
+      };
+      
+      $.post('../ManagementServlet', JSON.stringify(data));
+    }
+  }
 };
 
 if ('' != sp.viewer.linkHash) {

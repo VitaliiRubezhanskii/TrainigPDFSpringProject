@@ -20,7 +20,8 @@ public class Analytics {
       + "  msg_info.id AS file_link,\n"
       + "  SUM(IF(event_name = 'OPEN_SLIDES', 1, 0)) AS file_sum_open,\n"
       + "  (SUM(IF(`event_name` = 'OPEN_SLIDES',1,0)) - SUM(IF(event_name = 'VIEW_SLIDE' AND count_event>1,1,0))) / SUM(IF(event_name = 'OPEN_SLIDES',1,0)) AS file_bounce_rate,\n"
-      + "  SUM(IF(event_name = 'VIEW_SLIDE', view_duration, 0)) / SUM(IF(event_name = 'VIEW_SLIDE', 1, 0)) AS average_view_duration\n"
+      + "  SUM(IF(event_name = 'VIEW_SLIDE', view_duration, 0)) / SUM(IF(event_name = 'VIEW_SLIDE', 1, 0)) AS average_view_duration,\n"
+      + "  SUM(IF(event_name = 'VIEW_SLIDE', count_event, 0)) / SUM(IF(event_name = 'VIEW_SLIDE', 1, 0)) AS average_pages_viewed\n"
       + "FROM view_file_agg_by_session_event_name\n"
       + "RIGHT JOIN slides ON slides.id = file_hash\n"
       + "INNER JOIN msg_info ON msg_info.slides_id = slides.id\n"
@@ -60,4 +61,11 @@ public class Analytics {
       + "GROUP by param1int\n"
       + "ORDER BY COUNT(param1int) DESC, SUM(param2float), param1int DESC\n"
       + "LIMIT 1";
+
+
+  public static final String sqlUsersCta =
+        "SELECT COUNT(DISTINCT session_id)\n"
+      + "FROM customer_events\n"
+      + "INNER JOIN msg_info ON msg_info.id = customer_events.msg_id\n"
+      + "WHERE msg_info.slides_id=? AND msg_info.sales_man_email=? AND event_name = 'CLICKED_CTA'";
 }

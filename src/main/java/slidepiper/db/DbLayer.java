@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.nio.file.Paths;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,6 +19,11 @@ import slidepiper.constants.Constants;
 import slidepiper.dataobjects.*;
 
 public class DbLayer {
+  
+  public static final String CUSTOMER_EVENT_TABLE =
+      ConfigProperties.getProperty("customer_event_table");
+  public static final String SALESMAN_EVENT_TABLE =
+      ConfigProperties.getProperty("salesman_event_table");
 	
   private static Boolean initialized = false;
 	
@@ -1491,12 +1495,13 @@ public class DbLayer {
       
       
       /**
-       * Add an event to the DB.
+       * Add a customer or salesman event to the DB.
        * 
-       * @param eventName The event name. See config.properties for available event names.
-       * @param eventDataMap A map connecting between salesman_events table column names and values.
+       * @param tableName The table in the DB in which the event would be inserted into.
+       * @param eventName The event name.
+       * @param eventDataMap A map connecting between tableName column names and values.
        */
-      public static void setEvent(String eventName, Map<String, String> eventDataMap) {
+      public static void setEvent(String tableName, String eventName, Map<String, String> eventDataMap) {
         String sqlColumns = "event_name";
         String sqlValues = "?";
         for (Map.Entry<String, String> mapEntry : eventDataMap.entrySet()) {
@@ -1504,7 +1509,7 @@ public class DbLayer {
           sqlValues += ",?";
         }
           
-        String sqlInsert = "INSERT INTO salesman_events (" + sqlColumns + ") VALUES (" + sqlValues + ")";
+        String sqlInsert = "INSERT INTO " + tableName + " (" + sqlColumns + ") VALUES (" + sqlValues + ")";
         
         Connection conn = null;
         try {

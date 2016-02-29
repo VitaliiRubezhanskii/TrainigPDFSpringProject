@@ -63,7 +63,6 @@ sp = {
 
               // Build dashboard.
               sp.metric.fileMetrics(files[fileHash]);
-              sp.metric.topExitPage(fileHash);
               sp.graph.getFileLineChart(fileHash);
               sp.graph.getFileBarChart(fileHash);
               sp.table.filesTable(filesData);
@@ -168,64 +167,71 @@ sp = {
      * Display the selected file data metrics. 
      */
     fileMetrics: function(fileData) {
-      // Total viewes.
+      // Total views.
       $('#sp-widget-total-views').text(fileData[3]);
+      sp.metric.totalViews = parseInt(fileData[3]);
       
-      // Bounce rate.
-      if (null != fileData[4]) {
+      if (sp.metric.totalViews > 0) {
+        // Bounce rate.
         $('#sp-widget-bounce-rate').text(parseFloat(fileData[4] * 100).toFixed(2) + '%');
-      } else {
-        $('#sp-widget-bounce-rate').text('N/A');
-      }
-      
-      // Average view duration.
-      if (null != fileData[5]) {
-        /**
-         * @see http://stackoverflow.com/questions/6312993/javascript-seconds-to-time-string-with-format-hhmmss
-         */
-        var totalSeconds = parseInt(fileData[5], 10);
-        var hours   = Math.floor(totalSeconds / 3600);
-        var minutes = Math.floor((totalSeconds - (hours * 3600)) / 60);
-        var seconds = totalSeconds - (hours * 3600) - (minutes * 60);
-
-        if (hours < 10) {
-          hours = '0' + hours;
-        }
-        if (minutes < 10) {
-          minutes = '0' + minutes;
-        }
-        if (seconds < 10) {
-          seconds = '0' + seconds;
-        }
-        var time    = hours+':'+minutes+':'+seconds;
-        $('#sp-widget-average-view-duration').text(hours + ':' + minutes + ':' + seconds);
-      } else {
-        $('#sp-widget-average-view-duration').text('00:00:00');
-      }
-      
-      // Average pages viewed.
-      if (null != fileData[6]) {
-        $('#sp-widget-average-pages-viewed').text(parseFloat(fileData[6]).toFixed(2));
-      } else {
-        $('#sp-widget-average-pages-viewed').text('N/A');
-      }
-    },
-    
-    /**
-     * Display the file top exit page. 
-     */
-    topExitPage: function(fileHash) {
-      $.getJSON(
-          '../ManagementServlet',
-          {action: 'getTopExitPage', fileHash: fileHash, salesmanEmail: sp.config.salesman.email},
-          function(data) {
-            if (null != data.topExitPage) {
-              $('#sp-widget-top-exit-page').text(data.topExitPage);
-            } else {
-              $('#sp-widget-top-exit-page').text('N/A');
-            }
+        
+        // Average view duration.
+        if (null != fileData[5]) {
+          /**
+           * @see http://stackoverflow.com/questions/6312993/javascript-seconds-to-time-string-with-format-hhmmss
+           */
+          var totalSeconds = parseInt(fileData[5], 10);
+          var hours   = Math.floor(totalSeconds / 3600);
+          var minutes = Math.floor((totalSeconds - (hours * 3600)) / 60);
+          var seconds = totalSeconds - (hours * 3600) - (minutes * 60);
+  
+          if (hours < 10) {
+            hours = '0' + hours;
           }
-      );
+          if (minutes < 10) {
+            minutes = '0' + minutes;
+          }
+          if (seconds < 10) {
+            seconds = '0' + seconds;
+          }
+          var time    = hours+':'+minutes+':'+seconds;
+          $('#sp-widget-average-view-duration').text(hours + ':' + minutes + ':' + seconds);
+        } else {
+          $('#sp-widget-average-view-duration').text('N/A');
+        }
+        
+        // Average pages viewed.
+        if (null != fileData[6]) {
+          $('#sp-widget-average-pages-viewed').text(parseFloat(fileData[6]).toFixed(2));
+        } else {
+          $('#sp-widget-average-pages-viewed').text('N/A');
+        }
+        
+        // Top exit page.
+        $.getJSON(
+            '../ManagementServlet',
+            {action: 'getTopExitPage', fileHash: fileData[0], salesmanEmail: sp.config.salesman.email},
+            function(data) {
+              if (typeof data.topExitPage[0] !== 'undefined') {
+                $('#sp-widget-top-exit-page').text(data.topExitPage);
+              } else {
+                $('#sp-widget-top-exit-page').text('N/A');
+              }
+            }
+        );
+        
+        // Users CTA.
+        $.getJSON(
+            '../ManagementServlet',
+            {action: 'getUsersCta', fileHash: fileData[0], salesmanEmail: sp.config.salesman.email},
+            function(data) {
+              $('#sp-widget-users-cta').text(data.usersCta);
+            }
+        );
+        
+      } else {
+        $('.sp-widget:not(#sp-widget-total-views)').text('N/A');
+      }
     }
   },
   

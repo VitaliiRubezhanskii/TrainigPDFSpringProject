@@ -95,7 +95,9 @@ public class UploadSlides extends HttpServlet {
             eventDataMap.put("param_2_varchar", fileHash);
             eventDataMap.put("param_3_varchar", Paths.get(file.getName()).getFileName().toString());
             eventDataMap.put("param_4_varchar", Long.toString(file.getSize()));
-            DbLayer.setEvent(ConfigProperties.getProperty("event_uploaded_file"), eventDataMap);
+            
+            DbLayer.setEvent(DbLayer.SALESMAN_EVENT_TABLE,
+                ConfigProperties.getProperty("event_uploaded_file"), eventDataMap);
           }
         }
       }
