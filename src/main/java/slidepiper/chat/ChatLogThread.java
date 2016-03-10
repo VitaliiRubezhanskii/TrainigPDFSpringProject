@@ -19,7 +19,7 @@ public class ChatLogThread implements Runnable {
 
 	   public void run() {
 		   //System.out.println("CHATLOGTHREAD: Writing to log in thread. sessid " + session_id + " chatline: " + chatline);
-		   CustomerLogger.LogEvent("chatmsgid", "CHAT_MESSAGE", "0", "0",chatline, session_id, 0);
+		   CustomerLogger.LogEvent("chatmsgid", "CHAT_MESSAGE", "0", "0",chatline, session_id, 0, null, null, null, null, null, null, null, null, null, null);
 		   
 		   if (DbLayer.isSessionDead(session_id))
 		   		{
