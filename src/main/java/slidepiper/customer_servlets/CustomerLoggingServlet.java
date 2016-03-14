@@ -7,6 +7,7 @@ import slidepiper.dataobjects.MessageInfo;
 import slidepiper.db.DbLayer;
 import slidepiper.email.EmailSender;
 import slidepiper.logging.CustomerLogger;
+import slidepiper.salesman_servlets.Geolocation;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -17,6 +18,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -49,7 +51,19 @@ public class CustomerLoggingServlet extends HttpServlet {
 			    		
 			    		int timezone_offset = Integer.parseInt(request.getParameter("timezone_offset_min")); 
 			    		
-			    		CustomerLogger.LogEvent(id, event_name, param1, param2, param3, sessionId, timezone_offset);
+			    		String ip = null;
+			    		List<String> ipData = null;
+			    		if (event_name.equals("OPEN_SLIDES")) {
+			    		  ip = Geolocation.getIpFromRequest(request);
+			    		  ipData = Geolocation.ipData(ip);
+			    		  
+			    		  CustomerLogger.LogEvent(id, event_name, param1, param2, param3, sessionId, timezone_offset,
+	                  ip, ipData.get(0), ipData.get(1), ipData.get(2), ipData.get(3), ipData.get(4), ipData.get(5),
+	                  ipData.get(6), ipData.get(7), ipData.get(8));
+			    		} else {
+			    		  CustomerLogger.LogEvent(id, event_name, param1, param2, param3, sessionId, timezone_offset,
+                    null, null, null, null, null, null, null, null, null, null);
+			    		}
 			    		
 							/// send email if opened presentation
 							if (event_name.equalsIgnoreCase("OPEN_SLIDES"))

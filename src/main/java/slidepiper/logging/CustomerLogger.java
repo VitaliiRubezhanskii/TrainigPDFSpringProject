@@ -16,7 +16,7 @@ import slidepiper.email.EmailSender;
 
 public class CustomerLogger {
 	
-	public static void LogEvent(String id, String event_name, String param1, String param2, String param3, String sessionId, int timezone_offset_min)
+	public static void LogEvent(String id, String event_name, String param1, String param2, String param3, String sessionId, int timezone_offset_min, String param1Varchar, String param2Varchar, String param3Varchar, String param4Varchar, String param5Varchar, String param6Varchar, String param7Varchar, String param8Varchar, String param9Varchar, String param10Varchar)
 	{
 				//System.out.println("CustLog: id " +id + "event " + event_name +  " prm1 " + param1  + " prm2 " + param2 + " prm3 " + param3 + " timezone offs: " + timezone_offset_min);
 				Constants.updateConstants();
@@ -27,8 +27,8 @@ public class CustomerLogger {
 				DriverManager.registerDriver(new com.mysql.jdbc.Driver());
 				conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
 								
-							String sql = "INSERT INTO customer_events (msg_id, event_name, param1int, param2float, param3str, notes, timestamp, session_id, done) values "
-									+ "		(?, ?, ?, ?, ?, '', DATE_ADD(UTC_TIMESTAMP(),INTERVAL "+ (-timezone_offset_min)+" MINUTE), ?, 0)";
+							String sql = "INSERT INTO customer_events (msg_id, event_name, param1int, param2float, param3str, notes, timestamp, session_id, done, param_1_varchar, param_2_varchar, param_3_varchar, param_4_varchar, param_5_varchar, param_6_varchar, param_7_varchar, param_8_varchar, param_9_varchar, param_10_varchar) values "
+									+ "		(?, ?, ?, ?, ?, '', DATE_ADD(UTC_TIMESTAMP(),INTERVAL "+ (-timezone_offset_min)+" MINUTE), ?, 0, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 				//			System.out.println("sql for cust logger is " + sql);
 							PreparedStatement statement = conn.prepareStatement(sql);
 							statement.setString(1, id);						
@@ -36,7 +36,19 @@ public class CustomerLogger {
 							statement.setInt(3, Integer.parseInt(param1));
 							statement.setFloat(4, Float.parseFloat(param2));
 							statement.setString(5, param3);						
-							statement.setString(6, sessionId);							
+							statement.setString(6, sessionId);
+							
+							statement.setString(7, param1Varchar);
+							statement.setString(8, param2Varchar);
+							statement.setString(9, param3Varchar);
+							statement.setString(10, param4Varchar);
+							statement.setString(11, param5Varchar);
+							statement.setString(12, param6Varchar);
+							statement.setString(13, param7Varchar);
+							statement.setString(14, param8Varchar);
+							statement.setString(15, param9Varchar);
+							statement.setString(16, param10Varchar);
+							
 							// sends the statement to the database server
 							int row = statement.executeUpdate();
 							if (row > 0) { 

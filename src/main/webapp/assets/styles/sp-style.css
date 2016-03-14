@@ -76,7 +76,3 @@ td.sp-file-hash {
   cursor: pointer;
   text-decoration: underline;
 }
-
-#lineChart2, #barChart2 {
-  height: 50px !important;
-}

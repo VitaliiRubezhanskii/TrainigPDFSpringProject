@@ -81,8 +81,15 @@ public class ManagementServlet extends HttpServlet {
         sqlData = DbLayer.getEventData(parameterList, Analytics.sqlFilesData);        
         data.put("filesData", sqlData);
         break;
+          
+	    case "getTopExitPage":
+        parameterList.add(request.getParameter("fileHash"));
+        parameterList.add(request.getParameter("salesmanEmail"));
+        sqlData = DbLayer.getEventData(parameterList, Analytics.sqlTopExitPage);
+        data.put("topExitPage", sqlData);
+        break;
         
-      case "getFileBarChart":
+	    case "getFileBarChart":
         parameterList.add(request.getParameter("fileHash"));
         parameterList.add(request.getParameter("salesmanEmail"));
         sqlData = DbLayer.getEventData(parameterList, Analytics.sqlFileBarChart);
@@ -96,18 +103,18 @@ public class ManagementServlet extends HttpServlet {
         data.put("fileLineChart", sqlData);
         break;
         
-	    case "getTopExitPage":
+      case "getFilePerformanceChart":
         parameterList.add(request.getParameter("fileHash"));
         parameterList.add(request.getParameter("salesmanEmail"));
-        sqlData = DbLayer.getEventData(parameterList, Analytics.sqlTopExitPage);
-        data.put("topExitPage", sqlData);
+        sqlData = DbLayer.getEventData(parameterList, Analytics.sqlFilePerformanceChart);
+        data.put("filePerformanceChart", sqlData);
         break;
         
-	    case "getUsersCta":
+      case "getFileVisitorsMap":
         parameterList.add(request.getParameter("fileHash"));
         parameterList.add(request.getParameter("salesmanEmail"));
-        sqlData = DbLayer.getEventData(parameterList, Analytics.sqlUsersCta);
-        data.put("usersCta", sqlData);
+        sqlData = DbLayer.getEventData(parameterList, Analytics.sqlFileVisitorsMap);
+        data.put("fileVisitorsMap", sqlData);
         break;
 	  }
 	  
