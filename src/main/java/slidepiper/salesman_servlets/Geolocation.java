@@ -59,7 +59,6 @@ public class Geolocation {
    * @throws IOException
    */
   public static List<String> ipData(String ip) throws IOException{
-    System.out.println("SP debugging: a");
     String filePathname = Geolocation.class.getClassLoader().getResource("GeoLite2-City.mmdb").getFile();
     
     File database = new File(filePathname);
@@ -69,7 +68,6 @@ public class Geolocation {
     List<String> data = new ArrayList<String>();
     
     try {
-      System.out.println("SP debugging: b");
       CityResponse response = reader.city(ipAddress);
       
       Country country = response.getCountry();
@@ -77,8 +75,6 @@ public class Geolocation {
       Location location = response.getLocation();
       Subdivision subdivision = response.getMostSpecificSubdivision();
       Postal postal = response.getPostal();
-
-      System.out.println("SP debugging: c");
       
       if (null != country.getIsoCode()) {
         data.add(country.getIsoCode());
@@ -120,7 +116,7 @@ public class Geolocation {
         data.add(postal.getCode());
       } else {
         data.add(null);
-      }
+      }      
       
       if (null != location.getLatitude()) {
         data.add(location.getLatitude().toString());
@@ -133,8 +129,12 @@ public class Geolocation {
       } else {
         data.add(null);
       }
+      
     } catch (GeoIp2Exception e) {
-      e.printStackTrace();
+      System.out.println(e.getMessage());
+      for (int i = data.size(); i <= 9; i++) {
+        data.add(null);
+      }
     }
     
     return data;
