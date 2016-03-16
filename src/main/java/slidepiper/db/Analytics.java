@@ -23,7 +23,7 @@ public class Analytics {
       + "  slides.name AS file_name,\n"
       + "  msg_info.id AS file_link,\n"
       + "  SUM(IF(event_name = 'OPEN_SLIDES', 1, 0)) AS file_sum_open,\n"
-      + "  (SUM(IF(`event_name` = 'OPEN_SLIDES',1,0)) - SUM(IF(event_name = 'VIEW_SLIDE' AND count_distinct_pages_viewed>1,1,0))) / SUM(IF(event_name = 'OPEN_SLIDES',1,0)) AS file_bounce_rate,\n"
+      + "  (SUM(IF(event_name = 'OPEN_SLIDES',1,0)) - SUM(IF(event_name = 'VIEW_SLIDE' AND count_distinct_pages_viewed>1,1,0))) / SUM(IF(event_name = 'OPEN_SLIDES',1,0)) AS file_bounce_rate,\n"
       + "  SUM(IF(event_name = 'VIEW_SLIDE', view_duration, 0)) / SUM(IF(event_name = 'VIEW_SLIDE', 1, 0)) AS average_view_duration,\n"
       + "  SUM(IF(event_name = 'VIEW_SLIDE', count_distinct_pages_viewed, 0)) / SUM(IF(event_name = 'VIEW_SLIDE', 1, 0)) AS average_pages_viewed,\n"
       + "  SUM(IF(event_name = 'CLICKED_CTA', 1, 0)) AS users_cta,\n"
