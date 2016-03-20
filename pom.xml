@@ -54,6 +54,11 @@
 		    <version>1.2</version>
 		</dependency>
 		<dependency>
+	        <groupId>com.maxmind.geoip2</groupId>
+	        <artifactId>geoip2</artifactId>
+	        <version>0.8.0</version>
+	    </dependency>
+		<dependency>
 		    <groupId>org.json</groupId>
 		    <artifactId>json</artifactId>
 		    <version>20141113</version>
@@ -129,7 +134,6 @@
       <artifactId>jackson-databind</artifactId>
       <version>2.2.1</version>
     </dependency>
-
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>

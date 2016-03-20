@@ -64,7 +64,7 @@ public class KeepAliveTask extends TimerTask {
 					CustomerLogger.LogEvent(p.getMsgId(), "VIEW_SLIDE", 
 							Integer.toString(p.getSlideNumber()), 
 							Double.toString(p.getEstimatedTimeViewed()+1.5), "LAST_SLIDE", 
-							p.getSessionId(), p.getTimezoneOffsetMin());
+							p.getSessionId(), p.getTimezoneOffsetMin(), null, null, null, null, null, null, null, null, null, null);
 					
 					EmailSender.sendReportEmail(p);
 															

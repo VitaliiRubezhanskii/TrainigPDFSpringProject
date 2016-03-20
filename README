@@ -4,6 +4,25 @@ SlidePiper README File
 Change Log
 ----------
 
+### 0.4.1
+
+2016-03-17 Yaniv Friedensohn <yanivf@slidepiper.com>
+
+* Created the average pages viewed, top exit page, and users CTA metrics.
+
+* Created the performance column and performance benchmark graph.
+
+* Created the geolocation chart (also called visitors map).
+
+* Enabled tracking of the file viewer CTA buttons click event. When a CTA button is clicked, a 
+LICKED_CTA event is sent with the following parameters:
+1. The CTA button id attribute value.
+2. The CTA button text.
+3. The CTA button link.
+
+* Created PrintProperty class to help print multiline strings (mostly SQL queries).
+
+
 ### 0.4.0
 
 2016-02-24 Yaniv Friedensohn <yanivf@slidepiper.com>
@@ -119,21 +138,22 @@ http://<subdomain>.slidepiper.com/view?f=<file-link-hash>
 
 2015-12-23 Yaniv Friedensohn <yanivf@slidepiper.com>
 
-* Removed hard-coding to enable flexible deployment
+* Removed hard-coding to enable flexible deployment.
 
-* Created sign up form
+* Created sign up form.
 
-* Replaced old chat design with a new one
+* Replaced old chat design with a new one.
 
-* Disabled presentation viewer auto close
+* Disabled presentation viewer auto close (though kept closing the event sending mechanism).
 
-* Enabled chat and live pitch for mobile devices
+* Enabled chat and live pitch for mobile devices, and let the chat open collapsed under a certain
+  breakpoint.
 
-* Added favicon to the presentation viewer
+* Added favicon to the presentation viewer.
 
-* Changed terms and privacy links design
+* Changed terms and privacy links design.
 
-* Changed presentation viewer title
+* Changed presentation viewer title.
 
 
 ### 0.1.0

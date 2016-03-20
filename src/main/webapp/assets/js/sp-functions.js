@@ -25,8 +25,8 @@ sp = {
         function setFileDashboard() {
           // Set fileHash.
           var fileHash = $(this).children().attr('data-file-hash');
-          if (typeof fileHash === 'undefined' && typeof sp.filesTable !== 'undefined') {
-            fileHash = sp.filesTable.row($(this).parent()).data()[0];
+          if (typeof fileHash === 'undefined' && typeof sp.table.filesData !== 'undefined') {
+            fileHash = sp.table.filesData.row($(this).parent()).data()[0];
           }
           
           $.getJSON(
@@ -41,7 +41,7 @@ sp = {
                   .empty()
                   .append(
                       '<a href="#" aria-expanded="true"><i class="fa fa-file"></i> '
-                      + '<span class="nav-label">Files</span></a>'
+                      + '<span class="nav-label">Marketing Analytics</span></a>'
                       + '<span class="fa arrow"></span>'
                       + '<ul class="nav nav-second-level">'
                   );
@@ -62,10 +62,12 @@ sp = {
               }
 
               // Build dashboard.
-              sp.metric.fileMetrics(files[fileHash]);
-              sp.graph.getFileLineChart(fileHash);
-              sp.graph.getFileBarChart(fileHash);
-              sp.table.filesTable(filesData);
+              sp.metric.getFileMetrics(files[fileHash]);
+              sp.chart.getFileLine(fileHash);
+              sp.chart.getFileBar(fileHash);
+              sp.chart.getFileVisitorsMap(fileHash);
+              sp.chart.getFilePerformance(fileHash);
+              sp.table.getFilesTable(filesData);
               
               // Move to the top of the page.
               $('html, body').animate({scrollTop: 0}, 'fast');
@@ -166,36 +168,319 @@ sp = {
     /**
      * Display the selected file data metrics. 
      */
-    fileMetrics: function(fileData) {
+    getFileMetrics: function(fileData) {
+      // Total views.
       $('#sp-widget-total-views').text(fileData[3]);
-      if (null != fileData[4]) {
+      sp.metric.totalViews = parseInt(fileData[3]);
+      
+      if (sp.metric.totalViews > 0) {
+        // Bounce rate.
         $('#sp-widget-bounce-rate').text(parseFloat(fileData[4] * 100).toFixed(2) + '%');
+        
+        // Average view duration.
+        if (null != fileData[5]) {
+          /**
+           * @see http://stackoverflow.com/questions/6312993/javascript-seconds-to-time-string-with-format-hhmmss
+           */
+          var totalSeconds = parseInt(fileData[5], 10);
+          var hours   = Math.floor(totalSeconds / 3600);
+          var minutes = Math.floor((totalSeconds - (hours * 3600)) / 60);
+          var seconds = totalSeconds - (hours * 3600) - (minutes * 60);
+  
+          if (hours < 10) {
+            hours = '0' + hours;
+          }
+          if (minutes < 10) {
+            minutes = '0' + minutes;
+          }
+          if (seconds < 10) {
+            seconds = '0' + seconds;
+          }
+          var time    = hours+':'+minutes+':'+seconds;
+          $('#sp-widget-average-view-duration').text(hours + ':' + minutes + ':' + seconds);
+        } else {
+          $('#sp-widget-average-view-duration').text('N/A');
+        }
+        
+        // Average pages viewed.
+        if (null != fileData[6]) {
+          $('#sp-widget-average-pages-viewed').text(parseFloat(fileData[6]).toFixed(2));
+        } else {
+          $('#sp-widget-average-pages-viewed').text('N/A');
+        }
+        
+        // Top exit page.
+        $.getJSON(
+            '../ManagementServlet',
+            {action: 'getTopExitPage', fileHash: fileData[0], salesmanEmail: sp.config.salesman.email},
+            function(data) {
+              if (typeof data.topExitPage[0] !== 'undefined') {
+                $('#sp-widget-top-exit-page').text(data.topExitPage);
+              } else {
+                $('#sp-widget-top-exit-page').text('N/A');
+              }
+            }
+        );
+        
+        // Users CTA.
+        $('#sp-widget-users-cta').text(fileData[7]);
+        
       } else {
-        $('#sp-widget-bounce-rate').text('N/A');
+        $('.sp-widget:not(#sp-widget-total-views)').text('N/A');
       }
-      if (null != fileData[5]) {
-        /**
-         * @see http://stackoverflow.com/questions/6312993/javascript-seconds-to-time-string-with-format-hhmmss
-         */
-        var totalSeconds = parseInt(fileData[5], 10);
-        var hours   = Math.floor(totalSeconds / 3600);
-        var minutes = Math.floor((totalSeconds - (hours * 3600)) / 60);
-        var seconds = totalSeconds - (hours * 3600) - (minutes * 60);
+    }
+  },
+  
+chart: {
+    
+    /**
+     * Get the file bar chart.
+     */
+    getFileBar: function(fileHash) {
+      $.getJSON('../ManagementServlet', {action: 'getFileBarChart',
+          fileHash: fileHash, salesmanEmail: sp.config.salesman.email}, function(data) {
+          
+        if (typeof sp.chart.fileBar !== 'undefined') {
+          sp.chart.fileBar.destroy();
+        }
+      
+        var barData = {
+            labels: [],
+            datasets: [
+                {
+                    label: "My Second dataset",
+                    fillColor: "rgba(26,179,148,0.5)",
+                    strokeColor: "rgba(26,179,148,0.8)",
+                    highlightFill: "rgba(26,179,148,0.75)",
+                    highlightStroke: "rgba(26,179,148,1)",
+                    data: []
+                }
+            ]
+        };
+  
+        var barOptions = {
+            scaleBeginAtZero: true,
+            scaleShowGridLines: true,
+            scaleGridLineColor: "rgba(0,0,0,.05)",
+            scaleGridLineWidth: 1,
+            barShowStroke: true,
+            barStrokeWidth: 2,
+            barValueSpacing: 15,
+            barDatasetSpacing: 1,
+            responsive: true,
+            tooltipTemplate: "<%if (label){%><%='Page ' + label%>: <%}%><%= value + ' sec.' %>"
+        };
+        
+        if (typeof data.fileBarChart[0] !== 'undefined' ) {
+          $.each(data.fileBarChart, function(index, value) {
+            barData.labels.push(parseInt(value[0]));
+            barData.datasets[0].data.push(parseFloat(value[1]).toFixed(1));
+          });
+        }
+        
+        
+        var ctx = $('#barChart')[0].getContext('2d');
+        sp.chart.fileBar = new Chart(ctx).Bar(barData, barOptions);
+      });
+    },
+    
+    /**
+     * Get the file line chart.
+     */
+    getFileLine: function(fileHash) {
+      $.getJSON('../ManagementServlet', {action: 'getFileLineChart',
+          fileHash: fileHash, salesmanEmail: sp.config.salesman.email}, function(data) {
+            
+        if (typeof sp.chart.fileLine !== 'undefined') {
+          sp.chart.fileLine.destroy();
+        }
+        
+        var lineData = {
+            labels: [],
+            datasets: [
+                {
+                    label: "Total views",
+                    fillColor: "rgba(220,220,220,0.5)",
+                    strokeColor: "rgba(220,220,220,1)",
+                    pointColor: "rgba(220,220,220,1)",
+                    pointStrokeColor: "#fff",
+                    pointHighlightFill: "#fff",
+                    pointHighlightStroke: "rgba(220,220,220,1)",
+                    data: []
+                },
+                {
+                    label: "Actual views",
+                    fillColor: "rgba(26,179,148,0.5)",
+                    strokeColor: "rgba(26,179,148,0.7)",
+                    pointColor: "rgba(26,179,148,1)",
+                    pointStrokeColor: "#fff",
+                    pointHighlightFill: "#fff",
+                    pointHighlightStroke: "rgba(26,179,148,1)",
+                    data: []
+                }
+            ]
+        };
+          
+        var lineOptions = {
+            scaleShowGridLines: true,
+            scaleGridLineColor: "rgba(0,0,0,.05)",
+            scaleGridLineWidth: 1,
+            bezierCurve: true,
+            bezierCurveTension: 0.4,
+            pointDot: true,
+            pointDotRadius: 4,
+            pointDotStrokeWidth: 1,
+            pointHitDetectionRadius: 20,
+            datasetStroke: true,
+            datasetStrokeWidth: 2,
+            datasetFill: true,
+            responsive: true,
+            multiTooltipTemplate: "<%= datasetLabel + ': ' + value %>"
+        };
+          
+        if (typeof data.fileLineChart[0] !== 'undefined' ) {
+          $.each(data.fileLineChart, function(index, value) {
+            dateParts = value[0].split('-');
+            lineData.labels.push(dateParts[2] + '-' + dateParts[1] + '-' + dateParts[0]);
+            lineData.datasets[0].data.push(parseInt(value[1]));
+            lineData.datasets[1].data.push(parseInt(value[2]));
+          });
+        }
+          
+        var ctx = $('#lineChart')[0].getContext('2d');
+        sp.chart.fileLine = new Chart(ctx).Line(lineData, lineOptions);
+      });
+    },
+    
+    /**
+     * Get the file performance chart.
+     */
+    getFilePerformance: function(fileHash) {
+      $.getJSON('../ManagementServlet', {action: 'getFilePerformanceChart',
+          fileHash: fileHash, salesmanEmail: sp.config.salesman.email}, function(data) {
+            
+        if (typeof sp.chart.filePerformance !== 'undefined') {
+          sp.chart.filePerformance.destroy();
+        }
+        
+        var lineData = {
+            labels: [],
+            datasets: [
+                {
+                    label: "Max performance",
+                    strokeColor: "rgba(248,172,89,0.7)",
+                    pointColor: "rgba(248,172,89,1)",
+                    pointStrokeColor: "#fff",
+                    pointHighlightFill: "#fff",
+                    pointHighlightStroke: "rgba(248,172,89,1)",
+                    data: []
+                },
+                {
+                    label: "Average performance",
+                    strokeColor: "rgba(26,179,148,0.7)",
+                    pointColor: "rgba(26,179,148,1)",
+                    pointStrokeColor: "#fff",
+                    pointHighlightFill: "#fff",
+                    pointHighlightStroke: "rgba(26,179,148,1)",
+                    data: []
+                },
+                {
+                  label: "File performance",
+                  strokeColor: "rgba(28,132,198,0.7)",
+                  pointColor: "rgba(28,132,198,1)",
+                  pointStrokeColor: "#fff",
+                  pointHighlightFill: "#fff",
+                  pointHighlightStroke: "rgba(28,132,198,1)",
+                  data: []
+              }
+            ]
+        };
+          
+        var lineOptions = {
+            scaleShowGridLines: true,
+            scaleGridLineColor: "rgba(0,0,0,.05)",
+            scaleGridLineWidth: 1,
+            bezierCurve: true,
+            bezierCurveTension: 0.4,
+            pointDot: true,
+            pointDotRadius: 4,
+            pointDotStrokeWidth: 1,
+            pointHitDetectionRadius: 20,
+            datasetStroke: true,
+            datasetStrokeWidth: 2,
+            datasetFill: false,
+            responsive: true,
+            multiTooltipTemplate: "<%= datasetLabel + ': ' + value %>"
+        };
+          
+        if (typeof data.filePerformanceChart[0] !== 'undefined' ) {
+          $.each(data.filePerformanceChart, function(index, value) {
+            dateParts = value[0].split('-');
+            lineData.labels.push(dateParts[2] + '-' + dateParts[1] + '-' + dateParts[0]);
+            
+            if (0 == value[1]) {
+              lineData.datasets[0].data.push(1);
+            } else {
+              lineData.datasets[0].data.push(Math.ceil(parseFloat(value[1]) * 100));
+            }
 
-        if (hours < 10) {
-          hours = '0' + hours;
+            if (0 == value[2]) {
+              lineData.datasets[1].data.push(1);
+            } else {
+              lineData.datasets[1].data.push(Math.ceil(parseFloat(value[2]) * 100));
+            }
+            
+            if (0 == value[3]) {
+              lineData.datasets[2].data.push(1);
+            } else {
+              lineData.datasets[2].data.push(Math.ceil(parseFloat(value[3]) * 100));
+            }
+          });
         }
-        if (minutes < 10) {
-          minutes = '0' + minutes;
+          
+        var ctx = $('#lineChart2')[0].getContext('2d');
+        sp.chart.filePerformance = new Chart(ctx).Line(lineData, lineOptions);
+      });
+    },
+    
+    /**
+     * get the file visitors report.
+     */
+    getFileVisitorsMap: function(fileHash) {
+      $.getJSON('../ManagementServlet', {action: 'getFileVisitorsMap',
+          fileHash: fileHash, salesmanEmail: sp.config.salesman.email}, function(data) {
+        
+        var dataFormatted = [];
+        if (data.fileVisitorsMap.length > 0) {
+          dataFormatted.push(['Latitude', 'Longitude', 'City', 'Total views']);
+          $.each(data.fileVisitorsMap, function(index, row) {
+            var city = (null != row[2]) ? row[2] + ', ' + row[3] : 'Unknown city, ' + row[3];
+            dataFormatted.push([parseFloat(row[0]), parseFloat(row[1]), city, parseInt(row[4])]);
+          });
+        } else {
+          dataFormatted.push(['']);
         }
-        if (seconds < 10) {
-          seconds = '0' + seconds;
+        
+        var mapData = google.visualization.arrayToDataTable(dataFormatted);
+
+        var options = {
+          colorAxis: {
+            colors: ['#dcdcdc', '#1ab394'],
+            minValue: 0
+          },
+          datalessRegionColor: '#dcdcdc',
+          displayMode: 'markers',
+          projection: 'kavrayskiy-vii',
+          sizeAxis: {
+            minValue: 0
+          }
+        };
+        
+        if (typeof sp.chart.visitorsMap == 'undefined') {
+          sp.chart.visitorsMap = new google.visualization.GeoChart(document.getElementById('sp-google-geochart'));
         }
-        var time    = hours+':'+minutes+':'+seconds;
-        $('#sp-widget-average-view-duration').text(hours + ':' + minutes + ':' + seconds);
-      } else {
-        $('#sp-widget-average-view-duration').text('00:00:00');
-      }
+        sp.chart.visitorsMap.draw(mapData, options);
+      });
     }
   },
   
@@ -206,15 +491,15 @@ sp = {
      * 
      * @param object filesData A 2d array consisting of files data.
      */
-    filesTable: function(filesData) {
+    getFilesTable: function(filesData) {
       if ($.fn.dataTable.isDataTable('#sp-files-data__table')) {
-        sp.filesTable = $('#sp-files-data__table').DataTable()
+        sp.table.filesData = $('#sp-files-data__table').DataTable()
             .clear()
             .rows.add(filesData)
             .draw();
       } else {
         var fileLinkColumnIndex = 2;
-        sp.filesTable = $('#sp-files-data__table').DataTable({
+        sp.table.filesData = $('#sp-files-data__table').DataTable({
           data: filesData,
           buttons: [
             {
@@ -301,7 +586,7 @@ sp = {
           columnDefs: [
               {
                 visible: false,
-                targets: 0
+                targets: [0, 5, 6, 7]
               },
               {
                 className: 'sp-file-hash',
@@ -329,9 +614,17 @@ sp = {
               },
               {
                 render: function (data, type, row) {
-                  return '';
+                  if (null != data) {
+                    if (0 == data) {
+                      return 1;
+                    } else {
+                      return Math.ceil(parseFloat(data) * 100);
+                    }
+                  } else {
+                    return 'N/A';
+                  }
                 },
-                targets: 5
+                targets: 8
               }
           ],
           dom: '<"html5buttons"B>lTfgitp',
@@ -341,140 +634,12 @@ sp = {
         new Clipboard('.sp-copy__button');
       }
     }
-  },
-  
-  graph: {
-    
-    /**
-     * Get the file bar chart.
-     */
-    getFileBarChart: function(fileHash) {
-      $.getJSON('../ManagementServlet', {action: 'getFileBarChart',
-          fileHash: fileHash, salesmanEmail: sp.config.salesman.email}, function(data) {
-          
-        if (typeof sp.graph.fileBarChart !== 'undefined') {
-          sp.graph.fileBarChart.destroy();
-        }
-      
-        var barData = {
-            labels: [],
-            datasets: [
-                {
-                    label: "My Second dataset",
-                    fillColor: "rgba(26,179,148,0.5)",
-                    strokeColor: "rgba(26,179,148,0.8)",
-                    highlightFill: "rgba(26,179,148,0.75)",
-                    highlightStroke: "rgba(26,179,148,1)",
-                    data: []
-                }
-            ]
-        };
-  
-        var barOptions = {
-            scaleBeginAtZero: true,
-            scaleShowGridLines: true,
-            scaleGridLineColor: "rgba(0,0,0,.05)",
-            scaleGridLineWidth: 1,
-            barShowStroke: true,
-            barStrokeWidth: 2,
-            barValueSpacing: 15,
-            barDatasetSpacing: 1,
-            responsive: true,
-            tooltipTemplate: "<%if (label){%><%='Page ' + label%>: <%}%><%= value + ' sec.' %>"
-        };
-        
-        if (typeof data.fileBarChart[0] !== 'undefined' ) {
-          $.each(data.fileBarChart, function(index, value) {
-            barData.labels.push(parseInt(value[0]));
-            barData.datasets[0].data.push(parseFloat(value[1]).toFixed(1));
-          });
-        }
-        
-        
-        var ctx = $('#barChart')[0].getContext('2d');
-        sp.graph.fileBarChart = new Chart(ctx).Bar(barData, barOptions);
-      });
-    },
-    
-    
-    /**
-     * Get the file line chart.
-     */
-    getFileLineChart: function(fileHash) {
-      $.getJSON('../ManagementServlet', {action: 'getFileLineChart',
-          fileHash: fileHash, salesmanEmail: sp.config.salesman.email}, function(data) {
-            
-        if (typeof sp.graph.fileLineChart !== 'undefined') {
-          sp.graph.fileLineChart.destroy();
-        }
-        
-        var lineData = {
-            labels: [],
-            datasets: [
-                {
-                    label: "Total views",
-                    fillColor: "rgba(220,220,220,0.5)",
-                    strokeColor: "rgba(220,220,220,1)",
-                    pointColor: "rgba(220,220,220,1)",
-                    pointStrokeColor: "#fff",
-                    pointHighlightFill: "#fff",
-                    pointHighlightStroke: "rgba(220,220,220,1)",
-                    data: []
-                },
-                {
-                    label: "Actual views",
-                    fillColor: "rgba(26,179,148,0.5)",
-                    strokeColor: "rgba(26,179,148,0.7)",
-                    pointColor: "rgba(26,179,148,1)",
-                    pointStrokeColor: "#fff",
-                    pointHighlightFill: "#fff",
-                    pointHighlightStroke: "rgba(26,179,148,1)",
-                    data: []
-                }
-            ]
-        };
-          
-        var lineOptions = {
-            scaleShowGridLines: true,
-            scaleGridLineColor: "rgba(0,0,0,.05)",
-            scaleGridLineWidth: 1,
-            bezierCurve: true,
-            bezierCurveTension: 0.4,
-            pointDot: true,
-            pointDotRadius: 4,
-            pointDotStrokeWidth: 1,
-            pointHitDetectionRadius: 20,
-            datasetStroke: true,
-            datasetStrokeWidth: 2,
-            datasetFill: true,
-            responsive: true,
-            multiTooltipTemplate: "<%= datasetLabel + ': ' + value %>"
-        };
-          
-        if (typeof data.fileLineChart[0] !== 'undefined' ) {
-          $.each(data.fileLineChart, function(index, value) {
-            dateParts = value[0].split('-');
-            lineData.labels.push(dateParts[2] + '-' + dateParts[1] + '-' + dateParts[0]);
-            lineData.datasets[0].data.push(parseInt(value[1]));
-            lineData.datasets[1].data.push(parseInt(value[2]));
-          });
-        }
-          
-        var ctx = $('#lineChart')[0].getContext('2d');
-        sp.graph.fileLineChart = new Chart(ctx).Line(lineData, lineOptions);
-      });
-    }
-    
-  // End graph.
   }
-  
-// End sp.
 };
-
+// End sp.
 
 $(document).ready(function() {
   $('#send_email_to_customers').css('visibility', 'visible');
-  
   
 	/**
 	 * Add a salesman to the DB.

@@ -119,7 +119,7 @@ public class ChatServlet extends HttpServlet {
 																											
 						sessid = input.getString("session_id");				
 						String msgtext = input.getString("msgtext");						
-						CustomerLogger.LogEvent("chatmsgid", "CHAT_MESSAGE", "1", "1",msgtext, sessid, 0);
+						CustomerLogger.LogEvent("chatmsgid", "CHAT_MESSAGE", "1", "1",msgtext, sessid, 0, null, null, null, null, null, null, null, null, null, null);
 						System.out.println("addchat message using ajax (no socket): msg " + msgtext + " sess id " + sessid );
 						
 						break;
