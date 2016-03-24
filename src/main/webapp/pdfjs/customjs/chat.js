@@ -100,7 +100,7 @@ function setGlobals() {
           
           $('.sp-chat-avatar:first-child').text(salesman.charAt(0).toUpperCase());
           $('.sp-chat-message h5:first-of-type').text(salesman);
-          $('.sp-chat-message p:first-of-type').text('Hello ' + customername + '. Please use this ' +
+          $('.sp-chat-message p:first-of-type').text('Please use this ' +
               'chat to ask me anything. All of your messages will be saved and sent to me. If I ' +
               'am online, I will be able to assist you immediately.');
         });
