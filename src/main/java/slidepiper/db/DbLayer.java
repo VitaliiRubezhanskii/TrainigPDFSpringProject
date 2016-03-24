@@ -1738,4 +1738,42 @@ public class DbLayer {
         
         return statusCode;
       }
+
+      /**
+       * Update (replace) a file with a different one.
+       * 
+       * @param file The file blob.
+       * @param fileHash The file hash.
+       * @param fileName The file name.
+       * @param salesmanEmail The salesman email address.
+       * 
+       * @throws IOException
+       */
+      public static void updateFile(FileItem file, String fileHash, String fileName,
+          String salesmanEmail) throws IOException {
+
+        Constants.updateConstants();
+        Connection conn = null;
+        String sql = "UPDATE slides SET file = ?, name = ?, timestamp = CURRENT_TIMESTAMP WHERE id = ? AND sales_man_email = ?";
+        
+        try {
+          conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
+          PreparedStatement stmt = conn.prepareStatement(sql);
+          stmt.setBytes(1, IOUtils.toByteArray(file.getInputStream()));
+          stmt.setString(2, fileName);
+          stmt.setString(3, fileHash);
+          stmt.setString(4, salesmanEmail);
+          stmt.executeUpdate();
+        } catch (SQLException ex) {
+          System.err.println("Error code: " + ex.getErrorCode() + " - " + ex.getMessage());
+        } finally {
+          if (null != conn) {
+            try {
+              conn.close();
+            } catch (SQLException ex) {
+              ex.printStackTrace();
+            }
+          }
+        }
+      }
 }

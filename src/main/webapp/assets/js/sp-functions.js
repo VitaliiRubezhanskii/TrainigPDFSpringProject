@@ -3,19 +3,17 @@ var sp = sp || {};
 sp = {
   
   init: (function(fileHash) {
-    var path = window.location.pathname.split( '/' ).splice(-2).join('/');
-    var configUrl = 'config';
+    var path = window.location.pathname.split( '/' ).splice(-1, 1);
     var isDashboard = false;
-    if ('dashboard/index.html' == path || 'dashboard/' == path) {
-      configUrl = '../' + configUrl;
+    if ('dashboard.html' == path) {
       isDashboard = true;
     }
     
-    $.getJSON(configUrl, {salesmanEmail: $.cookie('SalesmanEmail')}, function(data) {
+    $.getJSON('config', {salesmanEmail: Cookies.get('SalesmanEmail')}, function(data) {
       sp.config = data;
       
       if (isDashboard) {
-        if (typeof $.cookie('SalesmanEmail') === 'undefined') {
+        if (typeof Cookies.get('SalesmanEmail') === 'undefined') {
           window.location.href = sp.config.appUrl;
         }
         
@@ -30,7 +28,7 @@ sp = {
           }
           
           $.getJSON(
-              '../ManagementServlet',
+              'ManagementServlet',
               {action: 'getFilesData', salesmanEmail: sp.config.salesman.email},
               function(data) {
             var filesData = data.filesData;
@@ -80,14 +78,185 @@ sp = {
         
         // .click() cannot be used since '#sp-nav-files__li li' haven't been created yet.
         $(document).on('click', '#sp-nav-files__li li, td.sp-file-hash', setFileDashboard);
-      
-        $(document).ready(function() { 
-          $('#side-menu').metisMenu();
+        
+        $(document).ready(function() {
           $('#sp-salesman-full-name strong').text(sp.config.salesman.name);
+          
+          $('.sp-nav-section').click(function() {
+            routingEmulator($(this).attr('data-dashboard'));
+          });
+          
+          $('.sp-logout').click(function() {
+            Cookies.remove('SalesmanEmail');
+            location.href = sp.config.appUrl;
+          });
+          
+          /* Files Management */
+          $('input[type=file]').on('change', function() {
+            sp.file.files = event.target.files;
+          });
+          
+          // Upload file.
+          $('#sp-upload-files__button').click(function(event) {
+            sp.file.uploadFiles(event);
+            $('input[type="file"]').val(null);
+          });
+          
+          // Update file.
+          $(document).on('click', '.sp-file-update', function() {
+            sp.file.fileHash = $(this).attr('data-file-hash');
+          });
+          
+          $('#sp-update-file__button').click(function(event) {
+            sp.file.updateFile(event, sp.file.fileHash);
+            $('input[type="file"]').val(null);
+          });
+          
+          // Delete file.
+          $(document).on('click', '.sp-file-delete', function() {
+            if (true == confirm('Are you sure you want to delete this file?')) {
+              sp.file.fileHash = $(this).attr('data-file-hash');
+              sp.file.deleteFile(sp.file.fileHash);
+              sp.file.fileHash = null;
+            }
+          });
+          
+          //$('#side-menu').metisMenu();
+          
+          function routingEmulator(topSection) {
+            $('.sp-dashboard').hide();
+            $('.sp-nav-section').removeClass('active');
+            $('[data-dashboard="' + topSection + '"]').addClass('active');
+            $('#' + topSection).show();
+            
+            switch(topSection) {
+              case 'sp-file-upload':
+                $('#sp-nav-files__li ul').hide();
+                sp.file.getFilesList();
+                break;
+                
+              case 'sp-file-dashboard':
+                sp.table.filesData = undefined;
+                setFileDashboard();
+                break;
+            }
+          }
+          
         });
       }
     });
   })(),
+  
+  file: {
+    
+    fileHash: null,
+    files: [],
+    
+    getFilesList: function() {
+      $.getJSON(
+          'ManagementServlet',
+          {action: 'getFilesList', salesmanEmail: sp.config.salesman.email},
+          function(data) {
+            $('#sp-files-management tbody').empty();
+            
+            $.each(data.filesList, function(index, row) {
+              $('#sp-files-management tbody').append(
+                  '<tr>'
+                    + '<td class="col-lg-2"><i class="fa fa-clock-o sp-file-clock" data-toggle="tooltip" data-placement="right" title="Date file was added or updated"></i> ' + row[2] + '</td>'
+                    + '<td class="col-lg-3 sp-file-mgmt-file-name" data-file-hash="' + row[0] + '">' + row[1] + '</td>'
+                    + '<td class="col-lg-7"><a href="#"><span class="label label-primary sp-file-update" data-toggle="modal" data-target="#sp-modal-update-file" data-file-hash="' + row[0] + '">Update</span></a><a href="#"><span class="label label-danger sp-file-delete" data-file-hash="' + row[0] + '">Delete</span></a></td>'
+                + '</tr>'
+              );
+            });
+            
+            $('#sp-files-management tbody').tooltip({
+              selector: "[data-toggle=tooltip]"
+            });
+          });
+    },
+    
+    uploadFiles: function(event) {
+      event.stopPropagation();
+      event.preventDefault();
+
+      $('#file').hide();
+      $('.sk-spinner').show();
+      $('#sp-upload-files__button').removeClass('btn-primary').addClass('btn-default').text('Uploading...');
+      
+      var data = new FormData();
+      $.each(sp.file.files, function(key, value) {
+        data.append(key, value);
+      });
+      data.append('action', 'uploadFiles');
+      data.append('salesmanEmail', Cookies.get('SalesmanEmail'));
+        
+      $.ajax({
+        url: 'upload-file',
+        type: 'POST',
+        data: data,
+        cache: false,
+        processData: false,
+        contentType: false,
+        success: function(data, textStatus, jqXHR) {
+          if(typeof data.error === 'undefined') {
+            sp.file.getFilesList();
+            $('button[data-dismiss="modal"]').click();
+            
+            sp.file.files = [];
+            $('#sp-upload-files__button').removeClass('btn-default').addClass('btn-primary').text('Update Files');
+            $('.sk-spinner').hide();
+            $('.file__input').show();
+          }
+        }
+      });
+    },
+    
+    updateFile: function(event, fileHash) {
+      event.stopPropagation();
+      event.preventDefault();
+
+      $('.file__input').hide();
+      $('.sk-spinner').show();
+      $('#sp-upload-files__button').removeClass('btn-primary').addClass('btn-default').text('Uploading...');
+      
+      var data = new FormData();
+      data.append('updatedfile', sp.file.files[0]);
+      data.append('action', 'updateFile');
+      data.append('updateFileHash', fileHash);
+      data.append('salesmanEmail', Cookies.get('SalesmanEmail'));
+      
+      $.ajax({
+        url: 'upload-file',
+        type: 'POST',
+        data: data,
+        cache: false,
+        processData: false,
+        contentType: false,
+        success: function(data, textStatus, jqXHR) {
+          if(typeof data.error === 'undefined') {
+            sp.file.getFilesList();
+            $('button[data-dismiss="modal"]').click();
+            
+            sp.file.files = [];
+            $('#sp-upload-files__button').removeClass('btn-default').addClass('btn-primary').text('Upload Files');
+            $('.sk-spinner').hide();
+            $('.file__input').show();
+          }
+        }
+      });
+    },
+    
+    deleteFile: function(fileHash) {
+      $.post('ManagementServlet', JSON.stringify({
+        action: 'deletePresentation',
+        salesman_email: Cookies.get('SalesmanEmail'),
+        presentation: fileHash
+      }))
+      .done(function() {
+        sp.file.getFilesList();
+      });
+    }
+  },
   
   email: {
     lastFocusedSubjectOrBody: {},
@@ -211,7 +380,7 @@ sp = {
         
         // Top exit page.
         $.getJSON(
-            '../ManagementServlet',
+            'ManagementServlet',
             {action: 'getTopExitPage', fileHash: fileData[0], salesmanEmail: sp.config.salesman.email},
             function(data) {
               if (typeof data.topExitPage[0] !== 'undefined') {
@@ -237,7 +406,7 @@ chart: {
      * Get the file bar chart.
      */
     getFileBar: function(fileHash) {
-      $.getJSON('../ManagementServlet', {action: 'getFileBarChart',
+      $.getJSON('ManagementServlet', {action: 'getFileBarChart',
           fileHash: fileHash, salesmanEmail: sp.config.salesman.email}, function(data) {
           
         if (typeof sp.chart.fileBar !== 'undefined') {
@@ -288,7 +457,7 @@ chart: {
      * Get the file line chart.
      */
     getFileLine: function(fileHash) {
-      $.getJSON('../ManagementServlet', {action: 'getFileLineChart',
+      $.getJSON('ManagementServlet', {action: 'getFileLineChart',
           fileHash: fileHash, salesmanEmail: sp.config.salesman.email}, function(data) {
             
         if (typeof sp.chart.fileLine !== 'undefined') {
@@ -356,7 +525,7 @@ chart: {
      * Get the file performance chart.
      */
     getFilePerformance: function(fileHash) {
-      $.getJSON('../ManagementServlet', {action: 'getFilePerformanceChart',
+      $.getJSON('ManagementServlet', {action: 'getFilePerformanceChart',
           fileHash: fileHash, salesmanEmail: sp.config.salesman.email}, function(data) {
             
         if (typeof sp.chart.filePerformance !== 'undefined') {
@@ -447,7 +616,7 @@ chart: {
      * get the file visitors report.
      */
     getFileVisitorsMap: function(fileHash) {
-      $.getJSON('../ManagementServlet', {action: 'getFileVisitorsMap',
+      $.getJSON('ManagementServlet', {action: 'getFileVisitorsMap',
           fileHash: fileHash, salesmanEmail: sp.config.salesman.email}, function(data) {
         
         var dataFormatted = [];
@@ -470,6 +639,7 @@ chart: {
           },
           datalessRegionColor: '#dcdcdc',
           displayMode: 'markers',
+          legend: 'none',
           projection: 'kavrayskiy-vii',
           sizeAxis: {
             minValue: 0
