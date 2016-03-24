@@ -370,6 +370,12 @@ if ('' != sp.viewer.linkHash) {
       $('#sp-cta3, #sp-secondary-cta3').hide();
     }
     
+    if (typeof config.viewer.toolbarLogoCollapseMaxWidth !== 'undefined') {
+      $('body').append(
+          '<style>@media all and (max-width: ' + config.viewer.toolbarLogoCollapseMaxWidth
+          + ') {.sp-toolbar-logo {display: none;}}</style>');
+    }
+    
     // Since loading fonts is currently done asynchronous, this section
     // is positioned at the end of the templating process.
     if (typeof config.viewer.toolbarFontFamily !== 'undefined') {

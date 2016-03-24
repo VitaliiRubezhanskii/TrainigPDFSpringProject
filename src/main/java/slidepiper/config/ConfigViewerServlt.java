@@ -61,6 +61,8 @@ public class ConfigViewerServlt extends HttpServlet {
           salesman.get("viewer_toolbar_logo_image"));
       viewer.put("toolbarLogoLink",
           salesman.get("viewer_toolbar_logo_link"));
+      viewer.put("toolbarLogoCollapseMaxWidth",
+          salesman.get("viewer_toolbar_logo_collapse_max_width"));
       viewer.put("isChatEnabled",
           Boolean.parseBoolean(salesman.get("viewer_is_chat_enabled")));
       viewer.put("isChatOpen",

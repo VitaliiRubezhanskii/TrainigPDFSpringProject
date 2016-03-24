@@ -428,7 +428,7 @@ var ProgressBar = (function ProgressBarClosure() {
 var DEFAULT_PREFERENCES = {
   showPreviousViewOnLoad: true,
 //  defaultZoomValue: '',
-  defaultZoomValue: 'page-actual',
+  defaultZoomValue: 'page-fit',
   sidebarViewOnLoad: 0,
   enableHandToolOnLoad: false,
   enableWebGL: false,

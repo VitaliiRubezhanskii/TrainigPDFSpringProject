@@ -19,6 +19,14 @@
   width: 36px;
 }
 
+#toolbarContainer {
+  height: 48px;
+}
+
+#toolbarViewerLeft, #toolbarViewerRight {
+  top: 8px !important;
+}
+
 #viewFind {
   margin-left: 4px;
 }
@@ -39,7 +47,7 @@
 }
 
 .sp-toolbar-logo img {
-  max-height: 28px;
+  max-height: 44px;
   margin: 2px 0;
 }
 
