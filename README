@@ -4,6 +4,23 @@ SlidePiper README File
 Change Log
 ----------
 
+### 0.5.0
+
+2016-04-06 Yaniv Friedensohn <yanivf@slidepiper.com>
+
+* Replaced the login screen with a new design.
+
+* Created a file management view.
+
+* Strengthened the security of the file update process by requiring the 
+salesman email.
+
+* Started logging the event of updating (replacing) a file (the 
+event name is UPDATED_FILE).
+
+* Removed legend from the visitors map.
+
+
 ### 0.4.2
 
 2016-03-24 Yaniv Friedensohn <yanivf@slidepiper.com>
