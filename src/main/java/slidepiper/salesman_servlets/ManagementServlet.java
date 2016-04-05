@@ -76,6 +76,12 @@ public class ManagementServlet extends HttpServlet {
         data.put("mailType", mailType);
         break;
         
+      case "getFilesList":
+        parameterList.add(request.getParameter("salesmanEmail"));
+        sqlData = DbLayer.getEventData(parameterList, Analytics.sqlFilesList);        
+        data.put("filesList", sqlData);
+        break;
+        
       case "getFilesData":
         parameterList.add(request.getParameter("salesmanEmail"));
         sqlData = DbLayer.getEventData(parameterList, Analytics.sqlFilesData);        

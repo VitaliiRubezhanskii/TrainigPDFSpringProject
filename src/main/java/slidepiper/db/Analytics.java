@@ -5,8 +5,18 @@ import slidepiper.config.ConfigProperties;
 public class Analytics {
 
   /**
-   * Metrics.
+   * Data.
    */
+  
+  public static final String sqlFilesList =
+      "SELECT\n"
+      + "  id AS file_hash,\n"
+      + "  name AS file_name,\n"
+      + "  DATE_FORMAT(timestamp, '%d-%b-%Y %H:%i:%s') AS date_added_or_modified\n"
+      + "FROM slides\n"
+      + "WHERE sales_man_email = ?\n"
+      + "ORDER BY timestamp DESC\n";
+  
   
   /**
    * The query only returns the default_customer_email file links.
