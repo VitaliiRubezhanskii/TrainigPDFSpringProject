@@ -55,7 +55,7 @@
 
 
 /* Dashboard settings */
-form[role="search"], .navbar-right, .profile-element .text-muted, .arrow {
+form[role="search"], .text-muted, .arrow {
   visibility: hidden;
 }
 
@@ -72,7 +72,27 @@ form[role="search"], .navbar-right, .profile-element .text-muted, .arrow {
   margin-right: 10px;
 }
 
+.sp-file-delete {
+  margin-left: 10px;
+}
+
+.sp-file-mgmt-file-name {
+  font-weight: bold;
+}
+
+.sp-top-section {
+  display: none;
+}
+
+.sp-file-clock {
+  margin-right: 5px;
+}
+
 td.sp-file-hash {
   cursor: pointer;
   text-decoration: underline;
+}
+
+.sk-spinner {
+  display: none;
 }
