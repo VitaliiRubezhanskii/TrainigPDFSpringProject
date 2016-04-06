@@ -91,7 +91,11 @@ sp = {
             location.href = sp.config.appUrl;
           });
           
-          /* Files Management */
+          /* Files & Customers management */
+          $('.sp-files-customers-mgmt-tab').click(function() {
+            $('.sp-files-customers-mgmt-top-part').toggle();
+          });
+          
           $('input[type=file]').on('change', function() {
             sp.file.files = event.target.files;
           });
@@ -117,12 +121,21 @@ sp = {
             if (true == confirm('Are you sure you want to delete this file?')) {
               sp.file.fileHash = $(this).attr('data-file-hash');
               sp.file.deleteFile(sp.file.fileHash);
-              sp.file.fileHash = null;
+              //sp.file.fileHash = null;
             }
+          });
+          
+          // Upload customers.
+          $('#sp-upload-customers__button').click(function(event) {
+            sp.file.uploadCustomers(event);
+            $('input[type="file"]').val(null);
           });
           
           //$('#side-menu').metisMenu();
           
+          /**
+           * The function controls the display of the current dashboard view. 
+           */
           function routingEmulator(topSection) {
             $('.sp-dashboard').hide();
             $('.sp-nav-section').removeClass('active');
@@ -254,6 +267,39 @@ sp = {
       }))
       .done(function() {
         sp.file.getFilesList();
+      });
+    },
+    
+    uploadCustomers: function(event) {
+      event.stopPropagation();
+      event.preventDefault();
+
+      $('#file').hide();
+      $('.sk-spinner').show();
+      $('#sp-upload-files__button').removeClass('btn-primary').addClass('btn-default').text('Uploading...');
+      
+      var data = new FormData();
+      data.append('filecsv', sp.file.files[0]);
+      data.append('salesman_email_for_csv', Cookies.get('SalesmanEmail'));
+        
+      $.ajax({
+        url: 'uploadCustomers',
+        type: 'POST',
+        data: data,
+        cache: false,
+        processData: false,
+        contentType: false,
+        success: function(data, textStatus, jqXHR) {
+          if(typeof data.error === 'undefined') {
+            sp.file.getFilesList();
+            $('button[data-dismiss="modal"]').click();
+            
+            sp.file.files = [];
+            $('#sp-upload-files__button').removeClass('btn-default').addClass('btn-primary').text('Update Files');
+            $('.sk-spinner').hide();
+            $('.file__input').show();
+          }
+        }
       });
     }
   },
