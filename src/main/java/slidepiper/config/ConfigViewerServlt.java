@@ -22,7 +22,7 @@ public class ConfigViewerServlt extends HttpServlet {
   public void doGet(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
   
-    response.setContentType("application/json");
+    response.setContentType("application/json; charset=UTF-8");
     PrintWriter out = response.getWriter();
     
     try {
