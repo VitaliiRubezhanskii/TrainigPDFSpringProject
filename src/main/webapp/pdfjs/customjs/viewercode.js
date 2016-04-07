@@ -1,7 +1,7 @@
 
                 if(window.ActiveXObject || "ActiveXObject" in window){
                     // Always true if browser is Internet Explorer
-                        alert("This website does not support Internet Explorer. Please switch to a different browser.");
+                        //alert("This website does not support Internet Explorer. Please switch to a different browser.");
                 }
 
 

@@ -4,6 +4,15 @@ SlidePiper README File
 Change Log
 ----------
 
+### 0.5.2
+
+2016-04-07 Yaniv Friedensohn <yanivf@slidepiper.com>
+
+* Disabled Internet Explorer alert message when opening the file viewer.
+
+* Removed file mgmt view from the marketing analytics view.
+
+
 ### 0.5.1
 
 2016-04-06 Yaniv Friedensohn <yanivf@slidepiper.com>
