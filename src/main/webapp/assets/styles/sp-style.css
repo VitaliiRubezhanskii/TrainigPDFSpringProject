@@ -96,3 +96,7 @@ td.sp-file-hash {
 .sk-spinner {
   display: none;
 }
+
+#sp-file-upload {
+  display: none;
+}
