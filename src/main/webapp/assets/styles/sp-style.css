@@ -105,6 +105,6 @@ td.sp-file-hash {
   display: none;
 }
 
-button[data-target="#sp-modal-add-customer"] {
+button[data-target="#sp-modal-add-update-customer"] {
   margin-left: 10px;
 }
