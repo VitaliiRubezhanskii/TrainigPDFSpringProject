@@ -100,3 +100,11 @@ td.sp-file-hash {
 #sp-file-upload {
   display: none;
 }
+
+#sp-customers-mgmt-top-part {
+  display: none;
+}
+
+button[data-target="#sp-modal-add-update-customer"] {
+  margin-left: 10px;
+}

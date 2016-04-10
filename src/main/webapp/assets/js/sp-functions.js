@@ -91,7 +91,17 @@ sp = {
             location.href = sp.config.appUrl;
           });
           
-          /* Files Management */
+          /* Files & Customers management */
+          $('.sp-files-customers-mgmt-tab').click(function() {
+            if ('sp-files-mgmt-tab' == $(this)[0].id) {
+              $('#sp-customers-mgmt-top-part').hide();
+              $('#sp-files-mgmt-top-part').show();
+            } else if ('sp-customers-mgmt-tab' == $(this)[0].id) {
+              $('#sp-files-mgmt-top-part').hide();
+              $('#sp-customers-mgmt-top-part').show();
+            }
+          });
+          
           $('input[type=file]').on('change', function() {
             sp.file.files = event.target.files;
           });
@@ -117,12 +127,25 @@ sp = {
             if (true == confirm('Are you sure you want to delete this file?')) {
               sp.file.fileHash = $(this).attr('data-file-hash');
               sp.file.deleteFile(sp.file.fileHash);
-              sp.file.fileHash = null;
             }
+          });
+          
+          // Upload customers.
+          $('#sp-upload-customers__button').click(function(event) {
+            sp.file.uploadCustomers(event);
+            $('input[type="file"]').val(null);
+          });
+          
+          // Add a customer
+          $('#sp-modal-add-update-customer__button').click(function(event) {
+            sp.file.addCustomer(event);
           });
           
           //$('#side-menu').metisMenu();
           
+          /**
+           * The function controls the display of the current dashboard view. 
+           */
           function routingEmulator(topSection) {
             $('.sp-dashboard').hide();
             $('.sp-nav-section').removeClass('active');
@@ -133,6 +156,7 @@ sp = {
               case 'sp-file-upload':
                 $('#sp-nav-files__li ul').hide();
                 sp.file.getFilesList();
+                sp.file.getCustomersList();
                 break;
                 
               case 'sp-file-dashboard':
@@ -179,7 +203,7 @@ sp = {
       event.stopPropagation();
       event.preventDefault();
 
-      $('#file').hide();
+      $('#sp-file-upload__form').hide();
       $('.sk-spinner').show();
       $('#sp-upload-files__button').removeClass('btn-primary').addClass('btn-default').text('Uploading...');
       
@@ -215,7 +239,7 @@ sp = {
       event.stopPropagation();
       event.preventDefault();
 
-      $('.file__input').hide();
+      $('#sp-file-update__form').hide();
       $('.sk-spinner').show();
       $('#sp-upload-files__button').removeClass('btn-primary').addClass('btn-default').text('Uploading...');
       
@@ -255,8 +279,149 @@ sp = {
       .done(function() {
         sp.file.getFilesList();
       });
-    }
+    },
+    
+    
+    getCustomersList: function() {
+      $.getJSON(
+          'ManagementServlet',
+          {action: 'getCustomersList', salesmanEmail: sp.config.salesman.email},
+          function(data) {
+            $('#sp-customers-management tbody').empty();
+            
+            $.each(data.customersList, function(index, row) {
+              $('#sp-customers-management tbody').append(
+                  '<tr>'
+                    + '<td>' + row[0] + ' ' + row[1] + '</td>' 
+                    + '<td>' + row[2] + '</td>'
+                    + '<td class="contact-type"><i class="fa fa-envelope"> </i></td>'
+                    + '<td>' + row[3] + '</td>'
+                    + '<td><a href="#"><span class="label label-primary sp-customer-update" data-toggle="modal" data-target="#sp-modal-add-update-customer" data-customer-email="' + row[3] + '">Update</span></a><a href="#"><span class="label label-danger sp-customer-delete" data-customer-email="' + row[3] + '">Delete</span></a></td>'
+                + '</tr>'
+              );
+            });
+            
+            $('#sp-files-management tbody').tooltip({
+              selector: "[data-toggle=tooltip]"
+            });
+          });
+    },
+    
+    uploadCustomers: function(event) {
+      event.stopPropagation();
+      event.preventDefault();
+
+      $('#sp-customers-upload__form').hide();
+      $('.sk-spinner').show();
+      $('#sp-upload-files__button').removeClass('btn-primary').addClass('btn-default').text('Uploading...');
+      
+      var data = new FormData();
+      data.append('filecsv', sp.file.files[0]);
+      data.append('salesman_email_for_csv', Cookies.get('SalesmanEmail'));
+        
+      $.ajax({
+        url: 'uploadCustomers',
+        type: 'POST',
+        data: data,
+        cache: false,
+        processData: false,
+        contentType: false,
+        success: function(data, textStatus, jqXHR) {
+          if(typeof data.error === 'undefined') {
+            sp.file.getCustomersList();
+            $('button[data-dismiss="modal"]').click();
+            
+            sp.file.files = [];
+            $('#sp-upload-files__button').removeClass('btn-default').addClass('btn-primary').text('Update Files');
+            $('.sk-spinner').hide();
+            $('.file__input').show();
+          }
+        }
+      });
+    },
+    
+    addOrUpdateCustomer: function(event) {
+      event.preventDefault();
+      
+      $('#sp-add-update-customer__form').hide();
+      $('.sk-spinner').show();
+      $('#sp-upload-files__button').removeClass('btn-primary').addClass('btn-default')
+      
+      var action = null;
+      if (true) {
+        $('#sp-upload-files__button').text('Adding...');
+        action = 'addNewCustomer';
+      } else if (true) {
+        action = "";
+      }
+      
+      var data = {
+        'salesmanEmail': Cookies.get('SalesmanEmail'),
+        'action': action
+      };
+      $('#sp-add-update-customer__form input').each(function() {
+        data[$(this).attr('name')] = $(this).val();
+      });
+      
+      
+      
+      $.ajax({
+        url: 'ManagementServlet',
+        type: 'POST',
+        data: JSON.stringify(data),
+        cache: false,
+        processData: false,
+        contentType : "application/json; charset=utf-8",
+        success: function(data, textStatus, jqXHR) {
+          if(typeof data.error === 'undefined') {
+            sp.file.getCustomersList();
+            $('button[data-dismiss="modal"]').click();
+            
+            $('#sp-upload-files__button').removeClass('btn-default').addClass('btn-primary').text('Add a Customer');
+            $('.sk-spinner').hide();
+            $('.file__input').show();
+          }
+        }
+      });
+    },
+    
+    updateCustomer: function(event) {
+      event.preventDefault();
+      
+      $('#sp-add-update-customer__form').hide();
+      $('.sk-spinner').show();
+      $('#sp-upload-files__button').removeClass('btn-primary').addClass('btn-default').text('Adding...');
+      
+      var data = {
+        'salesmanEmail': Cookies.get('SalesmanEmail'),
+        'action': 'addNewCustomer'
+      };
+      $('#sp-add-update-customer__form input').each(function() {
+        data[$(this).attr('name')] = $(this).val();
+      });
+       
+      $.ajax({
+        url: 'ManagementServlet',
+        type: 'POST',
+        data: JSON.stringify(data),
+        cache: false,
+        processData: false,
+        contentType : "application/json; charset=utf-8",
+        success: function(data, textStatus, jqXHR) {
+          if(typeof data.error === 'undefined') {
+            sp.file.getFilesList();
+            $('button[data-dismiss="modal"]').click();
+            
+            sp.file.files = [];
+            $('#sp-upload-files__button').removeClass('btn-default').addClass('btn-primary').text('Update Files');
+            $('.sk-spinner').hide();
+            $('.file__input').show();
+          }
+        }
+      });
+    },
   },
+  
   
   email: {
     lastFocusedSubjectOrBody: {},
