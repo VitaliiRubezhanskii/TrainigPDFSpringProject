@@ -15,7 +15,7 @@ public class Analytics {
       + "  DATE_FORMAT(timestamp, '%d-%b-%Y %H:%i:%s') AS date_added_or_modified\n"
       + "FROM slides\n"
       + "WHERE sales_man_email = ?\n"
-      + "ORDER BY timestamp DESC\n";
+      + "ORDER BY timestamp DESC";
   
   
   /**
@@ -54,6 +54,18 @@ public class Analytics {
     + "GROUP by param1int\n"
     + "ORDER BY COUNT(param1int) DESC, SUM(param2float), param1int DESC\n"
     + "LIMIT 1";
+  
+  
+  public static final String sqlCustomersList =
+      "SELECT\n"
+      + "  first_name,\n"
+      + "  last_name,\n"
+      + "  company,\n"
+      + "  email\n"
+      + "FROM customers\n"
+      + "WHERE sales_man = ?\n"
+      + "ORDER BY first_name, last_name";
+  
   
   /**
    * Charts.

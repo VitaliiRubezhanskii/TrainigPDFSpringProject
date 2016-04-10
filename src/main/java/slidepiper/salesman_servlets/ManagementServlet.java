@@ -95,6 +95,12 @@ public class ManagementServlet extends HttpServlet {
         data.put("topExitPage", sqlData);
         break;
         
+	    case "getCustomersList":
+        parameterList.add(request.getParameter("salesmanEmail"));
+        sqlData = DbLayer.getEventData(parameterList, Analytics.sqlCustomersList);        
+        data.put("customersList", sqlData);
+        break;
+        
 	    case "getFileBarChart":
         parameterList.add(request.getParameter("fileHash"));
         parameterList.add(request.getParameter("salesmanEmail"));
