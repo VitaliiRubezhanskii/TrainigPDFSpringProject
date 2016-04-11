@@ -9,7 +9,7 @@ function logout(event, ui) {
 	swal("Logged out.\n Thanks for using SlidePiper!");
 
 	// reloads page with the redirect (with #)
-	window.location = window.location.pathname;
+	window.location = 'login.html';
 }
 
 $("#logout").bind("click", logout);
