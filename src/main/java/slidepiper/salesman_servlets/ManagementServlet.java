@@ -242,8 +242,16 @@ public class ManagementServlet extends HttpServlet {
           break;
                             
         case "addNewCustomer":
-          System.out.println("addnew cust");
-          output.put("newCustomer", DbLayer.addNewCustomer(input.getString("salesmanEmail"),
+          System.out.println("add/update new cust");          
+          String subAction = null;
+          try {
+            subAction = input.getString("subAction");
+          } catch (Exception ex) {
+            subAction = null;
+          }
+          
+          output.put("newCustomer", DbLayer.addNewCustomer(
+              subAction, input.getString("salesmanEmail"),
               input.getString("customerFirstName"), input.getString("customerLastName"),
               input.getString("customerCompany"), input.getString("customerEmail")));
           break;

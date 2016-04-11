@@ -297,11 +297,10 @@
                                   <p>
                                       Here is the place where you can upload new customers, update, and delete them.
                                   </p>
-                                  
                                   <button type="button" class="btn btn-success" data-toggle="modal" data-target="#sp-modal-upload-customers">
                                       Upload Customers
                                   </button>
-                                  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#sp-modal-add-update-customer">
+                                  <button type="button" class="btn btn-primary sp-add-update-customer" data-add-update="add" data-toggle="modal" data-target="#sp-modal-add-update-customer">
                                       Add a Customer
                                   </button>
                                 </div>
@@ -436,7 +435,8 @@
                 <i class="fa fa-cloud-upload modal-icon"></i>
                 <h4 class="modal-title">Upload Customers</h4>
                 <small class="font-bold">Click on the choose file button to upload a customers file.
-                <br>The customers file should be a CSV file based on the following <a href="assets/files/customers_template.csv">template</a>.</small>
+                <br>The customers file should be a CSV file based on the following <a href="assets/files/customers_template.csv">template</a>.
+                <br>Existing users in the file would not be inserted.</small>
             </div>
             <div class="modal-body">
                 <form id="sp-customers-upload__form">
@@ -452,7 +452,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" id="sp-upload-customers__button">Upload File</button>
+                <button type="button" class="btn btn-primary" id="sp-upload-customers__button">Upload Customers</button>
             </div>
         </div>
     </div>
@@ -465,8 +465,8 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
                 <i class="fa fa-cloud-upload modal-icon"></i>
-                <h4 class="modal-title">Add a Customer</h4>
-                <small class="font-bold">Fill the fields below and then click on add a customer.</small>
+                <h4 class="modal-title"></h4>
+                <small class="font-bold modal-sub-title"></small>
             </div>
             <div class="modal-body">
                 <form class="form-horizontal" id="sp-add-update-customer__form">
@@ -493,6 +493,8 @@
                         <input type="email" name="customerEmail" placeholder="Email" class="form-control" required="" autocomplete="off" style="background-image: url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAASCAYAAABSO15qAAAAAXNSR0IArs4c6QAAAPhJREFUOBHlU70KgzAQPlMhEvoQTg6OPoOjT+JWOnRqkUKHgqWP4OQbOPokTk6OTkVULNSLVc62oJmbIdzd95NcuGjX2/3YVI/Ts+t0WLE2ut5xsQ0O+90F6UxFjAI8qNcEGONia08e6MNONYwCS7EQAizLmtGUDEzTBNd1fxsYhjEBnHPQNG3KKTYV34F8ec/zwHEciOMYyrIE3/ehKAqIoggo9inGXKmFXwbyBkmSQJqmUNe15IRhCG3byphitm1/eUzDM4qR0TTNjEixGdAnSi3keS5vSk2UDKqqgizLqB4YzvassiKhGtZ/jDMtLOnHz7TE+yf8BaDZXA509yeBAAAAAElFTkSuQmCC&quot;); background-attachment: scroll; background-size: 16px 18px; background-position: 98% 50%; background-repeat: no-repeat;">
                         </div>
                     </div>
+                    
+                    <input type="hidden" id="add-update">
                 </form>
 
                 <div class="sk-spinner sk-spinner-wave">
@@ -505,7 +507,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" id="sp-modal-add-update-customer__button">Add a Customer</button>
+                <button type="button" class="btn btn-primary" id="sp-modal-add-update-customer__button"></button>
             </div>
         </div>
     </div>

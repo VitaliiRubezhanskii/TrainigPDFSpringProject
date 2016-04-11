@@ -72,7 +72,7 @@ form[role="search"], .text-muted, .arrow {
   margin-right: 10px;
 }
 
-.sp-file-delete {
+.sp-file-delete, .sp-customer-delete {
   margin-left: 10px;
 }
 

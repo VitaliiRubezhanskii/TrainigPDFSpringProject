@@ -51,7 +51,7 @@ public class UploadCustomers extends HttpServlet {
     for (CSVRecord csvRecord : parser) {
       if (1 < csvRecord.getRecordNumber() && 4 <= csvRecord.size()
           && isValidEmailAddress(csvRecord.get(2).trim())) {
-        DbLayer.addNewCustomer(salesman_email, csvRecord.get(0).trim(), csvRecord.get(1).trim(),
+        DbLayer.addNewCustomer(null, salesman_email, csvRecord.get(0).trim(), csvRecord.get(1).trim(),
             csvRecord.get(3).trim(), csvRecord.get(2).trim());
       }
     }

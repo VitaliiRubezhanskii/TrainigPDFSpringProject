@@ -136,6 +136,62 @@ sp = {
             $('input[type="file"]').val(null);
           });
           
+          // Add or update a customer.
+          $(document).on('click', '.sp-add-update-customer', function() {
+            if ('add' == $(this).attr('data-add-update')) {
+              $('#sp-modal-add-update-customer .modal-title').text('Add Customer');
+              $('#sp-modal-add-update-customer .modal-sub-title')
+                  .text('Fill the fields below and then click on add a customer.');
+              $('#sp-modal-add-update-customer__button').text('Add Customer');
+              $('#sp-modal-add-update-customer input#add-update').val('add');
+              
+              $('#sp-modal-add-update-customer input:not(#add-update)').val('');
+              $('#sp-modal-add-update-customer input[name="customerEmail"]')
+                  .prop('readonly', false);
+              
+            } else {
+              $('#sp-modal-add-update-customer .modal-title').text('Update Customer');
+              $('#sp-modal-add-update-customer .modal-sub-title')
+                  .text('Update the fields below and then click on update a customer.');
+              $('#sp-modal-add-update-customer__button').text('Update Customer');
+              $('#sp-modal-add-update-customer input#add-update').val('update');
+              
+              $('#sp-modal-add-update-customer input[name="customerFirstName"]').
+                  val($('#sp-customers-management tr[data-customer-email="'
+                      + $(this).attr('data-customer-email') + '"] #sp-customer-first-name__td').text());
+              
+              $('#sp-modal-add-update-customer input[name="customerLastName"]').
+                  val($('#sp-customers-management tr[data-customer-email="'
+                      + $(this).attr('data-customer-email') + '"] #sp-customer-last-name__td').text());
+              
+              $('#sp-modal-add-update-customer input[name="customerCompany"]').
+                  val($('#sp-customers-management tr[data-customer-email="'
+                      + $(this).attr('data-customer-email') + '"] #sp-customer-company__td').text());
+              
+              $('#sp-modal-add-update-customer input[name="customerEmail"]')
+                  .val($(this).attr('data-customer-email'))
+                  .prop('readonly', true);
+            }
+          });
+          
+          // Add a customer
+          $('#sp-modal-add-update-customer__button').click(function(event) {
+            sp.file.addUpdateCustomer(event);
+          });
+          
+          // Delete a customer.
+          $(document).on('click', '.sp-customer-delete', function() {
+            if (true == confirm('Are you sure you want to delete this customer?')) {
+              sp.file.deleteCustomer($(this).attr('data-customer-email'));
+            }
+          });
+          
+          // Upload customers.
+          $('#sp-upload-customers__button').click(function(event) {
+            sp.file.uploadCustomers(event);
+            $('input[type="file"]').val(null);
+          });
+          
           // Add a customer
           $('#sp-modal-add-update-customer__button').click(function(event) {
             sp.file.addCustomer(event);
@@ -282,6 +338,8 @@ sp = {
     },
     
     
+    /* Customers mgmt. */
+    
     getCustomersList: function() {
       $.getJSON(
           'ManagementServlet',
@@ -291,18 +349,14 @@ sp = {
             
             $.each(data.customersList, function(index, row) {
               $('#sp-customers-management tbody').append(
-                  '<tr>'
-                    + '<td>' + row[0] + ' ' + row[1] + '</td>' 
-                    + '<td>' + row[2] + '</td>'
+                  '<tr data-customer-email="' + row[3] + '">'
+                    + '<td><span id="sp-customer-first-name__td">' + row[0] + '</span> <span id="sp-customer-last-name__td">' + row[1] + '</span></td>' 
+                    + '<td id="sp-customer-company__td">' + row[2] + '</td>'
                     + '<td class="contact-type"><i class="fa fa-envelope"> </i></td>'
                     + '<td>' + row[3] + '</td>'
-                    + '<td><a href="#"><span class="label label-primary sp-customer-update" data-toggle="modal" data-target="#sp-modal-add-update-customer" data-customer-email="' + row[3] + '">Update</span></a><a href="#"><span class="label label-danger sp-customer-delete" data-customer-email="' + row[3] + '">Delete</span></a></td>'
+                    + '<td><a href="#"><span class="label label-primary sp-add-update-customer sp-customer-update" data-add-update="update" data-toggle="modal" data-target="#sp-modal-add-update-customer" data-customer-email="' + row[3] + '">Update</span></a><a href="#"><span class="label label-danger sp-customer-delete" data-customer-email="' + row[3] + '">Delete</span></a></td>'
                 + '</tr>'
               );
-            });
-            
-            $('#sp-files-management tbody').tooltip({
-              selector: "[data-toggle=tooltip]"
             });
           });
     },
@@ -313,7 +367,7 @@ sp = {
 
       $('#sp-customers-upload__form').hide();
       $('.sk-spinner').show();
-      $('#sp-upload-files__button').removeClass('btn-primary').addClass('btn-default').text('Uploading...');
+      $('#sp-upload-customers__button').removeClass('btn-primary').addClass('btn-default').text('Uploading...');
       
       var data = new FormData();
       data.append('filecsv', sp.file.files[0]);
@@ -332,38 +386,38 @@ sp = {
             $('button[data-dismiss="modal"]').click();
             
             sp.file.files = [];
-            $('#sp-upload-files__button').removeClass('btn-default').addClass('btn-primary').text('Update Files');
+            $('#sp-upload-customers__button').removeClass('btn-default').addClass('btn-primary').text('Upload Customers');
             $('.sk-spinner').hide();
-            $('.file__input').show();
+            $('#sp-customers-upload__form').show();
           }
         }
       });
     },
     
-    addOrUpdateCustomer: function(event) {
+    addUpdateCustomer: function(event) {
       event.preventDefault();
       
       $('#sp-add-update-customer__form').hide();
       $('.sk-spinner').show();
-      $('#sp-upload-files__button').removeClass('btn-primary').addClass('btn-default')
+      $('#sp-modal-add-update-customer__button').removeClass('btn-primary').addClass('btn-default');
       
-      var action = null;
-      if (true) {
-        $('#sp-upload-files__button').text('Adding...');
-        action = 'addNewCustomer';
-      } else if (true) {
-        action = "";
+      var subAction = null;
+      if ('add' == $('#sp-modal-add-update-customer input#add-update').val()) {
+        $('#sp-modal-add-update-customer__button').text('Adding...');
+        subAction = 'add';
+      } else {
+        $('#sp-modal-add-update-customer__button').text('Updating...');
+        subAction = 'update';
       }
       
       var data = {
         'salesmanEmail': Cookies.get('SalesmanEmail'),
-        'action': action
+        'action': 'addNewCustomer',
+        'subAction': subAction 
       };
-      $('#sp-add-update-customer__form input').each(function() {
+      $('#sp-add-update-customer__form input:not([type="hidden"])').each(function() {
         data[$(this).attr('name')] = $(this).val();
       });
-      
-      
       
       $.ajax({
         url: 'ManagementServlet',
@@ -377,47 +431,25 @@ sp = {
             sp.file.getCustomersList();
             $('button[data-dismiss="modal"]').click();
             
-            $('#sp-upload-files__button').removeClass('btn-default').addClass('btn-primary').text('Add a Customer');
+            if (-1 == data.newCustomer) {
+              alert('The added user alredy exist therefore was not inserted into the system');
+            }
+            $('#sp-modal-add-update-customer__button').removeClass('btn-default').addClass('btn-primary').text('Add a Customer');
             $('.sk-spinner').hide();
-            $('.file__input').show();
+            $('#sp-add-update-customer__form').show();
           }
         }
       });
     },
     
-    updateCustomer: function(event) {
-      event.preventDefault();
-      
-      $('#sp-add-update-customer__form').hide();
-      $('.sk-spinner').show();
-      $('#sp-upload-files__button').removeClass('btn-primary').addClass('btn-default').text('Adding...');
-      
-      var data = {
-        'salesmanEmail': Cookies.get('SalesmanEmail'),
-        'action': 'addNewCustomer'
-      };
-      $('#sp-add-update-customer__form input').each(function() {
-        data[$(this).attr('name')] = $(this).val();
-      });
-       
-      $.ajax({
-        url: 'ManagementServlet',
-        type: 'POST',
-        data: JSON.stringify(data),
-        cache: false,
-        processData: false,
-        contentType : "application/json; charset=utf-8",
-        success: function(data, textStatus, jqXHR) {
-          if(typeof data.error === 'undefined') {
-            sp.file.getFilesList();
-            $('button[data-dismiss="modal"]').click();
-            
-            sp.file.files = [];
-            $('#sp-upload-files__button').removeClass('btn-default').addClass('btn-primary').text('Update Files');
-            $('.sk-spinner').hide();
-            $('.file__input').show();
-          }
-        }
+    deleteCustomer: function(customerEmail) {
+      $.post('ManagementServlet', JSON.stringify({
+        action: 'deleteCustomer',
+        salesman_email: Cookies.get('SalesmanEmail'),
+        customer_email: customerEmail
+      }))
+      .done(function() {
+        sp.file.getCustomersList();
       });
     },
   },
@@ -976,66 +1008,66 @@ chart: {
 $(document).ready(function() {
   $('#send_email_to_customers').css('visibility', 'visible');
   
-	/**
-	 * Add a salesman to the DB.
-	 */
-	$('#sp-signup').submit(function(event) {
-		
-		var formData = {action: 'setSalesman'};
-		 $('input:not([type=submit]), select').each(function(index){
-			 formData[$(this).attr('id')] = this.value;
-		 });
-		
-		$.ajax({
-			async: false,
-			type: 'POST',
-			url: 'ManagementServlet',
-			contentType : 'application/json; charset=utf-8',
-			dataType: 'json',
-			data: JSON.stringify(formData),
-		}).done(function(data) {
-			switch (data.statusCode) {
-				case 200:
-					alert('The user was added successfuly.');
-					$('input:not([type=submit])').val('');
-					$('select').val('gmail');
-					break;
+  /**
+   * Add a salesman to the DB.
+   */
+  $('#sp-signup').submit(function(event) {
+    
+    var formData = {action: 'setSalesman'};
+     $('input:not([type=submit]), select').each(function(index){
+       formData[$(this).attr('id')] = this.value;
+     });
+    
+    $.ajax({
+      async: false,
+      type: 'POST',
+      url: 'ManagementServlet',
+      contentType : 'application/json; charset=utf-8',
+      dataType: 'json',
+      data: JSON.stringify(formData),
+    }).done(function(data) {
+      switch (data.statusCode) {
+        case 200:
+          alert('The user was added successfuly.');
+          $('input:not([type=submit])').val('');
+          $('select').val('gmail');
+          break;
 
-				case 100:
-					alert('The user ' + formData.email + ' already exist.');
-					break;
-					
-				case 101:
-					alert('The user was not added. Magic inccorect.');
-					break;
-					
-				default:
-					alert('The user was not added. Error code: ' + data.statusCode + '.');
-			}
-		}).fail(function(jqXHR, textStatus, errorThrown) {
-			console.log(textStatus + ': ' + errorThrown);
-		});
-		
-		event.preventDefault();
+        case 100:
+          alert('The user ' + formData.email + ' already exist.');
+          break;
+          
+        case 101:
+          alert('The user was not added. Magic inccorect.');
+          break;
+          
+        default:
+          alert('The user was not added. Error code: ' + data.statusCode + '.');
+      }
+    }).fail(function(jqXHR, textStatus, errorThrown) {
+      console.log(textStatus + ': ' + errorThrown);
     });
-	
-	
-	/**
+    
+    event.preventDefault();
+    });
+  
+  
+  /**
    *  Store the last focused subject or body email element.
    */
-	$('#subject1, #msgtext1').focus(function() {
-	  sp.email.lastFocusedSubjectOrBody = $(this);
-	});
-	
-	
-	/**
-	 * Add a file place holder to the email subject or body based upon
+  $('#subject1, #msgtext1').focus(function() {
+    sp.email.lastFocusedSubjectOrBody = $(this);
+  });
+  
+  
+  /**
+   * Add a file place holder to the email subject or body based upon
    * the focused element, and caret position or selected text.
-	 */
-	$(document).on('click', 'label.ui-btn:not([for^=cust])', function() {  
-	  var fileHash = $(this).attr('for').substr(0, $(this).attr('for').length - 2);
-	  var focusedElement = sp.email.getLastFocusedSubjectOrBody();
-	  
+   */
+  $(document).on('click', 'label.ui-btn:not([for^=cust])', function() {  
+    var fileHash = $(this).attr('for').substr(0, $(this).attr('for').length - 2);
+    var focusedElement = sp.email.getLastFocusedSubjectOrBody();
+    
       if (! $.isEmptyObject(focusedElement)) {
         var caretStart = focusedElement[0].selectionStart;
         var caretEnd = focusedElement[0].selectionEnd;
@@ -1050,19 +1082,19 @@ $(document).ready(function() {
             + textToAdd.length);
         focusedElement.focus();
       }
-	});
-	
-	
-	/**
-	 * List the files to be uploaded.
-	 * 
-	 * @see http://stackoverflow.com/questions/13652955/get-all-values-of-multiple-file-select-with-jquery
-	 */
-	$('form[id="uploadform"] input[id="file"]').change(function() {
-	  var filesNames = '';
-	  for (var i = 0; i < $(this)[0].files.length; i++) {
-	    filesNames += $(this)[0].files[i].name + '\n';
-	  }
-	  $('#newpresname').val(filesNames);
-	});
+  });
+  
+  
+  /**
+   * List the files to be uploaded.
+   * 
+   * @see http://stackoverflow.com/questions/13652955/get-all-values-of-multiple-file-select-with-jquery
+   */
+  $('form[id="uploadform"] input[id="file"]').change(function() {
+    var filesNames = '';
+    for (var i = 0; i < $(this)[0].files.length; i++) {
+      filesNames += $(this)[0].files[i].name + '\n';
+    }
+    $('#newpresname').val(filesNames);
+  });
 });

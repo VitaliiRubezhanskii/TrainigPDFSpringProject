@@ -63,7 +63,7 @@ public class Analytics {
       + "  company,\n"
       + "  email\n"
       + "FROM customers\n"
-      + "WHERE sales_man = ?\n"
+      + "WHERE sales_man = ? AND email != '" + ConfigProperties.getProperty("default_customer_email") + "'\n"
       + "ORDER BY first_name, last_name";
   
   
