@@ -1,6 +1,7 @@
 package slidepiper.salesman_servlets;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import slidepiper.*;
 import slidepiper.constants.Constants;
@@ -27,6 +28,7 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.io.IOUtils;
+import org.json.JSONObject;
 
 
 //upload CSV file of customers
@@ -48,15 +50,35 @@ public class UploadCustomers extends HttpServlet {
 		
 		CSVParser parser = CSVParser.parse(IOUtils.toString(filePart.getInputStream(), "UTF-8"),
 		    CSVFormat.DEFAULT);
+		
+		int flag = -1;
     for (CSVRecord csvRecord : parser) {
-      if (1 < csvRecord.getRecordNumber() && 4 <= csvRecord.size()
-          && isValidEmailAddress(csvRecord.get(2).trim())) {
-        DbLayer.addNewCustomer(null, salesman_email, csvRecord.get(0).trim(), csvRecord.get(1).trim(),
-            csvRecord.get(3).trim(), csvRecord.get(2).trim());
+      if (1 == csvRecord.getRecordNumber()
+              && csvRecord.get(0).equals("First Name")
+              && csvRecord.get(1).equals("Last Name")
+              && csvRecord.get(2).equals("Company")
+              && csvRecord.get(3).equals("E-mail")) {
+        
+        flag = 0;
+      }
+      
+      if (0 <= flag && 1 < csvRecord.getRecordNumber()) {
+        if (4 <= csvRecord.size() && isValidEmailAddress(csvRecord.get(3).trim())) {
+          DbLayer.addNewCustomer(null, salesman_email, csvRecord.get(0).trim(), csvRecord.get(1).trim(),
+              csvRecord.get(2).trim(), csvRecord.get(3).trim());
+        } else {
+          flag++;
+        }
       }
     }
 		
-    getServletContext().getRequestDispatcher("/uploadcustomersmessage.html").forward(request, response);
+    JSONObject data = new JSONObject();
+    data.put("flag", flag);
+    
+    response.setContentType("application/json; charset=UTF-8");
+    PrintWriter output = response.getWriter();
+    output.print(data);
+    output.close();
 	}
 	
 	

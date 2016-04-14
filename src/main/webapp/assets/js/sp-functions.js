@@ -130,10 +130,16 @@ sp = {
             }
           });
           
+          /* Customers mgmt. */
+          
           // Upload customers.
           $('#sp-upload-customers__button').click(function(event) {
             sp.file.uploadCustomers(event);
             $('input[type="file"]').val(null);
+          });
+          
+          $('#sp-download-template__button').click(function() {
+            location.href = 'assets/files/customers_template.csv';
           });
           
           // Add or update a customer.
@@ -143,9 +149,10 @@ sp = {
               $('#sp-modal-add-update-customer .modal-sub-title')
                   .text('Fill the fields below and then click on add a customer.');
               $('#sp-modal-add-update-customer__button').text('Add Customer');
+              $('#sp-modal-add-update-customer input[type=submit]').val('Add Customer');
               $('#sp-modal-add-update-customer input#add-update').val('add');
               
-              $('#sp-modal-add-update-customer input:not(#add-update)').val('');
+              $('#sp-modal-add-update-customer input:not(#add-update, [type=submit])').val('');
               $('#sp-modal-add-update-customer input[name="customerEmail"]')
                   .prop('readonly', false);
               
@@ -154,6 +161,7 @@ sp = {
               $('#sp-modal-add-update-customer .modal-sub-title')
                   .text('Update the fields below and then click on update a customer.');
               $('#sp-modal-add-update-customer__button').text('Update Customer');
+              $('#sp-modal-add-update-customer input[type=submit]').val('Update Customer');
               $('#sp-modal-add-update-customer input#add-update').val('update');
               
               $('#sp-modal-add-update-customer input[name="customerFirstName"]').
@@ -174,8 +182,7 @@ sp = {
             }
           });
           
-          // Add a customer
-          $('#sp-modal-add-update-customer__button').click(function(event) {
+          $('#sp-add-update-customer__form').submit(function(event) {
             sp.file.addUpdateCustomer(event);
           });
           
@@ -186,16 +193,6 @@ sp = {
             }
           });
           
-          // Upload customers.
-          $('#sp-upload-customers__button').click(function(event) {
-            sp.file.uploadCustomers(event);
-            $('input[type="file"]').val(null);
-          });
-          
-          // Add a customer
-          $('#sp-modal-add-update-customer__button').click(function(event) {
-            sp.file.addCustomer(event);
-          });
           
           //$('#side-menu').metisMenu();
           
@@ -382,6 +379,12 @@ sp = {
         contentType: false,
         success: function(data, textStatus, jqXHR) {
           if(typeof data.error === 'undefined') {
+            if (-1 == data.flag) {
+              alert('The CSV file first line titles are corrupted. Please use the titles located in the template file and in the order they appear there');
+            } else if (0 < data.flag) {
+              alert(data.flag + ' records were not inserted due to missing or corrupt data.');
+            }
+            
             sp.file.getCustomersList();
             $('button[data-dismiss="modal"]').click();
             
@@ -434,7 +437,7 @@ sp = {
             if (-1 == data.newCustomer) {
               alert('The added user alredy exist therefore was not inserted into the system');
             }
-            $('#sp-modal-add-update-customer__button').removeClass('btn-default').addClass('btn-primary').text('Add a Customer');
+            $('#sp-modal-add-update-customer__button').removeClass('btn-default').addClass('btn-primary');
             $('.sk-spinner').hide();
             $('#sp-add-update-customer__form').show();
           }
