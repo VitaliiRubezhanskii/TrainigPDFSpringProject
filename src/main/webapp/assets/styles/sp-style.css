@@ -80,6 +80,10 @@ form[role="search"], .text-muted, .arrow {
   font-weight: bold;
 }
 
+.sp-inline {
+  display: inline !important;
+}
+
 .sp-top-section {
   display: none;
 }
@@ -105,6 +109,16 @@ td.sp-file-hash {
   display: none;
 }
 
+#sp-customers-upload__form {
+  text-align: center;
+}
+
 button[data-target="#sp-modal-add-update-customer"] {
   margin-left: 10px;
+}
+
+#sp-download-template__button {
+  color: initial;
+  font-family: sans-serif;
+  margin-right: 40px;
 }
