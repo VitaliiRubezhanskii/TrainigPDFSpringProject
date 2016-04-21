@@ -88,7 +88,14 @@ public class ManagementServlet extends HttpServlet {
         sqlData = DbLayer.getEventData(parameterList, Analytics.sqlFilesData);        
         data.put("filesData", sqlData);
         break;
-          
+      
+      case "getFilesCustomerData":
+        parameterList.add(request.getParameter("salesmanEmail"));
+        parameterList.add(request.getParameter("customerEmail"));
+        sqlData = DbLayer.getEventData(parameterList, Analytics.sqlFilesCustomerData);        
+        data.put("filesCustomerData", sqlData);
+        break;
+      
 	    case "getTopExitPage":
         parameterList.add(request.getParameter("fileHash"));
         parameterList.add(request.getParameter("salesmanEmail"));
