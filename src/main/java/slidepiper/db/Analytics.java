@@ -67,6 +67,24 @@ public class Analytics {
       + "ORDER BY first_name, last_name";
   
   
+  public static final String sqlCustomersData =
+      "SELECT\n"
+    + "  slides.id AS file_hash,\n"
+    + "  slides.name AS file_name,\n"
+    + "  msg_info.id AS file_link,\n"
+    + "  SUM(IF(event_name = 'OPEN_SLIDES', 1, 0)) AS file_sum_open,\n"
+    + "  (SUM(IF(event_name = 'OPEN_SLIDES',1,0)) - SUM(IF(event_name = 'VIEW_SLIDE' AND count_distinct_pages_viewed>1,1,0))) / SUM(IF(event_name = 'OPEN_SLIDES',1,0)) AS file_bounce_rate,\n"
+    + "  SUM(IF(event_name = 'VIEW_SLIDE', view_duration, 0)) / SUM(IF(event_name = 'VIEW_SLIDE', 1, 0)) AS average_view_duration,\n"
+    + "  SUM(IF(event_name = 'VIEW_SLIDE', count_distinct_pages_viewed, 0)) / SUM(IF(event_name = 'VIEW_SLIDE', 1, 0)) AS average_pages_viewed,\n"
+    + "  SUM(IF(event_name = 'CLICKED_CTA', 1, 0)) AS users_cta,\n"
+    + "  0.5 * SUM(IF(event_name = 'VIEW_SLIDE' AND count_distinct_pages_viewed>1,1,0)) / SUM(IF(event_name = 'OPEN_SLIDES',1,0)) + 0.5 * SUM(IF(event_name = 'CLICKED_CTA', 1, 0)) / SUM(IF(event_name = 'OPEN_SLIDES',1,0)) AS file_performance\n"
+    + "FROM view_file_agg_by_session_event_name\n"
+    + "RIGHT JOIN slides ON slides.id = file_hash\n"
+    + "INNER JOIN msg_info ON msg_info.slides_id = slides.id\n"
+    + "WHERE msg_info.sales_man_email=? AND msg_info.sales_man_email != '' AND msg_info.customer_email='" + ConfigProperties.getProperty("default_customer_email") + "'\n"
+    + "GROUP BY slides.id\n"
+    + "ORDER BY slides.name, slides.timestamp";
+  
   /**
    * Charts.
    */
