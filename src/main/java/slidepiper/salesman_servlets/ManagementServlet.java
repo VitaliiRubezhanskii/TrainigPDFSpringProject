@@ -298,6 +298,27 @@ public class ManagementServlet extends HttpServlet {
           //output.put("newCustomer", DbLayer.addNewCustomer(smemail, cname, ccompany, cemail));
           break;
           
+        case "createCustomersFilelinks":
+          JSONObject customersFilelinks = new JSONObject();
+          for (int i = 0; i < data.getJSONArray("data").length(); i++) {
+            JSONObject group = data.getJSONArray("data").getJSONObject(i);
+            String customerEmail = group.getString("customerEmail");
+            JSONArray fileHashes = group.getJSONArray("fileHashes");
+            
+            ArrayList<String> fileLinks = new ArrayList<String>();
+            for (int j = 0; j < fileHashes.length(); j++) { 
+              fileLinks.add(DbLayer.setFileLinkHash(
+                  customerEmail,
+                  fileHashes.getString(j),
+                  input.getString("salesmanEmail"))
+              );
+            }
+            customersFilelinks.put(customerEmail, fileLinks);
+          }
+          
+          output.put("customersFilelinks", customersFilelinks);
+          break;
+        
         case "sendEmail":
           String emailBody = URLDecoder.decode(data.getString("emailBody"), "UTF-8");
           String emailSubject = URLDecoder.decode(data.getString("emailSubject"), "UTF-8");
