@@ -25,6 +25,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.tomcat.jni.File;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -299,21 +300,30 @@ public class ManagementServlet extends HttpServlet {
           break;
           
         case "createCustomersFilelinks":
-          JSONObject customersFilelinks = new JSONObject();
+          JSONArray customersFilelinks = new JSONArray();
           for (int i = 0; i < data.getJSONArray("data").length(); i++) {
             JSONObject group = data.getJSONArray("data").getJSONObject(i);
             String customerEmail = group.getString("customerEmail");
             JSONArray fileHashes = group.getJSONArray("fileHashes");
             
-            ArrayList<String> fileLinks = new ArrayList<String>();
+            //HashMap<String, String> fileLinks = new HashMap<String, String>();
+            JSONObject customer = new JSONObject();
+            JSONArray files = new JSONArray();
+            
             for (int j = 0; j < fileHashes.length(); j++) { 
-              fileLinks.add(DbLayer.setFileLinkHash(
-                  customerEmail,
-                  fileHashes.getString(j),
-                  input.getString("salesmanEmail"))
+              JSONObject file = new JSONObject();
+              file.put("fileHash", fileHashes.getString(j));
+              file.put("fileLink",
+                  DbLayer.setFileLinkHash(
+                    customerEmail,
+                    fileHashes.getString(j),
+                    input.getString("salesmanEmail"))
               );
+              files.put(file);
             }
-            customersFilelinks.put(customerEmail, fileLinks);
+            customer.put("customerEmail", group.getString("customerEmail"));
+            customer.put("files", files);
+            customersFilelinks.put(customer);
           }
           
           output.put("customersFilelinks", customersFilelinks);
