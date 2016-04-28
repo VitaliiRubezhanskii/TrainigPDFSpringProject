@@ -1270,7 +1270,7 @@ chart: {
            );            
           
           sp.customerFileLinksGenerator.findDocumentName(v['fileHash'], files);
-          sp.customerFileLinksGenerator.sendMailCallback();
+          
           new Clipboard('.sp-copy__btn');
         });
         
@@ -1290,7 +1290,7 @@ chart: {
               + '</div>'
           + '</div>'          
       );
-      
+      sp.customerFileLinksGenerator.sendMailCallback();
       sp.customerFileLinksGenerator.sendAll();
       sp.customerFileLinksGenerator.copyAll();
       
