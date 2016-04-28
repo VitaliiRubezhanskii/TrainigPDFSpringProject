@@ -125,10 +125,23 @@ sp = {
           
           // Delete file.
           $(document).on('click', '.sp-file-delete', function() {
-            if (true == confirm('Are you sure you want to delete this file?')) {
-              sp.file.fileHash = $(this).attr('data-file-hash');
+            sp.file.fileHash = $(this).attr('data-file-hash');
+            swal({
+              title: "Are you sure you want to delete this file?",             
+              type: "warning",
+              confirmButtonText: "Yes, delete please!",
+              cancelButtonText: "No, cancel!",
+              showCancelButton: true,
+              closeOnConfirm: false,
+              closeOnCancel: true
+          },
+          function(isConfirm){
+            if (isConfirm) {
+              swal("Deleted!", "Your file has been deleted.", "success");
               sp.file.deleteFile(sp.file.fileHash);
-            }
+              } 
+           
+          });
           });
           
           /* Customers mgmt. */
@@ -189,9 +202,26 @@ sp = {
           
           // Delete a customer.
           $(document).on('click', '.sp-customer-delete', function() {
-            if (true == confirm('Are you sure you want to delete this customer?')) {
-              sp.file.deleteCustomer($(this).attr('data-customer-email'));
-            }
+            var nameToDelete = $(this).attr('data-customer-email');
+            swal({
+              title: "Are you sure you want to delete this contact?",             
+              type: "warning",
+              confirmButtonText: "Yes, delete please!",
+              cancelButtonText: "No, cancel!",
+              showCancelButton: true,
+              closeOnConfirm: false,
+              closeOnCancel: true
+          },
+          function(isConfirm){  
+            if (isConfirm) {
+              swal("Deleted!", nameToDelete + " has been deleted.", "success");
+              sp.file.deleteCustomer(nameToDelete);
+              } 
+           
+            
+            });
+            
+         
           });
           
           
@@ -314,7 +344,7 @@ sp = {
         contentType: false,
         success: function(data, textStatus, jqXHR) {
           if(typeof data.error === 'undefined') {
-            sp.file.getFilesList('file');
+            sp.file.getFilesList('fileUploadDashboard');
             $('button[data-dismiss="modal"]').click();
             
             sp.file.files = [];
@@ -352,13 +382,14 @@ sp = {
         contentType: false,
         success: function(data, textStatus, jqXHR) {
           if(typeof data.error === 'undefined') {
-            sp.file.getFilesList();
+            sp.file.getFilesList('fileUploadDashboard');
             $('button[data-dismiss="modal"]').click();
             
             sp.file.files = [];
             $('#sp-upload-files__button').removeClass('btn-default').addClass('btn-primary').text('Upload Files');
             $('.sk-spinner').hide();
             $('.file__input').show();
+            $('#sp-file-update__form').css('display', 'block');
           }
         }
       });
@@ -371,7 +402,7 @@ sp = {
         presentation: fileHash
       }))
       .done(function() {
-        sp.file.getFilesList();
+        sp.file.getFilesList('fileUploadDashboard');
       });
     },
     
@@ -450,7 +481,7 @@ sp = {
               alert(data.flag + ' records were not inserted due to missing or corrupt data.');
             }
             
-            sp.file.getCustomersList();
+            sp.file.getCustomersList('fileUploadDashboard');
             $('button[data-dismiss="modal"]').click();
             
             sp.file.files = [];
@@ -496,11 +527,11 @@ sp = {
         contentType : "application/json; charset=utf-8",
         success: function(data, textStatus, jqXHR) {
           if(typeof data.error === 'undefined') {
-            sp.file.getCustomersList();
+            sp.file.getCustomersList('fileUploadDashboard');
             $('button[data-dismiss="modal"]').click();
             
             if (-1 == data.newCustomer) {
-              alert('The added user alredy exist therefore was not inserted into the system');
+              sp.error.handleError('The added user alredy exist therefore was not inserted into the system');
             }
             $('#sp-modal-add-update-customer__button').removeClass('btn-default').addClass('btn-primary');
             $('.sk-spinner').hide();
@@ -517,7 +548,8 @@ sp = {
         customer_email: customerEmail
       }))
       .done(function() {
-        sp.file.getCustomersList();
+        
+        sp.file.getCustomersList('fileUploadDashboard');
       });
     },
   },
@@ -1071,8 +1103,10 @@ chart: {
     }
   },
   
-  // This object handles the wizard where a user can choose customers 
-  // and documents they'd like to send them
+  /**
+   * This object handles the wizard where a user can choose customers 
+   * and documents they'd like to send them 
+  */
   customerFileLinksGenerator : {
     
     //This function is the configuration for the wizard - jQuery Steps www.jquery-steps.com/
@@ -1134,7 +1168,7 @@ chart: {
     },
     
     // Listener to save which boxes have been checked i.e. which documents the
-    // user wants to send, and to whom
+    // user wants to send, and to whom.
     checkboxListener: (function () {            
       $('a#document-wizard-t-2').addClass('sp-enumerate-customers-files__button');
       $('a#document-wizard-t-1').addClass('sp-enumerate-customers-files__button');
@@ -1142,20 +1176,20 @@ chart: {
       $('.sp-enumerate-customers-files__button').on('click', function () { 
         
         // This checks If wizard-step is document selector tab in order to start saving the
-        // chosen sections
+        // chosen sections.
         if ($('li.current').text() === 'current step: 3. Send Documents'){  
           var customerArr = [];
           var fileArr = [];
           var files = [];
          
-          //This saves all the chosen email addresses
+          //This saves all the chosen email addresses.
           $(':checked').closest('tr').find('[data-email]').each(function (i, v) {
             var email = $(this).text();
             customerArr.push(email.slice(1, email.length));
           });
        
           // This saves all the document hashes & file names into a file array, and
-          // a files object
+          // a files object.
           $(':checked').closest('tr').find('[data-file-hash]')
             .each(function (i, v) {
               fileArr.push($(this).attr('data-file-hash'));
@@ -1196,7 +1230,7 @@ chart: {
       });
     })(),
     
-    //Create obj to send
+    //Create obj to send.
     sortDocsAndCustomersForServer: function (customers, documents, files) {
       var dataToSend = [];
       $.each(customers, function (i, v) {
@@ -1234,12 +1268,12 @@ chart: {
     },
     
     //This function collects the choices the customer has made for the email addresses to which he will
-    //send the documents
+    //send the documents.
     renderCustomerChoice: function (data, files) {
       var fileLink;
       $('.sp-send-table tbody tr').remove();
       $.each(data['customersFilelinks'], function (i, val) {
-      //This creates the initial bootstrap layout
+      //This creates the initial bootstrap layout.
         $('.sp-send-table tbody').append(
           '<tr class="sp-mail-table__row" id="sp-t-row' + i + '">'
         + '<div class="row">' 
@@ -1251,7 +1285,7 @@ chart: {
         
         $.each(val['files'], function (index, v) {
             fileLink = sp.config.viewerUrlWithoutFileLink + v['fileLink'];
-            //This renders the information into the predefined rows 
+            //This renders the information into the predefined rows.
             $('.sp-send-table tbody #sp-t-row' + i + ' #sp-doc-' + i).append(
                 '<div class="sp-doc-send-data row">'
                   + '<div class="col-md-3" data-hash=' + v['fileHash'] +'></div>'
@@ -1275,7 +1309,7 @@ chart: {
         });
         
       });
-      // This creates the copy all and send all buttons
+      // This creates the copy all and send all buttons.
       $('.sp-document').append(
             '<div class="row">'
               + '<div class="col-md-offset-8 col-md-2">'
@@ -1296,7 +1330,7 @@ chart: {
       
     },
     
-    //This function
+    // This function sends an email with one document in it.
     sendMailCallback: function () {      
       var mailSubject = sp.config.salesman.name.split(" ")[0] + ' from ' + sp.config.salesman.company
       + ' has sent you a document'; 
@@ -1312,9 +1346,12 @@ chart: {
     },
     
     copyAll: function () {
-      //This function allows the user to copy all documents being
-      //sent to a particular email address
-      //Uses clipboard js https://clipboardjs.com/
+      /**
+       * This function allows the user to copy all documents being
+       * sent to a particular email address
+       * Uses clipboard js https://clipboardjs.com/
+       */
+      
       $('.sp-copy-all').on('click', function () {
         var links = [];
         $(this).closest('tr').find('div[data-link]').each(function (i, v){
@@ -1343,13 +1380,13 @@ chart: {
       $('.sp-send-all').on('click', function () {
         var emailRecipient = $(this).closest('tr').children('td.sp-customer').text();
         
-        //This will create an array of file links
+        //This will create an array of file links.
         var links = [];
         $(this).closest('tr').find('div[data-link]').each(function(i, v) {
           links.push($(this).text()); 
         });
         
-        //filename
+        //This creates an array of filenames.
         var fileNames = [];
           $(this).closest('tr').find('.sp-mailto').each(function(i, v) {
             fileNames.push($(this).attr('data-file-name'));
@@ -1362,7 +1399,7 @@ chart: {
             mailBody += v + ' - ' + links[i] + '%0D%0A';
            });
         
-        //This dynamically creates the email subject with the salesman email and their company
+        //This dynamically creates the email subject with the salesman email and their company.
         var mailSubject = sp.config.salesman.name.split(" ")[0] + ' from ' + sp.config.salesman.company
         + ' has sent you a document'; 
         
