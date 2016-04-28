@@ -38,7 +38,7 @@ sp = {
               $('#sp-nav-files__li')
                   .empty()
                   .append(
-                      '<a href="#" aria-expanded="true"><i class="fa fa-file"></i> '
+                      '<a href="#" aria-expanded="true"><i class="fa fa-bar-chart"></i> '
                       + '<span class="nav-label">Marketing Analytics</span></a>'
                       + '<span class="fa arrow"></span>'
                       + '<ul class="nav nav-second-level">'
@@ -108,6 +108,7 @@ sp = {
           
           // Upload file.
           $('#sp-upload-files__button').click(function(event) {
+//            if ($("input[multiple]").val())
             sp.file.uploadFiles(event);
             $('input[type="file"]').val(null);
           });
@@ -207,14 +208,25 @@ sp = {
             
             switch(topSection) {
               case 'sp-file-upload':
+                var requestOrigin = 'fileUploadDashboard';
                 $('#sp-nav-files__li ul').hide();
-                sp.file.getFilesList();
-                sp.file.getCustomersList();
+                sp.file.getFilesList(requestOrigin);
+                sp.file.getCustomersList(requestOrigin);
                 break;
                 
               case 'sp-file-dashboard':
-                sp.table.filesData = undefined;
+                sp.table.filesData = undefined;                
                 setFileDashboard();
+                break;
+                
+              case 'sp-send-email':
+                requestOrigin = 'customerFileLinksGenerator';
+                $('#sp-nav-files__li ul').hide();
+                $('.sp-hidden').removeClass('sp-hidden');                
+                sp.file.getCustomersList(requestOrigin);
+                sp.file.getFilesList(requestOrigin);   
+             // Move to the top of the page.
+                $('html, body').animate({scrollTop: 0}, 'fast');
                 break;
             }
           }
@@ -229,27 +241,53 @@ sp = {
     fileHash: null,
     files: [],
     
-    getFilesList: function() {
+    getFilesList: function(requestOrigin) {
       $.getJSON(
           'ManagementServlet',
           {action: 'getFilesList', salesmanEmail: sp.config.salesman.email},
           function(data) {
-            $('#sp-files-management tbody').empty();
+                   
+            //Request Origin is a handler to decide where to send the data from the getFilesList function
+            //There are two choices - either to send the file data to the fileupload dashboard (Files & Customers),
+            //or to send it to the customerFileLinkGenerator which allows the user to choose customers and documents
+            //to send out.
             
-            $.each(data.filesList, function(index, row) {
-              $('#sp-files-management tbody').append(
-                  '<tr>'
-                    + '<td class="col-lg-2"><i class="fa fa-clock-o sp-file-clock" data-toggle="tooltip" data-placement="right" title="Date file was added or updated"></i> ' + row[2] + '</td>'
-                    + '<td class="col-lg-3 sp-file-mgmt-file-name" data-file-hash="' + row[0] + '">' + row[1] + '</td>'
-                    + '<td class="col-lg-7"><a href="#"><span class="label label-primary sp-file-update" data-toggle="modal" data-target="#sp-modal-update-file" data-file-hash="' + row[0] + '">Update</span></a><a href="#"><span class="label label-danger sp-file-delete" data-file-hash="' + row[0] + '">Delete</span></a></td>'
-                + '</tr>'
-              );
-            });
+            sp.file.fileCallback(data, requestOrigin);
             
-            $('#sp-files-management tbody').tooltip({
-              selector: "[data-toggle=tooltip]"
-            });
+            
           });
+    },
+    
+    fileCallback: function (data, requestOrigin) {
+      // do something with data      
+      console.log(data);
+      if (requestOrigin === 'fileUploadDashboard'){
+        sp.file.sortFilesForUpload(data);
+      }
+      else if (requestOrigin === 'customerFileLinksGenerator') {
+        sp.customerFileLinksGenerator.formatFile(data);
+      }
+      
+      
+    },
+    
+    sortFilesForUpload: function (data) {
+      $('#sp-files-management tbody').empty();
+      
+      $.each(data.filesList, function(index, row) {
+        $('#sp-files-management tbody').append(
+            '<tr>'
+              + '<td class="col-lg-2"><i class="fa fa-clock-o sp-file-clock" data-toggle="tooltip" data-placement="right" title="Date file was added or updated"></i> ' + row[2] + '</td>'
+              + '<td class="col-lg-3 sp-file-mgmt-file-name" data-file-hash="' + row[0] + '">' + row[1] + '</td>'
+              + '<td class="col-lg-7"><a href="#"><span style="margin-left: 300px;" class="label label-primary sp-file-update" data-toggle="modal" data-target="#sp-modal-update-file" data-file-hash="' + row[0] + '">Update</span></a><a href="#"><span class="label label-danger sp-file-delete" data-file-hash="' + row[0] + '">Delete</span></a></td>'
+          + '</tr>'
+        );
+      });
+      $('.tab-content').perfectScrollbar();
+      $('#sp-files-management tbody').tooltip({
+        selector: "[data-toggle=tooltip]"
+      });      
+      
     },
     
     uploadFiles: function(event) {
@@ -276,15 +314,18 @@ sp = {
         contentType: false,
         success: function(data, textStatus, jqXHR) {
           if(typeof data.error === 'undefined') {
-            sp.file.getFilesList();
+            sp.file.getFilesList('file');
             $('button[data-dismiss="modal"]').click();
             
             sp.file.files = [];
             $('#sp-upload-files__button').removeClass('btn-default').addClass('btn-primary').text('Update Files');
             $('.sk-spinner').hide();
             $('.file__input').show();
+            $('#sp-file-upload__form').css('display', 'block');
           }
-        }
+        },
+        error: sp.error.handleError('ERROR: the file was too large, please upload a file less than 16MB')
+      
       });
     },
     
@@ -337,25 +378,49 @@ sp = {
     
     /* Customers mgmt. */
     
-    getCustomersList: function() {
+    getCustomersList: function(requestOrigin) {
+      
       $.getJSON(
           'ManagementServlet',
           {action: 'getCustomersList', salesmanEmail: sp.config.salesman.email},
-          function(data) {
-            $('#sp-customers-management tbody').empty();
-            
-            $.each(data.customersList, function(index, row) {
-              $('#sp-customers-management tbody').append(
-                  '<tr data-customer-email="' + row[3] + '">'
-                    + '<td><span id="sp-customer-first-name__td">' + row[0] + '</span> <span id="sp-customer-last-name__td">' + row[1] + '</span></td>' 
-                    + '<td id="sp-customer-company__td">' + row[2] + '</td>'
-                    + '<td class="contact-type"><i class="fa fa-envelope"> </i></td>'
-                    + '<td>' + row[3] + '</td>'
-                    + '<td><a href="#"><span class="label label-primary sp-add-update-customer sp-customer-update" data-add-update="update" data-toggle="modal" data-target="#sp-modal-add-update-customer" data-customer-email="' + row[3] + '">Update</span></a><a href="#"><span class="label label-danger sp-customer-delete" data-customer-email="' + row[3] + '">Delete</span></a></td>'
-                + '</tr>'
-              );
-            });
+          function(data) {              
+          //Request Origin is a handler to decide where to send the data from the getFilesList function
+            //There are two choices - either to send the file data to the fileupload dashboard (Files & Customers),
+            //or to send it to the customerFileLinkGenerator which allows the user to choose customers and documents
+            //to send out.           
+            sp.file.customerCallback(data, requestOrigin);
           });
+    },
+    
+    customerCallback: function (data, requestOrigin) {
+      
+      if (requestOrigin === 'fileUploadDashboard'){
+        sp.file.sortForDocUpload(data);
+      }
+      else if (requestOrigin === 'customerFileLinksGenerator') {
+        sp.customerFileLinksGenerator.formatCustomers(data);
+      }
+      
+      
+    },
+   
+    
+    sortForDocUpload: function (data) {
+      $('#sp-customers-management tbody').empty(); 
+      $.each(data.customersList, function(index, row) {
+        $('#sp-customers-management tbody').append(
+            '<tr data-customer-email="' + row[3] + '">'
+              + '<td><span id="sp-customer-first-name__td">' + row[0] + '</span> <span id="sp-customer-last-name__td">' + row[1] + '</span></td>' 
+              + '<td id="sp-customer-company__td">' + row[2] + '</td>'
+              + '<td class="contact-type"><i class="fa fa-envelope"> </i></td>'
+              + '<td>' + row[3] + '</td>'
+              + '<td><a href="#"><span class="label label-primary sp-add-update-customer sp-customer-update" data-add-update="update" data-toggle="modal" data-target="#sp-modal-add-update-customer" data-customer-email="' + row[3] + '">Update</span></a><a href="#"><span class="label label-danger sp-customer-delete" data-customer-email="' + row[3] + '">Delete</span></a></td>'
+          + '</tr>'
+        );
+      });
+      $('.tab-content').perfectScrollbar();
+      
+      
     },
     
     uploadCustomers: function(event) {
@@ -1004,8 +1069,362 @@ chart: {
         new Clipboard('.sp-copy__button');
       }
     }
+  },
+  
+  // This object handles the wizard where a user can choose customers 
+  // and documents they'd like to send them
+  customerFileLinksGenerator : {
+    
+    //This function is the configuration for the wizard - jQuery Steps www.jquery-steps.com/
+    wizardConfig : (function() {
+      $("#document-wizard").steps({
+        headerTag : "h3",
+        bodyTag : "section",
+        transitionEffect : "slideLeft",
+        autoFocus : true,
+        onStepChanging: function (event, currentIndex, newIndex){
+          if (currentIndex > newIndex){
+            return true;
+          };
+          console.log('current: ' + currentIndex + 'new: ' + newIndex);
+          if (currentIndex === 0 && (!$('.sp-customer-table tbody input[type="checkbox"]').is(':checked'))){
+            sp.error.handleError('You must select at least one customer to continue');
+            return false;
+          }
+          else if (currentIndex === 1 && (!$('.sp-doc-table tbody input[type="checkbox"]').is(':checked'))) {
+            sp.error.handleError('You must select at least one document to continue');
+            return false;
+          }
+          else {
+            return true;
+          };
+          
+        },
+      });
+    })(),
+    
+    // This function formats and prints customers to print wizard
+    formatCustomers : function(data) {
+      $('.sp-customer-table td').remove();
+      $.each(data['customersList'], function(i, v) {  
+          $('.sp-customer-table tbody').append(
+              '<tr id=' + i + '><td><input id= ' + 'checkbox' + i + ' type="checkbox" class="i-checks" name="input[]"></td>'
+                  + '<td>' + v[0] + ' ' + v[1] + '</td><td>' + v[2]
+                  + '</td><td data-email=' + v[3] +' class="sp-email"> ' + v[3] + '</td>'
+                  + '<td></td>'
+                  + '</tr>'
+          );
+      });
+      $('.table-responsive').perfectScrollbar();
+    },
+    
+  // This function formats and renders files to the wizard
+    formatFile: function (data){
+      $('.sp-doc-table td').remove();
+      $.each(data['filesList'], function (i, v) {
+        $('.sp-doc-table tbody').append(
+            '<tr id=' + i + '><td><input id= ' + 'checkbox' + i + ' type="checkbox" class="i-checks" name="input[]"></td>'
+                + '<td class="sp-doc-name" data-file-name=' + v[1] +' data-file-hash=' + v[0] +'>' + v[1] + '</td>'
+                + '<td> ' + v[2] + '</td>'
+                + '</tr>'
+        );        
+      });
+      $('.content').perfectScrollbar();
+       
+    },
+    
+    // Listener to save which boxes have been checked i.e. which documents the
+    // user wants to send, and to whom
+    checkboxListener: (function () {            
+      $('a#document-wizard-t-2').addClass('sp-enumerate-customers-files__button');
+      $('a#document-wizard-t-1').addClass('sp-enumerate-customers-files__button');
+      $('a[href="#next"]').addClass('sp-enumerate-customers-files__button');
+      $('.sp-enumerate-customers-files__button').on('click', function () { 
+        
+        // This checks If wizard-step is document selector tab in order to start saving the
+        // chosen sections
+        if ($('li.current').text() === 'current step: 3. Send Documents'){  
+          var customerArr = [];
+          var fileArr = [];
+          var files = [];
+         
+          //This saves all the chosen email addresses
+          $(':checked').closest('tr').find('[data-email]').each(function (i, v) {
+            var email = $(this).text();
+            customerArr.push(email.slice(1, email.length));
+          });
+       
+          // This saves all the document hashes & file names into a file array, and
+          // a files object
+          $(':checked').closest('tr').find('[data-file-hash]')
+            .each(function (i, v) {
+              fileArr.push($(this).attr('data-file-hash'));
+              var fileObj = {
+                  name: $(this).text(),
+                  hash: $(this).attr('data-file-hash')
+              };
+              files.push(fileObj);
+            }); 
+          
+          sp.customerFileLinksGenerator.sortDocsAndCustomersForServer(customerArr, fileArr, files);
+        }      
+      });   
+    })(),
+    
+
+    // Change 'next' button text to 'send'. 
+    toggleActionTabs: (function () {      
+      $('ul[role="tablist"]').on('click', function () {
+        if ($('ul[role="tablist"] > li[aria-selected="true"]')
+            .children().attr('id') === 'document-wizard-t-1') {
+          $('a[href="#next"]').text('Send');
+        }
+        else {
+          $('a[href="#next"]').text('Next');
+        }
+      });      
+    })(),
+    
+    toggleActionBtns: (function () {
+      $('a[href="#previous"]').on('click', function () {
+        if (!($('li.current').text() === 'current step: 2. Select Documents')){
+          $('a[href="#next"]').text('Next');
+        }   
+        else {
+          $('a[href="#next"]').text('Send');
+        }
+      });
+    })(),
+    
+    //Create obj to send
+    sortDocsAndCustomersForServer: function (customers, documents, files) {
+      var dataToSend = [];
+      $.each(customers, function (i, v) {
+        var obj = {
+            customerEmail: v,
+            fileHashes: documents
+        };
+        dataToSend.push(obj);
+      
+      });
+      sp.customerFileLinksGenerator.sendDocsAndCustomersToServer(dataToSend, files);
+
+    },
+    
+    sendDocsAndCustomersToServer: function (dataToSend, files) {
+      var data = {'data': dataToSend};
+      $.ajax({       
+        url: 'ManagementServlet',
+        type: 'post',
+        dataType: 'json',
+        contentType: 'application/json',
+        data: JSON.stringify({
+          'data': data, 
+          'action': 'createCustomersFilelinks', 
+          'salesmanEmail': sp.config.salesman.email
+          }),
+        success: function (data) {
+          sp.customerFileLinksGenerator.renderCustomerChoice(data, files);
+        },
+        error: function (err) {
+          console.log(err);
+        }
+      });
+
+    },
+    
+    //This function collects the choices the customer has made for the email addresses to which he will
+    //send the documents
+    renderCustomerChoice: function (data, files) {
+      var fileLink;
+      $('.sp-send-table tbody tr').remove();
+      $.each(data['customersFilelinks'], function (i, val) {
+      //This creates the initial bootstrap layout
+        $('.sp-send-table tbody').append(
+          '<tr class="sp-mail-table__row" id="sp-t-row' + i + '">'
+        + '<div class="row">' 
+        + '<td class="col-sm-2 sp-customer">' + val['customerEmail'] +'</td>'
+        + '<td id="sp-doc-'+ i +'" class="col-sm-10 sp-document"></td>'
+        + '</div>'
+        + '</tr>'
+        );
+        
+        $.each(val['files'], function (index, v) {
+            fileLink = sp.config.viewerUrlWithoutFileLink + v['fileLink'];
+            //This renders the information into the predefined rows 
+            $('.sp-send-table tbody #sp-t-row' + i + ' #sp-doc-' + i).append(
+                '<div class="sp-doc-send-data row">'
+                  + '<div class="col-md-3" data-hash=' + v['fileHash'] +'></div>'
+                  + '<div id="sp-file-link-' + v['fileLink'] + '"  data-link="'+ fileLink +'" class="col-md-5 sp-file-link">' + fileLink + '</div>'
+                  + '<div class="sp-mail-choice col-md-2">'
+                      + '<button class="btn btn-white sp-send-options btn-xs sp-copy__btn" data-clipboard-target="#sp-file-link-' + v['fileLink']+ '">'
+                          + '<i class="fa fa-copy"></i> Copy'
+                      + '</button>'
+                  + '</div>'
+                  + '<div class="sp-mail-choice col-md-2">'
+                      + '<button data-file-link="' + fileLink +'" data-mailto="' + val['customerEmail'] + '" class="btn btn-white  sp-send-options btn-xs sp-mailto sp-clickable ' + 'mail-' + v['fileHash'] +'">'
+                          + '<i class="fa fa-envelope"></i>  Send Mail'
+                      +'</button>'
+                  + '</div>'
+              + '</div>'
+           );            
+          
+          sp.customerFileLinksGenerator.findDocumentName(v['fileHash'], files);
+          sp.customerFileLinksGenerator.sendMailCallback();
+          new Clipboard('.sp-copy__btn');
+        });
+        
+      });
+      // This creates the copy all and send all buttons
+      $('.sp-document').append(
+            '<div class="row">'
+              + '<div class="col-md-offset-8 col-md-2">'
+                + '<button class="btn btn-white sp-mail-all__button btn-xs sp-copy-all sp-cmd-all__button">'
+                  + '<i class="fa fa-copy sp-mail__icon"></i> Copy All'
+                + '</button>' 
+              + '</div>'
+              + '<div class="col-md-2">' 
+                  + '<button class="btn btn-white sp-send-to-all__button sp-send-options btn-xs sp-mail-all__button sp-send-all sp-cmd-all__button">'
+                    + '<i class="fa fa-envelope sp-mail__icon"></i> Send To All'
+                  + '</button>'
+              + '</div>'
+          + '</div>'          
+      );
+      
+      sp.customerFileLinksGenerator.sendAll();
+      sp.customerFileLinksGenerator.copyAll();
+      
+    },
+    
+    //This function
+    sendMailCallback: function () {      
+      var mailSubject = sp.config.salesman.name.split(" ")[0] + ' from ' + sp.config.salesman.company
+      + ' has sent you a document'; 
+      
+      $('.sp-mailto').on('click', function () {       
+        window.open(
+            'mailto:' + $(this).attr('data-mailto')
+          + '?subject=' + mailSubject
+          + '&body='  + 'Please follow this link to view the PDF: '+ '%0D%0A' + $(this).attr('data-file-name') + ' - ' + $(this).attr('data-file-link')
+      );
+      });
+      
+    },
+    
+    copyAll: function () {
+      //This function allows the user to copy all documents being
+      //sent to a particular email address
+      //Uses clipboard js https://clipboardjs.com/
+      $('.sp-copy-all').on('click', function () {
+        var links = [];
+        $(this).closest('tr').find('div[data-link]').each(function (i, v){
+          console.log($(this).text());
+          links.push($(this).text() + '%0D%0A');
+          });
+        
+        new Clipboard('.sp-copy-all', {
+          text: function(target) {
+            target = '';
+            $.each(links, function (i, v){
+              target += decodeURIComponent(v);       
+            });
+            return target;
+     
+          }
+      });
+      });
+      
+    },
+    
+    /**
+     * This function opens a mail window to a particular email address with all documents in the body
+     */
+    sendAll: function () {
+      $('.sp-send-all').on('click', function () {
+        var emailRecipient = $(this).closest('tr').children('td.sp-customer').text();
+        
+        //This will create an array of file links
+        var links = [];
+        $(this).closest('tr').find('div[data-link]').each(function(i, v) {
+          links.push($(this).text()); 
+        });
+        
+        //filename
+        var fileNames = [];
+          $(this).closest('tr').find('.sp-mailto').each(function(i, v) {
+            fileNames.push($(this).attr('data-file-name'));
+          });  
+          
+          
+        var mailBody = '';
+        $.each(fileNames, function (i, v) {
+            
+            mailBody += v + ' - ' + links[i] + '%0D%0A';
+           });
+        
+        //This dynamically creates the email subject with the salesman email and their company
+        var mailSubject = sp.config.salesman.name.split(" ")[0] + ' from ' + sp.config.salesman.company
+        + ' has sent you a document'; 
+        
+        window.open(
+          'mailto:' + emailRecipient
+        + '?subject=' + mailSubject 
+        + '&body=' + 'Please follow these links to view the PDFs: ' + '%0D%0A' + mailBody
+        );
+        
+      });
+      
+    },
+    /**
+     * File-hash is linked to file-name in an object - so name can be retrieved by hash
+     * @param {string} hash - the file hash
+     * @param {arr of objs} - the file objects containing k/v pair of hash and document name
+     */
+    
+    findDocumentName: function (hash, files) {      
+      $.each(files, function (i, v) {
+        var name = v['name'];
+        if (v['hash'] === hash){
+          $('[data-hash=' + hash + ']').text(v['name']);
+          $('.mail-' + hash).attr('data-file-name',  name);
+        }
+      });      
+    }
+    
+  }, 
+  
+  error: {
+    /** 
+      * This function is an error handler - you can call this function sp.error.handleError() and
+      * pass the error message as a parameter 
+      * @param {string} msg - the error message 
+      */
+    handleError: function (msg) {
+      toastr.options = {
+          "closeButton": false,
+          "debug": false,
+          "progressBar": false,
+          "preventDuplicates": true,
+          "positionClass": "toast-top-right",
+          "onclick": null,
+          "showDuration": "400",
+          "hideDuration": "1000",
+          "timeOut": "7000",
+          "extendedTimeOut": "1000",
+          "showEasing": "swing",
+          "hideEasing": "linear",
+          "showMethod": "fadeIn",
+          "hideMethod": "fadeOut"
+        };
+      toastr.error(msg);
+
+    },
+    
   }
 };
+
+
+
 // End sp.
 
 $(document).ready(function() {
@@ -1037,7 +1456,7 @@ $(document).ready(function() {
           break;
 
         case 100:
-          alert('The user ' + formData.email + ' already exist.');
+          alert('The user ' + formData.email + ' already exists.');
           break;
           
         case 101:
@@ -1053,6 +1472,10 @@ $(document).ready(function() {
     
     event.preventDefault();
     });
+  
+  
+ 
+  
   
   
   /**
