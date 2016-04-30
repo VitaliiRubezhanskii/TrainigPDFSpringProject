@@ -26,7 +26,7 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
 @SuppressWarnings("serial")
 @WebServlet("/upload-file")
-@MultipartConfig(maxFileSize = 16177215)  // upload file's size up to 16MB
+@MultipartConfig(maxFileSize = 104857600)
 public class UploadFile extends HttpServlet {
     
   protected void doPost(HttpServletRequest request,
