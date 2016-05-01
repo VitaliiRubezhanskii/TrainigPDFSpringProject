@@ -245,14 +245,22 @@ sp = {
                 break;
                 
               case 'sp-file-dashboard':
-                sp.table.filesData = undefined;                
+                sp.table.filesData = undefined;
                 setFileDashboard();
                 break;
-                
+              
+              /**
+               * @todo: fix the step the doc-wizard loads on - 
+               *        current method: $('#document-wizard-t-0').click();
+               *        simulates a click on the first step.
+               */  
               case 'sp-send-email':
                 requestOrigin = 'customerFileLinksGenerator';
                 $('#sp-nav-files__li ul').hide();
-                $('.sp-hidden').removeClass('sp-hidden');                
+                $('.sp-hidden').removeClass('sp-hidden');   
+                $('a[href="#finish"]').remove();
+                $('a[href="#cancel"]').remove();
+                $('#document-wizard-t-0').click();
                 sp.file.getCustomersList(requestOrigin);
                 sp.file.getFilesList(requestOrigin);   
              // Move to the top of the page.
@@ -1171,7 +1179,14 @@ chart: {
         );        
       });
       $('.content').perfectScrollbar();
+      sp.customerFileLinksGenerator.toggleBtnAttr();
        
+    },
+    
+    toggleBtnAttr: function () {
+      if ($('li.current').text() === 'current step: 2. Select Documents'){ 
+          $('a[href="#next"]').attr('id', 'sp-send-docs__button');
+      };
     },
     
     // Listener to save which boxes have been checked i.e. which documents the
@@ -1179,8 +1194,9 @@ chart: {
     checkboxListener: (function () {            
       $('a#document-wizard-t-2').addClass('sp-enumerate-customers-files__button');
       $('a#document-wizard-t-1').addClass('sp-enumerate-customers-files__button');
-      $('a[href="#next"]').addClass('sp-enumerate-customers-files__button');
-      $('.sp-enumerate-customers-files__button').on('click', function () { 
+      $('#sp-send-docs__button').addClass('sp-enumerate-customers-files__button');
+      $('.sp-enumerate-customers-files__button').on('click', function (e) { 
+        console.log(e.currentTarget);
         
         // This checks If wizard-step is document selector tab in order to start saving the
         // chosen sections.
@@ -1211,33 +1227,9 @@ chart: {
         }      
       });   
     })(),
-    
 
-    // Change 'next' button text to 'send'. 
-    toggleActionTabs: (function () {      
-      $('ul[role="tablist"]').on('click', function () {
-        if ($('ul[role="tablist"] > li[aria-selected="true"]')
-            .children().attr('id') === 'document-wizard-t-1') {
-          $('a[href="#next"]').text('Send');
-        }
-        else {
-          $('a[href="#next"]').text('Next');
-        }
-      });      
-    })(),
-    
-    toggleActionBtns: (function () {
-      $('a[href="#previous"]').on('click', function () {
-        if (!($('li.current').text() === 'current step: 2. Select Documents')){
-          $('a[href="#next"]').text('Next');
-        }   
-        else {
-          $('a[href="#next"]').text('Send');
-        }
-      });
-    })(),
-    
-    //Create obj to send.
+    // Create obj to send.
+    // Each email address receives all the documents
     sortDocsAndCustomersForServer: function (customers, documents, files) {
       var dataToSend = [];
       $.each(customers, function (i, v) {
@@ -1274,13 +1266,13 @@ chart: {
 
     },
     
-    //This function collects the choices the customer has made for the email addresses to which he will
-    //send the documents.
+    // This function collects the choices the customer has made for the email addresses to which he will
+    // send the documents.
     renderCustomerChoice: function (data, files) {
       var fileLink;
       $('.sp-send-table tbody tr').remove();
       $.each(data['customersFilelinks'], function (i, val) {
-      //This creates the initial bootstrap layout.
+      // This creates the initial bootstrap layout.
         $('.sp-send-table tbody').append(
           '<tr class="sp-mail-table__row" id="sp-t-row' + i + '">'
         + '<div class="row">' 
@@ -1292,7 +1284,7 @@ chart: {
         
         $.each(val['files'], function (index, v) {
             fileLink = sp.config.viewerUrlWithoutFileLink + v['fileLink'];
-            //This renders the information into the predefined rows.
+            // This renders the information into the predefined rows.
             $('.sp-send-table tbody #sp-t-row' + i + ' #sp-doc-' + i).append(
                 '<div class="sp-doc-send-data row">'
                   + '<div class="col-md-3" data-hash=' + v['fileHash'] +'></div>'
