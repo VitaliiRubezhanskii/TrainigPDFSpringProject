@@ -352,9 +352,12 @@ sp = {
             $('.sk-spinner').hide();
             $('.file__input').show();
             $('#sp-file-upload__form').css('display', 'block');
+            swal("Success!", "Your file was uploaded!", "success");
           }
         },
-        error: sp.error.handleError('ERROR: the file was too large, please upload a file less than 16MB')
+        error: function () {
+          sp.error.handleError('ERROR: the file was too large, please upload a file less than 100MB');
+        }
       
       });
     },
@@ -390,6 +393,7 @@ sp = {
             $('.sk-spinner').hide();
             $('.file__input').show();
             $('#sp-file-update__form').css('display', 'block');
+            swal("Success!", "Your file was updated!", "success");
           }
         }
       });
@@ -488,6 +492,8 @@ sp = {
             $('#sp-upload-customers__button').removeClass('btn-default').addClass('btn-primary').text('Upload Customers');
             $('.sk-spinner').hide();
             $('#sp-customers-upload__form').show();
+            swal("Success!", "Your new customers were uploaded!", "success");
+            
           }
         }
       });
@@ -536,6 +542,7 @@ sp = {
             $('#sp-modal-add-update-customer__button').removeClass('btn-default').addClass('btn-primary');
             $('.sk-spinner').hide();
             $('#sp-add-update-customer__form').show();
+            swal("Success!", "Your customer was udpated!", "success");
           }
         }
       });
