@@ -250,3 +250,7 @@ sp-mail-choice{
 .sp-send-to-all__button{
   margin-left: -20px;
 }
+
+.form-group{
+  margin: 10px !important;
+}

@@ -123,6 +123,11 @@ sp = {
             $('input[type="file"]').val(null);
           });
           
+//          // Change password
+//          $('#sp-change-pwd__button').on('click', function () {
+//            sp.user.changePassword();
+//          });
+//          
           // Delete file.
           $(document).on('click', '.sp-file-delete', function() {
             sp.file.fileHash = $(this).attr('data-file-hash');
@@ -1455,6 +1460,72 @@ chart: {
       toastr.error(msg);
 
     },
+    
+  },
+  
+  user: {
+
+    changePassword: $(function () {
+        $('.sp-change-pwd__icon').on('click', function () {
+          $('#sp-old-password').val('');
+          $('#sp-new-password').val('');
+          $('#sp-retype-password').val('');
+          
+        });
+      
+        $('#sp-change-pwd__button').on('click', function () {
+          var oldPwd = $('#sp-old-password').val();
+          var newPwd = $('#sp-new-password').val();
+          var retypePwd = $('#sp-retype-password').val();
+          if (sp.config.salesman.password === oldPwd) {
+            if (newPwd !== retypePwd){
+              console.log('error');
+              sp.error.handleError('Your passwords do not match');
+            }
+            else {
+              var data = {
+                  action: 'changeSalesmanPassword',
+                  email: sp.config.salesman.email,
+                  oldpassword: oldPwd,
+                  newpassword: newPwd
+              };
+              
+              $.ajax({
+                url: 'ManagementServlet',
+                type: 'post',
+                contentType : 'application/json; charset=utf-8',
+                dataType: 'json',
+                data: JSON.stringify(data),
+                success: function (res) {
+                  if (res) {
+                    swal(
+                      'Success',
+                      'Your password has been changed',
+                      'success'
+                    );
+                  }
+                  else {
+                    sp.error.handleError('There was an error');
+                  }
+                },
+                error: function (err) {
+                  console.log(err);
+                  sp.error.handleError('There was an error, your password was not changed');
+                }
+                 
+              });
+          }
+         
+          }
+          else {
+            sp.error.handleError('Retype your old password');
+          }
+          
+        });
+      
+      
+    }),
+    
     
   }
 };
