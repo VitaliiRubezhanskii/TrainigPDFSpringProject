@@ -130,7 +130,7 @@ public class EmailSender {
 					subj,				
 						msgtext
 					);
-			System.out.println("***************Message text: " + msgtext);
+			//System.out.println("***************Message text: " + msgtext);
 			
 			System.out.println("********** SENT ALERT EMAIL for " + mi.getSalesManEmail());
 	}

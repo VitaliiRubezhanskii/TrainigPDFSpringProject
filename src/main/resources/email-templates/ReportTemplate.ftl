@@ -1326,6 +1326,7 @@ body.outlook p {
 								  <p><b>Questions asked:</b></p>
                        <p>${messages}</p>
 									</p>
+								  <p>${documentActions}</p>
 								  
                                  <!-- <table class="row">
                                     <tbody>

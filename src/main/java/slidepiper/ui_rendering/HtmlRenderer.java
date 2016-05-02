@@ -44,7 +44,7 @@ public class HtmlRenderer {
 			Boolean downloadAdded = false;
 			if (!actions.isEmpty())
 			{
-				 actionsHtml = "<u> Actions performed: </u>";
+				 actionsHtml = "<b>Actions Performed:</b>";
 				 for(String action : actions)
 					{
 								 switch (action)
@@ -52,14 +52,14 @@ public class HtmlRenderer {
 								 		case "PRINT":
 								 			if (printAdded == false)
 								 			{
-								 					actionsHtml += " print ";
+								 					actionsHtml += "<p>Print</p>";
 								 					printAdded= true;
 								 			}
 								 			break;
 								 		case "DOWNLOAD": 
 								 			if (downloadAdded == false)
 								 			{
-										 			actionsHtml += " download ";
+										 			actionsHtml += "<p>Download</p>";
 										 			downloadAdded = true;
 								 			}
 								 			break;
@@ -67,7 +67,8 @@ public class HtmlRenderer {
 								 }																	
 					}				 
 			}
-			return getFreeTextRow(actionsHtml);
+			//return getFreeTextRow(actionsHtml);
+			return actionsHtml;
 		}
 	
 		/// generate 
@@ -100,7 +101,7 @@ public class HtmlRenderer {
 						getFreeTextRow(ai.getAll_browser_data());			
 				
 	            String input = ai.getAll_browser_data();
-	            System.out.print("**********Device data: " + input);
+	            //System.out.print("**********Device data: " + input);
 	            
 	            Pattern pattern;
 	            Matcher matcher;
@@ -109,18 +110,18 @@ public class HtmlRenderer {
 	            pattern = Pattern.compile(regex);
 	            matcher = pattern.matcher(input);
 	            
-	            System.out.println("Current REGEX is: "+regex);
-	            System.out.println("Current INPUT is: "+input);
+	            //System.out.println("Current REGEX is: "+regex);
+	            //System.out.println("Current INPUT is: "+input);
 	            String mobileDeviceStr;
 	            Boolean isFound = matcher.find();
-	            System.out.print("Looking at:" + isFound);
+	            //System.out.print("Looking at:" + isFound);
 	            
 	            if (isFound) {
-	            	System.out.print("**********Answer: No");
+	            	//System.out.print("**********Answer: No");
 	            	mobileDeviceStr = "No";
 	            }
 	            else {
-	            	System.out.print("**********Answer: Yes");
+	            	//System.out.print("**********Answer: Yes");
 	            	mobileDeviceStr = "Yes";
 	            }
 	            
@@ -156,13 +157,16 @@ public class HtmlRenderer {
 	            data.put("mailReportData", mailReportData);
 	            data.put("documentName", DbLayer.getSlidesName(ai.getSlides_id()));
 	            data.put("logoUrl", appUrl);
+	            
+	            data.put("documentActions", getActionsRow(ai));
+	            
 	            //data.put("mailReportQuestions", mailReportQuestions);
 	            
      
 	            // Console output
 	            Writer out = new OutputStreamWriter(System.out);
 	            template.process(data, out);
-	            out.flush();
+	            //out.flush();
 	 
 	            // File output
 	            //String path = System.getProperty("user.home");
@@ -177,7 +181,7 @@ public class HtmlRenderer {
 	            
 	            
 	           reportHTML = stringwriter.toString();
-	            System.out.println("***************ReportHTML: " + reportHTML);
+	            //System.out.println("***************ReportHTML: " + reportHTML);
 	            
 	             
 	        } catch (IOException e) {
@@ -292,7 +296,7 @@ public class HtmlRenderer {
 	            // Console output
 	            Writer out = new OutputStreamWriter(System.out);
 	            template.process(data, out);
-	            out.flush();
+	            //out.flush();
 	 
 	            // File output
 	            //String path = System.getProperty("user.home");
@@ -307,7 +311,7 @@ public class HtmlRenderer {
 	            
 	            
 	            html = stringwriter.toString();
-	            System.out.println("***************HTML: " + html);
+	            //System.out.println("***************HTML: " + html);
 //	            alertHTML = template.toString();
 	            
 	             
@@ -345,9 +349,9 @@ public class HtmlRenderer {
 //					whatNextRows;					
 //			
 			//alertHTML = addEnclosingHtml(html);
-			System.out.println("ALERT HTML SENT **********************\n" 
+			//System.out.println("ALERT HTML SENT **********************\n" 
 			//+ alertHTML
-					);
+				//	);
 	        
 	        
 			return html;			
