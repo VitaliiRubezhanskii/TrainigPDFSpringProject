@@ -122,3 +122,135 @@ button[data-target="#sp-modal-add-update-customer"] {
   font-family: sans-serif;
   margin-right: 40px;
 }
+
+.content {
+  height: 270px !important; 	
+  background-color: white !important;	
+}
+
+#sp-send-email{
+  margin-bottom: 30px;
+}
+
+/* .mail-menu{
+  background-color: white;
+  padding: 13px;
+} */
+
+/* .mail-menu-row{
+  margin-top: -15px !important;
+  border-radius: 4px 4px 4px 4px !important;
+-moz-border-radius: 4px 4px 4px 4px !important;
+-webkit-border-radius: 4px 4px 4px 4px !important;
+} */
+
+/* .table-head{
+  float: left;
+} */
+/* .col-head{
+  margin-right: 30px;
+} */
+
+.table tbody{
+  position: relative;
+}
+
+.table tbody{
+  position: relative;
+}
+
+/* .mail-choice-customers{
+  width: 100% !important;
+} */
+
+/* .table-cols{
+  display: inline-block;
+}
+ */
+.sp-hidden {
+  display: none;
+}
+
+/* .sp-doc-send-data{
+  margin-bottom: 20px;
+}
+ */
+/* .sp-copy__btn{
+  margin-top: 11%;
+} */
+
+.sp-error-box{
+  position: absolute;
+  right: 4%;
+  top: -0.5%;
+  z-index:2;
+  width: 400px;
+  
+}
+
+.toast-error{
+  background: #ED5565;
+  border-radius: 10px 10px 10px 10px;
+-moz-border-radius: 10px 10px 10px 10px;
+-webkit-border-radius: 10px 10px 10px 10px;
+border: 0px solid #000000;
+}
+
+.toast-message{
+  background: #ED5565;
+}
+
+.sp-clickable{
+  cursor: pointer;
+}
+
+.sp-mailto{
+  color: black;
+}
+
+sp-mail-choice{
+  display: inline-block;
+}
+
+.sp-cmd-all__button{
+  display: inline-block;
+  bottom: 0;
+}
+
+
+.sp-file-link{
+  font-size: 12px;
+}
+
+.sp-mail__icon{
+  color: #1AB394 !important;
+}
+
+.sp-mail-all__button{
+  color: #1AB394;
+  margin-left: -10px;
+}
+
+.sp-mail-all__button:hover{
+  color: #1AB394;
+}
+
+.sp-send-options{
+  /* width: 70px; */
+} 
+
+.sp-copy-all{
+  
+}
+
+.sp-mail-choice{
+  margin-left: -10px;
+}
+
+.sp-send-to-all__button{
+  margin-left: -20px;
+}
+
+.form-group{
+  margin: 10px !important;
+}
