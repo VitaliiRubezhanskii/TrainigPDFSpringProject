@@ -4,8 +4,27 @@ import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 
+import slidepiper.config.ConfigProperties;
 import slidepiper.dataobjects.*;
 import slidepiper.db.DbLayer;
+import slidepiper.salesman_servlets.Geolocation;
+
+import java.util.Map;
+import java.io.StringWriter;
+import java.io.Writer;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.HashMap;
+import java.io.OutputStreamWriter;
+import java.util.List;
+
+import freemarker.template.Configuration;
+import freemarker.template.Template;
+import freemarker.template.TemplateException;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 // this whole thing needs to use StringBuilder to be faster. In the future...
 
@@ -52,93 +71,280 @@ public class HtmlRenderer {
 	
 		/// generate 
 		public static String getReportHtml(AlertData ai, String chatMessages) 
-		{											
-			String reportHTML="";
+		{	
 			
-			//System.out.println("MAKING REPORT HTML: custemail " + ai.getCustomer_email() + " ok");
-												
-			String emailmailto = "<a style=\"color:grey\" href=\"mailto:"
-					+ ai.getCustomer_email()
-					+ "?Subject=Followup to our last email.\">"
-					+ ai.getCustomer_email() + "</a>";											
-			String custname = ai.getCustomer_name() + " (" + emailmailto + ")";
-					
-			String reportTitleRow = getTitleRow("SlidePiper Report");		
-			String alertRow = getAlertRow("viewed", ai.getSlides_name(), custname, ai.getOpen_time());
-			 
-			String deviceInfoRows =
-					getFreeTextRow("<u>Device Information</u>")+
-					getFreeTextRow(ai.getAll_browser_data());			
-						
-			String chatMessagesRow = getFreeTextRow("<u>Messages in Chat Window:</u>")
-					+getFreeTextRow(chatMessages);
+			Configuration cfg = new Configuration();
+			try {
+				cfg.setDirectoryForTemplateLoading(new File("/users/maxprais/documents/workspace/templates"));
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			String reportHTML = "";
+			//String html = "";
+	        try {
+	            //Load template from source folder
+	        	Template template = cfg.getTemplate("ReportTemplate.ftl");
 
-			String barchartImageUrl = BarChartRenderer.getBarChartLink(ai.getSession_id());
-			String barchartrow = getImageRow(barchartImageUrl);
+	             
+	            // Build the data-model
+	            Map<String, Object> data = new HashMap<String, Object>();
+
+	            List<String> mailReportData = new ArrayList<String>();
+	            String deviceInfoRows =
+						getFreeTextRow("<u>Device Information</u>")+
+						getFreeTextRow(ai.getAll_browser_data());			
+				
+	            String input = ai.getAll_browser_data();
+	            System.out.print("**********Device data: " + input);
+	            
+	            Pattern pattern;
+	            Matcher matcher;
+	            String regex = "false";
+	            
+	            pattern = Pattern.compile(regex);
+	            matcher = pattern.matcher(input);
+	            
+	            System.out.println("Current REGEX is: "+regex);
+	            System.out.println("Current INPUT is: "+input);
+	            String mobileDeviceStr;
+	            Boolean isFound = matcher.find();
+	            System.out.print("Looking at:" + isFound);
+	            
+	            if (isFound) {
+	            	System.out.print("**********Answer: No");
+	            	mobileDeviceStr = "No";
+	            }
+	            else {
+	            	System.out.print("**********Answer: Yes");
+	            	mobileDeviceStr = "Yes";
+	            }
+	            
+				String chatMessagesRow = getFreeTextRow("<u>Messages in Chat Window:</u>")
+						+getFreeTextRow(chatMessages);
+				String appUrl = ConfigProperties.getProperty("app_url");
+				
+				//String barchartImageUrl = BarChartRenderer.getBarChartLink(ai.getSession_id());
+				//String barchartrow = getImageRow(barchartImageUrl);
+//				List<String> questions = ai.getQuestions();
+//				List<String> mailReportQuestions = new ArrayList<String>();
+//				
+//				mailReportQuestions.add(questions.get(0));
+//				mailReportQuestions.add(questions.get(1));
+//				mailReportQuestions.add(questions.get(2));
+				
+	            
+	            //mailReportData.add(DbLayer.getSlidesName(ai.getSlides_id()));
+	            mailReportData.add(ai.getCustomer_name());
+	            mailReportData.add(ai.getCustomer_email());
+	            mailReportData.add(ai.getOpen_time());
+	            mailReportData.add(ai.getSlides_id());
+	            //mailReportData.add(barchartImageUrl);
+	            //mailReportData.add(barchartrow);
+	            mailReportData.add(mobileDeviceStr);
+	            //mailReportData.add(chatMessagesRow);
+	            
+	            data.put("customerName", ai.getCustomer_name());
+	            data.put("customerEmail", ai.getCustomer_email());
+	            data.put("openTime", ai.getOpen_time());
+	            data.put("device", mobileDeviceStr);
+	            data.put("messages", chatMessages);
+	            data.put("mailReportData", mailReportData);
+	            data.put("documentName", DbLayer.getSlidesName(ai.getSlides_id()));
+	            data.put("logoUrl", appUrl);
+	            //data.put("mailReportQuestions", mailReportQuestions);
+	            
+     
+	            // Console output
+	            Writer out = new OutputStreamWriter(System.out);
+	            template.process(data, out);
+	            out.flush();
+	 
+	            // File output
+	            //String path = System.getProperty("user.home");
+	            Writer file = new FileWriter (new File("FTL_helloreport.txt"));
+	            template.process(data, file);
+	            file.flush();
+	            file.close();
+	            
+	            StringWriter stringwriter = new StringWriter();
+	            template.process(data, stringwriter);
+	            
+	            
+	            
+	           reportHTML = stringwriter.toString();
+	            System.out.println("***************ReportHTML: " + reportHTML);
+	            
+	             
+	        } catch (IOException e) {
+	            e.printStackTrace();
+	        } catch (TemplateException e) {
+	            e.printStackTrace();
+	        }
 			
-			String recotext = "<u>Recommendation</u>: ";
 			
-			if (chatMessages.contains("No messages"))
-			{
-						recotext = recotext+ "Send e-mail to " + custname;
-			}
-			else
-			{
-				recotext = recotext+ "Call " + custname;
-			}
 			
-			String recommendationRow = getBoldBigRow(recotext);
+//			String reportHTML="";
+//			
+//			//System.out.println("MAKING REPORT HTML: custemail " + ai.getCustomer_email() + " ok");
+//												
+//			String emailmailto = "<a style=\"color:grey\" href=\"mailto:"
+//					+ ai.getCustomer_email()
+//					+ "?Subject=Followup to our last email.\">"
+//					+ ai.getCustomer_email() + "</a>";											
+//			String custname = ai.getCustomer_name() + " (" + emailmailto + ")";
+//					
+//			String reportTitleRow = getTitleRow("SlidePiper Report");		
+//			String alertRow = getAlertRow("viewed", ai.getSlides_name(), custname, ai.getOpen_time());
+//			 
+//			String deviceInfoRows =
+//					getFreeTextRow("<u>Device Information</u>")+
+//					getFreeTextRow(ai.getAll_browser_data());			
+//						
+//			String chatMessagesRow = getFreeTextRow("<u>Messages in Chat Window:</u>")
+//					+getFreeTextRow(chatMessages);
+//
+//			String barchartImageUrl = BarChartRenderer.getBarChartLink(ai.getSession_id());
+//			String barchartrow = getImageRow(barchartImageUrl);
 			
-			String actionsRow = getActionsRow(ai);
-			
-			reportHTML = reportTitleRow + "<BR>" +
-					recommendationRow +
-					alertRow +					 
-					actionsRow + 
-					barchartrow +
-					chatMessagesRow + "<BR>"+
-					deviceInfoRows; 
+//			String recotext = "<u>Recommendation</u>: ";
+//			
+//			if (chatMessages.contains("No messages"))
+//			{
+//						recotext = recotext+ "Send e-mail to " + custname;
+//			}
+//			else
+//			{
+//				recotext = recotext+ "Call " + custname;
+//			}
+//			
+//			String recommendationRow = getBoldBigRow(recotext);
+//			
+//			String actionsRow = getActionsRow(ai);
+//			
+//			reportHTML = reportTitleRow + "<BR>" +
+//					recommendationRow +
+//					alertRow +					 
+//					actionsRow + 
+//					barchartrow +
+//					chatMessagesRow + "<BR>"+
+//					deviceInfoRows; 
 						
 			return reportHTML;			
 	}
-		
-		
 
-		
 		public static String getAlertHtml(MessageInfo mi, CustomerSession cs, String currentviewslink, String chatlink, String fullchatlink) 
-		{											
-			String alertHTML="";			
-												
-			String emailmailto = "<a style=\"color:grey\" href=\"mailto:"
-					+ mi.getCustomerEmail()
-					+ "?Subject=Followup to our last email.\">"
-					+ mi.getCustomerEmail() + "</a>";					
-			String custname = DbLayer.getCustomerName(mi.getCustomerEmail(),mi.getSalesManEmail()) + " (" + emailmailto + ")";
-					
-			String alertTitleRow = getTitleRow("SlidePiper Open Alert");		
-			String alertRow = getAlertRow("opened", DbLayer.getSlidesName(mi.getSlidesId()), custname, "");
+		{	
 			
-			String whatNextTitleRow = getTitleRow("What Next?");
-
-			String whatNextRows = whatNextTitleRow+"<BR>"; // start from this
+			Configuration cfg = new Configuration();
+			try {
+				cfg.setDirectoryForTemplateLoading(new File("/src/main/resources/templates"));
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			String alertHTML = "";
+			String html = "";
+	        try {
+	            //Load template from source folder
+	        	Template template = cfg.getTemplate("AlertTemplate.ftl");
+//	            Template template = cfg.getTemplate(HtmlRenderer.class.getClassLoader().getResource("AlertTest.ftl").getFile());
+	             
+	            // Build the data-model
+	            Map<String, Object> data = new HashMap<String, Object>();
+	            //data.put("message", "Hello World!");
+	 
+	            //List parsing 
+//	            List<String> countries = new ArrayList<String>();
+//	            countries.add("India");
+//	            countries.add("United States");
+//	            countries.add("Germany");
+//	            countries.add("France");
+	          //data.put("countries", countries);
+	            
+	            //AlertData ai;
+	            //Map<String, String> mailData = new HashMap<String, String>();
+	            //String alertRow = getAlertRow("opened", DbLayer.getSlidesName(mi.getSlidesId()), custname, "");
+	            //String custname = DbLayer.getCustomerName(mi.getCustomerEmail(),mi.getSalesManEmail()) + " (" + emailmailto + ")"; 
+	            List<String> mailAlertData = new ArrayList<String>();
+	            
+	            //ArrayList alerts = DbLayer.getAlerts(mi.getSalesManEmail());
+	            
+	            //mailData.add("opened");
+	            String appUrl = ConfigProperties.getProperty("app_url");
+	            mailAlertData.add(DbLayer.getSlidesName(mi.getSlidesId()));
+	            mailAlertData.add(DbLayer.getCustomerName(mi.getCustomerEmail(), mi.getSalesManEmail()));
+	            mailAlertData.add(mi.getCustomerEmail());
+	            
+	            data.put("documentName", DbLayer.getSlidesName(mi.getSlidesId()));
+	            data.put("customerName", DbLayer.getCustomerName(mi.getCustomerEmail(), mi.getSalesManEmail()));
+	            data.put("customerEmail", mi.getCustomerEmail());
+	            data.put("chatLink", fullchatlink);
+	            data.put("mailAlertData", mailAlertData);
+	            data.put("logoUrl", appUrl);
+     
+	            // Console output
+	            Writer out = new OutputStreamWriter(System.out);
+	            template.process(data, out);
+	            out.flush();
+	 
+	            // File output
+	            //String path = System.getProperty("user.home");
+	            Writer file = new FileWriter (new File("FTL_helloworld.txt"));
+	            template.process(data, file);
+	            file.flush();
+	            file.close();
+	            
+	            StringWriter stringwriter = new StringWriter();
+	            template.process(data, stringwriter);
+	            
+	            
+	            
+	            html = stringwriter.toString();
+	            System.out.println("***************HTML: " + html);
+//	            alertHTML = template.toString();
+	            
+	             
+	        } catch (IOException e) {
+	            e.printStackTrace();
+	        } catch (TemplateException e) {
+	            e.printStackTrace();
+	        }
 			
-			whatNextRows = whatNextRows + HtmlRenderer.getButtonRow(currentviewslink, "View Current Slides Report ");
-			
-					whatNextRows = whatNextRows	
-						 +HtmlRenderer.getButtonRow(chatlink, "<b>Quick Chat</b>")  
-						+HtmlRenderer.getButtonRow(fullchatlink, "<b>Full Chat</b> + <b>Live Pitch</b>") +
-						  "<BR>";
-			
-			alertHTML = alertTitleRow + 
-					alertRow +
-					"<BR>"+
-					whatNextRows;					
-			
-			alertHTML = addEnclosingHtml(alertHTML);
+//			String alertHTML="";			
+//												
+//			String emailmailto = "<a style=\"color:grey\" href=\"mailto:"
+//					+ mi.getCustomerEmail()
+//					+ "?Subject=Followup to our last email.\">"
+//					+ mi.getCustomerEmail() + "</a>";					
+//			String custname = DbLayer.getCustomerName(mi.getCustomerEmail(),mi.getSalesManEmail()) + " (" + emailmailto + ")";
+//					
+//			String alertTitleRow = getTitleRow("SlidePiper Open Alert");		
+//			String alertRow = getAlertRow("opened", DbLayer.getSlidesName(mi.getSlidesId()), custname, "");
+//			
+//			String whatNextTitleRow = getTitleRow("What Next?");
+//
+//			String whatNextRows = whatNextTitleRow+"<BR>"; // start from this
+//			
+//			whatNextRows = whatNextRows + HtmlRenderer.getButtonRow(currentviewslink, "View Current Slides Report ");
+//			
+//					whatNextRows = whatNextRows	
+//			Don't need chatlink			 +HtmlRenderer.getButtonRow(chatlink, "<b>Quick Chat</b>")  
+//						+HtmlRenderer.getButtonRow(fullchatlink, "<b>Full Chat</b> + <b>Live Pitch</b>") +
+//						  "<BR>";
+//			
+//			alertHTML = alertTitleRow + 
+//					alertRow +
+//					"<BR>"+
+//					whatNextRows;					
+//			
+			//alertHTML = addEnclosingHtml(html);
 			System.out.println("ALERT HTML SENT **********************\n" 
 			//+ alertHTML
 					);
-			return alertHTML;			
+	        
+	        
+			return html;			
 	}
 		
 		
