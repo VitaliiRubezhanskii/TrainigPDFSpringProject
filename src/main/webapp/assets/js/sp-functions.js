@@ -497,6 +497,18 @@ sp = {
               alert(data.flag + ' records were not inserted due to missing or corrupt data.');
             }
             
+            if (data.err){
+              swal(
+                'Error!',  
+                'You are missing some required information - your contacts must include First Name, Last Name,'
+              + ' Company, and Email Address',
+                'error'
+              );
+            }
+            else {
+              swal("Success!", "Your new customers were uploaded!", "success");
+            }
+            
             sp.file.getCustomersList('fileUploadDashboard');
             $('button[data-dismiss="modal"]').click();
             
@@ -504,7 +516,7 @@ sp = {
             $('#sp-upload-customers__button').removeClass('btn-default').addClass('btn-primary').text('Upload Customers');
             $('.sk-spinner').hide();
             $('#sp-customers-upload__form').show();
-            swal("Success!", "Your new customers were uploaded!", "success");
+            
             
           }
         }
