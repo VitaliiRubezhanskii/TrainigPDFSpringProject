@@ -1009,6 +1009,8 @@ chart: {
             colors: ['#dcdcdc', '#1ab394'],
             minValue: 0
           },
+          height: 354,
+          width: 450,
           datalessRegionColor: '#dcdcdc',
           displayMode: 'markers',
           legend: 'none',
@@ -1020,8 +1022,10 @@ chart: {
         
         if (typeof sp.chart.visitorsMap == 'undefined') {
           sp.chart.visitorsMap = new google.visualization.GeoChart(document.getElementById('sp-google-geochart'));
+          
         }
         sp.chart.visitorsMap.draw(mapData, options);
+        
       });
     }
   },

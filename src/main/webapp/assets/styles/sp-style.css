@@ -277,3 +277,11 @@ sp-mail-choice{
 #sp-sales-analytics-scroll{
   height: 300px;
 }
+
+.sp-data-widget{
+  height: 99px;
+}
+
+.sp-widget-text{
+  font-size: 23px !important; 
+}
