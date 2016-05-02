@@ -9,6 +9,6 @@ import slidepiper.db.Analytics;
 public class PrintProperty {
 
   public static void main(String[] args) {
-    System.out.println(Analytics.sqlCustomersData);
+    System.out.println(Analytics.sqlFilesData);
   }
 }

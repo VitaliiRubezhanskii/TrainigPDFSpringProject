@@ -67,6 +67,10 @@ sp = {
               sp.chart.getFilePerformance(fileHash);
               sp.table.getFilesTable(filesData);
               
+
+              // Temporary solution until sales analytics will show data for all metrics, charts, and table. 
+              $('.sp-metric-top-exit-page, .sp-chart-performance-benchmark').show();
+              
               // Move to the top of the page.
               $('html, body').animate({scrollTop: 0}, 'fast');
             }
@@ -82,8 +86,27 @@ sp = {
         $(document).ready(function() {
           $('#sp-salesman-full-name strong').text(sp.config.salesman.name);
           
-          $('.sp-nav-section').click(function() {
-            routingEmulator($(this).attr('data-dashboard'));
+          /* Nav bar click event mechanisem */
+          $('.sp-nav-section').click(function(event) {
+
+            // If a first level nav bar is clicked, then do the following.
+            if (typeof $(event.target).closest('.nav-second-level')[0] == 'undefined') {
+              routingEmulator($(this).attr('data-dashboard'));
+            }
+            
+            // If a third level nav bar from the sales analytics nav (a file name) is clicked,
+            // then do the following.
+            if ($(event.target).hasClass('sp-customer-file__a')) {
+              
+              // Temporary solution until metisMenu and Inspinia nav bar functionality will work well.
+              $('#sp-nav-sales-analytics__li ul li a').css('color', '#a7b1c2');
+              $(event.target).css('color', '#fff');
+              
+              sp.view.salesAnalytics.setMetrics(
+                  $(event.target).attr('data-customer-email'),
+                  $(event.target).attr('data-file-hash')
+              );
+            }
           });
           
           $('.sp-logout').click(function() {
@@ -236,15 +259,15 @@ sp = {
            * The function controls the display of the current dashboard view. 
            */
           function routingEmulator(topSection) {
-            $('.sp-dashboard').hide();
+            $('.sp-dashboard, .sp-nav-section ul').hide();
             $('.sp-nav-section').removeClass('active');
-            $('[data-dashboard="' + topSection + '"]').addClass('active');
+            $('.sp-nav-section[data-dashboard="' + topSection + '"]').addClass('active');
             $('#' + topSection).show();
+            $('html, body').animate({scrollTop: 0}, 'fast');
             
             switch(topSection) {
               case 'sp-file-upload':
                 var requestOrigin = 'fileUploadDashboard';
-                $('#sp-nav-files__li ul').hide();
                 sp.file.getFilesList(requestOrigin);
                 sp.file.getCustomersList(requestOrigin);
                 break;
@@ -253,12 +276,17 @@ sp = {
                 sp.table.filesData = undefined;
                 setFileDashboard();
                 break;
-              
+                
+              case 'sp-sales-analytics-view':
+                sp.view.salesAnalytics.setNavBar();
+                $('#sp-file-dashboard').show();
+                break;
+                
               /**
                * @todo: fix the step the doc-wizard loads on - 
                *        current method: $('#document-wizard-t-0').click();
                *        simulates a click on the first step.
-               */  
+               */
               case 'sp-send-email':
                 requestOrigin = 'customerFileLinksGenerator';
                 $('#sp-nav-files__li ul').hide();
@@ -268,8 +296,6 @@ sp = {
                 $('#document-wizard-t-0').click();
                 sp.file.getCustomersList(requestOrigin);
                 sp.file.getFilesList(requestOrigin);   
-             // Move to the top of the page.
-                $('html, body').animate({scrollTop: 0}, 'fast');
                 break;
             }
           }
@@ -654,11 +680,11 @@ sp = {
      * Display the selected file data metrics. 
      */
     getFileMetrics: function(fileData) {
-      // Total views.
-      $('#sp-widget-total-views').text(fileData[3]);
-      sp.metric.totalViews = parseInt(fileData[3]);
-      
-      if (sp.metric.totalViews > 0) {
+      if (typeof fileData != 'undefined' && typeof fileData[3] != 'undefined' && parseInt(fileData[3]) > 0) {
+
+        // Total views.
+        $('#sp-widget-total-views').text(fileData[3]);
+        
         // Bounce rate.
         $('#sp-widget-bounce-rate').text(parseFloat(fileData[4] * 100).toFixed(2) + '%');
         
@@ -711,6 +737,7 @@ sp = {
         $('#sp-widget-users-cta').text(fileData[7]);
         
       } else {
+        $('#sp-widget-total-views').text('0');
         $('.sp-widget:not(#sp-widget-total-views)').text('N/A');
       }
     }
@@ -721,9 +748,12 @@ chart: {
     /**
      * Get the file bar chart.
      */
-    getFileBar: function(fileHash) {
+    getFileBar: function(fileHash, customerEmail) {
+      if (typeof customerEmail == 'undefined') {
+        customerEmail = null;
+      }
       $.getJSON('ManagementServlet', {action: 'getFileBarChart',
-          fileHash: fileHash, salesmanEmail: sp.config.salesman.email}, function(data) {
+          fileHash: fileHash, salesmanEmail: sp.config.salesman.email, customerEmail: customerEmail}, function(data) {
           
         if (typeof sp.chart.fileBar !== 'undefined') {
           sp.chart.fileBar.destroy();
@@ -772,9 +802,12 @@ chart: {
     /**
      * Get the file line chart.
      */
-    getFileLine: function(fileHash) {
+    getFileLine: function(fileHash, customerEmail) {
+      if (typeof customerEmail == 'undefined') {
+        customerEmail = null;
+      }
       $.getJSON('ManagementServlet', {action: 'getFileLineChart',
-          fileHash: fileHash, salesmanEmail: sp.config.salesman.email}, function(data) {
+          fileHash: fileHash, salesmanEmail: sp.config.salesman.email, customerEmail: customerEmail}, function(data) {
             
         if (typeof sp.chart.fileLine !== 'undefined') {
           sp.chart.fileLine.destroy();
@@ -931,9 +964,12 @@ chart: {
     /**
      * get the file visitors report.
      */
-    getFileVisitorsMap: function(fileHash) {
+    getFileVisitorsMap: function(fileHash, customerEmail) {
+      if (typeof customerEmail == 'undefined') {
+        customerEmail = null;
+      }
       $.getJSON('ManagementServlet', {action: 'getFileVisitorsMap',
-          fileHash: fileHash, salesmanEmail: sp.config.salesman.email}, function(data) {
+          fileHash: fileHash, salesmanEmail: sp.config.salesman.email, customerEmail: customerEmail}, function(data) {
         
         var dataFormatted = [];
         if (data.fileVisitorsMap.length > 0) {
@@ -979,8 +1015,16 @@ chart: {
      */
     getFilesTable: function(filesData) {
       if ($.fn.dataTable.isDataTable('#sp-files-data__table')) {
-        sp.table.filesData = $('#sp-files-data__table').DataTable()
+        
+        if (typeof filesData[0] == 'undefined') {
+          sp.table.filesData = $('#sp-files-data__table').DataTable()
             .clear()
+            .draw();
+          return false;
+        }
+        
+        sp.table.filesData = $('#sp-files-data__table').DataTable()
+            .clear()    
             .rows.add(filesData)
             .draw();
       } else {
@@ -1523,13 +1567,104 @@ chart: {
       
       
     }),
-    
-    
+  },
+
+  view: {
+    salesAnalytics: {
+      setNavBar: function() {
+        $.getJSON(
+            'ManagementServlet',
+            {
+              action: 'getCustomersFilesList',
+              salesmanEmail: sp.config.salesman.email,
+            },
+            function(data) {
+              var customersFilesList = data.customersFilesList;
+              if (0 < customersFilesList.length) {
+                
+                // Arrange the data for future processing.
+                var customers = {};
+                $.each(customersFilesList, function(i, v) {
+                  if (typeof customers[v[0]] == 'undefined') { 
+                    customers[v[0]] = {
+                      customerName: v[1],
+                      files: [],
+                    };
+                  };
+                  
+                  var file = {
+                    fileName: v[3],
+                    fileHash: v[2],
+                  };
+                  
+                  customers[v[0]]['files'].push(file);
+                });
+                
+                // Build the nav bar.
+                $('#sp-nav-sales-analytics__li')
+                    .empty()
+                    .append(
+                        '<a href="#" aria-expanded="true"><i class="fa fa-bar-chart"></i> '
+                        + '<span class="nav-label">Sales Analytics</span></a>'
+                        + '<span class="fa arrow"></span>'
+                        + '<ul class="nav nav-second-level">'
+                    );
+                
+                $.each(customers, function(i, v) {
+                  $('#sp-nav-sales-analytics__li > ul')
+                      .append('<li><a href="#" data-customer-email="' + i + '">' + v.customerName + '</a></li>')
+                      .append('<ul class="nav nav-third-level" data-customer-email="' + i + '">');
+                  
+                  $.each(v.files, function(j, u) {
+                    $('#sp-nav-sales-analytics__li ul ul[data-customer-email="' + i + '"]')
+                        .append('<li><a class="sp-customer-file__a" href="#" data-customer-email="'
+                            + i + '" data-file-hash="' + u.fileHash + '">' + u.fileName + '</a></li>');
+                  });
+                });
+                
+                // A workaround for metisMenu dysfunctionality.
+                $('#sp-nav-sales-analytics__li ul li:has(a[data-file-hash="' + customersFilesList[0][2]
+                    + '"][data-customer-email="' + customersFilesList[0][0] + '"]) a')
+                        .css('color', '#fff');
+                sp.view.salesAnalytics.setMetrics(customersFilesList[0][0], customersFilesList[0][2]);
+              }
+            }
+         );
+      },
+      
+      setMetrics: function(customerEmail, fileHash) {
+        $.getJSON(
+            'ManagementServlet',
+            {
+              action: 'getFilesCustomerData',
+              salesmanEmail: sp.config.salesman.email,
+              customerEmail: customerEmail,
+            },
+            function(data) {
+              var files = [];
+              $.each(data.filesCustomerData, function(i, v) {
+                files[v[0]] = v;
+              });
+              
+              // Build dashboard.
+              sp.metric.getFileMetrics(files[fileHash]);
+              sp.chart.getFileLine(fileHash, customerEmail);
+              sp.chart.getFileBar(fileHash, customerEmail);
+              sp.chart.getFileVisitorsMap(fileHash, customerEmail);
+              var filesArray = [files[fileHash]];
+              if (typeof filesArray[0] != 'undefined') {
+                filesArray[0][8] = null;
+              }
+              sp.table.getFilesTable(filesArray);
+              
+              // Hide unavailable yet metrics, charts, and table.
+              $('.sp-metric-top-exit-page, .sp-chart-performance-benchmark').hide();
+            }
+        );
+      }
+    }
   }
 };
-
-
-
 // End sp.
 
 $(document).ready(function() {
