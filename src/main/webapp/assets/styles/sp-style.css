@@ -254,3 +254,18 @@ sp-mail-choice{
 .form-group{
   margin: 10px !important;
 }
+
+.sp-help-modal__container{
+  margin-bottom: -35px;
+}
+
+.middle-box{
+  margin-top: -60px !important;
+}
+
+.sp-help-info-mailto__button{
+  margin-top: 7px;
+}
+.sp-help-done{
+  margin-top: 20px;
+}

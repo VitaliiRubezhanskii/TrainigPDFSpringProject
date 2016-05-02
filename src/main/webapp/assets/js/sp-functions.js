@@ -1223,8 +1223,18 @@ chart: {
                   + '</tr>'
           );
       });
-      $('.table-responsive').perfectScrollbar();
+      $('.content').perfectScrollbar();
     },
+    
+    scrollTop: $(function () {
+      
+      $('#document-wizard-t-0, #document-wizard-t-1, #document-wizard-t-2, a[href="next"], a[href="previous"]')
+              .on('click', function () {
+                $('.content').animate({scrollTop: 0}, 1, 'linear');
+               });
+      
+      
+    }),
     
   // This function formats and renders files to the wizard
     formatFile: function (data){
@@ -1247,6 +1257,8 @@ chart: {
           $('a[href="#next"]').attr('id', 'sp-send-docs__button');
       };
     },
+    
+    
     
     // Listener to save which boxes have been checked i.e. which documents the
     // user wants to send, and to whom.
@@ -1348,15 +1360,15 @@ chart: {
                   + '<div class="col-md-3" data-hash=' + v['fileHash'] +'></div>'
                   + '<div id="sp-file-link-' + v['fileLink'] + '"  data-link="'+ fileLink +'" class="col-md-5 sp-file-link">' + fileLink + '</div>'
                   + '<div class="sp-mail-choice col-md-2">'
-                      + '<button class="btn btn-white sp-send-options btn-xs sp-copy__btn" data-clipboard-target="#sp-file-link-' + v['fileLink']+ '">'
+                      + '<button data-file-link="' + fileLink +'" class="btn btn-white sp-mailto sp-send-options btn-xs sp-copy__btn ' + 'mail-' + v['fileHash'] +'" data-clipboard-target="#sp-file-link-' + v['fileLink']+ '">'
                           + '<i class="fa fa-copy"></i> Copy'
                       + '</button>'
                   + '</div>'
-                  + '<div class="sp-mail-choice col-md-2">'
-                      + '<button data-file-link="' + fileLink +'" data-mailto="' + val['customerEmail'] + '" class="btn btn-white  sp-send-options btn-xs sp-mailto sp-clickable ' + 'mail-' + v['fileHash'] +'">'
-                          + '<i class="fa fa-envelope"></i>  Send Mail'
-                      +'</button>'
-                  + '</div>'
+//                  + '<div class="sp-mail-choice col-md-2">'
+//                      + '<button data-file-link="' + fileLink +'" data-mailto="' + val['customerEmail'] + '" class="btn btn-white  sp-send-options btn-xs sp-mailto sp-clickable ' + 'mail-' + v['fileHash'] +'">'
+//                          + '<i class="fa fa-envelope"></i>  Send Mail'
+//                      +'</button>'
+//                  + '</div>'
               + '</div>'
            );            
           
@@ -1376,31 +1388,31 @@ chart: {
               + '</div>'
               + '<div class="col-md-2">' 
                   + '<button class="btn btn-white sp-send-to-all__button sp-send-options btn-xs sp-mail-all__button sp-send-all sp-cmd-all__button">'
-                    + '<i class="fa fa-envelope sp-mail__icon"></i> Send To All'
+                    + '<i class="fa fa-envelope sp-mail__icon"></i> Send All'
                   + '</button>'
               + '</div>'
           + '</div>'          
       );
-      sp.customerFileLinksGenerator.sendMailCallback();
+      //sp.customerFileLinksGenerator.sendMailCallback();
       sp.customerFileLinksGenerator.sendAll();
       sp.customerFileLinksGenerator.copyAll();
       
     },
     
     // This function sends an email with one document in it.
-    sendMailCallback: function () {      
-      var mailSubject = sp.config.salesman.name.split(" ")[0] + ' from ' + sp.config.salesman.company
-      + ' has sent you a document'; 
-      
-      $('.sp-mailto').on('click', function () {       
-        window.open(
-            'mailto:' + $(this).attr('data-mailto')
-          + '?subject=' + mailSubject
-          + '&body='  + 'Please follow this link to view the PDF: '+ '%0D%0A' + $(this).attr('data-file-name') + ' - ' + $(this).attr('data-file-link')
-      );
-      });
-      
-    },
+//    sendMailCallback: function () {      
+//      var mailSubject = sp.config.salesman.name.split(" ")[0] + ' from ' + sp.config.salesman.company
+//      + ' has sent you a document'; 
+//      
+//      $('.sp-mailto').on('click', function () {       
+//        window.open(
+//            'mailto:' + $(this).attr('data-mailto')
+//          + '?subject=' + mailSubject
+//          + '&body='  + 'Please follow this link to view the PDF: '+ '%0D%0A' + $(this).attr('data-file-name') + ' - ' + $(this).attr('data-file-link')
+//      );
+//      });
+//      
+//    },
     
     copyAll: function () {
       /**
@@ -1579,6 +1591,7 @@ chart: {
       
       
     }),
+   
   },
 
   view: {
