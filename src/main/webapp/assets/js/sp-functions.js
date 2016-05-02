@@ -302,8 +302,7 @@ sp = {
     },
     
     fileCallback: function (data, requestOrigin) {
-      // do something with data      
-      console.log(data);
+      // do something with data    
       if (requestOrigin === 'fileUploadDashboard'){
         sp.file.sortFilesForUpload(data);
       }
@@ -1140,7 +1139,6 @@ chart: {
           if (currentIndex > newIndex){
             return true;
           };
-          console.log('current: ' + currentIndex + 'new: ' + newIndex);
           if (currentIndex === 0 && (!$('.sp-customer-table tbody input[type="checkbox"]').is(':checked'))){
             sp.error.handleError('You must select at least one customer to continue');
             return false;
@@ -1201,7 +1199,6 @@ chart: {
       $('a#document-wizard-t-1').addClass('sp-enumerate-customers-files__button');
       $('#sp-send-docs__button').addClass('sp-enumerate-customers-files__button');
       $('.sp-enumerate-customers-files__button').on('click', function (e) { 
-        console.log(e.currentTarget);
         
         // This checks If wizard-step is document selector tab in order to start saving the
         // chosen sections.
@@ -1359,7 +1356,6 @@ chart: {
       $('.sp-copy-all').on('click', function () {
         var links = [];
         $(this).closest('tr').find('div[data-link]').each(function (i, v){
-          console.log($(this).text());
           links.push($(this).text() + '%0D%0A');
           });
         
@@ -1470,6 +1466,9 @@ chart: {
           $('#sp-old-password').val('');
           $('#sp-new-password').val('');
           $('#sp-retype-password').val('');
+          setTimeout(function () {
+            $('input#sp-old-password').focus(); 
+          },1);
           
         });
       
@@ -1479,7 +1478,6 @@ chart: {
           var retypePwd = $('#sp-retype-password').val();
           if (sp.config.salesman.password === oldPwd) {
             if (newPwd !== retypePwd){
-              console.log('error');
               sp.error.handleError('Your passwords do not match');
             }
             else {
