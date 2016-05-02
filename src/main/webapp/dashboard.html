@@ -109,6 +109,9 @@
           </div>
             
           <ul class="nav navbar-top-links navbar-right">
+            <li data-toggle="modal" data-target="#sp-help-salesmen__modal" class="sp-help-salesmen__icon">
+                <a href="#"><i class="fa fa-question" aria-hidden="true"></i>Help</a>
+            </li>
             <li data-toggle="modal" data-target="#sp-change-password__modal" class="sp-change-pwd__icon">
                 <a href="#"><i class="fa fa-cog" aria-hidden="true"></i>Change Password</a>
             </li>
@@ -811,7 +814,50 @@
   
   </div>
 
+  <!-- Help Salesman Modal -->
+  <div id="sp-help-salesmen__modal" class="modal inmodal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">
+             <span aria-hidden="true">&times;</span>
+             <span class="sr-only">Close</span>
+          </button>
+          <h4 class="modal-title">Help Using Slidepiper</h4>
+          <small class="font-bold modal-sub-title"></small>
+        </div>
+        <div class="modal-body">
+           <div class="wrapper wrapper-content">
+                <div class="middle-box text-center">
+                    <h2 class="font-bold">Welcome to SlidePiper</h2>
+                    <div class="error-desc sp-help-modal__container">
+                        <p><h2>To send documents to customers you need to do 3 things:</h2></p>
+						<br/>
+						<p><h3>1. Add Customers</h3></p>
+						<p><h3>2. Upload Documents</h3></p>
+                        <small>Click Documents & Customers</small>
+						<p><h3>3. Use the wizard to send documents</h3></p>
+                        <small>Click Send Email</small>
+                        <h3 class="sp-help-done"><i class="fa fa-thumbs-up" aria-hidden="true"></i>     Once you're done, check out the Anayltics</h3>
+						<p>For support please contact us at:</p>
+						<a class="sp-help-info-mailto__button btn btn-primary" href="mailto:info@slidepiper.com">info@slidepiper.com</a>
+					
+                        <!-- <br/><a id="sp-upload-customers-help__modal" class="btn btn-primary m-t">Upload Customers</a>
+						<a id="sp-upload-documents-help__modal" class="btn btn-primary m-t">Upload Documents</a>
+						<br/><a id="sp-send-documents-help__modal" class="btn btn-primary m-t">Send Documents</a> -->
+                    </div>
+                </div>
+            </div>
 
+          </div>
+        <div class="modal-footer">
+          
+        </div>
+      </div>
+    </div>
+  
+    </div>
+  </div>
 </body>
 
 </html>
