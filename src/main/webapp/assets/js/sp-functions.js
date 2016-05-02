@@ -41,8 +41,12 @@ sp = {
                       '<a href="#" aria-expanded="true"><i class="fa fa-bar-chart"></i> '
                       + '<span class="nav-label">Marketing Analytics</span></a>'
                       + '<span class="fa arrow"></span>'
-                      + '<ul class="nav nav-second-level">'
+                      + '<div class="sp-analytics-container__div">'
+                      + '<ul class="nav nav-second-level"></div>'
+                      
                   );
+              
+              $('.sp-analytics-container__div').perfectScrollbar();
               
               var files = [];
               for (var i = 0; i < filesData.length; i++) {
@@ -268,6 +272,7 @@ sp = {
             switch(topSection) {
               case 'sp-file-upload':
                 var requestOrigin = 'fileUploadDashboard';
+                $('.sp-analytics-container__div').css('height', 'auto');
                 sp.file.getFilesList(requestOrigin);
                 sp.file.getCustomersList(requestOrigin);
                 break;
@@ -275,11 +280,13 @@ sp = {
               case 'sp-file-dashboard':
                 sp.table.filesData = undefined;
                 setFileDashboard();
+                $('#sp-sales-analytics-scroll').css('height', 'auto');
                 break;
                 
               case 'sp-sales-analytics-view':
                 sp.view.salesAnalytics.setNavBar();
                 $('#sp-file-dashboard').show();
+                $('.sp-analytics-container__div').css('height', 'auto');
                 break;
                 
               /**
@@ -290,7 +297,8 @@ sp = {
               case 'sp-send-email':
                 requestOrigin = 'customerFileLinksGenerator';
                 $('#sp-nav-files__li ul').hide();
-                $('.sp-hidden').removeClass('sp-hidden');   
+                $('.sp-hidden').removeClass('sp-hidden'); 
+                $('.sp-analytics-container__div').css('height', 'auto');
                 $('a[href="#finish"]').remove();
                 $('a[href="#cancel"]').remove();
                 $('#document-wizard-t-0').click();
@@ -1632,8 +1640,10 @@ chart: {
                         '<a href="#" aria-expanded="true"><i class="fa fa-bar-chart"></i> '
                         + '<span class="nav-label">Sales Analytics</span></a>'
                         + '<span class="fa arrow"></span>'
-                        + '<ul class="nav nav-second-level">'
+                        + '<ul id="sp-sales-analytics__ul" class="nav nav-second-level">'
                     );
+                
+                //$('#sp-sales-analytics-scroll').perfectScrollbar();
                 
                 $.each(customers, function(i, v) {
                   $('#sp-nav-sales-analytics__li > ul')
@@ -1646,6 +1656,11 @@ chart: {
                             + i + '" data-file-hash="' + u.fileHash + '">' + u.fileName + '</a></li>');
                   });
                 });
+                
+                var scrollCont = $('<div></div>', {id: 'sp-sales-analytics-scroll'});
+                $('#sp-nav-sales-analytics__li').append(scrollCont);
+                scrollCont.append($('#sp-sales-analytics__ul'));
+                scrollCont.perfectScrollbar({suppressScrollX: true, maxScrollbarLength: '70', minScrollbarLength: '70'});
                 
                 // A workaround for metisMenu dysfunctionality.
                 $('#sp-nav-sales-analytics__li ul li:has(a[data-file-hash="' + customersFilesList[0][2]

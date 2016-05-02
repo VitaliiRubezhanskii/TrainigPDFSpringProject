@@ -269,3 +269,11 @@ sp-mail-choice{
 .sp-help-done{
   margin-top: 20px;
 }
+
+.sp-analytics-container__div{
+  height: 300px;
+}
+
+#sp-sales-analytics-scroll{
+  height: 300px;
+}
