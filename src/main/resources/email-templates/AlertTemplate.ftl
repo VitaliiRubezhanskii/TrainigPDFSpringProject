@@ -1307,7 +1307,7 @@ body.outlook p {
                             <table>
                               <tr>
                                 <th>
-                                  <center data-parsed=""> <img src="//localhost:8080/ts1/assets/email/img/logo-email.png" align="center" class="float-center"> </center>
+                                  <center data-parsed=""> <img src="${logoUrl}/assets/email/img/logo-email.png" align="center" class="float-center"> </center>
                                   <h1 class="text-center">SlidePiper Alert</h1>
 								  <table class="spacer">
                                     <tbody>

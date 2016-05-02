@@ -1,5 +1,6 @@
 package slidepiper.ui_rendering;
 
+import java.net.URL;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -75,7 +76,10 @@ public class HtmlRenderer {
 			
 			Configuration cfg = new Configuration();
 			try {
-				cfg.setDirectoryForTemplateLoading(new File("/users/maxprais/documents/workspace/templates"));
+
+			  URL url = HtmlRenderer.class.getResource("/email-templates");
+        cfg.setDirectoryForTemplateLoading(new File(url.getPath()));
+			  
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -238,7 +242,9 @@ public class HtmlRenderer {
 			
 			Configuration cfg = new Configuration();
 			try {
-				cfg.setDirectoryForTemplateLoading(new File("/src/main/resources/templates"));
+				URL url = HtmlRenderer.class.getResource("/email-templates");
+				cfg.setDirectoryForTemplateLoading(new File(url.getPath()));
+				
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
