@@ -34,6 +34,10 @@ import slidepiper.keepalive.KeepAlivePacket;
 import slidepiper.ui_rendering.BarChartRenderer;
 import slidepiper.ui_rendering.HtmlRenderer;
 
+import freemarker.template.Configuration;
+import freemarker.template.Template;
+import freemarker.template.TemplateException;
+
 public class EmailSender {
   
   /** A regex for capturing a merge tag. */
@@ -120,14 +124,27 @@ public class EmailSender {
 			CustomerSession cs = DbLayer.getSessionData(sessionId);
 			
 			String msgtext = HtmlRenderer.getAlertHtml(mi, cs, currentviewslink, chatlink, fullchatlink); 
-						
+			// String msgtext = HtmlRenderer.getAlertHtml();
+			
 			EmailSender.sendEmail(mi.getSalesManEmail(), 
 					subj,				
 						msgtext
 					);
+			System.out.println("***************Message text: " + msgtext);
 			
 			System.out.println("********** SENT ALERT EMAIL for " + mi.getSalesManEmail());
 	}
+	
+//	public static void testSendEmail(){
+//		
+//		Template mailTemplate = HtmlRenderer.testGetAlertTemplate();
+//		
+//		String strTemplate = mailTemplate.toString();
+//		
+//				
+//	}
+	
+	
 	// report email after customer stops viewing presentation
 	// called from KeepAliveTask
 	public static void sendReportEmail(KeepAlivePacket p)
@@ -154,7 +171,7 @@ public class EmailSender {
 			// write in session without enclosing html. only enclosing table.
 			DbLayer.updateSessionReport(p.getSessionId(), "<table>"+msg+"</table>");
 					 
-			msg = HtmlRenderer.addEnclosingHtml(msg);
+			//msg = HtmlRenderer.addEnclosingHtml(msg);
 			EmailSender.sendEmail(mi.getSalesManEmail(), subj , msg);
 			
 			System.out.println("********** SENT REPORT EMAIL for " + mi.getSalesManEmail());
