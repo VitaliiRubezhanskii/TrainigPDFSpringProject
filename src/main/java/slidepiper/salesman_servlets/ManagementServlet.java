@@ -109,17 +109,33 @@ public class ManagementServlet extends HttpServlet {
         data.put("customersList", sqlData);
         break;
         
+	    case "getCustomersFilesList":
+        parameterList.add(request.getParameter("salesmanEmail"));
+        sqlData = DbLayer.getEventData(parameterList, Analytics.sqlCustomersFilesList);        
+        data.put("customersFilesList", sqlData);
+        break;
+        
 	    case "getFileBarChart":
         parameterList.add(request.getParameter("fileHash"));
         parameterList.add(request.getParameter("salesmanEmail"));
-        sqlData = DbLayer.getEventData(parameterList, Analytics.sqlFileBarChart);
+        if (null == request.getParameter("customerEmail") || request.getParameter("customerEmail").equals("")) {
+          sqlData = DbLayer.getEventData(parameterList, Analytics.sqlFileBarChart);
+        } else {
+          parameterList.add(request.getParameter("customerEmail"));
+          sqlData = DbLayer.getEventData(parameterList, Analytics.sqlFileCustomerBarChart);
+        }
         data.put("fileBarChart", sqlData);
         break;
       
       case "getFileLineChart":
         parameterList.add(request.getParameter("fileHash"));
         parameterList.add(request.getParameter("salesmanEmail"));
-        sqlData = DbLayer.getEventData(parameterList, Analytics.sqlFileLineChart);
+        if (null == request.getParameter("customerEmail") || request.getParameter("customerEmail").equals("")) {
+          sqlData = DbLayer.getEventData(parameterList, Analytics.sqlFileLineChart);
+        } else {
+          parameterList.add(request.getParameter("customerEmail"));
+          sqlData = DbLayer.getEventData(parameterList, Analytics.sqlFileCustomerLineChart);
+        }
         data.put("fileLineChart", sqlData);
         break;
         
@@ -133,7 +149,12 @@ public class ManagementServlet extends HttpServlet {
       case "getFileVisitorsMap":
         parameterList.add(request.getParameter("fileHash"));
         parameterList.add(request.getParameter("salesmanEmail"));
-        sqlData = DbLayer.getEventData(parameterList, Analytics.sqlFileVisitorsMap);
+        if (null == request.getParameter("customerEmail") || request.getParameter("customerEmail").equals("")) {
+          sqlData = DbLayer.getEventData(parameterList, Analytics.sqlFileVisitorsMap);
+        } else {
+          parameterList.add(request.getParameter("customerEmail"));
+          sqlData = DbLayer.getEventData(parameterList, Analytics.sqlFileCustomerVisitorsMap);
+        }
         data.put("fileVisitorsMap", sqlData);
         break;
 	  }
@@ -313,7 +334,6 @@ public class ManagementServlet extends HttpServlet {
             String customerEmail = group.getString("customerEmail");
             JSONArray fileHashes = group.getJSONArray("fileHashes");
             
-            //HashMap<String, String> fileLinks = new HashMap<String, String>();
             JSONObject customer = new JSONObject();
             JSONArray files = new JSONArray();
             
