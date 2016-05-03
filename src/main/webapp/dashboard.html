@@ -656,19 +656,46 @@
           </button>
           <i class="fa fa-cloud-upload modal-icon"></i>
           <h4 class="modal-title">Upload Customers</h4>
-
-          <small class="font-bold">1. Click on the download
-            template button and add your customers based on the template
-            format. <br>2. Click on the choose file / browse button
-            and select your customers file. <br>3. Click on the
-            upload file button to upload the customers file to the
-            system.
-          </small>
+          
+          <div class="sp-create-csv-help">
+            <small class="font-bold">
+                 To upload customers to SlidePiper, follow these instructions: 
+                 <br>
+                 <br>
+                 1. Create a CSV file of your contacts by one of these options:
+                 <br>
+                 <br>
+                 Export a CSV file from Outlook: 
+                 (<a href="https://support.office.com/en-us/article/Export-contacts-from-Outlook-10f09abd-643c-4495-bb80-543714eca73f">How?</a>)
+                 <br>
+                 -OR-
+                 <br>
+                 Export a CSV file from Gmail:
+                 (<a href="https://support.google.com/mail/answer/24911?hl=en">How?</a>)
+                 <br> 
+                 -OR-
+                 <br>
+                 Add your data using our template:
+                 (<a href="assets/files/customers_template.csv">Download</a>)
+                 <br>
+                 <br>
+            </small>
+          </div>
+          <div class="sp-download-contacts-help">
+            <small class="font-bold">
+              Once you have saved the CSV in an appropriate folder:
+              <br>
+              2. Click on the 'Choose File / Browse' button
+              and select your customers CSV file. <br>
+              3. Click on the
+              'Upload Customers' button to upload the customers file to the
+              system.
+             </small>
+           </div>
+            
         </div>
         <div class="modal-body">
           <form id="sp-customers-upload__form">
-            <button class="sp-inline" id="sp-download-template__button"
-              type="button">Download Template</button>
             <input class="file__input sp-inline" type="file"
               accept=".csv" />
           </form>

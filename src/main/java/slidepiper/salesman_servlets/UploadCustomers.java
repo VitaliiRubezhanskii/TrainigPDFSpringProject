@@ -61,16 +61,16 @@ public class UploadCustomers extends HttpServlet {
     	
     	if (1 == csvRecord.getRecordNumber()){
     		for (int i = 0; i < csvRecord.size(); i++){
-    			if (csvRecord.get(i).equalsIgnoreCase("First Name")){
+    			if (csvRecord.get(i).equalsIgnoreCase("First Name") || csvRecord.get(i).equalsIgnoreCase("Given Name")){
     				firstNameIndex = i;
     			}
-    			if (csvRecord.get(i).equalsIgnoreCase("Last Name") || csvRecord.get(i).equalsIgnoreCase("Surname")){
+    			if (csvRecord.get(i).equalsIgnoreCase("Last Name") || csvRecord.get(i).equalsIgnoreCase("Surname") || csvRecord.get(i).equalsIgnoreCase("Family Name")){
     				lastNameIndex = i;
     			}
-    			if (csvRecord.get(i).equalsIgnoreCase("Company")){
+    			if (csvRecord.get(i).equalsIgnoreCase("Company") || csvRecord.get(i).equalsIgnoreCase("Organization 1 - Name")){
     				companyIndex = i;
     			}
-    			if (csvRecord.get(i).equalsIgnoreCase("E-mail Address") || csvRecord.get(i).equalsIgnoreCase("E-mail") || csvRecord.get(i).equalsIgnoreCase("Email") ){
+    			if (csvRecord.get(i).equalsIgnoreCase("E-mail Address") || csvRecord.get(i).equalsIgnoreCase("E-mail") || csvRecord.get(i).equalsIgnoreCase("Email") || csvRecord.get(i).equalsIgnoreCase("E-mail 1 - Value") ){
     				emailIndex = i;
     			}
     		}

@@ -12,7 +12,7 @@ public class Analytics {
       "SELECT\n"
       + "  id AS file_hash,\n"
       + "  name AS file_name,\n"
-      + "  DATE_FORMAT(timestamp, '%d-%b-%Y %H:%i:%s') AS date_added_or_modified\n"
+      + "  DATE_FORMAT(timestamp, '%d-%b-%Y') AS date_added_or_modified\n"
       + "FROM slides\n"
       + "WHERE sales_man_email = ?\n"
       + "ORDER BY timestamp DESC";
