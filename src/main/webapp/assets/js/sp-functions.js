@@ -1565,48 +1565,60 @@ chart: {
           var oldPwd = $('#sp-old-password').val();
           var newPwd = $('#sp-new-password').val();
           var retypePwd = $('#sp-retype-password').val();
-          if (sp.config.salesman.password === oldPwd) {
-            if (newPwd !== retypePwd){
-              sp.error.handleError('Your passwords do not match');
-            }
-            else {
-              var data = {
-                  action: 'changeSalesmanPassword',
-                  email: sp.config.salesman.email,
-                  oldpassword: oldPwd,
-                  newpassword: newPwd
-              };
-              
-              $.ajax({
-                url: 'ManagementServlet',
-                type: 'post',
-                contentType : 'application/json; charset=utf-8',
-                dataType: 'json',
-                data: JSON.stringify(data),
-                success: function (res) {
-                  if (res) {
-                    swal(
-                      'Success',
-                      'Your password has been changed',
-                      'success'
-                    );
-                  }
-                  else {
-                    sp.error.handleError('There was an error');
-                  }
-                },
-                error: function (err) {
-                  console.log(err);
-                  sp.error.handleError('There was an error, your password was not changed');
-                }
-                 
-              });
-          }
-         
+          
+          if ($('#sp-new-password').val() === '') {
+            sp.error.handleError('Your password field cannot be blank');
           }
           else {
-            sp.error.handleError('Retype your old password');
+            
+            if (sp.config.salesman.password === oldPwd) {
+              if (newPwd !== retypePwd){
+                sp.error.handleError('Your passwords do not match');
+              }
+              else {
+                var data = {
+                    action: 'changeSalesmanPassword',
+                    email: sp.config.salesman.email,
+                    oldpassword: oldPwd,
+                    newpassword: newPwd
+                };
+                
+                $.ajax({
+                  url: 'ManagementServlet',
+                  type: 'post',
+                  contentType : 'application/json; charset=utf-8',
+                  dataType: 'json',
+                  data: JSON.stringify(data),
+                  success: function (res) {
+                    if (res) {
+                      swal(
+                        'Success',
+                        'Your password has been changed',
+                        'success'
+                      );
+                      // Close modal after pwd change
+                      $('.sr-only').click();
+                    }
+                    else {
+                      sp.error.handleError('There was an error');
+                    }
+                  },
+                  error: function (err) {
+                    console.log(err);
+                    sp.error.handleError('There was an error, your password was not changed');
+                  }
+                   
+                });
+            }
+           
+            }
+            else {
+              sp.error.handleError('Retype your old password');
+            }
+            
           }
+          
+          
           
         });
       
