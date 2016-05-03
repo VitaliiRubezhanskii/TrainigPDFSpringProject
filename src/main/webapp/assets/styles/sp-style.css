@@ -271,11 +271,11 @@ sp-mail-choice{
 }
 
 .sp-analytics-container__div{
-  height: 300px;
+  max-height: 300px;
 }
 
 #sp-sales-analytics-scroll{
-  height: 300px;
+  max-height: 300px;
 }
 
 .sp-data-widget{
@@ -284,4 +284,12 @@ sp-mail-choice{
 
 .sp-widget-text{
   font-size: 23px !important; 
+}
+
+.sp-download-contacts-help{
+  margin-top: 10px;
+}
+
+.sp-create-csv-help{
+  margin-top: 10px;
 }
