@@ -1445,14 +1445,14 @@ chart: {
       $('.sp-copy-all').on('click', function () {
         var links = [];
         $(this).closest('tr').find('div[data-link]').each(function (i, v){
-          links.push($(this).text() + '%0D%0A');
+          links.push($(this).text() + '\r\n');
           });
         
         new Clipboard('.sp-copy-all', {
           text: function(target) {
             target = '';
             $.each(links, function (i, v){
-              target += decodeURIComponent(v);       
+              target += v;       
             });
             return target;
      
@@ -1485,7 +1485,7 @@ chart: {
         var mailBody = '';
         $.each(fileNames, function (i, v) {
             
-            mailBody += v + ' - ' + links[i] + '%0D%0A';
+            mailBody += v + ' - ' + links[i] + '\r\n';
            });
         
         //This dynamically creates the email subject with the salesman email and their company.
@@ -1494,8 +1494,8 @@ chart: {
         
         window.open(
           'mailto:' + emailRecipient
-        + '?subject=' + mailSubject 
-        + '&body=' + 'Please follow these links to view the PDFs: ' + '%0D%0A' + mailBody
+        + '?subject=' + encodeURIComponent(mailSubject) 
+        + '&body=' + encodeURIComponent('Please follow these links to view the PDFs: ' + '\r\n' + mailBody)
         );
         
       });
