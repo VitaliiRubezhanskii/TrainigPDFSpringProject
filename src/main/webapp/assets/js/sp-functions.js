@@ -385,7 +385,7 @@ sp = {
           + '</tr>'
         );
       });
-      $('.tab-content').perfectScrollbar();
+      //$('.tab-content').perfectScrollbar();
       $('#sp-files-management tbody').tooltip({
         selector: "[data-toggle=tooltip]"
       });      
@@ -526,7 +526,7 @@ sp = {
           + '</tr>'
         );
       });
-      $('.tab-content').perfectScrollbar();
+      //$('.tab-content').perfectScrollbar();
       
       
     },

@@ -140,17 +140,17 @@ td.sp-file-hash {
   overflow-y: scroll;
 }
 
-::-webkit-scrollbar {
+#sp-sales-analytics-scroll::-webkit-scrollbar {
     -webkit-appearance: none;
     width: 7px;
     height: 0;
     border-radius: 3px;
-    background-color: rgb(48, 60, 91);
+    background-color: white;
 }
-::-webkit-scrollbar-thumb {
-    height: 5px;
+#sp-sales-analytics-scroll::-webkit-scrollbar-thumb {
+    height: 20px;
     border-radius: 3px;
-    background-color: rgb(38, 47, 71);
+    background-color: green;
     -webkit-box-shadow: 0 0 1px rgba(255,255,255,.5);
 } 
 
@@ -158,13 +158,31 @@ td.sp-file-hash {
   height: 99px;
 }
 
-/* #sp-sales-analytics__ul{
-  overflow-y: scroll;
-} */
-
 .sp-widget-text {
   font-size: 23px !important; 
 }
+
+.tab-content {
+  overflow-y: scroll;
+}
+
+.tab-content:hover {
+  overflow-y: scroll;
+}
+
+.tab-content::-webkit-scrollbar {
+    -webkit-appearance: none;
+    width: 7px;
+    height: 0;
+    border-radius: 3px;
+    background-color: white;
+}
+.tab-content::-webkit-scrollbar-thumb {
+    height: 150px;
+    border-radius: 3px;
+    background-color: grey;
+    -webkit-box-shadow: 0 0 1px rgba(255,255,255,.5);
+} 
 
 /* Send Email Wizard */
 
