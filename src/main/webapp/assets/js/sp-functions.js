@@ -1273,7 +1273,7 @@ chart: {
        * $('.content') is the selector on the section object within the wizard
        * @see the same in sp.customerFileLinks.formatFile() 
        */
-      $('.content').perfectScrollbar();
+      //$('.content').perfectScrollbar();
     },
     
     /**
@@ -1301,7 +1301,7 @@ chart: {
                 + '</tr>'
         );        
       });
-      $('.content').perfectScrollbar();
+      //$('.content').perfectScrollbar();
       sp.customerFileLinksGenerator.toggleBtnAttr();
     },
     
