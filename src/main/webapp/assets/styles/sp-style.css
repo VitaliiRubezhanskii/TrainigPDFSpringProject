@@ -56,6 +56,10 @@
 
 /* Dashboard settings */
 
+button[data-target="#sp-modal-add-update-customer"] {
+  margin-left: 10px;
+}
+
 form[role="search"], .text-muted, .arrow {
   visibility: hidden;
 }
@@ -102,6 +106,10 @@ td.sp-file-hash {
   display: none;
 }
 
+.sp-analytics-container__div {
+  max-height: 300px;
+}
+
 #sp-file-upload {
   display: none;
 }
@@ -114,27 +122,45 @@ td.sp-file-hash {
   text-align: center;
 }
 
-button[data-target="#sp-modal-add-update-customer"] {
-  margin-left: 10px;
-}
-
 #sp-download-template__button {
   color: initial;
   font-family: sans-serif;
   margin-right: 40px;
 }
 
-.sp-analytics-container__div {
-  max-height: 300px;
-}
-
 #sp-sales-analytics-scroll {
   max-height: 300px;
 }
 
+#sp-sales-analytics-scroll {
+  overflow-y: hidden;
+}
+
+#sp-sales-analytics-scroll:hover {
+  overflow-y: scroll;
+}
+
+::-webkit-scrollbar {
+    -webkit-appearance: none;
+    width: 7px;
+    height: 0;
+    border-radius: 3px;
+    background-color: rgb(48, 60, 91);
+}
+::-webkit-scrollbar-thumb {
+    height: 5px;
+    border-radius: 3px;
+    background-color: rgb(38, 47, 71);
+    -webkit-box-shadow: 0 0 1px rgba(255,255,255,.5);
+} 
+
 .sp-data-widget {
   height: 99px;
 }
+
+/* #sp-sales-analytics__ul{
+  overflow-y: scroll;
+} */
 
 .sp-widget-text {
   font-size: 23px !important; 

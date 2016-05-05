@@ -46,7 +46,7 @@ sp = {
                       
                   );
               
-              $('.sp-analytics-container__div').perfectScrollbar();
+//              $('.sp-analytics-container__div').perfectScrollbar();
               
               var files = [];
               for (var i = 0; i < filesData.length; i++) {
@@ -1694,10 +1694,14 @@ chart: {
                   });
                 });
                 
+                /**
+                 * CSS overflow styling
+                 */
                 var scrollCont = $('<div></div>', {id: 'sp-sales-analytics-scroll'});
+                //scrollCont.css('overflow-y', 'scroll');
                 $('#sp-nav-sales-analytics__li').append(scrollCont);
                 scrollCont.append($('#sp-sales-analytics__ul'));
-                scrollCont.perfectScrollbar({suppressScrollX: true, maxScrollbarLength: '70', minScrollbarLength: '70'});
+                //scrollCont.perfectScrollbar({suppressScrollX: true, maxScrollbarLength: '70', minScrollbarLength: '70'});
                 
                 // A workaround for metisMenu dysfunctionality.
                 $('#sp-nav-sales-analytics__li ul li:has(a[data-file-hash="' + customersFilesList[0][2]
