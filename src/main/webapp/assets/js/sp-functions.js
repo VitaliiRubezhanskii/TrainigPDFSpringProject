@@ -46,8 +46,6 @@ sp = {
                       
                   );
               
-              $('.sp-analytics-container__div').perfectScrollbar();
-              
               var files = [];
               for (var i = 0; i < filesData.length; i++) {
                 $('#sp-nav-files__li ul').append('<li><a href="#" data-file-hash="'
@@ -273,7 +271,7 @@ sp = {
             switch(topSection) {
               case 'sp-file-upload':
                 var requestOrigin = 'fileUploadDashboard';
-                $('.sp-analytics-container__div').css('height', 'auto');
+//                $('.sp-analytics-container__div').css('height', 'auto');
                 sp.file.getFilesList(requestOrigin);
                 sp.file.getCustomersList(requestOrigin);
                 break;
@@ -281,13 +279,14 @@ sp = {
               case 'sp-file-dashboard':
                 sp.table.filesData = undefined;
                 setFileDashboard();
-                $('#sp-sales-analytics-scroll').css('height', 'auto');
+//                $('.sp-analytics-container__div').css('max-height', '300px');
+//                $('#sp-sales-analytics-scroll').css('height', 'auto');
                 break;
                 
               case 'sp-sales-analytics-view':
                 sp.view.salesAnalytics.setNavBar();
                 $('#sp-file-dashboard').show();
-                $('.sp-analytics-container__div').css('height', 'auto');
+//                $('.sp-analytics-container__div').css('height', 'auto');
                 break;
                 
               /**
@@ -301,7 +300,7 @@ sp = {
                 // This class is removed because the send-email wizard appears at the botton of
                 // marketing analytics when the page loads
                 $('.sp-email-container-hidden').removeClass('sp-email-container-hidden'); 
-                $('.sp-analytics-container__div').css('height', 'auto');
+//                $('.sp-analytics-container__div').css('height', 'auto');
                 $('a[href="#finish"]').remove();
                 $('a[href="#cancel"]').remove();
                 $('#document-wizard-t-0').click();
@@ -346,7 +345,6 @@ sp = {
             
             sp.file.fileCallback(data, requestOrigin);
             
-            
           });
     },
     
@@ -385,7 +383,6 @@ sp = {
           + '</tr>'
         );
       });
-      $('.tab-content').perfectScrollbar();
       $('#sp-files-management tbody').tooltip({
         selector: "[data-toggle=tooltip]"
       });      
@@ -526,7 +523,7 @@ sp = {
           + '</tr>'
         );
       });
-      $('.tab-content').perfectScrollbar();
+      $('.tab-content').css('overflow-y', 'scroll');
       
       
     },
@@ -1273,11 +1270,11 @@ chart: {
        * $('.content') is the selector on the section object within the wizard
        * @see the same in sp.customerFileLinks.formatFile() 
        */
-      $('.content').perfectScrollbar();
+      $('.content').css('overflow-y', 'scroll');
     },
     
     /**
-     * This function ensure the wizard is always at the top, the perfect scrollbar often
+     * This function ensure the wizard is always at the top, the scrollbar often
      * makes this not possible
      */
     scrollTop: $(function () {
@@ -1301,7 +1298,6 @@ chart: {
                 + '</tr>'
         );        
       });
-      $('.content').perfectScrollbar();
       sp.customerFileLinksGenerator.toggleBtnAttr();
     },
     
@@ -1444,7 +1440,7 @@ chart: {
       sp.customerFileLinksGenerator.sendAll();
       sp.customerFileLinksGenerator.copyAll();
     },
-    
+
     copyAll: function () {
       /**
        * This function allows the user to copy all documents being
@@ -1680,8 +1676,6 @@ chart: {
                         + '<ul id="sp-sales-analytics__ul" class="nav nav-second-level">'
                     );
                 
-                //$('#sp-sales-analytics-scroll').perfectScrollbar();
-                
                 $.each(customers, function(i, v) {
                   $('#sp-nav-sales-analytics__li > ul')
                       .append('<li><a href="#" data-customer-email="' + i + '">' + v.customerName + '</a></li>')
@@ -1694,10 +1688,12 @@ chart: {
                   });
                 });
                 
+                /**
+                 * CSS overflow styling
+                 */
                 var scrollCont = $('<div></div>', {id: 'sp-sales-analytics-scroll'});
                 $('#sp-nav-sales-analytics__li').append(scrollCont);
                 scrollCont.append($('#sp-sales-analytics__ul'));
-                scrollCont.perfectScrollbar({suppressScrollX: true, maxScrollbarLength: '70', minScrollbarLength: '70'});
                 
                 // A workaround for metisMenu dysfunctionality.
                 $('#sp-nav-sales-analytics__li ul li:has(a[data-file-hash="' + customersFilesList[0][2]

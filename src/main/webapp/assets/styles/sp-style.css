@@ -56,6 +56,10 @@
 
 /* Dashboard settings */
 
+button[data-target="#sp-modal-add-update-customer"] {
+  margin-left: 10px;
+}
+
 form[role="search"], .text-muted, .arrow {
   visibility: hidden;
 }
@@ -114,23 +118,12 @@ td.sp-file-hash {
   text-align: center;
 }
 
-button[data-target="#sp-modal-add-update-customer"] {
-  margin-left: 10px;
-}
-
 #sp-download-template__button {
   color: initial;
   font-family: sans-serif;
   margin-right: 40px;
 }
 
-.sp-analytics-container__div {
-  max-height: 300px;
-}
-
-#sp-sales-analytics-scroll {
-  max-height: 300px;
-}
 
 .sp-data-widget {
   height: 99px;
@@ -138,6 +131,86 @@ button[data-target="#sp-modal-add-update-customer"] {
 
 .sp-widget-text {
   font-size: 23px !important; 
+}
+
+/* Scrollbar */
+
+/* Chrome and Safari */
+
+.sp-analytics-container__div {
+  max-height: 300px;
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
+
+.sp-analytics-container__div::-webkit-scrollbar{
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  background-color: rgb(47, 64, 80);
+  border-radius: 3px;
+  min-height: 0;
+  width: 7px;
+}
+
+.sp-analytics-container__div::-webkit-scrollbar-thumb {
+  background-color: rgba(241,241,241,.6);
+  border-radius: 3px;
+  -webkit-box-shadow: 0 0 1px rgb(167, 177 194);
+}
+
+.content::-webkit-scrollbar {
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  background-color: #fff;
+  border-radius: 3px;
+  height: 0;
+  width: 7px;
+}
+.content::-webkit-scrollbar-thumb {
+  background-color: #808080;
+  border-radius: 3px;
+  -webkit-box-shadow: 0 0 1px rgba(255,255,255,.5);
+} 
+
+.tab-content::-webkit-scrollbar {
+  -webkit-appearance: none;
+  background-color: #fff;
+  border-radius: 3px;
+  height: 0;
+  width: 7px;
+}
+.tab-content::-webkit-scrollbar-thumb {
+  -webkit-box-shadow: 0 0 1px rgba(255,255,255,.5);
+  background-color: #808080;
+  border-radius: 3px;
+}
+
+#sp-sales-analytics-scroll {
+  max-height: 300px;
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
+
+#sp-sales-analytics-scroll::-webkit-scrollbar {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-color: rgb(47, 64, 80);
+  border-radius: 3px;
+  height: 0;
+  width: 7px;
+}
+
+#sp-sales-analytics-scroll::-webkit-scrollbar-thumb {
+  -webkit-box-shadow: 0 0 1px rgb(167, 177 194);
+  background-color:rgba(241,241,241,.6);
+  border-radius: 3px;
+  position: relative;
+  z-index: 2;
+} 
+
+.tab-content::-webkit-scrollbar-thumb, #sp-sales-analytics-scroll::-webkit-scrollbar-thumb, .sp-analytics-container__div::-webkit-scrollbar-thumb,
+.content::-webkit-scrollbar-thumb {
+  min-height: 100px;
 }
 
 /* Send Email Wizard */
@@ -156,8 +229,8 @@ button[data-target="#sp-modal-add-update-customer"] {
 }
 
 .content {
-  background-color: white !important;	
-  height: 270px !important; 	
+  background-color: #fff !important;
+  height: 270px !important;
 }
 
 .sp-hidden {
