@@ -1031,10 +1031,14 @@ chart: {
         
         if (typeof sp.chart.visitorsMap == 'undefined') {
           sp.chart.visitorsMap = new google.visualization.GeoChart(document.getElementById('sp-google-geochart'));
-          
         }
+        
         sp.chart.visitorsMap.draw(mapData, options);
         
+        $(window).on('resize', function() {
+          sp.chart.visitorsMap = new google.visualization.GeoChart(document.getElementById('sp-google-geochart'));
+          sp.chart.visitorsMap.draw(mapData, options);
+        });
       });
     }
   },
