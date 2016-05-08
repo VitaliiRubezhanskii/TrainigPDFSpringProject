@@ -106,10 +106,6 @@ td.sp-file-hash {
   display: none;
 }
 
-.sp-analytics-container__div {
-  max-height: 300px;
-}
-
 #sp-file-upload {
   display: none;
 }
@@ -128,9 +124,6 @@ td.sp-file-hash {
   margin-right: 40px;
 }
 
-#sp-sales-analytics-scroll {
-  max-height: 300px;
-}
 
 .sp-data-widget {
   height: 99px;
@@ -141,30 +134,21 @@ td.sp-file-hash {
 }
 
 /* SCROLLBAR */
-/* IE and Edge */
-
-scrollbar-base-color: grey;
-
-scrollbar-base-color: grey;
-
-scrollbar-3dlight-color: grey;
-
-scrollbar-highlight-color: grey;
-
-scrollbar-track-color: grey;
-
-scrollbar-arrow-color: grey;
-
-scrollbar-shadow-color: grey;
-
-scrollbar-dark-shadow-color: grey;
 
 /* Chrome and Safari */
 
-
 .sp-analytics-container__div {
-  overflow-y: scroll;
+  max-height: 300px;
   overflow-x: hidden;
+  overflow-y: scroll;
+  scrollbar-base-color: grey;
+  scrollbar-base-color: grey;
+  scrollbar-3dlight-color: grey;
+  scrollbar-highlight-color: grey;
+  scrollbar-track-color: grey;
+  scrollbar-arrow-color: grey;
+  scrollbar-shadow-color: grey;
+  scrollbar-dark-shadow-color: grey;
 }
 
 .sp-analytics-container__div::-webkit-scrollbar{
@@ -175,6 +159,7 @@ scrollbar-dark-shadow-color: grey;
     -webkit-appearance: none;
     width: 7px;
 }
+
 .sp-analytics-container__div::-webkit-scrollbar-thumb {
     background-color: rgba(241,241,241,.6);
     border-radius: 3px;
@@ -182,7 +167,14 @@ scrollbar-dark-shadow-color: grey;
 }
 
 .content {
-  
+  scrollbar-base-color: grey;
+  scrollbar-base-color: grey;
+  scrollbar-3dlight-color: grey;
+  scrollbar-highlight-color: grey;
+  scrollbar-track-color: grey;
+  scrollbar-arrow-color: grey;
+  scrollbar-shadow-color: grey;
+  scrollbar-dark-shadow-color: grey;
 }
 
 .content::-webkit-scrollbar {
@@ -200,7 +192,14 @@ scrollbar-dark-shadow-color: grey;
 } 
 
 .tab-content {
-  
+  scrollbar-base-color: grey;
+  scrollbar-base-color: grey;
+  scrollbar-3dlight-color: grey;
+  scrollbar-highlight-color: grey;
+  scrollbar-track-color: grey;
+  scrollbar-arrow-color: grey;
+  scrollbar-shadow-color: grey;
+  scrollbar-dark-shadow-color: grey;
 }
 
 .tab-content::-webkit-scrollbar {
@@ -216,14 +215,18 @@ scrollbar-dark-shadow-color: grey;
     -webkit-box-shadow: 0 0 1px rgba(255,255,255,.5);
 }
 
-.tab-content::-webkit-scrollbar-thumb, #sp-sales-analytics-scroll::-webkit-scrollbar-thumb, .sp-analytics-container__div::-webkit-scrollbar-thumb
-,.content::-webkit-scrollbar-thumb {
-  min-height: 100px;
-}
-
 #sp-sales-analytics-scroll {
+  max-height: 300px;
   overflow-x: hidden;
   overflow-y: scroll;
+  scrollbar-base-color: grey;
+  scrollbar-base-color: grey;
+  scrollbar-3dlight-color: grey;
+  scrollbar-highlight-color: grey;
+  scrollbar-track-color: grey;
+  scrollbar-arrow-color: grey;
+  scrollbar-shadow-color: grey;
+  scrollbar-dark-shadow-color: grey;
 }
 
 #sp-sales-analytics-scroll::-webkit-scrollbar {
@@ -242,6 +245,10 @@ scrollbar-dark-shadow-color: grey;
     -webkit-box-shadow: 0 0 1px rgb(167, 177 194);
 } 
 
+.tab-content::-webkit-scrollbar-thumb, #sp-sales-analytics-scroll::-webkit-scrollbar-thumb, .sp-analytics-container__div::-webkit-scrollbar-thumb,
+.content::-webkit-scrollbar-thumb {
+  min-height: 100px;
+}
 
 /* Send Email Wizard */
 

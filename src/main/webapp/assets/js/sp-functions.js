@@ -271,7 +271,7 @@ sp = {
             switch(topSection) {
               case 'sp-file-upload':
                 var requestOrigin = 'fileUploadDashboard';
-                $('.sp-analytics-container__div').css('height', 'auto');
+//                $('.sp-analytics-container__div').css('height', 'auto');
                 sp.file.getFilesList(requestOrigin);
                 sp.file.getCustomersList(requestOrigin);
                 break;
@@ -279,13 +279,14 @@ sp = {
               case 'sp-file-dashboard':
                 sp.table.filesData = undefined;
                 setFileDashboard();
-                $('#sp-sales-analytics-scroll').css('height', 'auto');
+//                $('.sp-analytics-container__div').css('max-height', '300px');
+//                $('#sp-sales-analytics-scroll').css('height', 'auto');
                 break;
                 
               case 'sp-sales-analytics-view':
                 sp.view.salesAnalytics.setNavBar();
                 $('#sp-file-dashboard').show();
-                $('.sp-analytics-container__div').css('height', 'auto');
+//                $('.sp-analytics-container__div').css('height', 'auto');
                 break;
                 
               /**
@@ -299,7 +300,7 @@ sp = {
                 // This class is removed because the send-email wizard appears at the botton of
                 // marketing analytics when the page loads
                 $('.sp-email-container-hidden').removeClass('sp-email-container-hidden'); 
-                $('.sp-analytics-container__div').css('height', 'auto');
+//                $('.sp-analytics-container__div').css('height', 'auto');
                 $('a[href="#finish"]').remove();
                 $('a[href="#cancel"]').remove();
                 $('#document-wizard-t-0').click();
