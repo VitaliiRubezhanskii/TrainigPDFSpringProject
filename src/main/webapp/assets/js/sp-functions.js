@@ -46,8 +46,6 @@ sp = {
                       
                   );
               
-//              $('.sp-analytics-container__div').perfectScrollbar();
-              
               var files = [];
               for (var i = 0; i < filesData.length; i++) {
                 $('#sp-nav-files__li ul').append('<li><a href="#" data-file-hash="'
@@ -346,7 +344,6 @@ sp = {
             
             sp.file.fileCallback(data, requestOrigin);
             
-            
           });
     },
     
@@ -385,7 +382,6 @@ sp = {
           + '</tr>'
         );
       });
-      //$('.tab-content').perfectScrollbar();
       $('#sp-files-management tbody').tooltip({
         selector: "[data-toggle=tooltip]"
       });      
@@ -526,7 +522,7 @@ sp = {
           + '</tr>'
         );
       });
-      //$('.tab-content').perfectScrollbar();
+      $('.tab-content').css('overflow-y', 'scroll');
       
       
     },
@@ -1273,11 +1269,11 @@ chart: {
        * $('.content') is the selector on the section object within the wizard
        * @see the same in sp.customerFileLinks.formatFile() 
        */
-      //$('.content').perfectScrollbar();
+      $('.content').css('overflow-y', 'scroll');
     },
     
     /**
-     * This function ensure the wizard is always at the top, the perfect scrollbar often
+     * This function ensure the wizard is always at the top, the scrollbar often
      * makes this not possible
      */
     scrollTop: $(function () {
@@ -1301,7 +1297,6 @@ chart: {
                 + '</tr>'
         );        
       });
-      //$('.content').perfectScrollbar();
       sp.customerFileLinksGenerator.toggleBtnAttr();
     },
     
@@ -1444,7 +1439,7 @@ chart: {
       sp.customerFileLinksGenerator.sendAll();
       sp.customerFileLinksGenerator.copyAll();
     },
-    
+
     copyAll: function () {
       /**
        * This function allows the user to copy all documents being
@@ -1680,8 +1675,6 @@ chart: {
                         + '<ul id="sp-sales-analytics__ul" class="nav nav-second-level">'
                     );
                 
-                //$('#sp-sales-analytics-scroll').perfectScrollbar();
-                
                 $.each(customers, function(i, v) {
                   $('#sp-nav-sales-analytics__li > ul')
                       .append('<li><a href="#" data-customer-email="' + i + '">' + v.customerName + '</a></li>')
@@ -1698,10 +1691,8 @@ chart: {
                  * CSS overflow styling
                  */
                 var scrollCont = $('<div></div>', {id: 'sp-sales-analytics-scroll'});
-                //scrollCont.css('overflow-y', 'scroll');
                 $('#sp-nav-sales-analytics__li').append(scrollCont);
                 scrollCont.append($('#sp-sales-analytics__ul'));
-                //scrollCont.perfectScrollbar({suppressScrollX: true, maxScrollbarLength: '70', minScrollbarLength: '70'});
                 
                 // A workaround for metisMenu dysfunctionality.
                 $('#sp-nav-sales-analytics__li ul li:has(a[data-file-hash="' + customersFilesList[0][2]
