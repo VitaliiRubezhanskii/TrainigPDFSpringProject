@@ -1017,8 +1017,7 @@ chart: {
 
         var options = {
           colorAxis: {
-            colors: ['#dcdcdc', '#1ab394'],
-            minValue: 0
+            colors: ['#538b80', '#60D5BE']
           },
           datalessRegionColor: '#dcdcdc',
           displayMode: 'markers',
