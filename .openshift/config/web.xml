@@ -415,6 +415,20 @@
     </filter>
 -->
 
+<filter>
+    <filter-name>ExpiresFilter</filter-name>
+    <filter-class>org.apache.catalina.filters.ExpiresFilter</filter-class>
+    <init-param>
+        <param-name>ExpiresDefault</param-name>
+        <param-value>M0</param-value>
+    </init-param>
+</filter>
+ 
+<filter-mapping>
+    <filter-name>ExpiresFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+    <dispatcher>REQUEST</dispatcher>
+</filter-mapping>
 
   <!-- NOTE: An SSI Servlet is also available as an alternative SSI         -->
   <!-- implementation. Use either the Servlet or the Filter but NOT both.   -->
