@@ -213,6 +213,123 @@ td.sp-file-hash {
   min-height: 100px;
 }
 
+/* SCROLLBAR */
+
+/* Chrome and Safari */
+
+.sp-analytics-container__div {
+  max-height: 300px;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  scrollbar-base-color: grey;
+  scrollbar-base-color: grey;
+  scrollbar-3dlight-color: grey;
+  scrollbar-highlight-color: grey;
+  scrollbar-track-color: grey;
+  scrollbar-arrow-color: grey;
+  scrollbar-shadow-color: grey;
+  scrollbar-dark-shadow-color: grey;
+}
+
+.sp-analytics-container__div::-webkit-scrollbar{
+    -moz-appearance: none;
+    background-color: rgb(47, 64, 80);
+    border-radius: 3px;
+    min-height: 0;
+    -webkit-appearance: none;
+    width: 7px;
+}
+
+.sp-analytics-container__div::-webkit-scrollbar-thumb {
+    background-color: rgba(241,241,241,.6);
+    border-radius: 3px;
+    -webkit-box-shadow: 0 0 1px rgb(167, 177 194);
+}
+
+.content {
+  scrollbar-base-color: grey;
+  scrollbar-base-color: grey;
+  scrollbar-3dlight-color: grey;
+  scrollbar-highlight-color: grey;
+  scrollbar-track-color: grey;
+  scrollbar-arrow-color: grey;
+  scrollbar-shadow-color: grey;
+  scrollbar-dark-shadow-color: grey;
+}
+
+.content::-webkit-scrollbar {
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    width: 7px;
+    height: 0;
+    border-radius: 3px;
+    background-color: white;
+}
+.content::-webkit-scrollbar-thumb {
+    border-radius: 3px;
+    background-color: grey;
+    -webkit-box-shadow: 0 0 1px rgba(255,255,255,.5);
+} 
+
+.tab-content {
+  scrollbar-base-color: grey;
+  scrollbar-base-color: grey;
+  scrollbar-3dlight-color: grey;
+  scrollbar-highlight-color: grey;
+  scrollbar-track-color: grey;
+  scrollbar-arrow-color: grey;
+  scrollbar-shadow-color: grey;
+  scrollbar-dark-shadow-color: grey;
+}
+
+.tab-content::-webkit-scrollbar {
+    -webkit-appearance: none;
+    width: 7px;
+    height: 0;
+    border-radius: 3px;
+    background-color: white;
+}
+.tab-content::-webkit-scrollbar-thumb {
+    border-radius: 3px;
+    background-color: grey;
+    -webkit-box-shadow: 0 0 1px rgba(255,255,255,.5);
+}
+
+#sp-sales-analytics-scroll {
+  max-height: 300px;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  scrollbar-base-color: grey;
+  scrollbar-base-color: grey;
+  scrollbar-3dlight-color: grey;
+  scrollbar-highlight-color: grey;
+  scrollbar-track-color: grey;
+  scrollbar-arrow-color: grey;
+  scrollbar-shadow-color: grey;
+  scrollbar-dark-shadow-color: grey;
+}
+
+#sp-sales-analytics-scroll::-webkit-scrollbar {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    width: 7px;
+    height: 0;
+    border-radius: 3px;
+    background-color: rgb(47, 64, 80);
+}
+#sp-sales-analytics-scroll::-webkit-scrollbar-thumb {
+    position: relative;
+    z-index: 2;
+    border-radius: 3px;
+    background-color:rgba(241,241,241,.6);
+    -webkit-box-shadow: 0 0 1px rgb(167, 177 194);
+} 
+
+.tab-content::-webkit-scrollbar-thumb, #sp-sales-analytics-scroll::-webkit-scrollbar-thumb, .sp-analytics-container__div::-webkit-scrollbar-thumb,
+.content::-webkit-scrollbar-thumb {
+  min-height: 100px;
+}
+
 /* Send Email Wizard */
 
 .sp-clickable {
