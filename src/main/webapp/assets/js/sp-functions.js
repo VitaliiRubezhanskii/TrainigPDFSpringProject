@@ -46,8 +46,6 @@ sp = {
                       
                   );
               
-              $('.sp-analytics-container__div').perfectScrollbar();
-              
               var files = [];
               for (var i = 0; i < filesData.length; i++) {
                 $('#sp-nav-files__li ul').append('<li><a href="#" data-file-hash="'
@@ -169,11 +167,11 @@ sp = {
           },
           function(isConfirm){
             if (isConfirm) {
-              swal("Deleted!", "Your file has been deleted.", "success");
               sp.file.deleteFile(sp.file.fileHash);
+              swal("Deleted!", "Your file has been deleted.", "success");
+              
               } 
-           
-          });
+            });
           });
           
           /* Customers mgmt. */
@@ -234,7 +232,7 @@ sp = {
           
           // Delete a customer.
           $(document).on('click', '.sp-customer-delete', function() {
-            var nameToDelete = $(this).attr('data-customer-email');
+            var customerToDelete = $(this).attr('data-customer-email');
             swal({
               title: "Are you sure you want to delete this contact?",             
               type: "warning",
@@ -246,14 +244,11 @@ sp = {
           },
           function(isConfirm){  
             if (isConfirm) {
-              swal("Deleted!", nameToDelete + " has been deleted.", "success");
-              sp.file.deleteCustomer(nameToDelete);
+              sp.file.deleteCustomer(customerToDelete);
+              swal("Deleted!", customerToDelete + " has been deleted.", "success");
+              
               } 
-           
-            
             });
-            
-         
           });
           
           
@@ -261,6 +256,10 @@ sp = {
           
           /**
            * The function controls the display of the current dashboard view. 
+           * topSection refers to the ID of the container in dashboard.html
+           * When the routingEmulator is called, all sections are hidden,
+           * then, the selected topSection is shown
+           * 
            */
           function routingEmulator(topSection) {
             $('.sp-dashboard, .sp-nav-section ul').hide();
@@ -272,7 +271,7 @@ sp = {
             switch(topSection) {
               case 'sp-file-upload':
                 var requestOrigin = 'fileUploadDashboard';
-                $('.sp-analytics-container__div').css('height', 'auto');
+//                $('.sp-analytics-container__div').css('height', 'auto');
                 sp.file.getFilesList(requestOrigin);
                 sp.file.getCustomersList(requestOrigin);
                 break;
@@ -280,13 +279,14 @@ sp = {
               case 'sp-file-dashboard':
                 sp.table.filesData = undefined;
                 setFileDashboard();
-                $('#sp-sales-analytics-scroll').css('height', 'auto');
+//                $('.sp-analytics-container__div').css('max-height', '300px');
+//                $('#sp-sales-analytics-scroll').css('height', 'auto');
                 break;
                 
               case 'sp-sales-analytics-view':
                 sp.view.salesAnalytics.setNavBar();
                 $('#sp-file-dashboard').show();
-                $('.sp-analytics-container__div').css('height', 'auto');
+//                $('.sp-analytics-container__div').css('height', 'auto');
                 break;
                 
               /**
@@ -297,8 +297,10 @@ sp = {
               case 'sp-send-email':
                 requestOrigin = 'customerFileLinksGenerator';
                 $('#sp-nav-files__li ul').hide();
-                $('.sp-hidden').removeClass('sp-hidden'); 
-                $('.sp-analytics-container__div').css('height', 'auto');
+                // This class is removed because the send-email wizard appears at the botton of
+                // marketing analytics when the page loads
+                $('.sp-email-container-hidden').removeClass('sp-email-container-hidden'); 
+//                $('.sp-analytics-container__div').css('height', 'auto');
                 $('a[href="#finish"]').remove();
                 $('a[href="#cancel"]').remove();
                 $('#document-wizard-t-0').click();
@@ -334,22 +336,28 @@ sp = {
           'ManagementServlet',
           {action: 'getFilesList', salesmanEmail: sp.config.salesman.email},
           function(data) {
-                   
-            //Request Origin is a handler to decide where to send the data from the getFilesList function
-            //There are two choices - either to send the file data to the fileupload dashboard (Files & Customers),
-            //or to send it to the customerFileLinkGenerator which allows the user to choose customers and documents
-            //to send out.
+            /**
+             * Request Origin is a handler to decide where to send the data from the getFilesList function
+             * There are two choices - either to send the file data to the fileupload dashboard (Files & Customers),
+             * or to send it to the customerFileLinkGenerator which allows the user to choose customers and documents
+             * to send out.
+             */       
             
             sp.file.fileCallback(data, requestOrigin);
-            
             
           });
     },
     
     fileCallback: function (data, requestOrigin) {
       // do something with data    
+      /**
+       * @params {data - obj} This is the data received from the server
+       * @params {requestOrigin - String} The request origin routes the the sending of the data either for the 
+       *          file upload, or to the send document wizard
+       */
+      
       if (requestOrigin === 'fileUploadDashboard'){
-        sp.file.sortFilesForUpload(data);
+        sp.file.sortDocsInDocsMgmtPanel(data);
       }
       else if (requestOrigin === 'customerFileLinksGenerator') {
         sp.customerFileLinksGenerator.formatFile(data);
@@ -357,8 +365,13 @@ sp = {
       
       
     },
-    
-    sortFilesForUpload: function (data) {
+    /**
+     * @params {data - obj} This is the file data received from the server, which has
+     *          been passed through the callback function.
+     * The data will now be printed to 'Documents & Customers, Upload Documents' 
+     * 
+     */
+    sortDocsInDocsMgmtPanel: function (data) {
       $('#sp-files-management tbody').empty();
       
       $.each(data.filesList, function(index, row) {
@@ -370,7 +383,6 @@ sp = {
           + '</tr>'
         );
       });
-      $('.tab-content').perfectScrollbar();
       $('#sp-files-management tbody').tooltip({
         selector: "[data-toggle=tooltip]"
       });      
@@ -476,16 +488,17 @@ sp = {
           'ManagementServlet',
           {action: 'getCustomersList', salesmanEmail: sp.config.salesman.email},
           function(data) {              
-          //Request Origin is a handler to decide where to send the data from the getFilesList function
-            //There are two choices - either to send the file data to the fileupload dashboard (Files & Customers),
-            //or to send it to the customerFileLinkGenerator which allows the user to choose customers and documents
-            //to send out.           
+          /**
+           * @see comment on line 341
+           */         
             sp.file.customerCallback(data, requestOrigin);
           });
     },
     
     customerCallback: function (data, requestOrigin) {
-      
+      /**
+       * @see similar callback function above
+       */
       if (requestOrigin === 'fileUploadDashboard'){
         sp.file.sortForDocUpload(data);
       }
@@ -510,7 +523,7 @@ sp = {
           + '</tr>'
         );
       });
-      $('.tab-content').perfectScrollbar();
+      $('.tab-content').css('overflow-y', 'scroll');
       
       
     },
@@ -1207,36 +1220,45 @@ chart: {
    * This object handles the wizard where a user can choose customers 
    * and documents they'd like to send them 
   */
+  
   customerFileLinksGenerator : {
-    
-    //This function is the configuration for the wizard - jQuery Steps www.jquery-steps.com/
+    /**
+     * This function is the configuration for the wizard - @see jQuery Steps www.jquery-steps.com/
+     * Immediatley invoked i.e. when the page loads - this is because initialising the jQuery steps
+     * causes bugs that stop it from working
+     * @returns false or true, which highlights the current index of the wizard, allowing for errors to be
+     *          thrown if the user has not checked a box, and wants to move to the next part
+     */
     wizardConfig : (function() {
-      $("#document-wizard").steps({
-        headerTag : "h3",
-        bodyTag : "section",
-        transitionEffect : "slideLeft",
+      $('#document-wizard').steps({
+        headerTag : 'h3',
+        bodyTag : 'section',
+        transitionEffect : 'slideLeft',
         autoFocus : true,
         onStepChanging: function (event, currentIndex, newIndex){
           if (currentIndex > newIndex){
             return true;
           };
-          if (currentIndex === 0 && (!$('.sp-customer-table tbody input[type="checkbox"]').is(':checked'))){
+          if (0 === currentIndex && (!$('.sp-customer-table tbody input[type="checkbox"]').is(':checked'))){
             sp.error.handleError('You must select at least one customer to continue');
             return false;
           }
-          else if (currentIndex === 1 && (!$('.sp-doc-table tbody input[type="checkbox"]').is(':checked'))) {
+          else if (1 === currentIndex && (!$('.sp-doc-table tbody input[type="checkbox"]').is(':checked'))) {
             sp.error.handleError('You must select at least one document to continue');
             return false;
           }
           else {
             return true;
           };
-          
         },
       });
     })(),
     
-    // This function formats and prints customers to print wizard
+    /**
+     * This function formats and prints customers to the document sending wizard
+     * @params {data - object} This is the data on the customers recevied from the server
+     * This object contains both customer and file data @see sp.customerFileLinks.formatFile()
+     */
     formatCustomers : function(data) {
       $('.sp-customer-table td').remove();
       $.each(data['customersList'], function(i, v) {  
@@ -1248,20 +1270,28 @@ chart: {
                   + '</tr>'
           );
       });
-      $('.content').perfectScrollbar();
+      /**
+       * $('.content') is the selector on the section object within the wizard
+       * @see the same in sp.customerFileLinks.formatFile() 
+       */
+      $('.content').css('overflow-y', 'scroll');
     },
     
+    /**
+     * This function ensure the wizard is always at the top, the scrollbar often
+     * makes this not possible
+     */
     scrollTop: $(function () {
-      
       $('#document-wizard-t-0, #document-wizard-t-1, #document-wizard-t-2, a[href="next"], a[href="previous"]')
-              .on('click', function () {
-                $('.content').animate({scrollTop: 0}, 1, 'linear');
-               });
-      
-      
-    }),
+          .on('click', function () {
+            $('.content').animate({scrollTop: 0}, 1, 'linear');
+          });
+      }),
     
-  // This function formats and renders files to the wizard
+    /**
+     * This function formats and renders documents to the wizard
+     * @params {data-obj} - This is the files data received from the server
+     */
     formatFile: function (data){
       $('.sp-doc-table td').remove();
       $.each(data['filesList'], function (i, v) {
@@ -1272,9 +1302,7 @@ chart: {
                 + '</tr>'
         );        
       });
-      $('.content').perfectScrollbar();
       sp.customerFileLinksGenerator.toggleBtnAttr();
-       
     },
     
     toggleBtnAttr: function () {
@@ -1284,12 +1312,17 @@ chart: {
     },
     
     
-    
-    // Listener to save which boxes have been checked i.e. which documents the
-    // user wants to send, and to whom.
+    /**
+     *  Listener to save which boxes have been checked i.e. which documents the
+     *  user wants to send, and to whom.
+     *  $('#document-wizard-t-x') is a selector on the inspinia wizard object
+     *        @see http://webapplayers.com/inspinia_admin-v2.5/form_wizard.html#
+     *  $('a[href="next"]') is also an INSPINIA generated selector
+     */
+   
     checkboxListener: (function () {            
-      $('a#document-wizard-t-2').addClass('sp-enumerate-customers-files__button');
-      $('a#document-wizard-t-1').addClass('sp-enumerate-customers-files__button');
+      $('#document-wizard-t-2').addClass('sp-enumerate-customers-files__button');
+      $('#document-wizard-t-1').addClass('sp-enumerate-customers-files__button');
       $('#sp-send-docs__button').addClass('sp-enumerate-customers-files__button');
       $('.sp-enumerate-customers-files__button').on('click', function (e) { 
         
@@ -1317,14 +1350,15 @@ chart: {
               };
               files.push(fileObj);
             }); 
-          
           sp.customerFileLinksGenerator.sortDocsAndCustomersForServer(customerArr, fileArr, files);
         }      
       });   
     })(),
 
-    // Create obj to send.
-    // Each email address receives all the documents
+    /**
+     * Create obj to send.
+     * Each email address becomes attached to all the documents
+     */
     sortDocsAndCustomersForServer: function (customers, documents, files) {
       var dataToSend = [];
       $.each(customers, function (i, v) {
@@ -1333,10 +1367,8 @@ chart: {
             fileHashes: documents
         };
         dataToSend.push(obj);
-      
       });
       sp.customerFileLinksGenerator.sendDocsAndCustomersToServer(dataToSend, files);
-
     },
     
     sendDocsAndCustomersToServer: function (dataToSend, files) {
@@ -1358,7 +1390,6 @@ chart: {
           console.log(err);
         }
       });
-
     },
     
     // This function collects the choices the customer has made for the email addresses to which he will
@@ -1369,12 +1400,12 @@ chart: {
       $.each(data['customersFilelinks'], function (i, val) {
       // This creates the initial bootstrap layout.
         $('.sp-send-table tbody').append(
-          '<tr class="sp-mail-table__row" id="sp-t-row' + i + '">'
-        + '<div class="row">' 
-        + '<td class="col-sm-2 sp-customer">' + val['customerEmail'] +'</td>'
-        + '<td id="sp-doc-'+ i +'" class="col-sm-10 sp-document"></td>'
-        + '</div>'
-        + '</tr>'
+            '<tr class="sp-mail-table__row" id="sp-t-row' + i + '">'
+          + '<div class="row">' 
+          + '<td class="col-sm-2 sp-customer">' + val['customerEmail'] +'</td>'
+          + '<td id="sp-doc-'+ i +'" class="col-sm-10 sp-document"></td>'
+          + '</div>'
+          + '</tr>'
         );
         
         $.each(val['files'], function (index, v) {
@@ -1389,19 +1420,11 @@ chart: {
                           + '<i class="fa fa-copy"></i> Copy'
                       + '</button>'
                   + '</div>'
-//                  + '<div class="sp-mail-choice col-md-2">'
-//                      + '<button data-file-link="' + fileLink +'" data-mailto="' + val['customerEmail'] + '" class="btn btn-white  sp-send-options btn-xs sp-mailto sp-clickable ' + 'mail-' + v['fileHash'] +'">'
-//                          + '<i class="fa fa-envelope"></i>  Send Mail'
-//                      +'</button>'
-//                  + '</div>'
               + '</div>'
-           );            
-          
+           );        
           sp.customerFileLinksGenerator.findDocumentName(v['fileHash'], files);
-          
           new Clipboard('.sp-copy__btn');
         });
-        
       });
       // This creates the copy all and send all buttons.
       $('.sp-document').append(
@@ -1418,32 +1441,16 @@ chart: {
               + '</div>'
           + '</div>'          
       );
-      //sp.customerFileLinksGenerator.sendMailCallback();
       sp.customerFileLinksGenerator.sendAll();
       sp.customerFileLinksGenerator.copyAll();
-      
     },
-    
-    // This function sends an email with one document in it.
-//    sendMailCallback: function () {      
-//      var mailSubject = sp.config.salesman.name.split(" ")[0] + ' from ' + sp.config.salesman.company
-//      + ' has sent you a document'; 
-//      
-//      $('.sp-mailto').on('click', function () {       
-//        window.open(
-//            'mailto:' + $(this).attr('data-mailto')
-//          + '?subject=' + mailSubject
-//          + '&body='  + 'Please follow this link to view the PDF: '+ '%0D%0A' + $(this).attr('data-file-name') + ' - ' + $(this).attr('data-file-link')
-//      );
-//      });
-//      
-//    },
-    
+
     copyAll: function () {
       /**
        * This function allows the user to copy all documents being
        * sent to a particular email address
        * Uses clipboard js https://clipboardjs.com/
+       * @returns the array of links that need to be copied
        */
       
       $('.sp-copy-all').on('click', function () {
@@ -1456,18 +1463,19 @@ chart: {
           text: function(target) {
             target = '';
             $.each(links, function (i, v){
-              target += v;       
+              target += v;
             });
             return target;
      
           }
+        });
       });
-      });
-      
     },
     
     /**
-     * This function opens a mail window to a particular email address with all documents in the body
+     * This function opens a mail window to a particular email address with all
+     * documents in the body. The subject and body are encoded as some mail 
+     * clients have issues rendering the unencoded information
      */
     sendAll: function () {
       $('.sp-send-all').on('click', function () {
@@ -1501,9 +1509,7 @@ chart: {
         + '?subject=' + encodeURIComponent(mailSubject) 
         + '&body=' + encodeURIComponent('Please follow these links to view the PDFs: ' + '\r\n' + mailBody)
         );
-        
       });
-      
     },
     /**
      * File-hash is linked to file-name in an object - so name can be retrieved by hash
@@ -1520,7 +1526,6 @@ chart: {
         }
       });      
     }
-    
   }, 
   
   error: {
@@ -1547,13 +1552,16 @@ chart: {
           "hideMethod": "fadeOut"
         };
       toastr.error(msg);
-
     },
-    
   },
   
   user: {
-
+    /**
+     * This function allows the user to change their password
+     * It has a series of verifications: whether the old password is correct,
+     * whether the new password is a blank field, and whether the new password
+     * matches the retyped new password.
+     */
     changePassword: $(function () {
         $('.sp-change-pwd__icon').on('click', function () {
           $('#sp-old-password').val('');
@@ -1672,8 +1680,6 @@ chart: {
                         + '<ul id="sp-sales-analytics__ul" class="nav nav-second-level">'
                     );
                 
-                //$('#sp-sales-analytics-scroll').perfectScrollbar();
-                
                 $.each(customers, function(i, v) {
                   $('#sp-nav-sales-analytics__li > ul')
                       .append('<li><a href="#" data-customer-email="' + i + '">' + v.customerName + '</a></li>')
@@ -1686,10 +1692,12 @@ chart: {
                   });
                 });
                 
+                /**
+                 * CSS overflow styling
+                 */
                 var scrollCont = $('<div></div>', {id: 'sp-sales-analytics-scroll'});
                 $('#sp-nav-sales-analytics__li').append(scrollCont);
                 scrollCont.append($('#sp-sales-analytics__ul'));
-                scrollCont.perfectScrollbar({suppressScrollX: true, maxScrollbarLength: '70', minScrollbarLength: '70'});
                 
                 // A workaround for metisMenu dysfunctionality.
                 $('#sp-nav-sales-analytics__li ul li:has(a[data-file-hash="' + customersFilesList[0][2]
