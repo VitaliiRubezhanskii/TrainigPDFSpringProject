@@ -1015,7 +1015,7 @@ chart: {
       }
       $.getJSON('ManagementServlet', {action: 'getFileVisitorsMap',
           fileHash: fileHash, salesmanEmail: sp.config.salesman.email, customerEmail: customerEmail}, function(data) {
-        
+       
         var dataFormatted = [];
         if (data.fileVisitorsMap.length > 0) {
           dataFormatted.push(['Latitude', 'Longitude', 'City', 'Total views']);
@@ -1031,8 +1031,7 @@ chart: {
 
         var options = {
           colorAxis: {
-            colors: ['#dcdcdc', '#1ab394'],
-            minValue: 0
+            colors: ['#00AC8A', '#00AC8A']
           },
           datalessRegionColor: '#dcdcdc',
           displayMode: 'markers',
