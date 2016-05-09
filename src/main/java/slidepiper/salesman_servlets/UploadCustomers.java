@@ -49,7 +49,7 @@ public class UploadCustomers extends HttpServlet {
 		Part filePart = request.getPart("filecsv");
 		
 		CSVParser parser = CSVParser.parse(
-		    IOUtils.toString(filePart.getInputStream()),
+		    IOUtils.toString(filePart.getInputStream(), "UTF-8"),
 		    CSVFormat.DEFAULT);
 		System.out.println("****Parser: " + parser);
 		
