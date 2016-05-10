@@ -1731,7 +1731,7 @@ public class DbLayer {
         
         if (isSalesmanExist(email)) {
           statusCode = 100;
-        } else if (! magic.equals("333")) {
+        } else if (! magic.equals("SYMpiper&3")) {
           statusCode = 101;
         } else {
           Connection conn = null;
