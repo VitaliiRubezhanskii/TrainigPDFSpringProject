@@ -1325,7 +1325,7 @@ body.outlook p {
 								  <!-- <p>Client: |client name|</p>
 								  <p>Location: |City or Country|</p> -->
 								  
-								  <p><a href="${chatLink!}">Chat With Client</a></p>
+								  <p><a href="${chatLink!}">Co-browse and Chat With Client</a></p>
 								  <p><a href="http://www.slidepiper.com/login.html">Go to dashboard</a></p>
                                   
 								  
