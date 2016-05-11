@@ -338,6 +338,7 @@ td.sp-file-hash {
 
 .sp-file-link {
   font-size: 12px;
+  color: inherit;
 }
 
 .sp-cmd-all__button {
@@ -354,9 +355,9 @@ td.sp-file-hash {
   display: none;
 }
 
-.sp-mailto {
+/* .sp-mailto {
   color: inherit;
-}
+} */
 
 .sp-mail-all__button {
   color: #1ab394;

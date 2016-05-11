@@ -148,8 +148,14 @@ sp = {
           });
           
           $('#sp-update-file__button').click(function(event) {
-            sp.file.updateFile(event, sp.file.fileHash);
-            $('input[type="file"]').val(null);
+            if ($('#sp-file-update__form > input[type="file"]').val() !== ''){
+              sp.file.updateFile(event, sp.file.fileHash);
+              $('input[type="file"]').val(null);
+            }
+            else {
+              sp.error.handleError('You must select a file to update');
+            }
+            
           });
           
           // Delete file.
@@ -1284,7 +1290,7 @@ chart: {
     })(),
     
     /**
-     * This function formats and prints customers to the document sending wizard
+     * This function formats and prints customers to the document sending wizard using DataTables API
      * @params {data - object} This is the data on the customers recevied from the server
      * This object contains both customer and file data @see sp.customerFileLinks.formatFile()
      */
@@ -1336,7 +1342,7 @@ chart: {
       }),
     
     /**
-     * This function formats and renders documents to the wizard
+     * This function formats and renders documents to the wizard, using the DataTables API
      * @params {data-obj} - This is the files data received from the server
      */
     formatFile: function (data){
@@ -1485,9 +1491,9 @@ chart: {
             fileLink = sp.config.viewerUrlWithoutFileLink + v['fileLink'];
             // This renders the information into the predefined rows.
             $('.sp-send-table tbody #sp-t-row' + i + ' #sp-doc-' + i).append(
-                '<div class="sp-doc-send-data row">'
-                  + '<div class="col-md-3" data-hash=' + v['fileHash'] +'></div>'
-                  + '<div id="sp-file-link-' + v['fileLink'] + '" data-file-link="' + fileLink +'" data-link="'+ fileLink +'" class="sp-mailto col-md-5 sp-file-link  ' + 'mail-' + v['fileHash'] +'" ">' + fileLink + '</div>'
+                '<div class="row">'
+                  + '<div class="col-md-3" data-file-hash=' + v['fileHash'] +'></div>'
+                  + '<div data-file-link-hash="'+ fileLink +'" class="col-md-5 sp-file-link">' + fileLink + '</div>'
               + '</div>'
               
            );        
@@ -1524,7 +1530,7 @@ chart: {
       
       $('.sp-copy-all').on('click', function () {
         var links = [];
-        $(this).closest('tr').find('div[data-link]').each(function (i, v){
+        $(this).closest('tr').find('div[data-file-link-hash]').each(function (i, v){
           links.push($(this).text() + '\r\n');
           });
         
@@ -1550,16 +1556,16 @@ chart: {
       $('.sp-send-all').on('click', function () {
         var emailRecipient = $(this).closest('tr').children('td.sp-customer').text();
         
-        //This will create an array of file links.
+        // This will create an array of file links.
         var links = [];
-        $(this).closest('tr').find('div[data-link]').each(function(i, v) {
+        $(this).closest('tr').find('div[data-file-link-hash]').each(function(i, v) {
           links.push($(this).text()); 
         });
         
-        //This creates an array of filenames.
+        // This creates an array of filenames.
         var fileNames = [];
-          $(this).closest('tr').find('.sp-mailto').each(function(i, v) {
-            fileNames.push($(this).attr('data-file-name'));
+          $(this).closest('tr').find('[data-file-hash]').each(function(i, v) {
+            fileNames.push($(v).text());
           });  
           
           
@@ -1588,10 +1594,8 @@ chart: {
     
     findDocumentName: function (hash, files) {      
       $.each(files, function (i, v) {
-        var name = v['name'];
         if (v['hash'] === hash){
-          $('[data-hash=' + hash + ']').text(v['name']);
-          $('.mail-' + hash).attr('data-file-name',  name);
+          $('[data-file-hash=' + hash + ']').text(v['name']);
         }
       });      
     }
