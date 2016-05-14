@@ -1498,11 +1498,26 @@ public class DbLayer {
           
           if (rs.next()) {
             for (int i = 1; i <= columnCount; i++) {
-              if (null != rs.getString(i) && md.getColumnClassName(i).equals("java.lang.String")) {
-                salesmanMap.put(md.getColumnLabel(i), rs.getString(i));
-              } else if (null != rs.getBytes(i) && md.getColumnClassName(i).equals("[B")) {
-                  salesmanMap.put(md.getColumnLabel(i),
-                      DatatypeConverter.printBase64Binary(rs.getBytes(i)));
+              if (null != rs.getString(i)) {
+                switch (md.getColumnClassName(i)) {
+                  case "java.lang.String":
+                    salesmanMap.put(md.getColumnLabel(i), rs.getString(i));
+                    break;
+                    
+                  case "[B":
+                    salesmanMap.put(
+                        md.getColumnLabel(i),
+                        DatatypeConverter.printBase64Binary(rs.getBytes(i))
+                    );
+                    break;
+                    
+                  case "java.lang.Integer":
+                    salesmanMap.put(
+                        md.getColumnLabel(i),
+                        DatatypeConverter.printInt(rs.getInt(i))
+                    );
+                    break;
+                }
               }
             }
           }

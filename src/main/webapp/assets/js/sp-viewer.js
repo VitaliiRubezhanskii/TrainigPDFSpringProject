@@ -420,6 +420,79 @@ if ('' != sp.viewer.linkHash) {
       
       $('#sp-live-chat').css('visibility', 'visible');
     }
+    
+    /* Widget Settings */
+    
+    // Widget 1 - YouTube widget 
+    if (true == config.viewer.widget1.isEnabled) {
+      $('body').append('<div class="sp-demo-video sp-demo-video1"><span></span><i class="fa fa-chevron-up"></i><hr><iframe width="360" height="315" frameborder="0" allowfullscreen></iframe></div>');
+      $('.sp-demo-video1 span').text(config.viewer.widget1.title);
+      $('.sp-demo-video1 iframe').attr('src', config.viewer.widget1.iframeSrc);
+        
+      config.viewer.widget1.flag = false;
+      setInterval(function() {
+        if (! $('.sp-demo-video1').hasClass('sp-video1-clicked')) {
+          if (null != PDFViewerApplication.page && config.viewer.widget1.pageNumber == PDFViewerApplication.page) {
+            if (false == config.viewer.widget1.flag) {
+              $('.sp-demo-video1').css('visibility', 'visible');
+              $('.sp-demo-video1').css('transform', 'translate(0,0)');
+              $('.sp-demo-video1 .fa').removeClass('fa-chevron-up').addClass('fa-chevron-down');
+              $('.sp-demo-video1').addClass('sp-video1-active');
+              config.viewer.widget1.flag = true;
+            }
+          } else {
+              $('.sp-demo-video1').css('transform', 'translate(0,87%)');
+              $('.sp-demo-video1 .fa').removeClass('fa-chevron-down').addClass('fa-chevron-up');
+              $('.sp-demo-video1').removeClass('sp-video1-active');
+              config.viewer.widget1.flag = false;
+          }
+        }
+      }, 1000);
+      
+      $('.sp-demo-video1 span, .sp-demo-video1 .fa').click(function() {
+        $('.sp-demo-video1').addClass('sp-video1-clicked');
+        
+        if ($('.sp-demo-video1').hasClass('sp-video1-active')) {
+          $('.sp-demo-video1').css('transform', 'translate(0,87%)');
+          $('.sp-demo-video1 .fa').removeClass('fa-chevron-down').addClass('fa-chevron-up');
+          $('.sp-demo-video1').removeClass('sp-video1-active');
+        } else {
+          $('.sp-demo-video1').css('transform', 'translate(0,0)');
+          $('.sp-demo-video1 .fa').removeClass('fa-chevron-up').addClass('fa-chevron-down');
+          $('.sp-demo-video1').addClass('sp-video1-active');
+        } 
+      });
+    }
+    
+    // Widget 2 - Calendly widget
+    if (true == config.viewer.widget2.isEnabled) {
+      $('body').append('<button class="sp-widget-button sp-widget2"></button>');
+      $('.sp-widget2').text(config.viewer.widget2.title);
+
+      config.viewer.widget2.flag = false;
+      setInterval(function() {
+        if (config.viewer.widget2.pageNumber == PDFViewerApplication.page) {
+          if (false == config.viewer.widget2.flag) {
+            $('.sp-widget2').css('visibility', 'visible');
+            $('.sp-widget2').css('transform', 'translate(0,0)');
+            config.viewer.widget2.flag = true;
+          }
+        } else {
+          $('.sp-widget2').css('transform', 'translate(188px,0)');         
+          config.viewer.widget2.flag = false;
+        }
+      }, 1000);
+
+      $('.sp-widget2').click(function() {
+        swal({
+          title: config.viewer.widget2.title,
+          text: '<iframe src="' + config.viewer.widget2.iframeSrc + '" width="450" height="420" frameborder="0" scrolling="yes"></iframe>',
+          html: true,
+          showCancelButton: true,
+          showConfirmButton: false,
+        });
+      });
+    }
   });
 }
 

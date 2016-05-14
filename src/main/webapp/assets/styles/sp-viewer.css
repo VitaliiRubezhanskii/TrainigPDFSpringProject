@@ -339,3 +339,65 @@
     border-top-right-radius: 0;
   }
 }
+
+/* Widget Settings */
+
+/* Widget 1 -  YouTube widget */
+.sp-demo-video {
+  background-color: white;
+  border: 1px solid #8D8D8D;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  color: #0074A6;
+  padding: 10px;
+  position: fixed;
+  top: 60.5%;
+  transition: background 200ms ease-in-out, box-shadow 200ms ease-in-out, transform 1000ms ease-in-out;
+  visibility: hidden;
+}
+
+.sp-demo-video hr {
+  margin: 10px auto;
+}
+
+.sp-demo-video span, .sp-demo-video .fa  {
+  cursor: pointer;
+}
+
+.sp-demo-video .fa {
+  margin-left: 8px;
+}
+
+.sp-demo-video1 {
+  left: 10%;
+}
+
+/* Widget 2 */
+.sp-widget-button {
+  background-color: #1aaee4;
+  background-position: 20px center;
+  background-repeat: no-repeat;
+  background-size: 160px;
+  border: none;
+  -moz-border-radius: 45px 0px 0px 45px;
+  -webkit-border-radius: 45px 0px 0px 45px;
+  border-radius: 45px 0px 0px 45px;
+  box-shadow: 0px 8.5px 5.67px rgba(35, 31, 32, 0.3);
+  color: #fff;
+  font-size: 17px;
+  font-weight: bold;
+  height: 90px;
+  position: absolute;
+  right: -1px;
+  top: 45%;
+  transition: background 200ms ease-in-out, box-shadow 200ms ease-in-out, transform 1000ms ease-in-out;
+  visibility: hidden;
+  width: 188px;
+ }
+
+.sp-widget-button:hover {
+   background-color: #47beea;
+   box-shadow: 0px 3.5px 4px rgba(35, 31, 32, 0.4);
+   cursor: pointer;
+  }
+}
