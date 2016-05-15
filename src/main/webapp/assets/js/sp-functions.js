@@ -138,7 +138,7 @@ sp = {
                 $('input[type="file"]').val(null);
             }
             else {
-              sp.error.handleError('You must select a file to upload');
+              sp.error.handleError('You must select a document to upload');
             }
           });
           
@@ -183,8 +183,13 @@ sp = {
           
           // Upload customers.
           $('#sp-upload-customers__button').click(function(event) {
+          if ($('#sp-modal-upload-customers input[type="file"]').val() === ''){
+            sp.error.handleError('You must select a file to upload');
+          }
+          else {
             sp.file.uploadCustomers(event);
             $('input[type="file"]').val(null);
+            }
           });
           
           $('#sp-download-template__button').click(function() {
@@ -649,12 +654,15 @@ sp = {
             $('button[data-dismiss="modal"]').click();
             
             if (-1 == data.newCustomer) {
-              sp.error.handleError('The added user alredy exist therefore was not inserted into the system');
+              sp.error.handleError('The added user already exists so was not inserted into the system');
+            }
+            else {
+              swal("Success!", "Your customer list was udpated!", "success");
             }
             $('#sp-modal-add-update-customer__button').removeClass('btn-default').addClass('btn-primary');
             $('.sk-spinner').hide();
             $('#sp-add-update-customer__form').show();
-            swal("Success!", "Your customer was udpated!", "success");
+            
           }
         }
       });
