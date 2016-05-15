@@ -467,7 +467,7 @@ if ('' != sp.viewer.linkHash) {
     // Widget 2 - Calendly widget
     if (true == config.viewer.widget2.isEnabled) {
       $('body').append('<button class="sp-widget-button sp-widget2"></button>');
-      $('.sp-widget2').text(config.viewer.widget2.title);
+      $('.sp-widget2').html('<i class="fa fa-2x fa-calendar"></i><div>' + config.viewer.widget2.title + '</div>');
 
       config.viewer.widget2.flag = false;
       setInterval(function() {
