@@ -133,9 +133,13 @@ sp = {
           
           // Upload file.
           $('#sp-upload-files__button').click(function(event) {
-//            if ($("input[multiple]").val())
-            sp.file.uploadFiles(event);
-            $('input[type="file"]').val(null);
+            if ($('#sp-file-upload__form > input[type="file"]').val() !== '') {
+                sp.file.uploadFiles(event);
+                $('input[type="file"]').val(null);
+            }
+            else {
+              sp.error.handleError('You must select a file to upload');
+            }
           });
           
           // Update file.
@@ -148,11 +152,6 @@ sp = {
             $('input[type="file"]').val(null);
           });
           
-//          // Change password
-//          $('#sp-change-pwd__button').on('click', function () {
-//            sp.user.changePassword();
-//          });
-//          
           // Delete file.
           $(document).on('click', '.sp-file-delete', function() {
             sp.file.fileHash = $(this).attr('data-file-hash');
@@ -271,7 +270,6 @@ sp = {
             switch(topSection) {
               case 'sp-file-upload':
                 var requestOrigin = 'fileUploadDashboard';
-//                $('.sp-analytics-container__div').css('height', 'auto');
                 sp.file.getFilesList(requestOrigin);
                 sp.file.getCustomersList(requestOrigin);
                 break;
@@ -279,14 +277,11 @@ sp = {
               case 'sp-file-dashboard':
                 sp.table.filesData = undefined;
                 setFileDashboard();
-//                $('.sp-analytics-container__div').css('max-height', '300px');
-//                $('#sp-sales-analytics-scroll').css('height', 'auto');
                 break;
                 
               case 'sp-sales-analytics-view':
                 sp.view.salesAnalytics.setNavBar();
                 $('#sp-file-dashboard').show();
-//                $('.sp-analytics-container__div').css('height', 'auto');
                 break;
                 
               /**
@@ -300,7 +295,6 @@ sp = {
                 // This class is removed because the send-email wizard appears at the botton of
                 // marketing analytics when the page loads
                 $('.sp-email-container-hidden').removeClass('sp-email-container-hidden'); 
-//                $('.sp-analytics-container__div').css('height', 'auto');
                 $('a[href="#finish"]').remove();
                 $('a[href="#cancel"]').remove();
                 $('#document-wizard-t-0').click();
@@ -362,8 +356,8 @@ sp = {
       }
       else if (requestOrigin === 'customerFileLinksGenerator') {
         sp.customerFileLinksGenerator.formatFile(data);
+        
       }
-      
       
     },
     /**
@@ -373,21 +367,34 @@ sp = {
      * 
      */
     sortDocsInDocsMgmtPanel: function (data) {
-      $('#sp-files-management tbody').empty();
-      
-      $.each(data.filesList, function(index, row) {
-        $('#sp-files-management tbody').append(
-            '<tr>'
-              + '<td class="col-lg-2"><i class="fa fa-clock-o sp-file-clock" data-toggle="tooltip" data-placement="right" title="Date file was added or updated"></i> ' + row[2] + '</td>'
-              + '<td class="col-lg-3 sp-file-mgmt-file-name" data-file-hash="' + row[0] + '">' + row[1] + '</td>'
-              + '<td class="col-lg-7"><a href="#"><span style="margin-left: 300px;" class="label label-primary sp-file-update" data-toggle="modal" data-target="#sp-modal-update-file" data-file-hash="' + row[0] + '">Update</span></a><a href="#"><span class="label label-danger sp-file-delete" data-file-hash="' + row[0] + '">Delete</span></a></td>'
-          + '</tr>'
-        );
+      var filesArr = [];
+      $.each(data['filesList'], function (i, v) {
+        var obj = {
+            'date': '<span><i class="fa fa-clock-o sp-file-clock" data-toggle="tooltip" data-placement="right" title="Date file was added or updated"></i> ' + v[2] + '</span>',
+            'document': '<span class="sp-file-mgmt-file-name" data-file-hash="' + v[0] + '">' + v[1] + '</span>',
+            'options': '<span><a href="#"><span style="margin-left: 300px;" class="label label-primary sp-file-update" data-toggle="modal" data-target="#sp-modal-update-file" data-file-hash="' + v[0] + '">Update</span></a><a href="#"><span class="label label-danger sp-file-delete" data-file-hash="' + v[0] + '">Delete</span></a></span>'
+        };   
+        filesArr.push(obj);
       });
-      $('#sp-files-management tbody').tooltip({
-        selector: "[data-toggle=tooltip]"
-      });      
-      
+      if (!($.fn.dataTable.isDataTable('#sp-files-management'))) {
+        $('#sp-files-management').DataTable({
+          data: filesArr,
+          columns: [
+            {data: 'date' },
+            {data: 'document' },
+            {data: 'options' },
+          ],
+          paging: false,
+        });
+      }
+      else {
+        $('#sp-files-management').DataTable()
+        .clear()
+        .rows.add(filesArr)
+        .draw();
+      }
+      $('.tab-content').css('overflow-y', 'scroll');
+ 
     },
     
     uploadFiles: function(event) {
@@ -418,7 +425,7 @@ sp = {
             $('button[data-dismiss="modal"]').click();
             
             sp.file.files = [];
-            $('#sp-upload-files__button').removeClass('btn-default').addClass('btn-primary').text('Update Files');
+            $('#sp-upload-files__button').removeClass('btn-default').addClass('btn-primary').text('Upload Documents');
             $('.sk-spinner').hide();
             $('.file__input').show();
             $('#sp-file-upload__form').css('display', 'block');
@@ -512,20 +519,36 @@ sp = {
    
     
     sortForDocUpload: function (data) {
-      $('#sp-customers-management tbody').empty(); 
-      $.each(data.customersList, function(index, row) {
-        $('#sp-customers-management tbody').append(
-            '<tr data-customer-email="' + row[3] + '">'
-              + '<td><span id="sp-customer-first-name__td">' + row[0] + '</span> <span id="sp-customer-last-name__td">' + row[1] + '</span></td>' 
-              + '<td id="sp-customer-company__td">' + row[2] + '</td>'
-              + '<td class="contact-type"><i class="fa fa-envelope"> </i></td>'
-              + '<td>' + row[3] + '</td>'
-              + '<td><a href="#"><span class="label label-primary sp-add-update-customer sp-customer-update" data-add-update="update" data-toggle="modal" data-target="#sp-modal-add-update-customer" data-customer-email="' + row[3] + '">Update</span></a><a href="#"><span class="label label-danger sp-customer-delete" data-customer-email="' + row[3] + '">Delete</span></a></td>'
-          + '</tr>'
-        );
-      });
-      $('.tab-content').css('overflow-y', 'scroll');
       
+      var nameArr = [];
+      $.each(data['customersList'], function (i, row) {
+        var obj = {
+            'name':  '<span id="sp-customer-first-name__td">' + row[0] + '</span> <span id="sp-customer-last-name__td">' + row[1] + '</span></span>' ,
+            'company': '<span id="sp-customer-company__td">' + row[2] + '</span>',
+            'email':  '<span class="contact-type"><i class="fa fa-envelope"> </i></span>' + '         '  + row[3] + '',
+            'options': '<td><a href="#"><span class="label label-primary sp-add-update-customer sp-customer-update" data-add-update="update" data-toggle="modal" data-target="#sp-modal-add-update-customer" data-customer-email="' + row[3] + '">Update</span></a><a href="#"><span class="label label-danger sp-customer-delete" data-customer-email="' + row[3] + '">Delete</span></a></td>'
+        };
+        nameArr.push(obj);
+      });
+      if (!($.fn.dataTable.isDataTable('#sp-customers-management'))) {
+        $('#sp-customers-management').DataTable({
+          data: nameArr,
+          columns: [
+            {data: 'name'},
+            {data: 'company'},
+            {data: 'email'},
+            {data: 'options'}
+          ],
+          paging: false,
+        });
+      }
+      else {
+        $('#sp-customers-management').DataTable()
+        .clear()
+        .rows.add(nameArr)
+        .draw();
+      }
+      $('.tab-content').css('overflow-y', 'scroll');
       
     },
     
@@ -1239,6 +1262,12 @@ chart: {
           if (currentIndex > newIndex){
             return true;
           };
+          $('.sp-customer-table').DataTable()
+          .search('').draw();
+  
+          $('.sp-doc-table').DataTable()
+          .search('').draw();
+          
           if (0 === currentIndex && (!$('.sp-customer-table tbody input[type="checkbox"]').is(':checked'))){
             sp.error.handleError('You must select at least one customer to continue');
             return false;
@@ -1260,21 +1289,39 @@ chart: {
      * This object contains both customer and file data @see sp.customerFileLinks.formatFile()
      */
     formatCustomers : function(data) {
-      $('.sp-customer-table td').remove();
-      $.each(data['customersList'], function(i, v) {  
-          $('.sp-customer-table tbody').append(
-              '<tr id=' + i + '><td><input id= ' + 'checkbox' + i + ' type="checkbox" class="i-checks" name="input[]"></td>'
-                  + '<td>' + v[0] + ' ' + v[1] + '</td><td>' + v[2]
-                  + '</td><td data-email=' + v[3] +' class="sp-email"> ' + v[3] + '</td>'
-                  + '<td></td>'
-                  + '</tr>'
-          );
+      var nameArr = [];
+      $.each(data['customersList'], function (i, v) {
+        var obj = {
+            'checkbox' : '<input id= ' + 'checkbox' + i + ' type="checkbox" class="i-checks" name="input[]">',
+            'name' : v[0] + ' ' + v[1],
+            'company' : v[2],
+            'email' : '<span data-email=' + v[3] +' class="sp-email"> ' + v[3] + '</span>'
+        };
+        nameArr.push(obj);
       });
+      if (!($.fn.dataTable.isDataTable('.sp-customer-table'))) {
+        $('.sp-customer-table').DataTable({
+          data: nameArr,
+          columns: [
+            {data: 'checkbox' },
+            {data: 'name' },
+            {data: 'company' },
+            {data: 'email' },
+          ],
+          paging: false,
+        });
+      }
+      else {
+        $('.sp-customer-table').DataTable()
+        .clear()
+        .rows.add(nameArr)
+        .draw();
+      }
+      $('.content').css('overflow-y', 'scroll');
       /**
        * $('.content') is the selector on the section object within the wizard
        * @see the same in sp.customerFileLinks.formatFile() 
        */
-      $('.content').css('overflow-y', 'scroll');
     },
     
     /**
@@ -1293,25 +1340,45 @@ chart: {
      * @params {data-obj} - This is the files data received from the server
      */
     formatFile: function (data){
-      $('.sp-doc-table td').remove();
+      var fileArr = [];
       $.each(data['filesList'], function (i, v) {
-        $('.sp-doc-table tbody').append(
-            '<tr id=' + i + '><td><input id= ' + 'checkbox' + i + ' type="checkbox" class="i-checks" name="input[]"></td>'
-                + '<td class="sp-doc-name" data-file-name=' + v[1] +' data-file-hash=' + v[0] +'>' + v[1] + '</td>'
-                + '<td> ' + v[2] + '</td>'
-                + '</tr>'
-        );        
+        var obj = {
+            'checkbox' : '<input id= ' + 'checkbox' + i + ' type="checkbox" class="i-checks" name="input[]">',
+            'name' : '<span class="sp-doc-name" data-file-name=' + v[1] +' data-file-hash=' + v[0] +'>' + v[1] + '</span>',
+            'date' : '<span>' + v[2] + '</span>',
+        };
+        fileArr.push(obj);
       });
+      if (!($.fn.dataTable.isDataTable('.sp-doc-table'))) {
+        $('.sp-doc-table').DataTable({
+          data: fileArr,
+          columns: [
+            {data: 'checkbox' },
+            {data: 'name'},
+            {data: 'date'},
+          ],
+          
+          paging: false,
+        });
+      }
+      else {
+        $('.sp-doc-table').DataTable()
+        .clear()
+        .rows.add(fileArr)
+        .draw();
+      }
+      $('.content').css('overflow-y', 'scroll');
+      
       sp.customerFileLinksGenerator.toggleBtnAttr();
     },
-    
+
     toggleBtnAttr: function () {
       if ($('li.current').text() === 'current step: 2. Select Documents'){ 
           $('a[href="#next"]').attr('id', 'sp-send-docs__button');
       };
+     
     },
-    
-    
+
     /**
      *  Listener to save which boxes have been checked i.e. which documents the
      *  user wants to send, and to whom.
@@ -1332,6 +1399,12 @@ chart: {
           var customerArr = [];
           var fileArr = [];
           var files = [];
+          
+          $('.sp-customer-table').DataTable()
+                    .search('').draw();
+          
+          $('.sp-doc-table').DataTable()
+                    .search('').draw();
          
           //This saves all the chosen email addresses.
           $(':checked').closest('tr').find('[data-email]').each(function (i, v) {
@@ -1414,33 +1487,29 @@ chart: {
             $('.sp-send-table tbody #sp-t-row' + i + ' #sp-doc-' + i).append(
                 '<div class="sp-doc-send-data row">'
                   + '<div class="col-md-3" data-hash=' + v['fileHash'] +'></div>'
-                  + '<div id="sp-file-link-' + v['fileLink'] + '"  data-link="'+ fileLink +'" class="col-md-5 sp-file-link">' + fileLink + '</div>'
-                  + '<div class="sp-mail-choice col-md-2">'
-                      + '<button data-file-link="' + fileLink +'" class="btn btn-white sp-mailto sp-send-options btn-xs sp-copy__btn ' + 'mail-' + v['fileHash'] +'" data-clipboard-target="#sp-file-link-' + v['fileLink']+ '">'
-                          + '<i class="fa fa-copy"></i> Copy'
-                      + '</button>'
-                  + '</div>'
+                  + '<div id="sp-file-link-' + v['fileLink'] + '" data-file-link="' + fileLink +'" data-link="'+ fileLink +'" class="sp-mailto col-md-5 sp-file-link  ' + 'mail-' + v['fileHash'] +'" ">' + fileLink + '</div>'
               + '</div>'
+              
            );        
           sp.customerFileLinksGenerator.findDocumentName(v['fileHash'], files);
-          new Clipboard('.sp-copy__btn');
         });
       });
       // This creates the copy all and send all buttons.
       $('.sp-document').append(
             '<div class="row">'
-              + '<div class="col-md-offset-8 col-md-2">'
+              + '<div class="col-md-offset-7 col-md-2">'
                 + '<button class="btn btn-white sp-mail-all__button btn-xs sp-copy-all sp-cmd-all__button">'
-                  + '<i class="fa fa-copy sp-mail__icon"></i> Copy All'
+                  + '<i class="fa fa-copy sp-mail__icon"></i> Copy'
                 + '</button>' 
               + '</div>'
               + '<div class="col-md-2">' 
                   + '<button class="btn btn-white sp-send-to-all__button sp-send-options btn-xs sp-mail-all__button sp-send-all sp-cmd-all__button">'
-                    + '<i class="fa fa-envelope sp-mail__icon"></i> Send All'
+                    + '<i class="fa fa-envelope sp-mail__icon"></i> Send'
                   + '</button>'
               + '</div>'
           + '</div>'          
       );
+ 
       sp.customerFileLinksGenerator.sendAll();
       sp.customerFileLinksGenerator.copyAll();
     },

@@ -355,7 +355,7 @@ td.sp-file-hash {
 }
 
 .sp-mailto {
-  color: black;
+  color: inherit;
 }
 
 .sp-mail-all__button {
@@ -421,6 +421,10 @@ td.sp-file-hash {
   margin-top: 10px;
 }
 
+.sp-doc-and-file-tab__ul {
+  margin-bottom: 10px;
+}
+
 /* Error Handler */
 .sp-error-box {
   position: absolute;
@@ -442,5 +446,6 @@ td.sp-file-hash {
 
 .toast-message {
   background: #ed5565;
-  
 }
+
+
