@@ -22,10 +22,16 @@ sp = {
          */
         function setFileDashboard() {
           // Set fileHash.
-          var fileHash = $(this).children().attr('data-file-hash');
-          if (typeof fileHash === 'undefined' && typeof sp.table.filesData !== 'undefined') {
-            fileHash = sp.table.filesData.row($(this).parent()).data()[0];
-          }
+          /**
+           * The (if) clause is there so that a fileHash is not set to the search field,
+           * as it is contain inside an <li> tag
+           */
+            var fileHash = $(this).children().attr('data-file-hash');
+        if (!$(this).find('input').hasClass('sp-nav-search__input')){  
+            if (typeof fileHash === 'undefined' && typeof sp.table.filesData !== 'undefined') {
+              fileHash = sp.table.filesData.row($(this).parent()).data()[0];
+            }
+        }
           
           $.getJSON(
               'ManagementServlet',
@@ -35,22 +41,29 @@ sp = {
           
             if (0 < filesData.length) {
               // Build side menu.
+             /**
+              *  Put search bar inside ul tag, putting it anywhere else causes bugs in the menu
+              */ 
               $('#sp-nav-files__li')
                   .empty()
                   .append(
                       '<a href="#" aria-expanded="true"><i class="fa fa-bar-chart"></i> '
                       + '<span class="nav-label">Marketing Analytics</span></a>'
                       + '<span class="fa arrow"></span>'
-                      + '<div class="sp-analytics-container__div">'
-                      + '<ul class="nav nav-second-level"></div>'
-                      
+                      + '<div id="sp-marketing-analytics" class="sp-analytics-container__div">'
+                      + '<ul class="nav nav-second-level sp-search-list">'
+                      + '<li><input id="sp-search-box" class="sp-nav-search__input" placeholder="Search" /></li>'
+                      + '</div>'
                   );
+              
+              //Without this command, the input field does not focus when clicked on 
+              $('#sp-search-box').focus();
               
               var files = [];
               for (var i = 0; i < filesData.length; i++) {
-                $('#sp-nav-files__li ul').append('<li><a href="#" data-file-hash="'
+                $('#sp-nav-files__li ul').append('<li><a href="#" class="marketing-files" data-file-hash="'
                     + filesData[i][0] + '">' + filesData[i][1] + '</a></li>');
-                
+
                 if (typeof fileHash === 'undefined' || filesData[i][0] == fileHash) {
                   fileHash = filesData[i][0];
                   files[fileHash] = filesData[i];
@@ -60,7 +73,27 @@ sp = {
                       .addClass("active");
                 }
               }
-
+              
+              /**
+               * Search functionality on navbar 
+               */
+              $('.sp-search-list a').each(function (i, v) {
+                $(v).attr('data-search-term', $(v).text().toLowerCase());
+                });
+              $('#sp-search-box').on('keyup', function () {
+                var searchTerm = $(this).val().toLowerCase();
+                    $('.sp-search-list a').each(function(){
+                        if ($(this).is('[data-search-term *= ' + searchTerm + ']')) {
+                            $(this).show();
+                        } else {
+                            $(this).hide();
+                        }
+                        if (!(searchTerm)) {
+                            $(this).show();
+                        }
+                    });
+                });
+              
               // Build dashboard.
               sp.metric.getFileMetrics(files[fileHash]);
               sp.chart.getFileLine(fileHash);
@@ -78,6 +111,7 @@ sp = {
             }
           });
         }
+        
             
         // Run once.
         setFileDashboard();
@@ -155,7 +189,6 @@ sp = {
             else {
               sp.error.handleError('You must select a file to update');
             }
-            
           });
           
           // Delete file.
@@ -336,7 +369,6 @@ sp = {
     
     fileHash: null,
     files: [],
-    
     getFilesList: function(requestOrigin) {
       $.getJSON(
           'ManagementServlet',
@@ -1644,7 +1676,7 @@ chart: {
      * matches the retyped new password.
      */
     changePassword: $(function () {
-        $('.sp-change-pwd__icon').on('click', function () {
+        $('.sp-change-pwd__li').on('click', function () {
           $('#sp-old-password').val('');
           $('#sp-new-password').val('');
           $('#sp-retype-password').val('');
@@ -1708,15 +1740,16 @@ chart: {
             else {
               sp.error.handleError('Retype your old password');
             }
-            
           }
-          
-          
-          
         });
-      
-      
     }),
+    
+    changeDocSettings: function () {
+      
+      
+      
+      
+    },
    
   },
 
@@ -1758,21 +1791,54 @@ chart: {
                         '<a href="#" aria-expanded="true"><i class="fa fa-bar-chart"></i> '
                         + '<span class="nav-label">Sales Analytics</span></a>'
                         + '<span class="fa arrow"></span>'
-                        + '<ul id="sp-sales-analytics__ul" class="nav nav-second-level">'
+                        + '<ul id="sp-sales-analytics__ul" class="nav nav-second-level sp-sales-search-list">'
+                        + '<li><input id="sp-sales-search__input" type="text" placeholder="Search" class="sp-nav-search__input"></li>'
                     );
                 
                 $.each(customers, function(i, v) {
                   $('#sp-nav-sales-analytics__li > ul')
-                      .append('<li><a href="#" data-customer-email="' + i + '">' + v.customerName + '</a></li>')
+                      .append('<li class="sp-analytics-customer-name__li"><a data-customer-email="' + i + '">' + v.customerName + '</a></li>')
                       .append('<ul class="nav nav-third-level" data-customer-email="' + i + '">');
                   
                   $.each(v.files, function(j, u) {
                     $('#sp-nav-sales-analytics__li ul ul[data-customer-email="' + i + '"]')
-                        .append('<li><a class="sp-customer-file__a" href="#" data-customer-email="'
+                        .append('<li class="sp-sales-analytics-filename__li"><a class="sp-customer-file__a" data-customer-email="'
                             + i + '" data-file-hash="' + u.fileHash + '">' + u.fileName + '</a></li>');
                   });
                 });
                 
+                /**
+                 * Search sales analytics
+                 * The document names are hidden
+                 */
+                $('.sp-sales-search-list >li > a').each(function(){
+                  // Add data-search-term attribute to customers their their corresponding
+                  // file names
+                  $(this).attr('data-search-term', $(this).text().toLowerCase());
+                  $(this).parent().next('ul').find('a').each(function (i, v) {
+                    $(v).attr('data-search-term', $(this).text().toLowerCase());
+                    });
+                  });
+                $('#sp-sales-search__input').on('keyup', function(){
+                  var searchTerm = $(this).val().toLowerCase();
+                      $('.sp-sales-search-list > li > a').each(function() {
+                          if ($(this).is('[data-search-term *= ' + searchTerm + ']')) {
+                            $(this).show();
+                            $(this).parent().next('ul').find('li').show();
+                          }
+                          else {
+                            $(this).hide();
+                            $(this).parent().next('ul').find('li').hide();
+                          }
+                          if (!(searchTerm)){
+                            // If search bar is empty display all customers & files
+                            $(this).show();
+                            $(this).parent().next('ul').find('li').show();
+                          }
+                      });
+                      
+                  });
+              
                 /**
                  * CSS overflow styling
                  */
@@ -1826,12 +1892,9 @@ chart: {
 // End sp.
 
 $(document).ready(function() {
-  $('#send_email_to_customers').css('visibility', 'visible');
-  
 
-  
-  
-  
+  $('#send_email_to_customers').css('visibility', 'visible');
+
   /**
    *  Store the last focused subject or body email element.
    */
