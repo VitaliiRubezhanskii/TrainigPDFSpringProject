@@ -33,7 +33,6 @@ import slidepiper.db.DbLayer;
 import slidepiper.keepalive.KeepAlivePacket;
 import slidepiper.ui_rendering.BarChartRenderer;
 import slidepiper.ui_rendering.HtmlRenderer;
-
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
@@ -124,26 +123,14 @@ public class EmailSender {
 			CustomerSession cs = DbLayer.getSessionData(sessionId);
 			
 			String msgtext = HtmlRenderer.getAlertHtml(mi, cs, currentviewslink, chatlink, fullchatlink); 
-			// String msgtext = HtmlRenderer.getAlertHtml();
 			
 			EmailSender.sendEmail(mi.getSalesManEmail(), 
 					subj,				
 						msgtext
 					);
-			//System.out.println("***************Message text: " + msgtext);
 			
 			System.out.println("********** SENT ALERT EMAIL for " + mi.getSalesManEmail());
 	}
-	
-//	public static void testSendEmail(){
-//		
-//		Template mailTemplate = HtmlRenderer.testGetAlertTemplate();
-//		
-//		String strTemplate = mailTemplate.toString();
-//		
-//				
-//	}
-	
 	
 	// report email after customer stops viewing presentation
 	// called from KeepAliveTask
@@ -161,7 +148,6 @@ public class EmailSender {
 			
 			String custname = DbLayer.getCustomerName(mi.getCustomerEmail(),mi.getSalesManEmail());
 			
-//			System.out.println("Getcustname for custemail " +  mi.getCustomerEmail() +" sm email " + mi.getSalesManEmail() + " is " + custname);
 			String subj = "SlidePiper Report for " +
 					custname +
 					" (" + mi.getCustomerEmail() + ")";
@@ -171,7 +157,6 @@ public class EmailSender {
 			// write in session without enclosing html. only enclosing table.
 			DbLayer.updateSessionReport(p.getSessionId(), "<table>"+msg+"</table>");
 					 
-			//msg = HtmlRenderer.addEnclosingHtml(msg);
 			EmailSender.sendEmail(mi.getSalesManEmail(), subj , msg);
 			
 			System.out.println("********** SENT REPORT EMAIL for " + mi.getSalesManEmail());
@@ -242,12 +227,20 @@ public class EmailSender {
                .get("last_name"));
            break;
            
-         case MERGE_TAG_SALESMAN_FIRST_NAME:     
-           mergeTagMap.put(mergeTag, DbLayer.getSalesman(salesmanEmail).get("first_name"));
+         case MERGE_TAG_SALESMAN_FIRST_NAME:
+	       if (null != DbLayer.getSalesman(salesmanEmail).get("first_name")) {
+	         mergeTagMap.put(mergeTag, DbLayer.getSalesman(salesmanEmail).get("first_name").toString());
+	       } else {
+	    	   mergeTagMap.put(mergeTag, "");
+	       }
            break;
            
          case MERGE_TAG_SALESMAN_LAST_NAME:
-           mergeTagMap.put(mergeTag, DbLayer.getSalesman(salesmanEmail).get("last_name"));
+	       if (null != DbLayer.getSalesman(salesmanEmail).get("last_name")) {
+		     mergeTagMap.put(mergeTag, DbLayer.getSalesman(salesmanEmail).get("last_name").toString());
+		   } else {
+		     mergeTagMap.put(mergeTag, "");
+		   }
            break;
        }
      }

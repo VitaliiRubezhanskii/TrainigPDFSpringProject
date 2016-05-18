@@ -10,6 +10,7 @@
 
     <link href="assets/css/bootstrap.min.css" rel="stylesheet">
     <link href="assets/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <link href="assets/css/plugins/sweetalerts/sweetalert.css" rel="stylesheet">
 
     <link href="assets/css/animate.css" rel="stylesheet">
     <link href="assets/css/style.css" rel="stylesheet">
@@ -62,6 +63,7 @@
     <!-- Mainly scripts -->
     <script src="assets/js/jquery-2.1.1.js"></script>
     <script src="assets/js/bootstrap.min.js"></script>
+    <script src="assets/js/plugins/sweetalerts/sweetalert.min.js"></script>    
     
     <!-- SlidePiper scripts -->
     <script src="assets/js/js.cookie.js"></script>
@@ -82,7 +84,11 @@
       	     Cookies.set('SalesmanEmail', $('input[type=email]').val(), { expires: 90 });
       	     location.href = 'dashboard.html';
       	   } else {
-      	     alert('Username or password incorrect.');
+      	     swal(
+      	       'Error',
+      	       'Username or password incorrect.',
+      	       'error'
+      	     );
       	   }
       	  }
       );      
