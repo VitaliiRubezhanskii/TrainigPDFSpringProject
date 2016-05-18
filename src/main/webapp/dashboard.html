@@ -3,303 +3,419 @@
 
 <head>
 
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>SlidePiper Dashboard</title>
+<title>SlidePiper Dashboard</title>
 
-    <link href="assets/css/bootstrap.min.css" rel="stylesheet">
-    <link href="assets/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+<link href="assets/css/bootstrap.min.css" rel="stylesheet">
+<link href="assets/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+<link href="assets/css/animate.css" rel="stylesheet">
+<link href="assets/css/style.css" rel="stylesheet">
+<link href="assets/css/plugins/jquerySteps/jquery.steps.css" rel="stylesheet">
+<link href="assets/css/plugins/metisMenu/metisMenu.min.css" rel="stylesheet">
+<link href="assets/css/plugins/datatables/datatables.min.css" rel="stylesheet">
+<script src="https://www.google.com/jsapi?autoload=%7B%27modules%27:%5B%7B%27name%27:%27visualization%27,%27version%27:%271.1%27,%27packages%27:%5B%27geochart%27%5D%7D%5D%7D"></script>
+<link href="assets/css/plugins/toastr/toastr.css" rel="stylesheet">
+<link href="assets/css/plugins/sweetalerts/sweetalert.css" rel="stylesheet">
 
-    <link href="assets/css/animate.css" rel="stylesheet">
-    <link href="assets/css/style.css" rel="stylesheet">
-    <link href="assets/css/plugins/metisMenu/metisMenu.min.css" rel="stylesheet">
-    <link href="assets/css/plugins/datatables/datatables.min.css" rel="stylesheet">
-    <script src="https://www.google.com/jsapi?autoload=%7B%27modules%27:%5B%7B%27name%27:%27visualization%27,%27version%27:%271.1%27,%27packages%27:%5B%27geochart%27%5D%7D%5D%7D"></script>
-    
-    <!-- SlidePiper scripts -->
-    <link rel="shortcut icon" type="image/png" href="img/splogo.png" />
-    <link href="assets/styles/sp-style.css" rel="stylesheet">
+<!-- SlidePiper scripts -->
+<link rel="shortcut icon" type="image/png" href="img/splogo.png" />
+<link href="assets/styles/sp-style.css" rel="stylesheet">
+
+<!-- Heap Analytics -->
+<script type="text/javascript">
+  window.heap = window.heap || [], heap.load = function(e, t) {
+    window.heap.appid = e, window.heap.config = t = t || {};
+    var r = t.forceSSL || "https:" === document.location.protocol, a = document
+        .createElement("script");
+    a.type = "text/javascript", a.async = !0, a.src = (r ? "https:" : "http:")
+        + "//cdn.heapanalytics.com/js/heap-" + e + ".js";
+    var n = document.getElementsByTagName("script")[0];
+    n.parentNode.insertBefore(a, n);
+    for (var o = function(e) {
+      return function() {
+        heap.push([ e ].concat(Array.prototype.slice.call(arguments, 0)))
+      }
+    }, p = [ "addEventProperties", "addUserProperties", "clearEventProperties",
+        "identify", "removeEventProperty", "setEventProperties", "track",
+        "unsetEventProperty" ], c = 0; c < p.length; c++)
+      heap[p[c]] = o(p[c])
+  };
+  heap.load("3688641079");
+</script>
 
 </head>
 
 <body>
 
-<div id="wrapper">
-
-    <nav class="navbar-default navbar-static-side" role="navigation">
-        <div class="sidebar-collapse">
-            <ul class="nav metismenu" id="side-menu">
-                <li class="nav-header">
-                    <div class="dropdown profile-element">
-                            <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                            <span class="clear"> <span class="block m-t-xs" id="sp-salesman-full-name"> <strong class="font-bold"></strong>
-                             </span> <span class="text-muted text-xs block">Position <b class="caret"></b></span> </span> </a>
-                            <ul class="dropdown-menu animated fadeInRight m-t-xs">
-                                <li class="sp-logout"><a href="#">Logout</a></li>
-                            </ul>
-                    </div>
-                    <div class="logo-element">
-                        SP
-                    </div>
-                </li>
-                <li id="sp-admin">
-                    <a href="spsystem.html"><i class="fa fa-cloud-upload"></i> <span class="nav-label">Admin</span></a>
-                </li>
-                <li class="sp-nav-section" data-dashboard="sp-file-upload">
-                    <a href="#upload"><i class="fa fa-folder"></i> <span class="nav-label">File Management</span></a>
-                </li>
-                <li class="active sp-nav-section" id="sp-nav-files__li" data-dashboard="sp-file-dashboard">
-                    <a href="#" aria-expanded="true"><i class="fa fa-file"></i> <span class="nav-label">Marketing Analytics</span></a>
-                </li>
-                <!-- 
-                <li class="">
-                    <a id="sp-file-links-data" href="#"><i class="fa fa-table"></i> <span class="nav-label">File links data</span></a>
-                </li>
-                -->
-            </ul>
-
-        </div>
-    </nav>
-
-    <div id="page-wrapper" class="gray-bg">
-        <div class="row border-bottom">
-            <nav class="navbar navbar-static-top white-bg" role="navigation" style="margin-bottom: 0">
-                <div class="navbar-header">
-                    <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-bars"></i> </a>
-                    <form role="search" class="navbar-form-custom" method="post" action="#">
-                        <div class="form-group">
-                            <input type="text" placeholder="Search for something..." class="form-control" name="top-search" id="top-search">
+    <div id="wrapper">
+        <nav class="navbar-default navbar-static-side" role="navigation">
+            <div class="sidebar-collapse">
+                <ul class="nav metismenu" id="side-menu">
+                    <li class="nav-header">
+                        <div class="dropdown profile-element">
+                            <a data-toggle="dropdown" class="dropdown-toggle" href="#"> 
+                                <span class="clear">
+                                    <span class="block m-t-xs" id="sp-salesman-full-name"> 
+                                        <strong class="font-bold"></strong>
+                                    </span> 
+                                    <span class="text-muted text-xs block">Position <b class="caret"></b> </span>
+                                </span>
+                            </a>
                         </div>
-                    </form>
-                </div>
-                <ul class="nav navbar-top-links navbar-right">
-                    <li class="sp-logout">
+                        <div class="logo-element">SP</div>
+                    </li>
+                    <li class="sp-nav-section" data-dashboard="sp-file-upload">
                         <a href="#">
-                            <i class="fa fa-sign-out"></i> Log Out
+                            <i class="fa fa-folder"></i> 
+                            <span class="nav-label">Documents & Customers</span>
                         </a>
                     </li>
+
+                    <li class="sp-nav-section" data-dashboard="sp-send-email">
+                        <a href="#" aria-expanded="true">
+                            <i class="fa fa-envelope-o"></i> 
+                            <span class="nav-label">Send Documents</span> 
+                        </a>
+                    </li>
+
+                    <li class="sp-nav-section active" id="sp-nav-files__li" data-dashboard="sp-file-dashboard">
+                        <a href="#" aria-expanded="true">
+                            <i class="fa fa-bar-chart"></i> 
+                            <span class="nav-label">Marketing Analytics</span>
+                        </a>
+                    </li>
+
+                    <li class="sp-nav-section" id="sp-nav-sales-analytics__li" data-dashboard="sp-sales-analytics-view">
+                        <a href="#" aria-expanded="true">
+                            <i class="fa fa-bar-chart"></i> 
+                            <span class="nav-label">Sales Analytics</span> 
+                        </a>
+                   </li>
                 </ul>
 
-            </nav>
-        </div>
-        <div class="wrapper wrapper-content animated fadeInRight">
-            
-            <!-- File dashboard -->
-            <div class="sp-dashboard" id="sp-file-dashboard">
-                <div class="row">
-                    <div class="col-lg-2">
-                        <div class="widget style1 blue-bg">
-                            <div class="row">
-                                <div class="col-xs-4">
-                                    <i class="fa fa-eye fa-3x"></i>
-                                </div>
-                                <div class="col-xs-8 text-right">
-                                    <span>Total views</span>
-                                    <h2 class="font-bold sp-widget" id="sp-widget-total-views">0</h2>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-2">
-                        <div class="widget style1 navy-bg">
-                            <div class="row">
-                                <div class="col-xs-4">
-                                    <i class="fa fa-external-link fa-3x"></i>
-                                </div>
-                                <div class="col-xs-8 text-right">
-                                    <span>Bounce rate</span>
-                                    <h2 class="font-bold sp-widget" id="sp-widget-bounce-rate">N/A</h2>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-2">
-                        <div class="widget style1 yellow-bg">
-                            <div class="row">
-                                <div class="col-xs-4">
-                                    <i class="fa fa-hourglass-end fa-3x"></i>
-                                </div>
-                                <div class="col-xs-8 text-right">
-                                    <span>Avg. view duration</span>
-                                    <h2 class="font-bold sp-widget" id="sp-widget-average-view-duration">N/A</h2>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-2">
-                        <div class="widget style1 lazur-bg">
-                            <div class="row">
-                                <div class="col-xs-4">
-                                    <i class="fa fa-clone fa-3x"></i>
-                                </div>
-                                <div class="col-xs-8 text-right">
-                                    <span>Avg. pages viewed</span>
-                                    <h2 class="font-bold sp-widget" id="sp-widget-average-pages-viewed">N/A</h2>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-2">
-                        <div class="widget style1 red-bg">
-                            <div class="row">
-                                <div class="col-xs-4">
-                                    <i class="fa fa-external-link-square fa-3x"></i>
-                                </div>
-                                <div class="col-xs-8 text-right">
-                                    <span>Top exit page</span>
-                                    <h2 class="font-bold sp-widget" id="sp-widget-top-exit-page">N/A</h2>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-2">
-                        <div class="widget style1 blue-bg">
-                            <div class="row">
-                                <div class="col-xs-4">
-                                    <i class="fa fa-user-plus fa-3x"></i>
-                                </div>
-                                <div class="col-xs-8 text-right">
-                                    <span>Users CTA</span>
-                                    <h2 class="font-bold sp-widget" id="sp-widget-users-cta">N/A</h2>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-6">
-                        <div class="ibox float-e-margins">
-                            <div class="ibox-title">
-                                <i class="fa fa-line-chart fa-2x sp-chart-title-fa"></i>
-                                <h4>Total views</h4>
-                            </div>
-                            <div class="ibox-content">
-                                <div>
-                                    <canvas id="lineChart" height="354" width="760" style="width: 760px; height: 354px;"></canvas>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="ibox float-e-margins">
-                            <div class="ibox-title">
-                                <i class="fa fa-bar-chart-o fa-2x sp-chart-title-fa"></i>
-                                <h4>Average view duration per page (sec.)</h4>
-                            </div>
-                            <div class="ibox-content">
-                                <div>
-                                    <canvas id="barChart" height="354" width="760" style="width: 760px; height: 354px;"></canvas>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-6">
-                        <div class="ibox float-e-margins">
-                            <div class="ibox-title">
-                                <i class="fa fa-map-marker fa-2x sp-chart-title-fa"></i>
-                                <h4>Visitors map</h4>
-                            </div>
-                            <div class="ibox-content">
-                                <div>
-                                    <div id="sp-google-geochart" style="width: 760px; height: 354px"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="ibox float-e-margins">
-                            <div class="ibox-title">
-                                <i class="fa fa-signal fa-2x sp-chart-title-fa"></i>
-                                <h4>Performance benchmark</h4>
-                            </div>
-                            <div class="ibox-content">
-                                <div>
-                                    <canvas id="lineChart2" height="354" width="760" style="width: 760px; height: 354px;"></canvas>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                            
-	            <!-- File links table -->
-	            <div class="sp-display--off" id="sp-file-links-table">
-	                <div class="row">
-	                    <div class="col-lg-12">
-	                        <div class="ibox float-e-margins">
-	                            <div class="ibox-title">
-	                                <h5>File links data</h5>
-	                                <div class="ibox-tools">
-	                                    <a class="collapse-link">
-	                                        <i class="fa fa-chevron-up"></i>
-	                                    </a>
-	                                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-	                                        <i class="fa fa-wrench"></i>
-	                                    </a>
-	                                    <ul class="dropdown-menu dropdown-user">
-	                                        <li><a href="#">Config option 1</a>
-	                                        </li>
-	                                        <li><a href="#">Config option 2</a>
-	                                        </li>
-	                                    </ul>
-	                                    <a class="close-link">
-	                                        <i class="fa fa-times"></i>
-	                                    </a>
-	                                </div>
-	                            </div>
-	                            <div class="ibox-content">
-	                                <div class="table-responsive">
-	                                    <table class="table table-striped table-bordered table-hover" id="sp-files-data__table">
-	                                        <thead>
-	                                            <tr>
-	                                                <th>File hash</th>
-	                                                <th>File name</th>
-	                                                <th>File link (general)</th>
-	                                                <th>Total views</th>
-	                                                <th>Bounce rate</th>
-	                                                <th>Avg. view duration</th>
-	                                                <th>Avg. pages viewed</th>
-	                                                <th>Users CTA</th>
-	                                                <th>Performance</th>
-	                                            </tr>
-	                                        </thead>
-	                                    </table>
-	                                </div>
-	                            </div>
-	                        </div>
-	                    </div>
-	                </div>
-	            </div>
             </div>
-            
-            <!-- File Upload -->
-            <div class="sp-dashboard" id="sp-file-upload">
-                <div class="wrapper wrapper-content animated fadeInRight">
+        </nav>
+
+        <div id="page-wrapper" class="gray-bg">
+            <div class="row border-bottom">
+                <nav class="navbar navbar-static-top white-bg" role="navigation" style="margin-bottom: 0">
+                    <div class="navbar-header">
+                        <div class="sp-error-box"></div>
+                        <a class="navbar-minimalize minimalize-styl-2 btn btn-primary" href="#">
+                            <i class="fa fa-bars"></i> 
+                        </a>
+                        <form role="search" class="navbar-form-custom" method="post" action="#">
+                            <div class="form-group">
+                                <input type="text" placeholder="Search for something..." class="form-control" name="top-search" id="top-search">
+                            </div>
+                        </form>
+                    </div>
+
+                    <ul class="nav navbar-top-links navbar-right">
+                        <li data-toggle="modal" data-target="#sp-help-salesmen__modal" class="sp-help-salesmen__icon">
+                            <a href="#">
+                                <i class="fa fa-question" aria-hidden="true"></i>Help
+                            </a>
+                        </li>
+                        <li data-toggle="modal" data-target="#sp-change-password__modal" class="sp-change-pwd__icon">
+                            <a href="#">
+                                <i class="fa fa-cog" aria-hidden="true"></i>Change Password
+                            </a>
+                        </li>
+                        <li class="sp-logout">
+                            <a href="#">
+                                <i class="fa fa-sign-out"></i> Log Out
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+         
+            <div class="wrapper wrapper-content animated fadeInRight">       
+                <!-- File dashboard -->
+                <div class="sp-dashboard animated fadeInRight" id="sp-file-dashboard">
                     <div class="row">
-                        <div class="ibox">
-                            <div class="ibox-content">
-                                <h2>Files</h2>
-                                <p>
-                                    Here is the place where you can upload new files, update, and delete them.
-                                </p>
-                                
-                                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#sp-modal-upload-files">
-                                    Upload Files
-                                </button>
-                                
-                                <div class="clients-list">
-                                    <ul class="nav nav-tabs">
-                                        <li class="active"><a data-toggle="tab" href="#tab-1"><i class="fa fa-file"></i> Files</a></li>
-                                    </ul>
-                                    <div class="tab-content">
-                                        <div id="tab-1" class="tab-pane active">
-                                            <div class="full-height-scroll">
+                        <div class="col-lg-2">
+                            <div class="widget style1 blue-bg sp-data-widget">
+                                <div class="row">
+                                    <div class="col-xs-4">
+                                        <i class="fa fa-eye fa-3x"></i>
+                                    </div>
+                                    <div class="col-xs-8 text-right">
+                                        <span>Total views</span>
+                                        <h2 class="font-bold sp-widget sp-widget-text" id="sp-widget-total-views">0</h2>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-2">
+                            <div class="widget style1 navy-bg sp-data-widget">
+                                <div class="row">
+                                    <div class="col-xs-4">
+                                        <i class="fa fa-external-link fa-3x"></i>
+                                    </div>
+                                    <div class="col-xs-8 text-right">
+                                        <span>Bounce rate</span>
+                                        <h2 class="font-bold sp-widget sp-widget-text" id="sp-widget-bounce-rate">N/A</h2>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-2">
+                            <div class="widget style1 yellow-bg sp-data-widget">
+                                <div class="row">
+                                    <div class="col-xs-4">
+                                        <i class="fa fa-hourglass-end fa-3x"></i>
+                                    </div>
+                                    <div class="col-xs-8 text-right">
+                                        <span>Avg. view duration</span>
+                                        <h2 class="font-bold sp-widget sp-widget-text" id="sp-widget-average-view-duration">N/A</h2>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-2">
+                            <div class="widget style1 lazur-bg sp-data-widget">
+                                <div class="row">
+                                    <div class="col-xs-4">
+                                        <i class="fa fa-clone fa-3x"></i>
+                                    </div>
+                                    <div class="col-xs-8 text-right">
+                                        <span>Avg. pages viewed</span>
+                                        <h2 class="font-bold sp-widget sp-widget-text" id="sp-widget-average-pages-viewed">N/A</h2>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-2 sp-metric-top-exit-page">
+                            <div class="widget style1 red-bg sp-data-widget">
+                                <div class="row">
+                                    <div class="col-xs-4">
+                                        <i class="fa fa-external-link-square fa-3x"></i>
+                                    </div>
+                                    <div class="col-xs-8 text-right">
+                                        <span>Top exit page</span>
+                                        <h2 class="font-bold sp-widget sp-widget-text" id="sp-widget-top-exit-page">N/A</h2>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-2">
+                            <div class="widget style1 blue-bg sp-data-widget">
+                                <div class="row">
+                                    <div class="col-xs-4">
+                                        <i class="fa fa-user-plus fa-3x"></i>
+                                    </div>
+                                    <div class="col-xs-8 text-right">
+                                        <span>Users CTA</span>
+                                        <h2 class="font-bold sp-widget sp-widget-text" id="sp-widget-users-cta">N/A</h2>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="ibox float-e-margins">
+                                <div class="ibox-title">
+                                    <i class="fa fa-line-chart sp-chart-title-fa fa-2x"></i>
+                                    <h4>Total views</h4>
+                                </div>
+                                <div class="ibox-content">
+                                    <div>
+                                        <canvas id="lineChart" height="354" width="760" style="width: 760px; height: 354px;"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="ibox float-e-margins">
+                                <div class="ibox-title">
+                                    <i class="fa fa-bar-chart-o sp-chart-title-fa fa-2x"></i>
+                                    <h4>Average view duration per page (sec.)</h4>
+                                </div>
+                                <div class="ibox-content">
+                                    <div>
+                                        <canvas id="barChart" height="354" width="760" style="width: 760px; height: 354px;"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="ibox float-e-margins">
+                                <div class="ibox-title">
+                                    <i class="fa fa-map-marker sp-chart-title-fa fa-2x"></i>
+                                    <h4>Visitors map</h4>
+                                </div>
+                                <div class="ibox-content">
+                                    <div>
+                                        <div id="sp-google-geochart" style="width: 100%; height: auto"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div
+                            class="col-lg-6 sp-chart-performance-benchmark">
+                            <div class="ibox float-e-margins">
+                                <div class="ibox-title">
+                                    <i class="fa fa-signal sp-chart-title-fa fa-2x"></i>
+                                    <h4>Performance benchmark</h4>
+                                </div>
+                                <div class="ibox-content">
+                                    <div>
+                                        <canvas id="lineChart2" height="354" width="760" style="width: 760px; height: 354px;"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+              
+                    <!-- File links table -->
+                    <div class="sp-display--off" id="sp-file-links-table">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="ibox float-e-margins">
+                                    <div class="ibox-title">
+                                        <h5>File links data</h5>
+                                        <div class="ibox-tools">
+                                            <a class="collapse-link">
+                                                <i class="fa fa-chevron-up"></i>
+                                            </a> 
+                                            <a class="dropdown-toggle" data-toggle="dropdown" href="#"> 
+                                                <i class="fa fa-wrench"></i>
+                                            </a>
+                                            <ul class="dropdown-menu dropdown-user">
+                                                <li>
+                                                    <a href="#">Config option 1</a>
+                                                </li>
+                                                <li>
+                                                    <a href="#">Config option 2</a>
+                                                </li>
+                                            </ul>
+                                            <a class="close-link"> 
+                                                <i class="fa fa-times"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="ibox-content">
+                                        <div class="table-responsive">
+                                            <table style="width: 100%;" class="table table-striped table-bordered table-hover"
+                                                id="sp-files-data__table">
+                                                <thead>
+                                                    <tr>
+                                                        <th>File hash</th>
+                                                        <th>File name</th>
+                                                        <th>File link (general)</th>
+                                                        <th>Total views</th>
+                                                        <th>Bounce rate</th>
+                                                        <th>Avg. view duration</th>
+                                                        <th>Avg. pages viewed</th>
+                                                        <th>Users CTA</th>
+                                                        <th>Performance</th>
+                                                    </tr>
+                                                </thead>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            
+                <!-- File Upload -->
+                <div class="sp-dashboard animated fadeInRight" id="sp-file-upload">
+                    <div class="wrapper wrapper-content animated fadeInRight">
+                        <div class="row">
+                            <div class="ibox">
+                                <div class="ibox-content">
+                                    <div class="sp-files-customers-mgmt-top-part" id="sp-files-mgmt-top-part">
+                                        <h2>Documents</h2>
+                                        <p>Here is the place where you can upload new files,
+                                            update, and delete them.
+                                        </p>
+                                        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#sp-modal-upload-files">
+                                                Upload Documents
+                                        </button>
+                                    </div>
+              
+                                    <div class="sp-files-customers-mgmt-top-part" id="sp-customers-mgmt-top-part">
+                                        <h2>Customers</h2>
+                                        <p>Here is the place where you can upload new customers, update, and
+                                            delete them.
+                                        </p>
+                                        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#sp-modal-upload-customers">
+                                            Upload Customers
+                                        </button>
+                                        <button type="button" class="btn btn-primary sp-add-update-customer" data-add-update="add" data-toggle="modal" data-target="#sp-modal-add-update-customer">
+                                            Add a Customer
+                                        </button>
+                                    </div>
+              
+                                    <div class="clients-list">
+                                        <ul class="nav nav-tabs sp-doc-and-file-tab__ul">
+                                            <li class="sp-files-customers-mgmt-tab active" id="sp-files-mgmt-tab">
+                                                <a data-toggle="tab" href="#tab-1">
+                                                    <i class="fa fa-file"></i>
+                                                    Documents
+                                                </a>
+                                            </li>
+                                            <li class="sp-files-customers-mgmt-tab" id="sp-customers-mgmt-tab">
+                                                <a data-toggle="tab" href="#tab-2" aria-expanded="false">
+                                                    <i class="fa fa-user"></i>
+                                                    Customers
+                                                </a>
+                                            </li>
+                                        </ul>
+                                        <div class="tab-content">
+                                            <!-- Files mgmt -->
+                                            <div id="tab-1" class="tab-pane active">
                                                 <div class="table-responsive">
-                                                    <table class="table table-striped table-hover" id="sp-files-management">
-                                                        <tbody>
-                                                        </tbody>
+                                                    <table style="width: 100%;" class="table table-striped table-hover" id="sp-files-management">
+                                                        <thead style="z-depth: 1;">
+                                                            <tr>
+                                                                <th>Date</th>
+                                                                <th>Document</th>
+                                                                <th></th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tfoot>
+                                                            <tr>
+                                                                <td>Date</td>
+                                                                <td>Document</td>
+                                                                <td></td>
+                                                            </tr>
+                                                        </tfoot>
+                                                        <tbody></tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+              
+                                            <!-- Users mgmt -->
+                                            <div id="tab-2" class="tab-pane">
+                                                <div class="table-responsive">
+                                                    <table style="width: 100%;" class="table table-striped table-hover" id="sp-customers-management">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Name</th>
+                                                                <th>Company</th>
+                                                                <th style="margin-left: 30px;">Email</th>
+                                                                <th></th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tfoot>
+                                                            <tr>
+                                                                <td>Name</td>
+                                                                <td>Company</td>
+                                                                <td>Email</td>
+                                                                <td></td>
+                                                            </tr>
+                                                        </tfoot>
+                                                        <tbody></tbody>
                                                     </table>
                                                 </div>
                                             </div>
@@ -310,95 +426,415 @@
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-        <div class="footer">
-            <div class="pull-right">
-            </div>
-            <div>
-                SlidePiper &copy; 2016
-            </div>
-        </div>
-
-    </div>
-</div>
-
-<!-- Mainly scripts -->
-<script src="assets/js/jquery-2.1.1.js"></script>
-<script src="assets/js/bootstrap.min.js"></script>
-<script src="assets/js/plugins/metisMenu/metisMenu.min.js"></script>
-
-<!-- Custom and plugin javascript -->
-<script src="assets/js/inspinia.js"></script>
-<script src="assets/js/plugins/pace/pace.min.js"></script>
-<script src="assets/js/plugins/clipboard/clipboard.min.js"></script>
-<script src="assets/js/plugins/datatables/datatables.min.js"></script>
-<script src="assets/js/plugins/chartjs/chart.min.js"></script>
-
-<!-- SlidePiper scripts -->
-<script src="assets/js/js.cookie.js"></script>
-<script src="assets/js/sp-functions.js"></script>
-
-<!-- Upload files modal -->
-<div class="modal inmodal" id="sp-modal-upload-files" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                <i class="fa fa-cloud-upload modal-icon"></i>
-                <h4 class="modal-title">Upload Files</h4>
-                <small class="font-bold">Click on the choose files button to add one or more files.<br>Then just hit on the upload files and you are done.</small>
-            </div>
-            <div class="modal-body">
-                <form id="sp-file-upload__form">
-                  <input class="file__input" type="file" multiple accept=".pdf" />
-                </form>
-                <div class="sk-spinner sk-spinner-wave">
-                    <div class="sk-rect1"></div>
-                    <div class="sk-rect2"></div>
-                    <div class="sk-rect3"></div>
-                    <div class="sk-rect4"></div>
-                    <div class="sk-rect5"></div>
+            
+                <!-- Send Email  -->
+                <div class='container-fluid sp-email-container-hidden'>
+                    <div class="sp-dashboard animated fadeInRight" id="sp-send-email">
+                        <div class="col-lg-12">
+                            <div class="ibox float-e-margins">
+                                <div class="ibox-title">
+                                    <h5>Send Email</h5>
+                                </div>
+                                <div class="ibox-content">
+                                    <p class="sp-section-description">Send your documents using this wizard</p>
+                                    <div id="document-wizard">
+                                        <h3>Select Customers</h3>
+                                        <section id="sp-section1">
+                                            <div class="ibox float-e-margins">
+                                                <div class="ibox-content">
+                                                    <div class="row">
+                                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                            <div class="table-responsive">
+                                                                <table class="table table-striped sp-customer-table">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th></th>
+                                                                            <th>Name</th>
+                                                                            <th>Company</th>
+                                                                            <th>Email</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tfoot>
+                                                                        <tr>
+                                                                            <td></td>
+                                                                            <td>Name</td>
+                                                                            <td>Company</td>
+                                                                            <td>Email</td>
+                                                                        </tr>
+                                                                    </tfoot>
+                                                                    <tbody></tbody>
+                                                                </table>
+                                                            </div> 
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </section>
+                                        <h3>Select Documents</h3>
+                                        <section id="sp-section2">
+                                            <div class="ibox float-e-margins">
+                                                <div class="ibox-content">
+                                                    <div class="row">
+                                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                            <div class="table-responsive">
+                                                            <!-- Width is set to 100% because datatables set it to 0px -->
+                                                                <table style="width: 100%;" class="table table-striped sp-doc-table">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th></th>
+                                                                            <th>Name</th>
+                                                                            <th>Date</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tfoot>
+                                                                        <tr>
+                                                                            <td></td>
+                                                                            <td>Name</td>
+                                                                            <td>Date</td>
+                                                                        </tr>
+                                                                    </tfoot>
+                                                                    <tbody></tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </section>
+                                        <h3>Send Documents</h3>
+                                        <section id="sp-section3">
+                                            <div class="ibox float-e-margins">
+                                                <div class="ibox-content">
+                                                    <div class="row">
+                                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                            <div class="table-responsive">
+                                                                <table class="table table-striped sp-send-table">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th>Email Address</th>
+                                                                            <th>Document</th>
+            
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody></tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </section>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" id="sp-upload-files__button">Upload Files</button>
+              
+            <div class="footer">
+                <div class="pull-right"></div>
+                <div>SlidePiper &copy; 2016</div>
             </div>
         </div>
     </div>
-</div>
 
-<!-- Update files modal -->
-<div class="modal inmodal" id="sp-modal-update-file" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                <i class="fa fa-cloud-upload modal-icon"></i>
-                <h4 class="modal-title">Update File</h4>
-                <small class="font-bold">Click on the choose file button to add the file you want to update to.<br>Then just hit on the update file and you are done.</small>
-            </div>
-            <div class="modal-body">
-                <form id="sp-file-update__form">
-                  <input class="file__input" type="file" accept=".pdf" />
-                </form>
-                <div class="sk-spinner sk-spinner-wave">
-                    <div class="sk-rect1"></div>
-                    <div class="sk-rect2"></div>
-                    <div class="sk-rect3"></div>
-                    <div class="sk-rect4"></div>
-                    <div class="sk-rect5"></div>
+    <!-- Mainly scripts -->
+    <script src="assets/js/jquery-2.1.1.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+    <script src="assets/js/plugins/metisMenu/metisMenu.min.js"></script>
+
+    <!-- Custom and plugin javascript -->
+    <script src="assets/js/inspinia.js"></script>
+    <script src="assets/js/plugins/jquerySteps/jquery.steps.min.js"></script>
+    <script src="assets/js/plugins/pace/pace.min.js"></script>
+    <script src="assets/js/plugins/clipboard/clipboard.min.js"></script>
+    <script src="assets/js/plugins/datatables/datatables.min.js"></script>
+    <script src="assets/js/plugins/chartjs/chart.min.js"></script>
+    <script src="assets/js/plugins/toastr/toastr.js"></script>
+    <script src="assets/js/plugins/sweetalerts/sweetalert.min.js"></script>
+
+    <!-- SlidePiper scripts -->
+    <script src="assets/js/js.cookie.js"></script>
+    <script src="assets/js/sp-functions.js"></script>
+
+    <!-- Upload files modal -->
+    <div class="modal inmodal" id="sp-modal-upload-files" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">&times;</span>
+                        <span class="sr-only">Close</span>
+                    </button>
+                    <i class="fa fa-cloud-upload modal-icon"></i>
+                    <h4 class="modal-title">Upload Documents</h4>
+                    <small class="font-bold">Click on the choose
+                        documents button to add one or more documents.
+                        <br>
+                        Then just hit upload documents and you are done.
+                    </small>
+                </div>
+                <div class="modal-body">
+                    <form id="sp-file-upload__form">
+                        <input class="file__input" type="file" multiple accept=".pdf"/>
+                    </form>
+                    <div class="sk-spinner sk-spinner-wave">
+                        <div class="sk-rect1"></div>
+                        <div class="sk-rect2"></div>
+                        <div class="sk-rect3"></div>
+                        <div class="sk-rect4"></div>
+                        <div class="sk-rect5"></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="sp-upload-files__button">Upload Documents</button>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" id="sp-update-file__button">Update File</button>
+        </div>
+    </div>
+
+    <!-- Update files modal -->
+    <div class="modal inmodal" id="sp-modal-update-file" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">&times;</span>
+                        <span class="sr-only">Close</span>
+                    </button>
+                    <i class="fa fa-cloud-upload modal-icon"></i>
+                    <h4 class="modal-title">Update Document</h4>
+                    <small class="font-bold">Click on the choose
+                        document button to add the file you want to
+                        update to.<br>Then just hit on the update
+                        document and you are done.
+                    </small>
+                </div>
+                <div class="modal-body">
+                    <form id="sp-file-update__form">
+                        <input class="file__input" type="file" accept=".pdf"/>
+                    </form>
+                    <div class="sk-spinner sk-spinner-wave">
+                        <div class="sk-rect1"></div>
+                        <div class="sk-rect2"></div>
+                        <div class="sk-rect3"></div>
+                        <div class="sk-rect4"></div>
+                        <div class="sk-rect5"></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="sp-update-file__button">Update Document</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
+    <!-- Upload customers modal -->
+    <div class="modal inmodal" id="sp-modal-upload-customers" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">&times;</span>
+                        <span class="sr-only">Close</span>
+                    </button>
+                    <i class="fa fa-cloud-upload modal-icon"></i>
+                    <h4 class="modal-title">Upload Customers</h4>
+
+                    <div class="sp-create-csv-help">
+                        <small class="font-bold"> To upload
+                            customers to SlidePiper, follow these
+                            instructions:
+                            <br><br>
+                            1. Create a CSV file of your customers by one of these options:
+                            <br><br>
+                            Export a CSV file from Outlook: 
+                            (<a target="_blank" href="https://support.office.com/en-us/article/Export-contacts-from-Outlook-10f09abd-643c-4495-bb80-543714eca73f">How?</a>)
+                            <br> -OR- <br>
+                            Export a CSV file from Gmail (Outlook CSV Format): 
+                            (<a target="_blank" href="https://support.google.com/mail/answer/24911?hl=en">How?</a>)
+                            <br> -OR- <br>
+                            Add your data using our template: 
+                            (<a href="assets/files/customers_template.csv">Download</a>)
+                            <br><br>
+                        </small>
+                    </div>
+                    <div class="sp-download-contacts-help">
+                        <small class="font-bold"> Once you have saved the CSV in an appropriate folder: 
+                            <br>
+                            2. Click on the 'Choose File / Browse' button and select your CSV file.
+                            <br>
+                            3. Click on the 'Upload Customers' button to upload the CSV file to the system.
+                        </small>
+                    </div>
+
+                </div>
+                <div class="modal-body">
+                    <form id="sp-customers-upload__form">
+                        <input class="file__input sp-inline" type="file" accept=".csv"/>
+                    </form>
+                    <div class="sk-spinner sk-spinner-wave">
+                        <div class="sk-rect1"></div>
+                        <div class="sk-rect2"></div>
+                        <div class="sk-rect3"></div>
+                        <div class="sk-rect4"></div>
+                        <div class="sk-rect5"></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="sp-upload-customers__button">Upload Customers</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add / update a customer modal -->
+    <div class="modal inmodal" id="sp-modal-add-update-customer" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">&times;</span>
+                        <span class="sr-only">Close</span>
+                    </button>
+                    <i class="fa fa-cloud-upload modal-icon"></i>
+                    <h4 class="modal-title"></h4>
+                    <small class="font-bold modal-sub-title"></small>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" id="sp-add-update-customer__form">
+                        <div class="form-group">
+                            <label class="col-lg-3 control-label">First Name</label>
+                            <div class="col-lg-8">
+                                <input type="text" name="customerFirstName" placeholder="First Name" class="form-control" autocomplete="off">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-lg-3 control-label">Last Name</label>
+                            <div class="col-lg-8">
+                                <input type="text" name="customerLastName" placeholder="Last Name" class="form-control" autocomplete="off">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-lg-3 control-label">Company</label>
+                            <div class="col-lg-8">
+                                <input type="text" name="customerCompany" placeholder="Company" class="form-control" autocomplete="off">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-lg-3 control-label">Email</label>
+                            <div class="col-lg-8">
+                                <input type="email" name="customerEmail" placeholder="Email" class="form-control" required autocomplete="off">
+                            </div>
+                        </div>
+                        <input type="hidden" id="add-update">
+                    </form>
+                    <div class="sk-spinner sk-spinner-wave">
+                        <div class="sk-rect1"></div>
+                        <div class="sk-rect2"></div>
+                        <div class="sk-rect3"></div>
+                        <div class="sk-rect4"></div>
+                        <div class="sk-rect5"></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
+                    <input type="submit" form="sp-add-update-customer__form" class="btn btn-primary" id="sp-modal-add-update-customer__button">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Change Password Modal -->
+    <div id="sp-change-password__modal" class="modal inmodal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">&times;</span>
+                        <span class="sr-only">Close</span>
+                    </button>
+                    <h4 class="modal-title">Change Your Password</h4>
+                    <small class="font-bold modal-sub-title"></small>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Old Password</label>
+                            <div class="col-sm-9">
+                                <input placeholder="Old Password" id="sp-old-password" type="password" class="form-control" name="password">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">New Password</label>
+                            <div class="col-sm-9">
+                                <input placeholder="New Password" id="sp-new-password" type="password" class="form-control" name="password">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Retype New Password</label>
+                            <div class="col-sm-9">
+                                <input placeholder="New Password" id="sp-retype-password" type="password" class="form-control" name="password">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="sp-change-pwd__button">Change Password</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Help Salesman Modal -->
+    <div id="sp-help-salesmen__modal" class="modal inmodal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">&times;</span>
+                        <span class="sr-only">Close</span>
+                    </button>
+                    <h4 class="modal-title">How to Use SlidePiper</h4>
+                    <small class="font-bold modal-sub-title"></small>
+                </div>
+                <div class="modal-body">
+                    <div class="wrapper wrapper-content">
+                        <div class="middle-box text-center">
+                            <h2 class="font-bold">Welcome to SlidePiper</h2>
+                            <div class="error-desc sp-help-modal__container">
+                                <p>To send documents to customers you need to do 3 things:</p>
+                                <br>
+                                <h3>1. Add Customers</h3>
+                                <h3>2. Upload Documents</h3>
+                                <p>Click Documents & Customers</p>
+                                <h3>3. Use the wizard to send documents</h3>
+                                <p>Click Send Email</p>
+                                <h3 class="sp-help-done__h3">
+                                    <i class="fa fa-thumbs-up" aria-hidden="true"></i> Once you're done, check out the Anayltics
+                                </h3>
+                                <p>For support please contact us at:</p>
+                                <a target="_blank"  class="sp-help-info-mailto__button btn btn-primary" href="mailto:info@slidepiper.com">info@slidepiper.com</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer"></div>
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>

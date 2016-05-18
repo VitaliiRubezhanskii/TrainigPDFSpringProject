@@ -26,7 +26,7 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
 @SuppressWarnings("serial")
 @WebServlet("/uploadSlides")
-@MultipartConfig(maxFileSize = 16177215)  // upload file's size up to 16MB
+@MultipartConfig(maxFileSize = 104857600)  // upload file's size up to 16MB
 public class UploadSlides extends HttpServlet {
     
   protected void doPost(HttpServletRequest request,
@@ -79,7 +79,7 @@ public class UploadSlides extends HttpServlet {
           // Set default customer for the salesman if not exist.
           if (false == isDefaultCustomerEmailExist) {
             if (false == DbLayer.isCustomerExist(salesmanEmail, defaultCustomerEmail)) {  
-              DbLayer.addNewCustomer(salesmanEmail, null, null, null, defaultCustomerEmail);
+              DbLayer.addNewCustomer(null, salesmanEmail, null, null, null, defaultCustomerEmail);
             }
             isDefaultCustomerEmailExist = true;
           }

@@ -144,6 +144,34 @@ public class ConfigViewerServlt extends HttpServlet {
       viewer.put("toolbarCta3Link",
           salesman.get("viewer_toolbar_cta3_link"));
       
+      // Widget1.
+      if (Boolean.parseBoolean(salesman.get("viewer_widget1_is_enabled"))) {
+        JSONObject widget1 = new JSONObject();
+        widget1.put("isEnabled",
+            Boolean.parseBoolean(salesman.get("viewer_widget1_is_enabled")));
+        widget1.put("title",
+            salesman.get("viewer_widget1_title"));
+        widget1.put("iframeSrc",
+            salesman.get("viewer_widget1_iframe_src"));
+        widget1.put("pageNumber",
+            Integer.parseInt(salesman.get("viewer_widget1_page_number")));
+        viewer.put("widget1", widget1);
+      }
+      
+      // Widget2.
+      if (Boolean.parseBoolean(salesman.get("viewer_widget2_is_enabled"))) {
+        JSONObject widget2 = new JSONObject();
+        widget2.put("isEnabled",
+            Boolean.parseBoolean(salesman.get("viewer_widget2_is_enabled")));
+        widget2.put("title",
+            salesman.get("viewer_widget2_title"));
+        widget2.put("iframeSrc",
+            salesman.get("viewer_widget2_iframe_src"));
+        widget2.put("pageNumber",
+            Integer.parseInt(salesman.get("viewer_widget2_page_number")));
+        viewer.put("widget2", widget2);
+      }
+      
       config.put("viewer", viewer);
       out.println(config);
     } catch (Exception e) {

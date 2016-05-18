@@ -55,6 +55,11 @@
 
 
 /* Dashboard settings */
+
+button[data-target="#sp-modal-add-update-customer"] {
+  margin-left: 10px;
+}
+
 form[role="search"], .text-muted, .arrow {
   visibility: hidden;
 }
@@ -72,12 +77,16 @@ form[role="search"], .text-muted, .arrow {
   margin-right: 10px;
 }
 
-.sp-file-delete {
+.sp-file-delete, .sp-customer-delete {
   margin-left: 10px;
 }
 
 .sp-file-mgmt-file-name {
   font-weight: bold;
+}
+
+.sp-inline {
+  display: inline !important;
 }
 
 .sp-top-section {
@@ -100,3 +109,343 @@ td.sp-file-hash {
 #sp-file-upload {
   display: none;
 }
+
+#sp-customers-mgmt-top-part {
+  display: none;
+}
+
+#sp-customers-upload__form {
+  text-align: center;
+}
+
+#sp-download-template__button {
+  color: initial;
+  font-family: sans-serif;
+  margin-right: 40px;
+}
+
+
+.sp-data-widget {
+  height: 99px;
+}
+
+.sp-widget-text {
+  font-size: 23px !important; 
+}
+
+/* Scrollbar */
+
+/* Chrome and Safari */
+
+.sp-analytics-container__div {
+  max-height: 300px;
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
+
+.sp-analytics-container__div::-webkit-scrollbar{
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  background-color: rgb(47, 64, 80);
+  border-radius: 3px;
+  min-height: 0;
+  width: 7px;
+}
+
+.sp-analytics-container__div::-webkit-scrollbar-thumb {
+  background-color: rgba(241,241,241,.6);
+  border-radius: 3px;
+  -webkit-box-shadow: 0 0 1px rgb(167, 177 194);
+}
+
+.content::-webkit-scrollbar {
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  background-color: #fff;
+  border-radius: 3px;
+  height: 0;
+  width: 7px;
+}
+.content::-webkit-scrollbar-thumb {
+  background-color: #808080;
+  border-radius: 3px;
+  -webkit-box-shadow: 0 0 1px rgba(255,255,255,.5);
+} 
+
+.tab-content::-webkit-scrollbar {
+  -webkit-appearance: none;
+  background-color: #fff;
+  border-radius: 3px;
+  height: 0;
+  width: 7px;
+}
+.tab-content::-webkit-scrollbar-thumb {
+  -webkit-box-shadow: 0 0 1px rgba(255,255,255,.5);
+  background-color: #808080;
+  border-radius: 3px;
+}
+
+#sp-sales-analytics-scroll {
+  max-height: 300px;
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
+
+#sp-sales-analytics-scroll::-webkit-scrollbar {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-color: rgb(47, 64, 80);
+  border-radius: 3px;
+  height: 0;
+  width: 7px;
+}
+
+#sp-sales-analytics-scroll::-webkit-scrollbar-thumb {
+  -webkit-box-shadow: 0 0 1px rgb(167, 177 194);
+  background-color:rgba(241,241,241,.6);
+  border-radius: 3px;
+  position: relative;
+  z-index: 2;
+} 
+
+.tab-content::-webkit-scrollbar-thumb, #sp-sales-analytics-scroll::-webkit-scrollbar-thumb, .sp-analytics-container__div::-webkit-scrollbar-thumb,
+.content::-webkit-scrollbar-thumb {
+  min-height: 100px;
+}
+
+/* SCROLLBAR */
+
+/* Chrome and Safari */
+
+.sp-analytics-container__div {
+  max-height: 300px;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  scrollbar-base-color: grey;
+  scrollbar-base-color: grey;
+  scrollbar-3dlight-color: grey;
+  scrollbar-highlight-color: grey;
+  scrollbar-track-color: grey;
+  scrollbar-arrow-color: grey;
+  scrollbar-shadow-color: grey;
+  scrollbar-dark-shadow-color: grey;
+}
+
+.sp-analytics-container__div::-webkit-scrollbar{
+    -moz-appearance: none;
+    background-color: rgb(47, 64, 80);
+    border-radius: 3px;
+    min-height: 0;
+    -webkit-appearance: none;
+    width: 7px;
+}
+
+.sp-analytics-container__div::-webkit-scrollbar-thumb {
+    background-color: rgba(241,241,241,.6);
+    border-radius: 3px;
+    -webkit-box-shadow: 0 0 1px rgb(167, 177 194);
+}
+
+.content {
+  scrollbar-base-color: grey;
+  scrollbar-base-color: grey;
+  scrollbar-3dlight-color: grey;
+  scrollbar-highlight-color: grey;
+  scrollbar-track-color: grey;
+  scrollbar-arrow-color: grey;
+  scrollbar-shadow-color: grey;
+  scrollbar-dark-shadow-color: grey;
+}
+
+.content::-webkit-scrollbar {
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    width: 7px;
+    height: 0;
+    border-radius: 3px;
+    background-color: white;
+}
+.content::-webkit-scrollbar-thumb {
+    border-radius: 3px;
+    background-color: grey;
+    -webkit-box-shadow: 0 0 1px rgba(255,255,255,.5);
+} 
+
+.tab-content {
+  scrollbar-base-color: grey;
+  scrollbar-base-color: grey;
+  scrollbar-3dlight-color: grey;
+  scrollbar-highlight-color: grey;
+  scrollbar-track-color: grey;
+  scrollbar-arrow-color: grey;
+  scrollbar-shadow-color: grey;
+  scrollbar-dark-shadow-color: grey;
+}
+
+.tab-content::-webkit-scrollbar {
+    -webkit-appearance: none;
+    width: 7px;
+    height: 0;
+    border-radius: 3px;
+    background-color: white;
+}
+.tab-content::-webkit-scrollbar-thumb {
+    border-radius: 3px;
+    background-color: grey;
+    -webkit-box-shadow: 0 0 1px rgba(255,255,255,.5);
+}
+
+#sp-sales-analytics-scroll {
+  max-height: 300px;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  scrollbar-base-color: grey;
+  scrollbar-base-color: grey;
+  scrollbar-3dlight-color: grey;
+  scrollbar-highlight-color: grey;
+  scrollbar-track-color: grey;
+  scrollbar-arrow-color: grey;
+  scrollbar-shadow-color: grey;
+  scrollbar-dark-shadow-color: grey;
+}
+
+#sp-sales-analytics-scroll::-webkit-scrollbar {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    width: 7px;
+    height: 0;
+    border-radius: 3px;
+    background-color: rgb(47, 64, 80);
+}
+#sp-sales-analytics-scroll::-webkit-scrollbar-thumb {
+    position: relative;
+    z-index: 2;
+    border-radius: 3px;
+    background-color:rgba(241,241,241,.6);
+    -webkit-box-shadow: 0 0 1px rgb(167, 177 194);
+} 
+
+.tab-content::-webkit-scrollbar-thumb, #sp-sales-analytics-scroll::-webkit-scrollbar-thumb, .sp-analytics-container__div::-webkit-scrollbar-thumb,
+.content::-webkit-scrollbar-thumb {
+  min-height: 100px;
+}
+
+/* Send Email Wizard */
+
+.sp-clickable {
+  cursor: pointer;
+}
+
+.sp-file-link {
+  font-size: 12px;
+}
+
+.sp-cmd-all__button {
+  bottom: 0;
+  display: inline-block;
+}
+
+.content {
+  background-color: #fff !important;
+  height: 270px !important;
+}
+
+.sp-hidden {
+  display: none;
+}
+
+.sp-mailto {
+  color: inherit;
+}
+
+.sp-mail-all__button {
+  color: #1ab394;
+  margin-left: -10px;
+}
+
+.sp-mail-all__button:hover {
+  color: #1ab394;
+}
+
+.sp-email-container-hidden {
+  display: none;
+}
+
+.sp-mail-choice {
+  margin-left: -10px;
+}
+
+.sp-mail__icon {
+  color: #1ab394 !important;
+}
+
+.sp-send-to-all__button {
+  margin-left: -20px;
+}
+
+#sp-send-email {
+  margin-bottom: 30px;
+}
+
+/* Change Password */
+
+.form-group {
+  margin: 10px !important;
+}
+
+/* Help Modal */
+
+.sp-help-done__h3 {
+  margin-top: 20px;
+}
+
+.sp-help-info-mailto__button{
+  margin-top: 7px;
+}
+
+.sp-help-modal__container {
+  margin-bottom: -35px;
+}
+
+.middle-box {
+  margin-top: -60px !important;
+}
+
+/* Documents and Customers */
+
+.sp-create-csv-help {
+  margin-top: 10px;
+}
+
+.sp-download-contacts-help {
+  margin-top: 10px;
+}
+
+.sp-doc-and-file-tab__ul {
+  margin-bottom: 10px;
+}
+
+/* Error Handler */
+.sp-error-box {
+  position: absolute;
+  right: 4%;
+  top: -0.5%;
+  width: 400px;
+  z-index: 2;
+}
+
+/* These two toast rules are for the toastr, which is dynamically created, and there is no
+   code written for it in our files  */	
+.toast-error {
+  background: #ed5565;
+  border: 0px solid #000000;
+  border-radius: 10px 10px 10px 10px;
+  -moz-border-radius: 10px 10px 10px 10px;
+  -webkit-border-radius: 10px 10px 10px 10px;
+}
+
+.toast-message {
+  background: #ed5565;
+}
+
+

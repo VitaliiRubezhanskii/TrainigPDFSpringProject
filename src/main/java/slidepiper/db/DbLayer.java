@@ -96,7 +96,7 @@ public class DbLayer {
 	
 	
 	//add new customer.
-	public static int addNewCustomer(String salesMan, String firstName, String lastName, String company, String email){
+	public static int addNewCustomer(String subAction, String salesMan, String firstName, String lastName, String company, String email){
 		
 		// customer does not exist.
 		if (getCustomerName(email, salesMan) == null)
@@ -130,12 +130,41 @@ public class DbLayer {
 					ex.printStackTrace();
 					return 0;
 				}		
-		}
-		else
-		{
+		} else if (null != subAction && subAction.equals("add")) {
+		  return -1;
+		} else if (null != subAction && subAction.equals("update")) {
 			// customer already exists.
+		  Constants.updateConstants();
+      Connection conn = null;
+		  String sql = "UPDATE customers SET first_name = ?, last_name = ?, name = ?, company = ? WHERE sales_man = ? AND email = ?";
+		  
+		  try {
+        conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
+        PreparedStatement stmt = conn.prepareStatement(sql);
+        stmt.setString(1, firstName);
+        stmt.setString(2, lastName);
+        stmt.setString(3, firstName + " " + lastName);
+        stmt.setString(4, company);
+        stmt.setString(5, salesMan);
+        stmt.setString(6, email);
+        stmt.executeUpdate();
+      } catch (SQLException ex) {
+        System.err.println("Error code: " + ex.getErrorCode() + " - " + ex.getMessage());
+      } finally {
+        if (null != conn) {
+          try {
+            conn.close();
+          } catch (SQLException ex) {
+            ex.printStackTrace();
+          }
+        }
+      }
+		  
+		  
 			return 0;
 		}
+    
+		return 0;
 	}
 		
 	
@@ -1469,11 +1498,26 @@ public class DbLayer {
           
           if (rs.next()) {
             for (int i = 1; i <= columnCount; i++) {
-              if (null != rs.getString(i) && md.getColumnClassName(i).equals("java.lang.String")) {
-                salesmanMap.put(md.getColumnLabel(i), rs.getString(i));
-              } else if (null != rs.getBytes(i) && md.getColumnClassName(i).equals("[B")) {
-                  salesmanMap.put(md.getColumnLabel(i),
-                      DatatypeConverter.printBase64Binary(rs.getBytes(i)));
+              if (null != rs.getString(i)) {
+                switch (md.getColumnClassName(i)) {
+                  case "java.lang.String":
+                    salesmanMap.put(md.getColumnLabel(i), rs.getString(i));
+                    break;
+                    
+                  case "[B":
+                    salesmanMap.put(
+                        md.getColumnLabel(i),
+                        DatatypeConverter.printBase64Binary(rs.getBytes(i))
+                    );
+                    break;
+                    
+                  case "java.lang.Integer":
+                    salesmanMap.put(
+                        md.getColumnLabel(i),
+                        DatatypeConverter.printInt(rs.getInt(i))
+                    );
+                    break;
+                }
               }
             }
           }
@@ -1702,7 +1746,7 @@ public class DbLayer {
         
         if (isSalesmanExist(email)) {
           statusCode = 100;
-        } else if (! magic.equals("333")) {
+        } else if (! magic.equals("SYMpiper&3")) {
           statusCode = 101;
         } else {
           Connection conn = null;

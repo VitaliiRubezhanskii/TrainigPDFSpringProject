@@ -25,6 +25,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.tomcat.jni.File;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -87,7 +88,14 @@ public class ManagementServlet extends HttpServlet {
         sqlData = DbLayer.getEventData(parameterList, Analytics.sqlFilesData);        
         data.put("filesData", sqlData);
         break;
-          
+      
+      case "getFilesCustomerData":
+        parameterList.add(request.getParameter("salesmanEmail"));
+        parameterList.add(request.getParameter("customerEmail"));
+        sqlData = DbLayer.getEventData(parameterList, Analytics.sqlFilesCustomerData);        
+        data.put("filesCustomerData", sqlData);
+        break;
+      
 	    case "getTopExitPage":
         parameterList.add(request.getParameter("fileHash"));
         parameterList.add(request.getParameter("salesmanEmail"));
@@ -95,17 +103,39 @@ public class ManagementServlet extends HttpServlet {
         data.put("topExitPage", sqlData);
         break;
         
+	    case "getCustomersList":
+        parameterList.add(request.getParameter("salesmanEmail"));
+        sqlData = DbLayer.getEventData(parameterList, Analytics.sqlCustomersList);        
+        data.put("customersList", sqlData);
+        break;
+        
+	    case "getCustomersFilesList":
+        parameterList.add(request.getParameter("salesmanEmail"));
+        sqlData = DbLayer.getEventData(parameterList, Analytics.sqlCustomersFilesList);        
+        data.put("customersFilesList", sqlData);
+        break;
+        
 	    case "getFileBarChart":
         parameterList.add(request.getParameter("fileHash"));
         parameterList.add(request.getParameter("salesmanEmail"));
-        sqlData = DbLayer.getEventData(parameterList, Analytics.sqlFileBarChart);
+        if (null == request.getParameter("customerEmail") || request.getParameter("customerEmail").equals("")) {
+          sqlData = DbLayer.getEventData(parameterList, Analytics.sqlFileBarChart);
+        } else {
+          parameterList.add(request.getParameter("customerEmail"));
+          sqlData = DbLayer.getEventData(parameterList, Analytics.sqlFileCustomerBarChart);
+        }
         data.put("fileBarChart", sqlData);
         break;
       
       case "getFileLineChart":
         parameterList.add(request.getParameter("fileHash"));
         parameterList.add(request.getParameter("salesmanEmail"));
-        sqlData = DbLayer.getEventData(parameterList, Analytics.sqlFileLineChart);
+        if (null == request.getParameter("customerEmail") || request.getParameter("customerEmail").equals("")) {
+          sqlData = DbLayer.getEventData(parameterList, Analytics.sqlFileLineChart);
+        } else {
+          parameterList.add(request.getParameter("customerEmail"));
+          sqlData = DbLayer.getEventData(parameterList, Analytics.sqlFileCustomerLineChart);
+        }
         data.put("fileLineChart", sqlData);
         break;
         
@@ -119,7 +149,12 @@ public class ManagementServlet extends HttpServlet {
       case "getFileVisitorsMap":
         parameterList.add(request.getParameter("fileHash"));
         parameterList.add(request.getParameter("salesmanEmail"));
-        sqlData = DbLayer.getEventData(parameterList, Analytics.sqlFileVisitorsMap);
+        if (null == request.getParameter("customerEmail") || request.getParameter("customerEmail").equals("")) {
+          sqlData = DbLayer.getEventData(parameterList, Analytics.sqlFileVisitorsMap);
+        } else {
+          parameterList.add(request.getParameter("customerEmail"));
+          sqlData = DbLayer.getEventData(parameterList, Analytics.sqlFileCustomerVisitorsMap);
+        }
         data.put("fileVisitorsMap", sqlData);
         break;
 	  }
@@ -236,8 +271,16 @@ public class ManagementServlet extends HttpServlet {
           break;
                             
         case "addNewCustomer":
-          System.out.println("addnew cust");
-          output.put("newCustomer", DbLayer.addNewCustomer(input.getString("salesmanEmail"),
+          System.out.println("add/update new cust");          
+          String subAction = null;
+          try {
+            subAction = input.getString("subAction");
+          } catch (Exception ex) {
+            subAction = null;
+          }
+          
+          output.put("newCustomer", DbLayer.addNewCustomer(
+              subAction, input.getString("salesmanEmail"),
               input.getString("customerFirstName"), input.getString("customerLastName"),
               input.getString("customerCompany"), input.getString("customerEmail")));
           break;
@@ -284,6 +327,35 @@ public class ManagementServlet extends HttpServlet {
           //output.put("newCustomer", DbLayer.addNewCustomer(smemail, cname, ccompany, cemail));
           break;
           
+        case "createCustomersFilelinks":
+          JSONArray customersFilelinks = new JSONArray();
+          for (int i = 0; i < data.getJSONArray("data").length(); i++) {
+            JSONObject group = data.getJSONArray("data").getJSONObject(i);
+            String customerEmail = group.getString("customerEmail");
+            JSONArray fileHashes = group.getJSONArray("fileHashes");
+            
+            JSONObject customer = new JSONObject();
+            JSONArray files = new JSONArray();
+            
+            for (int j = 0; j < fileHashes.length(); j++) { 
+              JSONObject file = new JSONObject();
+              file.put("fileHash", fileHashes.getString(j));
+              file.put("fileLink",
+                  DbLayer.setFileLinkHash(
+                    customerEmail,
+                    fileHashes.getString(j),
+                    input.getString("salesmanEmail"))
+              );
+              files.put(file);
+            }
+            customer.put("customerEmail", group.getString("customerEmail"));
+            customer.put("files", files);
+            customersFilelinks.put(customer);
+          }
+          
+          output.put("customersFilelinks", customersFilelinks);
+          break;
+        
         case "sendEmail":
           String emailBody = URLDecoder.decode(data.getString("emailBody"), "UTF-8");
           String emailSubject = URLDecoder.decode(data.getString("emailSubject"), "UTF-8");
