@@ -110,18 +110,13 @@ public class HtmlRenderer {
 	            pattern = Pattern.compile(regex);
 	            matcher = pattern.matcher(input);
 	            
-	            //System.out.println("Current REGEX is: "+regex);
-	            //System.out.println("Current INPUT is: "+input);
 	            String mobileDeviceStr;
 	            Boolean isFound = matcher.find();
-	            //System.out.print("Looking at:" + isFound);
 	            
 	            if (isFound) {
-	            	//System.out.print("**********Answer: No");
 	            	mobileDeviceStr = "No";
 	            }
 	            else {
-	            	//System.out.print("**********Answer: Yes");
 	            	mobileDeviceStr = "Yes";
 	            }
 	            
@@ -164,16 +159,16 @@ public class HtmlRenderer {
 	            
      
 	            // Console output
-	            Writer out = new OutputStreamWriter(System.out);
-	            template.process(data, out);
+//	            Writer out = new OutputStreamWriter(System.out);
+//	            template.process(data, out);
 	            //out.flush();
 	 
 	            // File output
 	            //String path = System.getProperty("user.home");
-	            Writer file = new FileWriter (new File("FTL_helloreport.txt"));
-	            template.process(data, file);
-	            file.flush();
-	            file.close();
+//	            Writer file = new FileWriter (new File("FTL_helloreport.txt"));
+//	            template.process(data, file);
+//	            file.flush();
+//	            file.close();
 	            
 	            StringWriter stringwriter = new StringWriter();
 	            template.process(data, stringwriter);
@@ -294,16 +289,16 @@ public class HtmlRenderer {
 	            data.put("logoUrl", appUrl);
      
 	            // Console output
-	            Writer out = new OutputStreamWriter(System.out);
-	            template.process(data, out);
+	            //Writer out = new OutputStreamWriter(System.out);
+	            //template.process(data, out);
 	            //out.flush();
 	 
 	            // File output
 	            //String path = System.getProperty("user.home");
-	            Writer file = new FileWriter (new File("FTL_helloworld.txt"));
-	            template.process(data, file);
-	            file.flush();
-	            file.close();
+	            //Writer file = new FileWriter (new File("FTL_helloworld.txt"));
+	            //template.process(data, file);
+	            //file.flush();
+	            //file.close();
 	            
 	            StringWriter stringwriter = new StringWriter();
 	            template.process(data, stringwriter);

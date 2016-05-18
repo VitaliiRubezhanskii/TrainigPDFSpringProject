@@ -30,7 +30,7 @@ public class ConfigViewerServlt extends HttpServlet {
       config.put("appUrl", ConfigProperties.getProperty("app_url"));
       
       String salesmanEmail = DbLayer.getSalesmanEmailFromMsgId(request.getParameter("linkHash"));
-      Map<String, String> salesman = DbLayer.getSalesman(salesmanEmail);
+      Map<String, Object> salesman = DbLayer.getSalesman(salesmanEmail);
       JSONObject viewer = new JSONObject();
       
       viewer.put("toolbarBackground",
@@ -63,10 +63,18 @@ public class ConfigViewerServlt extends HttpServlet {
           salesman.get("viewer_toolbar_logo_link"));
       viewer.put("toolbarLogoCollapseMaxWidth",
           salesman.get("viewer_toolbar_logo_collapse_max_width"));
-      viewer.put("isChatEnabled",
-          Boolean.parseBoolean(salesman.get("viewer_is_chat_enabled")));
-      viewer.put("isChatOpen",
-          Boolean.parseBoolean(salesman.get("viewer_is_chat_open")));
+      
+      if (null != salesman.get("viewer_is_chat_enabled")) {
+    	viewer.put("isChatEnabled", Boolean.parseBoolean(salesman.get("viewer_is_chat_enabled").toString()));
+      } else {
+    	viewer.put("isChatEnabled", false);
+      }
+      
+      if (null != salesman.get("viewer_is_chat_open")) {
+      	viewer.put("isChatOpen", Boolean.parseBoolean(salesman.get("viewer_is_chat_open").toString()));
+      } else {
+      	viewer.put("isChatOpen", false);
+      }
       
       // CTA buttons.
       viewer.put("toolbarCtaBorderRadius",
@@ -79,8 +87,12 @@ public class ConfigViewerServlt extends HttpServlet {
           salesman.get("viewer_toolbar_cta_padding"));
       
       // CTA1.
-      viewer.put("isCta1Enabled",
-          Boolean.parseBoolean(salesman.get("viewer_toolbar_cta1_is_enabled")));
+      if (null != salesman.get("viewer_toolbar_cta1_is_enabled")) {
+	    viewer.put("isCta1Enabled", Boolean.parseBoolean(salesman.get("viewer_toolbar_cta1_is_enabled").toString()));
+	  } else {
+	    viewer.put("isCta1Enabled", false);
+	  }
+      
       viewer.put("cta1CollapseMaxWidth",
           salesman.get("viewer_toolbar_cta1_collapse_max_width"));
       viewer.put("toolbarCta1Background",
@@ -101,8 +113,12 @@ public class ConfigViewerServlt extends HttpServlet {
           salesman.get("viewer_toolbar_cta1_link"));
       
       // CTA2.
-      viewer.put("isCta2Enabled",
-          Boolean.parseBoolean(salesman.get("viewer_toolbar_cta2_is_enabled")));
+      if (null != salesman.get("viewer_toolbar_cta2_is_enabled")) {
+	    viewer.put("isCta2Enabled", Boolean.parseBoolean(salesman.get("viewer_toolbar_cta2_is_enabled").toString()));
+	  } else {
+	    viewer.put("isCta2Enabled", false);
+	  }
+      
       viewer.put("cta2CollapseMaxWidth",
           salesman.get("viewer_toolbar_cta2_collapse_max_width"));
       viewer.put("toolbarCta2Background",
@@ -123,8 +139,12 @@ public class ConfigViewerServlt extends HttpServlet {
           salesman.get("viewer_toolbar_cta2_link"));
       
       // CTA3.
-      viewer.put("isCta3Enabled",
-          Boolean.parseBoolean(salesman.get("viewer_toolbar_cta3_is_enabled")));
+      if (null != salesman.get("viewer_toolbar_cta3_is_enabled")) {
+	    viewer.put("isCta3Enabled", Boolean.parseBoolean(salesman.get("viewer_toolbar_cta3_is_enabled").toString()));
+	  } else {
+	    viewer.put("isCta3Enabled", false);
+	  }
+      
       viewer.put("cta3CollapseMaxWidth",
           salesman.get("viewer_toolbar_cta3_collapse_max_width"));
       viewer.put("toolbarCta3Background",

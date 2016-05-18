@@ -2,7 +2,9 @@ package slidepiper.keepalive;
 
 import slidepiper.dataobjects.*;
 
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.TimerTask;
 
@@ -66,7 +68,15 @@ public class KeepAliveTask extends TimerTask {
 							Double.toString(p.getEstimatedTimeViewed()+1.5), "LAST_SLIDE", 
 							p.getSessionId(), p.getTimezoneOffsetMin(), null, null, null, null, null, null, null, null, null, null);
 					
-					EmailSender.sendReportEmail(p);
+					String salesmanEmail = DbLayer.getSalesmanEmailFromMsgId(p.msgId);
+		    		Map<String, Object> docSettings = new HashMap<String, Object>();
+		    		docSettings = DbLayer.getSalesman(salesmanEmail);
+		    		if ((Boolean)docSettings.get("email_report_enabled")){
+		    			EmailSender.sendReportEmail(p);
+		    		}
+		    		else {
+		    			System.err.print("SP: Didn't send report email");
+		    		}
 															
 					// remove current element in 
 					// thread-safe, collection-safe, hash-safe, iterator-safe way.

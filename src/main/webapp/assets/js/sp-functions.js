@@ -61,7 +61,7 @@ sp = {
               
               var files = [];
               for (var i = 0; i < filesData.length; i++) {
-                $('#sp-nav-files__li ul').append('<li><a href="#" class="marketing-files" data-file-hash="'
+                $('#sp-nav-files__li ul').append('<li><a href="#" class="sp-word-wrap" data-file-hash="'
                     + filesData[i][0] + '">' + filesData[i][1] + '</a></li>');
 
                 if (typeof fileHash === 'undefined' || filesData[i][0] == fileHash) {
@@ -419,6 +419,7 @@ sp = {
         };   
         filesArr.push(obj);
       });
+      
       if (!($.fn.dataTable.isDataTable('#sp-files-management'))) {
         $('#sp-files-management').DataTable({
           data: filesArr,
@@ -437,7 +438,9 @@ sp = {
         .draw();
       }
       $('.tab-content').css('overflow-y', 'scroll');
- 
+      
+   // init tooltip
+      $('.sp-file-clock').tooltip();
     },
     
     uploadFiles: function(event) {
@@ -1716,6 +1719,7 @@ chart: {
                   data: JSON.stringify(data),
                   success: function (res) {
                     if (res) {
+                      sp.user.updateConfigSettings();
                       swal(
                         'Success',
                         'Your password has been changed',
@@ -1744,13 +1748,59 @@ chart: {
         });
     }),
     
-    changeDocSettings: function () {
+    setDocSettings: $(function () {
       
-      
-      
-      
+      $('#sp-save-doc-settings-changes').on('click', function () {
+        var docSettingsData = {
+            'action': 'setSalesmanDocumentSettings',
+            'isChatEnabled': $('#sp-enable-chat__checkbox').is(':checked'),
+            'isAlertEmailEnabled': $('#sp-enable-alert-emails__checkbox').is(':checked'),
+            'isReportEmailEnabled': $('#sp-enable-report-emails__checkbox').is(':checked'),
+            'salesMan': sp.config.salesman.email
+        };
+        
+        $.ajax({
+          url: 'ManagementServlet',
+          type: 'post',
+          data: JSON.stringify(docSettingsData),
+          success: function (data) {
+            $('#sp-document-settings__modal .sr-only').click();
+            sp.user.updateConfigSettings();
+            swal(
+              'Success!',
+              'Your changes have been saved',
+              'success'
+            );
+          },
+          error: function (err) {
+            console.log(err);
+            swal(
+              'Error!',
+              'Your changes were not saved',
+              'error'
+            );
+          }
+        });
+        
+      });
+    }),
+    
+    getSalesmanDocSettings: $(function () {
+        
+        $('[data-target="#sp-document-settings__modal"]').on('click', function () {
+          var enabledChat = (sp.config.salesman.viewer_is_chat_enabled === "true") ? true: false;
+          $('#sp-enable-chat__checkbox').prop('checked', enabledChat);
+          $('#sp-enable-alert-emails__checkbox').prop('checked', sp.config.salesman.email_alert_enabled);
+          $('#sp-enable-report-emails__checkbox').prop('checked', sp.config.salesman.email_report_enabled);
+        }); 
+    }),
+    
+    updateConfigSettings: function () {
+      $.getJSON('config', {salesmanEmail: Cookies.get('SalesmanEmail')}, function(data) {
+        sp.config = data;
+      });
     },
-   
+      
   },
 
   view: {
@@ -1797,12 +1847,12 @@ chart: {
                 
                 $.each(customers, function(i, v) {
                   $('#sp-nav-sales-analytics__li > ul')
-                      .append('<li class="sp-analytics-customer-name__li"><a data-customer-email="' + i + '">' + v.customerName + '</a></li>')
+                      .append('<li class="sp-analytics-customer-name__li"><a class="sp-word-wrap" data-customer-email="' + i + '">' + v.customerName + '</a></li>')
                       .append('<ul class="nav nav-third-level" data-customer-email="' + i + '">');
                   
                   $.each(v.files, function(j, u) {
                     $('#sp-nav-sales-analytics__li ul ul[data-customer-email="' + i + '"]')
-                        .append('<li class="sp-sales-analytics-filename__li"><a class="sp-customer-file__a" data-customer-email="'
+                        .append('<li class="sp-sales-analytics-filename__li"><a class="sp-customer-file__a sp-word-wrap" data-customer-email="'
                             + i + '" data-file-hash="' + u.fileHash + '">' + u.fileName + '</a></li>');
                   });
                 });
@@ -1892,7 +1942,9 @@ chart: {
 // End sp.
 
 $(document).ready(function() {
-
+  // Init js tooltip
+  $('[data-toggle="tooltip"]').tooltip(); 
+  
   $('#send_email_to_customers').css('visibility', 'visible');
 
   /**

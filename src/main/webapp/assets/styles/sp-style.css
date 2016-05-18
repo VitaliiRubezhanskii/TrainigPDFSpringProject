@@ -399,12 +399,18 @@ td.sp-file-hash {
 }
 
 .sp-settings-dropdown__button {
+  border: 0px;
   color: #999c9e;
   font-weight: 600;
+  margin-bottom: 2px;
 }
 
 .sp-dropdown-settings__li {
   color: #999c9e;
+}
+
+.sp-doc-settings-info__icon {
+  color: #1ab394;
 }
 
 /* Help Modal */
@@ -550,3 +556,6 @@ input:checked + .sp-slider:before {
   text-align: center;
 }
 
+.sp-word-wrap {
+  word-wrap: break-word;
+}

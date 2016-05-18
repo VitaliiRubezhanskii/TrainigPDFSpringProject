@@ -3,6 +3,7 @@ package slidepiper.customer_servlets;
 import java.io.ByteArrayOutputStream;
 
 import slidepiper.*;
+import slidepiper.dataobjects.AlertData;
 import slidepiper.dataobjects.MessageInfo;
 import slidepiper.db.DbLayer;
 import slidepiper.email.EmailSender;
@@ -18,7 +19,9 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -66,11 +69,19 @@ public class CustomerLoggingServlet extends HttpServlet {
 			    		}
 			    		
 							/// send email if opened presentation
-							if (event_name.equalsIgnoreCase("OPEN_SLIDES"))
-							{								
+			    		String salesmanEmail = DbLayer.getSalesmanEmailFromMsgId(id);
+			    		Map<String, Object> docSettings = new HashMap<String, Object>();
+			    		docSettings = DbLayer.getSalesman(salesmanEmail);
+			    		// Get salesman details, check if email_alert_enabled is true/false
+			    		if ((Boolean)docSettings.get("email_alert_enabled")){
+							if (event_name.equalsIgnoreCase("OPEN_SLIDES")) {
 									System.out.println("open slides event - sending email alert");
 									EmailSender.sendAlertEmail(id, sessionId);
-							}				    					    		
+							}				    					
+			    		}
+			    		else {
+			    			System.err.print("SP: Didn't send alert email");
+			    		}
     	}
 }
 

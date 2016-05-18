@@ -1466,63 +1466,85 @@ public class DbLayer {
         return dataEventList;
       }
 
-      
-			/**
-			 * Get data about a specific salesman such as his first name. 
-			 * 
-			 * @param salesmanEmail The salesman email address.
-			 * 
-			 * @return A map containing data about a specific salesman. Both keys and values are of type
-			 * String. Binary values retrieved from the DB are converted to a Base64 string.
-			 */
-      public static Map<String, String> getSalesman(String salesmanEmail) {
-        Connection conn = null;
-        Map<String, String> salesmanMap = new HashMap<String, String>();
-        String sql = "SELECT * FROM sales_men WHERE email=?";
-        
-        Constants.updateConstants();
-        try {
-          Class.forName("com.mysql.jdbc.Driver");
-        } catch (ClassNotFoundException e) {
-          e.printStackTrace();
-        }
-        
-        try {
-          conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
-          PreparedStatement ps = conn.prepareStatement(sql);
-          ps.setString(1, salesmanEmail);
-          
-          ResultSet rs = ps.executeQuery();
-          ResultSetMetaData md = rs.getMetaData();
-          int columnCount = md.getColumnCount();
-          
-          if (rs.next()) {
-            for (int i = 1; i <= columnCount; i++) {
-              if (null != rs.getString(i) && md.getColumnClassName(i).equals("java.lang.String")) {
-                salesmanMap.put(md.getColumnLabel(i), rs.getString(i));
-              } else if (null != rs.getBytes(i) && md.getColumnClassName(i).equals("[B")) {
-                  salesmanMap.put(md.getColumnLabel(i),
-                      DatatypeConverter.printBase64Binary(rs.getBytes(i)));
-              }
-            }
-          }
-        } catch (SQLException ex) {
-          System.err.println("Error code: " + ex.getErrorCode() + " - " + ex.getMessage());
-          ex.printStackTrace();
-        } finally {
-          if (null != conn) {
-            try {
-              conn.close();
-            } catch (SQLException ex) {
-              ex.printStackTrace();
-            }
-          }
-        }
-        
-        return salesmanMap;
-      }
-      
-      
+      /**
+       * Get data about a specific salesman such as his first name.
+        *
+        * @param salesmanEmail The salesman email address.
+       *
+        * @return A map containing data about a specific salesman. Both keys and values are of type
+       * String. Binary values retrieved from the DB are converted to a Base64 string.
+       */
+		public static Map<String, Object> getSalesman(String salesmanEmail) {
+			
+		Connection conn = null;
+		Map<String, Object> salesmanMap = new HashMap<String, Object>();
+		String sql = "SELECT * FROM sales_men WHERE email=?";
+		
+		Constants.updateConstants();
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		
+		try {
+			conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ps.setString(1, salesmanEmail);
+			
+			ResultSet rs = ps.executeQuery();
+			ResultSetMetaData md = rs.getMetaData();
+			int columnCount = md.getColumnCount();
+		
+			if (rs.next()) {
+			 for (int i = 1; i <= columnCount; i++) {
+			   if (null != rs.getString(i)) {
+			     switch (md.getColumnClassName(i)) {
+			       case "java.lang.String":
+			         salesmanMap.put(md.getColumnLabel(i), rs.getString(i));
+			         break;
+			        
+			       case "[B":
+			         salesmanMap.put(
+			             md.getColumnLabel(i),
+			             rs.getBytes(i)
+			         );
+			         break;
+			        
+			       case "java.lang.Integer":
+			         salesmanMap.put(
+			             md.getColumnLabel(i),
+			             rs.getInt(i)
+			         );
+			         break;
+			       
+			       case "java.lang.Boolean":
+			    	   salesmanMap.put(
+			    		md.getColumnLabel(i),
+			    		rs.getBoolean(i)
+			    	 );
+			    	 break;
+		     }
+		   }
+		 }
+		}
+		} catch (SQLException ex) {
+			System.err.println("Error code: " + ex.getErrorCode() + " - " + ex.getMessage());
+			ex.printStackTrace();
+		} finally {
+			if (null != conn) {
+			 try {
+			   conn.close();
+			 } catch (SQLException ex) {
+			   ex.printStackTrace();
+			 }
+			}
+		}
+		
+		return salesmanMap;
+		}
+		
+		      
       /**
        * Add a customer or salesman event to the DB.
        * 
@@ -1805,4 +1827,31 @@ public class DbLayer {
           }
         }
       }
+      
+      public static void setSalesmenDocumentSettings (String isChatEnabled, Boolean isAlertEmailEnabled, Boolean isReportEmailEnabled,
+    		  			String salesMan) {
+    	  //documentation - javadoc
+    	  
+    	  Connection conn = null;
+    	  
+    	  String query = "UPDATE sales_men SET viewer_is_chat_enabled = ?, email_alert_enabled = ?, email_report_enabled = ? WHERE email = ?";
+    	  
+    	  System.out.println(query);
+    	  
+    	  try {
+    		  conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
+              PreparedStatement stmt = conn.prepareStatement(query);
+              stmt.setString(1, isChatEnabled);
+              stmt.setBoolean(2, isAlertEmailEnabled);
+              stmt.setBoolean(3, isReportEmailEnabled);
+              stmt.setString(4, salesMan);
+              stmt.executeUpdate();
+    	  }
+    	  catch (SQLException ex) {
+              System.err.println("Error code: " + ex.getErrorCode() + " - " + ex.getMessage());
+    	  }
+    	  
+      }
+    	  
 }
+
