@@ -3,6 +3,66 @@ SlidePiper README File
 
 Change Log
 ----------
+### 0.6.1
+
+2016-05-15 Max Prais <maxp@slidepiper.com>, Yaniv Friedensohn <yanivf@slidepiper.com>
+
+* Removed 'perfect-scrollbar' in favour of overflow-y css styling.
+Scrolling functionality is now included in 'Documents and Customers', 'Send Documents', and the 
+side navbar.
+
+* Fixed signup functionality - create 'signup.js' to handle signups and remove signup code 
+from 'sp-functions.js' for better code architecture.
+
+* Added search functionality to customers and documents lists in 'Documents and Customers' and
+'Send Documents'.
+
+* Removed 'Copy All' and 'Send All' buttons in 'Send Documents' final step - replace 
+with one 'Copy' and 'Send' button.
+
+* Fixed visitors map responsiveness and resizing problem which caused the map width to exceed 
+its container for different viewports.
+
+* Fixed visitors map problem where smaller values were not displayed properly.
+ 
+
+### 0.6.0
+
+2016-05-03 Max Prais <maxp@slidepiper.com>, Yaniv Friedensohn <yanivf@slidepiper.com>
+
+* Created 2 tests (/jobs/test1 and /jobs/test2) for hiring a developer.
+
+* Created customers management view, including the functionality of adding customers
+via a CSV file (Outlook, Gmail (Outlook CSV Format), and our own template), 
+manually adding customers, updating, and deleting them.
+
+* Requests for customers or files are now routed either to the 'Documents & Customers' section 
+or to the email wizard through a routing emulator.
+
+* Created a wizard to send documents to customers.
+Three-part wizard allowing the user to select their customers by email, 
+then the documents they would like to send, and then they can either copy a single document file-link,
+all documents file links, or 'Send All', which opens the default mail client.
+Tested with Gmail and Outlook.
+
+* Created the Sales Analytics dashboard which allows viewing metrics and charts of files per customer.
+
+* Created an email templating mechanism using Apache Java Freemarker which allows the alert and 
+report emails to be dynamically created through templates.
+
+* Replaced default user first name from null to Generic, and last name from null to Link.
+
+* Created 'Help' and 'Change Password' modals.
+
+* Heap Analytics and Intercom have been installed.
+
+* Added perfect scrollbar: any elements containing lots of content i.e:
+menu, customers and file lists, have internal scrolling capabilities.
+
+* Added sweet alerts: this library adds good UI to any alerts.
+
+* Increased file upload max file size to 100MB. 
+
 
 ### 0.5.2
 
