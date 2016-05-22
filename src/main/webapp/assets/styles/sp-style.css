@@ -124,7 +124,6 @@ td.sp-file-hash {
   margin-right: 40px;
 }
 
-
 .sp-data-widget {
   height: 99px;
 }
@@ -547,7 +546,7 @@ input:checked + .sp-slider:before {
   margin-left: 10px;
 }
 
-.sp-switch-tite__label {
+.sp-switch-title__label {
  margin-top: 6px; 
 }
 .sp-settings-modal-header {

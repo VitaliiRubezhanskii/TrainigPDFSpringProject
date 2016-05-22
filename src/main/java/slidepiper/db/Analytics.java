@@ -12,7 +12,7 @@ public class Analytics {
       "SELECT\n"
       + "  id AS file_hash,\n"
       + "  name AS file_name,\n"
-      + "  DATE_FORMAT(timestamp, '%d-%b-%Y') AS date_added_or_modified\n"
+      + "  DATE_FORMAT(timestamp, '%b-%d-%Y') AS date_added_or_modified\n"
       + "FROM slides\n"
       + "WHERE sales_man_email = ?\n"
       + "ORDER BY timestamp DESC";
@@ -101,7 +101,8 @@ public class Analytics {
       + "JOIN customers ON msg_info.sales_man_email = customers.sales_man AND msg_info.customer_email = customers.email\n"
       + "JOIN slides ON msg_info.slides_id = slides.id\n"
       + "WHERE msg_info.sales_man_email=? AND msg_info.customer_email != '" + ConfigProperties.getProperty("default_customer_email") + "'\n"
-      + "GROUP BY msg_info.customer_email, msg_info.slides_id";
+      + "GROUP BY msg_info.customer_email, msg_info.slides_id\n"
+      + "ORDER BY customers.name";
   
   
   /**
