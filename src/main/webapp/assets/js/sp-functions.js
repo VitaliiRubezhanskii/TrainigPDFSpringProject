@@ -24,7 +24,7 @@ sp = {
           // Set fileHash.
           /**
            * The (if) clause is there so that a fileHash is not set to the search field,
-           * as it is contain inside an <li> tag
+           * as it is contained inside an <li> tag
            */
             var fileHash = $(this).children().attr('data-file-hash');
         if (!$(this).find('input').hasClass('sp-nav-search__input')){  
@@ -47,7 +47,7 @@ sp = {
               $('#sp-nav-files__li')
                   .empty()
                   .append(
-                      '<a href="#" aria-expanded="true"><i class="fa fa-bar-chart"></i> '
+                      '<a aria-expanded="true"><i class="fa fa-bar-chart"></i> '
                       + '<span class="nav-label">Marketing Analytics</span></a>'
                       + '<span class="fa arrow"></span>'
                       + '<div id="sp-marketing-analytics" class="sp-analytics-container__div">'
@@ -61,7 +61,7 @@ sp = {
               
               var files = [];
               for (var i = 0; i < filesData.length; i++) {
-                $('#sp-nav-files__li ul').append('<li><a href="#" class="sp-word-wrap" data-file-hash="'
+                $('#sp-nav-files__li ul').append('<li><a class="sp-word-wrap" data-file-hash="'
                     + filesData[i][0] + '">' + filesData[i][1] + '</a></li>');
 
                 if (typeof fileHash === 'undefined' || filesData[i][0] == fileHash) {
@@ -161,7 +161,10 @@ sp = {
             }
           });
           
-          $('input[type=file]').on('change', function() {
+          $('input[type=file]').on('change', function(event) {
+            if(!event) {
+              event = window.event;
+            }
             sp.file.files = event.target.files;
           });
           
@@ -309,6 +312,8 @@ sp = {
             $('.sp-nav-section').removeClass('active');
             $('.sp-nav-section[data-dashboard="' + topSection + '"]').addClass('active');
             $('#' + topSection).show();
+            //  Bug fix for bad UI on mozilla - scrollbar still shows
+            $('.sp-analytics-container__div').remove();
             $('html, body').animate({scrollTop: 0}, 'fast');
             
             switch(topSection) {
@@ -320,11 +325,15 @@ sp = {
                 
               case 'sp-file-dashboard':
                 sp.table.filesData = undefined;
+                //  Bug fix for bad UI on mozilla - scrollbar still showed
+                $('#sp-sales-analytics-scroll').remove();
                 setFileDashboard();
                 break;
                 
               case 'sp-sales-analytics-view':
                 sp.view.salesAnalytics.setNavBar();
+                //  Bug fix for bad UI on mozilla - scrollbar still showed
+                $('#sp-marketing-analytics').remove();
                 $('#sp-file-dashboard').show();
                 break;
                 
@@ -413,9 +422,9 @@ sp = {
       var filesArr = [];
       $.each(data['filesList'], function (i, v) {
         var obj = {
-            'date': '<span><i class="fa fa-clock-o sp-file-clock" data-toggle="tooltip" data-placement="right" title="Date file was added or updated"></i> ' + v[2] + '</span>',
+            'date': '<span><i class="fa fa-clock-o sp-clickable sp-file-clock" data-toggle="tooltip" data-placement="right" title="Date file was added or updated"></i> ' + v[2] + '</span>',
             'document': '<span class="sp-file-mgmt-file-name" data-file-hash="' + v[0] + '">' + v[1] + '</span>',
-            'options': '<span><a href="#"><span style="margin-left: 300px;" class="label label-primary sp-file-update" data-toggle="modal" data-target="#sp-modal-update-file" data-file-hash="' + v[0] + '">Update</span></a><a href="#"><span class="label label-danger sp-file-delete" data-file-hash="' + v[0] + '">Delete</span></a></span>'
+            'options': '<span><a><span style="margin-left: 300px;" class="label label-primary sp-file-update" data-toggle="modal" data-target="#sp-modal-update-file" data-file-hash="' + v[0] + '">Update</span></a><a href="#"><span class="label label-danger sp-file-delete" data-file-hash="' + v[0] + '">Delete</span></a></span>'
         };   
         filesArr.push(obj);
       });
@@ -428,6 +437,7 @@ sp = {
             {data: 'document' },
             {data: 'options' },
           ],
+          order: [[ 0, "desc" ]],
           paging: false,
         });
       }
@@ -440,7 +450,7 @@ sp = {
       $('.tab-content').css('overflow-y', 'scroll');
       
    // init tooltip
-      $('.sp-file-clock').tooltip();
+      $('.sp-file-clock').tooltip({delay: {show: 100, hide: 200}, placement: 'right' });
     },
     
     uploadFiles: function(event) {
@@ -491,7 +501,7 @@ sp = {
 
       $('#sp-file-update__form').hide();
       $('.sk-spinner').show();
-      $('#sp-upload-files__button').removeClass('btn-primary').addClass('btn-default').text('Uploading...');
+      $('#sp-update-file__button').removeClass('btn-primary').addClass('btn-default').text('Updating...');
       
       var data = new FormData();
       data.append('updatedfile', sp.file.files[0]);
@@ -512,7 +522,8 @@ sp = {
             $('button[data-dismiss="modal"]').click();
             
             sp.file.files = [];
-            $('#sp-upload-files__button').removeClass('btn-default').addClass('btn-primary').text('Upload Files');
+            $('#sp-update-file__button').removeClass('btn-primary').addClass('btn-default').text('Update Documents');
+            $('#sp-upload-files__button').removeClass('btn-default').addClass('btn-primary').text('Upload Documents');
             $('.sk-spinner').hide();
             $('.file__input').show();
             $('#sp-file-update__form').css('display', 'block');
@@ -873,7 +884,10 @@ chart: {
           fileHash: fileHash, salesmanEmail: sp.config.salesman.email, customerEmail: customerEmail}, function(data) {
           
         if (typeof sp.chart.fileBar !== 'undefined') {
-          sp.chart.fileBar.destroy();
+          //sp.chart.fileBar.destroy();
+          $('#barChart').remove();
+          $('#sp-bar-chart-container')
+              .append('<canvas id="barChart" height="354" width="760" style="width: 760px; height: 354px;"></canvas>');
         }
       
         var barData = {
@@ -927,7 +941,10 @@ chart: {
           fileHash: fileHash, salesmanEmail: sp.config.salesman.email, customerEmail: customerEmail}, function(data) {
             
         if (typeof sp.chart.fileLine !== 'undefined') {
-          sp.chart.fileLine.destroy();
+          //sp.chart.fileLine.destroy();
+          $('#lineChart').remove();
+          $('#sp-line-chart-container')
+              .append('<canvas id="lineChart" height="354" width="760" style="width: 760px; height: 354px;"></canvas>');
         }
         
         var lineData = {
@@ -995,7 +1012,10 @@ chart: {
           fileHash: fileHash, salesmanEmail: sp.config.salesman.email}, function(data) {
             
         if (typeof sp.chart.filePerformance !== 'undefined') {
-          sp.chart.filePerformance.destroy();
+          //sp.chart.filePerformance.destroy();
+          $('#lineChart2').remove();
+          $('#sp-line-chart-2-container')
+              .append('<canvas id="lineChart2" height="354" width="760" style="width: 760px; height: 354px;"></canvas>');
         }
         
         var lineData = {
@@ -1838,7 +1858,7 @@ chart: {
                 $('#sp-nav-sales-analytics__li')
                     .empty()
                     .append(
-                        '<a href="#" aria-expanded="true"><i class="fa fa-bar-chart"></i> '
+                        '<a aria-expanded="true"><i class="fa fa-bar-chart"></i> '
                         + '<span class="nav-label">Sales Analytics</span></a>'
                         + '<span class="fa arrow"></span>'
                         + '<ul id="sp-sales-analytics__ul" class="nav nav-second-level sp-sales-search-list">'
@@ -1892,7 +1912,7 @@ chart: {
                 /**
                  * CSS overflow styling
                  */
-                var scrollCont = $('<div></div>', {id: 'sp-sales-analytics-scroll'});
+                var scrollCont = $('<div></div>', {class: 'sp-analytics-container__div', id: 'sp-sales-analytics-scroll'});
                 $('#sp-nav-sales-analytics__li').append(scrollCont);
                 scrollCont.append($('#sp-sales-analytics__ul'));
                 
@@ -1919,7 +1939,7 @@ chart: {
               $.each(data.filesCustomerData, function(i, v) {
                 files[v[0]] = v;
               });
-              
+             
               // Build dashboard.
               sp.metric.getFileMetrics(files[fileHash]);
               sp.chart.getFileLine(fileHash, customerEmail);
@@ -1943,7 +1963,7 @@ chart: {
 
 $(document).ready(function() {
   // Init js tooltip
-  $('[data-toggle="tooltip"]').tooltip(); 
+  $('[data-toggle="tooltip"]').tooltip({delay: {show: 100, hide: 200}, placement: 'auto' }); 
   
   $('#send_email_to_customers').css('visibility', 'visible');
 
