@@ -901,7 +901,7 @@ chart: {
           fileHash: fileHash, salesmanEmail: sp.config.salesman.email, customerEmail: customerEmail}, function(data) {
           
         if (typeof sp.chart.fileBar !== 'undefined') {
-          //sp.chart.fileBar.destroy();
+          sp.chart.fileBar.destroy();
           $('#barChart').remove();
           $('#sp-bar-chart-container')
               .append('<canvas id="barChart" height="354" width="760" style="width: 760px; height: 354px;"></canvas>');
@@ -958,7 +958,7 @@ chart: {
           fileHash: fileHash, salesmanEmail: sp.config.salesman.email, customerEmail: customerEmail}, function(data) {
             
         if (typeof sp.chart.fileLine !== 'undefined') {
-          //sp.chart.fileLine.destroy();
+          sp.chart.fileLine.destroy();
           $('#lineChart').remove();
           $('#sp-line-chart-container')
               .append('<canvas id="lineChart" height="354" width="760" style="width: 760px; height: 354px;"></canvas>');
@@ -1029,7 +1029,7 @@ chart: {
           fileHash: fileHash, salesmanEmail: sp.config.salesman.email}, function(data) {
             
         if (typeof sp.chart.filePerformance !== 'undefined') {
-          //sp.chart.filePerformance.destroy();
+          sp.chart.filePerformance.destroy();
           $('#lineChart2').remove();
           $('#sp-line-chart-2-container')
               .append('<canvas id="lineChart2" height="354" width="760" style="width: 760px; height: 354px;"></canvas>');
