@@ -27,72 +27,89 @@ sp = {
            * as it is contained inside an <li> tag
            */
             var fileHash = $(this).children().attr('data-file-hash');
-        if (!$(this).find('input').hasClass('sp-nav-search__input')){  
+        if (!($(this).find('input').hasClass('sp-nav-search__input') || $(this).hasClass('sp-sort'))){  
             if (typeof fileHash === 'undefined' && typeof sp.table.filesData !== 'undefined') {
               fileHash = sp.table.filesData.row($(this).parent()).data()[0];
             }
         }
-          
+          /**
+           * @param Check what has been clicked on in the menu to decide whether to repopulate the list
+           * or not. I.e. if they have clicked sort repopulate the list, otherwise do not
+           */
+          var clickChoice = $(this).attr('data-sort');
           $.getJSON(
               'ManagementServlet',
-              {action: 'getFilesData', salesmanEmail: sp.config.salesman.email},
+              {action: 'getFilesData', salesmanEmail: sp.config.salesman.email, 
+                sortChoice: $(this).attr('data-sort') !== undefined ? $(this).attr('data-sort'): "noSort" },
               function(data) {
             var filesData = data.filesData;
-          
+            
             if (0 < filesData.length) {
               // Build side menu.
              /**
-              *  Put search bar inside ul tag, putting it anywhere else causes bugs in the menu
+              *  Put search bar inside <ul> tag, putting it anywhere else causes bugs in the menu
+              *  
+              *  If the list has not been created, create it (in the else clause)
+              *  This stops the list from being re-created each time a file is clicked on, but still allows
+              *  the metrics to be updated
               */ 
-              $('#sp-nav-files__li')
-                  .empty()
-                  .append(
-                      '<a aria-expanded="true"><i class="fa fa-bar-chart"></i> '
-                      + '<span class="nav-label">Marketing Analytics</span></a>'
-                      + '<span class="fa arrow"></span>'
-                      + '<div id="sp-marketing-analytics" class="sp-analytics-container__div">'
-                      + '<ul class="nav nav-second-level sp-search-list">'
-                      + '<li><input id="sp-search-box" class="sp-nav-search__input" placeholder="Search" /></li>'
-                      + '</div>'
-                  );
-              
-              //Without this command, the input field does not focus when clicked on 
-              $('#sp-search-box').focus();
-              
               var files = [];
-              for (var i = 0; i < filesData.length; i++) {
-                $('#sp-nav-files__li ul').append('<li><a class="sp-word-wrap" data-file-hash="'
-                    + filesData[i][0] + '">' + filesData[i][1] + '</a></li>');
-
-                if (typeof fileHash === 'undefined' || filesData[i][0] == fileHash) {
-                  fileHash = filesData[i][0];
-                  files[fileHash] = filesData[i];
-                  
-                  // A workaround for metisMenu dysfunctionality.
-                  $('#sp-nav-files__li li:has(a[data-file-hash="' + fileHash + '"])')
-                      .addClass("active");
+              if (0 < $('.sp-search-list li').length && undefined === clickChoice) {
+                for (var i = 0; i < filesData.length; i++) {
+                  if (typeof fileHash === 'undefined' || filesData[i][0] == fileHash) {
+                    fileHash = filesData[i][0];
+                    files[fileHash] = filesData[i];
+                  }
                 }
               }
+              else  {
+                $('#sp-nav-files__li')
+                    .empty()
+                    .append(
+                        '<a aria-expanded="true"><i class="fa fa-bar-chart"></i> '
+                        + '<span class="nav-label">Marketing Analytics</span></a>'
+                        + '<span class="fa arrow"></span>'
+                        + '<div id="sp-marketing-analytics" class="sp-analytics-container__div">'
+                        + '<ul class="nav nav-second-level sp-search-list">'
+                        + '<div class="sp-sort-search-cont">'
+                          + '<div class="sp-search-container">'
+                            + '<span><input id="sp-search-box" class="sp-nav-search__input" placeholder="Search" /></span>'
+                          + '</div>'
+                          + '<div class="sp-sort-list">'
+                            + '<span class="sp-clickable sp-sort sp-sort-options-toggle"><i class="fa fa-sort-amount-asc" aria-hidden="true"></i></i><i class="fa fa-caret-down sp-sort-toggle__icon" aria-hidden="true"></i></span>'
+                          + '</div>'  
+                          + '<div">'
+                            + '<li data-sort="fileName" class="sp-sort-option__li sp-sort"><span class="sp-sort-option__a">Sort by Name</span></li>'
+                            + '<li data-sort="performance" class="sp-sort-option__li sp-sort"><span class="sp-sort-option__a">Sort by Performance</span></li>'                           
+                          + '</div>'
+                        + '</div>'
+                        + '</div>'
+                    );
+                
+                //Without this command, the input field does not focus when clicked on 
+                $('#sp-search-box').focus();
+                
+                for (var i = 0; i < filesData.length; i++) {
+                  $('#sp-nav-files__li ul').append('<li class="sp-marketing-analytics__li"><a class="sp-word-wrap" data-file-hash="'
+                      + filesData[i][0] + '">' + filesData[i][1] + '</a></li>');
+
+                  if (typeof fileHash === 'undefined' || filesData[i][0] == fileHash) {
+                    fileHash = filesData[i][0];
+                    files[fileHash] = filesData[i];
+                  }
+                }
+                $('.sp-marketing-analytics__li:first').addClass('active');
+                
+                // Init search and sort functions
+                sp.view.marketingAnalytics.search();
+                sp.view.marketingAnalytics.sort();
+              }
               
-              /**
-               * Search functionality on navbar 
-               */
-              $('.sp-search-list a').each(function (i, v) {
-                $(v).attr('data-search-term', $(v).text().toLowerCase());
-                });
-              $('#sp-search-box').on('keyup', function () {
-                var searchTerm = $(this).val().toLowerCase();
-                    $('.sp-search-list a').each(function(){
-                        if ($(this).is('[data-search-term *= ' + searchTerm + ']')) {
-                            $(this).show();
-                        } else {
-                            $(this).hide();
-                        }
-                        if (!(searchTerm)) {
-                            $(this).show();
-                        }
-                    });
-                });
+              // Highlight the <li> clicked on
+              $('.sp-marketing-analytics__li').on('click', function () {
+                $('.sp-marketing-analytics__li').removeClass('active');
+                $(this).addClass('active');
+              });
               
               // Build dashboard.
               sp.metric.getFileMetrics(files[fileHash]);
@@ -331,7 +348,7 @@ sp = {
                 break;
                 
               case 'sp-sales-analytics-view':
-                sp.view.salesAnalytics.setNavBar();
+                sp.view.salesAnalytics.setNavBar("customerName");
                 //  Bug fix for bad UI on mozilla - scrollbar still showed
                 $('#sp-marketing-analytics').remove();
                 $('#sp-file-dashboard').show();
@@ -1825,12 +1842,13 @@ chart: {
 
   view: {
     salesAnalytics: {
-      setNavBar: function() {
+      setNavBar: function(sortChoice) {
         $.getJSON(
             'ManagementServlet',
             {
               action: 'getCustomersFilesList',
               salesmanEmail: sp.config.salesman.email,
+              sortChoice: sortChoice
             },
             function(data) {
               var customersFilesList = data.customersFilesList;
@@ -1858,11 +1876,22 @@ chart: {
                 $('#sp-nav-sales-analytics__li')
                     .empty()
                     .append(
-                        '<a aria-expanded="true"><i class="fa fa-bar-chart"></i> '
+                          '<a aria-expanded="true"><i class="fa fa-bar-chart"></i> '
                         + '<span class="nav-label">Sales Analytics</span></a>'
                         + '<span class="fa arrow"></span>'
                         + '<ul id="sp-sales-analytics__ul" class="nav nav-second-level sp-sales-search-list">'
-                        + '<li><input id="sp-sales-search__input" type="text" placeholder="Search" class="sp-nav-search__input"></li>'
+                        + '<div class="sp-sort-search-cont">'
+                        + '<div class="sp-search-container">'
+                          + '<span><input id="sp-sales-search__input" type="text" placeholder="Search" class="sp-nav-search__input"></span>'
+                        + '</div>'
+                        + '<div class="sp-sort-list">'
+                          + '<span class="sp-clickable sp-sort sp-sort-options-toggle"><i class="fa fa-sort-amount-asc" aria-hidden="true"></i></i><i class="fa fa-caret-down sp-sort-toggle__icon" aria-hidden="true"></i></span>'
+                        + '</div>'  
+                        + '<div>'
+                        + '<li data-sort="customerName" class="sp-sort-option__li sp-sales-sort"><span class="sp-sort-option__a">Sort by Customer Name</span></li>'
+                        + '<li data-sort="performance" class="sp-sort-option__li sp-sales-sort"><span class="sp-sort-option__a">Sort by Performance</span></li>'                      
+                        + '</div>'
+                      + '</div>'
                     );
                 
                 $.each(customers, function(i, v) {
@@ -1877,38 +1906,10 @@ chart: {
                   });
                 });
                 
-                /**
-                 * Search sales analytics
-                 * The document names are hidden
-                 */
-                $('.sp-sales-search-list >li > a').each(function(){
-                  // Add data-search-term attribute to customers their their corresponding
-                  // file names
-                  $(this).attr('data-search-term', $(this).text().toLowerCase());
-                  $(this).parent().next('ul').find('a').each(function (i, v) {
-                    $(v).attr('data-search-term', $(this).text().toLowerCase());
-                    });
-                  });
-                $('#sp-sales-search__input').on('keyup', function(){
-                  var searchTerm = $(this).val().toLowerCase();
-                      $('.sp-sales-search-list > li > a').each(function() {
-                          if ($(this).is('[data-search-term *= ' + searchTerm + ']')) {
-                            $(this).show();
-                            $(this).parent().next('ul').find('li').show();
-                          }
-                          else {
-                            $(this).hide();
-                            $(this).parent().next('ul').find('li').hide();
-                          }
-                          if (!(searchTerm)){
-                            // If search bar is empty display all customers & files
-                            $(this).show();
-                            $(this).parent().next('ul').find('li').show();
-                          }
-                      });
-                      
-                  });
-              
+                //Search and Sort
+                sp.view.salesAnalytics.search();
+                sp.view.salesAnalytics.sort();
+                
                 /**
                  * CSS overflow styling
                  */
@@ -1924,6 +1925,75 @@ chart: {
               }
             }
          );
+      },
+      
+      search: function () {
+        /**
+         * Search sales analytics
+         * The document names are hidden
+         */
+        $('.sp-sales-search-list >li > a').each(function(){
+          // Add data-search-term attribute to customers their their corresponding
+          // file names
+          $(this).attr('data-search-term', $(this).text().toLowerCase());
+          $(this).parent().next('ul').find('a').each(function (i, v) {
+            $(v).attr('data-search-term', $(this).text().toLowerCase());
+            });
+          });
+        $('#sp-sales-search__input').on('keyup', function(){
+          var searchTerm = $(this).val().toLowerCase();
+              $('.sp-sales-search-list > li > a').each(function() {
+                  if ($(this).is('[data-search-term *= ' + searchTerm + ']')) {
+                    $(this).show();
+                    $(this).parent().next('ul').find('li').show();
+                  }
+                  else {
+                    $(this).hide();
+                    $(this).parent().next('ul').find('li').hide();
+                  }
+                  if (!(searchTerm)){
+                    // If search bar is empty display all customers & files
+                    $(this).show();
+                    $(this).parent().next('ul').find('li').show();
+                  }
+              });
+              
+          });
+      },
+      
+      sort: function () {
+        /**
+         * Init sort capabilities
+         * Using 'unbind' and 'bind' because of the yoyo effect on the list - this ensures
+         * there are no leftover click handlers
+         * 
+         * Callback: Toggle the icon caret to up or down
+         */
+        $('.sp-sort-options-toggle').off('click');
+        $('.sp-sort-options-toggle').on('click', function () {
+            $('.sp-sort-option__li').slideToggle('slow','swing', function (){
+              if (!$('.sp-sort-option__li').is(':hidden')) {
+                $('.sp-sort-options-toggle i')
+                  .removeClass('.fa fa-caret-down')
+                  .addClass('.fa fa-caret-up');
+                isDown = false;
+              }
+              else {
+                $('.sp-sort-options-toggle i')
+                  .removeClass('.fa fa-caret-up')
+                  .addClass('.fa fa-caret-down');
+                isDown = true;
+              }
+            });
+        });
+        $('.sp-sales-sort').on('click', function () {
+          sp.view.salesAnalytics.setNavBar($(this).attr('data-sort'));
+        });
+        
+        // Temp until sorting is possible
+        $('[data-sort="performance"]').on('click', function () {
+          swal('We\'re working on it!', 'Sorting by performance will be with you soon');
+        });
       },
       
       setMetrics: function(customerEmail, fileHash) {
@@ -1956,6 +2026,57 @@ chart: {
             }
         );
       }
+    },
+    marketingAnalytics: {
+      search: function () {
+        /**
+         * Search functionality on navbar 
+         */
+        $('.sp-search-list a').each(function (i, v) {
+          $(v).attr('data-search-term', $(v).text().toLowerCase());
+          });
+        $('#sp-search-box').on('keyup', function () {
+          var searchTerm = $(this).val().toLowerCase();
+              $('.sp-search-list a').each(function(){
+                  if ($(this).is('[data-search-term *= ' + searchTerm + ']')) {
+                      $(this).show();
+                  } else {
+                      $(this).hide();
+                  }
+                  if (!(searchTerm)) {
+                      $(this).show();
+                  }
+              });
+          });
+        
+      },
+      sort: function () {
+        /**
+         * Init sort capabilities
+         * Using 'unbind' and 'bind' because of the yoyo effect on the list - this ensures
+         * there are no leftover click handlers
+         * 
+         * Callback: Toggle the icon caret to up or down
+         */
+        $('.sp-sort-options-toggle').off('click');
+        $('.sp-sort-options-toggle').on('click', function () {
+            $('.sp-sort-option__li').slideToggle('slow','swing', function (){
+              if (!$('.sp-sort-option__li').is(':hidden')) {
+                $('.sp-sort-options-toggle i')
+                  .removeClass('.fa fa-caret-down')
+                  .addClass('.fa fa-caret-up');
+                isDown = false;
+              }
+              else {
+                $('.sp-sort-options-toggle i')
+                  .removeClass('.fa fa-caret-up')
+                  .addClass('.fa fa-caret-down');
+                isDown = true;
+              }
+            });
+        });
+      },
+      
     }
   }
 };

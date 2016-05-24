@@ -108,10 +108,18 @@ public class DbLayer {
 					{			
 					try{
 							PreparedStatement preparedStatement = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-							
-							if (null != firstName && null != lastName) {
-							  fullName = firstName + " " + lastName;
+							System.err.print(firstName);
+							if (! firstName.equals("")) {
+							  System.out.print(firstName);
+							  fullName = firstName;
+							  
+							  if (! lastName.equals("")) { 
+								fullName += " " + lastName;
+							  }
+							} else if (! lastName.equals("")) {
+							  fullName = lastName;
 							}
+							
 							preparedStatement.setString(1, email.toLowerCase());
 							preparedStatement.setString(2, fullName);
 							preparedStatement.setString(3, firstName);
@@ -1437,9 +1445,11 @@ public class DbLayer {
           Constants.updateConstants();
           conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
           PreparedStatement ps = conn.prepareStatement(sql);
+          System.out.print(parameterList);
           for (int i = 0; i < parameterList.size(); i++) {
             ps.setString(i + 1, parameterList.get(i));
           }
+          System.out.println(ps);
           
           ResultSet rs = ps.executeQuery();
           while (rs.next()) {
@@ -1759,7 +1769,15 @@ public class DbLayer {
         } else {
           Connection conn = null;
           String fullName = firstName + " " + lastName;
-          String sql = "INSERT INTO sales_men (company, email, mailtype, name, first_name, last_name, password, emailpassword) VALUES (?, ?, ?, ?, ?, ?, ?, 0)";
+          String sql = "INSERT INTO sales_men (company, email, mailtype, name, first_name, last_name, password, emailpassword,\n"
+        		  + "viewer_toolbar_background, viewer_toolbar_button_background, viewer_toolbar_button_hover_background, viewer_toolbar_color,\n"
+        		  + "viewer_toolbar_logo_image, viewer_toolbar_logo_link, viewer_toolbar_cta3_text, viewer_toolbar_cta3_link,\n"
+        		  + "viewer_toolbar_cta_border_radius, viewer_toolbar_cta_font, viewer_toolbar_cta_margin, viewer_toolbar_cta_padding,\n"
+        		  + "viewer_toolbar_cta3_is_enabled, viewer_toolbar_cta3_collapse_max_width, viewer_toolbar_cta3_background, viewer_toolbar_cta3_hover_background,\n"
+        		  + "viewer_toolbar_cta3_border, viewer_toolbar_cta3_color, viewer_toolbar_cta3_hover_color)\n"
+        		  + "VALUES (?, ?, ?, ?, ?, ?, ?, 0, '#fff', '#1B1862', '#33315F', '#00395d', '/assets/images/sp-logo-02-555x120.png',\n"
+        		  + "'www.slidepiper.com', 'Contact " + firstName + "', 'mailto:" + email + "', '3px', '14px ExpertSans, verdana, arial, sans-serif',\n"
+        		  + "'3px 10px 3px 0', '4px 10px', true, '1000px', '#1B1862', '#C27F1D', 'none', '#fff', '#fff')";
           
           try {
             conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);

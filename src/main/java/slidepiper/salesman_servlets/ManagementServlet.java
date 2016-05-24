@@ -85,7 +85,17 @@ public class ManagementServlet extends HttpServlet {
         
       case "getFilesData":
         parameterList.add(request.getParameter("salesmanEmail"));
-        sqlData = DbLayer.getEventData(parameterList, Analytics.sqlFilesData);        
+        switch (request.getParameter("sortChoice")){
+      		case "fileName":
+      			sqlData = DbLayer.getEventData(parameterList, Analytics.sqlFilesDataByName);
+      			break;
+      		case "performance":
+      			sqlData = DbLayer.getEventData(parameterList, Analytics.sqlFilesDataByPerformance);
+      			break;
+      		case "noSort":
+      			sqlData = DbLayer.getEventData(parameterList, Analytics.sqlFilesDataByName);
+      			break;
+        }
         data.put("filesData", sqlData);
         break;
       
@@ -111,7 +121,10 @@ public class ManagementServlet extends HttpServlet {
         
 	    case "getCustomersFilesList":
         parameterList.add(request.getParameter("salesmanEmail"));
-        sqlData = DbLayer.getEventData(parameterList, Analytics.sqlCustomersFilesList);        
+        switch (request.getParameter("sortChoice")){
+        	case "customerName":
+        		sqlData = DbLayer.getEventData(parameterList, Analytics.sqlCustomersFilesList);
+        }
         data.put("customersFilesList", sqlData);
         break;
         

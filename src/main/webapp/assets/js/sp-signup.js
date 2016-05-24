@@ -48,7 +48,7 @@ sp = {
                               + 'Your username is:\r\n'
                               + formData.email + '.\r\n\r\n'
                               + 'Your initial Password is:\r\n'
-                              + '12345678\r\n\r\n'
+                              + formData.password + '\r\n\r\n'
                               + 'To login follow this link:\r\n'
                               + 'http://www.slidepiper.com/login.html\r\n\r\n'
                     

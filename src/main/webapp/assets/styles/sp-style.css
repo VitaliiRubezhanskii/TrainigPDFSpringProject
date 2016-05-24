@@ -480,6 +480,7 @@ td.sp-file-hash {
   margin-left: 31px;
   padding: 5px;
   outline: none;
+  width: 128px;
 }
 
 /* SLIDER */
@@ -494,6 +495,21 @@ td.sp-file-hash {
 .sp-switch input {display:none;}
 
 /* The slider */
+
+input:checked + .sp-slider {
+  background-color: #1ab394;
+}
+
+input:focus + .sp-slider {
+  box-shadow: 0 0 1px #1ab394;
+}
+
+input:checked + .sp-slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
 .sp-slider {
   position: absolute;
   cursor: pointer;
@@ -516,20 +532,6 @@ td.sp-file-hash {
   background-color: white;
   -webkit-transition: .4s;
   transition: .4s;
-}
-
-input:checked + .sp-slider {
-  background-color: #1ab394;
-}
-
-input:focus + .sp-slider {
-  box-shadow: 0 0 1px #1ab394;
-}
-
-input:checked + .sp-slider:before {
-  -webkit-transform: translateX(26px);
-  -ms-transform: translateX(26px);
-  transform: translateX(26px);
 }
 
 /* Rounded sliders */
@@ -558,3 +560,64 @@ input:checked + .sp-slider:before {
 .sp-word-wrap {
   word-wrap: break-word;
 }
+
+/* Sorting */
+
+.sp-sort-list {
+  display: inline-block;
+}
+
+.sp-sort-option__a {
+  background-color: #273441;
+  border: 1px solid #587490;
+  border-top-left-radius: 50px;
+  border-top-right-radius: 50px;
+  border-bottom-right-radius: 50px;
+  border-bottom-left-radius: 50px;
+  color: white;
+  cursor: pointer;
+  font-size: 10px;
+  padding-right: 16px !important;
+  padding-left: 13px !important;
+  margin-left: 34px !important;
+  padding-top: 6px;
+  padding-bottom: 6px;
+}
+
+.sp-sort-option__a:hover {
+  background-color: #1E2933;
+}
+
+.sp-sort-option__li {
+  display: none;
+  margin-top: 17px;
+}
+
+.sp-sort-option__li:first-child {
+  margin-top: 1px;
+}
+
+.sp-sort-option__li:last-child {
+  margin-bottom: 12px;
+}
+
+.sp-search-container {
+  display: inline-block;
+}
+
+.sp-sort-search-cont {
+  display: inline-block;
+}
+
+.sp-sort-toggle__icon {
+  margin-left: 3px;
+}
+
+.sp-sort-options-toggle {
+  color: #ffffff;
+  margin-left: 7px;
+}
+
+.sp-sort-options-toggle:hover {
+  color: #C6C0C0;
+} 

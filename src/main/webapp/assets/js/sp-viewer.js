@@ -121,7 +121,8 @@ if ('' != sp.viewer.linkHash) {
     // Logo.
     if (typeof config.viewer.toolbarLogoImage !== 'undefined') {
       $('.sp-toolbar-logo img')
-          .attr('src', 'data:image/png;base64,' + config.viewer.toolbarLogoImage);
+          .attr('src', config.viewer.toolbarLogoImage);
+          console.log(config.viewer.toolbarLogoImage);
       
       if (typeof config.viewer.toolbarLogoLink !== 'undefined') {
         $('.sp-toolbar-logo a').attr('href', config.viewer.toolbarLogoLink);
@@ -427,7 +428,8 @@ if ('' != sp.viewer.linkHash) {
     if (true == config.viewer.widget1.isEnabled) {
       $('body').append('<div class="sp-demo-video sp-demo-video1"><span></span><i class="fa fa-chevron-up"></i><hr><iframe width="360" height="315" frameborder="0" allowfullscreen></iframe></div>');
       $('.sp-demo-video1 span').text(config.viewer.widget1.title);
-      $('.sp-demo-video1 iframe').attr('src', config.viewer.widget1.iframeSrc);
+      $('.sp-demo-video1 iframe').attr('src', config.viewer.widget1.iframeSrc + '?loop=1&playlist=' + config.viewer.widget1.iframeSrc.split('/')[4]);
+      console.log('SOURCE: ' + config.viewer.widget1.iframeSrc + '?loop=1&playlist=' + config.viewer.widget1.iframeSrc.split('/')[4]);
         
       config.viewer.widget1.flag = false;
       setInterval(function() {
