@@ -1445,11 +1445,9 @@ public class DbLayer {
           Constants.updateConstants();
           conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
           PreparedStatement ps = conn.prepareStatement(sql);
-          System.out.print(parameterList);
           for (int i = 0; i < parameterList.size(); i++) {
             ps.setString(i + 1, parameterList.get(i));
           }
-          System.out.println(ps);
           
           ResultSet rs = ps.executeQuery();
           while (rs.next()) {
@@ -1611,10 +1609,10 @@ public class DbLayer {
        * @return The file enumerated hash.
        * @throws IOException
        */
-      public static String setFileHash(FileItem file, String salesmanEmail) throws IOException {
+      public static String setFileHash(FileItem file, String salesmanEmail, Timestamp localTimestamp) throws IOException {
         
         Connection conn = null;
-        String sqlInsert = "INSERT INTO slides (file, sales_man_email, name) VALUES (?, ?, ?)";
+        String sqlInsert = "INSERT INTO slides (file, sales_man_email, name, local_timestamp) VALUES (?, ?, ?, ?)";
         String sqlSelectAfterInsert = "SELECT id_ai, id FROM slides WHERE id_ai=?";
         String fileHash = null;
         
@@ -1626,6 +1624,7 @@ public class DbLayer {
           ps.setBytes(1, IOUtils.toByteArray(file.getInputStream()));
           ps.setString(2, salesmanEmail);
           ps.setString(3, Paths.get(file.getName()).getFileName().toString());
+          ps.setTimestamp(4, localTimestamp);
           ps.executeUpdate();
           ResultSet rs = ps.getGeneratedKeys();
           

@@ -484,6 +484,7 @@ sp = {
       });
       data.append('action', 'uploadFiles');
       data.append('salesmanEmail', Cookies.get('SalesmanEmail'));
+      data.append('localTimestamp', Math.round(new Date().getTime()));
         
       $.ajax({
         url: 'upload-file',
@@ -1462,7 +1463,6 @@ chart: {
       if ($('li.current').text() === 'current step: 2. Select Documents'){ 
           $('a[href="#next"]').attr('id', 'sp-send-docs__button');
       };
-     
     },
 
     /**
@@ -1560,10 +1560,8 @@ chart: {
       // This creates the initial bootstrap layout.
         $('.sp-send-table tbody').append(
             '<tr class="sp-mail-table__row" id="sp-t-row' + i + '">'
-          + '<div class="row">' 
           + '<td class="col-sm-2 sp-customer">' + val['customerEmail'] +'</td>'
-          + '<td id="sp-doc-'+ i +'" class="col-sm-10 sp-document"></td>'
-          + '</div>'
+          + '<td id="sp-doc-'+ i +'" class="col-sm-6 sp-document"></td>'
           + '</tr>'
         );
         
@@ -1572,8 +1570,8 @@ chart: {
             // This renders the information into the predefined rows.
             $('.sp-send-table tbody #sp-t-row' + i + ' #sp-doc-' + i).append(
                 '<div class="row">'
-                  + '<div class="col-md-3" data-file-hash=' + v['fileHash'] +'></div>'
-                  + '<div data-file-link-hash="'+ fileLink +'" class="col-md-5 sp-file-link">' + fileLink + '</div>'
+                  + '<div class="col-md-5" data-file-hash=' + v['fileHash'] +'></div>'
+                  + '<div data-file-link-hash="'+ fileLink +'" class="col-md-7 sp-file-link">' + fileLink + '</div>'
               + '</div>'
               
            );        
@@ -1581,19 +1579,19 @@ chart: {
         });
       });
       // This creates the copy all and send all buttons.
-      $('.sp-document').append(
-            '<div class="row">'
-              + '<div class="col-md-offset-7 col-md-2">'
+      $('.sp-mail-table__row').append(
+            '<td id="sp-wizard-action-btns-container" class="col-sm-2 row">'
+              + '<div id="sp-copy-button-container" class="col-md-6">'
                 + '<button class="btn btn-white sp-mail-all__button btn-xs sp-copy-all sp-cmd-all__button">'
                   + '<i class="fa fa-copy sp-mail__icon"></i> Copy'
                 + '</button>' 
               + '</div>'
-              + '<div class="col-md-2">' 
+              + '<div class="col-md-6">' 
                   + '<button class="btn btn-white sp-send-to-all__button sp-send-options btn-xs sp-mail-all__button sp-send-all sp-cmd-all__button">'
                     + '<i class="fa fa-envelope sp-mail__icon"></i> Send'
                   + '</button>'
               + '</div>'
-          + '</div>'          
+          + '</td>'          
       );
  
       sp.customerFileLinksGenerator.sendAll();

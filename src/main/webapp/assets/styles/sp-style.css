@@ -128,6 +128,10 @@ td.sp-file-hash {
   height: 99px;
 }
 
+#sp-wizard-action-btns-container {
+  vertical-align: middle;
+}
+
 .sp-widget-text {
   font-size: 23px !important; 
 }
