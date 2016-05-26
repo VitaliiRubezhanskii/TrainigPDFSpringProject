@@ -176,7 +176,15 @@ public class DbLayer {
 			" FROM msg_info " + 
 			" WHERE id=? LIMIT 1;"; // take only 1 result. SHOULD be one.
 			//System.out.println("running query to get message info: " + msginfoQuery);
-
+			
+			Constants.updateConstants();
+			
+			try {
+	          Class.forName("com.mysql.jdbc.Driver");
+	        } catch (ClassNotFoundException e) {
+	          e.printStackTrace();
+	        }
+			
 			Connection conn=null;
 			try 
 			{
