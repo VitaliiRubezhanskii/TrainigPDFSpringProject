@@ -88,10 +88,10 @@ public class ConfigViewerServlt extends HttpServlet {
       
       // CTA1.
       if (null != salesman.get("viewer_toolbar_cta1_is_enabled")) {
-	    viewer.put("isCta1Enabled", Boolean.parseBoolean(salesman.get("viewer_toolbar_cta1_is_enabled").toString()));
-	  } else {
-	    viewer.put("isCta1Enabled", false);
-	  }
+  	    viewer.put("isCta1Enabled", Boolean.parseBoolean(salesman.get("viewer_toolbar_cta1_is_enabled").toString()));
+  	  } else {
+  	    viewer.put("isCta1Enabled", false);
+  	  }
       
       viewer.put("cta1CollapseMaxWidth",
           salesman.get("viewer_toolbar_cta1_collapse_max_width"));
@@ -114,10 +114,10 @@ public class ConfigViewerServlt extends HttpServlet {
       
       // CTA2.
       if (null != salesman.get("viewer_toolbar_cta2_is_enabled")) {
-	    viewer.put("isCta2Enabled", Boolean.parseBoolean(salesman.get("viewer_toolbar_cta2_is_enabled").toString()));
-	  } else {
-	    viewer.put("isCta2Enabled", false);
-	  }
+  	    viewer.put("isCta2Enabled", Boolean.parseBoolean(salesman.get("viewer_toolbar_cta2_is_enabled").toString()));
+  	  } else {
+  	    viewer.put("isCta2Enabled", false);
+  	  }
       
       viewer.put("cta2CollapseMaxWidth",
           salesman.get("viewer_toolbar_cta2_collapse_max_width"));
@@ -140,10 +140,10 @@ public class ConfigViewerServlt extends HttpServlet {
       
       // CTA3.
       if (null != salesman.get("viewer_toolbar_cta3_is_enabled")) {
-	    viewer.put("isCta3Enabled", Boolean.parseBoolean(salesman.get("viewer_toolbar_cta3_is_enabled").toString()));
-	  } else {
-	    viewer.put("isCta3Enabled", false);
-	  }
+  	    viewer.put("isCta3Enabled", Boolean.parseBoolean(salesman.get("viewer_toolbar_cta3_is_enabled").toString()));
+  	  } else {
+  	    viewer.put("isCta3Enabled", false);
+  	  }
       
       viewer.put("cta3CollapseMaxWidth",
           salesman.get("viewer_toolbar_cta3_collapse_max_width"));
@@ -165,32 +165,32 @@ public class ConfigViewerServlt extends HttpServlet {
           salesman.get("viewer_toolbar_cta3_link"));
       
       // Widget1.
+      JSONObject widget1 = new JSONObject();
+      widget1.put("isEnabled",
+          salesman.get("viewer_widget1_is_enabled"));
       if ((Boolean) salesman.get("viewer_widget1_is_enabled")) {
-        JSONObject widget1 = new JSONObject();
-        widget1.put("isEnabled",
-            salesman.get("viewer_widget1_is_enabled"));
         widget1.put("title",
             salesman.get("viewer_widget1_title"));
         widget1.put("iframeSrc",
             salesman.get("viewer_widget1_iframe_src"));
         widget1.put("pageNumber",
             salesman.get("viewer_widget1_page_number"));
-        viewer.put("widget1", widget1);
       }
+      viewer.put("widget1", widget1);
       
       // Widget2.
+      JSONObject widget2 = new JSONObject();
+      widget2.put("isEnabled",
+          salesman.get("viewer_widget2_is_enabled"));
       if ((Boolean) salesman.get("viewer_widget2_is_enabled")) {
-        JSONObject widget2 = new JSONObject();
-        widget2.put("isEnabled",
-            salesman.get("viewer_widget2_is_enabled"));
         widget2.put("title",
             salesman.get("viewer_widget2_title"));
         widget2.put("iframeSrc",
             salesman.get("viewer_widget2_iframe_src"));
         widget2.put("pageNumber",
             salesman.get("viewer_widget2_page_number"));
-        viewer.put("widget2", widget2);
       }
+      viewer.put("widget2", widget2);
       
       config.put("viewer", viewer);
       out.println(config);
