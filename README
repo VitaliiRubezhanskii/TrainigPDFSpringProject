@@ -3,6 +3,22 @@ SlidePiper README File
 
 Change Log
 ----------
+
+### 0.6.2
+
+2016-05-26 Max Prais <maxp@slidepiper.com>, Yaniv Friedensohn <yanivf@slidepiper.com>
+
+* Added customisation settings to choose whether to receive alert and report emails, and whether
+chat is enabled in the viewer.
+
+* Added mailto functionality in signup.js, which opens a default email when signing up a new user.
+
+* Fixed Mozilla Firefox bugs:
+1. Fixed issue where scrollbar shows even when Marketing and Sales Analytics are not selected. 
+2. Fixed issue stopping files from being uploaded- when you click on 'Upload' it said file had been
+uploaded, but this was not the case, due to a Firefox-specific error.
+
+
 ### 0.6.1
 
 2016-05-15 Max Prais <maxp@slidepiper.com>, Yaniv Friedensohn <yanivf@slidepiper.com>
@@ -25,6 +41,8 @@ its container for different viewports.
 
 * Fixed visitors map problem where smaller values were not displayed properly.
  
+* Added YouTube (widget 1) and Calendly (widget 2) widgets.
+
 
 ### 0.6.0
 
