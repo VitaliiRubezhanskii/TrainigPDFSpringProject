@@ -108,10 +108,18 @@ public class DbLayer {
 					{			
 					try{
 							PreparedStatement preparedStatement = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-							
-							if (null != firstName && null != lastName) {
-							  fullName = firstName + " " + lastName;
+							System.err.print(firstName);
+							if (! firstName.equals("")) {
+							  System.out.print(firstName);
+							  fullName = firstName;
+							  
+							  if (! lastName.equals("")) { 
+								fullName += " " + lastName;
+							  }
+							} else if (! lastName.equals("")) {
+							  fullName = lastName;
 							}
+							
 							preparedStatement.setString(1, email.toLowerCase());
 							preparedStatement.setString(2, fullName);
 							preparedStatement.setString(3, firstName);
@@ -1609,10 +1617,10 @@ public class DbLayer {
        * @return The file enumerated hash.
        * @throws IOException
        */
-      public static String setFileHash(FileItem file, String salesmanEmail) throws IOException {
+      public static String setFileHash(FileItem file, String salesmanEmail, Timestamp localTimestamp) throws IOException {
         
         Connection conn = null;
-        String sqlInsert = "INSERT INTO slides (file, sales_man_email, name) VALUES (?, ?, ?)";
+        String sqlInsert = "INSERT INTO slides (file, sales_man_email, name, local_timestamp) VALUES (?, ?, ?, ?)";
         String sqlSelectAfterInsert = "SELECT id_ai, id FROM slides WHERE id_ai=?";
         String fileHash = null;
         
@@ -1624,6 +1632,7 @@ public class DbLayer {
           ps.setBytes(1, IOUtils.toByteArray(file.getInputStream()));
           ps.setString(2, salesmanEmail);
           ps.setString(3, Paths.get(file.getName()).getFileName().toString());
+          ps.setTimestamp(4, localTimestamp);
           ps.executeUpdate();
           ResultSet rs = ps.getGeneratedKeys();
           
@@ -1767,7 +1776,15 @@ public class DbLayer {
         } else {
           Connection conn = null;
           String fullName = firstName + " " + lastName;
-          String sql = "INSERT INTO sales_men (company, email, mailtype, name, first_name, last_name, password, emailpassword) VALUES (?, ?, ?, ?, ?, ?, ?, 0)";
+          String sql = "INSERT INTO sales_men (company, email, mailtype, name, first_name, last_name, password, emailpassword,\n"
+        		  + "viewer_toolbar_background, viewer_toolbar_button_background, viewer_toolbar_button_hover_background, viewer_toolbar_color,\n"
+        		  + "viewer_toolbar_logo_image, viewer_toolbar_logo_link, viewer_toolbar_cta3_text, viewer_toolbar_cta3_link,\n"
+        		  + "viewer_toolbar_cta_border_radius, viewer_toolbar_cta_font, viewer_toolbar_cta_margin, viewer_toolbar_cta_padding,\n"
+        		  + "viewer_toolbar_cta3_is_enabled, viewer_toolbar_cta3_collapse_max_width, viewer_toolbar_cta3_background, viewer_toolbar_cta3_hover_background,\n"
+        		  + "viewer_toolbar_cta3_border, viewer_toolbar_cta3_color, viewer_toolbar_cta3_hover_color)\n"
+        		  + "VALUES (?, ?, ?, ?, ?, ?, ?, 0, '#fff', '#1B1862', '#33315F', '#00395d', '/assets/images/sp-logo-02-555x120.png',\n"
+        		  + "'www.slidepiper.com', 'Contact " + firstName + "', 'mailto:" + email + "', '3px', '14px ExpertSans, verdana, arial, sans-serif',\n"
+        		  + "'3px 10px 3px 0', '4px 10px', true, '1000px', '#1B1862', '#C27F1D', 'none', '#fff', '#fff')";
           
           try {
             conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
@@ -1810,19 +1827,27 @@ public class DbLayer {
        * @throws IOException
        */
       public static void updateFile(FileItem file, String fileHash, String fileName,
-          String salesmanEmail) throws IOException {
+          String salesmanEmail, Timestamp localTimestamp) throws IOException {
 
         Constants.updateConstants();
         Connection conn = null;
-        String sql = "UPDATE slides SET file = ?, name = ?, timestamp = CURRENT_TIMESTAMP WHERE id = ? AND sales_man_email = ?";
+        String sql = "UPDATE slides SET file = ?, name = ?, timestamp = CURRENT_TIMESTAMP, local_timestamp = ? WHERE id = ? AND sales_man_email = ?";
         
         try {
+	      try {
+			DriverManager.registerDriver(new com.mysql.jdbc.Driver());
+		  } catch (SQLException e) {
+			e.printStackTrace();
+		  }	
+        	
           conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
           PreparedStatement stmt = conn.prepareStatement(sql);
           stmt.setBytes(1, IOUtils.toByteArray(file.getInputStream()));
           stmt.setString(2, fileName);
-          stmt.setString(3, fileHash);
-          stmt.setString(4, salesmanEmail);
+          stmt.setTimestamp(3, localTimestamp);
+          stmt.setString(4, fileHash);
+          stmt.setString(5, salesmanEmail);
+          
           stmt.executeUpdate();
         } catch (SQLException ex) {
           System.err.println("Error code: " + ex.getErrorCode() + " - " + ex.getMessage());

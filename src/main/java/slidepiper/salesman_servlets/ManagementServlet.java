@@ -12,11 +12,18 @@ import slidepiper.email.EmailSender;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URLDecoder;
+import java.sql.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TimeZone;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -79,13 +86,23 @@ public class ManagementServlet extends HttpServlet {
         
       case "getFilesList":
         parameterList.add(request.getParameter("salesmanEmail"));
-        sqlData = DbLayer.getEventData(parameterList, Analytics.sqlFilesList);        
+        sqlData = DbLayer.getEventData(parameterList, Analytics.sqlFilesList);
         data.put("filesList", sqlData);
         break;
         
       case "getFilesData":
         parameterList.add(request.getParameter("salesmanEmail"));
-        sqlData = DbLayer.getEventData(parameterList, Analytics.sqlFilesData);        
+        switch (request.getParameter("sortChoice")){
+      		case "fileName":
+      			sqlData = DbLayer.getEventData(parameterList, Analytics.sqlFilesDataByName);
+      			break;
+      		case "performance":
+      			sqlData = DbLayer.getEventData(parameterList, Analytics.sqlFilesDataByPerformance);
+      			break;
+      		case "noSort":
+      			sqlData = DbLayer.getEventData(parameterList, Analytics.sqlFilesDataByName);
+      			break;
+        }
         data.put("filesData", sqlData);
         break;
       
@@ -111,7 +128,10 @@ public class ManagementServlet extends HttpServlet {
         
 	    case "getCustomersFilesList":
         parameterList.add(request.getParameter("salesmanEmail"));
-        sqlData = DbLayer.getEventData(parameterList, Analytics.sqlCustomersFilesList);        
+        switch (request.getParameter("sortChoice")){
+        	case "customerName":
+        		sqlData = DbLayer.getEventData(parameterList, Analytics.sqlCustomersFilesList);
+        }
         data.put("customersFilesList", sqlData);
         break;
         
