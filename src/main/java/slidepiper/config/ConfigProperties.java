@@ -171,8 +171,9 @@ public class ConfigProperties {
             + appContextPath);
         
         if (key.equals("viewer_url")) {
-          String subdomain = DbLayer.getSalesman(salesmanEmail).get("subdomain");
-          if (null != subdomain) {
+          
+          if (null != DbLayer.getSalesman(salesmanEmail).get("subdomain")) {
+        	String subdomain = DbLayer.getSalesman(salesmanEmail).get("subdomain").toString();
             props.setProperty("viewer_url",
                 appScheme + "://" 
                 + subdomain.replaceAll("\\.$", "") + "."
@@ -200,8 +201,8 @@ public class ConfigProperties {
         props.setProperty("app_url", System.getenv("OPENSHIFT_APP_SCHEME") + "://" + openshiftHost);
         
         if (key.equals("viewer_url")) {
-          String subdomain = DbLayer.getSalesman(salesmanEmail).get("subdomain");
-          if (null != subdomain) {
+          if (null != DbLayer.getSalesman(salesmanEmail).get("subdomain")) {
+            String subdomain = DbLayer.getSalesman(salesmanEmail).get("subdomain").toString();
             props.setProperty("viewer_url",
                 System.getenv("OPENSHIFT_APP_SCHEME") + "://" 
                 + subdomain.replaceAll("\\.$", "") + "."

@@ -22,10 +22,16 @@ sp = {
          */
         function setFileDashboard() {
           // Set fileHash.
-          var fileHash = $(this).children().attr('data-file-hash');
-          if (typeof fileHash === 'undefined' && typeof sp.table.filesData !== 'undefined') {
-            fileHash = sp.table.filesData.row($(this).parent()).data()[0];
-          }
+          /**
+           * The (if) clause is there so that a fileHash is not set to the search field,
+           * as it is contained inside an <li> tag
+           */
+            var fileHash = $(this).children().attr('data-file-hash');
+        if (!$(this).find('input').hasClass('sp-nav-search__input')){  
+            if (typeof fileHash === 'undefined' && typeof sp.table.filesData !== 'undefined') {
+              fileHash = sp.table.filesData.row($(this).parent()).data()[0];
+            }
+        }
           
           $.getJSON(
               'ManagementServlet',
@@ -35,22 +41,29 @@ sp = {
           
             if (0 < filesData.length) {
               // Build side menu.
+             /**
+              *  Put search bar inside ul tag, putting it anywhere else causes bugs in the menu
+              */ 
               $('#sp-nav-files__li')
                   .empty()
                   .append(
-                      '<a href="#" aria-expanded="true"><i class="fa fa-bar-chart"></i> '
+                      '<a aria-expanded="true"><i class="fa fa-bar-chart"></i> '
                       + '<span class="nav-label">Marketing Analytics</span></a>'
                       + '<span class="fa arrow"></span>'
-                      + '<div class="sp-analytics-container__div">'
-                      + '<ul class="nav nav-second-level"></div>'
-                      
+                      + '<div id="sp-marketing-analytics" class="sp-analytics-container__div">'
+                      + '<ul class="nav nav-second-level sp-search-list">'
+                      + '<li><input id="sp-search-box" class="sp-nav-search__input" placeholder="Search" /></li>'
+                      + '</div>'
                   );
+              
+              //Without this command, the input field does not focus when clicked on 
+              $('#sp-search-box').focus();
               
               var files = [];
               for (var i = 0; i < filesData.length; i++) {
-                $('#sp-nav-files__li ul').append('<li><a href="#" data-file-hash="'
+                $('#sp-nav-files__li ul').append('<li><a class="sp-word-wrap" data-file-hash="'
                     + filesData[i][0] + '">' + filesData[i][1] + '</a></li>');
-                
+
                 if (typeof fileHash === 'undefined' || filesData[i][0] == fileHash) {
                   fileHash = filesData[i][0];
                   files[fileHash] = filesData[i];
@@ -60,7 +73,27 @@ sp = {
                       .addClass("active");
                 }
               }
-
+              
+              /**
+               * Search functionality on navbar 
+               */
+              $('.sp-search-list a').each(function (i, v) {
+                $(v).attr('data-search-term', $(v).text().toLowerCase());
+                });
+              $('#sp-search-box').on('keyup', function () {
+                var searchTerm = $(this).val().toLowerCase();
+                    $('.sp-search-list a').each(function(){
+                        if ($(this).is('[data-search-term *= ' + searchTerm + ']')) {
+                            $(this).show();
+                        } else {
+                            $(this).hide();
+                        }
+                        if (!(searchTerm)) {
+                            $(this).show();
+                        }
+                    });
+                });
+              
               // Build dashboard.
               sp.metric.getFileMetrics(files[fileHash]);
               sp.chart.getFileLine(fileHash);
@@ -78,6 +111,7 @@ sp = {
             }
           });
         }
+        
             
         // Run once.
         setFileDashboard();
@@ -127,7 +161,10 @@ sp = {
             }
           });
           
-          $('input[type=file]').on('change', function() {
+          $('input[type=file]').on('change', function(event) {
+            if(!event) {
+              event = window.event;
+            }
             sp.file.files = event.target.files;
           });
           
@@ -138,7 +175,7 @@ sp = {
                 $('input[type="file"]').val(null);
             }
             else {
-              sp.error.handleError('You must select a file to upload');
+              sp.error.handleError('You must select a document to upload');
             }
           });
           
@@ -148,8 +185,13 @@ sp = {
           });
           
           $('#sp-update-file__button').click(function(event) {
-            sp.file.updateFile(event, sp.file.fileHash);
-            $('input[type="file"]').val(null);
+            if ($('#sp-file-update__form > input[type="file"]').val() !== ''){
+              sp.file.updateFile(event, sp.file.fileHash);
+              $('input[type="file"]').val(null);
+            }
+            else {
+              sp.error.handleError('You must select a file to update');
+            }
           });
           
           // Delete file.
@@ -177,8 +219,13 @@ sp = {
           
           // Upload customers.
           $('#sp-upload-customers__button').click(function(event) {
+          if ($('#sp-modal-upload-customers input[type="file"]').val() === ''){
+            sp.error.handleError('You must select a file to upload');
+          }
+          else {
             sp.file.uploadCustomers(event);
             $('input[type="file"]').val(null);
+            }
           });
           
           $('#sp-download-template__button').click(function() {
@@ -265,6 +312,8 @@ sp = {
             $('.sp-nav-section').removeClass('active');
             $('.sp-nav-section[data-dashboard="' + topSection + '"]').addClass('active');
             $('#' + topSection).show();
+            //  Bug fix for bad UI on mozilla - scrollbar still shows
+            $('.sp-analytics-container__div').remove();
             $('html, body').animate({scrollTop: 0}, 'fast');
             
             switch(topSection) {
@@ -276,11 +325,15 @@ sp = {
                 
               case 'sp-file-dashboard':
                 sp.table.filesData = undefined;
+                //  Bug fix for bad UI on mozilla - scrollbar still showed
+                $('#sp-sales-analytics-scroll').remove();
                 setFileDashboard();
                 break;
                 
               case 'sp-sales-analytics-view':
                 sp.view.salesAnalytics.setNavBar();
+                //  Bug fix for bad UI on mozilla - scrollbar still showed
+                $('#sp-marketing-analytics').remove();
                 $('#sp-file-dashboard').show();
                 break;
                 
@@ -325,7 +378,6 @@ sp = {
     
     fileHash: null,
     files: [],
-    
     getFilesList: function(requestOrigin) {
       $.getJSON(
           'ManagementServlet',
@@ -370,12 +422,13 @@ sp = {
       var filesArr = [];
       $.each(data['filesList'], function (i, v) {
         var obj = {
-            'date': '<span><i class="fa fa-clock-o sp-file-clock" data-toggle="tooltip" data-placement="right" title="Date file was added or updated"></i> ' + v[2] + '</span>',
+            'date': '<span><i class="fa fa-clock-o sp-clickable sp-file-clock" data-toggle="tooltip" data-placement="right" title="Date file was added or updated"></i> ' + v[2] + '</span>',
             'document': '<span class="sp-file-mgmt-file-name" data-file-hash="' + v[0] + '">' + v[1] + '</span>',
-            'options': '<span><a href="#"><span style="margin-left: 300px;" class="label label-primary sp-file-update" data-toggle="modal" data-target="#sp-modal-update-file" data-file-hash="' + v[0] + '">Update</span></a><a href="#"><span class="label label-danger sp-file-delete" data-file-hash="' + v[0] + '">Delete</span></a></span>'
+            'options': '<span><a><span style="margin-left: 300px;" class="label label-primary sp-file-update" data-toggle="modal" data-target="#sp-modal-update-file" data-file-hash="' + v[0] + '">Update</span></a><a href="#"><span class="label label-danger sp-file-delete" data-file-hash="' + v[0] + '">Delete</span></a></span>'
         };   
         filesArr.push(obj);
       });
+      
       if (!($.fn.dataTable.isDataTable('#sp-files-management'))) {
         $('#sp-files-management').DataTable({
           data: filesArr,
@@ -384,6 +437,7 @@ sp = {
             {data: 'document' },
             {data: 'options' },
           ],
+          order: [[ 0, "desc" ]],
           paging: false,
         });
       }
@@ -394,7 +448,9 @@ sp = {
         .draw();
       }
       $('.tab-content').css('overflow-y', 'scroll');
- 
+      
+   // init tooltip
+      $('.sp-file-clock').tooltip({delay: {show: 100, hide: 200}, placement: 'right' });
     },
     
     uploadFiles: function(event) {
@@ -445,7 +501,7 @@ sp = {
 
       $('#sp-file-update__form').hide();
       $('.sk-spinner').show();
-      $('#sp-upload-files__button').removeClass('btn-primary').addClass('btn-default').text('Uploading...');
+      $('#sp-update-file__button').removeClass('btn-primary').addClass('btn-default').text('Updating...');
       
       var data = new FormData();
       data.append('updatedfile', sp.file.files[0]);
@@ -466,7 +522,8 @@ sp = {
             $('button[data-dismiss="modal"]').click();
             
             sp.file.files = [];
-            $('#sp-upload-files__button').removeClass('btn-default').addClass('btn-primary').text('Upload Files');
+            $('#sp-update-file__button').removeClass('btn-primary').addClass('btn-default').text('Update Documents');
+            $('#sp-upload-files__button').removeClass('btn-default').addClass('btn-primary').text('Upload Documents');
             $('.sk-spinner').hide();
             $('.file__input').show();
             $('#sp-file-update__form').css('display', 'block');
@@ -643,12 +700,15 @@ sp = {
             $('button[data-dismiss="modal"]').click();
             
             if (-1 == data.newCustomer) {
-              sp.error.handleError('The added user alredy exist therefore was not inserted into the system');
+              sp.error.handleError('The added user already exists so was not inserted into the system');
+            }
+            else {
+              swal("Success!", "Your customer list was udpated!", "success");
             }
             $('#sp-modal-add-update-customer__button').removeClass('btn-default').addClass('btn-primary');
             $('.sk-spinner').hide();
             $('#sp-add-update-customer__form').show();
-            swal("Success!", "Your customer was udpated!", "success");
+            
           }
         }
       });
@@ -824,7 +884,10 @@ chart: {
           fileHash: fileHash, salesmanEmail: sp.config.salesman.email, customerEmail: customerEmail}, function(data) {
           
         if (typeof sp.chart.fileBar !== 'undefined') {
-          sp.chart.fileBar.destroy();
+          //sp.chart.fileBar.destroy();
+          $('#barChart').remove();
+          $('#sp-bar-chart-container')
+              .append('<canvas id="barChart" height="354" width="760" style="width: 760px; height: 354px;"></canvas>');
         }
       
         var barData = {
@@ -878,7 +941,10 @@ chart: {
           fileHash: fileHash, salesmanEmail: sp.config.salesman.email, customerEmail: customerEmail}, function(data) {
             
         if (typeof sp.chart.fileLine !== 'undefined') {
-          sp.chart.fileLine.destroy();
+          //sp.chart.fileLine.destroy();
+          $('#lineChart').remove();
+          $('#sp-line-chart-container')
+              .append('<canvas id="lineChart" height="354" width="760" style="width: 760px; height: 354px;"></canvas>');
         }
         
         var lineData = {
@@ -946,7 +1012,10 @@ chart: {
           fileHash: fileHash, salesmanEmail: sp.config.salesman.email}, function(data) {
             
         if (typeof sp.chart.filePerformance !== 'undefined') {
-          sp.chart.filePerformance.destroy();
+          //sp.chart.filePerformance.destroy();
+          $('#lineChart2').remove();
+          $('#sp-line-chart-2-container')
+              .append('<canvas id="lineChart2" height="354" width="760" style="width: 760px; height: 354px;"></canvas>');
         }
         
         var lineData = {
@@ -1284,7 +1353,7 @@ chart: {
     })(),
     
     /**
-     * This function formats and prints customers to the document sending wizard
+     * This function formats and prints customers to the document sending wizard using DataTables API
      * @params {data - object} This is the data on the customers recevied from the server
      * This object contains both customer and file data @see sp.customerFileLinks.formatFile()
      */
@@ -1336,7 +1405,7 @@ chart: {
       }),
     
     /**
-     * This function formats and renders documents to the wizard
+     * This function formats and renders documents to the wizard, using the DataTables API
      * @params {data-obj} - This is the files data received from the server
      */
     formatFile: function (data){
@@ -1485,9 +1554,9 @@ chart: {
             fileLink = sp.config.viewerUrlWithoutFileLink + v['fileLink'];
             // This renders the information into the predefined rows.
             $('.sp-send-table tbody #sp-t-row' + i + ' #sp-doc-' + i).append(
-                '<div class="sp-doc-send-data row">'
-                  + '<div class="col-md-3" data-hash=' + v['fileHash'] +'></div>'
-                  + '<div id="sp-file-link-' + v['fileLink'] + '" data-file-link="' + fileLink +'" data-link="'+ fileLink +'" class="sp-mailto col-md-5 sp-file-link  ' + 'mail-' + v['fileHash'] +'" ">' + fileLink + '</div>'
+                '<div class="row">'
+                  + '<div class="col-md-3" data-file-hash=' + v['fileHash'] +'></div>'
+                  + '<div data-file-link-hash="'+ fileLink +'" class="col-md-5 sp-file-link">' + fileLink + '</div>'
               + '</div>'
               
            );        
@@ -1524,7 +1593,7 @@ chart: {
       
       $('.sp-copy-all').on('click', function () {
         var links = [];
-        $(this).closest('tr').find('div[data-link]').each(function (i, v){
+        $(this).closest('tr').find('div[data-file-link-hash]').each(function (i, v){
           links.push($(this).text() + '\r\n');
           });
         
@@ -1550,16 +1619,16 @@ chart: {
       $('.sp-send-all').on('click', function () {
         var emailRecipient = $(this).closest('tr').children('td.sp-customer').text();
         
-        //This will create an array of file links.
+        // This will create an array of file links.
         var links = [];
-        $(this).closest('tr').find('div[data-link]').each(function(i, v) {
+        $(this).closest('tr').find('div[data-file-link-hash]').each(function(i, v) {
           links.push($(this).text()); 
         });
         
-        //This creates an array of filenames.
+        // This creates an array of filenames.
         var fileNames = [];
-          $(this).closest('tr').find('.sp-mailto').each(function(i, v) {
-            fileNames.push($(this).attr('data-file-name'));
+          $(this).closest('tr').find('[data-file-hash]').each(function(i, v) {
+            fileNames.push($(v).text());
           });  
           
           
@@ -1588,10 +1657,8 @@ chart: {
     
     findDocumentName: function (hash, files) {      
       $.each(files, function (i, v) {
-        var name = v['name'];
         if (v['hash'] === hash){
-          $('[data-hash=' + hash + ']').text(v['name']);
-          $('.mail-' + hash).attr('data-file-name',  name);
+          $('[data-file-hash=' + hash + ']').text(v['name']);
         }
       });      
     }
@@ -1632,7 +1699,7 @@ chart: {
      * matches the retyped new password.
      */
     changePassword: $(function () {
-        $('.sp-change-pwd__icon').on('click', function () {
+        $('.sp-change-pwd__li').on('click', function () {
           $('#sp-old-password').val('');
           $('#sp-new-password').val('');
           $('#sp-retype-password').val('');
@@ -1672,6 +1739,7 @@ chart: {
                   data: JSON.stringify(data),
                   success: function (res) {
                     if (res) {
+                      sp.user.updateConfigSettings();
                       swal(
                         'Success',
                         'Your password has been changed',
@@ -1696,16 +1764,63 @@ chart: {
             else {
               sp.error.handleError('Retype your old password');
             }
-            
           }
-          
-          
-          
         });
-      
-      
     }),
-   
+    
+    setDocSettings: $(function () {
+      
+      $('#sp-save-doc-settings-changes').on('click', function () {
+        var docSettingsData = {
+            'action': 'setSalesmanDocumentSettings',
+            'isChatEnabled': $('#sp-enable-chat__checkbox').is(':checked'),
+            'isAlertEmailEnabled': $('#sp-enable-alert-emails__checkbox').is(':checked'),
+            'isReportEmailEnabled': $('#sp-enable-report-emails__checkbox').is(':checked'),
+            'salesMan': sp.config.salesman.email
+        };
+        
+        $.ajax({
+          url: 'ManagementServlet',
+          type: 'post',
+          data: JSON.stringify(docSettingsData),
+          success: function (data) {
+            $('#sp-document-settings__modal .sr-only').click();
+            sp.user.updateConfigSettings();
+            swal(
+              'Success!',
+              'Your changes have been saved',
+              'success'
+            );
+          },
+          error: function (err) {
+            console.log(err);
+            swal(
+              'Error!',
+              'Your changes were not saved',
+              'error'
+            );
+          }
+        });
+        
+      });
+    }),
+    
+    getSalesmanDocSettings: $(function () {
+        
+        $('[data-target="#sp-document-settings__modal"]').on('click', function () {
+          var enabledChat = (sp.config.salesman.viewer_is_chat_enabled === "true") ? true: false;
+          $('#sp-enable-chat__checkbox').prop('checked', enabledChat);
+          $('#sp-enable-alert-emails__checkbox').prop('checked', sp.config.salesman.email_alert_enabled);
+          $('#sp-enable-report-emails__checkbox').prop('checked', sp.config.salesman.email_report_enabled);
+        }); 
+    }),
+    
+    updateConfigSettings: function () {
+      $.getJSON('config', {salesmanEmail: Cookies.get('SalesmanEmail')}, function(data) {
+        sp.config = data;
+      });
+    },
+      
   },
 
   view: {
@@ -1743,28 +1858,61 @@ chart: {
                 $('#sp-nav-sales-analytics__li')
                     .empty()
                     .append(
-                        '<a href="#" aria-expanded="true"><i class="fa fa-bar-chart"></i> '
+                        '<a aria-expanded="true"><i class="fa fa-bar-chart"></i> '
                         + '<span class="nav-label">Sales Analytics</span></a>'
                         + '<span class="fa arrow"></span>'
-                        + '<ul id="sp-sales-analytics__ul" class="nav nav-second-level">'
+                        + '<ul id="sp-sales-analytics__ul" class="nav nav-second-level sp-sales-search-list">'
+                        + '<li><input id="sp-sales-search__input" type="text" placeholder="Search" class="sp-nav-search__input"></li>'
                     );
                 
                 $.each(customers, function(i, v) {
                   $('#sp-nav-sales-analytics__li > ul')
-                      .append('<li><a href="#" data-customer-email="' + i + '">' + v.customerName + '</a></li>')
+                      .append('<li class="sp-analytics-customer-name__li"><a class="sp-word-wrap" data-customer-email="' + i + '">' + v.customerName + '</a></li>')
                       .append('<ul class="nav nav-third-level" data-customer-email="' + i + '">');
                   
                   $.each(v.files, function(j, u) {
                     $('#sp-nav-sales-analytics__li ul ul[data-customer-email="' + i + '"]')
-                        .append('<li><a class="sp-customer-file__a" href="#" data-customer-email="'
+                        .append('<li class="sp-sales-analytics-filename__li"><a class="sp-customer-file__a sp-word-wrap" data-customer-email="'
                             + i + '" data-file-hash="' + u.fileHash + '">' + u.fileName + '</a></li>');
                   });
                 });
                 
                 /**
+                 * Search sales analytics
+                 * The document names are hidden
+                 */
+                $('.sp-sales-search-list >li > a').each(function(){
+                  // Add data-search-term attribute to customers their their corresponding
+                  // file names
+                  $(this).attr('data-search-term', $(this).text().toLowerCase());
+                  $(this).parent().next('ul').find('a').each(function (i, v) {
+                    $(v).attr('data-search-term', $(this).text().toLowerCase());
+                    });
+                  });
+                $('#sp-sales-search__input').on('keyup', function(){
+                  var searchTerm = $(this).val().toLowerCase();
+                      $('.sp-sales-search-list > li > a').each(function() {
+                          if ($(this).is('[data-search-term *= ' + searchTerm + ']')) {
+                            $(this).show();
+                            $(this).parent().next('ul').find('li').show();
+                          }
+                          else {
+                            $(this).hide();
+                            $(this).parent().next('ul').find('li').hide();
+                          }
+                          if (!(searchTerm)){
+                            // If search bar is empty display all customers & files
+                            $(this).show();
+                            $(this).parent().next('ul').find('li').show();
+                          }
+                      });
+                      
+                  });
+              
+                /**
                  * CSS overflow styling
                  */
-                var scrollCont = $('<div></div>', {id: 'sp-sales-analytics-scroll'});
+                var scrollCont = $('<div></div>', {class: 'sp-analytics-container__div', id: 'sp-sales-analytics-scroll'});
                 $('#sp-nav-sales-analytics__li').append(scrollCont);
                 scrollCont.append($('#sp-sales-analytics__ul'));
                 
@@ -1791,7 +1939,7 @@ chart: {
               $.each(data.filesCustomerData, function(i, v) {
                 files[v[0]] = v;
               });
-              
+             
               // Build dashboard.
               sp.metric.getFileMetrics(files[fileHash]);
               sp.chart.getFileLine(fileHash, customerEmail);
@@ -1814,12 +1962,11 @@ chart: {
 // End sp.
 
 $(document).ready(function() {
+  // Init js tooltip
+  $('[data-toggle="tooltip"]').tooltip({delay: {show: 100, hide: 200}, placement: 'auto' }); 
+  
   $('#send_email_to_customers').css('visibility', 'visible');
-  
 
-  
-  
-  
   /**
    *  Store the last focused subject or body email element.
    */

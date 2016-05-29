@@ -327,6 +327,20 @@ public class ManagementServlet extends HttpServlet {
           //output.put("newCustomer", DbLayer.addNewCustomer(smemail, cname, ccompany, cemail));
           break;
           
+        case "setSalesmanDocumentSettings":
+        	String isChatEnabled = Boolean.toString(input.getBoolean("isChatEnabled"));
+        	Boolean isAlertEmailEnabled = input.getBoolean("isAlertEmailEnabled");
+        	Boolean isReportEmailEnabled = input.getBoolean("isReportEmailEnabled");
+        	String salesMan = input.getString("salesMan");
+        	
+        	System.out.println("Chat: " + isChatEnabled + ", Alert: " + isAlertEmailEnabled + ", Report: " + isReportEmailEnabled 
+ 				   + ", User: " + salesMan);
+        	
+        	DbLayer.setSalesmenDocumentSettings(isChatEnabled, isAlertEmailEnabled, isReportEmailEnabled, salesMan);
+        	
+        	output.put("result", "success");
+        	break;
+          
         case "createCustomersFilelinks":
           JSONArray customersFilelinks = new JSONArray();
           for (int i = 0; i < data.getJSONArray("data").length(); i++) {
@@ -422,6 +436,7 @@ public class ManagementServlet extends HttpServlet {
               output.put("emailBody", emailBody);
           }
           break;
+          
       }
       
         String res = output.toString();

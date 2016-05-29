@@ -124,7 +124,6 @@ td.sp-file-hash {
   margin-right: 40px;
 }
 
-
 .sp-data-widget {
   height: 99px;
 }
@@ -338,6 +337,7 @@ td.sp-file-hash {
 
 .sp-file-link {
   font-size: 12px;
+  color: inherit;
 }
 
 .sp-cmd-all__button {
@@ -354,9 +354,9 @@ td.sp-file-hash {
   display: none;
 }
 
-.sp-mailto {
+/* .sp-mailto {
   color: inherit;
-}
+} */
 
 .sp-mail-all__button {
   color: #1ab394;
@@ -387,10 +387,29 @@ td.sp-file-hash {
   margin-bottom: 30px;
 }
 
-/* Change Password */
+/* Settings */
 
 .form-group {
   margin: 10px !important;
+}
+
+#sp-change-pwd__button {
+  float: right;
+}
+
+.sp-settings-dropdown__button {
+  border: 0px;
+  color: #999c9e;
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+.sp-dropdown-settings__li {
+  color: #999c9e;
+}
+
+.sp-doc-settings-info__icon {
+  color: #1ab394;
 }
 
 /* Help Modal */
@@ -448,4 +467,94 @@ td.sp-file-hash {
   background: #ed5565;
 }
 
+/* Side Navbar */
 
+.sp-nav-search__input {
+  background-color: #293846;
+  border-radius: 13px 13px 13px 13px;
+  -moz-border-radius: 13px 13px 13px 13px;
+  -webkit-border-radius: 13px 13px 13px 13px;
+  border: 1px solid #FFFFFF;
+  color: #FFFFFF;
+  margin-bottom: 8px;
+  margin-left: 31px;
+  padding: 5px;
+  outline: none;
+}
+
+/* SLIDER */
+.sp-switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+/* Hide default HTML checkbox */
+.sp-switch input {display:none;}
+
+/* The slider */
+.sp-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.sp-slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .sp-slider {
+  background-color: #1ab394;
+}
+
+input:focus + .sp-slider {
+  box-shadow: 0 0 1px #1ab394;
+}
+
+input:checked + .sp-slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.sp-slider.sp-round {
+  border-radius: 34px;
+}
+
+.sp-slider.sp-round:before {
+  border-radius: 50%;
+}
+
+.sp-switch-container {
+  margin-top: 20px;
+  margin-left: 10px;
+}
+
+.sp-switch-title__label {
+ margin-top: 6px; 
+}
+.sp-settings-modal-header {
+  margin-top: -2px;
+  margin-bottom: 5px;
+  text-align: center;
+}
+
+.sp-word-wrap {
+  word-wrap: break-word;
+}
