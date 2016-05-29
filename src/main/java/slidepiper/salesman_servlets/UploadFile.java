@@ -121,7 +121,7 @@ public class UploadFile extends HttpServlet {
             
             // Update file.
             DbLayer.updateFile(file, updateFileHash,
-                Paths.get(file.getName()).getFileName().toString(), salesmanEmail);
+                Paths.get(file.getName()).getFileName().toString(), salesmanEmail, localTimestamp);
             
             // Record event.
             eventDataMap.put("email", salesmanEmail);

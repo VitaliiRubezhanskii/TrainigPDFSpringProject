@@ -526,6 +526,7 @@ sp = {
       data.append('action', 'updateFile');
       data.append('updateFileHash', fileHash);
       data.append('salesmanEmail', Cookies.get('SalesmanEmail'));
+      data.append('localTimestamp', Math.round(new Date().getTime()));
       
       $.ajax({
         url: 'upload-file',
@@ -540,7 +541,7 @@ sp = {
             $('button[data-dismiss="modal"]').click();
             
             sp.file.files = [];
-            $('#sp-update-file__button').removeClass('btn-primary').addClass('btn-default').text('Update Documents');
+            $('#sp-update-file__button').removeClass('btn-default').addClass('btn-primary').text('Update Document');
             $('#sp-upload-files__button').removeClass('btn-default').addClass('btn-primary').text('Upload Documents');
             $('.sk-spinner').hide();
             $('.file__input').show();

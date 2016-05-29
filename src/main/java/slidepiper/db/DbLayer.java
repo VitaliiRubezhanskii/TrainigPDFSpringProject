@@ -1819,19 +1819,27 @@ public class DbLayer {
        * @throws IOException
        */
       public static void updateFile(FileItem file, String fileHash, String fileName,
-          String salesmanEmail) throws IOException {
+          String salesmanEmail, Timestamp localTimestamp) throws IOException {
 
         Constants.updateConstants();
         Connection conn = null;
-        String sql = "UPDATE slides SET file = ?, name = ?, timestamp = CURRENT_TIMESTAMP WHERE id = ? AND sales_man_email = ?";
+        String sql = "UPDATE slides SET file = ?, name = ?, timestamp = CURRENT_TIMESTAMP, local_timestamp = ? WHERE id = ? AND sales_man_email = ?";
         
         try {
+	      try {
+			DriverManager.registerDriver(new com.mysql.jdbc.Driver());
+		  } catch (SQLException e) {
+			e.printStackTrace();
+		  }	
+        	
           conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
           PreparedStatement stmt = conn.prepareStatement(sql);
           stmt.setBytes(1, IOUtils.toByteArray(file.getInputStream()));
           stmt.setString(2, fileName);
-          stmt.setString(3, fileHash);
-          stmt.setString(4, salesmanEmail);
+          stmt.setTimestamp(3, localTimestamp);
+          stmt.setString(4, fileHash);
+          stmt.setString(5, salesmanEmail);
+          
           stmt.executeUpdate();
         } catch (SQLException ex) {
           System.err.println("Error code: " + ex.getErrorCode() + " - " + ex.getMessage());
