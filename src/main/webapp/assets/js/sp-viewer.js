@@ -484,13 +484,7 @@ if ('' != sp.viewer.linkHash) {
       }, 1000);
 
       $('.sp-widget2').click(function() {
-        swal({
-          title: config.viewer.widget2.title,
-          text: '<iframe src="' + config.viewer.widget2.iframeSrc + '" width="450" height="420" frameborder="0" scrolling="yes"></iframe>',
-          html: true,
-          showCancelButton: true,
-          showConfirmButton: false,
-        });
+        Calendly.showPopupWidget(config.viewer.widget2.iframeSrc);
       });
     }
   });
