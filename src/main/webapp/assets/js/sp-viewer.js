@@ -484,7 +484,13 @@ if ('' != sp.viewer.linkHash) {
       }, 1000);
 
       $('.sp-widget2').click(function() {
-        Calendly.showPopupWidget(config.viewer.widget2.iframeSrc);
+        swal({
+          html: true,
+          showCancelButton: true,
+          showConfirmButton: false,
+          text: '<iframe src="../assets/viewer/widget/calendly.html?user=' + config.viewer.widget2.iframeSrc + '" height="420" frameborder="0"></iframe>',
+          title: 'Schedule Meeting',
+        });
       });
     }
   });
