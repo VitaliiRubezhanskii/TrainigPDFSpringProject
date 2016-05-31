@@ -485,11 +485,11 @@ if ('' != sp.viewer.linkHash) {
 
       $('.sp-widget2').click(function() {
         swal({
-          title: config.viewer.widget2.title,
-          text: '<iframe src="' + config.viewer.widget2.iframeSrc + '" width="450" height="420" frameborder="0" scrolling="yes"></iframe>',
           html: true,
           showCancelButton: true,
           showConfirmButton: false,
+          text: '<iframe src="../assets/viewer/widget/calendly.html?user=' + config.viewer.widget2.iframeSrc + '" height="420" frameborder="0"></iframe>',
+          title: 'Schedule Meeting',
         });
       });
     }

@@ -4,6 +4,13 @@ SlidePiper README File
 Change Log
 ----------
 
+### 0.6.2.1
+2016-05-31 Yaniv Friedensohn <yanivf@slidepiper.com>
+
+* Fix Canlendly widget from not working buy using their method of implementing their widget.
+The overall solution paves the way towards a universal solution for implementing widgets in our viewer.
+
+
 ### 0.6.2
 
 2016-05-26 Max Prais <maxp@slidepiper.com>, Yaniv Friedensohn <yanivf@slidepiper.com>
