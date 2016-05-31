@@ -342,6 +342,10 @@
 
 /* Widget Settings */
 
+.sweet-alert iframe {
+  width: 100%;
+}
+
 /* Widget 1 -  YouTube widget */
 .sp-demo-video {
   background-color: white;
