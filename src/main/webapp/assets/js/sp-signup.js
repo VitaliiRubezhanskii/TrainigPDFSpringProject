@@ -45,7 +45,10 @@ sp = {
     })(),
     
     newUser: function() { 
-      $('#sp-signup__form').submit(function () {
+      $('#sp-signup__form').submit(function (event) {
+        if (!event) {
+          event = window.event;
+        }
         event.stopPropagation();
         event.preventDefault();
         
