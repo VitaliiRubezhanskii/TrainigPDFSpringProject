@@ -121,7 +121,7 @@ if ('' != sp.viewer.linkHash) {
     // Logo.
     if (typeof config.viewer.toolbarLogoImage !== 'undefined') {
       $('.sp-toolbar-logo img')
-          .attr('src', config.viewer.toolbarLogoImage);
+          .attr('src', 'data:image/png;base64,' + config.viewer.toolbarLogoImage);
           console.log(config.viewer.toolbarLogoImage);
       
       if (typeof config.viewer.toolbarLogoLink !== 'undefined') {

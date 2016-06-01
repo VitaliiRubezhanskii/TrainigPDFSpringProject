@@ -6,6 +6,7 @@
  * For information on the naming convention, see Harry Roberts' style in
  * https://en.bem.info/method/naming-convention/ .
  */
+/* SIGNUP */
 
 .sp--height-100-percent {
 	height: 100%;
@@ -14,6 +15,56 @@
 .sp-signup-form__logo {
 	width: 250px;
 }
+
+.sp-viewer-toolbar-container:not(.sp-viewer-logo-handler) {
+  display: inline-block;
+}
+
+.sp-viewer-toolbar-background__checkbox {
+  display: inline-block;
+}
+
+.slds-size--1-of-5 {
+  width: 45%;
+}
+
+.sp-viewer-choice-demo {
+  display: inline-block;
+  height: 40px;
+  width: 200px;
+  border-radius: 3px;
+  float: right;
+  
+}
+
+.sp-viewer-choice-demo-toolbar {
+  padding: 9px;
+  border: 1px solid grey;
+  border-radius: 3px;
+  text-align: center;
+}
+
+.sp-viewer-choice-demo-button {
+  padding: 10px;
+  border: 1px solid grey;
+  border-radius: 3px;
+  text-align: center;
+}
+
+#sp-cta-button-desc__p {
+  color: white;
+}
+
+#sp-viewer-settings__h3 {
+  margin-top: 10px;
+}
+
+#sp-viewer-logo-link {
+  width: 100%;
+}
+
+
+
 
 /* TODO: considering UI, perhaps it is better to remove this section. 
 .ui-block-b .ui-checkbox {

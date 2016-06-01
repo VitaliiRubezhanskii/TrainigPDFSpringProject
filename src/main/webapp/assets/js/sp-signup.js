@@ -12,33 +12,81 @@ sp = {
       });
     },
     
-    newUser: function() { 
-      $('#sp-signup__form').submit(function () {
-        var formData = {
-            action: 'setSalesman'
-         };
-         $('input:not([type=submit]), select').each(function(index){
-           formData[$(this).attr('id')] = this.value;
-         });
+    addFile: (function() {
+      $('input[type=file]').on('change', function(event) {
+        if(!event) {
+          event = window.event;
+        }
+        sp.signup.file = event.target.files;
+      });
+    })(),
+    
+    styleDemoBox: (function () {
+      // init style
+      $('.sp-viewer-choice-demo-toolbar').css('background-color',
+          $('[name="viewer_toolbar_background"]:checked').attr('data-color'));
+      $('.sp-viewer-choice-demo-button').css('background-color',
+          $('[name="viewer_toolbar_cta_background"]:checked').attr('data-color'));
+      
+      $('[name="viewer_toolbar_background"], [name="viewer_toolbar_cta_background"]')
+        .on('change', function () {
+          $('.sp-viewer-choice-demo-toolbar').css('background-color',
+              $('[name="viewer_toolbar_background"]:checked').attr('data-color'));
         
+          $('.sp-viewer-choice-demo-button').css('background-color',
+              $('[name="viewer_toolbar_cta_background"]:checked').attr('data-color'));
+          
+          if ($('[data-color="#293846"').is(':checked')){
+            $('#sp-toolbar-desc__p').css('color', '#fff');
+          } else {
+            $('#sp-toolbar-desc__p').css('color', '#293846');
+          }
+        });
+    })(),
+    
+    newUser: function() { 
+      $('#sp-submit-signup__button').on('click', function () {
+        event.stopPropagation();
+        event.preventDefault();
+        
+        var formData = new FormData();
+        formData.append('action', 'setSalesman');
+         
+         $('input[type="radio"]:checked').each(function (i, v){
+           formData.append($(v).attr('name'), $(v).attr('data-color'));
+         });
+         
+         $('input[type="checkbox"]').each(function (i, v) {
+           formData.append($(v).attr('name'), $(v).is(':checked') ? 'true': 'false');
+         });
+         
+         $('input[type="text"]').each(function (i, v) {
+           formData.append($(v).attr('name'), $(v).val());
+         });
+         
+         formData.append('email-client', $('select[name="email-client"]').val());
+         formData.append('viewer_toolbar_logo_image', sp.signup.file === undefined ? null: sp.signup.file[0]);
+         formData.append('password', $('input[type="password"][name="password"]').val());
+         formData.append('magic', $('input[type="password"][name="magic"]').val());
+         formData.append('email', $('input[type="email"]').val());
+         
         $.ajax({
-          async: false,
           type: 'POST',
-          url: 'ManagementServlet',
-          contentType : 'application/json; charset=utf-8',
-          dataType: 'json',
-          data: JSON.stringify(formData),
+          url: 'create-user',
+          contentType : false,
+          processData: false,
+          cache: false,
+          data: formData,
         }).done(function(data) {
           switch (data.statusCode) {
             case 200:
               alert('The user was added successfuly.');
-              $('input:not([type=submit])').val('');
-              $('select').val('gmail');
+              
               window.open(
-                  'mailto:'   + formData.email
+                  'mailto:'   + $('[name="email"]').val()
                 + '?subject=' + encodeURIComponent('Welcome to SlidePiper - Beta Test License!')
      
-                + '&body='    + encodeURIComponent('Dear ' + formData['first-name'] + ',\r\n\r\n'
+                + '&body='    + encodeURIComponent('Dear ' + $('[name="first-name"]').val() + ',\r\n\r\n'
 
                               + 'I would like to personally welcome you as a SlidePiper Beta user. We look forward to working with you to understand and customize this tool to give you more value.\r\n\r\n'
                     
@@ -46,9 +94,9 @@ sp = {
                               + 'You can then view the analytics that are generated from the viewing of the document. There will be updates giving more features as we finish the development and testing.\r\n\r\n'
                     
                               + 'Your username is:\r\n'
-                              + formData.email + '.\r\n\r\n'
+                              + $('[name="email"]').val() + '.\r\n\r\n'
                               + 'Your initial Password is:\r\n'
-                              + formData.password + '\r\n\r\n'
+                              + $('[name="password"]').val() + '\r\n\r\n'
                               + 'To login follow this link:\r\n'
                               + 'http://www.slidepiper.com/login.html\r\n\r\n'
                     
@@ -67,7 +115,7 @@ sp = {
               break;
 
             case 100:
-              alert('The user ' + formData.email + ' already exists.');
+              alert('The user ' + $('[name="email"]').val() + ' already exists.');
               break;
               
             case 101:
@@ -77,13 +125,28 @@ sp = {
             default:
               alert('The user was not added. Error code: ' + data.statusCode + '.');
           }
-          
+
+          // Reset form values.
+          $('input:not([type=submit])').val('');
+          $('select').val('gmail');
         }).fail(function(jqXHR, textStatus, errorThrown) {
           console.log(textStatus + ': ' + errorThrown);
         });
         event.preventDefault();
       });
-    }
+    },
+    
+    toggleSettingsBtns: (function () {
+      $('#sp-cta2-settings').hide();
+      $('#sp-cta3-settings').hide();
+      
+      $('[name="viewer_toolbar_cta2_is_enabled"]').on('click', function () {
+        $('#sp-cta2-settings').toggle();
+      });
+      $('[name="viewer_toolbar_cta3_is_enabled"]').on('click', function () {
+        $('#sp-cta3-settings').toggle();
+      });
+    })(),
   }
 };
 

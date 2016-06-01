@@ -330,23 +330,7 @@ public class ManagementServlet extends HttpServlet {
           DbLayer.setEvent(DbLayer.CUSTOMER_EVENT_TABLE,
               URLDecoder.decode(data.getString("eventName"), "UTF-8"), eventDataMap);
           break;
-          
-        case "setSalesman":
-          String company = input.getString("company");
-          String email = input.getString("email");
-          String emailClient = input.getString("email-client");
-          String firstName = input.getString("first-name");
-          String lastName = input.getString("last-name");
-          String magic = input.getString("magic");
-          String password = input.getString("password");
-          
-          int statusCode = DbLayer.setSalesman(company, email, emailClient, firstName, lastName, magic, password);
-          output.put("statusCode", statusCode);
-
-          //System.out.println("cust data: smemail " + smemail + " cname " + cname + "cust company: " + ccompany + " cu email:" + cemail);
-          //output.put("newCustomer", DbLayer.addNewCustomer(smemail, cname, ccompany, cemail));
-          break;
-          
+   
         case "setSalesmanDocumentSettings":
         	String isChatEnabled = Boolean.toString(input.getBoolean("isChatEnabled"));
         	Boolean isAlertEmailEnabled = input.getBoolean("isAlertEmailEnabled");
