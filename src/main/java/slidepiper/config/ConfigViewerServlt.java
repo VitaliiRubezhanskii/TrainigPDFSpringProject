@@ -57,8 +57,8 @@ public class ConfigViewerServlt extends HttpServlet {
           salesman.get("viewer_toolbar_find_color"));
       viewer.put("toolbarFindBackground",
           salesman.get("viewer_toolbar_find_background"));
-      viewer.put("toolbarLogoImage",
-          salesman.get("viewer_toolbar_logo_image"));
+      viewer.put("toolbarLogoImage", 
+    		  salesman.get("viewer_toolbar_logo_image"));
       viewer.put("toolbarLogoLink",
           salesman.get("viewer_toolbar_logo_link"));
       viewer.put("toolbarLogoCollapseMaxWidth",

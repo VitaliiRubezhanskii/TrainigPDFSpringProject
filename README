@@ -4,7 +4,46 @@ SlidePiper README File
 Change Log
 ----------
 
+### 0.6.3
+
+2016-06-01 Max Prais <maxp@slidepiper.com>, Yaniv Friedensohn <yanivf@slidepiper.com>
+
+* Dashboard - Added ability to sort documents in Marketing Analytics by document name
+and performance. Added ability to sort customers by customer name in Sales Analytics.
+
+* Dashboard - Display the email address in Sales Analytics if no name was inserted for a customer.
+
+* Dashboard - Moved 'Copy' and 'Send' buttons in 'Send Documents' to the end of the row, and
+aligned them in the centre.
+
+* Dashboard - Fixed chart.js bug causing the chart to load sporadically. 
+
+* Dashboard/DB - Sorted documents based on local timestamp i.e. time and date that is relative to the
+location of the user, rather than having a timestamp created by the server.
+Ordered documents based on this local timestamp ascending.
+
+* Dashboard/DB - Within MySQL views, limited page views duration events queries to 1 hour.  
+
+* DB - Added a timestamp to the customers table.
+
+* OpenShift - Created a script for daily backup of picascrafxzhbcmd DB. The backup will run
+upon installing a cron service on the server.
+
+* OpenShift - Set MySQL default timezone to UTC.
+
+* Signup - Added viewer customization settings to the signup page:
+1. Enable selection of different colors for the viewer toolbar and buttons.
+2. Enable the ability to choose the text and links of the CTA buttons, and to choose a logo for
+the viewer toolbar. 
+3. Created default SlidePiper viewer design for all customers.
+
+* System - Set cache to expire if files were modified.
+
+* Viewer - made YouTube widget loop through the loaded video.
+
+
 ### 0.6.2.1
+
 2016-05-31 Yaniv Friedensohn <yanivf@slidepiper.com>
 
 * Fix Canlendly widget from not working buy using their method of implementing their widget.

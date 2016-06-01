@@ -7,6 +7,7 @@ import java.nio.file.Paths;
 import slidepiper.config.ConfigProperties;
 import slidepiper.db.DbLayer;
 
+import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -55,6 +56,7 @@ public class UploadFile extends HttpServlet {
       String action = null;
       String updateFileHash = null;
       String salesmanEmail = null;
+      Timestamp localTimestamp = null;
       
       /**
        * The redundancy (by having this another for loop) is to ensure capturing the salesman email
@@ -70,7 +72,11 @@ public class UploadFile extends HttpServlet {
           updateFileHash = file.getString();
         } else if (file.getFieldName().equals("salesmanEmail")) {
           salesmanEmail = file.getString();
+        } else if (file.getFieldName().equals("localTimestamp")){
+          localTimestamp = new Timestamp(Long.parseLong(file.getString()));
+        	//localTimestamp = ;
         }
+       
       }
       
       Map<String, String> eventDataMap = new HashMap<String, String>();
@@ -82,7 +88,7 @@ public class UploadFile extends HttpServlet {
         
         for (FileItem file: items) {       
           if (null != file.getContentType() && file.getContentType().equals("application/pdf")) {         
-            fileHash = DbLayer.setFileHash(file, salesmanEmail);
+            fileHash = DbLayer.setFileHash(file, salesmanEmail, localTimestamp);
             
             // Set default customer for the salesman if not exist.
             if (false == isDefaultCustomerEmailExist) {
@@ -115,7 +121,7 @@ public class UploadFile extends HttpServlet {
             
             // Update file.
             DbLayer.updateFile(file, updateFileHash,
-                Paths.get(file.getName()).getFileName().toString(), salesmanEmail);
+                Paths.get(file.getName()).getFileName().toString(), salesmanEmail, localTimestamp);
             
             // Record event.
             eventDataMap.put("email", salesmanEmail);

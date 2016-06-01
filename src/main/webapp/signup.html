@@ -8,7 +8,7 @@
    
   </head>
 
-  <body class="sp--height-100-percent">
+  <body>
     <div class="slds-grid slds-grid--align-center sp--height-100-percent">
       <section class="slds-col slds-align-middle slds-size--1-of-5">
         <header class="slds-size--1-of-1 slds-text-align--center slds-p-bottom--medium">
@@ -18,46 +18,47 @@
   		<div class="slds-box">
           <h3 class="slds-section-title--divider">Sign Up Form</h3>
 
-          <form class="slds-form--stacked" id="sp-signup__form">
+          <form method="POST" enctype="multipart/form-data" class="slds-form--stacked" id="sp-signup__form">
             <div class="slds-form-element">
               <label class="slds-form-element__label" for="first-name">First Name</label>
               <div class="slds-form-element__control">
-                <input class="slds-input" id="first-name" type="text" maxlength="40" placeholder="First Name" required />
+                <input class="slds-input" name="first-name" type="text" maxlength="40" placeholder="First Name" required />
               </div>
             </div>
 
+            
             <div class="slds-form-element">
               <label class="slds-form-element__label" for="last-name">Last Name</label>
               <div class="slds-form-element__control">
-                <input class="slds-input" id="last-name" type="text" maxlength="40" placeholder="Last Name" required />
+                <input class="slds-input" name="last-name" type="text" maxlength="40" placeholder="Last Name" required />
               </div>
             </div>
             
             <div class="slds-form-element">
               <label class="slds-form-element__label" for="company">Company</label>
               <div class="slds-form-element__control">
-                <input id="company" class="slds-input" type="text" maxlength="40" placeholder="Company" required />
+                <input name="company" class="slds-input" type="text" maxlength="40" placeholder="Company" required />
               </div>
             </div>
 
             <div class="slds-form-element">
               <label class="slds-form-element__label" for="email">Email</label>
               <div class="slds-form-element__control">
-                <input class="slds-input" id="email" type="email" maxlength="40" placeholder="Email" required />
+                <input class="slds-input" name="email" type="email" maxlength="40" placeholder="Email" required />
               </div>
             </div>
 
            <div class="slds-form-element">
               <label class="slds-form-element__label" for="password">Password</label>
               <div class="slds-form-element__control">
-                <input class="slds-input" id="password" type="password" maxlength="40" required />
+                <input class="slds-input" name="password" type="password" maxlength="40" required />
               </div>
             </div>
 
             <div class="slds-form-element">
               <label class="slds-form-element__label" for="email-client">Email Client</label>
               <div class="slds-form-element__control">
-                <select id="email-client" class="slds-select" required >
+                <select name="email-client" class="slds-select" required >
                   <!-- <option selected disabled>Choose&hellip;</option> -->
                   <option value="gmail">Gmail</option>
                   <option value="mailto">Outlook</option>
@@ -68,14 +69,120 @@
             <div class="slds-form-element">
               <label class="slds-form-element__label" for="magic">Magic</label>
               <div class="slds-form-element__control">
-                <input class="slds-input" id="magic" type="password" maxlength="50" required />
+                <input class="slds-input" name="magic" type="password" maxlength="50" required />
               </div>
             </div>
             
-            <div class="slds-form-element slds-text-align--center slds-p-top--small">
-              <input class="slds-button slds-button--brand" type="submit" value="Sign Up" />
-            </div>
+            <h3 id="sp-viewer-settings__h3" class="slds-section-title--divider">Viewer Settings</h3>
             
+          <div id="sp-viewer-settings">
+                <div class="slds-form-element">
+                  <h3>Viewer Toolbar Background</h3>
+                  <div class="slds-form-element__control">
+                    <div class="sp-viewer-toolbar-container">
+                        <label class="slds-form-element__label">White</label><input checked data-color="#fff" class="slds-input sp-viewer-toolbar-background__checkbox" name="viewer_toolbar_background" type="radio"/>
+                    </div>
+                    <div class="sp-viewer-toolbar-container">
+                        <label class="slds-form-element__label">Dark Blue</label><input data-color="#293846" class="slds-input sp-viewer-toolbar-background__checkbox" name="viewer_toolbar_background" type="radio"/>
+                    </div>
+                    <div class="sp-viewer-choice-demo">
+                        <div class="sp-viewer-choice-demo-toolbar">
+                        <p id="sp-toolbar-desc__p">Toolbar</p>
+                            <div class="sp-viewer-choice-demo-button">
+                                <p id="sp-cta-button-desc__p">CTA Button</p>
+                            </div>
+                        </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <!-- CTA Btn Color  -->
+               <div class="slds-form-element" id="sp-cta-button-color-picker-container">
+                  <h3>CTA Button Color:</h3>
+                  <div class="slds-form-element__control">
+                    <div class="sp-viewer-toolbar-container">
+                        <div class="slds-form-element__control">
+                            <div class="slds-form-element__control">
+                                <div class="sp-viewer-toolbar-container">
+                                    <label class="slds-form-element__label">Red</label><input data-color="#F32720" class="slds-input" name="viewer_toolbar_cta_background" type="radio"/>
+                                </div>
+                                <div class="sp-viewer-toolbar-container">
+                                    <label class="slds-form-element__label">Orange</label><input data-color="#FC8600" class="slds-input" name="viewer_toolbar_cta_background" type="radio"/>
+                                </div>
+                                <div class="sp-viewer-toolbar-container">
+                                    <label class="slds-form-element__label">Green</label><input data-color="#41CD41" class="slds-input" name="viewer_toolbar_cta_background" type="radio"/>
+                                </div>
+                                <div class="sp-viewer-toolbar-container">
+                                    <label class="slds-form-element__label">SP Blue</label><input checked data-color="#1B1862" class="slds-input" name="viewer_toolbar_cta_background" type="radio"/>
+                                </div>
+                            </div>
+                        </div>
+                      </div>
+                   </div>
+                </div>
+                <hr>
+               
+                <div class="slds-form-element sp-viewer-settings-container">
+                  <h3>Company Logo</h3>
+                  <div class="slds-form-element__control">
+                    <div class="sp-viewer-toolbar-container sp-viewer-logo-handler">
+                        <label class="slds-form-element__label">Logo: </label><input name="viewer_toolbar_logo_image" class="slds-input" type="file" accept="image/*"/>
+                    </div>
+                    <div id="sp-viewer-logo-link" class="sp-viewer-toolbar-container">
+                        <label class="slds-form-element__label">Logo Link: </label><input name="viewer_toolbar_logo_link" class="slds-input" type="text"/>
+                    </div>
+                  </div>
+                </div>
+                
+                <hr>
+                
+                <div class="slds-form-element">
+                  <h3>Enable CTAs:</h3>
+                  <div class="slds-form-element__control">
+                    <div class="sp-viewer-toolbar-container">
+                        <label class="slds-form-element__label" for="viewer_toolbar_cta2_is_enabled">CTA2</label><input class="slds-input" name="viewer_toolbar_cta2_is_enabled" type="checkbox"/>
+                    </div>
+                    <div class="sp-viewer-toolbar-container">
+                        <label class="slds-form-element__label" for="viewer_toolbar_cta3_is_enabled">CTA3</label><input class="slds-input" name="viewer_toolbar_cta3_is_enabled" type="checkbox"/>
+                    </div>
+                  </div>
+                </div>
+                
+                <div id="sp-cta2-settings" class="slds-form-element">
+                  <h3>CTA2 Settings</h3>
+                  <div class="slds-form-element">
+                      <label class="slds-form-element__label" for="viewer_toolbar_cta2_text">CTA2 Text</label>
+                      <div class="slds-form-element__control">
+                        <input class="slds-input" name="viewer_toolbar_cta2_text" type="text"/>
+                      </div>
+                  </div>
+                  <div class="slds-form-element">
+                      <label class="slds-form-element__label" for="viewer_toolbar_cta2_link">CTA2 Link</label>
+                      <div class="slds-form-element__control">
+                        <input class="slds-input" name="viewer_toolbar_cta2_link" type="text"/>
+                      </div>
+                    </div>
+                </div>
+                <hr>
+                <div id="sp-cta3-settings" class="slds-form-element">
+                  <h3>CTA3 Settings</h3>
+                  <div class="slds-form-element">
+                      <label class="slds-form-element__label" for="viewer_toolbar_cta3_text">CTA3 Text</label>
+                      <div class="slds-form-element__control">
+                        <input class="slds-input" name="viewer_toolbar_cta3_text" type="text"/>
+                      </div>
+                  </div>
+                  <div class="slds-form-element">
+                      <label class="slds-form-element__label" for="viewer_toolbar_cta3_link">CTA3 Link</label>
+                      <div class="slds-form-element__control">
+                        <input class="slds-input" name="viewer_toolbar_cta3_link" type="text"/>
+                      </div>
+                    </div>
+                </div>
+           </div> 
+            <div class="slds-form-element slds-text-align--center slds-p-top--small">
+              <input id="sp-submit-signup__button" class="slds-button slds-button--brand" type="submit" value="Sign Up" />
+            </div>
           </form>
         </div>
       </section>

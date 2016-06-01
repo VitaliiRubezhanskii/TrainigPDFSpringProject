@@ -12,11 +12,18 @@ import slidepiper.email.EmailSender;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URLDecoder;
+import java.sql.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TimeZone;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -79,13 +86,23 @@ public class ManagementServlet extends HttpServlet {
         
       case "getFilesList":
         parameterList.add(request.getParameter("salesmanEmail"));
-        sqlData = DbLayer.getEventData(parameterList, Analytics.sqlFilesList);        
+        sqlData = DbLayer.getEventData(parameterList, Analytics.sqlFilesList);
         data.put("filesList", sqlData);
         break;
         
       case "getFilesData":
         parameterList.add(request.getParameter("salesmanEmail"));
-        sqlData = DbLayer.getEventData(parameterList, Analytics.sqlFilesData);        
+        switch (request.getParameter("sortChoice")){
+      		case "fileName":
+      			sqlData = DbLayer.getEventData(parameterList, Analytics.sqlFilesDataByName);
+      			break;
+      		case "performance":
+      			sqlData = DbLayer.getEventData(parameterList, Analytics.sqlFilesDataByPerformance);
+      			break;
+      		case "noSort":
+      			sqlData = DbLayer.getEventData(parameterList, Analytics.sqlFilesDataByName);
+      			break;
+        }
         data.put("filesData", sqlData);
         break;
       
@@ -111,7 +128,10 @@ public class ManagementServlet extends HttpServlet {
         
 	    case "getCustomersFilesList":
         parameterList.add(request.getParameter("salesmanEmail"));
-        sqlData = DbLayer.getEventData(parameterList, Analytics.sqlCustomersFilesList);        
+        switch (request.getParameter("sortChoice")){
+        	case "customerName":
+        		sqlData = DbLayer.getEventData(parameterList, Analytics.sqlCustomersFilesList);
+        }
         data.put("customersFilesList", sqlData);
         break;
         
@@ -310,23 +330,7 @@ public class ManagementServlet extends HttpServlet {
           DbLayer.setEvent(DbLayer.CUSTOMER_EVENT_TABLE,
               URLDecoder.decode(data.getString("eventName"), "UTF-8"), eventDataMap);
           break;
-          
-        case "setSalesman":
-          String company = input.getString("company");
-          String email = input.getString("email");
-          String emailClient = input.getString("email-client");
-          String firstName = input.getString("first-name");
-          String lastName = input.getString("last-name");
-          String magic = input.getString("magic");
-          String password = input.getString("password");
-          
-          int statusCode = DbLayer.setSalesman(company, email, emailClient, firstName, lastName, magic, password);
-          output.put("statusCode", statusCode);
-
-          //System.out.println("cust data: smemail " + smemail + " cname " + cname + "cust company: " + ccompany + " cu email:" + cemail);
-          //output.put("newCustomer", DbLayer.addNewCustomer(smemail, cname, ccompany, cemail));
-          break;
-          
+   
         case "setSalesmanDocumentSettings":
         	String isChatEnabled = Boolean.toString(input.getBoolean("isChatEnabled"));
         	Boolean isAlertEmailEnabled = input.getBoolean("isAlertEmailEnabled");
