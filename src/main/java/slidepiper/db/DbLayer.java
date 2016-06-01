@@ -1,9 +1,12 @@
 package slidepiper.db;
 
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Paths;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -108,10 +111,18 @@ public class DbLayer {
 					{			
 					try{
 							PreparedStatement preparedStatement = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-							
-							if (null != firstName && null != lastName) {
-							  fullName = firstName + " " + lastName;
+							System.err.print(firstName);
+							if (! firstName.equals("")) {
+							  System.out.print(firstName);
+							  fullName = firstName;
+							  
+							  if (! lastName.equals("")) { 
+								fullName += " " + lastName;
+							  }
+							} else if (! lastName.equals("")) {
+							  fullName = lastName;
 							}
+							
 							preparedStatement.setString(1, email.toLowerCase());
 							preparedStatement.setString(2, fullName);
 							preparedStatement.setString(3, firstName);
@@ -1609,10 +1620,10 @@ public class DbLayer {
        * @return The file enumerated hash.
        * @throws IOException
        */
-      public static String setFileHash(FileItem file, String salesmanEmail) throws IOException {
+      public static String setFileHash(FileItem file, String salesmanEmail, Timestamp localTimestamp) throws IOException {
         
         Connection conn = null;
-        String sqlInsert = "INSERT INTO slides (file, sales_man_email, name) VALUES (?, ?, ?)";
+        String sqlInsert = "INSERT INTO slides (file, sales_man_email, name, local_timestamp) VALUES (?, ?, ?, ?)";
         String sqlSelectAfterInsert = "SELECT id_ai, id FROM slides WHERE id_ai=?";
         String fileHash = null;
         
@@ -1624,6 +1635,7 @@ public class DbLayer {
           ps.setBytes(1, IOUtils.toByteArray(file.getInputStream()));
           ps.setString(2, salesmanEmail);
           ps.setString(3, Paths.get(file.getName()).getFileName().toString());
+          ps.setTimestamp(4, localTimestamp);
           ps.executeUpdate();
           ResultSet rs = ps.getGeneratedKeys();
           
@@ -1753,52 +1765,110 @@ public class DbLayer {
        * 
        * @return    A status code representing possible validation errors,
        *        and addition success.  
+     * @throws IOException 
        */
-      public static int setSalesman(String company, String email,
-          String emailClient, String firstName, String lastName,
-          String magic, String password) {
-        
+      public static int setSalesman(String company, String email, String emailClient, String firstName, String lastName, String magic, String password,
+    		  String viewerToolbarBackground, InputStream viewerToolbarLogoImage, String viewerToolbarLogoLink, String viewerToolbarCTABackground,
+    		  String viewerToolbarCta2IsEnabled, String viewerToolbarCta3IsEnabled,
+    		  String viewerToolbarCta2Text, String viewerToolbarCta2Link, String viewerToolbarCta3Text, String viewerToolbarCta3Link) throws IOException {
+    	  
         int statusCode = 0;
-        
+
+        Constants.updateConstants();
+		
+		try {
+          Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+          e.printStackTrace();
+        }
+		
         if (isSalesmanExist(email)) {
           statusCode = 100;
         } else if (! magic.equals("sympiper")) {
           statusCode = 101;
         } else {
-          Connection conn = null;
+          Connection conn=null;
           String fullName = firstName + " " + lastName;
-          String sql = "INSERT INTO sales_men (company, email, mailtype, name, first_name, last_name, password, emailpassword) VALUES (?, ?, ?, ?, ?, ?, ?, 0)";
+          String viewerCta1Background = viewerToolbarCTABackground;
+          String viewerCta2Background = viewerToolbarCTABackground;
+          String viewerCta3Background = viewerToolbarCTABackground;
+          String viewerToolbarButtonBackground = viewerToolbarCTABackground;
+          String viewerCta1Text = "Contact " + firstName;
+          String viewerCta1Link = "mailto:" + email;
+          String viewerToolbarColor = null;
+          String viewerToolbarFindBackground = null;
+    	  String viewerToolbarCta1Color = "#fff";
+          String viewerToolbarCta2Color = "#fff";
+          String viewerToolbarCta3Color = "#fff";
+          System.out.print("Toolbar background: " + viewerToolbarBackground);
+          if (viewerToolbarBackground.equals("#fff")){
+        	  viewerToolbarColor = "#293846";
+              viewerToolbarFindBackground = "#fff";
+          } else if (viewerToolbarBackground.equals("#293846")) {
+        	  viewerToolbarColor = "#fff";
+              viewerToolbarFindBackground = "#293846";
+          }
           
-          try {
-            conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setString(1, company);
-            stmt.setString(2, email);
-            stmt.setString(3, emailClient);
-            stmt.setString(4, fullName);
-            stmt.setString(5, firstName);
-            stmt.setString(6, lastName);
-            stmt.setString(7, password);
-            stmt.executeUpdate();
-              
-            // The user was added successfully.
-            statusCode = 200;
-          } catch (SQLException ex) {
-            System.err.println("Error code: " + ex.getErrorCode() + " - " + ex.getMessage());
-          } finally {
-            if (null != conn) {
+          String sql = "INSERT INTO sales_men (company, email, mailtype, first_name, last_name, password, viewer_toolbar_background,\n"
+          			 + "viewer_toolbar_logo_image, viewer_toolbar_logo_link, viewer_toolbar_cta2_is_enabled, viewer_toolbar_cta3_is_enabled,\n"
+          			 + "viewer_toolbar_cta2_text, viewer_toolbar_cta2_link, viewer_toolbar_cta3_text, viewer_toolbar_cta3_link, viewer_toolbar_cta1_background,\n"
+          			 + "viewer_toolbar_cta2_background, viewer_toolbar_cta3_background, name, viewer_toolbar_cta1_is_enabled, viewer_toolbar_cta1_text,\n"
+          			 + "viewer_toolbar_cta1_link, viewer_toolbar_cta_border_radius, viewer_toolbar_cta_font, viewer_toolbar_cta_margin, viewer_toolbar_cta_padding,\n"
+          			 + "viewer_toolbar_color, viewer_toolbar_cta1_color, viewer_toolbar_cta2_color, viewer_toolbar_cta3_color, emailpassword,\n"
+          			 + "viewer_toolbar_button_background, viewer_toolbar_find_background, viewer_toolbar_logo_collapse_max_width,\n"
+          			 + "viewer_toolbar_cta1_collapse_max_width, viewer_toolbar_cta2_collapse_max_width)\n"
+          			 + "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'true', ?, ?,'3px', '14px ExpertSans, verdana, arial, sans-serif',\n"
+            		 + "'3px 10px 3px 0', '4px 10px', ?, ?, ?, ?, '', ?, ?, '670px', '1050px', '800px')";
+
               try {
-                conn.close();
+                conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
+                PreparedStatement stmt = conn.prepareStatement(sql);
+                stmt.setString(1, company);
+                stmt.setString(2, email);
+                stmt.setString(3, emailClient);
+                stmt.setString(4, firstName);
+                stmt.setString(5, lastName);
+                stmt.setString(6, password);
+                stmt.setString(7, viewerToolbarBackground);
+                stmt.setBytes(8, IOUtils.toByteArray(viewerToolbarLogoImage)); 
+                stmt.setString(9, viewerToolbarLogoLink);
+                stmt.setString(10, viewerToolbarCta2IsEnabled);
+                stmt.setString(11, viewerToolbarCta3IsEnabled);
+                stmt.setString(12, viewerToolbarCta2Text);
+                stmt.setString(13, viewerToolbarCta2Link);
+                stmt.setString(14, viewerToolbarCta3Text);
+                stmt.setString(15, viewerToolbarCta3Link);
+                stmt.setString(16, viewerCta1Background);
+                stmt.setString(17, viewerCta2Background);
+                stmt.setString(18, viewerCta3Background);
+                stmt.setString(19, fullName);
+                stmt.setString(20, viewerCta1Text);
+                stmt.setString(21, viewerCta1Link);
+                stmt.setString(22, viewerToolbarColor);
+                stmt.setString(23, viewerToolbarCta1Color);
+                stmt.setString(24, viewerToolbarCta2Color);
+                stmt.setString(25, viewerToolbarCta3Color);	
+                stmt.setString(26, viewerToolbarButtonBackground);
+                stmt.setString(27, viewerToolbarFindBackground);
+                stmt.executeUpdate();
+                
+                // The user was added successfully.
+                statusCode = 200;
               } catch (SQLException ex) {
-                ex.printStackTrace();
+                System.err.println("Error code: " + ex.getErrorCode() + " - " + ex.getMessage());
+              } finally {
+                if (null != conn) {
+                  try {
+                    conn.close();
+                  } catch (SQLException ex) {
+                    ex.printStackTrace();
+                  }
+                }
               }
             }
-          }
-        }
-        
-        return statusCode;
-      }
-
+        	return statusCode;
+         }
+          
       /**
        * Update (replace) a file with a different one.
        * 
@@ -1810,19 +1880,27 @@ public class DbLayer {
        * @throws IOException
        */
       public static void updateFile(FileItem file, String fileHash, String fileName,
-          String salesmanEmail) throws IOException {
+          String salesmanEmail, Timestamp localTimestamp) throws IOException {
 
         Constants.updateConstants();
         Connection conn = null;
-        String sql = "UPDATE slides SET file = ?, name = ?, timestamp = CURRENT_TIMESTAMP WHERE id = ? AND sales_man_email = ?";
+        String sql = "UPDATE slides SET file = ?, name = ?, timestamp = CURRENT_TIMESTAMP, local_timestamp = ? WHERE id = ? AND sales_man_email = ?";
         
         try {
+	      try {
+			DriverManager.registerDriver(new com.mysql.jdbc.Driver());
+		  } catch (SQLException e) {
+			e.printStackTrace();
+		  }	
+        	
           conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
           PreparedStatement stmt = conn.prepareStatement(sql);
           stmt.setBytes(1, IOUtils.toByteArray(file.getInputStream()));
           stmt.setString(2, fileName);
-          stmt.setString(3, fileHash);
-          stmt.setString(4, salesmanEmail);
+          stmt.setTimestamp(3, localTimestamp);
+          stmt.setString(4, fileHash);
+          stmt.setString(5, salesmanEmail);
+          
           stmt.executeUpdate();
         } catch (SQLException ex) {
           System.err.println("Error code: " + ex.getErrorCode() + " - " + ex.getMessage());
@@ -1839,7 +1917,12 @@ public class DbLayer {
       
       public static void setSalesmenDocumentSettings (String isChatEnabled, Boolean isAlertEmailEnabled, Boolean isReportEmailEnabled,
     		  			String salesMan) {
-    	  //documentation - javadoc
+    	  
+    	  /**
+    	   * @param viewerChatIsEnabled, isAlertEmailEnabled, isReportEmailEnabled
+    	   * These settings decide whether chat is enabled, and whether report or alert emails will be 
+    	   * sent when a customer opens a salesman's document
+    	   */
     	  
     	  Connection conn = null;
     	  

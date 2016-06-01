@@ -51,7 +51,7 @@ public class UploadCustomers extends HttpServlet {
 		CSVParser parser = CSVParser.parse(
 		    IOUtils.toString(filePart.getInputStream(), "UTF-8"),
 		    CSVFormat.DEFAULT);
-		System.out.println("****Parser: " + parser);
+		System.out.println("Parser: " + parser);
 		
 		int flag = -1;
 		int firstNameIndex = -1;
@@ -75,24 +75,12 @@ public class UploadCustomers extends HttpServlet {
     				emailIndex = i;
     			}
     		}
-    		
-    		
     	}
     	
     	
     	System.out.print("First: " + firstNameIndex + ", Last: " + lastNameIndex  + ", Company: " + companyIndex
     	+ ", Email: " + emailIndex);
-    	
-//      if (1 == csvRecord.getRecordNumber()
-//              && csvRecord.get(0).equals("First Name")
-//              && csvRecord.get(1).equals("Last Name")
-//              && csvRecord.get(2).equals("Company")
-//              && csvRecord.get(3).equals("E-mail")) {
-//    	  
-//    	  
-//        
-//        flag = 0;
-//      }
+
     	if (-1 == firstNameIndex || -1 == lastNameIndex || -1 == emailIndex || -1 == companyIndex){
 			JSONObject dataErr = new JSONObject();
 			dataErr.put("err", true);

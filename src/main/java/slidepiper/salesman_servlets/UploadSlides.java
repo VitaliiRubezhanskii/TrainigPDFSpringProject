@@ -7,6 +7,7 @@ import java.nio.file.Paths;
 import slidepiper.config.ConfigProperties;
 import slidepiper.db.DbLayer;
 
+import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,6 +54,7 @@ public class UploadSlides extends HttpServlet {
     try {
       List<FileItem> items = upload.parseRequest(request);
       String salesmanEmail = null;
+      Timestamp localTimestamp = null;
       
       /**
        * The redundancy (by having this another for loop) is to ensure capturing the salesman email
@@ -64,6 +66,8 @@ public class UploadSlides extends HttpServlet {
       for (FileItem file: items) {
         if (file.getFieldName().equals("salesman_email")) {
           salesmanEmail = file.getString();
+        } else if (file.getFieldName().equals("localTimestamp")){
+          localTimestamp = new Timestamp(Long.parseLong(file.getString()));
         }
       }
       
@@ -74,7 +78,7 @@ public class UploadSlides extends HttpServlet {
       
       for (FileItem file: items) {       
         if (null != file.getContentType() && file.getContentType().equals("application/pdf")) {         
-          fileHash = DbLayer.setFileHash(file, salesmanEmail);
+          fileHash = DbLayer.setFileHash(file, salesmanEmail, localTimestamp);
           
           // Set default customer for the salesman if not exist.
           if (false == isDefaultCustomerEmailExist) {
