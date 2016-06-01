@@ -45,7 +45,10 @@ sp = {
     })(),
     
     newUser: function() { 
-      $('#sp-submit-signup__button').on('click', function () {
+      $('#sp-signup__form').submit(function (event) {
+        if (!event) {
+          event = window.event;
+        }
         event.stopPropagation();
         event.preventDefault();
         
@@ -142,9 +145,23 @@ sp = {
       
       $('[name="viewer_toolbar_cta2_is_enabled"]').on('click', function () {
         $('#sp-cta2-settings').toggle();
+        if ($(this).is(':checked')){
+          $('[name="viewer_toolbar_cta2_text"],[name="viewer_toolbar_cta2_link"]')
+            .attr('required', 'true');
+        } else {
+          $('[name="viewer_toolbar_cta2_text"],[name="viewer_toolbar_cta2_link"]')
+          .removeAttr('required');
+        }
       });
       $('[name="viewer_toolbar_cta3_is_enabled"]').on('click', function () {
         $('#sp-cta3-settings').toggle();
+        if ($(this).is(':checked')){
+          $('[name="viewer_toolbar_cta3_text"],[name="viewer_toolbar_cta3_link"]')
+            .attr('required', 'true');
+        } else {
+          $('[name="viewer_toolbar_cta3_text"],[name="viewer_toolbar_cta3_link"]')
+          .removeAttr('required');
+        }
       });
     })(),
   }
