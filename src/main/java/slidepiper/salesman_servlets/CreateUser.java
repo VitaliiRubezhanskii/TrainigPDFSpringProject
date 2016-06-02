@@ -6,7 +6,9 @@ import java.io.InputStream;
 import java.io.PrintWriter;
 import java.net.URL;
 
+import slidepiper.config.ConfigProperties;
 import slidepiper.db.DbLayer;
+
 import java.util.List;
 
 import javax.servlet.ServletContext;
@@ -79,7 +81,8 @@ public class CreateUser extends HttpServlet {
             String viewerToolbarCta2Link = null;
             String viewerToolbarCta3Text = null;
             String viewerToolbarCta3Link = null;
-	    	
+            Boolean isClientLogo = null;
+            
 	    	for (FileItem file: items) {
 	    		if (file.getFieldName().equals("action")){
 	    			action = file.getString();
@@ -121,16 +124,18 @@ public class CreateUser extends HttpServlet {
 	    			if (null != file.getName() && (file.getContentType().equals("image/jpeg") || file.getContentType().equals("image/png"))){
 	    				viewerToolbarLogoImage = file.getInputStream();
 		    			System.out.println(viewerToolbarLogoImage);
+		    			isClientLogo = true;
 	    			}
 	    			else {
 	    				URL spLogoUrl = CreateUser.class.getResource("/sp-logo/sp-logo-02-555x120.png");
 	    				System.out.println("Url: " + spLogoUrl);
 	    				viewerToolbarLogoImage = new URL(spLogoUrl.toString()).openStream();
+	    				isClientLogo = false;
 	    			}
 	    		}
 	    		else if (file.getFieldName().equals("viewer_toolbar_logo_link")){
 	    			viewerToolbarLogoLink = file.getString();
-	    			System.out.println(viewerToolbarLogoLink);
+	    			System.out.println("Logo Link: " + viewerToolbarLogoLink);
 	    		}
 	    		else if (file.getFieldName().equals("viewer_toolbar_cta_background")){
 	    			viewerToolbarCTABackground = file.getString();
@@ -140,7 +145,7 @@ public class CreateUser extends HttpServlet {
 	    			viewerToolbarCta2IsEnabled = file.getString();
 	    			System.out.println("CTA2 Enabled: " + viewerToolbarCta2IsEnabled);
 	    		}
-	    		else if (file.getFieldName().equals("viewer_toolbar_cta3_is_enabled")){
+	    		else if (file.getFieldName().equals("viewer_toolbar_cta1_is_enabled")){
 	    			viewerToolbarCta3IsEnabled = file.getString();
 	    			System.out.println("CTA3 Enabled: " + viewerToolbarCta3IsEnabled);
 	    		}
@@ -152,15 +157,18 @@ public class CreateUser extends HttpServlet {
 	    			viewerToolbarCta2Link = file.getString();
 	    			System.out.println("CTA2 Link: " + viewerToolbarCta2Link);
 	    		}
-	    		else if (file.getFieldName().equals("viewer_toolbar_cta3_text")){
+	    		else if (file.getFieldName().equals("viewer_toolbar_cta1_text")){
 	    			viewerToolbarCta3Text = file.getString();
 	    			System.out.println(viewerToolbarCta3Text);
 	    		}
-	    		else if (file.getFieldName().equals("viewer_toolbar_cta3_link")){
+	    		else if (file.getFieldName().equals("viewer_toolbar_cta1_link")){
 	    			viewerToolbarCta3Link = file.getString();
 	    			System.out.println(viewerToolbarCta3Link);
 	    		}
 	    	}
+	    	
+	    	System.out.println(viewerToolbarLogoLink);
+	    	viewerToolbarLogoLink = chooseLogoLink(isClientLogo, viewerToolbarLogoLink);
 	        
 	    	if (action.equals("setSalesman")){
 	        	statusCode = DbLayer.setSalesman(company, email, emailClient, firstName, lastName, magic, password, 
@@ -180,4 +188,22 @@ public class CreateUser extends HttpServlet {
 	    output.print(data);
 	    output.close();
 	}
+	
+	public static String chooseLogoLink (Boolean isClientLogo, String viewerToolbarLogoLink) {
+		
+    	String logoLink = "";
+    	if (viewerToolbarLogoLink.length() <= 0 && !isClientLogo){
+    		logoLink = ConfigProperties.getProperty("app_url");
+		}
+		else if (viewerToolbarLogoLink.length() <= 0 && isClientLogo) {
+			logoLink = "no-logo-link";
+		}
+		else {
+			return viewerToolbarLogoLink;
+		}
+    	
+		return logoLink;
+		
+	}
+	
 }

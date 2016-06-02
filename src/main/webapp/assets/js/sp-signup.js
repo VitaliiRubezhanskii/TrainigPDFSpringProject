@@ -83,9 +83,7 @@ sp = {
         }).done(function(data) {
           switch (data.statusCode) {
             case 200:
-              alert('The user was added successfuly.');
-              
-              window.open(
+              location.href = 
                   'mailto:'   + $('[name="email"]').val()
                 + '?subject=' + encodeURIComponent('Welcome to SlidePiper - Beta Test License!')
      
@@ -113,8 +111,7 @@ sp = {
                               + 'Sivan Bender - Founder & CEO\r\n'
                               + '054-681-5095\r\n'
                               + 'sivanb@slidepiper.com'
-                  )
-                );
+                  );
               break;
 
             case 100:
@@ -141,7 +138,7 @@ sp = {
     
     toggleSettingsBtns: (function () {
       $('#sp-cta2-settings').hide();
-      $('#sp-cta3-settings').hide();
+      $('#sp-cta1-settings').hide();
       
       $('[name="viewer_toolbar_cta2_is_enabled"]').on('click', function () {
         $('#sp-cta2-settings').toggle();
@@ -153,13 +150,13 @@ sp = {
           .removeAttr('required');
         }
       });
-      $('[name="viewer_toolbar_cta3_is_enabled"]').on('click', function () {
-        $('#sp-cta3-settings').toggle();
+      $('[name="viewer_toolbar_cta1_is_enabled"]').on('click', function () {
+        $('#sp-cta1-settings').toggle();
         if ($(this).is(':checked')){
-          $('[name="viewer_toolbar_cta3_text"],[name="viewer_toolbar_cta3_link"]')
+          $('[name="viewer_toolbar_cta1_text"],[name="viewer_toolbar_cta1_link"]')
             .attr('required', 'true');
         } else {
-          $('[name="viewer_toolbar_cta3_text"],[name="viewer_toolbar_cta3_link"]')
+          $('[name="viewer_toolbar_cta1_text"],[name="viewer_toolbar_cta1_link"]')
           .removeAttr('required');
         }
       });
