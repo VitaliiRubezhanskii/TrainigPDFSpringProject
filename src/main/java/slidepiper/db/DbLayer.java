@@ -1770,7 +1770,7 @@ public class DbLayer {
       public static int setSalesman(String company, String email, String emailClient, String firstName, String lastName, String magic, String password,
     		  String viewerToolbarBackground, InputStream viewerToolbarLogoImage, String viewerToolbarLogoLink, String viewerToolbarCTABackground,
     		  String viewerToolbarCta2IsEnabled, String viewerToolbarCta3IsEnabled,
-    		  String viewerToolbarCta2Text, String viewerToolbarCta2Link, String viewerToolbarCta3Text, String viewerToolbarCta3Link) throws IOException {
+    		  String viewerToolbarCta2Text, String viewerToolbarCta2Link, String viewerToolbarCta1Text, String viewerToolbarCta1Link) throws IOException {
     	  
         int statusCode = 0;
 
@@ -1793,14 +1793,13 @@ public class DbLayer {
           String viewerCta2Background = viewerToolbarCTABackground;
           String viewerCta3Background = viewerToolbarCTABackground;
           String viewerToolbarButtonBackground = viewerToolbarCTABackground;
-          String viewerCta1Text = "Contact " + firstName;
-          String viewerCta1Link = "mailto:" + email;
+          String viewerCta3Text = "Contact " + firstName;
+          String viewerCta3Link = "mailto:" + email;
           String viewerToolbarColor = null;
           String viewerToolbarFindBackground = null;
     	  String viewerToolbarCta1Color = "#fff";
           String viewerToolbarCta2Color = "#fff";
           String viewerToolbarCta3Color = "#fff";
-          System.out.print("Toolbar background: " + viewerToolbarBackground);
           if (viewerToolbarBackground.equals("#fff")){
         	  viewerToolbarColor = "#293846";
               viewerToolbarFindBackground = "#fff";
@@ -1810,14 +1809,14 @@ public class DbLayer {
           }
           
           String sql = "INSERT INTO sales_men (company, email, mailtype, first_name, last_name, password, viewer_toolbar_background,\n"
-          			 + "viewer_toolbar_logo_image, viewer_toolbar_logo_link, viewer_toolbar_cta2_is_enabled, viewer_toolbar_cta3_is_enabled,\n"
+          			 + "viewer_toolbar_logo_image, viewer_toolbar_logo_link, viewer_toolbar_cta2_is_enabled,viewer_toolbar_cta1_is_enabled ,\n"
           			 + "viewer_toolbar_cta2_text, viewer_toolbar_cta2_link, viewer_toolbar_cta3_text, viewer_toolbar_cta3_link, viewer_toolbar_cta1_background,\n"
-          			 + "viewer_toolbar_cta2_background, viewer_toolbar_cta3_background, name, viewer_toolbar_cta1_is_enabled, viewer_toolbar_cta1_text,\n"
+          			 + "viewer_toolbar_cta2_background, viewer_toolbar_cta3_background, name, viewer_toolbar_cta3_is_enabled, viewer_toolbar_cta1_text,\n"
           			 + "viewer_toolbar_cta1_link, viewer_toolbar_cta_border_radius, viewer_toolbar_cta_font, viewer_toolbar_cta_margin, viewer_toolbar_cta_padding,\n"
           			 + "viewer_toolbar_color, viewer_toolbar_cta1_color, viewer_toolbar_cta2_color, viewer_toolbar_cta3_color, emailpassword,\n"
           			 + "viewer_toolbar_button_background, viewer_toolbar_find_background, viewer_toolbar_logo_collapse_max_width,\n"
           			 + "viewer_toolbar_cta1_collapse_max_width, viewer_toolbar_cta2_collapse_max_width)\n"
-          			 + "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'true', ?, ?,'3px', '14px ExpertSans, verdana, arial, sans-serif',\n"
+          			 + "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'true', ?, ?, '3px', 'bold 14px Ariel, sans-serif',\n"
             		 + "'3px 10px 3px 0', '4px 10px', ?, ?, ?, ?, '', ?, ?, '670px', '1050px', '800px')";
 
               try {
@@ -1836,14 +1835,14 @@ public class DbLayer {
                 stmt.setString(11, viewerToolbarCta3IsEnabled);
                 stmt.setString(12, viewerToolbarCta2Text);
                 stmt.setString(13, viewerToolbarCta2Link);
-                stmt.setString(14, viewerToolbarCta3Text);
-                stmt.setString(15, viewerToolbarCta3Link);
+                stmt.setString(14,  viewerCta3Text);
+                stmt.setString(15,  viewerCta3Link);
                 stmt.setString(16, viewerCta1Background);
                 stmt.setString(17, viewerCta2Background);
                 stmt.setString(18, viewerCta3Background);
                 stmt.setString(19, fullName);
-                stmt.setString(20, viewerCta1Text);
-                stmt.setString(21, viewerCta1Link);
+                stmt.setString(20, viewerToolbarCta1Text);
+                stmt.setString(21, viewerToolbarCta1Link);
                 stmt.setString(22, viewerToolbarColor);
                 stmt.setString(23, viewerToolbarCta1Color);
                 stmt.setString(24, viewerToolbarCta2Color);
