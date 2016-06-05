@@ -125,6 +125,9 @@ if ('' != sp.viewer.linkHash) {
           console.log(config.viewer.toolbarLogoImage);
       
       if (typeof config.viewer.toolbarLogoLink !== 'undefined') {
+        if (config.viewer.toolbarLogoLink === 'no-logo-link'){
+          $('.sp-toolbar-logo a').attr('href', location.href);
+        } else {
         $('.sp-toolbar-logo a').attr('href', config.viewer.toolbarLogoLink);
       }
     }
@@ -494,8 +497,10 @@ if ('' != sp.viewer.linkHash) {
           title: 'Schedule Meeting',
         });
       });
+     }
     }
   });
+  
 }
 
 

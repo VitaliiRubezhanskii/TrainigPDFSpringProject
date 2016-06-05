@@ -37,7 +37,7 @@
             <div class="slds-form-element">
               <label class="slds-form-element__label" for="company">Company</label>
               <div class="slds-form-element__control">
-                <input name="company" class="slds-input" type="text" maxlength="40" placeholder="Company" required />
+                <input name="company" class="slds-input" type="text" maxlength="40" placeholder="Company"/>
               </div>
             </div>
 
@@ -140,14 +140,32 @@
                   <h3>Enable CTAs:</h3>
                   <div class="slds-form-element__control">
                     <div class="sp-viewer-toolbar-container">
-                        <label class="slds-form-element__label" for="viewer_toolbar_cta2_is_enabled">CTA2</label><input class="slds-input" name="viewer_toolbar_cta2_is_enabled" type="checkbox"/>
+                        <label class="slds-form-element__label" for="viewer_toolbar_cta1_is_enabled">CTA1</label><input class="slds-input" name="viewer_toolbar_cta1_is_enabled" type="checkbox"/>
                     </div>
                     <div class="sp-viewer-toolbar-container">
-                        <label class="slds-form-element__label" for="viewer_toolbar_cta3_is_enabled">CTA3</label><input class="slds-input" name="viewer_toolbar_cta3_is_enabled" type="checkbox"/>
+                        <label class="slds-form-element__label" for="viewer_toolbar_cta2_is_enabled">CTA2</label><input class="slds-input" name="viewer_toolbar_cta2_is_enabled" type="checkbox"/>
                     </div>
                   </div>
                 </div>
                 
+                 <div id="sp-cta1-settings" class="slds-form-element">
+                  <h3>CTA1 Settings</h3>
+                  <div class="slds-form-element">
+                      <label class="slds-form-element__label" for="viewer_toolbar_cta1_text">CTA1 Text</label>
+                      <div class="slds-form-element__control">
+                        <input class="slds-input" name="viewer_toolbar_cta1_text" type="text"/>
+                      </div>
+                  </div>
+                  <div class="slds-form-element">
+                      <label class="slds-form-element__label" for="viewer_toolbar_cta1_link">CTA1 Link</label>
+                      <div class="slds-form-element__control">
+                        <input class="slds-input" name="viewer_toolbar_cta1_link" type="text"/>
+                        <small>e.g. http://www.google.com</small>
+                      </div>
+                    </div>
+                </div>
+                
+                <hr>
                 <div id="sp-cta2-settings" class="slds-form-element">
                   <h3>CTA2 Settings</h3>
                   <div class="slds-form-element">
@@ -160,22 +178,7 @@
                       <label class="slds-form-element__label" for="viewer_toolbar_cta2_link">CTA2 Link</label>
                       <div class="slds-form-element__control">
                         <input class="slds-input" name="viewer_toolbar_cta2_link" type="text"/>
-                      </div>
-                    </div>
-                </div>
-                <hr>
-                <div id="sp-cta3-settings" class="slds-form-element">
-                  <h3>CTA3 Settings</h3>
-                  <div class="slds-form-element">
-                      <label class="slds-form-element__label" for="viewer_toolbar_cta3_text">CTA3 Text</label>
-                      <div class="slds-form-element__control">
-                        <input class="slds-input" name="viewer_toolbar_cta3_text" type="text"/>
-                      </div>
-                  </div>
-                  <div class="slds-form-element">
-                      <label class="slds-form-element__label" for="viewer_toolbar_cta3_link">CTA3 Link</label>
-                      <div class="slds-form-element__control">
-                        <input class="slds-input" name="viewer_toolbar_cta3_link" type="text"/>
+                        <small>e.g. http://www.google.com</small>
                       </div>
                     </div>
                 </div>
