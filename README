@@ -4,6 +4,21 @@ SlidePiper README File
 Change Log
 ----------
 
+### 0.6.3.1
+
+2016-06-05 Max Prais <maxp@slidepiper.com>
+
+* Signup - Fixed bug on Safari not allowing the mailto window to open after signup.
+The fix byproduct is that the mailto window now opens on the same page rather than in a new tab.
+
+* Signup - Removed Company as a required field on the signup form.
+
+* Viewer - Moved 'Contact Us' CTA to be on CTA3 instead of CTA1.
+
+* Viewer - Added default SlidePiper logo image if no logo image was selected. If a logo image was 
+selected but no link was added, the link will be the link of the SlidePiper document.
+
+
 ### 0.6.3
 
 2016-06-01 Max Prais <maxp@slidepiper.com>, Yaniv Friedensohn <yanivf@slidepiper.com>
