@@ -4,6 +4,16 @@ SlidePiper README File
 Change Log
 ----------
 
+### 0.6.3.2
+
+2016-06-06 Max Prais <maxp@slidepiper.com>
+
+* Viewer - Fixed bug where toolbar and chat weren't being displayed on old accounts that hadn't
+been created through new signup page.
+
+* Viewer - Added rule to set the toolbar find color in the DB based on the viewer toolbar color.
+
+
 ### 0.6.3.1
 
 2016-06-05 Max Prais <maxp@slidepiper.com>
