@@ -122,13 +122,13 @@ if ('' != sp.viewer.linkHash) {
     if (typeof config.viewer.toolbarLogoImage !== 'undefined') {
       $('.sp-toolbar-logo img')
           .attr('src', 'data:image/png;base64,' + config.viewer.toolbarLogoImage);
-          console.log(config.viewer.toolbarLogoImage);
       
       if (typeof config.viewer.toolbarLogoLink !== 'undefined') {
         if (config.viewer.toolbarLogoLink === 'no-logo-link'){
           $('.sp-toolbar-logo a').attr('href', location.href);
         } else {
-        $('.sp-toolbar-logo a').attr('href', config.viewer.toolbarLogoLink);
+          $('.sp-toolbar-logo a').attr('href', config.viewer.toolbarLogoLink);
+        }
       }
     }
     
@@ -497,10 +497,8 @@ if ('' != sp.viewer.linkHash) {
           title: 'Schedule Meeting',
         });
       });
-     }
     }
   });
-  
 }
 
 
