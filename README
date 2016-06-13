@@ -4,6 +4,12 @@ SlidePiper README File
 Change Log
 ----------
 
+### 0.6.3.3
+
+2016-06-13 Yaniv Friedensohn <yanivf@slidepiper.com>
+
+* Fix video widget vertical positioning
+
 ### 0.6.3.2
 
 2016-06-06 Max Prais <maxp@slidepiper.com>
