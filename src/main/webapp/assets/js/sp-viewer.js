@@ -429,43 +429,35 @@ if ('' != sp.viewer.linkHash) {
     
     // Widget 1 - YouTube widget 
     if (true == config.viewer.widget1.isEnabled) {
-      $('body').append('<div class="sp-demo-video sp-demo-video1"><span></span><i class="fa fa-chevron-up"></i><hr><iframe width="360" height="315" frameborder="0" allowfullscreen></iframe></div>');
+      $('body').append('<div class="sp-demo-video sp-demo-video1"><span></span><i class="fa fa-chevron-up"></i><hr><iframe height="315" frameborder="0" allowfullscreen></iframe></div>');
       $('.sp-demo-video1 span').text(config.viewer.widget1.title);
-      $('.sp-demo-video1 iframe').attr('src', config.viewer.widget1.iframeSrc + '?loop=1&playlist=' + config.viewer.widget1.iframeSrc.split('/')[4]);
-      console.log('SOURCE: ' + config.viewer.widget1.iframeSrc + '?loop=1&playlist=' + config.viewer.widget1.iframeSrc.split('/')[4]);
-        
-      config.viewer.widget1.flag = false;
-      setInterval(function() {
-        if (! $('.sp-demo-video1').hasClass('sp-video1-clicked')) {
-          if (null != PDFViewerApplication.page && config.viewer.widget1.pageNumber == PDFViewerApplication.page) {
-            if (false == config.viewer.widget1.flag) {
-              $('.sp-demo-video1').css('visibility', 'visible');
-              $('.sp-demo-video1').css('transform', 'translate(0,0)');
-              $('.sp-demo-video1 .fa').removeClass('fa-chevron-up').addClass('fa-chevron-down');
-              $('.sp-demo-video1').addClass('sp-video1-active');
-              config.viewer.widget1.flag = true;
-            }
-          } else {
-              $('.sp-demo-video1').css('transform', 'translate(0,87%)');
-              $('.sp-demo-video1 .fa').removeClass('fa-chevron-down').addClass('fa-chevron-up');
-              $('.sp-demo-video1').removeClass('sp-video1-active');
-              config.viewer.widget1.flag = false;
-          }
+      $('.sp-demo-video1 iframe').attr('src', config.viewer.widget1.iframeSrc);
+      
+      config.viewer.isFileLoaded = false;
+      config.viewer.lastViewedPage = 0;      
+      $(document).on('pagesloaded pagechange', function(event) {
+        if ('pagesloaded' == event.type) {
+          config.viewer.isFileLoaded = true;
         }
-      }, 1000);
+        
+        if (config.viewer.isFileLoaded && config.viewer.lastViewedPage != PDFViewerApplication.page) {
+          if (config.viewer.widget1.pageNumber == PDFViewerApplication.page) {
+            $('.sp-demo-video1 .fa').removeClass('fa-chevron-up').addClass('fa-chevron-down');
+            $('.sp-demo-video1 iframe').show(300, 'swing');
+            $('.sp-demo-video1').removeClass('sp-video1-clicked');
+          } else if (! $('.sp-demo-video1').hasClass('sp-video1-clicked')) {
+            $('.sp-demo-video1 .fa').removeClass('fa-chevron-down').addClass('fa-chevron-up');
+            $('.sp-demo-video1 iframe').hide(300, 'swing');
+          }
+        
+          config.viewer.lastViewedPage = PDFViewerApplication.page;
+        }
+      });
       
       $('.sp-demo-video1 span, .sp-demo-video1 .fa').click(function() {
+        $('.sp-demo-video1 iframe').slideToggle(300, 'swing');
+        $('.sp-demo-video1 .fa').toggleClass('fa-chevron-down fa-chevron-up');
         $('.sp-demo-video1').addClass('sp-video1-clicked');
-        
-        if ($('.sp-demo-video1').hasClass('sp-video1-active')) {
-          $('.sp-demo-video1').css('transform', 'translate(0,87%)');
-          $('.sp-demo-video1 .fa').removeClass('fa-chevron-down').addClass('fa-chevron-up');
-          $('.sp-demo-video1').removeClass('sp-video1-active');
-        } else {
-          $('.sp-demo-video1').css('transform', 'translate(0,0)');
-          $('.sp-demo-video1 .fa').removeClass('fa-chevron-up').addClass('fa-chevron-down');
-          $('.sp-demo-video1').addClass('sp-video1-active');
-        } 
       });
     }
     
