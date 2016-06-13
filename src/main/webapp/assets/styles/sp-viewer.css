@@ -352,16 +352,15 @@
   border: 1px solid #8D8D8D;
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
+  bottom: 0;
   color: #0074A6;
-  padding: 10px;
+  padding: 10px 10px 0 10px;
   position: fixed;
-  top: 60.5%;
-  transition: background 200ms ease-in-out, box-shadow 200ms ease-in-out, transform 1000ms ease-in-out;
-  visibility: hidden;
+  width: 380px;
 }
 
 .sp-demo-video hr {
-  margin: 10px auto;
+  margin: 10px auto 0;
 }
 
 .sp-demo-video span, .sp-demo-video .fa  {
@@ -374,6 +373,12 @@
 
 .sp-demo-video1 {
   left: 10%;
+}
+
+.sp-demo-video1 iframe {
+  display: none;
+  margin: 10px auto;
+  width: 100%;
 }
 
 /* Widget 2 */
