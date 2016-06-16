@@ -450,7 +450,7 @@ if ('' != sp.viewer.linkHash) {
         iframeSrc = config.viewer.widget1.iframeSrc.split('/')[4];
         $.getScript("https://www.youtube.com/iframe_api");
       } else {
-        $('#sp-player').append('<iframe src=' + config.viewer.widget1.iframeSrc + '></iframe>');
+        $('#sp-player').append('<iframe frameborder="0" scrolling="no" src=' + config.viewer.widget1.iframeSrc + '></iframe>');
       }
      
       config.viewer.isFileLoaded = false;
@@ -531,10 +531,24 @@ if ('' != sp.viewer.linkHash) {
   });
 }
 
+function calenderWidgetCollapse () {
+  if ($('.sp-widget2 div').is(':hidden')) {
+    $('.sp-widget2 i')
+      .removeClass('fa-2x')
+      .addClass('fa-1x');
+  }
+  if ($('.sp-widget2 div').is(':visible')) {
+    $('.sp-widget2 i')
+      .removeClass('fa-1x')
+      .addClass('fa-2x');
+  }
+}
+
 $(window).resize(function (){
   videoWidth = $('.sp-demo-video iframe').width();
   var videoHeight = (videoWidth / (16/9));
   $('.sp-demo-video iframe').height(videoHeight);
+  calenderWidgetCollapse();
   console.log('Width: ' + videoWidth + ', Height: ' +  videoHeight);
 }).resize();
 
