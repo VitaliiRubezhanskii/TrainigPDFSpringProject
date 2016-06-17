@@ -69,7 +69,6 @@ public class CreateUser extends HttpServlet {
 	    	String emailClient = null;
 	    	String firstName = null;
 	    	String lastName = null;
-	    	String magic = null;
 	    	String password = null;
 	    	String viewerToolbarBackground = null;
 	    	InputStream viewerToolbarLogoImage = null;
@@ -81,7 +80,7 @@ public class CreateUser extends HttpServlet {
             String viewerToolbarCta2Link = null;
             String viewerToolbarCta3Text = null;
             String viewerToolbarCta3Link = null;
-            Boolean isClientLogo = null;
+            Boolean isClientLogo = false;
             
 	    	for (FileItem file: items) {
 	    		if (file.getFieldName().equals("action")){
@@ -107,10 +106,6 @@ public class CreateUser extends HttpServlet {
 	    		else if (file.getFieldName().equals("last-name")){
 	    			lastName = file.getString();
 	    			System.out.println(lastName);
-	    		}
-	    		else if (file.getFieldName().equals("magic")){
-	    			magic = file.getString();
-	    			System.out.println(magic);
 	    		}
 	    		else if (file.getFieldName().equals("password")){
 	    			password = file.getString();
@@ -167,11 +162,16 @@ public class CreateUser extends HttpServlet {
 	    		}
 	    	}
 	    	
-	    	System.out.println(viewerToolbarLogoLink);
 	    	viewerToolbarLogoLink = chooseLogoLink(isClientLogo, viewerToolbarLogoLink);
-	        
+	    	
+	    	if (null == viewerToolbarLogoImage) {
+	    		URL spLogoUrl = CreateUser.class.getResource("/sp-logo/sp-logo-02-555x120.png");
+				System.out.println("Url: " + spLogoUrl);
+				viewerToolbarLogoImage = new URL(spLogoUrl.toString()).openStream();
+	    	}
+	    	
 	    	if (action.equals("setSalesman")){
-	        	statusCode = DbLayer.setSalesman(company, email, emailClient, firstName, lastName, magic, password, 
+	        	statusCode = DbLayer.setSalesman(company, email, emailClient, firstName, lastName, password, 
 	        		viewerToolbarBackground, viewerToolbarLogoImage, viewerToolbarLogoLink,
 	        		viewerToolbarCTABackground, viewerToolbarCta2IsEnabled, viewerToolbarCta3IsEnabled,
 	        		viewerToolbarCta2Text, viewerToolbarCta2Link, viewerToolbarCta3Text, viewerToolbarCta3Link);
@@ -192,7 +192,7 @@ public class CreateUser extends HttpServlet {
 	public static String chooseLogoLink (Boolean isClientLogo, String viewerToolbarLogoLink) {
 		
     	String logoLink = "";
-    	if (viewerToolbarLogoLink.length() <= 0 && !isClientLogo){
+    	if ((viewerToolbarLogoLink == null || viewerToolbarLogoLink.length() <= 0) && !isClientLogo){
     		logoLink = ConfigProperties.getProperty("app_url");
 		}
 		else if (viewerToolbarLogoLink.length() <= 0 && isClientLogo) {

@@ -1766,7 +1766,7 @@ public class DbLayer {
        *        and addition success.  
      * @throws IOException 
        */
-      public static int setSalesman(String company, String email, String emailClient, String firstName, String lastName, String magic, String password,
+      public static int setSalesman(String company, String email, String emailClient, String firstName, String lastName, String password,
     		  String viewerToolbarBackground, InputStream viewerToolbarLogoImage, String viewerToolbarLogoLink, String viewerToolbarCTABackground,
     		  String viewerToolbarCta2IsEnabled, String viewerToolbarCta3IsEnabled,
     		  String viewerToolbarCta2Text, String viewerToolbarCta2Link, String viewerToolbarCta1Text, String viewerToolbarCta1Link) throws IOException {
@@ -1783,11 +1783,12 @@ public class DbLayer {
 		
         if (isSalesmanExist(email)) {
           statusCode = 100;
-        } else if (! magic.equals("sympiper")) {
-          statusCode = 101;
         } else {
           Connection conn=null;
           String fullName = firstName + " " + lastName;
+          if (null == viewerToolbarCTABackground) {
+        	  viewerToolbarCTABackground = "#1B1862";
+          }
           String viewerCta1Background = viewerToolbarCTABackground;
           String viewerCta2Background = viewerToolbarCTABackground;
           String viewerCta3Background = viewerToolbarCTABackground;
@@ -1800,7 +1801,12 @@ public class DbLayer {
     	  String viewerToolbarCta1Color = "#fff";
           String viewerToolbarCta2Color = "#fff";
           String viewerToolbarCta3Color = "#fff";
-          if (viewerToolbarBackground.equals("#fff")){
+          if (null == viewerToolbarBackground) {
+	    	  viewerToolbarBackground = "#fff";
+	    	  viewerToolbarColor = "#293846";
+	          viewerToolbarFindBackground = "#fff";
+	          viewerToolbarFindColor = "#293846";
+          } else if (viewerToolbarBackground.equals("#fff")){
         	  viewerToolbarColor = "#293846";
               viewerToolbarFindBackground = "#fff";
               viewerToolbarFindColor = "#293846";
