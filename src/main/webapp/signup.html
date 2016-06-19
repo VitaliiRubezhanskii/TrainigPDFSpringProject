@@ -7,7 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>SlidePiper - Sign Up</title>
-
+    
+    <link rel="shortcut icon" type="image/png" href="img/splogo.png" />
     <link href="assets/css/bootstrap.min.css" rel="stylesheet">
     <link href="assets/font-awesome/css/font-awesome.min.css" rel="stylesheet">
     <link href="assets/css/plugins/sweetalerts/sweetalert.css" rel="stylesheet">
@@ -19,11 +20,13 @@
 <body class="gray-bg">
 
     <div class="middle-box text-center loginscreen   animated fadeInDown">
-        <div>
+        <div style="margin-top: 35px;">
             <div>
                 <a id="sp-logo" href="http://www.slidepiper.com"><img src="assets/images/logo_wide_2000x433.png" width="250" /></a>
             </div>
-            <h3>Signup to SlidePiper</h3>
+            <h3 style="margin-top: 17px;">Sign Up to SlidePiper</h3>
+            <p>Create an account to experience the new document!</p>
+            
             <form id="sp-user-signup__form" class="m-t" role="form">
                 <div class="form-group">
                     <input type="text" name="first-name" class="form-control" placeholder="First Name" required="">
@@ -38,15 +41,13 @@
                     <input type="password" name="password" class="form-control" placeholder="Password" required="">
                 </div>
                 <div class="form-group">
-                    <input type="text" name="company" class="form-control" placeholder="Company" required="">
+                    <input type="text" name="company" class="form-control" placeholder="Company">
                 </div>
                 <div class="form-group">
-                    <select name="email-client" class="form-control m-b" required >
-                      <option disabled selected hidden value="">Email Client</option>
-                      <option value="gmail">Gmail</option>
-                      <option value="mailto">Outlook</option>
-                      <option value="other">Other</option>
-                    </select>
+                    <input type="text" name="telephone" class="form-control" placeholder="Phone Number">
+                </div>
+                <div class="form-group">
+                    <input type="hidden" value="not-set" name="email-client" class="form-control">
                 </div>
                 <button type="submit" class="btn btn-primary block full-width m-b">Sign Up</button>
 

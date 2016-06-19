@@ -70,6 +70,7 @@ public class CreateUser extends HttpServlet {
 	    	String firstName = null;
 	    	String lastName = null;
 	    	String password = null;
+	    	String telephone = null;
 	    	String viewerToolbarBackground = null;
 	    	InputStream viewerToolbarLogoImage = null;
 	    	String viewerToolbarLogoLink = null;
@@ -110,6 +111,10 @@ public class CreateUser extends HttpServlet {
 	    		else if (file.getFieldName().equals("password")){
 	    			password = file.getString();
 	    			System.out.println(password);
+	    		}
+	    		else if (file.getFieldName().equals("telephone")){
+	    			telephone = file.getString();
+	    			System.out.print("Phone: " + telephone);
 	    		}
 	    		else if (file.getFieldName().equals("viewer_toolbar_background")){
 	    			viewerToolbarBackground = file.getString();
@@ -172,7 +177,7 @@ public class CreateUser extends HttpServlet {
 	    	
 	    	if (action.equals("setSalesman")){
 	        	statusCode = DbLayer.setSalesman(company, email, emailClient, firstName, lastName, password, 
-	        		viewerToolbarBackground, viewerToolbarLogoImage, viewerToolbarLogoLink,
+	        		telephone, viewerToolbarBackground, viewerToolbarLogoImage, viewerToolbarLogoLink,
 	        		viewerToolbarCTABackground, viewerToolbarCta2IsEnabled, viewerToolbarCta3IsEnabled,
 	        		viewerToolbarCta2Text, viewerToolbarCta2Link, viewerToolbarCta3Text, viewerToolbarCta3Link);
 	        	

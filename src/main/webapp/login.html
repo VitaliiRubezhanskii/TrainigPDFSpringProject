@@ -35,9 +35,7 @@
     <div class="middle-box text-center loginscreen animated fadeInDown">
         <div style="margin-top: 200px;">
             <div>
-
                 <a id="sp-logo" href="#"><img src="assets/images/logo_wide_2000x433.png" width="250" /></a>
-
             </div>
             
             <p style="margin-top: 20px;">Login to start making your documents smarter!</p>
@@ -81,6 +79,16 @@
       	  }),
       	  function(data) {
       	   if (1 == data.salesman) {
+      	     
+      	     // Event logging
+      	     var data = {
+      	       'action': 'setUserEvent',
+      	       'data': {
+          	       'event_name': 'LOGIN_USER',
+          	       'email': $('input[type=email]').val()
+      	       }
+      	     };
+      	     $.post('ManagementServlet', JSON.stringify(data));
       	     Cookies.set('SalesmanEmail', $('input[type=email]').val(), { expires: 90 });
       	     location.href = 'dashboard.html';
       	   } else {

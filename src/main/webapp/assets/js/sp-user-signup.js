@@ -20,7 +20,7 @@ sp = {
             var formData = new FormData();
             formData.append('action', 'setSalesman');
             
-            $('input:not(submit), select').each(function () {
+            $('input:not(submit)').each(function () {
               formData.append($(this).attr('name'), $(this).val());
               console.log($(this).attr('name') + ', ' + $(this).val());
             });
@@ -35,6 +35,11 @@ sp = {
               success: function (data) {
                 switch (data.statusCode){
                   case 200:
+                    var eventData = {
+                      'email': $('input[type="email"]').val(),
+                      'event_name': 'SIGNUP_USER'
+                    };
+                    sp.userSignup.setUserEvent(eventData);
                     Cookies.set('SalesmanEmail', $('input[type=email]').val(), { expires: 90 });
                     location.href = 'dashboard.html';
                     break;
@@ -42,7 +47,6 @@ sp = {
                     swal('There was an error with the signup');
                     break;
                 }
-                $('input:not(submit), select').val('');
               },
               error: function (err) {
                 console.log(err);
@@ -50,7 +54,15 @@ sp = {
             });
           });
         },
-      }
+        
+        setUserEvent: function (eventData) {
+          var data = {
+              action: 'setUserEvent',
+              data: eventData
+          };
+          $.post('ManagementServlet', JSON.stringify(data));
+        }
+      },
 };
 
 sp.userSignup.init();
