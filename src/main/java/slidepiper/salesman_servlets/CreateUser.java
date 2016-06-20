@@ -8,8 +8,11 @@ import java.net.URL;
 
 import slidepiper.config.ConfigProperties;
 import slidepiper.db.DbLayer;
+import slidepiper.email.Mailchimp;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -69,8 +72,8 @@ public class CreateUser extends HttpServlet {
 	    	String emailClient = null;
 	    	String firstName = null;
 	    	String lastName = null;
-	    	String magic = null;
 	    	String password = null;
+	    	String telephone = null;
 	    	String viewerToolbarBackground = null;
 	    	InputStream viewerToolbarLogoImage = null;
 	    	String viewerToolbarLogoLink = null;
@@ -81,7 +84,7 @@ public class CreateUser extends HttpServlet {
             String viewerToolbarCta2Link = null;
             String viewerToolbarCta3Text = null;
             String viewerToolbarCta3Link = null;
-            Boolean isClientLogo = null;
+            Boolean isClientLogo = false;
             
 	    	for (FileItem file: items) {
 	    		if (file.getFieldName().equals("action")){
@@ -108,13 +111,13 @@ public class CreateUser extends HttpServlet {
 	    			lastName = file.getString();
 	    			System.out.println(lastName);
 	    		}
-	    		else if (file.getFieldName().equals("magic")){
-	    			magic = file.getString();
-	    			System.out.println(magic);
-	    		}
 	    		else if (file.getFieldName().equals("password")){
 	    			password = file.getString();
 	    			System.out.println(password);
+	    		}
+	    		else if (file.getFieldName().equals("telephone")){
+	    			telephone = file.getString();
+	    			System.out.print("Phone: " + telephone);
 	    		}
 	    		else if (file.getFieldName().equals("viewer_toolbar_background")){
 	    			viewerToolbarBackground = file.getString();
@@ -167,14 +170,45 @@ public class CreateUser extends HttpServlet {
 	    		}
 	    	}
 	    	
-	    	System.out.println(viewerToolbarLogoLink);
 	    	viewerToolbarLogoLink = chooseLogoLink(isClientLogo, viewerToolbarLogoLink);
-	        
-	    	if (action.equals("setSalesman")){
-	        	statusCode = DbLayer.setSalesman(company, email, emailClient, firstName, lastName, magic, password, 
-	        		viewerToolbarBackground, viewerToolbarLogoImage, viewerToolbarLogoLink,
+	    	
+	    	if (null == viewerToolbarLogoImage) {
+	    		URL spLogoUrl = CreateUser.class.getResource("/sp-logo/sp-logo-02-555x120.png");
+				System.out.println("Url: " + spLogoUrl);
+				viewerToolbarLogoImage = new URL(spLogoUrl.toString()).openStream();
+	    	}
+	    	
+	    	if (action.equals("setSalesman")) {
+	        	statusCode = DbLayer.setSalesman(company, email, emailClient, firstName, lastName, password, 
+	        		telephone, viewerToolbarBackground, viewerToolbarLogoImage, viewerToolbarLogoLink,
 	        		viewerToolbarCTABackground, viewerToolbarCta2IsEnabled, viewerToolbarCta3IsEnabled,
 	        		viewerToolbarCta2Text, viewerToolbarCta2Link, viewerToolbarCta3Text, viewerToolbarCta3Link);
+	        	
+	        	// If user was added, then do the following
+	        	if (200 == statusCode) {
+	        	  Map<String, String> eventDataMap = new HashMap<String, String>();
+	        	  eventDataMap.put("email", email);
+	            
+              // Log event of user sign up
+	        	  DbLayer.setEvent(
+                  DbLayer.SALESMAN_EVENT_TABLE,
+                  ConfigProperties.getProperty("event_signup_user"),
+                  eventDataMap
+              );
+	        	  
+	        	  // Subscribe user to Mailchimp
+	        	  int mailchimpResponseCode =
+	        	      Mailchimp.SubscribeUser(email, firstName, lastName, password);
+	        	  
+	        	  // Log event of subscribing a user to Mailchimp
+	        	  if (200 == mailchimpResponseCode) {
+  	        	  DbLayer.setEvent(
+  	                DbLayer.SALESMAN_EVENT_TABLE,
+  	                ConfigProperties.getProperty("mailchimp_subscribe_user"),
+  	                eventDataMap
+  	            );
+	        	  }
+	        	}
 	        	
 	        	data.put("statusCode", statusCode);
 	        }
@@ -192,7 +226,7 @@ public class CreateUser extends HttpServlet {
 	public static String chooseLogoLink (Boolean isClientLogo, String viewerToolbarLogoLink) {
 		
     	String logoLink = "";
-    	if (viewerToolbarLogoLink.length() <= 0 && !isClientLogo){
+    	if ((viewerToolbarLogoLink == null || viewerToolbarLogoLink.length() <= 0) && !isClientLogo){
     		logoLink = ConfigProperties.getProperty("app_url");
 		}
 		else if (viewerToolbarLogoLink.length() <= 0 && isClientLogo) {
