@@ -1766,8 +1766,8 @@ public class DbLayer {
        *        and addition success.  
      * @throws IOException 
        */
-      public static int setSalesman(String company, String email, String emailClient, String firstName, String lastName, String magic, String password,
-    		  String viewerToolbarBackground, InputStream viewerToolbarLogoImage, String viewerToolbarLogoLink, String viewerToolbarCTABackground,
+      public static int setSalesman(String company, String email, String emailClient, String firstName, String lastName, String password,
+    		  String telephone, String viewerToolbarBackground, InputStream viewerToolbarLogoImage, String viewerToolbarLogoLink, String viewerToolbarCTABackground,
     		  String viewerToolbarCta2IsEnabled, String viewerToolbarCta3IsEnabled,
     		  String viewerToolbarCta2Text, String viewerToolbarCta2Link, String viewerToolbarCta1Text, String viewerToolbarCta1Link) throws IOException {
     	  
@@ -1783,11 +1783,12 @@ public class DbLayer {
 		
         if (isSalesmanExist(email)) {
           statusCode = 100;
-        } else if (! magic.equals("sympiper")) {
-          statusCode = 101;
         } else {
           Connection conn=null;
           String fullName = firstName + " " + lastName;
+          if (null == viewerToolbarCTABackground) {
+        	  viewerToolbarCTABackground = "#1B1862";
+          }
           String viewerCta1Background = viewerToolbarCTABackground;
           String viewerCta2Background = viewerToolbarCTABackground;
           String viewerCta3Background = viewerToolbarCTABackground;
@@ -1800,7 +1801,12 @@ public class DbLayer {
     	  String viewerToolbarCta1Color = "#fff";
           String viewerToolbarCta2Color = "#fff";
           String viewerToolbarCta3Color = "#fff";
-          if (viewerToolbarBackground.equals("#fff")){
+          if (null == viewerToolbarBackground) {
+	    	  viewerToolbarBackground = "#fff";
+	    	  viewerToolbarColor = "#293846";
+	          viewerToolbarFindBackground = "#fff";
+	          viewerToolbarFindColor = "#293846";
+          } else if (viewerToolbarBackground.equals("#fff")){
         	  viewerToolbarColor = "#293846";
               viewerToolbarFindBackground = "#fff";
               viewerToolbarFindColor = "#293846";
@@ -1817,9 +1823,9 @@ public class DbLayer {
           			 + "viewer_toolbar_cta1_link, viewer_toolbar_cta_border_radius, viewer_toolbar_cta_font, viewer_toolbar_cta_margin, viewer_toolbar_cta_padding,\n"
           			 + "viewer_toolbar_color, viewer_toolbar_cta1_color, viewer_toolbar_cta2_color, viewer_toolbar_cta3_color, emailpassword,\n"
           			 + "viewer_toolbar_button_background, viewer_toolbar_find_background, viewer_toolbar_logo_collapse_max_width,\n"
-          			 + "viewer_toolbar_cta1_collapse_max_width, viewer_toolbar_cta2_collapse_max_width, viewer_toolbar_find_color)\n"
+          			 + "viewer_toolbar_cta1_collapse_max_width, viewer_toolbar_cta2_collapse_max_width, viewer_toolbar_find_color, telephone)\n"
           			 + "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'true', ?, ?, '3px', 'bold 14px Ariel, sans-serif',\n"
-            		 + "'3px 10px 3px 0', '4px 10px', ?, ?, ?, ?, '', ?, ?, '670px', '1050px', '800px', ?)";
+            		 + "'3px 10px 3px 0', '4px 10px', ?, ?, ?, ?, '', ?, ?, '670px', '1050px', '800px', ?, ?)";
 
               try {
                 conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
@@ -1852,6 +1858,7 @@ public class DbLayer {
                 stmt.setString(26, viewerToolbarButtonBackground);
                 stmt.setString(27, viewerToolbarFindBackground);
                 stmt.setString(28, viewerToolbarFindColor);
+                stmt.setString(29, telephone);
                 stmt.executeUpdate();
                 
                 // The user was added successfully.

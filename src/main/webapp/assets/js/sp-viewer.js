@@ -38,12 +38,12 @@ sp.viewer = {
         action: 'setCustomerEvent',
         data: eventData
       };
-      
       $.post('../ManagementServlet', JSON.stringify(data));
     }
   }
 };
 
+var iframeSrc;
 if ('' != sp.viewer.linkHash) {
   $.getJSON('../config-viewer', {linkHash: sp.viewer.linkHash}, function(config) {
     PDFViewerApplication.open(config.appUrl + '/file/' + sp.viewer.linkHash);
@@ -420,44 +420,83 @@ if ('' != sp.viewer.linkHash) {
     if (true == config.viewer.isChatEnabled) {
       if (true == config.viewer.isChatOpen && sp.viewer.breakPoint < $(window).width()) {
         $('.sp-chat').css('display', 'block');
-      }
-      
+      }     
       $('#sp-live-chat').css('visibility', 'visible');
     }
+    $('#sp-live-chat header').on('click', function () {
+      // If chat is visible, it means when clicking we will shut it, so the max-width
+      // should be set for when it will be closed, and vice versa.
+      if ($('.sp-chat').is(':visible')) {
+        $('#sp-live-chat').animate({
+          'width': '40%'
+        }, function () {
+          $('#sp-live-chat h4').css('width', '100%');
+        });
+      } else {
+        $('#sp-live-chat h4').css('max-width', '100%');
+        $('#sp-live-chat').css('width', 'auto');
+      }
+    });
     
     /* Widget Settings */
     
     // Widget 1 - YouTube widget 
     if (true == config.viewer.widget1.isEnabled) {
-      $('body').append('<div class="sp-demo-video sp-demo-video1"><span></span><i class="fa fa-chevron-up"></i><hr><iframe height="315" frameborder="0" allowfullscreen></iframe></div>');
+      // If it is a YouTube video, then append the #sp-player to .sp-demo-video which will become an iframe,
+      // otherwise, append an iframe to the #sp-player.
+      $('body').append('<div class="sp-demo-video sp-demo-video1"><div class="sp-demo-video-title-container"><span class="sp-demo-video-title__span"></span><i class="fa fa-chevron-up"></i><hr></div></div>');
       $('.sp-demo-video1 span').text(config.viewer.widget1.title);
-      $('.sp-demo-video1 iframe').attr('src', config.viewer.widget1.iframeSrc);
-      
+      $('.sp-demo-video').append($('#sp-player'));
+      if (true == config.viewer.isYoutubeVideo) {
+        iframeSrc = config.viewer.widget1.iframeSrc.split('/')[4];
+        $.getScript("https://www.youtube.com/iframe_api");
+      } else {
+        $('#sp-player').append('<iframe frameborder="0" scrolling="no" src=' + config.viewer.widget1.iframeSrc + '></iframe>');
+      }
+     
       config.viewer.isFileLoaded = false;
       config.viewer.lastViewedPage = 0;      
       $(document).on('pagesloaded pagechange', function(event) {
         if ('pagesloaded' == event.type) {
           config.viewer.isFileLoaded = true;
         }
-        
         if (config.viewer.isFileLoaded && config.viewer.lastViewedPage != PDFViewerApplication.page) {
           if (config.viewer.widget1.pageNumber == PDFViewerApplication.page) {
+            $('.sp-demo-video1').css('visibility', 'visible');
             $('.sp-demo-video1 .fa').removeClass('fa-chevron-up').addClass('fa-chevron-down');
             $('.sp-demo-video1 iframe').show(300, 'swing');
             $('.sp-demo-video1').removeClass('sp-video1-clicked');
+            $(window).resize();
           } else if (! $('.sp-demo-video1').hasClass('sp-video1-clicked')) {
             $('.sp-demo-video1 .fa').removeClass('fa-chevron-down').addClass('fa-chevron-up');
             $('.sp-demo-video1 iframe').hide(300, 'swing');
           }
-        
           config.viewer.lastViewedPage = PDFViewerApplication.page;
         }
       });
       
-      $('.sp-demo-video1 span, .sp-demo-video1 .fa').click(function() {
-        $('.sp-demo-video1 iframe').slideToggle(300, 'swing');
+      $('.sp-demo-video1').click(function() {
+        $('.sp-demo-video1 iframe').slideToggle('swing', function () {
+          if ($('.sp-demo-video iframe').is(':visible')) {
+            $('.sp-demo-video-title__span')
+              .css({'padding-right': '0', 'max-width': '80%'});
+            $('.sp-demo-video1').css('width', '34%');
+            $('.sp-demo-video1').css('min-width', '300px');
+          } else {
+            $('.sp-demo-video-title__span')
+              .css({'padding-right': '20px', 'max-width': '80%'});
+            $('.sp-demo-video1').css('width', '34%');
+            $('.sp-demo-video1').css('min-width', '175px');
+          }
+          $(window).resize(); // Ensures the window remains 16:9
+        });
         $('.sp-demo-video1 .fa').toggleClass('fa-chevron-down fa-chevron-up');
-        $('.sp-demo-video1').addClass('sp-video1-clicked');
+        if ($('.sp-demo-video1').hasClass('sp-video1-active')) {
+          $('.sp-demo-video1').addClass('sp-video1-clicked');
+          $('.sp-demo-video1').removeClass('sp-video1-active');
+        } else {
+          $('.sp-demo-video1').addClass('sp-video1-active');
+        } 
       });
     }
     
@@ -477,7 +516,7 @@ if ('' != sp.viewer.linkHash) {
         } else {
           $('.sp-widget2').css('transform', 'translate(188px,0)');         
           config.viewer.widget2.flag = false;
-        }
+          }
       }, 1000);
 
       $('.sp-widget2').click(function() {
@@ -493,6 +532,62 @@ if ('' != sp.viewer.linkHash) {
   });
 }
 
+function calenderWidgetCollapse () {
+  if ($('.sp-widget2 div').is(':hidden')) {
+    $('.sp-widget2 i')
+      .removeClass('fa-2x')
+      .addClass('fa-1x');
+    $('.sp-widget-button').css('width', '11%');
+  }
+  if ($('.sp-widget2 div').is(':visible')) {
+    $('.sp-widget2 i')
+      .removeClass('fa-1x')
+      .addClass('fa-2x');
+    $('.sp-widget-button').css('width', '18%');
+  }
+}
+
+$(window).resize(function () {
+  var videoWidth = $('.sp-demo-video iframe').width();
+  var videoHeight = (videoWidth / (16/9));
+  
+  $('.sp-demo-video iframe').height(videoHeight);
+  calenderWidgetCollapse();
+});
+
+/**
+ *  YouTube iFrame API
+ *  @see https://developers.google.com/youtube/iframe_api_reference
+ */
+var player;
+function onYouTubeIframeAPIReady() {
+  player = new YT.Player('sp-player', {
+    height: '168.75',
+    width: '300',
+    videoId: iframeSrc,
+    events: {
+      'onStateChange': onPlayerStateChange
+    }
+  });
+}
+
+var done = false;
+function onPlayerStateChange(event) {
+  var playerState = event.data;
+  var viewDuration = getViewDuration();
+  var currentVideo = player.getVideoUrl();
+  if (event.data == YT.PlayerState.PLAYING && !done) {
+    setTimeout(stopVideo, 6000);
+    done = true;
+  }
+}
+function stopVideo() {
+  player.stopVideo();
+}
+
+function getViewDuration() {
+  return player.getDuration() - (player.getDuration() - player.getCurrentTime());
+}
 
 /**
  * The function returns the value of a URL query string parameter.

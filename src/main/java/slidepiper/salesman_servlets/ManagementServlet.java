@@ -373,6 +373,12 @@ public class ManagementServlet extends HttpServlet {
           
           output.put("customersFilelinks", customersFilelinks);
           break;
+          
+        case "setUserEvent":
+        	eventDataMap.put("email", URLDecoder.decode(data.getString("email"), "UTF-8"));
+        	DbLayer.setEvent(DbLayer.SALESMAN_EVENT_TABLE, URLDecoder.decode(data.getString("event_name"),
+        			"UTF-8"), eventDataMap);
+          break;
         
         case "sendEmail":
           String emailBody = URLDecoder.decode(data.getString("emailBody"), "UTF-8");
@@ -440,7 +446,6 @@ public class ManagementServlet extends HttpServlet {
               output.put("emailBody", emailBody);
           }
           break;
-          
       }
       
         String res = output.toString();
