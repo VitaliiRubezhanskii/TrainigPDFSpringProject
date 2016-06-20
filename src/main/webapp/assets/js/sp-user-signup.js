@@ -22,7 +22,6 @@ sp = {
             
             $('input:not(submit)').each(function () {
               formData.append($(this).attr('name'), $(this).val());
-              console.log($(this).attr('name') + ', ' + $(this).val());
             });
 
             $.ajax({
@@ -47,9 +46,6 @@ sp = {
                     swal('There was an error with the signup');
                     break;
                 }
-              },
-              error: function (err) {
-                console.log(err);
               }
             });
           });

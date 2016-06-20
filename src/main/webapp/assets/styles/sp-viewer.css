@@ -11,6 +11,12 @@
 /**
  * Customization settings.
  */
+
+/* Stops scrolbar overflowing over content in IE and Edge */
+body {  
+   -ms-overflow-style: scrollbar;
+} 
+ 
 #loadingBar, #toolbarContainer, #toolbarSidebar {
   visibility: hidden;
 }
@@ -46,14 +52,9 @@
   left: auto !important;
 }
 
-.sp-toolbar-logo {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-}
-
 .sp-toolbar-logo img {
   max-height: 44px;
+  max-width: 150px;
   margin: 2px 0;
 }
 
@@ -65,7 +66,7 @@
 .sp-cta {
   cursor: pointer;
   width: auto;
-  max-width: 135px;
+  max-width: 150px;
   display: inline-block;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -82,6 +83,8 @@
 }
 
 #sp-terms-privacy-secondary-toolbar {
+  margin-bottom: 8px;
+  margin-top: 8px;
   text-align: center;
 }
 
@@ -133,7 +136,6 @@
     font-size: 11px;
   }
 }
-
 
 /**
  * Chat CSS settings
@@ -377,8 +379,8 @@
   bottom: 0;
   color: #0074A6;
   cursor: pointer;
+  max-width: 500px;
   min-width: 300px;
-  max-width: 400px;
   position: fixed;
   padding-top: 10px; 
   visibility: hidden;
@@ -387,10 +389,21 @@
 
 .sp-demo-video iframe {
   left: 0;
+  padding: 7px;
   position: relative;
   top: 0;
   width: 100%;
 }  
+
+.sp-demo-video hr {
+  border: 0;
+  border-top: 1px solid #eeeeee;
+  margin-top: 0;
+  margin-bottom: 0;
+  margin-left: auto;
+  margin-right: auto;
+  width: 95%;
+}
 
 .sp-demo-video .fa {
   float: right;
@@ -411,11 +424,6 @@
   white-space: nowrap;
 }
 
-#sp-player {
-  padding: 8px;
-  padding-bottom: 0;
-}
-
 /* Widget1 - YouTube Widget - Media Queries */
 
 @media (max-width:801px) { 
@@ -424,6 +432,7 @@
       display: none;
     }
     .sp-demo-video1 {
+      border-top-left-radius: 0;
       left: 0;
     }
 }
@@ -436,11 +445,12 @@
   }
   .sp-widget-button {
     height: 6% !important;
-    width: 13%;
+    width: 13% !important;
   }
   .sp-widget2 i {
     vertical-align: middle !important;
     margin-left: -4px !important;
+    margin-bottom: 0 !important;
   }
 }
 
@@ -461,16 +471,22 @@
     font-size: 100% !important;
   }
   .sp-widget2 i {
+    display: block !important;
+    font-size: 1.5em !important;
+    margin-bottom: 5px !important;
     margin-left: 9px !important;
   }
 }
 
 @media (max-height: 550px) {
+  .sp-widget-button {
+    height: 8% !important;
+  }
    .sp-widget2 div {
     display: none !important;
   }
   .sp-widget2 i {
-    font-size: 27px !important;
+    font-size: 1.5em !important;
     vertical-align: middle !important;
   }
 }
@@ -491,6 +507,7 @@
   font-weight: bold;
   height: 15%;
   max-width: 188px;
+  min-height: 56px;
   position: absolute;
   right: -1px;
   top: 45%;
