@@ -8,8 +8,11 @@ import java.net.URL;
 
 import slidepiper.config.ConfigProperties;
 import slidepiper.db.DbLayer;
+import slidepiper.email.Mailchimp;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -175,11 +178,37 @@ public class CreateUser extends HttpServlet {
 				viewerToolbarLogoImage = new URL(spLogoUrl.toString()).openStream();
 	    	}
 	    	
-	    	if (action.equals("setSalesman")){
+	    	if (action.equals("setSalesman")) {
 	        	statusCode = DbLayer.setSalesman(company, email, emailClient, firstName, lastName, password, 
 	        		telephone, viewerToolbarBackground, viewerToolbarLogoImage, viewerToolbarLogoLink,
 	        		viewerToolbarCTABackground, viewerToolbarCta2IsEnabled, viewerToolbarCta3IsEnabled,
 	        		viewerToolbarCta2Text, viewerToolbarCta2Link, viewerToolbarCta3Text, viewerToolbarCta3Link);
+	        	
+	        	// If user was added, then do the following
+	        	if (200 == statusCode) {
+	        	  Map<String, String> eventDataMap = new HashMap<String, String>();
+	        	  eventDataMap.put("email", email);
+	            
+              // Log event of user sign up
+	        	  DbLayer.setEvent(
+                  DbLayer.SALESMAN_EVENT_TABLE,
+                  ConfigProperties.getProperty("event_signup_user"),
+                  eventDataMap
+              );
+	        	  
+	        	  // Subscribe user to Mailchimp
+	        	  int mailchimpResponseCode =
+	        	      Mailchimp.SubscribeUser(email, firstName, lastName, password);
+	        	  
+	        	  // Log event of subscribing a user to Mailchimp
+	        	  if (200 == mailchimpResponseCode) {
+  	        	  DbLayer.setEvent(
+  	                DbLayer.SALESMAN_EVENT_TABLE,
+  	                ConfigProperties.getProperty("mailchimp_subscribe_user"),
+  	                eventDataMap
+  	            );
+	        	  }
+	        	}
 	        	
 	        	data.put("statusCode", statusCode);
 	        }
