@@ -4,6 +4,36 @@ SlidePiper README File
 Change Log
 ----------
 
+### 0.7.0
+
+2016-06-20 Max Prais <maxp@slidepiper.com>, Yaniv Friedensohn <yanivf@slidepiper.com>
+
+* Homepage - Add a link to Sign Up at the top menu.
+
+* Homepage - Remove 'beta' from Login.
+
+* Signup - Create user signup page: Change old signup page to signup2.html, and replace signup.html
+with a new signup page for users.
+
+* Signup - Add phone number field.
+
+* Logging - Log salesman events on Sign Up and Login to salesman_events table.
+
+* Viewer - Make video widget responsive to width and height of the browser.
+
+* Viewer - Make video widget compatible with YouTube iFrame API and Barclays videos.
+
+* Viewer - Create POC to track YouTube events using iFrame API, such as view duration, which video
+is being watched, and how often the player state is changed e.g. pause, play, rewind. 
+
+* Viewer - Make chat widget responsive to width and height of viewer.
+
+* Viewer - Add SlidePiper Terms, Conditions, and Privacy to the right dropdown toolbar. When viewer
+is responsive, the terms are being removed from the left hand side of the window.
+
+* Viewer - Make calendar widget responsive to width and height of viewer.
+
+
 ### 0.6.3.3
 
 2016-06-13 Yaniv Friedensohn <yanivf@slidepiper.com>
