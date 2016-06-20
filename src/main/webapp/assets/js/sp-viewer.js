@@ -38,7 +38,6 @@ sp.viewer = {
         action: 'setCustomerEvent',
         data: eventData
       };
-      
       $.post('../ManagementServlet', JSON.stringify(data));
     }
   }
@@ -443,7 +442,9 @@ if ('' != sp.viewer.linkHash) {
     
     // Widget 1 - YouTube widget 
     if (true == config.viewer.widget1.isEnabled) {
-      $('body').append('<div class="sp-demo-video sp-demo-video1"><div class="sp-demo-video-title-container"><span class="sp-demo-video-title__span"></span><i class="fa fa-chevron-up"></i></div></div>');
+      // If it is a YouTube video, then append the #sp-player to .sp-demo-video which will become an iframe,
+      // otherwise, append an iframe to the #sp-player.
+      $('body').append('<div class="sp-demo-video sp-demo-video1"><div class="sp-demo-video-title-container"><span class="sp-demo-video-title__span"></span><i class="fa fa-chevron-up"></i><hr></div></div>');
       $('.sp-demo-video1 span').text(config.viewer.widget1.title);
       $('.sp-demo-video').append($('#sp-player'));
       if (true == config.viewer.isYoutubeVideo) {
@@ -487,7 +488,7 @@ if ('' != sp.viewer.linkHash) {
             $('.sp-demo-video1').css('width', '34%');
             $('.sp-demo-video1').css('min-width', '175px');
           }
-          $(window).resize();
+          $(window).resize(); // Ensures the window remains 16:9
         });
         $('.sp-demo-video1 .fa').toggleClass('fa-chevron-down fa-chevron-up');
         if ($('.sp-demo-video1').hasClass('sp-video1-active')) {
@@ -515,7 +516,7 @@ if ('' != sp.viewer.linkHash) {
         } else {
           $('.sp-widget2').css('transform', 'translate(188px,0)');         
           config.viewer.widget2.flag = false;
-        }
+          }
       }, 1000);
 
       $('.sp-widget2').click(function() {
@@ -536,23 +537,28 @@ function calenderWidgetCollapse () {
     $('.sp-widget2 i')
       .removeClass('fa-2x')
       .addClass('fa-1x');
+    $('.sp-widget-button').css('width', '11%');
   }
   if ($('.sp-widget2 div').is(':visible')) {
     $('.sp-widget2 i')
       .removeClass('fa-1x')
       .addClass('fa-2x');
+    $('.sp-widget-button').css('width', '18%');
   }
 }
 
-$(window).resize(function (){
-  videoWidth = $('.sp-demo-video iframe').width();
+$(window).resize(function () {
+  var videoWidth = $('.sp-demo-video iframe').width();
   var videoHeight = (videoWidth / (16/9));
+  
   $('.sp-demo-video iframe').height(videoHeight);
   calenderWidgetCollapse();
-  console.log('Width: ' + videoWidth + ', Height: ' +  videoHeight);
-}).resize();
+});
 
-/* YouTube iFrame API */
+/**
+ *  YouTube iFrame API
+ *  @see https://developers.google.com/youtube/iframe_api_reference
+ */
 var player;
 function onYouTubeIframeAPIReady() {
   player = new YT.Player('sp-player', {
@@ -569,7 +575,7 @@ var done = false;
 function onPlayerStateChange(event) {
   var playerState = event.data;
   var viewDuration = getViewDuration();
-  var currentVideo = getVideoUrl();
+  var currentVideo = player.getVideoUrl();
   if (event.data == YT.PlayerState.PLAYING && !done) {
     setTimeout(stopVideo, 6000);
     done = true;
@@ -581,10 +587,6 @@ function stopVideo() {
 
 function getViewDuration() {
   return player.getDuration() - (player.getDuration() - player.getCurrentTime());
-}
-
-function getVideoUrl() {
-  return player.getVideoUrl();
 }
 
 /**
