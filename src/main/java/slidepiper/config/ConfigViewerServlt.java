@@ -76,6 +76,8 @@ public class ConfigViewerServlt extends HttpServlet {
       	viewer.put("isChatOpen", false);
       }
       
+      viewer.put("isYoutubeVideo", Boolean.parseBoolean(salesman.get("viewer_widget1_is_youtube_video").toString()));
+      
       // CTA buttons.
       viewer.put("toolbarCtaBorderRadius",
           salesman.get("viewer_toolbar_cta_border_radius"));
