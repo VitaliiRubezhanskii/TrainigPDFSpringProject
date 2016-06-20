@@ -54,7 +54,6 @@ body {
 
 .sp-toolbar-logo img {
   max-height: 44px;
-  max-width: 150px;
   margin: 2px 0;
 }
 
@@ -66,11 +65,7 @@ body {
 .sp-cta {
   cursor: pointer;
   width: auto;
-  max-width: 150px;
   display: inline-block;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 
 .sp-secondary-cta {
