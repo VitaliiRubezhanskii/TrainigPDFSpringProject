@@ -12,6 +12,11 @@
  * Customization settings.
  */
 
+/* Patch for horizontal scroll-bar appearance */
+html, body {
+  overflow-x: hidden; 
+}
+
 /* Stops scrolbar overflowing over content in IE and Edge */
 body {  
    -ms-overflow-style: scrollbar;
