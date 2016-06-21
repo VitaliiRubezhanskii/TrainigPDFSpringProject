@@ -12,11 +12,6 @@
  * Customization settings.
  */
 
-/* Patch for horizontal scroll-bar appearance */
-html, body {
-  overflow-x: hidden; 
-}
-
 /* Stops scrolbar overflowing over content in IE and Edge */
 body {  
    -ms-overflow-style: scrollbar;
@@ -383,11 +378,11 @@ body {
   min-width: 300px;
   position: fixed;
   padding-top: 10px; 
-  visibility: hidden;
   width: 34%;
 }  
 
 .sp-demo-video iframe {
+  display: none;
   left: 0;
   padding: 7px;
   position: relative;
@@ -445,7 +440,7 @@ body {
   }
   .sp-widget-button {
     height: 6% !important;
-    width: 13% !important;
+    width: 11% !important;
   }
   .sp-widget2 i {
     vertical-align: middle !important;
@@ -466,14 +461,14 @@ body {
   }
 }
 
-@media (max-width: 796px) {
+@media (max-width: 925px) {
   .sp-widget-button {
     font-size: 100% !important;
   }
   .sp-widget2 i {
     display: block !important;
     font-size: 1.5em !important;
-    margin-bottom: 5px !important;
+    margin-bottom: 4px !important;
     margin-left: 9px !important;
   }
 }
@@ -507,12 +502,11 @@ body {
   font-weight: bold;
   height: 15%;
   max-width: 188px;
-  min-height: 56px;
+  min-height: 40px;
   position: absolute;
   right: -1px;
   top: 45%;
   transition: background 200ms ease-in-out, box-shadow 200ms ease-in-out, transform 1000ms ease-in-out;
-  visibility: hidden;
   width: 18%;
  }
 

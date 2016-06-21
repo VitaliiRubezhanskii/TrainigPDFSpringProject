@@ -423,6 +423,7 @@ if ('' != sp.viewer.linkHash) {
       }     
       $('#sp-live-chat').css('visibility', 'visible');
     }
+    
     $('#sp-live-chat header').on('click', function () {
       // If chat is visible, it means when clicking we will shut it, so the max-width
       // should be set for when it will be closed, and vice versa.
@@ -444,30 +445,42 @@ if ('' != sp.viewer.linkHash) {
     if (true == config.viewer.widget1.isEnabled) {
       // If it is a YouTube video, then append the #sp-player to .sp-demo-video which will become an iframe,
       // otherwise, append an iframe to the #sp-player.
-      $('body').append('<div class="sp-demo-video sp-demo-video1"><div class="sp-demo-video-title-container"><span class="sp-demo-video-title__span"></span><i class="fa fa-chevron-up"></i><hr></div></div>');
+      $('body').append(
+          '<div class="sp-demo-video sp-demo-video1">' +
+            '<div class="sp-demo-video-title-container">' +
+              '<span class="sp-demo-video-title__span"></span><i class="fa fa-chevron-up"></i><hr>' +
+            '</div>' +
+          '</div>');
+      
       $('.sp-demo-video1 span').text(config.viewer.widget1.title);
-      $('.sp-demo-video').append($('#sp-player'));
+      $('.sp-demo-video').append($('#sp-player').get(0));
+      
       if (true == config.viewer.isYoutubeVideo) {
         iframeSrc = config.viewer.widget1.iframeSrc.split('/')[4];
         $.getScript("https://www.youtube.com/iframe_api");
       } else {
-        $('#sp-player').append('<iframe frameborder="0" scrolling="no" src=' + config.viewer.widget1.iframeSrc + '></iframe>');
+        $('#sp-player').append(
+            '<iframe src=' + config.viewer.widget1.iframeSrc + ' frameborder="0" scrolling="no"></iframe>'
+        );
       }
      
       config.viewer.isFileLoaded = false;
-      config.viewer.lastViewedPage = 0;      
+      config.viewer.lastViewedPage = 0;
       $(document).on('pagesloaded pagechange', function(event) {
         if ('pagesloaded' == event.type) {
           config.viewer.isFileLoaded = true;
         }
         if (config.viewer.isFileLoaded && config.viewer.lastViewedPage != PDFViewerApplication.page) {
           if (config.viewer.widget1.pageNumber == PDFViewerApplication.page) {
-            $('.sp-demo-video1').css('visibility', 'visible');
             $('.sp-demo-video1 .fa').removeClass('fa-chevron-up').addClass('fa-chevron-down');
-            $('.sp-demo-video1 iframe').show(300, 'swing');
+            $('.sp-demo-video1 iframe').show(300, 'swing', function () {
+              $('.sp-demo-video').css('min-width', '300px');
+              keepAspectRatio();
+            });
             $('.sp-demo-video1').removeClass('sp-video1-clicked');
-            $(window).resize();
+            
           } else if (! $('.sp-demo-video1').hasClass('sp-video1-clicked')) {
+            $('.sp-demo-video').css('min-width', '175px');
             $('.sp-demo-video1 .fa').removeClass('fa-chevron-down').addClass('fa-chevron-up');
             $('.sp-demo-video1 iframe').hide(300, 'swing');
           }
@@ -476,6 +489,11 @@ if ('' != sp.viewer.linkHash) {
       });
       
       $('.sp-demo-video1').click(function() {
+        /**
+         * Depending on whether the video is open or not, set a different max and min width on the video.
+         * The video should always be a certain minimum height when open, but when closed the tab can be
+         * smalller.
+         */
         $('.sp-demo-video1 iframe').slideToggle('swing', function () {
           if ($('.sp-demo-video iframe').is(':visible')) {
             $('.sp-demo-video-title__span')
@@ -488,7 +506,7 @@ if ('' != sp.viewer.linkHash) {
             $('.sp-demo-video1').css('width', '34%');
             $('.sp-demo-video1').css('min-width', '175px');
           }
-          $(window).resize(); // Ensures the window remains 16:9
+          keepAspectRatio(); // Ensures the window remains 16:9
         });
         $('.sp-demo-video1 .fa').toggleClass('fa-chevron-down fa-chevron-up');
         if ($('.sp-demo-video1').hasClass('sp-video1-active')) {
@@ -504,20 +522,6 @@ if ('' != sp.viewer.linkHash) {
     if (true == config.viewer.widget2.isEnabled) {
       $('body').append('<button class="sp-widget-button sp-widget2"></button>');
       $('.sp-widget2').html('<i class="fa fa-2x fa-calendar"></i><div>' + config.viewer.widget2.title + '</div>');
-
-      config.viewer.widget2.flag = false;
-      setInterval(function() {
-        if (config.viewer.widget2.pageNumber == PDFViewerApplication.page) {
-          if (false == config.viewer.widget2.flag) {
-            $('.sp-widget2').css('visibility', 'visible');
-            $('.sp-widget2').css('transform', 'translate(0,0)');
-            config.viewer.widget2.flag = true;
-          }
-        } else {
-          $('.sp-widget2').css('transform', 'translate(188px,0)');         
-          config.viewer.widget2.flag = false;
-          }
-      }, 1000);
 
       $('.sp-widget2').click(function() {
         swal({
@@ -548,12 +552,17 @@ function calenderWidgetCollapse () {
 }
 
 $(window).resize(function () {
-  var videoWidth = $('.sp-demo-video iframe').width();
-  var videoHeight = (videoWidth / (16/9));
-  
-  $('.sp-demo-video iframe').height(videoHeight);
+  keepAspectRatio();
   calenderWidgetCollapse();
 });
+
+function keepAspectRatio () {
+  var videoWidth = $('.sp-demo-video iframe').width();
+  var videoHeight = (videoWidth / (16 / 9));
+  
+  $('.sp-demo-video iframe').height(videoHeight);
+}
+
 
 /**
  *  YouTube iFrame API
@@ -581,6 +590,7 @@ function onPlayerStateChange(event) {
     done = true;
   }
 }
+
 function stopVideo() {
   player.stopVideo();
 }
