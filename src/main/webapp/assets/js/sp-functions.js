@@ -137,6 +137,8 @@ sp = {
         $(document).on('click', '#sp-nav-files__li li, td.sp-file-hash', setFileDashboard);
         
         $(document).ready(function() {
+          $.ajaxSetup({cache: false});
+          
           $('#sp-salesman-full-name strong').text(sp.config.salesman.name);
           
           /* Nav bar click event mechanisem */
@@ -441,7 +443,10 @@ sp = {
         var obj = {
             'date': '<span><i class="fa fa-clock-o sp-clickable sp-file-clock" data-toggle="tooltip" data-placement="right" title="Date file was added or updated"></i> ' + v[2] + '</span>',
             'document': '<span class="sp-file-mgmt-file-name" data-file-hash="' + v[0] + '">' + v[1] + '</span>',
-            'options': '<span><a><span style="margin-left: 300px;" class="label label-primary sp-file-update" data-toggle="modal" data-target="#sp-modal-update-file" data-file-hash="' + v[0] + '">Update</span></a><a href="#"><span class="label label-danger sp-file-delete" data-file-hash="' + v[0] + '">Delete</span></a></span>'
+            'options': '<span>'
+                        + '<a><span style="margin-left: 300px;" class="label label-primary sp-file-update" data-toggle="modal" data-target="#sp-modal-update-file" data-file-hash="' + v[0] + '">Update</span></a>'
+                        + '<a href="#"><span class="label label-danger sp-file-delete" data-file-hash="' + v[0] + '">Delete</span></a></span>'
+                        + '<a><span data-toggle="modal" data-target="#sp-viewer-widgets-modal" style="margin-left: 10px;" class="label label-success sp-file-customize" data-file-hash="' + v[0] + '">Customize</span></a>'
         };   
         filesArr.push(obj);
       });
@@ -465,6 +470,21 @@ sp = {
         .draw();
       }
       $('.tab-content').css('overflow-y', 'scroll');
+      
+      
+      /**
+      * Open viewer widgets modal.
+      */
+      $('.sp-file-customize').on('click', function() {
+        var fileHash = $(this).attr('data-file-hash');
+        
+        $('#sp-viewer-widgets-modal').load('assets/modal/viewer-widgets-wizard/main.html', function () {
+          $.getScript('assets/modal/viewer-widgets-wizard/functions.js', function() {
+            sp.viewerWidgetsModal.getWidgetsSettings(fileHash);  
+          });
+        });
+      });
+      
       
    // init tooltip
       $('.sp-file-clock').tooltip({delay: {show: 100, hide: 200}, placement: 'right' });
@@ -561,6 +581,31 @@ sp = {
       .done(function() {
         sp.file.getFilesList('fileUploadDashboard');
       });
+    },
+    
+    
+    /**
+     * Add data-file-link attribute containing a user file link to an HTML element.
+     *
+     * @param {String} fileHash - A file hash.
+     * @param {String} customerEmail - A customer email.
+     * @param {String} salesmanEmail - A salesman email.
+     * @param {String} targetId - The id attribute of a target HTML element.
+     */
+    setFileLinkAttribute: function(fileHash, customerEmail, salesmanEmail, targetId) {
+      $.getJSON(
+          'ManagementServlet',
+          {
+            action: 'getFileLinkHash',
+            fileHash: fileHash,
+            customerEmail: customerEmail,
+            salesmanEmail: salesmanEmail
+          },
+          function(data) {
+            var fileLink = sp.config.viewerUrlWithoutFileLink + data.fileLinkHash;
+            $('#' + targetId).attr('data-file-link', fileLink); 
+          }
+      );
     },
     
     
