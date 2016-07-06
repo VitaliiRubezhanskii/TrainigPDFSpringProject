@@ -2023,7 +2023,7 @@ public class DbLayer {
           			 + "viewer_toolbar_button_background, viewer_toolbar_find_background, viewer_toolbar_logo_collapse_max_width,\n"
           			 + "viewer_toolbar_cta1_collapse_max_width, viewer_toolbar_cta2_collapse_max_width, viewer_toolbar_find_color, telephone)\n"
           			 + "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'true', ?, ?, '3px', 'bold 14px Ariel, sans-serif',\n"
-            		 + "'3px 10px 3px 0', '2px 10px 3px', ?, ?, ?, ?, '', ?, ?, '650px', '950px', '1260px', ?, ?)";
+            		 + "'3px 10px 3px 0', '4px 10px 5px', ?, ?, ?, ?, '', ?, ?, '650px', '950px', '1260px', ?, ?)";
 
               try {
                 conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
