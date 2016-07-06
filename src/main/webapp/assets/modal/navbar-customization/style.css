@@ -1,0 +1,86 @@
+[name="viewer_toolbar_cta_is_transparent"] {
+  margin-left: 50px !important;
+}
+
+.sp-citron__img {
+  display: inline-block;
+  margin-bottom: 2px;
+  margin-left: 12px;
+}
+
+.sp-cta-tooltip {
+  cursor: pointer;
+  color: #1ab394;
+}
+
+.sp-toolbar-indent {
+  margin-left: 2%;
+}
+
+.sp-light {
+  float: right !important;
+}
+
+.sp-style-margin-top {
+  margin-top: 10px;
+}
+
+.sp-viewer-toolbar-background__checkbox {
+  display: inline-block;
+}
+
+.sp-viewer-choice-demo {
+  border-radius: 3px;
+  display: inline-block;
+  float: right;
+  height: 40px;
+  margin-top: -111px;
+  margin-left: 50px;
+  width: 200px;
+}
+
+.sp-viewer-toolbar-container:not(.sp-viewer-logo-handler) {
+  display: inline-block;
+}
+
+.sp-viewer-choice-demo-toolbar {
+  border: 1px solid grey;
+  border-radius: 3px;
+  padding: 9px;
+  text-align: center;
+}
+
+.sp-viewer-choice-demo-button {
+  border: 1px solid grey;
+  border-radius: 3px;
+  padding: 10px;
+  text-align: center;
+}
+
+.sp-viewer-toolbar-color-picker {
+  display: block;
+  margin: 2%;
+  width: 55%;
+}
+
+#sp-toolbar-settings-container input[type="radio"], 
+#sp-toolbar-settings-container input[type="checkbox"] {
+  margin-left: 7px;
+}
+
+#sp-cta-button-desc__p {
+  margin: 0;
+  vertical-align: middle;
+}
+
+#sp-cta-button-color-picker-container label {
+  margin-left: 3px;
+}
+
+#sp-viewer-logo-link {
+  width: 100%;
+}
+
+#sp-viewer-settings__h3 {
+  margin-top: 10px;
+}
