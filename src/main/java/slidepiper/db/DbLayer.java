@@ -2023,7 +2023,7 @@ public class DbLayer {
           			 + "viewer_toolbar_button_background, viewer_toolbar_find_background, viewer_toolbar_logo_collapse_max_width,\n"
           			 + "viewer_toolbar_cta1_collapse_max_width, viewer_toolbar_cta2_collapse_max_width, viewer_toolbar_find_color, telephone)\n"
           			 + "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'true', ?, ?, '3px', 'bold 14px Ariel, sans-serif',\n"
-            		 + "'3px 10px 3px 0', '4px 10px', ?, ?, ?, ?, '', ?, ?, '670px', '1050px', '800px', ?, ?)";
+            		 + "'3px 10px 3px 0', '2px 10px 3px', ?, ?, ?, ?, '', ?, ?, '650px', '950px', '1260px', ?, ?)";
 
               try {
                 conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
@@ -2075,7 +2075,147 @@ public class DbLayer {
             }
         	return statusCode;
          }
-          
+      
+      public static int updateNavbarLogo (InputStream logo, String salesman) throws IOException {
+    	  
+    	  Connection conn = null;
+    	  Constants.updateConstants();
+  		  int statusCode = 0;	
+    	  
+  		  try {
+            Class.forName("com.mysql.jdbc.Driver");
+          } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+          }
+  		  
+  		  String sql = "UPDATE sales_men SET viewer_toolbar_logo_image = ? WHERE email = ?";
+  		  
+  		  try {
+			conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt.setBytes(1, IOUtils.toByteArray(logo));
+			stmt.setString(2,  salesman);
+			stmt.executeUpdate();
+			
+			statusCode = 200;
+	      } catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+	      }
+    	  return statusCode;
+      }
+      
+      public static int updateNavbarSettings (String salesman, String viewerToolbarBackground, String viewerToolbarLogoLink,
+    		  String viewerToolbarCTABackground, String viewerToolbarCta2IsEnabled, String viewerToolbarCta3IsEnabled, String viewerToolbarCta2Text,
+    		  String viewerToolbarCta2Link, String viewerToolbarCta3Text, String viewerToolbarCta3Link, String viewerToolbarTextColor, String viewerToolbarCTATextColor,
+    		  String viewerToolbarCta1IsEnabled, String viewerToolbarCta1Text, String viewerToolbarCta1Link,
+    		  String viewerToolbarButtonBackground) throws IOException {
+    	  
+    	  int statusCode = 0;
+    	  Connection conn = null;
+    	  Constants.updateConstants();
+  			
+  		  try {
+            Class.forName("com.mysql.jdbc.Driver");
+          } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+          }
+  		  
+  		  String sql = "UPDATE sales_men SET viewer_toolbar_background = ?, viewer_toolbar_logo_link = ?,"
+  		  		+ "viewer_toolbar_cta1_background = ?, viewer_toolbar_cta2_background = ?, viewer_toolbar_cta3_background = ?,"
+  		  		+ "viewer_toolbar_cta2_is_enabled = ?, viewer_toolbar_cta3_is_enabled = ?, "
+  		  		+ "viewer_toolbar_cta2_text = ?, viewer_toolbar_cta2_link = ?, viewer_toolbar_cta3_text = ?, viewer_toolbar_cta3_link = ?,"
+  		  		+ "viewer_toolbar_cta1_color = ?, viewer_toolbar_cta2_color = ?, viewer_toolbar_cta3_color = ?,"
+  		  		+ "viewer_toolbar_color = ?, viewer_toolbar_find_color = ?, viewer_toolbar_find_background = ?,"
+  		  		+ "viewer_toolbar_cta1_is_enabled = ?, viewer_toolbar_cta1_text = ?, viewer_toolbar_cta1_link = ?,"
+  		  		+ "viewer_toolbar_button_background = ? WHERE email = ?";
+    	  
+  		try {
+			conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			
+			stmt.setString(1, viewerToolbarBackground);
+			stmt.setString(2,  viewerToolbarLogoLink);
+			stmt.setString(3, viewerToolbarCTABackground);
+			stmt.setString(4, viewerToolbarCTABackground);
+			stmt.setString(5, viewerToolbarCTABackground);
+			stmt.setString(6,  viewerToolbarCta2IsEnabled);
+			stmt.setString(7,  viewerToolbarCta3IsEnabled);
+			stmt.setString(8,  viewerToolbarCta2Text);
+			stmt.setString(9,  viewerToolbarCta2Link);
+			stmt.setString(10, viewerToolbarCta3Text);
+			stmt.setString(11, viewerToolbarCta3Link);
+			stmt.setString(12, viewerToolbarCTATextColor);
+			stmt.setString(13, viewerToolbarCTATextColor);
+			stmt.setString(14, viewerToolbarCTATextColor);
+			stmt.setString(15, viewerToolbarTextColor);
+			stmt.setString(16, viewerToolbarTextColor);
+			stmt.setString(17, viewerToolbarBackground);
+			stmt.setString(18, viewerToolbarCta1IsEnabled);
+			stmt.setString(19, viewerToolbarCta1Text);
+			stmt.setString(20, viewerToolbarCta1Link);
+			stmt.setString(21, viewerToolbarButtonBackground);
+			stmt.setString(22, salesman);
+		
+			stmt.executeUpdate();
+			statusCode = 200;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	  return statusCode;
+      }
+       
+      public static ArrayList<Object> getNavbarSettings (String salesman){
+    	  
+    	  Connection conn = null;
+    	  Constants.updateConstants();
+  		  HashMap<String, Object> navbarSettings = new HashMap<String, Object>();
+  		  ArrayList<Object> resultList = new ArrayList<Object>();
+    	  
+  		  try {
+            Class.forName("com.mysql.jdbc.Driver");
+          } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+          }
+    	  
+    	  String sql = "SELECT viewer_toolbar_background, viewer_toolbar_logo_link, viewer_toolbar_cta1_background, "
+    	  		    + "viewer_toolbar_cta2_is_enabled, viewer_toolbar_cta3_is_enabled, viewer_toolbar_cta2_text, "
+    	  		    + "viewer_toolbar_cta2_link, viewer_toolbar_cta3_text, viewer_toolbar_cta3_link, viewer_toolbar_cta1_color, "
+    	  		    + "viewer_toolbar_color, viewer_toolbar_cta1_is_enabled, viewer_toolbar_cta1_text,"
+    		  		+ "viewer_toolbar_cta1_link FROM sales_men WHERE email = ?";
+    	  
+    	  try {
+			conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt.setString(1, salesman);
+			
+			ResultSet rs = stmt.executeQuery();
+			ResultSetMetaData md = rs.getMetaData();
+			int columns = md.getColumnCount();
+			
+			while (rs.next()) {
+			   for (int i = 1; i <= columns; ++i) {
+				  if (md.getColumnName(i).equals("viewer_toolbar_cta1_background")) {
+					  navbarSettings.put("viewer_toolbar_cta_background", rs.getObject(i));  
+				  } else if (md.getColumnName(i).equals("viewer_toolbar_color")) {
+					  navbarSettings.put("viewer_toolbar_text_color", rs.getObject(i)); 
+				  } else if (md.getColumnName(i).equals("viewer_toolbar_cta1_color")) {
+					  navbarSettings.put("viewer_toolbar_cta_text_color", rs.getObject(i)); 
+				  } else {
+					  navbarSettings.put(md.getColumnName(i), rs.getObject(i));
+				  }
+			   }
+			   resultList.add(navbarSettings);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	  
+		return resultList;
+      }
+      
       /**
        * Update (replace) a file with a different one.
        * 

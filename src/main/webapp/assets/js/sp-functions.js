@@ -213,6 +213,12 @@ sp = {
             }
           });
           
+          // Customize Toolbar
+          
+          $('[data-target="#sp-toolbar-settings__modal"]').on('click', function () {
+            $('#sp-toolbar-settings__modal').load('assets/modal/navbar-customization/main.html');
+          });
+          
           // Delete file.
           $(document).on('click', '.sp-file-delete', function() {
             sp.file.fileHash = $(this).attr('data-file-hash');
@@ -1881,7 +1887,6 @@ chart: {
         sp.config = data;
       });
     },
-      
   },
 
   view: {
