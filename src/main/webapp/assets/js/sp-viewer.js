@@ -439,99 +439,164 @@ if ('' != sp.viewer.linkHash) {
       }
     });
     
-    /* Widget Settings */
     
-    // Widget 1 - YouTube widget 
-    if (true == config.viewer.widget1.isEnabled) {
-      // If it is a YouTube video, then append the #sp-player to .sp-demo-video which will become an iframe,
-      // otherwise, append an iframe to the #sp-player.
-      $('body').append(
-          '<div class="sp-demo-video sp-demo-video1">' +
-            '<div class="sp-demo-video-title-container">' +
-              '<span class="sp-demo-video-title__span"></span><i class="fa fa-chevron-up"></i><hr>' +
-            '</div>' +
-          '</div>');
-      
-      $('.sp-demo-video1 span').text(config.viewer.widget1.title);
-      $('.sp-demo-video').append($('#sp-player').get(0));
-      
-      if (true == config.viewer.isYoutubeVideo) {
-        iframeSrc = config.viewer.widget1.iframeSrc.split('/')[4];
-        $.getScript("https://www.youtube.com/iframe_api");
-      } else {
-        $('#sp-player').append(
-            '<iframe src=' + config.viewer.widget1.iframeSrc + ' frameborder="0" scrolling="no"></iframe>'
-        );
-      }
-     
-      config.viewer.isFileLoaded = false;
-      config.viewer.lastViewedPage = 0;
-      $(document).on('pagesloaded pagechange', function(event) {
-        if ('pagesloaded' == event.type) {
-          config.viewer.isFileLoaded = true;
+    /* Widget */
+
+    /**
+     * Get widget settings.
+     */
+    $.getJSON(
+        '../ManagementServlet',
+        {
+          action: 'getWidgetsSettings',
+          fileLinkHash: sp.viewer.linkHash
+        },
+        function(data) {
+          var widgets = {};
+          $.each(data.widgetsSettings, function(key, value) {
+            widgets['widget' + value.widgetId] = value;            
+          });
+          implementWidgets(widgets);
         }
-        if (config.viewer.isFileLoaded && config.viewer.lastViewedPage != PDFViewerApplication.page) {
-          if (config.viewer.widget1.pageNumber == PDFViewerApplication.page) {
-            $('.sp-demo-video1 .fa').removeClass('fa-chevron-up').addClass('fa-chevron-down');
-            $('.sp-demo-video1 iframe').show(300, 'swing', function () {
-              $('.sp-demo-video').css('min-width', '300px');
-              keepAspectRatio();
-            });
-            $('.sp-demo-video1').removeClass('sp-video1-clicked');
-            
-          } else if (! $('.sp-demo-video1').hasClass('sp-video1-clicked')) {
-            $('.sp-demo-video').css('min-width', '175px');
-            $('.sp-demo-video1 .fa').removeClass('fa-chevron-down').addClass('fa-chevron-up');
-            $('.sp-demo-video1 iframe').hide(300, 'swing');
-          }
-          config.viewer.lastViewedPage = PDFViewerApplication.page;
+    );
+    
+    
+    /**
+     * Check whether a widget required settings are set.
+     * 
+     * @param {object} widgetSettings - An object containing a widget settings.
+     * @param {array} requiredSettings - The widget settings keys required to be
+     * defined for the functionality of the widget.
+     * 
+     * @return {boolean} Are the required widget settings defined.
+     */
+    function isWidgetSettingsDefined(widgetSettings, requiredSettings) {
+      var isWidgetSettingsDefined = true;
+      
+      $.each(requiredSettings, function(index, requiredSetting) {
+        if (typeof widgetSettings[requiredSetting] == 'undefined') {
+          isWidgetSettingsDefined = false;
+          return false;
         }
       });
       
-      $('.sp-demo-video1').click(function() {
-        /**
-         * Depending on whether the video is open or not, set a different max and min width on the video.
-         * The video should always be a certain minimum height when open, but when closed the tab can be
-         * smalller.
-         */
-        $('.sp-demo-video1 iframe').slideToggle('swing', function () {
-          if ($('.sp-demo-video iframe').is(':visible')) {
-            $('.sp-demo-video-title__span')
-              .css({'padding-right': '0', 'max-width': '80%'});
-            $('.sp-demo-video1').css('width', '34%');
-            $('.sp-demo-video1').css('min-width', '300px');
-          } else {
-            $('.sp-demo-video-title__span')
-              .css({'padding-right': '20px', 'max-width': '80%'});
-            $('.sp-demo-video1').css('width', '34%');
-            $('.sp-demo-video1').css('min-width', '175px');
-          }
-          keepAspectRatio(); // Ensures the window remains 16:9
-        });
-        $('.sp-demo-video1 .fa').toggleClass('fa-chevron-down fa-chevron-up');
-        if ($('.sp-demo-video1').hasClass('sp-video1-active')) {
-          $('.sp-demo-video1').addClass('sp-video1-clicked');
-          $('.sp-demo-video1').removeClass('sp-video1-active');
-        } else {
-          $('.sp-demo-video1').addClass('sp-video1-active');
-        } 
-      });
+      return isWidgetSettingsDefined;
     }
     
-    // Widget 2 - Calendly widget
-    if (true == config.viewer.widget2.isEnabled) {
-      $('body').append('<button class="sp-widget-button sp-widget2"></button>');
-      $('.sp-widget2').html('<i class="fa fa-2x fa-calendar"></i><div>' + config.viewer.widget2.title + '</div>');
-
-      $('.sp-widget2').click(function() {
-        swal({
-          html: true,
-          showCancelButton: true,
-          showConfirmButton: false,
-          text: '<iframe src="../assets/viewer/widget/calendly.html?user=' + config.viewer.widget2.iframeSrc + '" height="420" frameborder="0"></iframe>',
-          title: 'Schedule Meeting',
-        });
-      });
+    
+    /**
+     * This is an initial implementation of the widgets platform,
+     * taking its settings from the DB. 
+     */
+    function implementWidgets(widgets) {
+      
+      var widget1RequiredSettings = ['isEnabled', 'iframeSrc', 'title', 'isYouTubeVideo', 'pageNumber'];
+      var widget2RequiredSettings = ['isEnabled', 'userName'];
+      
+      if (isWidgetSettingsDefined(widgets.widget1, widget1RequiredSettings)) {
+        implementWidget1(widgets.widget1);
+      }
+      
+      if (isWidgetSettingsDefined(widgets.widget2, widget2RequiredSettings)) {
+        implementWidget2(widgets.widget2);
+      }
+      
+      function implementWidget1(widget) {
+        // Widget 1 - YouTube widget 
+        if (widget.isEnabled) {
+          // If it is a YouTube video, then append the #sp-player to .sp-demo-video which will become an iframe,
+          // otherwise, append an iframe to the #sp-player.
+          $('body').append(
+              '<div class="sp-demo-video sp-demo-video1">' +
+                '<div class="sp-demo-video-title-container">' +
+                  '<span class="sp-demo-video-title__span"></span><i class="fa fa-chevron-up"></i><hr>' +
+                '</div>' +
+              '</div>');
+          
+          $('.sp-demo-video1 span').text(widget.title);
+          $('.sp-demo-video').append($('#sp-player').get(0));
+          
+          if (widget.isYouTubeVideo) {
+            iframeSrc = widget.iframeSrc.split('/')[4];
+            $.getScript("https://www.youtube.com/iframe_api");
+          } else {
+            $('#sp-player').append(
+                '<iframe src=' + widget.iframeSrc + ' frameborder="0" scrolling="no"></iframe>'
+            );
+          }
+          
+          widget.isFileLoaded = false;
+          widget.lastViewedPage = 0;
+          $(document).on('pagesloaded pagechange', function(event) {
+            if ('pagesloaded' == event.type) {
+              widget.isFileLoaded = true;
+            }
+            if (widget.isFileLoaded && widget.lastViewedPage != PDFViewerApplication.page) {
+              if (widget.pageNumber == PDFViewerApplication.page) {
+                $('.sp-demo-video1 .fa').removeClass('fa-chevron-up').addClass('fa-chevron-down');
+                $('.sp-demo-video1 iframe').show(300, 'swing', function () {
+                  $('.sp-demo-video').css('min-width', '300px');
+                  keepAspectRatio();
+                });
+                $('.sp-demo-video1').removeClass('sp-video1-clicked');
+                
+              } else if (! $('.sp-demo-video1').hasClass('sp-video1-clicked')) {
+                $('.sp-demo-video').css('min-width', '175px');
+                $('.sp-demo-video1 .fa').removeClass('fa-chevron-down').addClass('fa-chevron-up');
+                $('.sp-demo-video1 iframe').hide(300, 'swing');
+              }
+              widget.lastViewedPage = PDFViewerApplication.page;
+            }
+          });
+          
+          $('.sp-demo-video1').click(function() {
+            /**
+             * Depending on whether the video is open or not, set a different max and min width on the video.
+             * The video should always be a certain minimum height when open, but when closed the tab can be
+             * smalller.
+             */
+            $('.sp-demo-video1 iframe').slideToggle('swing', function () {
+              if ($('.sp-demo-video iframe').is(':visible')) {
+                $('.sp-demo-video-title__span')
+                  .css({'padding-right': '0', 'max-width': '80%'});
+                $('.sp-demo-video1').css('width', '34%');
+                $('.sp-demo-video1').css('min-width', '300px');
+              } else {
+                $('.sp-demo-video-title__span')
+                  .css({'padding-right': '20px', 'max-width': '80%'});
+                $('.sp-demo-video1').css('width', '34%');
+                $('.sp-demo-video1').css('min-width', '175px');
+              }
+              keepAspectRatio(); // Ensures the window remains 16:9
+            });
+            $('.sp-demo-video1 .fa').toggleClass('fa-chevron-down fa-chevron-up');
+            if ($('.sp-demo-video1').hasClass('sp-video1-active')) {
+              $('.sp-demo-video1').addClass('sp-video1-clicked');
+              $('.sp-demo-video1').removeClass('sp-video1-active');
+            } else {
+              $('.sp-demo-video1').addClass('sp-video1-active');
+            } 
+          });
+        }
+      }
+      
+      function implementWidget2(widget) {
+        // Widget 2 - Calendly widget
+        if (widget.isEnabled) {
+          $('body').append('<button class="sp-widget-button sp-widget2"></button>');
+          $('.sp-widget2').html('<i class="fa fa-2x fa-calendar"></i><div>Schedule Meeting</div>');
+    
+          $('.sp-widget2').click(function() {
+            swal({
+              html: true,
+              showCancelButton: true,
+              showConfirmButton: false,
+              text: '<iframe src="../assets/viewer/widget/calendly.html?user=' + widget.userName + '" height="420" frameborder="0"></iframe>',
+              title: 'Schedule Meeting',
+            });
+          });
+        }
+      }
     }
   });
 }

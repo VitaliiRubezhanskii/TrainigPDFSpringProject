@@ -48,7 +48,6 @@
 </head>
 
 <body>
-
     <div id="wrapper">
         <nav class="navbar-default navbar-static-side" role="navigation">
             <div class="sidebar-collapse">
@@ -127,6 +126,7 @@
                               <ul class="dropdown-menu">
                                     <li data-toggle="modal" data-target="#sp-change-password__modal" class="sp-change-pwd__li sp-dropdown-settings__li"><a href="#">Change Password</a></li>
                                     <li class="sp-dropdown-settings__li" data-toggle="modal" data-target="#sp-document-settings__modal"><a href="#">Document Settings</a></li>
+                                    <li class="sp-dropdown-settings__li" data-toggle="modal" data-target="#sp-toolbar-settings__modal"><a href="#">Toolbar Settings</a></li>
                               </ul>
                             </div>
                         </li>
@@ -564,7 +564,13 @@
     <!-- SlidePiper scripts -->
     <script src="assets/js/js.cookie.js"></script>
     <script src="assets/js/sp-functions.js"></script>
-
+    
+    <!-- Viewer Widgets Modal -->
+    <div class="modal inmodal" id="sp-viewer-widgets-modal" tabindex="-1" role="dialog" aria-hidden="true"></div>
+    
+    <!-- Toolbar Settings Modal -->
+    <div id="sp-toolbar-settings__modal" class="modal inmodal" tabindex="-1" role="dialog" aria-hidden="true"></div>
+    
     <!-- Upload files modal -->
     <div class="modal inmodal" id="sp-modal-upload-files" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog">
@@ -827,7 +833,7 @@
                             <div class="col-md-4 col-sm-4">
                                 <label class="sp-switch"> 
                                   <input id="sp-enable-chat__checkbox" class="sp-settings__checkbox" type="checkbox">
-                                  <div class="sp-slider sp-round"></div>
+                                  <div class="sp-doc-settings-slider sp-round"></div>
                                 </label>
                             </div>
                         </div>
@@ -840,7 +846,7 @@
                             <div class="col-md-4  col-sm-4">
                                 <label class="sp-switch"> 
                                   <input id="sp-enable-alert-emails__checkbox" class="sp-settings__checkbox" type="checkbox">
-                                  <div class="sp-slider sp-round"></div>
+                                  <div class="sp-doc-settings-slider sp-round"></div>
                                 </label>
                             </div>
                         </div>
@@ -854,7 +860,7 @@
                             <div class="col-md-4 col-sm-4">
                                 <label class="sp-switch"> 
                                   <input id="sp-enable-report-emails__checkbox" class="sp-settings__checkbox" type="checkbox">
-                                  <div class="sp-slider sp-round"></div>
+                                  <div class="sp-doc-settings-slider sp-round"></div>
                                 </label>
                             </div>
                         </div>
@@ -895,7 +901,7 @@
                                 <h3>2. Upload Documents</h3>
                                 <p>Click Documents & Customers</p>
                                 <h3>3. Use the wizard to send documents</h3>
-                                <p>Click Send Email</p>
+                                <p>Click Send Documents</p>
                                 <h3 class="sp-help-done__h3">
                                     <i class="fa fa-thumbs-up" aria-hidden="true"></i> Once you're done, check out the Anayltics
                                 </h3>

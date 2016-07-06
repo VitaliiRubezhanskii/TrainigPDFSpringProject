@@ -16,6 +16,8 @@ import javax.xml.bind.DatatypeConverter;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.io.IOUtils;
 import org.hashids.Hashids;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import slidepiper.config.ConfigProperties;
 import slidepiper.constants.Constants;
@@ -1382,6 +1384,85 @@ public class DbLayer {
       
       
       /**
+       * Get the file ID from a file hash. 
+       * 
+       * @param fileHash The file hash.
+       * @return The file ID.
+       */
+      public static int getFileIdFromFileHash(String fileHash) {
+        
+        Constants.updateConstants();
+        try {
+          Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+          e.printStackTrace();
+        }
+        Connection conn = null;
+        
+        String sql = "SELECT id_ai FROM slides WHERE id = ?";
+        
+        int fileId = 0;
+        
+        try {
+          conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
+          PreparedStatement stmt = conn.prepareStatement(sql);
+          stmt.setString(1, fileHash);
+           
+          ResultSet rs = stmt.executeQuery();
+          if (rs.next()) {
+            fileId = rs.getInt(1);
+          }
+        } catch (SQLException e) {
+          e.printStackTrace();
+        }
+      
+        return fileId;
+      }
+      
+      
+      /**
+       * Get the file id from a file link hash. 
+       * (A file is the parent of file links)
+       * 
+       * @param fileLinkHash The file link hash.
+       * @return The file id.
+       */
+      public static int getFileIdFromFileLinkHash(String fileLinkHash) {
+        
+        Connection conn = null;
+        Constants.updateConstants();
+        try {
+          Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+          e.printStackTrace();
+        }
+        
+        String sql = 
+              "SELECT slides.id_ai\n"
+            + "FROM slides\n"
+            + "JOIN msg_info ON msg_info.slides_id = slides.id\n"
+            + "WHERE msg_info.id = ?";
+        
+        int fileId = 0;
+
+        try {
+          conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
+          PreparedStatement stmt = conn.prepareStatement(sql);
+          stmt.setString(1, fileLinkHash);
+           
+          ResultSet rs = stmt.executeQuery();
+          if (rs.next()) {
+            fileId = rs.getInt(1);
+          }
+        } catch (SQLException e) {
+          e.printStackTrace();
+        }
+      
+        return fileId;
+      }
+      
+      
+      /**
        * Retrieve a salesman customer file links.
        * 
        * @param customerEmail The customer email address.
@@ -1566,6 +1647,123 @@ public class DbLayer {
 		
 		
       /**
+       * Get a file link widget settings.
+       * 
+       * @param fileLinkHash A file link hash.
+       * @param isViewer Is the request being invoked from the viewer or the dashboard.
+       * @return the file link widget settings.
+       */
+      public static JSONArray getWidgetsSettings(int fileId, boolean isViewer) {
+        
+        Connection conn = null;
+        Constants.updateConstants();
+        try {
+          Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+          e.printStackTrace();
+        }
+        
+        String sql =
+            "SELECT\n"
+            + "widget.id AS widget_id,\n"
+            + "widget.url AS widget_url,\n"
+            + "FK_widget_setting_key_id AS key_id,\n"
+            + "widget_setting_key.key_type,\n"
+            + "widget_setting_key.key_name AS `key`,\n"
+            + "boolean_value,\n"
+            + "integer_value,\n"
+            + "string_value\n"
+          + "FROM widget_setting_value\n"
+          + "JOIN widget_setting_key ON widget_setting_key.id = widget_setting_value.FK_widget_setting_key_id\n"
+          + "JOIN widget ON widget.id = widget_setting_key.FK_widget_id\n"
+          + "WHERE FK_file_id_ai = ?\n"
+          + "ORDER BY widget.id, widget_setting_key.key_name";
+        
+        JSONArray widgetsSettings = new JSONArray();
+        
+        try {
+          conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
+          PreparedStatement ps = conn.prepareStatement(sql);
+          
+          ps.setInt(1, fileId);
+          ResultSet rs = ps.executeQuery();
+          
+          JSONObject widgetSetting = new JSONObject();
+          int lastWidgetId = 0;
+          
+          while (rs.next()) {
+            int widgetId = rs.getInt("widget_id");
+            String widgetUrl = rs.getString("widget_url");
+            
+            if (rs.getRow() > 1 && widgetId != lastWidgetId) {
+              widgetsSettings.put(widgetSetting);
+              widgetSetting = new JSONObject();
+            }
+            
+            widgetSetting.put("widgetId", widgetId);
+            widgetSetting.put("widgetUrl", widgetUrl);
+            
+            String keyType = rs.getString("key_type");
+            int keyId = rs.getInt("key_id");
+            String key = rs.getString("key");
+            
+            switch (keyType) {
+              case "boolean":
+                boolean booleanValue = rs.getBoolean("boolean_value");
+                if (! rs.wasNull()) {
+                  if (isViewer) {
+                    widgetSetting.put(key, booleanValue);
+                  } else {
+                    widgetSetting.put(Integer.toString(keyId), booleanValue);
+                  }
+                }
+                break;
+              
+              case "integer":
+                int integerValue = rs.getInt("integer_value");
+                if (! rs.wasNull()) {
+                  if (isViewer) {
+                    widgetSetting.put(key, integerValue);
+                  } else {
+                    widgetSetting.put(Integer.toString(keyId), integerValue);
+                  }
+                }
+                break;
+              
+              case "string":
+                String stringValue = rs.getString("string_value");
+                if (! rs.wasNull()) {
+                  if (isViewer) {
+                    widgetSetting.put(key, stringValue);
+                  } else {
+                    widgetSetting.put(Integer.toString(keyId), stringValue);
+                  }
+                }
+                break;
+            }
+            
+            lastWidgetId = widgetId;
+          }
+          widgetsSettings.put(widgetSetting);
+          
+        } catch (SQLException ex) {
+          System.err.println("Error code: " + ex.getErrorCode() + " - " + ex.getMessage());
+          ex.printStackTrace();
+        } finally {
+          if (null != conn) {
+           try {
+             conn.close();
+           } catch (SQLException ex) {
+             ex.printStackTrace();
+           }
+          }
+        }
+        
+        return widgetsSettings;
+      }
+      
+      
+		   /**
        * Add a customer or salesman event to the DB.
        * 
        * @param tableName The table in the DB in which the event would be inserted into.
@@ -1825,7 +2023,7 @@ public class DbLayer {
           			 + "viewer_toolbar_button_background, viewer_toolbar_find_background, viewer_toolbar_logo_collapse_max_width,\n"
           			 + "viewer_toolbar_cta1_collapse_max_width, viewer_toolbar_cta2_collapse_max_width, viewer_toolbar_find_color, telephone)\n"
           			 + "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'true', ?, ?, '3px', 'bold 14px Ariel, sans-serif',\n"
-            		 + "'3px 10px 3px 0', '4px 10px', ?, ?, ?, ?, '', ?, ?, '670px', '1050px', '800px', ?, ?)";
+            		 + "'3px 10px 3px 0', '4px 10px 5px', ?, ?, ?, ?, '', ?, ?, '650px', '950px', '1260px', ?, ?)";
 
               try {
                 conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
@@ -1877,7 +2075,147 @@ public class DbLayer {
             }
         	return statusCode;
          }
-          
+      
+      public static int updateNavbarLogo (InputStream logo, String salesman) throws IOException {
+    	  
+    	  Connection conn = null;
+    	  Constants.updateConstants();
+  		  int statusCode = 0;	
+    	  
+  		  try {
+            Class.forName("com.mysql.jdbc.Driver");
+          } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+          }
+  		  
+  		  String sql = "UPDATE sales_men SET viewer_toolbar_logo_image = ? WHERE email = ?";
+  		  
+  		  try {
+			conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt.setBytes(1, IOUtils.toByteArray(logo));
+			stmt.setString(2,  salesman);
+			stmt.executeUpdate();
+			
+			statusCode = 200;
+	      } catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+	      }
+    	  return statusCode;
+      }
+      
+      public static int updateNavbarSettings (String salesman, String viewerToolbarBackground, String viewerToolbarLogoLink,
+    		  String viewerToolbarCTABackground, String viewerToolbarCta2IsEnabled, String viewerToolbarCta3IsEnabled, String viewerToolbarCta2Text,
+    		  String viewerToolbarCta2Link, String viewerToolbarCta3Text, String viewerToolbarCta3Link, String viewerToolbarTextColor, String viewerToolbarCTATextColor,
+    		  String viewerToolbarCta1IsEnabled, String viewerToolbarCta1Text, String viewerToolbarCta1Link,
+    		  String viewerToolbarButtonBackground) throws IOException {
+    	  
+    	  int statusCode = 0;
+    	  Connection conn = null;
+    	  Constants.updateConstants();
+  			
+  		  try {
+            Class.forName("com.mysql.jdbc.Driver");
+          } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+          }
+  		  
+  		  String sql = "UPDATE sales_men SET viewer_toolbar_background = ?, viewer_toolbar_logo_link = ?,"
+  		  		+ "viewer_toolbar_cta1_background = ?, viewer_toolbar_cta2_background = ?, viewer_toolbar_cta3_background = ?,"
+  		  		+ "viewer_toolbar_cta2_is_enabled = ?, viewer_toolbar_cta3_is_enabled = ?, "
+  		  		+ "viewer_toolbar_cta2_text = ?, viewer_toolbar_cta2_link = ?, viewer_toolbar_cta3_text = ?, viewer_toolbar_cta3_link = ?,"
+  		  		+ "viewer_toolbar_cta1_color = ?, viewer_toolbar_cta2_color = ?, viewer_toolbar_cta3_color = ?,"
+  		  		+ "viewer_toolbar_color = ?, viewer_toolbar_find_color = ?, viewer_toolbar_find_background = ?,"
+  		  		+ "viewer_toolbar_cta1_is_enabled = ?, viewer_toolbar_cta1_text = ?, viewer_toolbar_cta1_link = ?,"
+  		  		+ "viewer_toolbar_button_background = ? WHERE email = ?";
+    	  
+  		try {
+			conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			
+			stmt.setString(1, viewerToolbarBackground);
+			stmt.setString(2,  viewerToolbarLogoLink);
+			stmt.setString(3, viewerToolbarCTABackground);
+			stmt.setString(4, viewerToolbarCTABackground);
+			stmt.setString(5, viewerToolbarCTABackground);
+			stmt.setString(6,  viewerToolbarCta2IsEnabled);
+			stmt.setString(7,  viewerToolbarCta3IsEnabled);
+			stmt.setString(8,  viewerToolbarCta2Text);
+			stmt.setString(9,  viewerToolbarCta2Link);
+			stmt.setString(10, viewerToolbarCta3Text);
+			stmt.setString(11, viewerToolbarCta3Link);
+			stmt.setString(12, viewerToolbarCTATextColor);
+			stmt.setString(13, viewerToolbarCTATextColor);
+			stmt.setString(14, viewerToolbarCTATextColor);
+			stmt.setString(15, viewerToolbarTextColor);
+			stmt.setString(16, viewerToolbarTextColor);
+			stmt.setString(17, viewerToolbarBackground);
+			stmt.setString(18, viewerToolbarCta1IsEnabled);
+			stmt.setString(19, viewerToolbarCta1Text);
+			stmt.setString(20, viewerToolbarCta1Link);
+			stmt.setString(21, viewerToolbarButtonBackground);
+			stmt.setString(22, salesman);
+		
+			stmt.executeUpdate();
+			statusCode = 200;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	  return statusCode;
+      }
+       
+      public static ArrayList<Object> getNavbarSettings (String salesman){
+    	  
+    	  Connection conn = null;
+    	  Constants.updateConstants();
+  		  HashMap<String, Object> navbarSettings = new HashMap<String, Object>();
+  		  ArrayList<Object> resultList = new ArrayList<Object>();
+    	  
+  		  try {
+            Class.forName("com.mysql.jdbc.Driver");
+          } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+          }
+    	  
+    	  String sql = "SELECT viewer_toolbar_background, viewer_toolbar_logo_link, viewer_toolbar_cta1_background, "
+    	  		    + "viewer_toolbar_cta2_is_enabled, viewer_toolbar_cta3_is_enabled, viewer_toolbar_cta2_text, "
+    	  		    + "viewer_toolbar_cta2_link, viewer_toolbar_cta3_text, viewer_toolbar_cta3_link, viewer_toolbar_cta1_color, "
+    	  		    + "viewer_toolbar_color, viewer_toolbar_cta1_is_enabled, viewer_toolbar_cta1_text,"
+    		  		+ "viewer_toolbar_cta1_link FROM sales_men WHERE email = ?";
+    	  
+    	  try {
+			conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt.setString(1, salesman);
+			
+			ResultSet rs = stmt.executeQuery();
+			ResultSetMetaData md = rs.getMetaData();
+			int columns = md.getColumnCount();
+			
+			while (rs.next()) {
+			   for (int i = 1; i <= columns; ++i) {
+				  if (md.getColumnName(i).equals("viewer_toolbar_cta1_background")) {
+					  navbarSettings.put("viewer_toolbar_cta_background", rs.getObject(i));  
+				  } else if (md.getColumnName(i).equals("viewer_toolbar_color")) {
+					  navbarSettings.put("viewer_toolbar_text_color", rs.getObject(i)); 
+				  } else if (md.getColumnName(i).equals("viewer_toolbar_cta1_color")) {
+					  navbarSettings.put("viewer_toolbar_cta_text_color", rs.getObject(i)); 
+				  } else {
+					  navbarSettings.put(md.getColumnName(i), rs.getObject(i));
+				  }
+			   }
+			   resultList.add(navbarSettings);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	  
+		return resultList;
+      }
+      
       /**
        * Update (replace) a file with a different one.
        * 
@@ -1953,6 +2291,87 @@ public class DbLayer {
     	  }
     	  
       }
-    	  
+      
+      
+      /**
+       * Save a file widgets settings.
+       * 
+       * @param widgetsSettings The file widgets settings. 
+       * @param fileHash The file hash.
+       */
+      public static int setWidgetsSettings(String fileHash, JSONArray widgetsSettings) {
+        int resultCode = 0;
+        
+        Constants.updateConstants();
+        try {
+          Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+          e.printStackTrace();
+        }
+        Connection conn = null;
+        
+        String sql = "INSERT INTO widget_setting_value (FK_file_id_ai, FK_widget_setting_key_id, boolean_value, integer_value, string_value) VALUES \n";
+        for (int i = 0; i < widgetsSettings.length() - 1; i++) {
+          sql += "(?,?,?,?,?),\n";
+        }
+        sql += 
+            "(?,?,?,?,?)\n"
+          + "ON DUPLICATE KEY UPDATE\n"
+          + "boolean_value = VALUES(boolean_value),\n"
+          + "integer_value = VALUES(integer_value),\n"
+          + "string_value = VALUES(string_value)";
+        
+        try {
+          conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
+          PreparedStatement ps = conn.prepareStatement(sql);
+          
+          int fileId = DbLayer.getFileIdFromFileHash(fileHash);
+          
+          for (int i = 0; i < widgetsSettings.length(); i++) {
+            JSONObject setting = widgetsSettings.getJSONObject(i);
+            
+            ps.setInt((i * 5) + 1, fileId);
+            ps.setInt((i * 5) + 2, setting.getInt("keyId"));
+            
+            if (setting.getString("keyType").equals("boolean")
+                && ! setting.isNull("value")) {
+              ps.setBoolean((i * 5) + 3, setting.getBoolean("value"));
+            } else {
+              ps.setNull((i * 5) + 3, java.sql.Types.BOOLEAN);
+            }
+            
+            if (setting.getString("keyType").equals("integer")
+                && ! setting.isNull("value")) {
+              ps.setInt((i * 5) + 4, setting.getInt("value"));
+            } else {
+              ps.setNull((i * 5) + 4, java.sql.Types.INTEGER);
+            }
+            
+            if (setting.getString("keyType").equals("string")
+                && ! setting.isNull("value")) {
+              ps.setString((i * 5) + 5, setting.getString("value"));
+            } else {
+              ps.setNull((i * 5) + 5, java.sql.Types.VARCHAR);
+            }            
+          }
+          
+          ps.executeUpdate();
+          resultCode = 1;
+        } catch (SQLException ex) {
+          System.err.println("Error code: " + ex.getErrorCode() + " - " + ex.getMessage());
+          ex.printStackTrace();
+        } finally {
+          if (null != conn) {
+            try {
+              conn.close();
+            } catch (SQLException ex) {
+              ex.printStackTrace();
+            }
+          }
+        }
+        
+        return resultCode;
+      }
+      
 }
 

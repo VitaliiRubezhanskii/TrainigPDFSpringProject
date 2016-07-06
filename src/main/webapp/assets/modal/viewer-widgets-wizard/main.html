@@ -1,0 +1,62 @@
+<!-- CSS -->
+<link rel="stylesheet" href="assets/modal/viewer-widgets-wizard/style.css">
+
+<!-- Viewer Widgets Modal  -->
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">
+                <span aria-hidden="true">&times;</span>
+                <span class="sr-only">Close</span>
+            </button>
+            <h4 class="modal-title">Viewer Widgets Settings</h4>
+            <small class="font-bold modal-sub-title">Edit what your customers will see when they open your document</small>
+        </div>
+        <div class="modal-body">
+            <div class="col-lg-12 m-b-md">
+                <div class="tabs-container">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a data-toggle="tab" href="#sp-tab-1"> <i class="fa fa-video-camera"></i></a></li>
+                        <li class=""><a data-toggle="tab" href="#sp-tab-2"><i class="fa fa-calendar"></i></a></li>
+                    </ul>
+                    <div class="tab-content sp-viewer-widgets-modal">
+                        <div id="sp-tab-1" class="tab-pane active">
+                            <div class="panel-body">
+                                <strong>Video Widget</strong>
+                                <div class="col-sm-12">
+                                    <div class="sp-customization-option__p">
+                                        <input type="checkbox" name="video-widget-is-enabled" data-key-id="5" data-key-type="boolean"> Is Enabled?
+                                    </div>
+                                    <p class="sp-customization-option__p">Video Link <i class="fa fa-info-circle sp-video-link-tooltip" data-toggle="tooltip" data-original-title="For a YouTube video, in YouTube go to Share > Embed, and copy the link in the src attribute"></i></p>
+                                    <input type="text" class="form-control" name="video-widget-link" placeholder="e.g. https://www.youtube.com/embed/tk-_PgWTASU" data-key-id="1" data-key-type="string">
+                                    <p class="sp-customization-option__p">Video Title</p>
+                                    <input type="text" class="form-control" name="video-widget-title" placeholder="e.g. Watch This Great Video!" data-key-id="2" data-key-type="string">
+                                    <p class="sp-customization-option__p">Page Number</p>
+                                    <input type="number" class="form-control" name="video-widget-page" placeholder="e.g. The page you would like this widget to appear" min="1" data-key-id="7" data-key-type="integer">
+                                    <input type="checkbox" class="form-control" style="display: none;" name="video-widget-is-youtube-video" data-key-id="4" data-key-type="boolean">
+                                </div>
+                            </div>
+                        </div>
+                        <div id="sp-tab-2" class="tab-pane">
+                            <div class="panel-body">
+                                <strong>Calendly Widget</strong>
+                                <div class="col-sm-12">
+                                    <div class="sp-customization-option__p">
+                                        <input type="checkbox" name="calendly-widget-is-enabled" data-key-id="6" data-key-type="boolean"> Is Enabled?
+                                    </div>
+                                    <p class="sp-customization-option__p">Calendly Username</p>
+                                    <input type="text" class="form-control" name="calendly-widget-username" placeholder="e.g. salesman" data-key-id="3" data-key-type="string">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" id="sp-save-widgets-settings__button">Save</button>
+            <button type="button" class="btn btn-primary" id="sp-save-test-widgets-settings__button">Save & Test</button>
+        </div>
+    </div>
+</div>
