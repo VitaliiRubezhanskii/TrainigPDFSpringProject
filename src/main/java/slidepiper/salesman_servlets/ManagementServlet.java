@@ -84,6 +84,27 @@ public class ManagementServlet extends HttpServlet {
         data.put("mailType", mailType);
         break;
         
+        
+      case "getFileLinkHash":
+        try {
+          String customerEmail = request.getParameter("customerEmail");
+          String salesmanEmail = request.getParameter("salesmanEmail");
+          
+          if (! DbLayer.isCustomerExist(salesmanEmail, customerEmail)) {  
+            DbLayer.addNewCustomer(null, salesmanEmail, "Test", "Viewer", null, customerEmail);
+          }
+          
+          String fileHash = request.getParameter("fileHash");
+          String fileLinkHash = DbLayer.setFileLinkHash(customerEmail, fileHash, salesmanEmail);
+          
+          data.put("fileLinkHash", fileLinkHash);  
+        } catch (Exception e) {
+          System.err.println("Error message: " + e.getMessage());
+          e.printStackTrace();
+        }
+        break;
+        
+        
       case "getFilesList":
         parameterList.add(request.getParameter("salesmanEmail"));
         sqlData = DbLayer.getEventData(parameterList, Analytics.sqlFilesList);
@@ -176,6 +197,24 @@ public class ManagementServlet extends HttpServlet {
           sqlData = DbLayer.getEventData(parameterList, Analytics.sqlFileCustomerVisitorsMap);
         }
         data.put("fileVisitorsMap", sqlData);
+        break;
+        
+      case "getWidgetsSettings":
+        int fileId = 0;
+        boolean isViewer = false;
+        
+        if (null != request.getParameter("fileLinkHash")) {
+          String fileLinkHash = request.getParameter("fileLinkHash");
+          fileId = DbLayer.getFileIdFromFileLinkHash(fileLinkHash);
+          isViewer = true;
+        } else if (null != request.getParameter("fileHash")) {
+          String fileHash = request.getParameter("fileHash");
+          fileId = DbLayer.getFileIdFromFileHash(fileHash);
+        }
+        
+        if (0 != fileId) {
+          data.put("widgetsSettings", DbLayer.getWidgetsSettings(fileId, isViewer));
+        }
         break;
 	  }
 	  
@@ -379,7 +418,17 @@ public class ManagementServlet extends HttpServlet {
         	DbLayer.setEvent(DbLayer.SALESMAN_EVENT_TABLE, URLDecoder.decode(data.getString("event_name"),
         			"UTF-8"), eventDataMap);
           break;
-        
+          
+          
+        case "setWidgetsSettings":
+          JSONArray widgetsSettings = input.getJSONArray("widgetsSettings");
+          String fileHash = input.getString("fileHash");
+          
+          int resultCode = DbLayer.setWidgetsSettings(fileHash, widgetsSettings);
+          output.put("resultCode", resultCode);
+          break;
+          
+          
         case "sendEmail":
           String emailBody = URLDecoder.decode(data.getString("emailBody"), "UTF-8");
           String emailSubject = URLDecoder.decode(data.getString("emailSubject"), "UTF-8");
