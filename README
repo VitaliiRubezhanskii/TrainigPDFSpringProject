@@ -4,18 +4,32 @@ SlidePiper README File
 Change Log
 ----------
 
+### 0.8.0
+
+2016-07-06 Max Prais <maxp@slidepiper.com>, Yaniv Friedensohn <yanivf@slidepiper.com>
+
+* Created the widgets platform for setting widgets in the dashboard.
+	- The widgets are set on the file level rather than the file link
+	 or user levels.
+	
+	- The platform is modular enabling widgets to be created and modified
+	 in an short time.
+	 
+* Created the functionality to customize the file viewer toolbar from the dashboard.
+
+
 ### 0.7.3
 
 2016-07-04 Yaniv Friedensohn <yanivf@slidepiper.com>
 
-* Change david.salesmaster@gmail.com password.
+* Changed david.salesmaster@gmail.com password.
 
 
 ### 0.7.2
 
 2016-06-26 Yaniv Friedensohn <yanivf@slidepiper.com>
 
-* Fix website typos.
+* Fixed website typos.
 
 
 ### 0.7.1
