@@ -199,3 +199,5 @@ sp.viewerWidgetsModal = {
     }
   }
 };
+
+$('.sp-video-link-tooltip').tooltip({delay: {show: 100, hide: 200}, placement: 'right'});
