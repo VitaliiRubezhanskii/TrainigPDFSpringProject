@@ -145,7 +145,6 @@ sp.viewerWidgetsModal = {
           
         case "string":
           var string = $(this).val().toString();
-          setting.value = string;
           
           // Set video widget - isYouTubeVideo value.
           if (1 == keyId) {
@@ -163,7 +162,28 @@ sp.viewerWidgetsModal = {
             if ('youtube' == domain) {
               $('[name="video-widget-is-youtube-video"]').prop('checked', true);
             }
+            
+            // Allow for saving a regular YouTube link, and not only an embed one.
+            if ('youtube' == domain && string.indexOf('?') > -1) {
+              string = 'https://www.youtube.com/embed/' + getParameterByKey('v', string);
+            }
+            
+            /**
+            * The function returns the value of a URL query string parameter.
+            * 
+            * @param {String} name - Query string key.
+            * 
+            * @return The URL query string parameter's value.
+            */
+            function getParameterByKey(key, url) {
+              var regex = new RegExp("[\\?&]" + key + "=([^&#]*)");
+              var results = regex.exec('?' + url.split('?')[1]);
+              
+              return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+            };
           }
+          
+          setting.value = string;
           break;
       }
       
