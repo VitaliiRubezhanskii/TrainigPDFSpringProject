@@ -650,14 +650,6 @@ function onPlayerStateChange(event) {
   var playerState = event.data;
   var viewDuration = getViewDuration();
   var currentVideo = player.getVideoUrl();
-  if (event.data == YT.PlayerState.PLAYING && !done) {
-    setTimeout(stopVideo, 6000);
-    done = true;
-  }
-}
-
-function stopVideo() {
-  player.stopVideo();
 }
 
 function getViewDuration() {
