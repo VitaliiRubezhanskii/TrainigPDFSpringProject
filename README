@@ -4,6 +4,13 @@ SlidePiper README File
 Change Log
 ----------
 
+### 0.8.2
+
+2016-07-07 Yaniv Friedensohn <yanivf@slidepiper.com>
+
+* Dashboard - Allow for saving a regular YouTube link, and not only an embed one.
+
+
 ### 0.8.1
 
 2016-07-07 Max Prais <maxp@slidepiper.com>
