@@ -280,16 +280,16 @@ sp = {
               $('#sp-modal-add-update-customer input#add-update').val('update');
               
               $('#sp-modal-add-update-customer input[name="customerFirstName"]').
-                  val($('#sp-customers-management tr[data-customer-email="'
-                      + $(this).attr('data-customer-email') + '"] #sp-customer-first-name__td').text());
+                  val($('[data-customer-email="' + $(this).attr('data-customer-email') + '"]')
+                      .closest('tr').find('#sp-customer-first-name__td').text());
               
               $('#sp-modal-add-update-customer input[name="customerLastName"]').
-                  val($('#sp-customers-management tr[data-customer-email="'
-                      + $(this).attr('data-customer-email') + '"] #sp-customer-last-name__td').text());
+                  val($('[data-customer-email="' + $(this).attr('data-customer-email') + '"]')
+                      .closest('tr').find('#sp-customer-last-name__td').text());
               
               $('#sp-modal-add-update-customer input[name="customerCompany"]').
-                  val($('#sp-customers-management tr[data-customer-email="'
-                      + $(this).attr('data-customer-email') + '"] #sp-customer-company__td').text());
+                  val($('[data-customer-email="' + $(this).attr('data-customer-email') + '"]')
+                      .closest('tr').find('#sp-customer-company__td').text());
               
               $('#sp-modal-add-update-customer input[name="customerEmail"]')
                   .val($(this).attr('data-customer-email'))
@@ -618,7 +618,6 @@ sp = {
     /* Customers mgmt. */
     
     getCustomersList: function(requestOrigin) {
-      
       $.getJSON(
           'ManagementServlet',
           {action: 'getCustomersList', salesmanEmail: sp.config.salesman.email},
@@ -640,13 +639,10 @@ sp = {
       else if (requestOrigin === 'customerFileLinksGenerator') {
         sp.customerFileLinksGenerator.formatCustomers(data);
       }
-      
-      
     },
    
     
     sortForDocUpload: function (data) {
-      
       var nameArr = [];
       $.each(data['customersList'], function (i, row) {
         var obj = {
