@@ -4,6 +4,13 @@ SlidePiper README File
 Change Log
 ----------
 
+### 0.8.1
+
+2016-07-07 Max Prais <maxp@slidepiper.com>
+
+* Viewer - Fixed YouTube video pausing in video widget.
+
+
 ### 0.8.0
 
 2016-07-06 Max Prais <maxp@slidepiper.com>, Yaniv Friedensohn <yanivf@slidepiper.com>
