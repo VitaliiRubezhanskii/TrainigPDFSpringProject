@@ -48,9 +48,12 @@ sp.viewerWidgetsModal = {
     
     if (typeof widgets['widget1'] != 'undefined') {
       $('[name="video-widget-is-enabled"]').prop('checked', function() {
-        if (typeof widgets.widget1['keyId' + $(this).attr('data-key-id')] != 'undefined'
-            && widgets.widget1['keyId' + $(this).attr('data-key-id')]) {
-          return true;
+        if (typeof widgets.widget1['keyId' + $(this).attr('data-key-id')] != 'undefined') {
+          if (widgets.widget1['keyId' + $(this).attr('data-key-id')]) {
+            return true;
+          } else {
+            return false;
+          }
         }
       });
       
@@ -77,9 +80,12 @@ sp.viewerWidgetsModal = {
     /* Widget 2 - Calendly Widget */
     if (typeof widgets['widget2'] != 'undefined') {
       $('[name="calendly-widget-is-enabled"]').prop('checked', function() {
-        if (typeof widgets.widget2['keyId' + $(this).attr('data-key-id')] != 'undefined'
-            && widgets.widget2['keyId' + $(this).attr('data-key-id')]) {
-          return true;
+        if (typeof widgets.widget2['keyId' + $(this).attr('data-key-id')] != 'undefined') {
+          if (widgets.widget2['keyId' + $(this).attr('data-key-id')]) {
+            return true;
+          } else {
+            return false;
+          }
         }
       });
       
@@ -146,41 +152,50 @@ sp.viewerWidgetsModal = {
         case "string":
           var string = $(this).val().toString();
           
-          // Set video widget - isYouTubeVideo value.
-          if (1 == keyId) {
-            var url = string;
-            var domain = null;
-            
-            if (url.indexOf("://") > -1) {
-              domain = url.split('/')[2];
-            } else {
-              domain = url.split('/')[0];
-            }
-            domain = domain.split('.');
-            domain = domain[domain.length - 2];
-            
-            if ('youtube' == domain) {
-              $('[name="video-widget-is-youtube-video"]').prop('checked', true);
-            }
-            
-            // Allow for saving a regular YouTube link, and not only an embed one.
-            if ('youtube' == domain && string.indexOf('?') > -1) {
-              string = 'https://www.youtube.com/embed/' + getParameterByKey('v', string);
-            }
-            
-            /**
-            * The function returns the value of a URL query string parameter.
-            * 
-            * @param {String} name - Query string key.
-            * 
-            * @return The URL query string parameter's value.
-            */
-            function getParameterByKey(key, url) {
-              var regex = new RegExp("[\\?&]" + key + "=([^&#]*)");
-              var results = regex.exec('?' + url.split('?')[1]);
+          switch (keyId) {
+            case 1:
+              // Set video widget - isYouTubeVideo value.
+              var url = string;
+              var domain = null;
               
-              return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
-            };
+              if (url.indexOf("://") > -1) {
+                domain = url.split('/')[2];
+              } else {
+                domain = url.split('/')[0];
+              }
+              domain = domain.split('.');
+              domain = domain[domain.length - 2];
+              
+              if ('youtube' == domain) {
+                $('[name="video-widget-is-youtube-video"]').prop('checked', true);
+              }
+              
+              // Allow for saving a regular YouTube link, and not only an embed one.
+              if ('youtube' == domain && string.indexOf('?') > -1) {
+                string = 'https://www.youtube.com/embed/' + getParameterByKey('v', string);
+              }
+              
+              /**
+              * The function returns the value of a URL query string parameter.
+              * 
+              * @param {String} name - Query string key.
+              * 
+              * @return The URL query string parameter's value.
+              */
+              function getParameterByKey(key, url) {
+                var regex = new RegExp("[\\?&]" + key + "=([^&#]*)");
+                var results = regex.exec('?' + url.split('?')[1]);
+                
+                return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+              };
+              break;
+              
+            case 3:
+              // If the input is for example https://calendly.com/username
+              if (string.indexOf('://') > -1) {
+                string = string.split('/').slice(3).join('/');
+              }
+              break;
           }
           
           setting.value = string;
