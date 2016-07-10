@@ -4,6 +4,11 @@ SlidePiper README File
 Change Log
 ----------
 
+### 0.8.3 Max Prais <maxp@slidepiper.com>
+
+* Dashboard - Fixed bug causing customer details to not be shown in Update Customer window.
+
+
 ### 0.8.2
 
 2016-07-07 Yaniv Friedensohn <yanivf@slidepiper.com>
