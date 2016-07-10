@@ -709,57 +709,62 @@
     <div class="modal inmodal" id="sp-modal-add-update-customer" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">
-                        <span aria-hidden="true">&times;</span>
-                        <span class="sr-only">Close</span>
-                    </button>
-                    <i class="fa fa-cloud-upload modal-icon"></i>
-                    <h4 class="modal-title"></h4>
-                    <small class="font-bold modal-sub-title"></small>
-                </div>
-                <div class="modal-body">
-                    <form class="form-horizontal" id="sp-add-update-customer__form">
+                <form class="form-horizontal" id="sp-add-update-customer__form">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">
+                            <span aria-hidden="true">&times;</span>
+                            <span class="sr-only">Close</span>
+                        </button>
+                        <i class="fa fa-cloud-upload modal-icon"></i>
+                        <h4 class="modal-title"></h4>
+                        <small class="font-bold modal-sub-title"></small>
+                    </div>
+                    
+                    <div class="modal-body">
                         <div class="form-group">
                             <label class="col-lg-3 control-label">First Name</label>
                             <div class="col-lg-8">
                                 <input type="text" name="customerFirstName" placeholder="First Name" class="form-control" autocomplete="off">
                             </div>
                         </div>
+                        
                         <div class="form-group">
                             <label class="col-lg-3 control-label">Last Name</label>
                             <div class="col-lg-8">
                                 <input type="text" name="customerLastName" placeholder="Last Name" class="form-control" autocomplete="off">
                             </div>
                         </div>
-
+                        
                         <div class="form-group">
                             <label class="col-lg-3 control-label">Company</label>
                             <div class="col-lg-8">
                                 <input type="text" name="customerCompany" placeholder="Company" class="form-control" autocomplete="off">
                             </div>
                         </div>
-
+                        
                         <div class="form-group">
                             <label class="col-lg-3 control-label">Email</label>
                             <div class="col-lg-8">
                                 <input type="email" name="customerEmail" placeholder="Email" class="form-control" required autocomplete="off">
                             </div>
                         </div>
+                        
                         <input type="hidden" id="add-update">
-                    </form>
-                    <div class="sk-spinner sk-spinner-wave">
-                        <div class="sk-rect1"></div>
-                        <div class="sk-rect2"></div>
-                        <div class="sk-rect3"></div>
-                        <div class="sk-rect4"></div>
-                        <div class="sk-rect5"></div>
+                        
+                        <div class="sk-spinner sk-spinner-wave">
+                            <div class="sk-rect1"></div>
+                            <div class="sk-rect2"></div>
+                            <div class="sk-rect3"></div>
+                            <div class="sk-rect4"></div>
+                            <div class="sk-rect5"></div>
+                        </div>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
-                    <input type="submit" form="sp-add-update-customer__form" class="btn btn-primary" id="sp-modal-add-update-customer__button">
-                </div>
+                    
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
+                        <input type="submit" class="btn btn-primary" id="sp-modal-add-update-customer__button">
+                    </div>
+                </form>
             </div>
         </div>
     </div>
