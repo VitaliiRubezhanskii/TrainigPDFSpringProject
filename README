@@ -4,7 +4,23 @@ SlidePiper README File
 Change Log
 ----------
 
-### 0.8.3 Max Prais <maxp@slidepiper.com>
+### 0.8.4
+
+2016-07-10 Yaniv Friedensohn <yanivf@slidepiper.com>
+
+* Dashboard - Allowed for saving a Calendly full URL in the widget, and not 
+only the username. e.g. Allow for saving https://calendly/yanivf and yanivf.
+
+* Dashboard - Set widgets status to be enabled by default. Until widget 
+settings are not saved, this setting is not reflected in the DB.
+
+* Viewer - Disabled showing widgets in the viewer if YouTube URL, or Calendly 
+username are blank.
+
+
+### 0.8.3
+
+2016-07-10 Max Prais <maxp@slidepiper.com>
 
 * Dashboard - Fixed bug causing customer details to not be shown in Update Customer window.
 
