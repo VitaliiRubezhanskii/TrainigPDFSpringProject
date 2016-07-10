@@ -729,7 +729,14 @@ sp = {
     },
     
     addUpdateCustomer: function(event) {
+        
+      // Firefox fix.
+      if (!event) {
+        event = window.event;
+      }
+      
       event.preventDefault();
+      event.stopPropagation();
       
       $('#sp-add-update-customer__form').hide();
       $('.sk-spinner').show();
