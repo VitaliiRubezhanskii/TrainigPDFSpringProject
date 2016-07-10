@@ -494,11 +494,15 @@ if ('' != sp.viewer.linkHash) {
       var widget2RequiredSettings = ['isEnabled', 'userName'];
       
       if (isWidgetSettingsDefined(widgets.widget1, widget1RequiredSettings)) {
-        implementWidget1(widgets.widget1);
+        if ('' != widgets.widget1.iframeSrc) {
+          implementWidget1(widgets.widget1);
+        }
       }
       
       if (isWidgetSettingsDefined(widgets.widget2, widget2RequiredSettings)) {
-        implementWidget2(widgets.widget2);
+        if ('' != widgets.widget2.userName) {
+          implementWidget2(widgets.widget2);
+        }
       }
       
       function implementWidget1(widget) {
