@@ -4,6 +4,13 @@ SlidePiper README File
 Change Log
 ----------
 
+### 0.8.5
+
+2016-07-10 Max Prais <maxp@slidepiper.com>
+
+* Dashboard - Fixed add/update customer functionality for IE and Edge.
+
+
 ### 0.8.4
 
 2016-07-10 Yaniv Friedensohn <yanivf@slidepiper.com>
