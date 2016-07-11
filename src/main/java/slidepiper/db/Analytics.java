@@ -45,6 +45,7 @@ public class Analytics {
       + "GROUP BY slides.id\n"
       + "ORDER BY file_name, slides.timestamp";
   
+  
   public static final String sqlFilesDataByPerformance =
 	        "SELECT\n"
 	      + "  slides.id AS file_hash,\n"
@@ -105,7 +106,7 @@ public class Analytics {
       + "  company,\n"
       + "  email\n"
       + "FROM customers\n"
-      + "WHERE sales_man = ? AND email != '" + ConfigProperties.getProperty("default_customer_email") + "'\n"
+      + "WHERE sales_man = ? AND email NOT IN ('" + ConfigProperties.getProperty("default_customer_email") + "', '" + ConfigProperties.getProperty("test_customer_email") + "')\n"
       + "ORDER BY first_name, last_name";
   
   
@@ -118,7 +119,7 @@ public class Analytics {
       + "FROM msg_info\n"
       + "JOIN customers ON msg_info.sales_man_email = customers.sales_man AND msg_info.customer_email = customers.email\n"
       + "JOIN slides ON msg_info.slides_id = slides.id\n"
-      + "WHERE msg_info.sales_man_email=? AND msg_info.customer_email != '" + ConfigProperties.getProperty("default_customer_email") + "'\n"
+      + "WHERE msg_info.sales_man_email=? AND msg_info.customer_email NOT IN ('" + ConfigProperties.getProperty("default_customer_email") + "', '" + ConfigProperties.getProperty("test_customer_email") + "')\n"
       + "GROUP BY msg_info.customer_email, msg_info.slides_id\n"
       + "ORDER BY customer_full_name_or_email";
   
@@ -195,7 +196,7 @@ public class Analytics {
       + "  COUNT(*) as total_views\n"
       + "FROM customer_events\n"
       + "INNER JOIN msg_info ON msg_info.id = customer_events.msg_id\n"
-      + "WHERE msg_info.slides_id=? AND msg_info.sales_man_email=? AND event_name = 'OPEN_SLIDES'\n"
+      + "WHERE msg_info.slides_id=? AND msg_info.sales_man_email=? AND event_name = 'OPEN_SLIDES' AND msg_info.customer_email != '" + ConfigProperties.getProperty("test_customer_email") + "'\n"
       + "GROUP BY param_2_varchar, param_4_varchar\n"
       + "HAVING latitude IS NOT NULL AND longitude IS NOT NULL AND param_2_varchar IS NOT NULL";
   
