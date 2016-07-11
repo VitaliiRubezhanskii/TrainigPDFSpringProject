@@ -1384,6 +1384,43 @@ public class DbLayer {
       
       
       /**
+       * Get the customer email associated with a file link hash.
+       * 
+       * @param fileLinkHash The file link hash.
+       * @return The customer email.
+       */
+      public static String getCustomerEmailFromFileLinkHash(String fileLinkHash) {
+        
+        Constants.updateConstants();
+        try {
+          Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+          e.printStackTrace();
+        }
+        Connection conn = null;
+        
+        String sql = "SELECT customer_email FROM msg_info WHERE id = ?";
+        
+        String customerEmail = null;
+        
+        try {
+          conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
+          PreparedStatement stmt = conn.prepareStatement(sql);
+          stmt.setString(1, fileLinkHash);
+          
+          ResultSet rs = stmt.executeQuery();
+          if (rs.next()) {
+            customerEmail = rs.getString(1);
+          }
+        } catch (SQLException e) {
+          e.printStackTrace();
+        }
+      
+        return customerEmail;
+      }
+      
+      
+      /**
        * Get the file ID from a file hash. 
        * 
        * @param fileHash The file hash.
@@ -2372,6 +2409,5 @@ public class DbLayer {
         
         return resultCode;
       }
-      
 }
 

@@ -3,6 +3,7 @@ package slidepiper.customer_servlets;
 import java.io.ByteArrayOutputStream;
 
 import slidepiper.*;
+import slidepiper.config.ConfigProperties;
 import slidepiper.dataobjects.AlertData;
 import slidepiper.dataobjects.MessageInfo;
 import slidepiper.db.DbLayer;
@@ -70,18 +71,21 @@ public class CustomerLoggingServlet extends HttpServlet {
 			    		
 							/// send email if opened presentation
 			    		String salesmanEmail = DbLayer.getSalesmanEmailFromMsgId(id);
+			    		String customerEmail = DbLayer.getCustomerEmailFromFileLinkHash(id);
+			    		
 			    		Map<String, Object> docSettings = new HashMap<String, Object>();
 			    		docSettings = DbLayer.getSalesman(salesmanEmail);
 			    		// Get salesman details, check if email_alert_enabled is true/false
-			    		if ((Boolean)docSettings.get("email_alert_enabled")){
-							if (event_name.equalsIgnoreCase("OPEN_SLIDES")) {
-									System.out.println("open slides event - sending email alert");
-									EmailSender.sendAlertEmail(id, sessionId);
-							}				    					
-			    		}
-			    		else {
-			    			System.err.print("SP: Didn't send alert email");
-			    		}
+			    		
+			    		if (event_name.equalsIgnoreCase("OPEN_SLIDES")) {
+  			    		if ((Boolean)docSettings.get("email_alert_enabled")
+  			    		    && ! customerEmail.equals(ConfigProperties.getProperty("test_customer_email"))) {
+    							System.out.println("open slides event - sending email alert");
+    							EmailSender.sendAlertEmail(id, sessionId);
+    						}	else {
+  			    			System.out.println("SP: Didn't send alert email");
+  			    		}
+    	        }
     	}
 }
 
