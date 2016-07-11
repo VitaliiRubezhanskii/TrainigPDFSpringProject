@@ -1,5 +1,6 @@
 package slidepiper.keepalive;
 
+import slidepiper.config.ConfigProperties;
 import slidepiper.dataobjects.*;
 
 import java.util.HashMap;
@@ -69,13 +70,16 @@ public class KeepAliveTask extends TimerTask {
 							p.getSessionId(), p.getTimezoneOffsetMin(), null, null, null, null, null, null, null, null, null, null);
 					
 					String salesmanEmail = DbLayer.getSalesmanEmailFromMsgId(p.msgId);
+					String customerEmail = DbLayer.getCustomerEmailFromFileLinkHash(p.msgId);
+					
 		    		Map<String, Object> docSettings = new HashMap<String, Object>();
 		    		docSettings = DbLayer.getSalesman(salesmanEmail);
-		    		if ((Boolean)docSettings.get("email_report_enabled")){
+		    		if ((Boolean)docSettings.get("email_report_enabled")
+		    		    && ! customerEmail.equals(ConfigProperties.getProperty("test_customer_email"))){
 		    			EmailSender.sendReportEmail(p);
 		    		}
 		    		else {
-		    			System.err.print("SP: Didn't send report email");
+		    			System.out.println("SP: Didn't send report email");
 		    		}
 															
 					// remove current element in 
