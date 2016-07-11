@@ -5,18 +5,24 @@ var sp = sp || {};
 sp.viewer = {
   breakPoint: 768,
   eventName: {
-    clickedCta: 'CLICKED_CTA'
+    clickedCta: 'CLICKED_CTA',
+    viewerWidgetCalendlyClicked: 'VIEWER_WIDGET_CALENDLY_CLICKED'
   },
   linkHash: getParameterByName('f'),
   
+  /**
+   * @param {String} param_1_varchar - The CTA button id attribute.
+   * @param {String} param_2_varchar - The CTA button text
+   * @param {String} param_3_varchar = The CTA button destination URL
+   */
   init: (function() {
     $(document).ready(function() {
       $('.sp-cta, .sp-secondary-cta').click(function() {
         var eventData = {
-          buttonText: $(this).text(),
-          destinationUrl: $(this).attr('href'),
           eventName: sp.viewer.eventName.clickedCta,
-          id: $(this).attr('id'),
+          param_1_varchar: $(this).attr('id'),
+          param_2_varchar: $(this).text(),
+          param_3_varchar: $(this).attr('href'),
           linkHash: sp.viewer.linkHash,
           sessionId: sessionid
         };
@@ -597,6 +603,13 @@ if ('' != sp.viewer.linkHash) {
               showConfirmButton: false,
               text: '<iframe src="../assets/viewer/widget/calendly.html?user=' + widget.userName + '" height="420" frameborder="0"></iframe>',
               title: 'Schedule Meeting',
+            });
+            
+            // Send event.
+            sp.viewer.setCustomerEvent({
+              eventName: sp.viewer.eventName.viewerWidgetCalendlyClicked,
+              linkHash: sp.viewer.linkHash,
+              sessionId: sessionid
             });
           });
         }
