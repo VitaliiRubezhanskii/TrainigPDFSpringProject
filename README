@@ -4,6 +4,17 @@ SlidePiper README File
 Change Log
 ----------
 
+### 0.8.6
+
+2016-07-11 Yaniv Friedensohn <yanivf@slidepiper.com>
+
+* Disabled sending email alerts and reports regarding test user.
+
+* Removed test user from sales analytics and customers list.
+
+* Removed test user from marketing & sales analytics metrics and charts.
+
+
 ### 0.8.5
 
 2016-07-10 Max Prais <maxp@slidepiper.com>
