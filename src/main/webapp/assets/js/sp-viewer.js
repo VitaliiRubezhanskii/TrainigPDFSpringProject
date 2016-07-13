@@ -616,11 +616,16 @@ if ('' != sp.viewer.linkHash) {
               title: 'Schedule Meeting',
             });
             
-            // Send event.
+            /**
+             * Send Calendly event.
+             * 
+             * param_1_varchar - The text on the Calendly button.
+             */
             sp.viewer.setCustomerEvent({
               eventName: sp.viewer.eventName.viewerWidgetCalendlyClicked,
               linkHash: sp.viewer.linkHash,
-              sessionId: sessionid
+              sessionId: sessionid,
+              param_1_varchar: $(this).text()
             });
           });
         }
