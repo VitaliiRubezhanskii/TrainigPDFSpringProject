@@ -935,7 +935,8 @@ sp = {
      * Get metrics about the viewer widgets.
      * 
      * @param {object} fileData - Array of data about a file including information such as fileHash and fileLink.
-     * @param {string} fileData[3] - Number of times a document has been opened. 
+     * (fileData[3] - Number of times a document has been opened)
+     *  
      * @param {string} customerEmail - The email address of the customer whose information being requested.
      */
     getViewerWidgetMetrics: function(fileData, customerEmail) {
@@ -955,8 +956,39 @@ sp = {
                 .text(data['totalNumberYouTubePlays'][0][0]);
           }
         );
+      	
+      	// Ask a Question widget questions.
+        $.getJSON(
+          'ManagementServlet',
+          {
+            action: 'getViewerWidgetAskQuestion',
+            customerEmail: customerEmail,
+            fileHash: fileData[0],
+            salesmanEmail: sp.config.salesman.email
+          },
+          function(data) {
+            $('#sp-widget-ask-question-metric ul.list-group').empty();
+            
+            var quetions = data.widgetAskQuestion;
+            if (quetions.length > 0) {
+              $.each(quetions, function(index, value) {
+                $('#sp-widget-ask-question-metric ul.list-group').append(
+                    '<li class="list-group-item">'
+                    + '<p class="sp-widget-ask-question-metric-email"><strong>' + value[2] + '</strong></p>'
+                    + '<div class="sp-widget-ask-question-metric-message">' + value[1].replace(/\r\n|\r|\n/g, '<br>') + '</div>'
+                    + '<small class="block"><i class="fa fa-clock-o"></i> ' + value[0] + '</small>'
+                  + '</li>');
+              });
+              
+              $('#sp-widget-ask-question-metric').show();
+            } else {
+              $('#sp-widget-ask-question-metric').hide();
+            }
+          }
+        );
       } else {
         $('#sp-widget-video-youtube-metric-total-number-plays').text('N/A');
+        $('#sp-widget-ask-question-metric').hide();
       }
     }
   },

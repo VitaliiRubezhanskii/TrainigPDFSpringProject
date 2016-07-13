@@ -195,6 +195,16 @@ td.sp-file-hash {
   margin-right: 10px;
 }
 
+/* Ask a Question Widget */
+#sp-widget-ask-question-metric {
+  display: none;
+}
+
+.sp-widget-ask-question-metric-email,
+.sp-widget-ask-question-metric-message {
+  margin-bottom: 5px;
+}
+
 
 /* Scrollbar */
 
