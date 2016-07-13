@@ -113,6 +113,7 @@ sp = {
               
               // Build dashboard.
               sp.metric.getFileMetrics(files[fileHash]);
+              sp.metric.getViewerWidgetMetrics(files[fileHash]);
               sp.chart.getFileLine(fileHash);
               sp.chart.getFileBar(fileHash);
               sp.chart.getFileVisitorsMap(fileHash);
@@ -381,21 +382,8 @@ sp = {
                 break;
             }
           }
-          
         });
       }
-     
-      
-    /* Intercom Start */
-    window.intercomSettings = {
-      app_id: "j4o2t486",
-      name: sp.config.salesman.email, // Full name
-      email: sp.config.salesman.email // Email address
-    };
-    
-    (function(){var w=window;var ic=w.Intercom;if(typeof ic==="function"){ic('reattach_activator');ic('update',intercomSettings);}else{var d=document;var i=function(){i.c(arguments)};i.q=[];i.c=function(args){i.q.push(args)};w.Intercom=i;function l(){var s=d.createElement('script');s.type='text/javascript';s.async=true;s.src='https://widget.intercom.io/widget/j4o2t486';var x=d.getElementsByTagName('script')[0];x.parentNode.insertBefore(s,x);}if(w.attachEvent){w.attachEvent('onload',l);}else{w.addEventListener('load',l,false);}}})()
-    /* Intercom End */
-    
     });
   })(),
   
@@ -940,6 +928,67 @@ sp = {
       } else {
         $('#sp-widget-total-views').text('0');
         $('.sp-widget:not(#sp-widget-total-views)').text('N/A');
+      }
+    },
+  
+    /**
+     * Get metrics about the viewer widgets.
+     * 
+     * @param {object} fileData - Array of data about a file including information such as fileHash and fileLink.
+     * (fileData[3] - Number of times a document has been opened)
+     *  
+     * @param {string} customerEmail - The email address of the customer whose information being requested.
+     */
+    getViewerWidgetMetrics: function(fileData, customerEmail) {
+      if (typeof fileData != 'undefined' && typeof fileData[3] != 'undefined' && parseInt(fileData[3]) > 0) {
+        
+      	// Total number of YouTube plays.
+      	$.getJSON(
+          'ManagementServlet',
+          {
+          	action: 'getVideoWidgetMetrics',
+          	customerEmail: customerEmail,
+          	fileHash: fileData[0],
+          	salesmanEmail: sp.config.salesman.email
+          },
+          function(data) {
+            $('#sp-widget-video-youtube-metric-total-number-plays')
+                .text(data['totalNumberYouTubePlays'][0][0]);
+          }
+        );
+      	
+      	// Ask a Question widget questions.
+        $.getJSON(
+          'ManagementServlet',
+          {
+            action: 'getViewerWidgetAskQuestion',
+            customerEmail: customerEmail,
+            fileHash: fileData[0],
+            salesmanEmail: sp.config.salesman.email
+          },
+          function(data) {
+            $('#sp-widget-ask-question-metric ul.list-group').empty();
+            
+            var quetions = data.widgetAskQuestion;
+            if (quetions.length > 0) {
+              $.each(quetions, function(index, value) {
+                $('#sp-widget-ask-question-metric ul.list-group').append(
+                    '<li class="list-group-item">'
+                    + '<p class="sp-widget-ask-question-metric-email"><strong>' + value[2] + '</strong></p>'
+                    + '<div class="sp-widget-ask-question-metric-message">' + value[1].replace(/\r\n|\r|\n/g, '<br>') + '</div>'
+                    + '<small class="block"><i class="fa fa-clock-o"></i> ' + value[0] + '</small>'
+                  + '</li>');
+              });
+              
+              $('#sp-widget-ask-question-metric').show();
+            } else {
+              $('#sp-widget-ask-question-metric').hide();
+            }
+          }
+        );
+      } else {
+        $('#sp-widget-video-youtube-metric-total-number-plays').text('N/A');
+        $('#sp-widget-ask-question-metric').hide();
       }
     }
   },
@@ -2064,6 +2113,7 @@ chart: {
              
               // Build dashboard.
               sp.metric.getFileMetrics(files[fileHash]);
+              sp.metric.getViewerWidgetMetrics(files[fileHash], customerEmail);
               sp.chart.getFileLine(fileHash, customerEmail);
               sp.chart.getFileBar(fileHash, customerEmail);
               sp.chart.getFileVisitorsMap(fileHash, customerEmail);

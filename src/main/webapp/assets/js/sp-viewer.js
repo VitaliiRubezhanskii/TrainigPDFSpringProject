@@ -5,18 +5,32 @@ var sp = sp || {};
 sp.viewer = {
   breakPoint: 768,
   eventName: {
-    clickedCta: 'CLICKED_CTA'
+    clickedCta: 'CLICKED_CTA',
+    viewerWidgetCalendlyClicked: 'VIEWER_WIDGET_CALENDLY_CLICKED',
+    viewerWidgetVideoTabClicked: 'VIEWER_WIDGET_VIDEO_TAB_CLICKED',
+    viewerWidgetVideoYouTubePlayed: 'VIEWER_WIDGET_VIDEO_YOUTUBE_PLAYED',
+    viewerWidgetVideoYouTubePaused: 'VIEWER_WIDGET_VIDEO_YOUTUBE_PAUSED',
+    viewerWidgetAskQuestion: 'VIEWER_WIDGET_ASK_QUESTION'
+  },
+  paramValue: {
+  	videoTabOpened: 'VIEWER_WIDGET_VIDEO_TAB_OPENED',
+  	videoTabClosed: 'VIEWER_WIDGET_VIDEO_TAB_CLOSED'
   },
   linkHash: getParameterByName('f'),
   
+  /**
+   * @param {String} param_1_varchar - The CTA button id attribute.
+   * @param {String} param_2_varchar - The CTA button text
+   * @param {String} param_3_varchar = The CTA button destination URL
+   */
   init: (function() {
     $(document).ready(function() {
       $('.sp-cta, .sp-secondary-cta').click(function() {
         var eventData = {
-          buttonText: $(this).text(),
-          destinationUrl: $(this).attr('href'),
           eventName: sp.viewer.eventName.clickedCta,
-          id: $(this).attr('id'),
+          param_1_varchar: $(this).attr('id'),
+          param_2_varchar: $(this).text(),
+          param_3_varchar: $(this).attr('href'),
           linkHash: sp.viewer.linkHash,
           sessionId: sessionid
         };
@@ -492,6 +506,7 @@ if ('' != sp.viewer.linkHash) {
       
       var widget1RequiredSettings = ['isEnabled', 'iframeSrc', 'title', 'isYouTubeVideo', 'pageNumber'];
       var widget2RequiredSettings = ['isEnabled', 'userName'];
+      var widget3RequiredSettings = ['isEnabled', 'buttonText'];
       
       if (isWidgetSettingsDefined(widgets.widget1, widget1RequiredSettings)) {
         if ('' != widgets.widget1.iframeSrc) {
@@ -502,6 +517,12 @@ if ('' != sp.viewer.linkHash) {
       if (isWidgetSettingsDefined(widgets.widget2, widget2RequiredSettings)) {
         if ('' != widgets.widget2.userName) {
           implementWidget2(widgets.widget2);
+        }
+      }
+      
+      if (isWidgetSettingsDefined(widgets.widget3, widget3RequiredSettings)) {
+        if ('' != widgets.widget3.buttonText) {
+          implementWidget3(widgets.widget3);
         }
       }
       
@@ -565,11 +586,15 @@ if ('' != sp.viewer.linkHash) {
                   .css({'padding-right': '0', 'max-width': '80%'});
                 $('.sp-demo-video1').css('width', '34%');
                 $('.sp-demo-video1').css('min-width', '300px');
+                
+                sendVideoTabClickedEvent(sp.viewer.paramValue.videoTabOpened);
               } else {
                 $('.sp-demo-video-title__span')
                   .css({'padding-right': '20px', 'max-width': '80%'});
                 $('.sp-demo-video1').css('width', '34%');
                 $('.sp-demo-video1').css('min-width', '175px');
+                
+                sendVideoTabClickedEvent(sp.viewer.paramValue.videoTabClosed);
               }
               keepAspectRatio(); // Ensures the window remains 16:9
             });
@@ -587,16 +612,83 @@ if ('' != sp.viewer.linkHash) {
       function implementWidget2(widget) {
         // Widget 2 - Calendly widget
         if (widget.isEnabled) {
-          $('body').append('<button class="sp-widget-button sp-widget2"></button>');
-          $('.sp-widget2').html('<i class="fa fa-2x fa-calendar"></i><div>Schedule Meeting</div>');
-    
-          $('.sp-widget2').click(function() {
+          
+          if (0 == $('.sp-right-side-widgets').length) {
+            $('body').append('<div class="sp-right-side-widgets"></div>');
+          }
+          
+          $('.sp-right-side-widgets').append('<button class="sp-widget-button" id="sp-widget2"></button>');
+          
+          if ($('.sp-widget-button').length > 1) {
+            $('#sp-widget2').css('margin-top', '20px');
+          }
+          
+          $('#sp-widget2').html('<i class="fa fa-calendar"></i><div>Schedule Meeting</div>');
+          $('#sp-widget2').click(function() {
             swal({
               html: true,
               showCancelButton: true,
               showConfirmButton: false,
               text: '<iframe src="../assets/viewer/widget/calendly.html?user=' + widget.userName + '" height="420" frameborder="0"></iframe>',
               title: 'Schedule Meeting',
+            });
+            
+            /**
+             * Send Calendly event.
+             * 
+             * param_1_varchar - The text on the Calendly button.
+             */
+            sp.viewer.setCustomerEvent({
+              eventName: sp.viewer.eventName.viewerWidgetCalendlyClicked,
+              linkHash: sp.viewer.linkHash,
+              sessionId: sessionid,
+              param_1_varchar: $(this).text()
+            });
+          });
+        }
+      }
+      
+      function implementWidget3(widget) {
+        
+        // Widget 3 - Ask a question widget
+        if (widget.isEnabled) {
+          
+          if (0 == $('.sp-right-side-widgets').length) {
+            $('body').append('<div class="sp-right-side-widgets"></div>');
+          }
+          
+          $('.sp-right-side-widgets').append('<button class="sp-widget-button" id="sp-widget3"></button>');
+
+          if ($('.sp-widget-button').length > 1) {
+            $('#sp-widget3').css('margin-top', '20px');
+          }
+          
+          $('#sp-widget3').html('<i class="fa fa-comment"></i><div>' + widget.buttonText + '</div>');
+          $('#sp-widget3').click(function() {
+            swal({
+              html: true,
+              showCancelButton: true,
+              showConfirmButton: true,
+              text: '<form><label for="sp-widget3-message">Enter your message:</label><textarea id="sp-widget3-message" rows="5" autofocus></textarea><label for="sp-widget3-email" class="sp-widget3-label">Enter your email address:</label><input type="text" id="sp-widget3-email" style="display: block; margin-top: 0;"></form>',
+              title: widget.buttonText,
+            }, function(isConfirm) {
+              if (isConfirm) {
+                /**
+                 * Send Ask a Question event.
+                 * 
+                 * param_1_varchar - The text on the Ask a Question button.
+                 * param_2_varchar - The message in the widget form.
+                 * param_3_varchar - The email address to reply to in the widget form.
+                 */
+                sp.viewer.setCustomerEvent({
+                  eventName: sp.viewer.eventName.viewerWidgetAskQuestion,
+                  linkHash: sp.viewer.linkHash,
+                  sessionId: sessionid,
+                  param_1_varchar: $('#sp-widget3').text(),
+                  param_2_varchar: $('#sp-widget3-message').val(),
+                  param_3_varchar: $('#sp-widget3-email').val()
+                });
+              }
             });
           });
         }
@@ -605,24 +697,8 @@ if ('' != sp.viewer.linkHash) {
   });
 }
 
-function calenderWidgetCollapse () {
-  if ($('.sp-widget2 div').is(':hidden')) {
-    $('.sp-widget2 i')
-      .removeClass('fa-2x')
-      .addClass('fa-1x');
-    $('.sp-widget-button').css('width', '11%');
-  }
-  if ($('.sp-widget2 div').is(':visible')) {
-    $('.sp-widget2 i')
-      .removeClass('fa-1x')
-      .addClass('fa-2x');
-    $('.sp-widget-button').css('width', '18%');
-  }
-}
-
 $(window).resize(function () {
   keepAspectRatio();
-  calenderWidgetCollapse();
 });
 
 function keepAspectRatio () {
@@ -632,6 +708,22 @@ function keepAspectRatio () {
   $('.sp-demo-video iframe').height(videoHeight);
 }
 
+/**
+ * Log event when video tab is clicked.
+ * 
+ * @param {string} videoTabState - A value representing whether the video 
+ * widget container is opened or closed.
+ */
+function sendVideoTabClickedEvent(videoTabState) {
+  sp.viewer.setCustomerEvent({
+    eventName: sp.viewer.eventName.viewerWidgetVideoTabClicked,
+    linkHash: sp.viewer.linkHash,
+    sessionId: sessionid,
+    param_1_varchar: player.getVideoUrl(),
+    param_2_varchar: $('.sp-demo-video-title__span').text(),
+    param_3_varchar: videoTabState
+  });
+}
 
 /**
  *  YouTube iFrame API
@@ -649,15 +741,37 @@ function onYouTubeIframeAPIReady() {
   });
 }
 
-var done = false;
+/**
+ * YouTube iFrame API function which is called when the state of the player 
+ * changes i.e. played, paused, ended.
+ * 
+ * @param {string} param_1_varchar - The video being played.
+ * @param {string} param_2_varchar - The title of the video chosen by the salesman.
+ */
 function onPlayerStateChange(event) {
   var playerState = event.data;
-  var viewDuration = getViewDuration();
-  var currentVideo = player.getVideoUrl();
-}
-
-function getViewDuration() {
-  return player.getDuration() - (player.getDuration() - player.getCurrentTime());
+  var data = {
+      linkHash: sp.viewer.linkHash, 
+      sessionId: sessionid,
+      param_1_varchar: player.getVideoUrl(),
+      param_2_varchar: $('.sp-demo-video-title__span').text(),
+    };
+  
+  switch (playerState) {
+    case 1:
+      
+      // YouTube video played.
+      data.eventName = sp.viewer.eventName.viewerWidgetVideoYouTubePlayed;
+      sp.viewer.setCustomerEvent(data);
+    break;
+    
+    case 2:
+      
+      // YouTube video paused.
+      data.eventName = sp.viewer.eventName.viewerWidgetVideoYouTubePaused;
+      sp.viewer.setCustomerEvent(data);
+    break;
+  };
 }
 
 /**

@@ -187,6 +187,25 @@ td.sp-file-hash {
   font-size: 23px !important; 
 }
 
+
+/* Metrics - Widgets */
+
+/* Video Widget */
+.sp-widget-video-youtube-metric-title__i {
+  margin-right: 10px;
+}
+
+/* Ask a Question Widget */
+#sp-widget-ask-question-metric {
+  display: none;
+}
+
+.sp-widget-ask-question-metric-email,
+.sp-widget-ask-question-metric-message {
+  margin-bottom: 5px;
+}
+
+
 /* Scrollbar */
 
 /* Chrome and Safari */

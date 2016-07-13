@@ -44,6 +44,36 @@ sp.viewerWidgetsModal = {
     
     /* Display Settings */
     
+    /**
+     * The following mechanism automatically sets widgets setting according to 
+     * their HTML input elements.
+     * Currently, the mechanism only supports boolean values connected to checkbox 
+     * elements, and string values connected to input type text elements.
+     * 
+     * The condition keyId >= 8 is used to skip the auto setting of the Video 
+     * and Calendly widgets.
+     */
+    $.each(widgets, function(widgetIndex, widget) {
+      $.each(widget, function(key, value) {
+        
+        // key is expected to be of the form "keyId<number>"
+        var keyId = parseInt(key.substring(5));  
+        if (! isNaN(keyId) && keyId >= 8) {
+          var input = $('.sp-viewer-widgets-modal [data-key-id="' + keyId + '"]');
+          switch (typeof value) {
+            case 'boolean':
+              input.prop('checked', value);
+              break;
+            
+            case 'string':
+              input.val(value);
+              break;
+          }
+        }
+      });  
+    });
+    
+    
     /* Widget 1  - Video Widget */
     
     if (typeof widgets['widget1'] != 'undefined') {
@@ -137,7 +167,7 @@ sp.viewerWidgetsModal = {
       
       var setting = {
         keyId: keyId,
-        keyType: keyType,      
+        keyType: keyType,
       };
       
       switch (keyType) {

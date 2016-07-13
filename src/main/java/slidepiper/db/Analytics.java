@@ -213,4 +213,66 @@ public class Analytics {
       + "WHERE msg_info.slides_id=? AND msg_info.sales_man_email=? AND msg_info.customer_email=? AND event_name = 'OPEN_SLIDES'\n"
       + "GROUP BY param_2_varchar, param_4_varchar\n"
       + "HAVING latitude IS NOT NULL AND longitude IS NOT NULL AND param_2_varchar IS NOT NULL";
+  
+  
+  /* Widgets Events Data */
+  
+  /**
+   * Get total number of YouTube video plays per document.
+   */
+  public static final String sqlFileTotalNumberYouTubePlays = 
+	    "SELECT\n"
+	  +	"  count(event_name) AS number_of_plays\n" 
+	  + "FROM customer_events\n"
+	  + "INNER JOIN msg_info ON msg_info.id = customer_events.msg_id\n"
+    + "WHERE event_name = 'VIEWER_WIDGET_VIDEO_YOUTUBE_PLAYED'\n"
+    + "AND msg_info.sales_man_email = ?\n"
+    + "AND msg_info.slides_id = ?\n"
+    + "AND msg_info.customer_email <> '" + ConfigProperties.getProperty("test_customer_email") + "'";
+  
+  
+  /**
+   * Get total number of YouTube video plays per file link.
+   */
+  public static final String sqlFileLinkTotalNumberYouTubePlays = 
+		"SELECT\n"
+	  +	"	count(event_name) AS number_of_plays\n" 
+	  + "FROM customer_events\n"
+	  + "INNER JOIN msg_info ON msg_info.id = customer_events.msg_id\n"
+    + "WHERE event_name = 'VIEWER_WIDGET_VIDEO_YOUTUBE_PLAYED'\n"
+    + "AND msg_info.sales_man_email = ?\n"
+    + "AND msg_info.slides_id = ?\n"
+	  + "AND msg_info.customer_email = ?";
+  
+  
+  /**
+   * Get questions asked per file.
+   */
+  public static final String sqlFileWidgetAskQuestion = 
+      "SELECT\n"
+    + "  DATE_FORMAT(customer_events.timestamp, '%d-%b-%Y') AS date,\n"
+    + "  param_2_varchar AS ask_question_message,\n" 
+    + "  param_3_varchar AS ask_question_reply_to_email\n"
+    + "FROM customer_events\n"
+    + "INNER JOIN msg_info ON msg_info.id = customer_events.msg_id\n"
+    + "WHERE event_name = 'VIEWER_WIDGET_ASK_QUESTION'\n"
+    + "AND msg_info.sales_man_email = ?\n"
+    + "AND msg_info.slides_id = ?\n"
+    + "AND msg_info.customer_email <> '" + ConfigProperties.getProperty("test_customer_email") + "'";
+  
+
+  /**
+   * Get questions asked per file link.
+   */
+  public static final String sqlFileLinkWidgetAskQuestion = 
+    "SELECT\n"
+    + "  DATE_FORMAT(customer_events.timestamp, '%d-%b-%Y') AS date,\n"
+    + "  param_2_varchar AS ask_question_message,\n" 
+    + "  param_3_varchar AS ask_question_reply_to_email\n"
+    + "FROM customer_events\n"
+    + "INNER JOIN msg_info ON msg_info.id = customer_events.msg_id\n"
+    + "WHERE event_name = 'VIEWER_WIDGET_ASK_QUESTION'\n"
+    + "AND msg_info.sales_man_email = ?\n"
+    + "AND msg_info.slides_id = ?\n"
+    + "AND msg_info.customer_email = ?";
 }

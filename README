@@ -4,6 +4,38 @@ SlidePiper README File
 Change Log
 ----------
 
+### 0.8.7
+
+2016-07-14 Max Prais <maxp@slidepiper.com>, Yaniv Friedensohn <yanivf@slidepiper.com>
+
+* Dashboard - Removed Intercom and add WalkMe (test environment code).
+
+* Dashboard - Displayed number of YouTube plays for marketing and sales analytics.
+
+* Viewer - Created functionality to log click events on widgets:
+	1. Calendly - Click event.
+	2. Video: 
+		a. Container - Open and close tab.
+		b. YouTube - Pause and play video.
+
+* Created ask a question widget:
+	1. Dashboard - Create customization setting.
+	2. Viewer - Create widget form.
+	3. Viewer - Create widget button.
+	4. Viewer - Create event that is sent after the user clicked on the 
+	button, filled the form data, and clicked OK.
+	5. Dashboard - Create metric (show the questions asked).
+
+* Created a mechanism which automatically sets widgets settings 
+according to their HTML input elements.
+Currently, the mechanism only supports boolean values connected to 
+checkbox elements, and string values connected to input type text 
+elements.
+
+* Refactored the Calendly widget button to support having several right
+sided widgets buttons.
+
+
 ### 0.8.6
 
 2016-07-11 Yaniv Friedensohn <yanivf@slidepiper.com>
