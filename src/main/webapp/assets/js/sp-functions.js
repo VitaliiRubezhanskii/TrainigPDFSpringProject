@@ -113,6 +113,7 @@ sp = {
               
               // Build dashboard.
               sp.metric.getFileMetrics(files[fileHash]);
+              sp.metric.getViewerWidgetMetrics(files[fileHash]);
               sp.chart.getFileLine(fileHash);
               sp.chart.getFileBar(fileHash);
               sp.chart.getFileVisitorsMap(fileHash);
@@ -940,6 +941,35 @@ sp = {
       } else {
         $('#sp-widget-total-views').text('0');
         $('.sp-widget:not(#sp-widget-total-views)').text('N/A');
+      }
+    },
+  
+    /**
+     * Get metrics about the viewer widgets.
+     * 
+     * @param {object} fileData - Array of data about a file including information such as fileHash and fileLink.
+     * @param {string} fileData[3] - Number of times a document has been opened. 
+     * @param {string} customerEmail - The email address of the customer whose information being requested.
+     */
+    getViewerWidgetMetrics: function(fileData, customerEmail) {
+      if (typeof fileData != 'undefined' && typeof fileData[3] != 'undefined' && parseInt(fileData[3]) > 0) {
+        
+      	// Total number of YouTube plays.
+      	$.getJSON(
+          'ManagementServlet',
+          {
+          	action: 'getVideoWidgetMetrics',
+          	customerEmail: customerEmail,
+          	fileHash: fileData[0],
+          	salesmanEmail: sp.config.salesman.email
+          },
+          function(data) {
+            $('#sp-widget-video-youtube-metric-total-number-plays')
+                .text(data['totalNumberYouTubePlays'][0][0]);
+          }
+        );
+      } else {
+        $('#sp-widget-video-youtube-metric-total-number-plays').text('N/A');
       }
     }
   },
@@ -2064,6 +2094,7 @@ chart: {
              
               // Build dashboard.
               sp.metric.getFileMetrics(files[fileHash]);
+              sp.metric.getViewerWidgetMetrics(files[fileHash], customerEmail);
               sp.chart.getFileLine(fileHash, customerEmail);
               sp.chart.getFileBar(fileHash, customerEmail);
               sp.chart.getFileVisitorsMap(fileHash, customerEmail);

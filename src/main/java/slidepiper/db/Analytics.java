@@ -212,4 +212,33 @@ public class Analytics {
       + "WHERE msg_info.slides_id=? AND msg_info.sales_man_email=? AND msg_info.customer_email=? AND event_name = 'OPEN_SLIDES'\n"
       + "GROUP BY param_2_varchar, param_4_varchar\n"
       + "HAVING latitude IS NOT NULL AND longitude IS NOT NULL AND param_2_varchar IS NOT NULL";
+  
+  
+  /**
+   * Get total number of YouTube video plays per document.
+   */
+  public static final String sqlFileTotalNumberYouTubePlays = 
+	    "SELECT\n"
+	  +	"  count(event_name) AS number_of_plays\n" 
+	  + "FROM customer_events\n"
+	  + "INNER JOIN msg_info ON msg_info.id = customer_events.msg_id\n"
+      + "WHERE event_name = 'VIEWER_WIDGET_VIDEO_YOUTUBE_PLAYED'\n"
+      + "AND msg_info.sales_man_email = ?\n"
+      + "AND msg_info.slides_id = ?";
+  
+  
+  /**
+   * Get total number of YouTube video plays per file link.
+   */
+  public static final String sqlFileLinkTotalNumberYouTubePlays = 
+		"SELECT\n"
+	  +	"	count(event_name) AS number_of_plays\n" 
+	  + "FROM customer_events\n"
+	  + "INNER JOIN msg_info ON msg_info.id = customer_events.msg_id\n"
+      + "WHERE event_name = 'VIEWER_WIDGET_VIDEO_YOUTUBE_PLAYED'\n"
+      + "AND msg_info.sales_man_email = ?\n"
+      + "AND msg_info.slides_id = ?\n"
+  	  + "AND msg_info.customer_email = ?";
+  
+  
 }
