@@ -432,82 +432,29 @@ body {
     }
 }
 
-/* Widget2 - Calender Widget - Media Queries */
 
-@media (max-width: 539px) {
-  .sp-widget2 div {
-    display: none !important;
-  }
-  .sp-widget-button {
-    height: 6% !important;
-    width: 11% !important;
-  }
-  .sp-widget2 i {
-    vertical-align: middle !important;
-    margin-left: -4px !important;
-    margin-bottom: 0 !important;
-  }
+/* Right Side Widgets */
+
+.sp-right-side-widgets {
+  max-width: 200px;
+  position: fixed;
+  right: 0;
+  top: 45%;
+  width: 18%;
 }
 
-@media (min-height: 764px) {
-  .sp-widget-button {
-    height: 10% !important;
-  }
-}
-
-@media (min-height: 1000px) {
-  .sp-widget-button {
-    height: 9% !important;
-  }
-}
-
-@media (max-width: 925px) {
-  .sp-widget-button {
-    font-size: 100% !important;
-  }
-  .sp-widget2 i {
-    display: block !important;
-    font-size: 1.5em !important;
-    margin-bottom: 4px !important;
-    margin-left: 9px !important;
-  }
-}
-
-@media (max-height: 550px) {
-  .sp-widget-button {
-    height: 8% !important;
-  }
-   .sp-widget2 div {
-    display: none !important;
-  }
-  .sp-widget2 i {
-    font-size: 1.5em !important;
-    vertical-align: middle !important;
-  }
-}
-
-/* Widget 2 */
 .sp-widget-button {
   background-color: #1aaee4;
-  background-position: 20px center;
-  background-repeat: no-repeat;
-  background-size: 160px;
   border: none;
-  -moz-border-radius: 45px 0px 0px 45px;
-  -webkit-border-radius: 45px 0px 0px 45px;
-  border-radius: 45px 0px 0px 45px;
+  border-radius: 50px 0 0 50px;
   box-shadow: 0px 8.5px 5.67px rgba(35, 31, 32, 0.3);
   color: #fff;
-  font-size: 17px;
+  display: block;
+  font-size: 1.2em;
   font-weight: bold;
-  height: 15%;
-  max-width: 188px;
   min-height: 40px;
-  position: absolute;
-  right: -1px;
-  top: 45%;
-  transition: background 200ms ease-in-out, box-shadow 200ms ease-in-out, transform 1000ms ease-in-out;
-  width: 18%;
+  padding: 20px 0;
+  width: 100%;
  }
 
 .sp-widget-button:hover {
@@ -516,15 +463,94 @@ body {
   cursor: pointer;
 }
 
-.sp-widget2 i {
+.sp-widget-button div {
   display: inline-block;
-  vertical-align: super;
-  margin-left: 2px;
+  margin-left: 16px;
+  width: 80px;
 }
 
-.sp-widget2 div {
+.sp-widget-button i {
   display: inline-block;
-  margin-left: 17px;
-  text-align: center;
-  width: 80px;
+  font-size: 2em;
+  vertical-align: super;
+}
+
+
+/* Widget 3 - Ask a Question */
+#sp-widget3 {
+  background-color: #aca17c;
+}
+
+#sp-widget3:hover {
+  background-color: #b4aa89;
+}
+
+.sweet-alert form {
+  text-align: left;
+}
+
+.sweet-alert textarea {
+  display: block;
+  width: 100%;
+}
+
+.sweet-alert .sp-widget3-label {
+  margin-top: 35px;
+}
+
+
+/* Right Side Widgets - Media Queries */
+@media only screen and (max-width: 1050px) {
+  .sp-right-side-widgets {
+    width: 12%;
+  }
+  
+  .sp-widget-button {
+    font-size: 1em;
+    padding: 15px 0 15px 10px;
+  }
+  
+  .sp-widget-button div {
+    margin: 0 auto;
+  }
+  
+  .sp-widget-button i {
+    display: block;
+    font-size: 1.5em;
+    margin-bottom: 8px;
+  }
+}
+
+ @media only screen and (max-width: 830px) {
+  .sp-right-side-widgets {
+    width: 10%;
+  }
+  
+  .sp-widget-button {
+    padding: 15px 0 15px 6px;
+  }
+  
+  .sp-widget-button div {
+    display: none;
+  }
+  
+  .sp-widget-button i {
+    font-size: 1.5em;
+    margin-bottom: 0;
+    vertical-align: middle;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .sp-right-side-widgets {
+    min-width: 40px;
+  }
+  
+  .sp-widget-button {
+    padding: 10px 0 10px 5px;
+  }
+  
+  .sp-widget-button i {
+    font-size: 1.2em;
+  }
 }
