@@ -216,6 +216,33 @@ public class ManagementServlet extends HttpServlet {
           data.put("widgetsSettings", DbLayer.getWidgetsSettings(fileId, isViewer));
         }
         break;
+        
+      case "getVideoWidgetMetrics":
+    	  try {
+    		  if (null == request.getParameter("salesmanEmail") || request.getParameter("salesmanEmail").equals("")) {
+    			break;
+    		  } else {
+    			parameterList.add(request.getParameter("salesmanEmail"));  ;
+    		  }
+    		  
+    		  if (null == request.getParameter("fileHash") || request.getParameter("fileHash").equals("")) {
+      			break; 
+      		  } else {
+      			parameterList.add(request.getParameter("fileHash"));
+      		  } 
+    		  
+    		  if (null == request.getParameter("customerEmail") || request.getParameter("customerEmail").equals("")) {
+    	        sqlData = DbLayer.getEventData(parameterList, Analytics.sqlFileTotalNumberYouTubePlays);
+	          } else {
+	            parameterList.add(request.getParameter("customerEmail"));
+	            sqlData = DbLayer.getEventData(parameterList, Analytics.sqlFileLinkTotalNumberYouTubePlays);
+	          }
+    		  
+    		  data.put("totalNumberYouTubePlays", sqlData);
+    	  } catch (Exception e) {
+    		  e.printStackTrace();
+    	  }
+    	break;
 	  }
 	  
 	  response.setContentType("application/json; charset=UTF-8");
