@@ -5,18 +5,31 @@ var sp = sp || {};
 sp.viewer = {
   breakPoint: 768,
   eventName: {
-    clickedCta: 'CLICKED_CTA'
+    clickedCta: 'CLICKED_CTA',
+    viewerWidgetCalendlyClicked: 'VIEWER_WIDGET_CALENDLY_CLICKED',
+    viewerWidgetVideoTabClicked: 'VIEWER_WIDGET_VIDEO_TAB_CLICKED',
+    viewerWidgetVideoYouTubePlayed: 'VIEWER_WIDGET_VIDEO_YOUTUBE_PLAYED',
+    viewerWidgetVideoYouTubePaused: 'VIEWER_WIDGET_VIDEO_YOUTUBE_PAUSED'
+  },
+  paramValue: {
+  	videoTabOpened: 'VIEWER_WIDGET_VIDEO_TAB_OPENED',
+  	videoTabClosed: 'VIEWER_WIDGET_VIDEO_TAB_CLOSED'
   },
   linkHash: getParameterByName('f'),
   
+  /**
+   * @param {String} param_1_varchar - The CTA button id attribute.
+   * @param {String} param_2_varchar - The CTA button text
+   * @param {String} param_3_varchar = The CTA button destination URL
+   */
   init: (function() {
     $(document).ready(function() {
       $('.sp-cta, .sp-secondary-cta').click(function() {
         var eventData = {
-          buttonText: $(this).text(),
-          destinationUrl: $(this).attr('href'),
           eventName: sp.viewer.eventName.clickedCta,
-          id: $(this).attr('id'),
+          param_1_varchar: $(this).attr('id'),
+          param_2_varchar: $(this).text(),
+          param_3_varchar: $(this).attr('href'),
           linkHash: sp.viewer.linkHash,
           sessionId: sessionid
         };
@@ -565,11 +578,15 @@ if ('' != sp.viewer.linkHash) {
                   .css({'padding-right': '0', 'max-width': '80%'});
                 $('.sp-demo-video1').css('width', '34%');
                 $('.sp-demo-video1').css('min-width', '300px');
+                
+                sendVideoTabClickedEvent(sp.viewer.paramValue.videoTabOpened);
               } else {
                 $('.sp-demo-video-title__span')
                   .css({'padding-right': '20px', 'max-width': '80%'});
                 $('.sp-demo-video1').css('width', '34%');
                 $('.sp-demo-video1').css('min-width', '175px');
+                
+                sendVideoTabClickedEvent(sp.viewer.paramValue.videoTabClosed);
               }
               keepAspectRatio(); // Ensures the window remains 16:9
             });
@@ -597,6 +614,18 @@ if ('' != sp.viewer.linkHash) {
               showConfirmButton: false,
               text: '<iframe src="../assets/viewer/widget/calendly.html?user=' + widget.userName + '" height="420" frameborder="0"></iframe>',
               title: 'Schedule Meeting',
+            });
+            
+            /**
+             * Send Calendly event.
+             * 
+             * param_1_varchar - The text on the Calendly button.
+             */
+            sp.viewer.setCustomerEvent({
+              eventName: sp.viewer.eventName.viewerWidgetCalendlyClicked,
+              linkHash: sp.viewer.linkHash,
+              sessionId: sessionid,
+              param_1_varchar: $(this).text()
             });
           });
         }
@@ -632,6 +661,22 @@ function keepAspectRatio () {
   $('.sp-demo-video iframe').height(videoHeight);
 }
 
+/**
+ * Log event when video tab is clicked.
+ * 
+ * @param {string} videoTabState - A value representing whether the video 
+ * widget container is opened or closed.
+ */
+function sendVideoTabClickedEvent(videoTabState) {
+  sp.viewer.setCustomerEvent({
+    eventName: sp.viewer.eventName.viewerWidgetVideoTabClicked,
+    linkHash: sp.viewer.linkHash,
+    sessionId: sessionid,
+    param_1_varchar: player.getVideoUrl(),
+    param_2_varchar: $('.sp-demo-video-title__span').text(),
+    param_3_varchar: videoTabState
+  });
+}
 
 /**
  *  YouTube iFrame API
@@ -649,15 +694,37 @@ function onYouTubeIframeAPIReady() {
   });
 }
 
-var done = false;
+/**
+ * YouTube iFrame API function which is called when the state of the player 
+ * changes i.e. played, paused, ended.
+ * 
+ * @param {string} param_1_varchar - The video being played.
+ * @param {string} param_2_varchar - The title of the video chosen by the salesman.
+ */
 function onPlayerStateChange(event) {
   var playerState = event.data;
-  var viewDuration = getViewDuration();
-  var currentVideo = player.getVideoUrl();
-}
-
-function getViewDuration() {
-  return player.getDuration() - (player.getDuration() - player.getCurrentTime());
+  var data = {
+      linkHash: sp.viewer.linkHash, 
+      sessionId: sessionid,
+      param_1_varchar: player.getVideoUrl(),
+      param_2_varchar: $('.sp-demo-video-title__span').text(),
+    };
+  
+  switch (playerState) {
+    case 1:
+      
+      // YouTube video played.
+      data.eventName = sp.viewer.eventName.viewerWidgetVideoYouTubePlayed;
+      sp.viewer.setCustomerEvent(data);
+    break;
+    
+    case 2:
+      
+      // YouTube video paused.
+      data.eventName = sp.viewer.eventName.viewerWidgetVideoYouTubePaused;
+      sp.viewer.setCustomerEvent(data);
+    break;
+  };
 }
 
 /**

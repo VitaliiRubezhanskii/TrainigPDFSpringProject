@@ -187,6 +187,15 @@ td.sp-file-hash {
   font-size: 23px !important; 
 }
 
+
+/* Metrics - Widgets */
+
+/* Video Widget */
+.sp-widget-video-youtube-metric-title__i {
+  margin-right: 10px;
+}
+
+
 /* Scrollbar */
 
 /* Chrome and Safari */

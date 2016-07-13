@@ -216,6 +216,33 @@ public class ManagementServlet extends HttpServlet {
           data.put("widgetsSettings", DbLayer.getWidgetsSettings(fileId, isViewer));
         }
         break;
+        
+      case "getVideoWidgetMetrics":
+    	  try {
+    		  if (null == request.getParameter("salesmanEmail") || request.getParameter("salesmanEmail").equals("")) {
+    			break;
+    		  } else {
+    			parameterList.add(request.getParameter("salesmanEmail"));  ;
+    		  }
+    		  
+    		  if (null == request.getParameter("fileHash") || request.getParameter("fileHash").equals("")) {
+      			break; 
+      		  } else {
+      			parameterList.add(request.getParameter("fileHash"));
+      		  } 
+    		  
+    		  if (null == request.getParameter("customerEmail") || request.getParameter("customerEmail").equals("")) {
+    	        sqlData = DbLayer.getEventData(parameterList, Analytics.sqlFileTotalNumberYouTubePlays);
+	          } else {
+	            parameterList.add(request.getParameter("customerEmail"));
+	            sqlData = DbLayer.getEventData(parameterList, Analytics.sqlFileLinkTotalNumberYouTubePlays);
+	          }
+    		  
+    		  data.put("totalNumberYouTubePlays", sqlData);
+    	  } catch (Exception e) {
+    		  e.printStackTrace();
+    	  }
+    	break;
 	  }
 	  
 	  response.setContentType("application/json; charset=UTF-8");
@@ -354,17 +381,39 @@ public class ManagementServlet extends HttpServlet {
           DbLayer.deletePresentation(input.getString("presentation"), input.getString("salesman_email"));
           break;
         
-        
+        /**
+         * JSONObject.has(String) to find if JSON object has certain key
+         * @see https://developer.android.com/reference/org/json/JSONObject.html#has(java.lang.String)
+         * @param param-x-varchar will hold different data depending on which event is being logged
+         */
         case "setCustomerEvent":
           eventDataMap.put("msg_id", URLDecoder.decode(data.getString("linkHash"), "UTF-8"));
           eventDataMap.put("session_id", URLDecoder.decode(data.getString("sessionId"), "UTF-8"));
           
-          eventDataMap.put("param_1_varchar",
-              URLDecoder.decode(data.getString("id"), "UTF-8"));
-          eventDataMap.put("param_2_varchar",
-              URLDecoder.decode(data.getString("buttonText"), "UTF-8"));
-          eventDataMap.put("param_3_varchar",
-              URLDecoder.decode(data.getString("destinationUrl"), "UTF-8"));
+          if (data.has("param_1_varchar")) {
+        	  eventDataMap.put("param_1_varchar",
+                  URLDecoder.decode(data.getString("param_1_varchar"), "UTF-8"));
+          }
+          
+          if (data.has("param_2_varchar")) {
+        	  eventDataMap.put("param_2_varchar",
+                  URLDecoder.decode(data.getString("param_2_varchar"), "UTF-8"));
+          }
+          
+          if (data.has("param_3_varchar")) {
+        	  eventDataMap.put("param_3_varchar",
+                  URLDecoder.decode(data.getString("param_3_varchar"), "UTF-8"));
+          }
+          
+          if (data.has("param_4_varchar")) {
+        	  eventDataMap.put("param_4_varchar",
+                  URLDecoder.decode(data.getString("param_4_varchar"), "UTF-8"));
+          }
+          
+          if (data.has("param_5_varchar")) {
+        	  eventDataMap.put("param_5_varchar",
+                  URLDecoder.decode(data.getString("param_5_varchar"), "UTF-8"));
+          }
           
           DbLayer.setEvent(DbLayer.CUSTOMER_EVENT_TABLE,
               URLDecoder.decode(data.getString("eventName"), "UTF-8"), eventDataMap);
