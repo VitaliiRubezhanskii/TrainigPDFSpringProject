@@ -227,7 +227,8 @@ public class Analytics {
 	  + "INNER JOIN msg_info ON msg_info.id = customer_events.msg_id\n"
     + "WHERE event_name = 'VIEWER_WIDGET_VIDEO_YOUTUBE_PLAYED'\n"
     + "AND msg_info.sales_man_email = ?\n"
-    + "AND msg_info.slides_id = ?";
+    + "AND msg_info.slides_id = ?\n"
+    + "AND msg_info.customer_email <> '" + ConfigProperties.getProperty("test_customer_email") + "'";
   
   
   /**
@@ -256,7 +257,8 @@ public class Analytics {
     + "INNER JOIN msg_info ON msg_info.id = customer_events.msg_id\n"
     + "WHERE event_name = 'VIEWER_WIDGET_ASK_QUESTION'\n"
     + "AND msg_info.sales_man_email = ?\n"
-    + "AND msg_info.slides_id = ?";
+    + "AND msg_info.slides_id = ?\n"
+    + "AND msg_info.customer_email <> '" + ConfigProperties.getProperty("test_customer_email") + "'";
   
 
   /**
