@@ -890,7 +890,7 @@ sp = {
         $('#sp-widget-total-views').text(fileData[3]);
         
         // Bounce rate.
-        $('#sp-widget-bounce-rate').text(parseFloat(fileData[4] * 100).toFixed(2) + '%');
+        $('#sp-widget-bounce-rate').text(parseFloat(fileData[4] * 100) + '%');
         
         // Average view duration.
         if (null != fileData[5]) {
@@ -898,28 +898,27 @@ sp = {
            * @see http://stackoverflow.com/questions/6312993/javascript-seconds-to-time-string-with-format-hhmmss
            */
           var totalSeconds = parseInt(fileData[5], 10);
+          
           var hours   = Math.floor(totalSeconds / 3600);
           var minutes = Math.floor((totalSeconds - (hours * 3600)) / 60);
           var seconds = totalSeconds - (hours * 3600) - (minutes * 60);
-  
-          if (hours < 10) {
-            hours = '0' + hours;
-          }
+          
           if (minutes < 10) {
             minutes = '0' + minutes;
           }
+          
           if (seconds < 10) {
             seconds = '0' + seconds;
           }
-          var time    = hours+':'+minutes+':'+seconds;
-          $('#sp-widget-average-view-duration').text(hours + ':' + minutes + ':' + seconds);
+          
+          $('#sp-widget-average-view-duration').text(minutes + ':' + seconds);
         } else {
           $('#sp-widget-average-view-duration').text('N/A');
         }
         
         // Average pages viewed.
         if (null != fileData[6]) {
-          $('#sp-widget-average-pages-viewed').text(parseFloat(fileData[6]).toFixed(2));
+          $('#sp-widget-average-pages-viewed').text(parseFloat(fileData[6]).toFixed(1));
         } else {
           $('#sp-widget-average-pages-viewed').text('N/A');
         }
