@@ -4,6 +4,14 @@ SlidePiper README File
 Change Log
 ----------
 
+### 0.8.8
+
+2016-07-14 Yaniv Friedensohn <yanivf@slidepiper.com>
+
+* Fix click event sending mechanism for the video tab. The tab functionality 
+didn't work on a video that wasn't a YouTube one.
+
+
 ### 0.8.7
 
 2016-07-14 Max Prais <maxp@slidepiper.com>, Yaniv Friedensohn <yanivf@slidepiper.com>

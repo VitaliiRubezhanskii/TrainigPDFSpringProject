@@ -719,7 +719,7 @@ function sendVideoTabClickedEvent(videoTabState) {
     eventName: sp.viewer.eventName.viewerWidgetVideoTabClicked,
     linkHash: sp.viewer.linkHash,
     sessionId: sessionid,
-    param_1_varchar: player.getVideoUrl(),
+    param_1_varchar: $('.sp-demo-video iframe').attr('src'),
     param_2_varchar: $('.sp-demo-video-title__span').text(),
     param_3_varchar: videoTabState
   });
