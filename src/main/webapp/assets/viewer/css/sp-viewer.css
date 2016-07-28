@@ -48,6 +48,7 @@
 
 .toolbarLabel,
 .toolbarField,
+#scaleSelectContainer,
 #scaleSelect {
   visibility: hidden;
 }
