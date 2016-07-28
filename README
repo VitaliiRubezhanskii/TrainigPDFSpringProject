@@ -4,6 +4,43 @@ SlidePiper README File
 Change Log
 ----------
 
+### 0.9.0
+
+2016-07-28 Yaniv Friedensohn <yanivf@slidepiper.com>
+
+Viewer:
+	1. Upgrade viewer to latest stable version (1.4.20 instead of 1.1.114).
+	
+	2. Pre-rendering of document pages upon load (currently set to 20 pages).
+	The defined number of pages (20) start to render when the document is 
+	loaded. Based on the device performance and the document richness of 
+	text and pictures it can take time until all of the 20 pages would 
+	render (just likes it takes a single page to render). Just to 
+	clarify, a rendered page is page that is completely shown after 
+	the spiral on a white page is shown, i.e. the rendering 
+	process).
+	
+	3. Add document scaling on desktop view.
+	
+	4. Download correct file name.
+	
+	5. Allow page thumbnails.
+	
+	6. Fix overlapping pages.
+	
+	7. Show loading bar.
+	
+	8. Fix false online (green) status of chat.
+	
+	9. Make sure that font settings can only be applied to CTA buttons, and 
+	not all of the toolbar text elements.
+	
+	10. Hebrew (or any UTF-8 encoded string) can now be written in CTA 
+	buttons.
+	
+	11. Start using StringEscapeUtils.escapeHtml4() for avoiding XSS attacks.
+
+
 ### 0.8.8
 
 2016-07-14 Yaniv Friedensohn <yanivf@slidepiper.com>
