@@ -46,6 +46,12 @@
   background-color: #ffffff;
 }
 
+.toolbarLabel,
+.toolbarField,
+#scaleSelect {
+  color: transparent;
+}
+
 #loadingBar {
   background-color: rgba(195, 195, 195, 0.3);
   border-bottom-color: #c3c3c3;

@@ -123,7 +123,7 @@ if ('' != sp.viewer.linkHash) {
     
     // Customization settings.
     if (typeof config.viewer.toolbarBackground !== 'undefined') {
-      $('#toolbarContainer, #toolbarSidebar, #secondaryToolbar, #scaleSelect option')
+      $('#toolbarViewer, #toolbarSidebar, #secondaryToolbar, #scaleSelect option')
           .css('background', config.viewer.toolbarBackground);
     }
     
@@ -173,8 +173,13 @@ if ('' != sp.viewer.linkHash) {
     }
     
     if (typeof config.viewer.toolbarColor !== 'undefined') {
-      $('.toolbarLabel, .pageNumber, #scaleSelect, #scaleSelect option, #sp-terms-privacy-secondary-toolbar, #sp-terms-privacy-secondary-toolbar a')
+      $('.toolbarLabel, .toolbarField, #scaleSelect option, #sp-terms-privacy-secondary-toolbar, #sp-terms-privacy-secondary-toolbar a')
           .css('color', config.viewer.toolbarColor);
+      
+      // A fix to set the document scale (select element) color. 
+      $(document).on('pagesinit', function() {
+        $('#scaleSelect').css('color', config.viewer.toolbarColor);
+      }); 
     }
     
     // Find toolbar.
