@@ -179,6 +179,7 @@ if ('' != sp.viewer.linkHash) {
       // A fix to set the document scale (select element) color. 
       $(document).on('pagesinit', function() {
         $('#scaleSelect').css('color', config.viewer.toolbarColor);
+        $('.toolbarLabel, .toolbarField, #scaleSelect').css('visibility', 'visible');
       }); 
     }
     
