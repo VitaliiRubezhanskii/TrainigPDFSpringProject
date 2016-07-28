@@ -49,7 +49,7 @@
 .toolbarLabel,
 .toolbarField,
 #scaleSelect {
-  color: transparent;
+  visibility: hidden;
 }
 
 #loadingBar {
