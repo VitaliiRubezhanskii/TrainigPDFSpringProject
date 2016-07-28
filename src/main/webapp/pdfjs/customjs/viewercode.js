@@ -6,7 +6,7 @@
 
 
 function keepalive_event(estimatedTimeViewed_param, slideNum_param) {
-    urlval = "../KeepAliveServlet";
+    urlval = "../../KeepAliveServlet";
     // if (document.location.hostname == "localhost")
     // {
     // urlval = "/SlidePiper/CustomerDataServlet";
@@ -39,7 +39,7 @@ function keepalive_event(estimatedTimeViewed_param, slideNum_param) {
 }
 
 function send_event(ename, eparam1, eparam2, eparam3) {
-    urlval = "../CustomerDataServlet";
+    urlval = "../../CustomerDataServlet";
 
     $.ajax({
         type : "POST",
@@ -72,9 +72,11 @@ prev_datetime = new Date(); // immediately make this global var.
 
 // hide after 5sec.
 setTimeout(function() {
-    // alert("hiding");
-    $("#logoMessage")[0].style.display = "none";
-    $("#logoMessage")[0].style.visibility = "hidden";
+    // alert("hiding");  
+    if (typeof $("#logoMessage")[0] !== 'undefined') {
+      $("#logoMessage")[0].style.display = "none";
+      $("#logoMessage")[0].style.visibility = "hidden";
+    }
 }, 5000);
 
 // initial value for leaving page - time. (sometimes
@@ -135,7 +137,7 @@ function getSalesmanData() {
     console.log("get salesman email ajax");
     $.ajax({
         type : "POST",
-        url : "../GetMessageDataServlet",
+        url : "../../GetMessageDataServlet",
         data : jsondata,
         contentType : "application/json; charset=utf-8",
         processData : false,

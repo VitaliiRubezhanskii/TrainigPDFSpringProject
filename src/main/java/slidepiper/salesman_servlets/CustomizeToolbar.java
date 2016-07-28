@@ -22,6 +22,7 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.io.IOUtils;
 import org.json.JSONObject;
 
 @SuppressWarnings("serial")
@@ -39,15 +40,15 @@ public class CustomizeToolbar extends HttpServlet {
 		data.put("data", navbarSettings);
 		
 		response.setContentType("application/json; charset=UTF-8");
-	    PrintWriter output = response.getWriter();
-	    output.print(data);
-	    output.close();
+    PrintWriter output = response.getWriter();
+    output.print(data);
+    output.close();
 	}
 	
 	protected void doPost(HttpServletRequest request,
 			      HttpServletResponse response) throws ServletException, IOException {
-		
-			 /**
+	  
+			  /**
 		     * @see https://commons.apache.org/proper/commons-fileupload/using.html
 		     */
 		    // Create a factory for disk-based file items
@@ -97,7 +98,7 @@ public class CustomizeToolbar extends HttpServlet {
 						System.out.println("Cta1 Enabled: " + viewerToolbarCta1IsEnabled);
 					}
 					else if (file.getFieldName().equals("viewer_toolbar_cta1_text")) {
-						viewerToolbarCta1Text = file.getString();
+						viewerToolbarCta1Text = IOUtils.toString(file.getInputStream(), "UTF-8");
 						System.out.println("CTA1 Text: " + viewerToolbarCta1Text);
 					}
 					else if (file.getFieldName().equals("viewer_toolbar_cta1_link")) {
@@ -142,7 +143,7 @@ public class CustomizeToolbar extends HttpServlet {
 						System.out.println("CTA3 Enabled: " + viewerToolbarCta3IsEnabled);
 					}
 					else if (file.getFieldName().equals("viewer_toolbar_cta2_text")) {
-						viewerToolbarCta2Text = file.getString();
+						viewerToolbarCta2Text = IOUtils.toString(file.getInputStream(), "UTF-8");
 						System.out.println("CTA2 Text: " + viewerToolbarCta2Text);
 					}
 					else if (file.getFieldName().equals("viewer_toolbar_cta2_link")) {
@@ -150,7 +151,7 @@ public class CustomizeToolbar extends HttpServlet {
 						System.out.println("CTA2 Link: " + viewerToolbarCta2Link);
 					}
 					else if (file.getFieldName().equals("viewer_toolbar_cta3_text")) {
-						viewerToolbarCta3Text = file.getString();
+						viewerToolbarCta3Text = IOUtils.toString(file.getInputStream(), "UTF-8");
 						System.out.println(viewerToolbarCta3Text);
 					}
 					else if (file.getFieldName().equals("viewer_toolbar_cta3_link")) {
