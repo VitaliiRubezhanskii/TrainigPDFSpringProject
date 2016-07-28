@@ -23,10 +23,8 @@ $(document).on('pagesloaded pagechange', function(event) {
       '<a id="sp-cta2" class="sp-cta" href="#" target="_blank"></a>' +
       '<a id="sp-cta1" class="sp-cta" href="#" target="_blank"></a>');
   
-  $('#toolbarViewerMiddle').append(
-    '<div class="sp-toolbar-logo">' +
-      '<a target="_blank" href="#"><img src="../../assets/viewer/img/slidepiper-logo-346x75.png"></a>' +
-    '</div>');
+  $('#toolbarViewerMiddle')
+      .append('<div class="sp-toolbar-logo"><a target="_blank" href="#"></a></div>');
       
   var innerTermsPrivacy =
     '<a href="../../tou.html" target="_blank">Terms</a> · <a href="../../privacy.html" target="_blank">Privacy</a><br>' +
@@ -190,8 +188,8 @@ if ('' != sp.viewer.linkHash) {
     
     // Logo.
     if (typeof config.viewer.toolbarLogoImage !== 'undefined') {
-      $('.sp-toolbar-logo img')
-          .attr('src', 'data:image/png;base64,' + config.viewer.toolbarLogoImage);
+      $('.sp-toolbar-logo a')
+          .append('<img src="data:image/png;base64,' + config.viewer.toolbarLogoImage + '" alt="Company Logo">');
       
       if (typeof config.viewer.toolbarLogoLink !== 'undefined') {
         if (config.viewer.toolbarLogoLink === 'no-logo-link'){
