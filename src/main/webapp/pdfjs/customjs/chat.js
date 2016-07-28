@@ -192,7 +192,7 @@ function connectSocket() {
                                 // add online msg to chatbox
                                 
                                 
-                                $('#sp-live-chat h4').toggleClass('sp-chat-user-status');
+                                $('#sp-live-chat h4').addClass('sp-chat-user-status-online').removeClass('sp-chat-user-status-offline');
                                 
                                 
                                 var d = document.createElement('div');
@@ -214,7 +214,7 @@ function connectSocket() {
                                 // add offline msg to chatbox
                           
                           
-                                $('#sp-live-chat h4').toggleClass('sp-chat-user-status');
+                                $('#sp-live-chat h4').addClass('sp-chat-user-status-offline').removeClass('sp-chat-user-status-online');
                           
                                 
                                 var d = document.createElement('div');
@@ -406,7 +406,7 @@ function startClient() {
         $.ajax({
                 async: false,
                 dataType: "json",
-                url: "../config",
+                url: "../../config",
         }).done(function( data ) {
                 socketString = data.webSocketsUrl.replace(/\/$/, "") + "/chat";
         }).fail(function( jqXHR, textStatus, errorThrown ) {
@@ -443,7 +443,7 @@ function sendMessage() {
 
                 $.ajax({
                         type : "POST",
-                        url : "../ChatServlet",
+                        url : "../../ChatServlet",
                         data : '{"action":"addChatMessage", ' + ' "session_id":"'
                                         + sessionid + '",    ' + ' "msgtext":"' + chatmsg + '"}',
                         contentType : "application/json; charset=utf-8",
@@ -589,7 +589,7 @@ function loadChatHistory() {
         $
                         .ajax({
                                 type : "POST",
-                                url : "../ChatServlet",
+                                url : "../../ChatServlet",
                                 data : '{"action":"getChatMessages", "session_id":"'
                                                 + sessionid + '"}',
                                 contentType : "application/json; charset=utf-8",

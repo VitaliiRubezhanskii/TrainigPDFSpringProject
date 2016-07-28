@@ -662,8 +662,16 @@ public class DbLayer {
 		//System.out.println("getCustomerName for custemail " + customer_email + " smemail " + salesman_email);
 						
 		String query =		
-				"SELECT name FROM customers WHERE email=? AND sales_man=? LIMIT 1;";
-		Connection conn=null;
+				"SELECT name FROM customers WHERE name IS NOT NULL AND email=? AND sales_man=? LIMIT 1;";
+		
+    Constants.updateConstants();
+    try {
+      Class.forName("com.mysql.jdbc.Driver");
+    } catch (ClassNotFoundException e) {
+      e.printStackTrace();
+    }
+    Connection conn = null;
+    
 		try 
 		{ 
 			try
@@ -1555,6 +1563,64 @@ public class DbLayer {
         }
         
         return fileLinkList;
+      }
+      
+      
+      /**
+       * Get a file's meta data.
+       * 
+       * @param fileLinkHash A document file link hash.
+       * 
+       * @return a file's meta data such as its name, and owner (salesman) email.
+       */
+      public static Map<String, String> getFileMetaData(String fileLinkHash) {
+        Map<String, String> fileMetaData = new HashMap<String, String>();
+        
+        Constants.updateConstants();
+        try {
+          Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+          e.printStackTrace();
+        }
+        Connection conn = null;
+        
+        String sql = 
+            "SELECT slides.id AS fileHash, slides.name AS fileName, slides.sales_man_email AS salesmanEmail FROM slides\n"
+          + "INNER JOIN msg_info ON msg_info.slides_id = slides.id\n"
+          + "WHERE msg_info.id = ?";
+        
+        try {
+          conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
+          PreparedStatement ps = conn.prepareStatement(sql);
+          ps.setString(1, fileLinkHash);
+          
+          ResultSet rs = ps.executeQuery();
+          ResultSetMetaData md = rs.getMetaData();
+          int columnCount = md.getColumnCount();
+        
+          if (rs.next()) {
+            for (int i = 1; i <= columnCount; i++) {
+              if (null != rs.getString(i)
+                  && md.getColumnClassName(i).equals("java.lang.String")) {
+                
+                fileMetaData.put(md.getColumnLabel(i), rs.getString(i));
+              }
+            }
+          }
+        } catch (SQLException ex) {
+          System.err.println("Error code: " + ex.getErrorCode() + " - " + ex.getMessage());
+          ex.printStackTrace();
+        } finally {
+          if (null != conn) {
+           try {
+             conn.close();
+           } catch (SQLException ex) {
+             ex.printStackTrace();
+           }
+          }
+        }
+        
+        return fileMetaData;
       }
       
       

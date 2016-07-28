@@ -22,11 +22,27 @@ See https://github.com/adobe-type-tools/cmap-resources
 -->
 <html dir="ltr" mozdisallowselectionprint moznomarginboxes>
   <head>
+  <base href="viewer/web/">
+    <script>
+    /**
+     * A solution for the file viewer's deprecated file URL format.
+     *
+     * The reason this function resides within the HTML code 
+     * is since all of the JS files are linked through relative paths.
+     */
+    (function(){
+      var pathArray = window.location.pathname.split('/');
+      if ('viewer.html' == pathArray.pop()) {
+        document.getElementsByTagName('base')[0].setAttribute('href', '');
+      }
+    })();
+    </script> 
+ 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <meta name="google" content="notranslate">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>PDF.js viewer</title>
+    <title>Loading...</title>
 
 
     <link rel="stylesheet" href="viewer.css"/>
@@ -44,7 +60,16 @@ See https://github.com/adobe-type-tools/cmap-resources
 
     <script src="debugger.js"></script>
     <script src="viewer.js"></script>
-
+    
+    <!-- SlidePiper -->
+    <link rel="shortcut icon" type="image/png" href="../../assets/viewer/img/logo-square-75x75.png" />
+    <link rel="stylesheet" href="../../assets/viewer/css/sp-viewer.css">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="../../assets/viewer/css/font-awesome/css/font-awesome.min.css">
+    
+    <!-- Sweet Alert -->
+    <link rel="stylesheet" href="../../assets/viewer/css/plugins/sweetalerts/sweetalert.css">
   </head>
 
   <body tabindex="1" class="loadingInProgress">
@@ -160,7 +185,36 @@ See https://github.com/adobe-type-tools/cmap-resources
                 <button id="viewFind" class="toolbarButton group hiddenSmallView" title="Find in Document" tabindex="12" data-l10n-id="findbar">
                    <span data-l10n-id="findbar_label">Find</span>
                 </button>
+                
                 <div class="splitToolbarButton">
+                  <button id="zoomOut" class="toolbarButton zoomOut" title="Zoom Out" tabindex="21" data-l10n-id="zoom_out">
+                    <span data-l10n-id="zoom_out_label">Zoom Out</span>
+                  </button>
+                  <div class="splitToolbarButtonSeparator"></div>
+                  <button id="zoomIn" class="toolbarButton zoomIn" title="Zoom In" tabindex="22" data-l10n-id="zoom_in">
+                    <span data-l10n-id="zoom_in_label">Zoom In</span>
+                  </button>
+                </div>
+                
+                <span id="scaleSelectContainer" class="dropdownToolbarButton">
+                  <select id="scaleSelect" title="Zoom" tabindex="23" data-l10n-id="zoom">
+                    <option id="pageAutoOption" title="" value="auto" data-l10n-id="page_scale_auto">Automatic Zoom</option>
+                    <option id="pageActualOption" title="" value="page-actual" data-l10n-id="page_scale_actual">Actual Size</option>
+                    <option id="pageFitOption" title="" value="page-fit" selected="selected" data-l10n-id="page_scale_fit">Page Fit</option>
+                    <option id="pageWidthOption" title="" value="page-width" data-l10n-id="page_scale_width">Full Width</option>
+                    <option id="customScaleOption" title="" value="custom"></option>
+                    <option title="" value="0.5" data-l10n-id="page_scale_percent" data-l10n-args='{ "scale": 50 }'>50%</option>
+                    <option title="" value="0.75" data-l10n-id="page_scale_percent" data-l10n-args='{ "scale": 75 }'>75%</option>
+                    <option title="" value="1" data-l10n-id="page_scale_percent" data-l10n-args='{ "scale": 100 }'>100%</option>
+                    <option title="" value="1.25" data-l10n-id="page_scale_percent" data-l10n-args='{ "scale": 125 }'>125%</option>
+                    <option title="" value="1.5" data-l10n-id="page_scale_percent" data-l10n-args='{ "scale": 150 }'>150%</option>
+                    <option title="" value="2" data-l10n-id="page_scale_percent" data-l10n-args='{ "scale": 200 }'>200%</option>
+                    <option title="" value="3" data-l10n-id="page_scale_percent" data-l10n-args='{ "scale": 300 }'>300%</option>
+                    <option title="" value="4" data-l10n-id="page_scale_percent" data-l10n-args='{ "scale": 400 }'>400%</option>
+                  </select>
+                </span>
+                
+                <div class="splitToolbarButton hidden">
                   <button class="toolbarButton pageUp" title="Previous Page" id="previous" tabindex="13" data-l10n-id="previous">
                     <span data-l10n-id="previous_label">Previous</span>
                   </button>
@@ -169,6 +223,7 @@ See https://github.com/adobe-type-tools/cmap-resources
                     <span data-l10n-id="next_label">Next</span>
                   </button>
                 </div>
+                
                 <label id="pageNumberLabel" class="toolbarLabel" for="pageNumber" data-l10n-id="page_label">Page: </label>
                 <input type="number" id="pageNumber" class="toolbarField pageNumber" value="1" size="4" min="1" tabindex="15">
                 <span id="numPages" class="toolbarLabel"></span>
@@ -200,34 +255,7 @@ See https://github.com/adobe-type-tools/cmap-resources
                 </button>
               </div>
               <div class="outerCenter">
-                <div class="innerCenter" id="toolbarViewerMiddle">
-                  <div class="splitToolbarButton">
-                    <button id="zoomOut" class="toolbarButton zoomOut" title="Zoom Out" tabindex="21" data-l10n-id="zoom_out">
-                      <span data-l10n-id="zoom_out_label">Zoom Out</span>
-                    </button>
-                    <div class="splitToolbarButtonSeparator"></div>
-                    <button id="zoomIn" class="toolbarButton zoomIn" title="Zoom In" tabindex="22" data-l10n-id="zoom_in">
-                      <span data-l10n-id="zoom_in_label">Zoom In</span>
-                     </button>
-                  </div>
-                  <span id="scaleSelectContainer" class="dropdownToolbarButton">
-                     <select id="scaleSelect" title="Zoom" tabindex="23" data-l10n-id="zoom">
-                      <option id="pageAutoOption" title="" value="auto" selected="selected" data-l10n-id="page_scale_auto">Automatic Zoom</option>
-                      <option id="pageActualOption" title="" value="page-actual" data-l10n-id="page_scale_actual">Actual Size</option>
-                      <option id="pageFitOption" title="" value="page-fit" data-l10n-id="page_scale_fit">Fit Page</option>
-                      <option id="pageWidthOption" title="" value="page-width" data-l10n-id="page_scale_width">Full Width</option>
-                      <option id="customScaleOption" title="" value="custom"></option>
-                      <option title="" value="0.5" data-l10n-id="page_scale_percent" data-l10n-args='{ "scale": 50 }'>50%</option>
-                      <option title="" value="0.75" data-l10n-id="page_scale_percent" data-l10n-args='{ "scale": 75 }'>75%</option>
-                      <option title="" value="1" data-l10n-id="page_scale_percent" data-l10n-args='{ "scale": 100 }'>100%</option>
-                      <option title="" value="1.25" data-l10n-id="page_scale_percent" data-l10n-args='{ "scale": 125 }'>125%</option>
-                      <option title="" value="1.5" data-l10n-id="page_scale_percent" data-l10n-args='{ "scale": 150 }'>150%</option>
-                      <option title="" value="2" data-l10n-id="page_scale_percent" data-l10n-args='{ "scale": 200 }'>200%</option>
-                      <option title="" value="3" data-l10n-id="page_scale_percent" data-l10n-args='{ "scale": 300 }'>300%</option>
-                      <option title="" value="4" data-l10n-id="page_scale_percent" data-l10n-args='{ "scale": 400 }'>400%</option>
-                    </select>
-                  </span>
-                </div>
+                <div class="innerCenter" id="toolbarViewerMiddle"></div>
               </div>
             </div>
             <div id="loadingBar">
@@ -419,6 +447,98 @@ See https://github.com/adobe-type-tools/cmap-resources
   </div>
 </div>
 
+
+    <!-- New Chat -->
+    <div id="sp-live-chat">
+      <header class="sp-clearfix">
+        <!-- Disable chat close functionality for now. <a href="#" class="sp-chat-close">x</a> -->
+        
+        <h4>Loading&hellip;</h4>
+        
+        <!-- Disable chat message counter functionality for now. <span class="sp-chat-message-counter">3</span> -->
+      </header>
+
+      <div class="sp-chat">
+        <div class="sp-chat-history">
+          <div class="sp-chat-message sp-clearfix">
+            <div class="sp-chat-avatar"></div>
+            
+            <div class="sp-chat-message-content s-pclearfix">
+              <!-- Disable chat time functionality for now. <span class="chat-time">13:35</span> -->
+              
+              <h5>Loading&hellip;</h5>
+              
+              <p>Loading&hellip;</p>
+            </div>
+            
+            <hr>
+          </div>
+        </div>
+
+        <!-- Disable chat feedback functionality for now. <p class="sp-chat-feedback">Your partner is typing</p> -->
+        
+        <div class="sp-chat-form">
+          <input id="txtMessage" type="text" placeholder="Type your message&hellip;" autofocus>
+        </div>      
+      </div>
+    </div>
+    <!-- End New Chat -->
+    
+    <!--  Old Chat -->
+    <div id="chatDiv" class="chatDiv" style="position: absolute; z-index:1000; width: 25%;  visibility: hidden; display: none;">
+      <div class="chatcontainer chatcorners" id="chatContainer">    
+        <div class="row">
+          <div class="col-xs-12">
+            <div class="col-xs-10" id="chatWith" style="word-wrap: break-word; font-size: 14px;"><a> Chat with ...</a></div>
+            <div class="col-xs-1"><button id="btnClose" class="btn btn-primary" style="width:100%; font-size: 12px; height: 30px;">X</button></div>
+            <div class="chatcontentDiv col-xs-9" id="chatBox">
+            </div>
+          </div>
+          <div class="col-xs-3" style="display: none;">
+            <div><h3>Users</h3></div>
+            <div class="chatcontentDiv" id="nicknamesBox" >
+            </div>
+          </div>
+        </div>
+        <div class="row" id="chatBottom" style="margin-top:3px;">    
+          <div class="col-xs-11"><input type="text" id="txtMessage2" class="form-control" placeholder="Type message" style="font-size: 12px;"/></div>
+          <div class="col-xs-1"><button id="btnSend" class="btn btn-primary" style="width:0%; font-size: 10px; height: 30px;">Send</button></div>
+        </div>
+      </div>  
+    </div>
+    <!-- Old Chat -->
+    
+    
+    <!-- jQuery -->
+    <script src="../../assets/viewer/js/jquery-3.1.0.min.js"></script>
+    
+    <!-- Old Scripts -->
+    <script src="../../pdfjs/sockjs/sockjs-0.3.js"></script>
+    <script src="../../scripts/cookies.js"></script>
+	<script src="../../scripts/clientutils.js"></script>
+	<script src="../../scripts/timezone.js"></script>  
+    <script src="../../pdfjs/customjs/chat.js"></script>
+  
+    <!-- SlidePiper -->
+    <script src="../../assets/viewer/js/sp-viewer.js"></script>
+    
+    <!-- Old Scripts -->
+	<script src="../../pdfjs/customjs/viewercode.js"></script>
+    
+    
+    <!-- Google Analytics -->
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-64949615-2', 'auto');
+      ga('send', 'pageview');
+    </script>
+    
+    <!-- Sweet Alert -->
+    <script src="../../assets/viewer/js/plugins/sweetalerts/sweetalert.min.js"></script>
   </body>
 </html>
 

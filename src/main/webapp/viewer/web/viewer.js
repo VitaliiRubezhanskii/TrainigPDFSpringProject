@@ -25,7 +25,13 @@
 
 'use strict';
 
-var DEFAULT_URL = 'compressed.tracemonkey-pldi-09.pdf';
+/**
+ * Sets the amount of pages to be pre-rendered upon the page loading
+ * in the browser. 
+ */
+var PRERENDERED_PAGES_NUMBER = 20;
+
+var DEFAULT_URL = '';
 var DEFAULT_SCALE_DELTA = 1.1;
 var MIN_SCALE = 0.25;
 var MAX_SCALE = 10.0;
@@ -45,7 +51,7 @@ var mozL10n = document.mozL10n || document.webL10n;
 
 
 var CSS_UNITS = 96.0 / 72.0;
-var DEFAULT_SCALE_VALUE = 'auto';
+var DEFAULT_SCALE_VALUE = 'page-fit';
 var DEFAULT_SCALE = 1.0;
 var UNKNOWN_SCALE = 0;
 var MAX_AUTO_SCALE = 1.25;
@@ -277,13 +283,16 @@ function getVisibleElements(scrollEl, views, sortByVisibility) {
   var firstVisibleElementInd = (views.length === 0) ? 0 :
     binarySearchFirstItem(views, isElementBottomBelowViewTop);
 
+  var prerenderedPagesNumber = Math.min(
+      PDFViewerApplication.page - 1 + PRERENDERED_PAGES_NUMBER,
+      PDFViewerApplication.pagesCount);
   for (var i = firstVisibleElementInd, ii = views.length; i < ii; i++) {
     view = views[i];
     element = view.div;
     currentHeight = element.offsetTop + element.clientTop;
     viewHeight = element.clientHeight;
 
-    if (currentHeight > bottom) {
+    if (currentHeight > bottom && i > prerenderedPagesNumber) {
       break;
     }
 
