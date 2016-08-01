@@ -201,19 +201,17 @@ public class ManagementServlet extends HttpServlet {
         
       case "getWidgetsSettings":
         int fileId = 0;
-        boolean isViewer = false;
         
         if (null != request.getParameter("fileLinkHash")) {
           String fileLinkHash = request.getParameter("fileLinkHash");
           fileId = DbLayer.getFileIdFromFileLinkHash(fileLinkHash);
-          isViewer = true;
         } else if (null != request.getParameter("fileHash")) {
           String fileHash = request.getParameter("fileHash");
           fileId = DbLayer.getFileIdFromFileHash(fileHash);
         }
         
         if (0 != fileId) {
-          data.put("widgetsSettings", DbLayer.getWidgetsSettings(fileId, isViewer));
+          data.put("widgetsSettings", DbLayer.getWidgetsSettings(fileId));
         }
         break;
         
@@ -499,9 +497,13 @@ public class ManagementServlet extends HttpServlet {
           
         case "setWidgetsSettings":
           JSONArray widgetsSettings = input.getJSONArray("widgetsSettings");
-          String fileHash = input.getString("fileHash");
+          int resultCode = 0;
+
+          for (int i = 0; i < widgetsSettings.length(); i++) {
+        	  JSONObject widgetSetting = widgetsSettings.getJSONObject(i);
+        	  resultCode = DbLayer.setWidgetSettings(widgetSetting);  
+          }
           
-          int resultCode = DbLayer.setWidgetsSettings(fileHash, widgetsSettings);
           output.put("resultCode", resultCode);
           break;
           
