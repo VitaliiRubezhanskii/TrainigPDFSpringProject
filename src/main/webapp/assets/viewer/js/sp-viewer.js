@@ -73,6 +73,7 @@ sp.viewer = {
   	videoTabClosed: 'VIEWER_WIDGET_VIDEO_TAB_CLOSED'
   },
   linkHash: getParameterByName('f'),
+  widget: {},
   
   /**
    * @param {String} param_1_varchar - The CTA button id attribute.
@@ -113,7 +114,6 @@ sp.viewer = {
   }
 };
 
-var iframeSrc;
 if ('' != sp.viewer.linkHash) {
   $.getJSON('../../config-viewer', {linkHash: sp.viewer.linkHash}, function(config) {
     
@@ -492,19 +492,80 @@ if ('' != sp.viewer.linkHash) {
         },
         function(data) {
           var widgets = {};
-          $.each(data.widgetsSettings, function(key, value) {
-            widgets['widget' + value.widgetId] = value;            
+          
+          $.each(data.widgetsSettings, function(index, data) {
+            var widgetData = JSON.parse(data.widgetData);
+            
+            switch(widgetData.data.widgetId) {
+	            case 1:
+	              displayVideoWidget(widgetData.data);
+	              break;
+	              
+	            case 2:
+	            case 3:
+	              displayCalendlyAndQuestionWidget(widgetData.data);
+	              break;
+	          }
           });
+          
+          /**
+           * This function creates an object out of the video widget data:
+           * widget.widget1.pageX = videoData.
+           * 
+           * @param {object} videoWidgetData - Object containing the video widget data.
+           * 
+           * @example
+           *  videoData = {
+           * 			videoSource: {string},
+           * 	     videoTitle: {string},
+           *   videoPageStart: {number}, 
+           *   isYoutubeVideo: {boolean}
+           * }
+           */
+          function displayVideoWidget(videoWidgetData) {
+            if (typeof videoWidgetData !== 'undefined') {
+              var widgetId = 'widget' + videoWidgetData.widgetId;
+              widgets[widgetId] = {
+              		isEnabled: videoWidgetData.isEnabled
+              }
+              
+              $.each(videoWidgetData.items, function(index, videoData) {
+                var pageStart = 'page' + videoData.videoPageStart.toString();
+              	widgets[widgetId][pageStart] = videoData;
+              });
+            }
+          }
+          
+          /**
+           * This function creates an object e.g.
+           * widget.widget2.items = widgetItems;
+           * 
+           * widgetItems will contain key:value pairs relating to the widget 
+           * e.g. the Calendly widget will have {buttonText: {string}} referring to the
+           * text that will appear in the widget button in the viewer.
+           * 
+           * @param {object} widgetData - An object containing widget data
+           * 
+           */
+          function displayCalendlyAndQuestionWidget(widgetData) {
+            if (typeof widgetData !== 'undefined') {
+              var widgetId = 'widget' + widgetData.widgetId;
+              widgets[widgetId] = {
+              	isEnabled: widgetData.isEnabled,
+              	items: widgetData.items
+              }
+            }
+          }
+
           implementWidgets(widgets);
         }
     );
-    
     
     /**
      * Check whether a widget required settings are set.
      * 
      * @param {object} widgetSettings - An object containing a widget settings.
-     * @param {array} requiredSettings - The widget settings keys required to be
+     * @param {object} requiredSettings - The widget settings keys required to be
      * defined for the functionality of the widget.
      * 
      * @return {boolean} Are the required widget settings defined.
@@ -513,8 +574,7 @@ if ('' != sp.viewer.linkHash) {
       var isWidgetSettingsDefined = true;
       
       $.each(requiredSettings, function(index, requiredSetting) {
-        if (typeof widgetSettings === 'undefined'
-            || typeof widgetSettings[requiredSetting] == 'undefined') {
+        if (typeof widgetSettings[requiredSetting] == 'undefined') {
           isWidgetSettingsDefined = false;
           return false;
         }
@@ -523,202 +583,324 @@ if ('' != sp.viewer.linkHash) {
       return isWidgetSettingsDefined;
     }
     
-    
     /**
-     * This is an initial implementation of the widgets platform,
+     * This is an implementation of the widgets platform,
      * taking its settings from the DB. 
+     * 
+     * @param {object} widgets - Array containing widget data formed as objects.
      */
     function implementWidgets(widgets) {
       
-      var widget1RequiredSettings = ['isEnabled', 'iframeSrc', 'title', 'isYouTubeVideo', 'pageNumber'];
-      var widget2RequiredSettings = ['isEnabled', 'userName'];
-      var widget3RequiredSettings = ['isEnabled', 'buttonText'];
-      
-      if (isWidgetSettingsDefined(widgets.widget1, widget1RequiredSettings)) {
-        if ('' != widgets.widget1.iframeSrc) {
-          implementWidget1(widgets.widget1);
+      var widget1RequiredSettings = ['videoPageStart', 'videoSource', 'videoTitle', 'isYouTubeVideo'];
+      var widget2RequiredSettings = ['userName'];
+      var widget3RequiredSettings = ['buttonText'];
+
+      if (widgets.widget1.isEnabled) {
+        var isValidVideoWidget = true;
+        $.each(widgets.widget1, function(key, value) {
+        	if ('page' === key.substring(0, 4)) {
+        		if (! isWidgetSettingsDefined(value, widget1RequiredSettings)) {
+	          	isValidVideoWidget = false;
+	            return false;
+	          }
+        	}
+        });
+        
+        if (isValidVideoWidget) {
+        	implementWidget1(widgets.widget1);
+        }
+      }
+
+      if (widgets.widget2.isEnabled) {
+        if (isWidgetSettingsDefined(widgets.widget2.items[0], widget2RequiredSettings)) {
+           implementWidget2(widgets.widget2.items[0]);
         }
       }
       
-      if (isWidgetSettingsDefined(widgets.widget2, widget2RequiredSettings)) {
-        if ('' != widgets.widget2.userName) {
-          implementWidget2(widgets.widget2);
+      if (widgets.widget3.isEnabled) {
+        if (isWidgetSettingsDefined(widgets.widget3.items[0], widget3RequiredSettings)) {
+           implementWidget3(widgets.widget3.items[0]);
         }
       }
       
-      if (isWidgetSettingsDefined(widgets.widget3, widget3RequiredSettings)) {
-        if ('' != widgets.widget3.buttonText) {
-          implementWidget3(widgets.widget3);
-        }
-      }
       
+      /**
+       * 
+       */
       function implementWidget1(widget) {
-        // Widget 1 - YouTube widget 
-        if (widget.isEnabled) {
-          // If it is a YouTube video, then append the #sp-player to .sp-demo-video which will become an iframe,
-          // otherwise, append an iframe to the #sp-player.
-          $('body').append(
-              '<div class="sp-demo-video sp-demo-video1">' +
-                '<div class="sp-demo-video-title-container">' +
-                  '<span class="sp-demo-video-title__span"></span><i class="fa fa-chevron-up"></i><hr>' +
-                  '<div id="sp-player"></div>' +
-                '</div>' +
-              '</div>');
-          
-          $('.sp-demo-video1 span').text(widget.title);
-          $('.sp-demo-video').append($('#sp-player').get(0));
-          
-          if (widget.isYouTubeVideo) {
-            iframeSrc = widget.iframeSrc.split('/')[4];
-            $.getScript("https://www.youtube.com/iframe_api");
+        
+        // Widget 1 - YouTube widget. 
+        $('body').append(
+            '<div class="sp-demo-video sp-demo-video1">' +
+              '<div class="sp-demo-video-title-container">' +
+                '<span class="sp-demo-video-title__span"></span><i class="fa fa-chevron-up"></i><hr>' +
+              '</div>' +
+            '</div>');
+        
+        sp.viewer.widget.videoWidget = {
+            isYouTubePlayerReady: false,
+        };
+        
+        widget.lastVideoSource = '';
+        widget.lastVideoTitle = '';
+        widget.isFileLoaded = false;
+        widget.lastViewedPage = 0;
+        widget.currentVideoIsYoutube = false;
+        
+        /**
+         * If any of the videos are YouTube videos, load the YouTube iFrame API.
+         */
+        function loadYouTubeAPI() {
+          for (var page = 1; page < PDFViewerApplication.pagesCount; page++) {
+            if (typeof widget['page' + page] !== 'undefined' && widget['page' + page].isYouTubeVideo) {
+              $.getScript("https://www.youtube.com/iframe_api");
+              $('.sp-demo-video').append('<div id="sp-player"></div>');
+            }
+          }
+        }
+        
+        /**
+         * Set video widget source.
+         * 
+         * If it is a YouTube video, then append the #sp-player to .sp-demo-video which will become an iframe,
+         * otherwise, append an iframe to the #sp-player, and load the video through the API function.
+         * 
+         * @param {string} videoSource - The video source.
+         * @param {number} page - The current page number.
+         * 
+         * @var sp.viewer.widget.videoWidget.youTubeIframeSrc - The ID of the YouTube link. 
+         */
+        function setVideoSource(videoSource, page) {
+          if (widget['page' + page].isYouTubeVideo) {
+            sp.viewer.widget.videoWidget.youTubeIframeSrc = videoSource.split('/')[4];
+            if (sp.viewer.widget.videoWidget.isYouTubePlayerReady) {
+              player.cueVideoById(sp.viewer.widget.videoWidget.youTubeIframeSrc);
+            }
+            widget.currentVideoIsYoutube = true;
+            if ($('#sp-not-youtube-player').length > 0) {
+              $('#sp-not-youtube-player').remove(); 
+            }
+            $('#sp-player').show();
           } else {
-            $('#sp-player').append(
-                '<iframe src=' + widget.iframeSrc + ' frameborder="0" scrolling="no"></iframe>'
-            );
+            if ($('#sp-not-youtube-player').length < 1) {
+              $('.sp-demo-video').append(
+                  '<iframe src="' + videoSource + '" id="sp-not-youtube-player" frameborder="0" scrolling="no"></iframe>'
+              );
+            } else {
+              $('#sp-not-youtube-player')
+                .show()
+                .attr('src', videoSource);
+            }
+            
+            $('#sp-player').hide();
+            widget.currentVideoIsYoutube = false;
+          }
+          widget.lastVideoSource = videoSource;
+        };
+        
+        
+        /**
+         * PDF.js event listeners - pagesloaded, pageschange.
+         * 
+         * This function checks if the current page the user is on requires a new video source
+         * or a new video title. This is checked against the video widget object, which contains 
+         * the {videoPageStart: {string}} object e.g. page1.
+         * 
+         * It also checks when to automatically open the video widget.
+         */
+        var isYouTubeApiCalled = false;
+        $(document).on('pagesloaded pagechange', function(event) {
+          if (! isYouTubeApiCalled) {
+            loadYouTubeAPI();
+            isYouTubeApiCalled = true;
+          }
+          if ('pagesloaded' == event.type) {
+            widget.isFileLoaded = true;
+          }
+          if (widget.isFileLoaded && widget.lastViewedPage != PDFViewerApplication.page) {
+          	for (var page = PDFViewerApplication.page; page >= 1; page--) {
+        			if (typeof widget['page' + page] !== 'undefined') {
+								var videoSource = widget['page' + page].videoSource;
+								var videoTitle = widget['page' + page].videoTitle;
+								
+								if (videoSource !== widget.lastVideoSource) {
+								  setVideoSource(videoSource, page);
+								  widget.lastVideoSource = videoSource;
+								}
+								
+								if (videoTitle !== widget.lastVideoTitle) {
+									$('.sp-demo-video1 span').text(videoTitle);
+								  widget.lastVideoTitle = videoTitle;
+								}
+								
+								if ($('.sp-demo-video').is(':hidden')) {
+								  $('.sp-demo-video').show();
+								}
+                
+								// If a page with a video is found, break the loop. 
+								break;
+             } else if (1 === page) {
+		    		    $('.sp-demo-video').hide();	  
+		    		  }
+          	}
+
+            $.each(widget, function(key, value) {
+            	if ('page' === key.substring(0, 4)) {
+          		  if (parseInt(key.substring(4)) === PDFViewerApplication.page) {
+
+                  // Hide/Show Video Widget.
+                  sp.viewer.widget.videoWidget.showVideo = function(video) {
+                    $(video).show(300, 'swing', function() {
+                      $('.sp-demo-video').css('min-width', '300px');
+                      keepAspectRatio();
+                    });
+                  };
+                
+                  if (widget.currentVideoIsYoutube) {
+                    sp.viewer.widget.videoWidget.showVideo('.sp-demo-video #sp-player');
+                  } else {
+                    sp.viewer.widget.videoWidget.showVideo('.sp-demo-video1 iframe:not(#sp-player)'); 
+                  }
+                  $('.sp-demo-video1 .fa').removeClass('fa-chevron-up').addClass('fa-chevron-down');
+                  $('.sp-demo-video1').removeClass('sp-video1-clicked');
+                  return false;
+                 
+                } else if (! $('.sp-demo-video1').hasClass('sp-video1-clicked')) {
+                  $('.sp-demo-video').css('min-width', '175px');
+                  $('.sp-demo-video1 .fa').removeClass('fa-chevron-down').addClass('fa-chevron-up');
+                  
+                  if (widget.currentVideoIsYoutube) {
+                    $('.sp-demo-video #sp-player').hide(300, 'swing');
+                  } else {
+                    $('.sp-demo-video1 iframe:not(#sp-player)').hide(300, 'swing'); 
+                  }
+                }
+            	}
+            });
+            
+            widget.lastViewedPage = PDFViewerApplication.page;
+          }
+        });
+
+        /**
+         * Depending on whether the video is open or not, set a different max and min width on the video.
+         * The video should always be a certain minimum height when open, but when closed the tab can be
+         * smalller.
+         * 
+         * @var {string} video - The jQuery selector for either a YouTube video or non-YouTube video. 
+         */
+        $('.sp-demo-video1').click(function(event) {
+          var video = '';
+          if ($(event.currentTarget).find('#sp-not-youtube-player').length > 0) {              
+            video = '.sp-demo-video1 #sp-not-youtube-player';
+          } else {
+            video = '.sp-demo-video #sp-player';
           }
           
-          widget.isFileLoaded = false;
-          widget.lastViewedPage = 0;
-          $(document).on('pagesloaded pagechange', function(event) {
-            if ('pagesloaded' == event.type) {
-              widget.isFileLoaded = true;
-            }
-            if (widget.isFileLoaded && widget.lastViewedPage != PDFViewerApplication.page) {
-              if (widget.pageNumber == PDFViewerApplication.page) {
-                $('.sp-demo-video1 .fa').removeClass('fa-chevron-up').addClass('fa-chevron-down');
-                $('.sp-demo-video1 iframe').show(300, 'swing', function () {
-                  $('.sp-demo-video').css('min-width', '300px');
-                  keepAspectRatio();
-                });
-                $('.sp-demo-video1').removeClass('sp-video1-clicked');
-                
-              } else if (! $('.sp-demo-video1').hasClass('sp-video1-clicked')) {
-                $('.sp-demo-video').css('min-width', '175px');
-                $('.sp-demo-video1 .fa').removeClass('fa-chevron-down').addClass('fa-chevron-up');
-                $('.sp-demo-video1 iframe').hide(300, 'swing');
-              }
-              widget.lastViewedPage = PDFViewerApplication.page;
-            }
-          });
-          
-          $('.sp-demo-video1').click(function() {
-            /**
-             * Depending on whether the video is open or not, set a different max and min width on the video.
-             * The video should always be a certain minimum height when open, but when closed the tab can be
-             * smalller.
-             */
-            $('.sp-demo-video1 iframe').slideToggle('swing', function () {
-              if ($('.sp-demo-video iframe').is(':visible')) {
-                $('.sp-demo-video-title__span')
-                  .css({'padding-right': '0', 'max-width': '80%'});
-                $('.sp-demo-video1').css('width', '34%');
-                $('.sp-demo-video1').css('min-width', '300px');
-                
-                sendVideoTabClickedEvent(sp.viewer.paramValue.videoTabOpened);
-              } else {
-                $('.sp-demo-video-title__span')
-                  .css({'padding-right': '20px', 'max-width': '80%'});
-                $('.sp-demo-video1').css('width', '34%');
-                $('.sp-demo-video1').css('min-width', '175px');
-                
-                sendVideoTabClickedEvent(sp.viewer.paramValue.videoTabClosed);
-              }
-              keepAspectRatio(); // Ensures the window remains 16:9
-            });
-            $('.sp-demo-video1 .fa').toggleClass('fa-chevron-down fa-chevron-up');
-            if ($('.sp-demo-video1').hasClass('sp-video1-active')) {
-              $('.sp-demo-video1').addClass('sp-video1-clicked');
-              $('.sp-demo-video1').removeClass('sp-video1-active');
+          $(video).slideToggle('swing', function () {
+            if ($('.sp-demo-video iframe').is(':visible')) {
+              $('.sp-demo-video-title__span')
+                .css({'padding-right': '0', 'max-width': '80%'});
+              $('.sp-demo-video1').css('width', '34%');
+              $('.sp-demo-video1').css('min-width', '300px');
+              
+              sendVideoTabClickedEvent(sp.viewer.paramValue.videoTabOpened);
             } else {
-              $('.sp-demo-video1').addClass('sp-video1-active');
-            } 
+              $('.sp-demo-video-title__span')
+                .css({'padding-right': '20px', 'max-width': '80%'});
+              $('.sp-demo-video1').css('width', '34%');
+              $('.sp-demo-video1').css('min-width', '175px');
+              
+              sendVideoTabClickedEvent(sp.viewer.paramValue.videoTabClosed);
+            }
+            
+            $('.sp-demo-video1').addClass('sp-video1-clicked');
+            keepAspectRatio(); // Ensures the window remains 16:9
           });
-        }
+
+          $('.sp-demo-video1').addClass('sp-video1-clicked');
+          $('.sp-demo-video1 .fa').toggleClass('fa-chevron-down fa-chevron-up');
+        });
       }
       
       function implementWidget2(widget) {
+        
         // Widget 2 - Calendly widget
-        if (widget.isEnabled) {
-          
-          if (0 == $('.sp-right-side-widgets').length) {
-            $('body').append('<div class="sp-right-side-widgets"></div>');
-          }
-          
-          $('.sp-right-side-widgets').append('<button class="sp-widget-button" id="sp-widget2"></button>');
-          
-          if ($('.sp-widget-button').length > 1) {
-            $('#sp-widget2').css('margin-top', '20px');
-          }
-          
-          $('#sp-widget2').html('<i class="fa fa-calendar"></i><div>Schedule Meeting</div>');
-          $('#sp-widget2').click(function() {
-            swal({
-              html: true,
-              showCancelButton: true,
-              showConfirmButton: false,
-              text: '<iframe src="../../assets/viewer/widget/calendly.html?user=' + widget.userName + '" height="420" frameborder="0"></iframe>',
-              title: 'Schedule Meeting',
-            });
-            
-            /**
-             * Send Calendly event.
-             * 
-             * param_1_varchar - The text on the Calendly button.
-             */
-            sp.viewer.setCustomerEvent({
-              eventName: sp.viewer.eventName.viewerWidgetCalendlyClicked,
-              linkHash: sp.viewer.linkHash,
-              sessionId: sessionid,
-              param_1_varchar: $(this).text()
-            });
-          });
+        if (0 == $('.sp-right-side-widgets').length) {
+          $('body').append('<div class="sp-right-side-widgets"></div>');
         }
+        
+        $('.sp-right-side-widgets').append('<button class="sp-widget-button" id="sp-widget2"></button>');
+        
+        if ($('.sp-widget-button').length > 1) {
+          $('#sp-widget2').css('margin-top', '20px');
+        }
+        
+        $('#sp-widget2').html('<i class="fa fa-calendar"></i><div>' + widget.buttonText +'</div>');
+        $('#sp-widget2').click(function() {
+          swal({
+            html: true,
+            showCancelButton: true,
+            showConfirmButton: false,
+            text: '<iframe src="../../assets/viewer/widget/calendly.html?user=' + widget.userName + '" height="420" frameborder="0"></iframe>',
+            title: widget.buttonText,
+          });
+          
+          /**
+           * Send Calendly event.
+           * 
+           * param_1_varchar - The text on the Calendly button.
+           */
+          sp.viewer.setCustomerEvent({
+            eventName: sp.viewer.eventName.viewerWidgetCalendlyClicked,
+            linkHash: sp.viewer.linkHash,
+            sessionId: sessionid,
+            param_1_varchar: $(this).text()
+          });
+        });
       }
       
       function implementWidget3(widget) {
         
         // Widget 3 - Ask a question widget
-        if (widget.isEnabled) {
-          
-          if (0 == $('.sp-right-side-widgets').length) {
-            $('body').append('<div class="sp-right-side-widgets"></div>');
-          }
-          
-          $('.sp-right-side-widgets').append('<button class="sp-widget-button" id="sp-widget3"></button>');
-
-          if ($('.sp-widget-button').length > 1) {
-            $('#sp-widget3').css('margin-top', '20px');
-          }
-          
-          $('#sp-widget3').html('<i class="fa fa-comment"></i><div>' + widget.buttonText + '</div>');
-          $('#sp-widget3').click(function() {
-            swal({
-              html: true,
-              showCancelButton: true,
-              showConfirmButton: true,
-              text: '<form><div class="sp-widget3-label-wrapper"><label class="sp-widget3-label" for="sp-widget3-message">Enter your message:</label></div><textarea id="sp-widget3-message" rows="5" autofocus></textarea><div class="sp-widget3-label-wrapper"><label class="sp-widget3-label" for="sp-widget3-email" class="sp-widget3-label">Enter your email address:</label></div><input type="text" id="sp-widget3-email" style="display: block; margin-top: 0;"></form>',
-              title: widget.buttonText,
-            }, function(isConfirm) {
-              if (isConfirm) {
-                /**
-                 * Send Ask a Question event.
-                 * 
-                 * param_1_varchar - The text on the Ask a Question button.
-                 * param_2_varchar - The message in the widget form.
-                 * param_3_varchar - The email address to reply to in the widget form.
-                 */
-                sp.viewer.setCustomerEvent({
-                  eventName: sp.viewer.eventName.viewerWidgetAskQuestion,
-                  linkHash: sp.viewer.linkHash,
-                  sessionId: sessionid,
-                  param_1_varchar: $('#sp-widget3').text(),
-                  param_2_varchar: $('#sp-widget3-message').val(),
-                  param_3_varchar: $('#sp-widget3-email').val()
-                });
-              }
-            });
-          });
+        if (0 == $('.sp-right-side-widgets').length) {
+          $('body').append('<div class="sp-right-side-widgets"></div>');
         }
+        
+        $('.sp-right-side-widgets').append('<button class="sp-widget-button" id="sp-widget3"></button>');
+
+        if ($('.sp-widget-button').length > 1) {
+          $('#sp-widget3').css('margin-top', '20px');
+        }
+        
+        $('#sp-widget3').html('<i class="fa fa-comment"></i><div>' + widget.buttonText + '</div>');
+        $('#sp-widget3').click(function() {
+          swal({
+            html: true,
+            showCancelButton: true,
+            showConfirmButton: true,
+            text: '<form><label for="sp-widget3-message">Enter your message:</label><textarea id="sp-widget3-message" rows="5" autofocus></textarea><label for="sp-widget3-email" class="sp-widget3-label">Enter your email address:</label><input type="text" id="sp-widget3-email" style="display: block; margin-top: 0;"></form>',
+            title: widget.buttonText,
+          }, function(isConfirm) {
+            if (isConfirm) {
+              /**
+               * Send Ask a Question event.
+               * 
+               * param_1_varchar - The text on the Ask a Question button.
+               * param_2_varchar - The message in the widget form.
+               * param_3_varchar - The email address to reply to in the widget form.
+               */
+              sp.viewer.setCustomerEvent({
+                eventName: sp.viewer.eventName.viewerWidgetAskQuestion,
+                linkHash: sp.viewer.linkHash,
+                sessionId: sessionid,
+                param_1_varchar: $('#sp-widget3').text(),
+                param_2_varchar: $('#sp-widget3-message').val(),
+                param_3_varchar: $('#sp-widget3-email').val()
+              });
+            }
+          });
+        });
       }
     }
   });
@@ -761,9 +943,9 @@ function onYouTubeIframeAPIReady() {
   player = new YT.Player('sp-player', {
     height: '168.75',
     width: '300',
-    videoId: iframeSrc,
     events: {
-      'onStateChange': onPlayerStateChange
+      'onStateChange': onPlayerStateChange,
+      'onReady': onPlayerReady
     }
   });
 }
@@ -778,27 +960,32 @@ function onYouTubeIframeAPIReady() {
 function onPlayerStateChange(event) {
   var playerState = event.data;
   var data = {
-      linkHash: sp.viewer.linkHash, 
-      sessionId: sessionid,
-      param_1_varchar: player.getVideoUrl(),
-      param_2_varchar: $('.sp-demo-video-title__span').text(),
-    };
-  
+    linkHash: sp.viewer.linkHash, 
+    sessionId: sessionid,
+    param_1_varchar: player.getVideoUrl(),
+    param_2_varchar: $('.sp-demo-video-title__span').text(),
+  };
+
   switch (playerState) {
     case 1:
       
       // YouTube video played.
       data.eventName = sp.viewer.eventName.viewerWidgetVideoYouTubePlayed;
       sp.viewer.setCustomerEvent(data);
-    break;
+      break;
     
     case 2:
       
       // YouTube video paused.
       data.eventName = sp.viewer.eventName.viewerWidgetVideoYouTubePaused;
       sp.viewer.setCustomerEvent(data);
-    break;
+      break;
   };
+}
+
+function onPlayerReady() {
+  sp.viewer.widget.videoWidget.isYouTubePlayerReady = true;
+  player.cueVideoById(sp.viewer.widget.videoWidget.youTubeIframeSrc);
 }
 
 /**

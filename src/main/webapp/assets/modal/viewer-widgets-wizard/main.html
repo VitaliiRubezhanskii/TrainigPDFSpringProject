@@ -27,16 +27,54 @@
                     <div id="sp-tab-1" class="tab-pane">
                         <div class="panel-body">
                             <strong>Video Widget</strong>
-                            <div class="sp-customization-option__p">
-                                <input type="checkbox" name="video-widget-is-enabled" data-key-id="5" data-key-type="boolean" checked="checked"> Is Enabled?
+                            <div class="sp-customization-option__p sp-hide-is-enabled">
+                                <input type="checkbox" name="video-widget-is-enabled" data-key-id="5" data-key-type="boolean"> Is Enabled?
                             </div>
-                            <p class="sp-customization-option__p">Video Link <i class="fa fa-info-circle sp-video-link-tooltip" data-toggle="tooltip" data-original-title="For a YouTube video, just copy & paste a YouTube link"></i></p>
-                            <input type="text" class="form-control" name="video-widget-link" placeholder="e.g. https://www.youtube.com/watch?v=tk-_PgWTASU" data-key-id="1" data-key-type="string">
-                            <p class="sp-customization-option__p">Video Title</p>
-                            <input type="text" class="form-control" name="video-widget-title" placeholder="e.g. Watch This Great Video!" data-key-id="2" data-key-type="string">
-                            <p class="sp-customization-option__p">Page Number</p>
-                            <input type="number" class="form-control" name="video-widget-page" placeholder="e.g. The page you would like this widget to appear" min="1" data-key-id="7" data-key-type="integer">
-                            <input type="checkbox" class="form-control" style="display: none;" name="video-widget-is-youtube-video" data-key-id="4" data-key-type="boolean">
+                            <hr>
+                                <div class="container-fluid">
+                                    <div class="row">
+                                        <div class="col-xs-4">
+                                            <p>Video Link <i class="fa fa-info-circle sp-video-link-tooltip" data-toggle="tooltip" data-original-title="For a YouTube video, just copy & paste a YouTube link"></i></p>
+                                        </div>
+                                        
+                                        <div class="col-xs-4">
+                                            <p>Video Title</p>
+                                        </div>
+                                        
+                                        <div class="col-xs-2">
+                                            <p>Page</p>
+                                        </div>
+                                    </div>
+                                    <div id="sp-video-customization-options-container">
+                                        <div class="row sp-video-widget-data-row">
+                                            <div class="col-xs-4">
+                                                <input type="text" data-video="videoSource" class="sp-video-widget" name="video-widget-link" placeholder="e.g. https://www.youtube.com/watch?v=tk-_PgWTASU" data-key-id="1" data-key-type="string">
+                                            </div>
+                                            
+                                            <div class="col-xs-4">
+                                                <input type="text" data-video="videoTitle" class="sp-video-widget" name="video-widget-title" placeholder="e.g. Watch This Video!" data-key-id="2" data-key-type="string">
+                                            </div>
+                                            
+                                            <div class="col-xs-2">
+                                                <input type="number" data-video="videoPageStart" class="sp-video-widget" name="video-widget-page-start" min="1" data-key-id="7" data-key-type="integer">
+                                            </div>
+                                            
+                                            <div class="col-xs-2">
+                                                <a class="btn btn-white btn-sm sp-delete-video-widget__a">
+                                                    <i class="fa fa-times" aria-hidden="true"></i>
+                                                </a>
+                                            </div>
+                                            
+                                            <input type="checkbox" class="form-control" style="display: none;" name="video-widget-is-youtube-video" data-key-id="4" data-key-type="boolean">
+                                        </div>
+                                    </div>
+                                </div>
+                            
+                            <div class="sp-add-video-container">
+                                <a class="btn btn-white btn-sm  sp-add-video-widget__a">
+                                    <i class="fa fa-plus" aria-hidden="true"></i>  Add Video
+                                </a>
+                            </div>
                         </div>
                     </div>
                     
@@ -45,13 +83,17 @@
                         <div class="panel-body">
                             <strong>Calendly Widget</strong>
                             <br>
-                            <small>(Don't have a Calendly account? <a target="_blank" href="https://calendly.com/">Sign up here</a>)</small>
+                            <small>(Don't have a Calendly account? <a target="_blank" href="https://calendly.com/">Sign up here</a>)</small>        
                             
-                            <div class="sp-customization-option__p">
-                                <input type="checkbox" name="calendly-widget-is-enabled" data-key-id="6" data-key-type="boolean" checked="checked"> Is Enabled?
+                            <div class="sp-customization-option__p sp-hide-is-enabled">
+                                <input type="checkbox" name="calendly-widget-is-enabled" data-key-id="6" data-key-type="boolean"> Is Enabled?
                             </div>
+                            <hr>
                             <p class="sp-customization-option__p">Calendly Username</p>
                             <input type="text" class="form-control" name="calendly-widget-username" placeholder="e.g. salesman" data-key-id="3" data-key-type="string">
+                            
+                            <p class="sp-customization-option__p">Button Text</p>
+                            <input type="text" class="form-control" name="calendly-widget-button-text" placeholder="e.g. Schedule Meeting" data-key-id="3" data-key-type="string">
                         </div>
                     </div>
                     
@@ -59,11 +101,12 @@
                     <div id="sp-tab-3" class="tab-pane active">
                         <div class="panel-body">
                             <strong>Ask a Question / Give Feedback Widget</strong>
-                            <div class="sp-customization-option__p">
-                                <input type="checkbox" data-key-id="8" data-key-type="boolean" checked="checked"> Is Enabled?
+                            <div class="sp-customization-option__p sp-hide-is-enabled">
+                                <input type="checkbox" name="question-widget-is-enabled" data-key-id="8" data-key-type="boolean"> Is Enabled?
                             </div>
+                            <hr>
                             <p class="sp-customization-option__p">Call to Action Text</p>
-                            <input type="text" class="form-control" data-key-id="9" data-key-type="string" placeholder="e.g. Ask a Question / Give Feedback">
+                            <input type="text" name="question-widget-text" class="form-control" data-key-id="9" data-key-type="string" placeholder="e.g. Ask a Question / Give Feedback">
                         </div>
                     </div>
                 </div>

@@ -433,16 +433,25 @@ sp = {
      */
     sortDocsInDocsMgmtPanel: function (data) {
       var filesArr = [];
-      $.each(data['filesList'], function (i, v) {
+      $.each(data['filesList'], function (index, value) {
+      
         var obj = {
-            'date': '<span><i class="fa fa-clock-o sp-clickable sp-file-clock" data-toggle="tooltip" data-placement="right" title="Date file was added or updated"></i> ' + v[2] + '</span>',
-            'document': '<span class="sp-file-mgmt-file-name" data-file-hash="' + v[0] + '">' + v[1] + '</span>',
+            'date': '<span><i class="fa fa-clock-o sdp-clickable sp-file-clock" data-toggle="tooltip" data-placement="right" title="Date file was added or updated"></i> ' + value[2] + '</span>',
+            'document': '<span class="sp-file-mgmt-file-name" data-file-hash="' + value[0] + '">' + value[1] + '</span>',
             'options': '<span>'
-                        + '<a><span style="margin-left: 300px;" class="label label-primary sp-file-update" data-toggle="modal" data-target="#sp-modal-update-file" data-file-hash="' + v[0] + '">Update</span></a>'
-                        + '<a href="#"><span class="label label-danger sp-file-delete" data-file-hash="' + v[0] + '">Delete</span></a></span>'
-                        + '<a><span data-toggle="modal" data-target="#sp-viewer-widgets-modal" style="margin-left: 10px;" class="label label-success sp-file-customize" data-file-hash="' + v[0] + '">Customize</span></a>'
-        };   
+		                    + '<a><span style="margin-left: 300px;" class="label label-primary sp-file-update" data-toggle="modal" data-target="#sp-modal-update-file" data-file-hash="' + value[0] + '">Update</span></a>'
+		                    + '<a href="#"><span class="label label-danger sp-file-delete" data-file-hash="' + value[0] + '">Delete</span></a></span>'
+		                    + '<a><span data-toggle="modal" data-target="#sp-viewer-widgets-modal" style="margin-left: 10px;" class="label label-success sp-file-customize" data-file-hash="' + value[0] + '">Customize</span></a>'
+		                    + '<a class="sp-preview-file-link"><span id="sp-preview-file-' + index + '" style="margin-left: 10px;" class="label label-warning">Preview</span></a></span>'
+        };           
         filesArr.push(obj);
+        
+        sp.file.setFileLinkAttribute(
+		      value[0],
+		      'test@example.com',
+		      sp.config.salesman.email,
+		      'sp-preview-file-' + index
+		    );
       });
       
       if (!($.fn.dataTable.isDataTable('#sp-files-management'))) {
@@ -479,8 +488,14 @@ sp = {
         });
       });
       
+      /**
+       * Open preview document.
+       */
+      $('.sp-preview-file-link span').on('click', function() {
+    		window.open($(this).attr('data-file-link')); 
+      });
       
-   // init tooltip
+      // init tooltip
       $('.sp-file-clock').tooltip({delay: {show: 100, hide: 200}, placement: 'right' });
     },
     
@@ -1791,7 +1806,7 @@ chart: {
       */
     handleError: function (msg) {
       toastr.options = {
-          "closeButton": false,
+          "closeButton": true,
           "debug": false,
           "progressBar": false,
           "preventDuplicates": true,
