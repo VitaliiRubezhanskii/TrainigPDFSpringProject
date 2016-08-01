@@ -1749,124 +1749,61 @@ public class DbLayer {
 		}
 		
 		
-      /**
-       * Get a file link widget settings.
-       * 
-       * @param fileLinkHash A file link hash.
-       * @param isViewer Is the request being invoked from the viewer or the dashboard.
-       * @return the file link widget settings.
-       */
-      public static JSONArray getWidgetsSettings(int fileId, boolean isViewer) {
-        
-        Connection conn = null;
-        Constants.updateConstants();
-        try {
-          Class.forName("com.mysql.jdbc.Driver");
-        } catch (ClassNotFoundException e) {
-          e.printStackTrace();
-        }
-        
-        String sql =
-            "SELECT\n"
-            + "widget.id AS widget_id,\n"
-            + "widget.url AS widget_url,\n"
-            + "FK_widget_setting_key_id AS key_id,\n"
-            + "widget_setting_key.key_type,\n"
-            + "widget_setting_key.key_name AS `key`,\n"
-            + "boolean_value,\n"
-            + "integer_value,\n"
-            + "string_value\n"
-          + "FROM widget_setting_value\n"
-          + "JOIN widget_setting_key ON widget_setting_key.id = widget_setting_value.FK_widget_setting_key_id\n"
-          + "JOIN widget ON widget.id = widget_setting_key.FK_widget_id\n"
-          + "WHERE FK_file_id_ai = ?\n"
-          + "ORDER BY widget.id, widget_setting_key.key_name";
-        
-        JSONArray widgetsSettings = new JSONArray();
-        
-        try {
-          conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
-          PreparedStatement ps = conn.prepareStatement(sql);
-          
-          ps.setInt(1, fileId);
-          ResultSet rs = ps.executeQuery();
-          
-          JSONObject widgetSetting = new JSONObject();
-          int lastWidgetId = 0;
-          
-          while (rs.next()) {
-            int widgetId = rs.getInt("widget_id");
-            String widgetUrl = rs.getString("widget_url");
-            
-            if (rs.getRow() > 1 && widgetId != lastWidgetId) {
-              widgetsSettings.put(widgetSetting);
-              widgetSetting = new JSONObject();
-            }
-            
-            widgetSetting.put("widgetId", widgetId);
-            widgetSetting.put("widgetUrl", widgetUrl);
-            
-            String keyType = rs.getString("key_type");
-            int keyId = rs.getInt("key_id");
-            String key = rs.getString("key");
-            
-            switch (keyType) {
-              case "boolean":
-                boolean booleanValue = rs.getBoolean("boolean_value");
-                if (! rs.wasNull()) {
-                  if (isViewer) {
-                    widgetSetting.put(key, booleanValue);
-                  } else {
-                    widgetSetting.put(Integer.toString(keyId), booleanValue);
-                  }
-                }
-                break;
-              
-              case "integer":
-                int integerValue = rs.getInt("integer_value");
-                if (! rs.wasNull()) {
-                  if (isViewer) {
-                    widgetSetting.put(key, integerValue);
-                  } else {
-                    widgetSetting.put(Integer.toString(keyId), integerValue);
-                  }
-                }
-                break;
-              
-              case "string":
-                String stringValue = rs.getString("string_value");
-                if (! rs.wasNull()) {
-                  if (isViewer) {
-                    widgetSetting.put(key, stringValue);
-                  } else {
-                    widgetSetting.put(Integer.toString(keyId), stringValue);
-                  }
-                }
-                break;
-            }
-            
-            lastWidgetId = widgetId;
-          }
-          widgetsSettings.put(widgetSetting);
-          
-        } catch (SQLException ex) {
-          System.err.println("Error code: " + ex.getErrorCode() + " - " + ex.getMessage());
-          ex.printStackTrace();
-        } finally {
-          if (null != conn) {
-           try {
-             conn.close();
-           } catch (SQLException ex) {
-             ex.printStackTrace();
-           }
-          }
-        }
-        
-        return widgetsSettings;
-      }
-      
-      
-		   /**
+	    /**
+	     * Get a file link widget settings.
+	     * 
+	     * @param fileLinkHash A file link hash.
+	     * @return the file link widget settings.
+	     */
+	   	public static JSONArray getWidgetsSettings(int fileId) {
+	   		
+	   		Connection conn = null;
+	      Constants.updateConstants();
+	      try {
+	        Class.forName("com.mysql.jdbc.Driver");
+	      } catch (ClassNotFoundException e) {
+	        e.printStackTrace();
+	      }
+	 		
+	      String sql = 
+	      		"SELECT\n"
+	    		  + "  setting AS widget_setting,\n"
+	    		  + "  FK_widget_id AS widget_id\n"
+	    		  + "FROM widget_setting\n"
+	    		  + "WHERE FK_file_id_ai = ?";
+	 		
+	   		JSONArray widgetsSettings = new JSONArray();
+	   		
+	   		try {
+	   		  conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
+	        PreparedStatement ps = conn.prepareStatement(sql);
+	        
+	        ps.setInt(1, fileId);
+	        ResultSet rs = ps.executeQuery();
+			  
+				  while (rs.next()) {
+						JSONObject widget = new JSONObject();
+						widget.put("widgetData", rs.getString("widget_setting"));
+						widgetsSettings.put(widget);
+				  }
+	
+	   		} catch (SQLException e) {
+	   			e.printStackTrace();
+	   		} finally {
+	          if (null != conn) {
+	            try {
+	              conn.close();
+	            } catch (SQLException ex) {
+	              ex.printStackTrace();
+	            }
+	          }
+	      }
+	        
+	   		return widgetsSettings;
+	   	}
+
+
+     /**
        * Add a customer or salesman event to the DB.
        * 
        * @param tableName The table in the DB in which the event would be inserted into.
@@ -2395,16 +2332,18 @@ public class DbLayer {
     	  
       }
       
-      
       /**
        * Save a file widgets settings.
        * 
-       * @param widgetsSettings The file widgets settings. 
-       * @param fileHash The file hash.
+       * The settings are saved one at a time per widget
+       * 
+       * @param widgetSetting - The file widget settings.
+       * 
+       * @returns resultCode - A number representing the status of the operation.
        */
-      public static int setWidgetsSettings(String fileHash, JSONArray widgetsSettings) {
-        int resultCode = 0;
-        
+      public static int setWidgetSettings(JSONObject widgetSetting) {
+      	int resultCode = 0;
+    	
         Constants.updateConstants();
         try {
           Class.forName("com.mysql.jdbc.Driver");
@@ -2413,52 +2352,23 @@ public class DbLayer {
         }
         Connection conn = null;
         
-        String sql = "INSERT INTO widget_setting_value (FK_file_id_ai, FK_widget_setting_key_id, boolean_value, integer_value, string_value) VALUES \n";
-        for (int i = 0; i < widgetsSettings.length() - 1; i++) {
-          sql += "(?,?,?,?,?),\n";
-        }
-        sql += 
-            "(?,?,?,?,?)\n"
-          + "ON DUPLICATE KEY UPDATE\n"
-          + "boolean_value = VALUES(boolean_value),\n"
-          + "integer_value = VALUES(integer_value),\n"
-          + "string_value = VALUES(string_value)";
+        String sql = "INSERT INTO widget_setting (FK_file_id_ai, FK_widget_id, setting) VALUES (?, ?, ?)\n"
+		        		   + "ON DUPLICATE KEY UPDATE\n"
+		        		   + "setting = VALUES(setting)";
+        
+        JSONObject data = widgetSetting.getJSONObject("data");
+        int fileId = DbLayer.getFileIdFromFileHash(data.getString("fileHash"));
+        int widgetId = data.getInt("widgetId");
         
         try {
-          conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
+          conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);	
           PreparedStatement ps = conn.prepareStatement(sql);
           
-          int fileId = DbLayer.getFileIdFromFileHash(fileHash);
-          
-          for (int i = 0; i < widgetsSettings.length(); i++) {
-            JSONObject setting = widgetsSettings.getJSONObject(i);
-            
-            ps.setInt((i * 5) + 1, fileId);
-            ps.setInt((i * 5) + 2, setting.getInt("keyId"));
-            
-            if (setting.getString("keyType").equals("boolean")
-                && ! setting.isNull("value")) {
-              ps.setBoolean((i * 5) + 3, setting.getBoolean("value"));
-            } else {
-              ps.setNull((i * 5) + 3, java.sql.Types.BOOLEAN);
-            }
-            
-            if (setting.getString("keyType").equals("integer")
-                && ! setting.isNull("value")) {
-              ps.setInt((i * 5) + 4, setting.getInt("value"));
-            } else {
-              ps.setNull((i * 5) + 4, java.sql.Types.INTEGER);
-            }
-            
-            if (setting.getString("keyType").equals("string")
-                && ! setting.isNull("value")) {
-              ps.setString((i * 5) + 5, setting.getString("value"));
-            } else {
-              ps.setNull((i * 5) + 5, java.sql.Types.VARCHAR);
-            }            
-          }
-          
+          ps.setInt(1, fileId);
+          ps.setInt(2, widgetId);
+          ps.setString(3, widgetSetting.toString());
           ps.executeUpdate();
+          
           resultCode = 1;
         } catch (SQLException ex) {
           System.err.println("Error code: " + ex.getErrorCode() + " - " + ex.getMessage());

@@ -1,7 +1,70 @@
+.sp-add-video-widget__a {
+  background-color: #FFFFFF;
+  background-image: none;
+  cursor: pointer;
+  border: 1px solid #e5e6e7;
+  border-radius: 4px;
+  float: right;
+  margin-top: 20px;
+  padding: 6px 12px;
+  position: relative;
+  right: -9px;
+}
+
+.sp-add-video-widget__a:hover {
+  color: #1ab394;
+  border: 1px solid #1ab394; 
+}
+
 .sp-customization-option__p {
   margin-top: 15px;
 }
 
+.sp-hide-is-enabled {
+  display: none;
+}
+
 .sp-video-link-tooltip {
   margin-left: 5px;
+}
+
+.sp-delete-video-widget__a {
+  background-color: #FFFFFF;
+  background-image: none;
+  cursor: pointer;
+  border: 1px solid #e5e6e7;
+  border-radius: 4px;
+  padding: 6px 12px;
+}
+
+.sp-delete-video-widget__a:hover {
+  color: #ed5565;
+  border: 1px solid #ed5565;
+}
+
+.sp-video-widget {
+  background-color: #FFFFFF;
+  background-image: none;
+  border: 1px solid #e5e6e7;
+  border-radius: 1px;
+  padding: 6px 12px;
+  transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+  width: 160px;
+}
+
+.sp-video-widget:focus {
+  border: 1px solid #1ab394;
+}
+
+.sp-video-widget-form-error {
+  border-color: #ed5565;
+}
+
+.sp-video-widget-data-row {
+  margin-top: 7px;
+  padding-left: 0;
+}
+
+[name="video-widget-page-start"] {
+  width: 79px;
 }
