@@ -595,7 +595,7 @@ if ('' != sp.viewer.linkHash) {
       var widget2RequiredSettings = ['userName'];
       var widget3RequiredSettings = ['buttonText'];
 
-      if (widgets.widget1.isEnabled) {
+      if (typeof widgets.widget1 !== 'undefined' && widgets.widget1.isEnabled) {
         var isValidVideoWidget = true;
         $.each(widgets.widget1, function(key, value) {
         	if ('page' === key.substring(0, 4)) {
@@ -611,13 +611,13 @@ if ('' != sp.viewer.linkHash) {
         }
       }
 
-      if (widgets.widget2.isEnabled) {
+      if (typeof widgets.widget2 !== 'undefined' && widgets.widget2.isEnabled) {
         if (isWidgetSettingsDefined(widgets.widget2.items[0], widget2RequiredSettings)) {
            implementWidget2(widgets.widget2.items[0]);
         }
       }
       
-      if (widgets.widget3.isEnabled) {
+      if (typeof widgets.widget3 !== 'undefined' && widgets.widget3.isEnabled) {
         if (isWidgetSettingsDefined(widgets.widget3.items[0], widget3RequiredSettings)) {
            implementWidget3(widgets.widget3.items[0]);
         }
