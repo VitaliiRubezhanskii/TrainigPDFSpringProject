@@ -876,6 +876,7 @@ if ('' != sp.viewer.linkHash) {
         $('#sp-widget3').html('<i class="fa fa-comment"></i><div>' + widget.buttonText + '</div>');
         $('#sp-widget3').click(function() {
           swal({
+            closeOnConfirm: false,
             html: true,
             showCancelButton: true,
             showConfirmButton: true,
@@ -898,6 +899,8 @@ if ('' != sp.viewer.linkHash) {
                 param_2_varchar: $('#sp-widget3-message').val(),
                 param_3_varchar: $('#sp-widget3-email').val()
               });
+              
+              swal("Succes!", "Your message has been sent.", "success");
             }
           });
         });
