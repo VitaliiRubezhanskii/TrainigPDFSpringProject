@@ -3,15 +3,32 @@ SlidePiper README File
 
 Change Log
 ----------
+### 0.10.1
+
+2016-08-02 Yaniv Friedensohn <yanivf@slidepiper.com>
+
+* Fixed issue for not being able to load individual widgets.
+Individual widgets could be saved (for example only set the Calendly 
+widget), but couldn't be loaded unless all 3 widgets were set.
+
+
 ### 0.10.0
 
 2016-08-01 Max Prais <maxp@slidepiper.com>
 
-* Dashboard: Add preview button.
+* Added support for having multiple videos on the video widget
 
-* Dashboard: Add support for shortened YouTube video.
+* Added support for shortened YouTube video link
 
-* Dashboard & Viewer: Add multiple videos functionality to the video widget.
+* Slick error notifications (top right messages & text box highlights in red) when input is missing or invalid
+
+* Added preview document button
+
+* Added ability to set the Calendly button text
+
+* Smart enabling/disabling widget mechanism – The option to enable/disable a widget now appears only after
+a user initially set the widget. This makes the onboarding and overall UX better as before there was a confusing
+“Is Enabled” checkbox that was always checked even if there was no widget setting in place
 
 * Refactor widgets mechanism:
 	1. New DB structure: widget_setting table.
