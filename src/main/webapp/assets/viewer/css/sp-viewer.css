@@ -478,7 +478,7 @@
   display: block;
   font-size: 1.2em;
   font-weight: bold;
-  min-height: 40px;
+  min-height: 90px;
   padding: 20px 0;
   width: 100%;
  }
@@ -492,13 +492,14 @@
 .sp-widget-button div {
   display: inline-block;
   margin-left: 16px;
+  vertical-align: middle;
   width: 80px;
 }
 
 .sp-widget-button i {
   display: inline-block;
   font-size: 2em;
-  vertical-align: super;
+  vertical-align: middle;
 }
 
 
@@ -517,6 +518,7 @@
 
 .sweet-alert textarea {
   display: block;
+  padding: 8px;
   width: 100%;
 }
 
@@ -568,12 +570,13 @@
   }
 }
 
- @media only screen and (max-width: 830px) {
+ @media only screen and (max-width: 850px) {
   .sp-right-side-widgets {
     width: 10%;
   }
   
   .sp-widget-button {
+    min-height: 0;
     padding: 15px 0 15px 6px;
   }
   
@@ -584,7 +587,6 @@
   .sp-widget-button i {
     font-size: 1.5em;
     margin-bottom: 0;
-    vertical-align: middle;
   }
 }
 
