@@ -176,7 +176,15 @@ td.sp-file-hash {
 }
 
 .sp-data-widget {
-  height: 99px;
+  min-height: 100px;
+}
+
+.sp-data-widget i {
+  font-size: 2.5em;
+}
+
+.sp-metric-title {
+  min-height: 36px;
 }
 
 #sp-wizard-action-btns-container {
