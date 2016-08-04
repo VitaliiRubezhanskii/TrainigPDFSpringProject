@@ -4,6 +4,16 @@ SlidePiper README File
 Change Log
 ----------
 
+### 0.10.3
+
+2016-08-04 Yaniv Friedensohn <yanivf@slidepiper.com>
+
+* Removed file title and name from viewer title
+
+* Fixed YouTube video not working if set to last page.
+The video would neither pop or the video tab be clickable.
+
+
 ### 0.10.2
 
 2016-08-02 Yaniv Friedensohn <yanivf@slidepiper.com>
