@@ -119,7 +119,6 @@ if ('' != sp.viewer.linkHash) {
     
     PDFViewerApplication.open(config.appUrl + '/file/' + sp.viewer.linkHash
         + '?file-name=' + config.viewer.file.fileName);
-    $(document).prop('title', 'SlidePiper - Document Viewer');
     
     // Customization settings.
     if (typeof config.viewer.toolbarBackground !== 'undefined') {
