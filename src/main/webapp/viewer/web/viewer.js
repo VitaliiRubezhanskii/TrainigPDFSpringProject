@@ -6495,12 +6495,10 @@ var PDFViewerApplication = {
 
     var parameters = Object.create(null);
     if (typeof file === 'string') { // URL
-      this.setTitleUsingUrl(file);
       parameters.url = file;
     } else if (file && 'byteLength' in file) { // ArrayBuffer
       parameters.data = file;
     } else if (file.url && file.originalUrl) {
-      this.setTitleUsingUrl(file.originalUrl);
       parameters.url = file.url;
     }
     if (args) {
@@ -6905,9 +6903,6 @@ var PDFViewerApplication = {
         pdfTitle = info['Title'];
       }
 
-      if (pdfTitle) {
-        self.setTitle(pdfTitle + ' - ' + document.title);
-      }
 
       if (info.IsAcroFormPresent) {
         console.warn('Warning: AcroForm/XFA is not supported');
@@ -7398,7 +7393,6 @@ function webViewerInitialized() {
     // file:-scheme. Load the contents in the main thread because QtWebKit
     // cannot load file:-URLs in a Web Worker. file:-URLs are usually loaded
     // very quickly, so there is no need to set up progress event listeners.
-    PDFViewerApplication.setTitleUsingUrl(file);
     var xhr = new XMLHttpRequest();
     xhr.onload = function() {
       PDFViewerApplication.open(new Uint8Array(xhr.response));
@@ -7602,7 +7596,6 @@ window.addEventListener('change', function webViewerChange(evt) {
     fileReader.readAsArrayBuffer(file);
   }
 
-  PDFViewerApplication.setTitleUsingUrl(file.name);
 
   // URL does not reflect proper document location - hiding some icons.
   document.getElementById('viewBookmark').setAttribute('hidden', 'true');
