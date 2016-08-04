@@ -119,7 +119,6 @@ if ('' != sp.viewer.linkHash) {
     
     PDFViewerApplication.open(config.appUrl + '/file/' + sp.viewer.linkHash
         + '?file-name=' + config.viewer.file.fileName);
-    $(document).prop('title', 'SlidePiper - Document Viewer');
     
     // Customization settings.
     if (typeof config.viewer.toolbarBackground !== 'undefined') {
@@ -651,7 +650,7 @@ if ('' != sp.viewer.linkHash) {
          * If any of the videos are YouTube videos, load the YouTube iFrame API.
          */
         function loadYouTubeAPI() {
-          for (var page = 1; page < PDFViewerApplication.pagesCount; page++) {
+          for (var page = 1; page <= PDFViewerApplication.pagesCount; page++) {
             if (typeof widget['page' + page] !== 'undefined' && widget['page' + page].isYouTubeVideo) {
               $.getScript("https://www.youtube.com/iframe_api");
               $('.sp-demo-video').append('<div id="sp-player"></div>');
