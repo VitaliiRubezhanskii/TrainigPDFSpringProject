@@ -685,6 +685,7 @@ if ('' != sp.viewer.linkHash) {
               $('.sp-demo-video').append(
                   '<iframe src="' + videoSource + '" id="sp-not-youtube-player" frameborder="0" scrolling="no"></iframe>'
               );
+              $('#sp-not-youtube-player').show();
             } else {
               $('#sp-not-youtube-player')
                 .show()
@@ -739,8 +740,33 @@ if ('' != sp.viewer.linkHash) {
 								// If a page with a video is found, break the loop. 
 								break;
              } else if (1 === page) {
-		    		    $('.sp-demo-video').hide();	  
-		    		  }
+
+               // Set video from page 1 to the first available video.
+               var videoPages = [];
+               $.each(widget, function(key, value) {
+                 if ('page' === key.substring(0, 4)) {
+                   videoPages.push(parseInt(key.substring(4)));
+                 }
+               });
+                 
+               videoPages.sort(function(a, b) {
+                 return a - b;
+               });
+               
+               var videoPageStart = videoPages.pop();
+               var videoSource = widget['page' + videoPageStart].videoSource;
+               var videoTitle = widget['page' + videoPageStart].videoTitle;
+               
+               if (videoSource !== widget.lastVideoSource) {
+                 setVideoSource(videoSource, videoPageStart);
+                 widget.lastVideoSource = videoSource;
+               }
+               
+               if (videoTitle !== widget.lastVideoTitle) {
+                 $('.sp-demo-video1 span').text(videoTitle);
+                 widget.lastVideoTitle = videoTitle;
+               }
+		    		 }
           	}
 
             $.each(widget, function(key, value) {
@@ -758,7 +784,9 @@ if ('' != sp.viewer.linkHash) {
                   if (widget.currentVideoIsYoutube) {
                     sp.viewer.widget.videoWidget.showVideo('.sp-demo-video #sp-player');
                   } else {
-                    sp.viewer.widget.videoWidget.showVideo('.sp-demo-video1 iframe:not(#sp-player)'); 
+                    $('#sp-not-youtube-player').show();
+                    $('.sp-demo-video').css('min-width', '300px');
+                    keepAspectRatio();
                   }
                   $('.sp-demo-video1 .fa').removeClass('fa-chevron-up').addClass('fa-chevron-down');
                   $('.sp-demo-video1').removeClass('sp-video1-clicked');
@@ -771,7 +799,7 @@ if ('' != sp.viewer.linkHash) {
                   if (widget.currentVideoIsYoutube) {
                     $('.sp-demo-video #sp-player').hide(300, 'swing');
                   } else {
-                    $('.sp-demo-video1 iframe:not(#sp-player)').hide(300, 'swing'); 
+                    $('#sp-not-youtube-player').hide(); 
                   }
                 }
             	}

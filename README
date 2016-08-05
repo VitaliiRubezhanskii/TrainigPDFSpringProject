@@ -4,14 +4,25 @@ SlidePiper README File
 Change Log
 ----------
 
+### 0.10.4
+
+2016-08-04 Yaniv Friedensohn <yanivf@slidepiper.co
+
+* Viewer - Set video from page 1 to the first available video.
+
+* Viewer - Removed sweet alert textarea element padding.
+
+* Viewer - Temporary fixed displaying non YouTube videos on iOS devices.
+
+
 ### 0.10.3
 
 2016-08-04 Yaniv Friedensohn <yanivf@slidepiper.com>
 
-* Removed file title and name from viewer title
+* Viewer - Removed the file title or file name from the viewer title.
 
-* Fixed YouTube video not working if set to last page.
-The video would neither pop or the video tab be clickable.
+* Viewer - Fixed YouTube video from not working if set to last page.
+The video would neither pop or its tab be clickable.
 
 
 ### 0.10.2
