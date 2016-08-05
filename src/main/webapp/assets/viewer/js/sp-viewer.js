@@ -739,8 +739,33 @@ if ('' != sp.viewer.linkHash) {
 								// If a page with a video is found, break the loop. 
 								break;
              } else if (1 === page) {
-		    		    $('.sp-demo-video').hide();	  
-		    		  }
+
+               // Set video from page 1 to the first available video.
+               var videoPages = [];
+               $.each(widget, function(key, value) {
+                 if ('page' === key.substring(0, 4)) {
+                   videoPages.push(parseInt(key.substring(4)));
+                 }
+               });
+                 
+               videoPages.sort(function(a, b) {
+                 return a - b;
+               });
+               
+               var videoPageStart = videoPages.pop();
+               var videoSource = widget['page' + videoPageStart].videoSource;
+               var videoTitle = widget['page' + videoPageStart].videoTitle;
+               
+               if (videoSource !== widget.lastVideoSource) {
+                 setVideoSource(videoSource, videoPageStart);
+                 widget.lastVideoSource = videoSource;
+               }
+               
+               if (videoTitle !== widget.lastVideoTitle) {
+                 $('.sp-demo-video1 span').text(videoTitle);
+                 widget.lastVideoTitle = videoTitle;
+               }
+		    		 }
           	}
 
             $.each(widget, function(key, value) {
