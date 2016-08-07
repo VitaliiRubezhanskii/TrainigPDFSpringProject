@@ -135,8 +135,9 @@
   background-color: rgba(246, 246, 246, 0.8);
   bottom: 0;
   font-size: 12px; 
-  padding: 1px 4px;
+  margin: 0 0 1px 4px;
   position: fixed;
+  width: 150px;
 }
 
 #sp-terms-privacy,
@@ -156,7 +157,7 @@
 
 
 /**
- * Chat CSS settings
+ * Chat CSS Settings.
  *
  * See media queries section below for different viewports settings. 
  */
@@ -375,7 +376,7 @@
 .sp-clearfix:after { clear: both; }
 
 
-/* Media queries */
+/* Media Queries */
 @media screen and (max-width: 768px) {
   #sp-live-chat {
     right: 0;
@@ -386,80 +387,77 @@
   }
 }
 
-/* Widget Settings */
+
+/**
+ * Widget Settings.
+ */
+
+.sp-widget-font-fmaily {
+  font-family: sans-serif;  
+}
 
 .sweet-alert iframe {
   width: 100%;
 }
 
-/* Widget 1 -  YouTube widget */
-.sp-demo-video {
+/* Widget 1 */
+#sp-widget1 {
   background-color: white;
   border: 1px solid #8D8D8D;
-  border-top-left-radius: 8px;
-  border-top-right-radius: 8px;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
   bottom: 0;
   color: #0074A6;
   cursor: pointer;
-  max-width: 500px;
-  min-width: 300px;
-  padding: 10px 7px 0;
+  left: 160px;
+  padding: 7px 7px 0;
   position: fixed;
-  width: 34%;
+  z-index: 1;
 }  
 
-.sp-demo-video iframe {
-  display: none;
-  left: 0;
-  position: relative;
-  top: 0;
-  width: 100%;
-}  
-
-.sp-demo-video hr {
-  border: 0;
-  border-top: 1px solid #eeeeee;
-  margin-top: 0;
-  margin-bottom: 0;
-  margin-left: auto;
-  margin-right: auto;
-  width: 95%;
+#sp-widget1-tab {
+  display: inline-block;
+  height: 22px;
+  margin-bottom: 3px;
+  width: 360px;
 }
 
-.sp-demo-video .fa {
-  float: right;
+#sp-widget1 .fa {
+  vertical-align: middle;
+}
+
+#sp-widget1-tab .fa-video-camera {
   margin-right: 10px;
 }
 
-.sp-demo-video1 {
-  left: 13%;
+#sp-widget1 .fa-chevron-up,
+#sp-widget1 .fa-chevron-down {
+  float: right;
 }
 
-.sp-demo-video-title__span {
+#sp-widget1-tab div {
   display: inline-block;
-  left: 19px;
-  max-width: 80%;
-  position: relative;
   overflow: hidden;
   text-overflow: ellipsis;
+  vertical-align: middle;
   white-space: nowrap;
+  width: 75%;
 }
 
-/* Widget1 - YouTube Widget - Media Queries */
+#sp-widget1-video-container {
+  display: none;
+}
 
-@media (max-width:801px) { 
-/*tablet, landscape iPad, lo-res laptops ands desktops*/ 
-    #sp-terms-privacy {
-      display: none;
-    }
-    .sp-demo-video1 {
-      border-top-left-radius: 0;
-      left: 0;
-    }
+#sp-widget1 iframe {
+  display: none;
+  height: 270px;
+  width: 480px;
 }
 
 
-/* Right Side Widgets */
+/**
+ * Right Side Widgets.
+ */
 
 .sp-right-side-widgets {
   max-width: 200px;
@@ -531,17 +529,28 @@
 }
 
 .sp-widget3-label {
+  display: block;
   font-weight: bold;
+  margin-bottom: 2px;
+  margin-top: 15px;
 }
 
 
 /** 
-  Media Queries
+ * Media Queries.
  */
 @media only screen and (max-width: 1050px) {
   
   /* Widgets */
-    
+  #sp-widget1 iframe {
+    height: 225px;
+    width: 400px;
+  }
+  
+  #sp-widget1-tab {
+    width: 300px;
+  }
+  
   .sp-right-side-widgets {
     width: 12%;
   }
@@ -569,7 +578,23 @@
   }
 }
 
- @media only screen and (max-width: 850px) {
+ @media only screen and (max-width: 850px) {   
+  
+  /* Widget Settings */
+  #sp-widget1 {
+    border-top-left-radius: 0;
+    left: 0;
+  }
+  
+  #sp-widget1 iframe {
+    height: 168.75px;
+    width: 300px;
+  }
+  
+  #sp-widget1-tab {
+    width: 225px;
+  }
+  
   .sp-right-side-widgets {
     width: 10%;
   }
@@ -587,9 +612,23 @@
     font-size: 1.5em;
     margin-bottom: 0;
   }
+  
+  /* Terms and Privacy */
+  #sp-terms-privacy {
+    display: none;
+  }
 }
 
 @media only screen and (max-width: 600px) {
+  #sp-widget1 iframe {
+    height: 140.625px;
+    width: 250px;
+  }
+
+  #sp-widget1-tab {
+    width: 187.5px;
+  }
+  
   .sp-right-side-widgets {
     min-width: 40px;
   }

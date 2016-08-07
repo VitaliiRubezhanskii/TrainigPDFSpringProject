@@ -4,9 +4,26 @@ SlidePiper README File
 Change Log
 ----------
 
+### 0.10.5
+
+2016-08-07 Yaniv Friedensohn <yanivf@slidepiper.com>
+
+* Dashboard - Enhanced dashboard metrics.
+
+* Viewer - Refactored video widget to fix multiple bugs:
+	1. Video widget sporadically goes up and down upon moving between pages.
+	2. The video widget tab doesn’t open upon clicking on it on iOS devices.
+	3. Video is overlapping the video widget container on iOS. 
+	4. Possibly widgets settings are fetched twice in the viewer.
+
+
+* Viewer - Fix minor design issues regarding widgets font and ask a question 
+form labels.
+
+
 ### 0.10.4
 
-2016-08-04 Yaniv Friedensohn <yanivf@slidepiper.co
+2016-08-04 Yaniv Friedensohn <yanivf@slidepiper.com>
 
 * Viewer - Set video from page 1 to the first available video.
 
