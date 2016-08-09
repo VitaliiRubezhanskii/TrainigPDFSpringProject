@@ -41,6 +41,10 @@ sp.viewerWidgetsModal = {
         case 3:
           displayAskQuestionSettings(widget.data);
           break;
+          
+        case 4:
+        	displayLikeWidgetSettings(widget.data);
+        	break;
       }
     });
     
@@ -113,6 +117,11 @@ sp.viewerWidgetsModal = {
           
       $('[name="question-widget-text"]').val(widget.items[0].buttonText);
     }
+    
+    function displayLikeWidgetSettings(widget) {
+    	$('[name="like-widget-is-enabled"]').prop('checked', widget.isEnabled),
+    	$('[name="like-widget-counter-is-enabled"]').prop('checked', widget.items[0].isCounterEnabled);
+    }
   },
   
   /**
@@ -180,6 +189,8 @@ sp.viewerWidgetsModal = {
     	settings.push(sp.viewerWidgetsModal.saveCalendlyWidgetSettings(fileHash));
     }
     
+    settings.push(sp.viewerWidgetsModal.saveLikeWidgetSettings(fileHash));
+    
     var data = {
         action: 'setWidgetsSettings',
         widgetsSettings: settings
@@ -237,6 +248,7 @@ sp.viewerWidgetsModal = {
       swal('Error', 'Something went wrong. Your settings weren\'t saved.', 'error');
     }
   },
+  
   
   /**
    * Validate then save Calendly Widget Settings.
@@ -329,6 +341,25 @@ sp.viewerWidgetsModal = {
     
     return askQuestionWidgetData;
   },
+  
+  saveLikeWidgetSettings: function(fileHash) {
+  	var likeWidgetData = {
+			apiVersion: '1.0',
+      data: {
+        fileHash: fileHash,
+        widgetId: 4,
+        isEnabled: $('[name="like-widget-is-enabled"]').prop('checked'),
+        items: [
+          {
+            isCounterEnabled: $('[name="like-widget-counter-is-enabled"]').prop('checked')
+          }
+        ]
+      }
+  	};
+  	
+  	return likeWidgetData;
+  },
+  
   
   /**
    * Validate then save Video Widget Settings.

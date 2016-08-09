@@ -7,6 +7,7 @@ import slidepiper.dataobjects.Customer;
 import slidepiper.dataobjects.Presentation;
 import slidepiper.db.Analytics;
 import slidepiper.db.DbLayer;
+import slidepiper.db.ViewerAnalytics;
 import slidepiper.email.EmailSender;
 
 import java.io.IOException;
@@ -269,6 +270,74 @@ public class ManagementServlet extends HttpServlet {
           e.printStackTrace();
         }
         break;
+        
+      case "getWidgetLikesCount":
+      	try {
+      		if (null == request.getParameter("salesmanEmail") || request.getParameter("salesmanEmail").equals("")) {
+            break;
+          } else {
+            parameterList.add(request.getParameter("salesmanEmail"));
+          }
+          
+          if (null == request.getParameter("fileHash") || request.getParameter("fileHash").equals("")) {
+            break; 
+          } else {
+            parameterList.add(request.getParameter("fileHash"));
+          } 
+          
+          if (null == request.getParameter("customerEmail") || request.getParameter("customerEmail").equals("")) {
+            sqlData = DbLayer.getEventData(parameterList, Analytics.sqlFileCountLikes);
+          } else {
+            parameterList.add(request.getParameter("customerEmail"));
+            sqlData = DbLayer.getEventData(parameterList, Analytics.sqlCustomerCountLikes);
+          }
+      		
+      		data.put("likesCount", sqlData);
+      	} catch (Exception e) {
+      		e.printStackTrace();
+      	}
+      	break;
+      
+      
+      case "getViewerWidgetMetrics":
+      	try {
+      		JSONObject widgetMetrics = new JSONObject();
+      		
+      		if (null != request.getParameter("fileLinkHash") && ! request.getParameter("fileLinkHash").equals("")) {
+      			
+          	String fileHash = DbLayer.getFileHashFromFileLinkHash(request.getParameter("fileLinkHash"));
+            String salesmanEmail = DbLayer.getSalesmanEmailFromFileHash(fileHash);
+            parameterList.add(salesmanEmail);
+            parameterList.add(fileHash);
+
+            switch(request.getParameter("wigdetId")) {
+            	case "4":
+            		widgetMetrics = DbLayer.getViewerWidgetMetrics(parameterList, ViewerAnalytics.sqlFileCountLikes);
+            		break;
+            }
+            
+            data.put("widgetMetrics", widgetMetrics);
+          } 
+      		
+      	} catch (Exception e) {
+      		e.printStackTrace();
+      	}
+      	break;
+      
+      
+      case "isLikeButtonClicked":
+      	try {
+      		boolean isLikeClickedInCurrentSession = false;
+      		
+      		if (null != request.getParameter("sessionid") && ! request.getParameter("sessionid").equals("")) {
+      			isLikeClickedInCurrentSession = DbLayer.isLikeButtonClicked(request.getParameter("sessionid"));
+      			
+      			data.put("isLikeButtonClicked", isLikeClickedInCurrentSession);
+      		}
+      	} catch (Exception e) {
+      		e.printStackTrace();
+      	}
+      	break;
 	  }
 	  
 	  response.setContentType("application/json; charset=UTF-8");
@@ -415,6 +484,11 @@ public class ManagementServlet extends HttpServlet {
         case "setCustomerEvent":
           eventDataMap.put("msg_id", URLDecoder.decode(data.getString("linkHash"), "UTF-8"));
           eventDataMap.put("session_id", URLDecoder.decode(data.getString("sessionId"), "UTF-8"));
+          
+          if (data.has("param1int")) {
+          	eventDataMap.put("param1int",
+          			Integer.toString(data.getInt("param1int")));
+          }
           
           if (data.has("param_1_varchar")) {
         	  eventDataMap.put("param_1_varchar",

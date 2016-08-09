@@ -1,0 +1,177 @@
+/* Button Design */
+
+.sp-like-button-widget {
+  left: 12px;
+  position: fixed;
+  top: 65px;
+}
+
+.sp-like-btn {
+	-webkit-animation-duration: 3s;
+	-webkit-animation-iteration-count: infinite;
+	-webkit-animation-name: pulse;
+  -webkit-animation-play-state: running;
+  -webkit-animation-timing-function: ease-in-out;
+  animation-duration: 3s;
+  animation-iteration-count: infinite;
+  animation-name: pulse;
+  animation-play-state: running;
+  animation-timing-function: ease-in-out;
+  background-color: rgb(255, 255, 255);
+  border: none;
+  border-radius: 50%;
+  box-shadow: 0px 8.5px 5.67px rgba(35, 31, 32, 0.3);
+  height: 75px;	
+  -o-transition: background 200ms ease-in-out, box-shadow 200ms ease-in-out, transform 1000ms ease-in-out;
+  -webkit-transition: background 200ms ease-in-out, box-shadow 200ms ease-in-out, transform 1000ms ease-in-out;
+  transition: background 200ms ease-in-out, box-shadow 200ms ease-in-out, transform 1000ms ease-in-out;
+  width: 75px;
+}
+
+@-webkit-keyframes pulse {
+  from {
+    -webkit-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1); }
+  80% {
+    -webkit-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1); }
+  90% {
+    -webkit-transform: scale3d(1.05, 1.05, 1.05);
+    transform: scale3d(1.05, 1.05, 1.05); }
+  to {
+    -webkit-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1); 
+  }
+}
+
+@keyframes pulse {
+  from {
+    -webkit-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1); }
+  80% {
+    -webkit-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1); }
+  90% {
+    -webkit-transform: scale3d(1.05, 1.05, 1.05);
+    transform: scale3d(1.05, 1.05, 1.05); }
+  to {
+    -webkit-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1); 
+  }
+}
+
+.sp-like-btn:hover {
+  cursor: pointer;
+}
+
+.sp-like-btn-clicked {
+  -moz-animation: none;
+  -webkit-animation: none;
+	animation: none;
+  background-color: #1aaee4;
+  box-shadow: 0px 3.5px 4px rgba(35, 31, 32, 0.4);
+  
+}
+
+.sp-like-btn-clicked:hover {
+  cursor: default;
+}
+
+
+/* Button Like Icon */
+
+#sp-thumbs-up__i {
+  font-size: 64px; 
+}
+
+#sp-thumbs-up__i,
+#sp-count-likes__p {
+  color: #9E9E9E;
+  left: 0;
+  line-height: 75px;
+  position: absolute;
+  top: 0;
+  width: 100%;  
+}
+
+
+/* Button Like Counter */
+
+.sp-widget4-count-likes-4-digit {
+	margin-left: 2px;
+}
+
+.sp-widget4-count-likes-5-digit {
+	margin-left: 3px;
+}
+
+.sp-widget4-count-likes-6-digit {
+	margin-left: 4px;
+}
+
+#sp-count-likes__p {
+  font-family: sans-serif;
+  margin-top: 5px;
+}
+
+
+/**
+ * Media Queries.
+ */
+ 
+@media only screen and (max-width: 1050px) {
+  .sp-like-btn {
+		height: 60px;
+		width: 60px;
+  }
+	
+  #sp-thumbs-up__i {
+		font-size: 51px;
+    line-height: 62px;
+  }
+  
+  #sp-count-likes__p {
+  	font-size: 13px;
+    line-height: 73px;
+    margin-top: 0;
+  }
+}
+
+@media only screen and (max-width: 850px) {
+  .sp-like-btn {
+		height: 45px;
+    width: 45px;
+  }
+	
+  #sp-thumbs-up__i {
+		font-size: 38px;
+    line-height: 46px;
+  }
+  
+  #sp-count-likes__p {
+  	font-size: 10px;
+    line-height: 53px;
+    margin-left: 2px;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .sp-like-btn {
+		height: 35px;
+		width: 35px;
+  }
+	
+  #sp-thumbs-up__i {
+		font-size: 28px;
+    line-height: 37px;
+  }
+  
+  #sp-count-likes__p {
+  	font-size: 7px;
+    line-height: 40px;
+    margin-left: 1px;
+  }
+}
+
+
+

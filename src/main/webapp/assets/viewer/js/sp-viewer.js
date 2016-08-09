@@ -65,7 +65,8 @@ sp.viewer = {
     viewerWidgetVideoTabClicked: 'VIEWER_WIDGET_VIDEO_TAB_CLICKED',
     viewerWidgetVideoYouTubePlayed: 'VIEWER_WIDGET_VIDEO_YOUTUBE_PLAYED',
     viewerWidgetVideoYouTubePaused: 'VIEWER_WIDGET_VIDEO_YOUTUBE_PAUSED',
-    viewerWidgetAskQuestion: 'VIEWER_WIDGET_ASK_QUESTION'
+    viewerWidgetAskQuestion: 'VIEWER_WIDGET_ASK_QUESTION',
+    viewerWidgetLikeClicked: 'VIEWER_WIDGET_LIKE_CLICKED'
   },
   isPagesLoaded: false,
   paramValue: {
@@ -84,6 +85,9 @@ sp.viewer = {
         youTube: false
       },
       lastVideoSource: ''
+    },
+    widget4: {
+    	likeCount: 0
     }
   },
   
@@ -622,6 +626,15 @@ if ('' != sp.viewer.linkHash) {
         }
       } 
       
+      /* Validate Widget 4 */
+      var widget4RequiredSettings = ['isCounterEnabled'];
+      
+      if (typeof widgets.widget4 !== 'undefined' && widgets.widget4.isEnabled) {
+      	if (isWidgetSettingsDefined(widgets.widget4.items[0], widget4RequiredSettings)) {
+      		implementWidget4(widgets.widget4.items[0]);
+      	}
+      }
+      
       
       /* Implement Widget 1 */
       function implementWidget1(videos) {
@@ -880,6 +893,158 @@ if ('' != sp.viewer.linkHash) {
             }
           });
         });
+      }
+      
+      function implementWidget4(widget) {
+	      	
+      	// Widget 4 - Like button widget.
+        $('body').append('<div class="sp-like-button-widget"></div>');
+              
+        $('.sp-like-button-widget').append(
+        	'<button class="sp-like-btn sp-hidden">' +	
+        	    '<i id="sp-thumbs-up__i" class="fa fa-thumbs-o-up" aria-hidden="true"></i>' +	  
+        	    '<p id="sp-count-likes__p"></p>' +
+        	'</button>'
+        );
+        
+        getLikeCount();
+        
+        
+        /**
+         * Get the number of likes a document has received.
+         */
+        function getLikeCount() {
+        	$.getJSON(
+      				'../../ManagementServlet',
+      				{
+      					action: 'getViewerWidgetMetrics',
+                fileLinkHash: sp.viewer.linkHash,
+                wigdetId: 4
+      				},
+      				function(data) {
+      					sp.viewer.widgets.widget4.likeCount = parseInt(data.widgetMetrics.metrics[0]);
+      					if (widget.isCounterEnabled) {
+      						formatDisplayLikeCount(sp.viewer.widgets.widget4.likeCount);
+      					}
+      					
+      					isLikeButtonClickedSession();
+      				}
+      		)
+      	}
+      	
+      	
+        /**
+         * Check if the Like Button has been clicked this session.
+         * 
+         * If it has been clicked, add the class 'sp-like-btn-clicked', and remove
+         * the 'click' event listener.
+         */
+        function isLikeButtonClickedSession() {
+        	$.getJSON(
+        			'../../ManagementServlet',
+        			{
+        				action: 'isLikeButtonClicked',
+        				sessionid: sessionid
+        			},
+        			function(data) {
+        				if (data.isLikeButtonClicked) {
+        					$('.sp-like-btn').addClass('sp-like-btn-clicked');
+        					$('#sp-thumbs-up__i, #sp-count-likes__p').css('color', '#fff');
+        				} else {
+        					likeButtonClickEventListener();
+        				}
+        				
+        				$('.sp-like-btn').removeClass('sp-hidden');
+        			}
+        	)
+        }
+        
+        
+        /**
+         * Send an event to customer_events table when the customer clicks the
+         * Like Button.
+         * 
+         * The 'one' click allows them to click only once.
+         * 
+         * Update the like counter if it is enabled.
+         */
+        function likeButtonClickEventListener() {
+        	$('.sp-like-btn').one('click', function() {
+         	 sp.viewer.setCustomerEvent({
+         		 eventName: sp.viewer.eventName.viewerWidgetLikeClicked,
+             linkHash: sp.viewer.linkHash,
+             param1int: PDFViewerApplication.page,
+             sessionId: sessionid
+           });
+         	 
+         	 if (widget.isCounterEnabled) {
+         		 sp.viewer.widgets.widget4.likeCount++;
+         		 formatDisplayLikeCount(sp.viewer.widgets.widget4.likeCount)
+         	 }
+         	 
+         	 // Change the colour of the button.
+         	 $('.sp-like-btn').addClass('sp-like-btn-clicked');
+ 	         $('#sp-thumbs-up__i, #sp-count-likes__p').css('color', '#fff');
+         });
+        }
+        
+        
+        /**
+         * Format the like count.
+         * 
+         * In the switch case, format the result before it appears in the Viewer.
+         * e.g. 1,200 likes will appear as 1.2k.
+         * 			15,700 likes will appear as 15k.
+         * 			More than 99,999 likes will appear as 99k+.
+         * 
+         * @param likeCount - The like count.
+         */
+        function formatDisplayLikeCount(likeCount) {
+        	var likeCountString = likeCount.toString();
+        	var likeCountLength = likeCountString.length;
+        	var likeCountToDisplay = '';
+        	
+        	switch(likeCountLength) {
+  					case 1:
+  					case 2:
+  					case 3:
+  						if (0 === likeCount) {
+  							likeCountToDisplay = '';
+  						} else {
+  							likeCountToDisplay = likeCountString;
+  						}
+  					  
+  						if (3 === likeCountLength) {
+  							$('#sp-count-likes__p').addClass('sp-widget4-count-likes-4-digit');
+  						}
+  						break;
+  						
+  					case 4:
+  						if (likeCountString.charAt(1) === '0') {
+  							likeCountToDisplay = likeCountString.slice(0, 1) + 'k';
+  						} else {
+  							likeCountToDisplay = likeCountString.slice(0, 1) + '.' + likeCountString.slice(1, 2) + 'k';
+  							$('#sp-count-likes__p').addClass('sp-widget4-count-likes-4-digit');
+  						}
+  						break;
+  						
+  					case 5:
+  						likeCountToDisplay = likeCountString.slice(0, 2) + 'k';
+  						$('#sp-count-likes__p')
+  								.removeClass('sp-widget4-count-likes-4-digit')
+  								.addClass('sp-widget4-count-likes-5-digit');
+  						break;
+  						
+  					default:
+  						likeCountToDisplay = '99k+';
+  					$('#sp-count-likes__p')
+  								.removeClass('sp-widget4-count-likes-5-digit')
+  								.addClass('sp-widget4-count-likes-6-digit');
+  						break;
+					}
+					
+        	$('#sp-count-likes__p').text(likeCountToDisplay);
+        }
       }
     }
   });
