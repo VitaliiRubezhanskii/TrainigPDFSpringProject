@@ -19,6 +19,7 @@
                     <li class="active"><a data-toggle="tab" href="#sp-tab-3"><i class="fa fa-comment"></i></a></li>
                     <li><a data-toggle="tab" href="#sp-tab-1"><i class="fa fa-video-camera"></i></a></li>
                     <li><a data-toggle="tab" href="#sp-tab-2"><i class="fa fa-calendar"></i></a></li>
+                    <li><a data-toggle="tab" href="#sp-tab-4"><i class="fa fa-thumbs-o-up"></i></a></li>
                 </ul>
                 
                 <div class="tab-content sp-viewer-widgets-modal">
@@ -28,7 +29,7 @@
                         <div class="panel-body">
                             <strong>Video Widget</strong>
                             <div class="sp-customization-option__p sp-hide-is-enabled">
-                                <input type="checkbox" name="video-widget-is-enabled" data-key-id="5" data-key-type="boolean"> Is Enabled?
+                                <input type="checkbox" name="video-widget-is-enabled"> Is Enabled?
                             </div>
                             <hr>
                                 <div class="container-fluid">
@@ -48,15 +49,15 @@
                                     <div id="sp-video-customization-options-container">
                                         <div class="row sp-video-widget-data-row">
                                             <div class="col-xs-4">
-                                                <input type="text" data-video="videoSource" class="sp-video-widget" name="video-widget-link" placeholder="e.g. https://www.youtube.com/watch?v=tk-_PgWTASU" data-key-id="1" data-key-type="string">
+                                                <input type="text" data-video="videoSource" class="sp-video-widget" name="video-widget-link" placeholder="e.g. https://www.youtube.com/watch?v=tk-_PgWTASU">
                                             </div>
                                             
                                             <div class="col-xs-4">
-                                                <input type="text" data-video="videoTitle" class="sp-video-widget" name="video-widget-title" placeholder="e.g. Watch This Video!" data-key-id="2" data-key-type="string">
+                                                <input type="text" data-video="videoTitle" class="sp-video-widget" name="video-widget-title" placeholder="e.g. Watch This Video!">
                                             </div>
                                             
                                             <div class="col-xs-2">
-                                                <input type="number" data-video="videoPageStart" class="sp-video-widget" name="video-widget-page-start" min="1" data-key-id="7" data-key-type="integer">
+                                                <input type="number" data-video="videoPageStart" class="sp-video-widget" name="video-widget-page-start" min="1">
                                             </div>
                                             
                                             <div class="col-xs-2">
@@ -86,14 +87,14 @@
                             <small>(Don't have a Calendly account? <a target="_blank" href="https://calendly.com/">Sign up here</a>)</small>        
                             
                             <div class="sp-customization-option__p sp-hide-is-enabled">
-                                <input type="checkbox" name="calendly-widget-is-enabled" data-key-id="6" data-key-type="boolean"> Is Enabled?
+                                <input type="checkbox" name="calendly-widget-is-enabled"> Is Enabled?
                             </div>
                             <hr>
                             <p class="sp-customization-option__p">Calendly Username</p>
-                            <input type="text" class="form-control" name="calendly-widget-username" placeholder="e.g. salesman" data-key-id="3" data-key-type="string">
+                            <input type="text" class="form-control" name="calendly-widget-username" placeholder="e.g. salesman">
                             
                             <p class="sp-customization-option__p">Button Text</p>
-                            <input type="text" class="form-control" name="calendly-widget-button-text" placeholder="e.g. Schedule Meeting" data-key-id="3" data-key-type="string">
+                            <input type="text" class="form-control" name="calendly-widget-button-text" placeholder="e.g. Schedule Meeting">
                         </div>
                     </div>
                     
@@ -102,11 +103,26 @@
                         <div class="panel-body">
                             <strong>Ask a Question / Give Feedback Widget</strong>
                             <div class="sp-customization-option__p sp-hide-is-enabled">
-                                <input type="checkbox" name="question-widget-is-enabled" data-key-id="8" data-key-type="boolean"> Is Enabled?
+                                <input type="checkbox" name="question-widget-is-enabled"> Is Enabled?
                             </div>
                             <hr>
                             <p class="sp-customization-option__p">Call to Action Text</p>
-                            <input type="text" name="question-widget-text" class="form-control" data-key-id="9" data-key-type="string" placeholder="e.g. Ask a Question / Give Feedback">
+                            <input type="text" name="question-widget-text" class="form-control" placeholder="e.g. Ask a Question / Give Feedback">
+                        </div>
+                    </div>
+                    
+                    <!-- Like Button Widget -->
+                    <div id="sp-tab-4" class="tab-pane">
+                        <div class="panel-body">
+                            <strong>Like Button</strong>
+                            <div class="sp-customization-option__p">
+                                <input type="checkbox" name="like-widget-is-enabled"> Is Enabled?
+                            </div>
+                            <hr>
+                            <input type="checkbox" checked name="like-widget-counter-is-enabled"> Enable Like Counter
+                            <div>
+                            		<small>Show the number of likes within the widget.</small>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -116,7 +132,7 @@
         <div class="modal-footer">
             <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
             <button type="button" class="btn btn-primary" id="sp-save-widgets-settings__button">Save</button>
-            <button type="button" class="btn btn-primary" id="sp-save-test-widgets-settings__button">Save & Test</button>
+            <button type="button" class="btn btn-primary" id="sp-save-test-widgets-settings__button">Save & Preview</button>
         </div>
     </div>
 </div>

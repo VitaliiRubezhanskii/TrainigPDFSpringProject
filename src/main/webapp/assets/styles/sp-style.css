@@ -198,7 +198,8 @@ td.sp-file-hash {
 
 /* Metrics - Widgets */
 
-/* Video Widget */
+/* Video & Like Widget */
+.sp-widget-like-metric__i,
 .sp-widget-video-youtube-metric-title__i {
   margin-right: 10px;
 }
