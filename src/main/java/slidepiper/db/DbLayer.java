@@ -240,7 +240,8 @@ public class DbLayer {
 				MessageInfo mi = getMessageInfo(msgid);			
 				return mi.getSalesManEmail();
 	}
-		
+	
+	
 	// set rows for this sessionId as done. 
 	// will not appear in recommendations. 
 	public static void setDone(String sessionId)
@@ -295,7 +296,6 @@ public class DbLayer {
 				}
 	    }
 	}
-	
 	
 	public static void setPassword(String salesman_email, String newpassword)
 	{
@@ -1308,6 +1308,59 @@ public class DbLayer {
 			
 			
 			/**
+	      * Check if the user has 'liked' (clicked the Like Button) for this viewing session.
+	      * 
+	      * @param sessionid - The session id.
+	      * @return isLikeClickedInCurrentSession - boolean determined by the outcome of the
+	      * SQL query.
+	      */
+	     public static boolean isLikeButtonClicked(String sessionid) {
+	    	
+	    	Constants.updateConstants();
+	      try {
+	        Class.forName("com.mysql.jdbc.Driver");
+	      } catch (ClassNotFoundException e) {
+	        e.printStackTrace();
+	      }
+	      
+	      String sql = "SELECT\n"
+		      					+ "  EXISTS (\n"
+	      						+ "    SELECT event_name\n"
+	      						+ "    FROM customer_events\n"
+	      						+ "    WHERE event_name = 'VIEWER_WIDGET_LIKE_CLICKED'\n"
+	      						+ "    AND session_id = ?)";
+	      
+	      boolean isLikeClickedInCurrentSession = false;
+	      
+	      Connection conn = null;
+	      try {
+	   		  conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
+	   		  PreparedStatement ps = conn.prepareStatement(sql); 
+	   		  
+	   		  ps.setString(1, sessionid);
+	   		  ResultSet rs = ps.executeQuery();
+	   		  
+	   		  while(rs.next()) {
+	   		  	isLikeClickedInCurrentSession = rs.getBoolean(1);
+	   		  }
+	   		  
+	      } catch (SQLException e) {
+	   			e.printStackTrace();
+	   		} finally {
+	          if (null != conn) {
+	            try {
+	              conn.close();
+	            } catch (SQLException ex) {
+	              ex.printStackTrace();
+	            }
+	          }
+	      }
+	      
+				return isLikeClickedInCurrentSession;
+	     }
+			
+			
+			/**
        * Check if a salesman record exists in the DB.
        * 
        * @param email The salesman email to be checked.
@@ -1426,8 +1479,53 @@ public class DbLayer {
       
         return customerEmail;
       }
-      
-      
+    
+    	
+    	/**
+    	 * Get the fileHash from a file link hash.
+    	 * 
+    	 * @param fileLinkHash
+    	 * @return fileHash - The fileHash determined by the result of the SQL query.
+    	 */
+    	public static String getFileHashFromFileLinkHash(String fileLinkHash) {
+    		
+        Constants.updateConstants();
+        try {
+          Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+          e.printStackTrace();
+        }
+        
+    		String fileHash = null;
+    		String sql = "SELECT slides_id AS fileHash FROM msg_info WHERE id = ?";
+    		
+    		Connection conn = null;
+    		try {
+    			conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
+    			PreparedStatement ps = conn.prepareStatement(sql);
+    			ps.setString(1, fileLinkHash);
+    			ResultSet rs = ps.executeQuery();
+    		  
+    		  while (rs.next()) {
+    				fileHash = rs.getString("fileHash");
+    		  }
+    			 
+    		} catch (SQLException e) {
+    			e.printStackTrace();
+    		} finally {
+          if (null != conn) {
+            try {
+              conn.close();
+            } catch (SQLException ex) {
+              ex.printStackTrace();
+            }
+          }
+    		}
+    		
+    		return fileHash;
+    	}
+    	
+    	
       /**
        * Get the file ID from a file hash. 
        * 
@@ -1748,7 +1846,53 @@ public class DbLayer {
 		return salesmanMap;
 		}
 		
-		
+	  
+  	/**
+  	 * Get the salesman email from a fileHash.
+  	 * 
+  	 * @param fileHash - The fileHash.
+  	 * @return salesmanEmail - The salesman's email resulting from the SQL query based on
+  	 * the fileHash.
+  	 */
+  	public static String getSalesmanEmailFromFileHash(String fileHash) {
+  		
+      Constants.updateConstants();
+      try {
+        Class.forName("com.mysql.jdbc.Driver");
+      } catch (ClassNotFoundException e) {
+        e.printStackTrace();
+      }
+      
+      String salesmanEmail = null;
+      String sql = "SELECT sales_man_email AS salesman_email FROM slides WHERE id = ? LIMIT 1";
+      
+      Connection conn = null;
+      try {
+      	conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
+      	PreparedStatement ps = conn.prepareStatement(sql);
+      	ps.setString(1, fileHash);
+      	ResultSet rs = ps.executeQuery();
+      	
+      	while (rs.next()) {
+      		salesmanEmail = rs.getString("salesman_email");
+      	}
+      	
+      } catch (SQLException e) {
+  			e.printStackTrace();
+  		} finally {
+        if (null != conn) {
+          try {
+            conn.close();
+          } catch (SQLException ex) {
+            ex.printStackTrace();
+          }
+        }
+  		}
+  		
+  		return salesmanEmail;
+  	}
+  	
+  	
 	    /**
 	     * Get a file link widget settings.
 	     * 
@@ -1802,7 +1946,63 @@ public class DbLayer {
 	   		return widgetsSettings;
 	   	}
 
+	   	
+	   	/**
+       * Get widget metrics for the Viewer from the DB.
+       * 
+       * @param parameterList A list of parameters required for the SQL query.
+       * @param sql The SQL query to execute.
+       * 
+       * @return The fetched tabular data from the DB.
+       */
+      public static JSONObject getViewerWidgetMetrics(ArrayList<String> parameterList, String sql) {
+        
+      	Constants.updateConstants();
+        try {
+          Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+          e.printStackTrace();
+        }
 
+        JSONObject widgetMetrics = new JSONObject();
+        
+        Connection conn = null;
+        try {
+          conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
+          PreparedStatement ps = conn.prepareStatement(sql);
+          
+          for (int i = 0; i < parameterList.size(); i++) {
+            ps.setString(i + 1, parameterList.get(i));
+          }
+          
+          ResultSet rs = ps.executeQuery();
+          while (rs.next()) {
+            String[] row = new String[rs.getMetaData().getColumnCount()];
+            for (int i = 0; i < row.length; i++) {
+              row[i] = rs.getString(i + 1);
+            }
+            widgetMetrics.put("metrics", row);
+          }
+          
+        } catch (SQLException ex) {
+          System.err.println("Error code: " + ex.getErrorCode() + " - " + ex.getMessage());
+          ex.printStackTrace();
+        } finally {
+          if (null != conn) {
+            try {
+              conn.close();
+            } catch (SQLException ex) {
+              ex.printStackTrace();
+            }
+          }
+        }
+        
+        return widgetMetrics;
+      }
+	   
+      
+     
+      
      /**
        * Add a customer or salesman event to the DB.
        * 

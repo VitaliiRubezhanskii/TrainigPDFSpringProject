@@ -1,7 +1,16 @@
 /**
- * Toolbar Settings.
+ * General Settings
  */
  
+.sp-hidden {
+	visibility: hidden;
+}
+
+
+/**
+ * Toolbar Settings.
+ */
+
 .splitToolbarButtonSeparator,
 .verticalToolbarSeparator,
 #download,

@@ -1000,8 +1000,23 @@ sp = {
             }
           }
         );
+        
+        // Total number of likes.
+        $.getJSON(
+    				'ManagementServlet',
+    				{
+    					action: 'getWidgetLikesCount',
+              customerEmail: customerEmail,
+              fileHash: fileData[0],
+              salesmanEmail: sp.config.salesman.email
+    				},
+    				function(data) {
+    					$('#sp-widget-total-count-likes').text(data.likesCount[0][0]);
+    				}
+    		);
+        
       } else {
-        $('#sp-widget-video-youtube-metric-total-number-plays').text('N/A');
+        $('#sp-widget-video-youtube-metric-total-number-plays, #sp-widget-total-count-likes').text('N/A');
         $('#sp-widget-ask-question-metric').hide();
       }
     }
