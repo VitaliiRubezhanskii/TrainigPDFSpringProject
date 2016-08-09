@@ -4,6 +4,18 @@ SlidePiper README File
 Change Log
 ----------
 
+### 0.10.6
+
+2016-08-09 Max Prais <maxp@slidepiper.com>
+
+* Created like button widget:
+	1. Dashboard - Widget can be applied in 'Customize' modal in 'Documents and
+	Customers'. The likes counter visibility can be enabled or not.
+	2. Dashboard - Display metrics for likes per document and per customer in
+	Marketing and Sales Analytics.
+	3. Viewer - Display number of likes per document.
+
+
 ### 0.10.5
 
 2016-08-07 Yaniv Friedensohn <yanivf@slidepiper.com>
