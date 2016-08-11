@@ -4,6 +4,13 @@ SlidePiper README File
 Change Log
 ----------
 
+### 0.10.7
+
+2016-08-11 Yaniv Friedensohn <yanivf@slidepiper.com>
+
+* Parse bounce rate result by striping all digits after the decimal point.
+
+
 ### 0.10.6
 
 2016-08-09 Max Prais <maxp@slidepiper.com>

@@ -890,7 +890,7 @@ sp = {
         $('#sp-widget-total-views').text(fileData[3]);
         
         // Bounce rate.
-        $('#sp-widget-bounce-rate').text(parseFloat(fileData[4] * 100) + '%');
+        $('#sp-widget-bounce-rate').text((parseFloat(fileData[4]) * 100).toFixed().toString() + '%');
         
         // Average view duration.
         if (null != fileData[5]) {
