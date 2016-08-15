@@ -1,3 +1,4 @@
+.sp-add-hopper-widget__a,
 .sp-add-video-widget__a {
   background-color: #FFFFFF;
   background-image: none;
@@ -11,6 +12,7 @@
   right: -9px;
 }
 
+.sp-add-hopper-widget__a:hover,
 .sp-add-video-widget__a:hover {
   color: #1ab394;
   border: 1px solid #1ab394; 
@@ -28,6 +30,7 @@
   margin-left: 5px;
 }
 
+.sp-delete-hopper-widget__a,
 .sp-delete-video-widget__a {
   background-color: #FFFFFF;
   background-image: none;
@@ -37,11 +40,13 @@
   padding: 6px 12px;
 }
 
+.sp-delete-hopper-widget__a:hover,
 .sp-delete-video-widget__a:hover {
   color: #ed5565;
   border: 1px solid #ed5565;
 }
 
+.sp-hopper__input-elm,
 .sp-video-widget {
   background-color: #FFFFFF;
   background-image: none;
@@ -52,14 +57,17 @@
   width: 160px;
 }
 
+.sp-hopper__input-elm:focus,
 .sp-video-widget:focus {
   border: 1px solid #1ab394;
+  outline: none;
 }
 
-.sp-video-widget-form-error {
+.sp-widget-form-error {
   border-color: #ed5565;
 }
 
+.sp-hopper-widget__row,
 .sp-video-widget-data-row {
   margin-top: 7px;
   padding-left: 0;
@@ -67,4 +75,12 @@
 
 [name="video-widget-page-start"] {
   width: 79px;
+}
+
+[data-item-setting="hopperText"] {
+  width: 110%
+}
+
+[data-item-setting="hopperPage"] {
+  width: 120%;
 }
