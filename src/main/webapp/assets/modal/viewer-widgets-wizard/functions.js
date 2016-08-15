@@ -31,7 +31,9 @@ sp.viewerWidgetsModal = {
       
       switch(widget.data.widgetId) {
         case 1:
-          displayVideoSettings(widget.data);
+          if (widget.data.items.length > 0) {
+            displayVideoSettings(widget.data);
+          }
           break;
           
         case 2:
@@ -45,19 +47,28 @@ sp.viewerWidgetsModal = {
         case 4:
         	displayLikeWidgetSettings(widget.data);
         	break;
+        	
+        case 5:
+          if (widget.data.items.length > 0) {
+            displayWidget5(widget.data);
+          }
+          break;
       }
     });
     
     /**
      * Display a Video widgets settings in the modal window.
      * 
+     * Check for items.length  > 0 - If widget was once defined but then deleted, a widgetId
+     * will still exist in the DB although there will be no settings available.
+     * 
      * @param {string} widget - The widget settings.
      */
     function displayVideoSettings(widget) {
     	
-    	for (var i = 0; i < widget.items.length - 1; i++) {
-    		sp.viewerWidgetsModal.renderAddVideoRows();
-    	}
+      for (var i = 0; i < widget.items.length - 1; i++) {
+        sp.viewerWidgetsModal.renderAddVideoRows();
+      }
       
       $('[name="video-widget-is-enabled"]')
         .prop('checked', widget.isEnabled)  
@@ -65,28 +76,20 @@ sp.viewerWidgetsModal = {
         
       $('.sp-video-widget-data-row').each(function(index) {
         $(this).find('[data-video]').each(function() {
-        	switch($(this).attr('data-video')) {
-        		case 'videoSource':
-        			$(this).val(widget.items[index].videoSource);
-        			break;
-        			
-        		case 'videoTitle':
-        			$(this).val(widget.items[index].videoTitle);
-        			break;
-        			
-        		case 'videoPageStart':
-        			$(this).val(widget.items[index].videoPageStart);
-        			break;
+          switch($(this).attr('data-video')) {
+            case 'videoSource':
+              $(this).val(widget.items[index].videoSource);
+              break;
+              
+            case 'videoTitle':
+              $(this).val(widget.items[index].videoTitle);
+              break;
+              
+            case 'videoPageStart':
+              $(this).val(widget.items[index].videoPageStart);
+              break;
           }
         });
-      });
-      
-      $(document).off('click', '.sp-add-video-widget__a').on('click', '.sp-add-video-widget__a', function() {
-        sp.viewerWidgetsModal.renderAddVideoRows();
-      });
-      
-      $(document).on('click', '.sp-delete-video-widget__a', function() {
-    		$(this).closest('.row').remove();
       });
     }
     
@@ -121,6 +124,36 @@ sp.viewerWidgetsModal = {
     function displayLikeWidgetSettings(widget) {
     	$('[name="like-widget-is-enabled"]').prop('checked', widget.isEnabled),
     	$('[name="like-widget-counter-is-enabled"]').prop('checked', widget.items[0].isCounterEnabled);
+    }
+    
+    
+    /**
+     * Display settings for Widget 5 - Hopper Widget
+     * 
+     * Check for items.length  > 0  - If widget was once defined but then deleted, a widgetId
+     * will still exist in the DB although there will be no settings available.
+     * 
+     * @param {object} widget - The settings for the Hopper widget.
+     */
+    function displayWidget5(widget) {
+      
+      for (var i = 0; i < widget.items.length - 1; i++) {
+        $('#sp-hopper-customize__container').append(
+            '<div class="row sp-hopper-widget__row">' + 
+              sp.viewerWidgetsModal.hopperHtml + 
+            '</div>'      
+        );
+      }
+      
+      $('[name="hopper-widget-is-enabled"]')
+          .prop('checked', widget.isEnabled)
+          .closest('div').removeClass('sp-hide-is-enabled');
+      
+      $('.sp-hopper-widget__row').each(function(index) {
+        $(this).find('[data-item-setting]').each(function() {
+          $(this).val(widget.items[index][$(this).attr('data-item-setting')]);
+        });
+      });
     }
   },
   
@@ -172,7 +205,7 @@ sp.viewerWidgetsModal = {
   validateWidgetsSettings: function(fileHash, targetId) {
     var settings = [];
     
-    $('.sp-viewer-widgets-modal input').removeClass('sp-video-widget-form-error');
+    $('.sp-viewer-widgets-modal input').removeClass('sp-widget-form-error');
 
     if (! sp.viewerWidgetsModal.isInputEmpty(3)
     		|| ! $('[name="question-widget-is-enabled"]').closest('div').hasClass('sp-hide-is-enabled')) {
@@ -190,6 +223,11 @@ sp.viewerWidgetsModal = {
     }
     
     settings.push(sp.viewerWidgetsModal.saveLikeWidgetSettings(fileHash));
+    
+    if (! sp.viewerWidgetsModal.isInputEmpty(5)
+        || ! $('[name="calendly-widget-is-enabled"]').closest('div').hasClass('sp-hide-is-enabled')) {
+      settings.push(sp.viewerWidgetsModal.saveWidget5(fileHash));
+    }
     
     var data = {
         action: 'setWidgetsSettings',
@@ -254,7 +292,7 @@ sp.viewerWidgetsModal = {
    * Validate then save Calendly Widget Settings.
    * 
    * If the user hasn't filled the field it will alert them to this by adding the
-   * class .sp-video-widget-form-error which sets the border color to #1ab394.
+   * class .sp-widget-form-error which sets the border color to #1ab394.
    * 
    * @param {string} fileHash - The fileHash
    * @return {object} calendlyWidgetData - The widget data for Calendly widget
@@ -272,12 +310,12 @@ sp.viewerWidgetsModal = {
     
     if ('' === $('[name="calendly-widget-username"]').val()) {
       sp.error.handleError('You must fill the field.');
-      $('[name="calendly-widget-username"]').addClass('sp-video-widget-form-error');
+      $('[name="calendly-widget-username"]').addClass('sp-widget-form-error');
     }
     
     if ('' === $('[name="calendly-widget-button-text"]').val()) {
       sp.error.handleError('You must fill the field.');
-      $('[name="calendly-widget-button-text"]').addClass('sp-video-widget-form-error');
+      $('[name="calendly-widget-button-text"]').addClass('sp-widget-form-error');
     }
     
     if ('' === $('[name="calendly-widget-button-text"]').val() || '' === $('[name="calendly-widget-username"]').val()) {
@@ -320,7 +358,7 @@ sp.viewerWidgetsModal = {
     
     if ('' === $('[name="question-widget-text"]').val()) {
       sp.error.handleError('You must fill the field.');
-      $('[name="question-widget-text"]').addClass('sp-video-widget-form-error');
+      $('[name="question-widget-text"]').addClass('sp-widget-form-error');
       sp.viewerWidgetsModal.openErrorTab();
       return undefined;
     }
@@ -360,6 +398,65 @@ sp.viewerWidgetsModal = {
   	return likeWidgetData;
   },
   
+  
+  /**
+   * Validate then save Hopper widget settings.
+   * 
+   * If one of the fields are empty, it returns undefined, otherwise it returns 
+   * widget5 which contains the settings for this widget.
+   * 
+   * @param fileHash
+   * @returns widget5 || undefined
+   */
+  saveWidget5: function(fileHash) {
+    
+    if ($('[name="hopper-widget-is-enabled"]').closest('div').hasClass('sp-hide-is-enabled')) {
+      $('[name="hopper-widget-is-enabled"]').prop('checked', true);
+    }
+    
+    var widget5 = {
+        apiVersion: '1.0',
+        data: {
+          fileHash: fileHash,
+          widgetId: 5,
+          isEnabled: $('[name="hopper-widget-is-enabled"]').prop('checked')         
+        }
+    };
+    
+    var items = [];
+    var isHopperSettingEmpty = false;
+    $('.sp-hopper-widget__row').each(function() {
+      
+      var item = {};
+      $(this).find('[data-item-setting]').each(function() {
+        switch($(this).attr('data-item-setting')) {
+          
+          case 'hopperText':
+          case 'hopperPage':
+            if ('' === $(this).val()) {
+              sp.error.handleError('You must fill the field.');
+              $(this).addClass('sp-widget-form-error');
+              sp.viewerWidgetsModal.openErrorTab();
+              isHopperSettingEmpty = true;
+              return false;
+            } else {
+              item[$(this).attr('data-item-setting')] = $(this).val();
+            }
+            break;
+        }
+      });
+      
+      items.push(item);
+    });
+    
+    widget5.data.items = items;
+    
+    if (! isHopperSettingEmpty) {
+      return widget5;
+    } else {
+      return undefined;
+    }
+  },
   
   /**
    * Validate then save Video Widget Settings.
@@ -409,7 +506,7 @@ sp.viewerWidgetsModal = {
 		    		var videoSource = $(value2).val();
 	          if (! videoSource || '' === videoSource) {
 	            sp.error.handleError('You must fill the field.');
-	            $(this).addClass('sp-video-widget-form-error');
+	            $(this).addClass('sp-widget-form-error');
 	            isVideoSourceEmpty = true;
 	            sp.viewerWidgetsModal.openErrorTab();
 	          } else {
@@ -423,7 +520,7 @@ sp.viewerWidgetsModal = {
 		    		var videoTitle =  $(value2).val();
 	          if ('' === videoTitle) {
 	            sp.error.handleError('You must fill the field.');
-	            $(this).addClass('sp-video-widget-form-error');
+	            $(this).addClass('sp-widget-form-error');
 	            isVideoTitleEmpty = true;
 	            sp.viewerWidgetsModal.openErrorTab();
 	          } else {
@@ -436,7 +533,7 @@ sp.viewerWidgetsModal = {
 		        pagesOverlapping = sp.viewerWidgetsModal.arePagesOverlapping(pageStart, pagesWithVideo);
 		        if (null !== pageStart) {
 		          if (isNaN(pageStart)) {
-		            $(value2).addClass('sp-video-widget-form-error');
+		            $(value2).addClass('sp-widget-form-error');
 		            sp.error.handleError('You must fill the field.');
 		            sp.viewerWidgetsModal.openErrorTab();
 		            isNumberFieldEmpty = true;
@@ -445,7 +542,7 @@ sp.viewerWidgetsModal = {
 		            $(this).closest('#sp-video-customization-options-container').find('[name="video-widget-page-start"]')
 		            	.each(function(index, value) {
 			              if ($(value).val() === errorNumber) {
-			                  $(value).addClass('sp-video-widget-form-error');
+			                  $(value).addClass('sp-widget-form-error');
 			              }
 		            });
 		            sp.viewerWidgetsModal.openErrorTab();
@@ -470,7 +567,7 @@ sp.viewerWidgetsModal = {
    */
   openErrorTab: function() {
     $('#sp-viewer-widgets-modal input').each(function() {
-      if ($(this).hasClass('sp-video-widget-form-error')) {
+      if ($(this).hasClass('sp-widget-form-error')) {
          $('#sp-viewer-widgets-modal .tab-pane').removeClass('active');
          $(this).closest('.tab-pane').addClass('active');
          var tabId = $(this).closest('.tab-pane').attr('id');
@@ -514,7 +611,7 @@ sp.viewerWidgetsModal = {
           + '</div>'
 
           + '<div class="col-xs-2 sp-video-widget-page-choice-container">'
-            + '<input type="number" data-video="videoPageStart" class="sp-video-widget" name="video-widget-page-start" min="1" data-key-id="7" data-key-type="integer">'
+            + '<input type="number" placeholder="e.g. 1" data-video="videoPageStart" class="sp-video-widget" name="video-widget-page-start" min="1" data-key-id="7" data-key-type="integer">'
           + '</div>'
                        
           + '<div class="col-xs-2">'
@@ -602,5 +699,39 @@ sp.viewerWidgetsModal = {
     return false;
   }
 };
+
+/**
+ * Event handlers for adding and deleting widget rows in the 'Customize' modal.
+ */
+(function addDeleteRows() {
+  sp.viewerWidgetsModal.hopperHtml = $('.sp-hopper-widget__row').html();
+  
+  // Hopper.
+  $(document).off('click', '.sp-add-hopper-widget__a').on('click', '.sp-add-hopper-widget__a', function() {
+    if ($('.sp-hopper-widget__row').length < 8) {
+      $('#sp-hopper-customize__container').append(
+          '<div class="row sp-hopper-widget__row">' + 
+            sp.viewerWidgetsModal.hopperHtml + 
+          '</div>'      
+      );
+    } else {
+      sp.error.handleError('You can add a maximum of 8 hoppers.');
+    }
+  });
+
+  $(document).on('click', '.sp-delete-hopper-widget__a', function() {
+      $(this).closest('.row').remove();
+  });
+  
+  // Video.
+  $(document).off('click', '.sp-add-video-widget__a').on('click', '.sp-add-video-widget__a', function() {
+    sp.viewerWidgetsModal.renderAddVideoRows();
+  });
+  
+  $(document).on('click', '.sp-delete-video-widget__a', function() {
+    $(this).closest('.row').remove();
+  });
+})();
+
 
 $('.sp-video-link-tooltip').tooltip({delay: {show: 100, hide: 200}, placement: 'top'});
