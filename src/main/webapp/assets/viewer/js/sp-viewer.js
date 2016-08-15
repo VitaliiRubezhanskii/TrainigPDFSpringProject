@@ -66,7 +66,8 @@ sp.viewer = {
     viewerWidgetVideoYouTubePlayed: 'VIEWER_WIDGET_VIDEO_YOUTUBE_PLAYED',
     viewerWidgetVideoYouTubePaused: 'VIEWER_WIDGET_VIDEO_YOUTUBE_PAUSED',
     viewerWidgetAskQuestion: 'VIEWER_WIDGET_ASK_QUESTION',
-    viewerWidgetLikeClicked: 'VIEWER_WIDGET_LIKE_CLICKED'
+    viewerWidgetLikeClicked: 'VIEWER_WIDGET_LIKE_CLICKED',
+    viewerWidgetHopperClicked: 'VIEWER_WIDGET_HOPPER_CLICKED'
   },
   isPagesLoaded: false,
   paramValue: {
@@ -591,11 +592,15 @@ if ('' != sp.viewer.linkHash) {
       /* Validate Widget 1 */
       var widget1RequiredSettings = ['videoPageStart', 'videoSource', 'videoTitle', 'isYouTubeVideo'];
       
-      if (typeof widgets.widget1 !== 'undefined') {
-        var isWidget1Valid = true;
+      if (typeof widgets.widget1 !== 'undefined'
+          && typeof widgets.widget1.items !== 'undefined'
+          && widgets.widget1.items.length > 0) {
+        var isWidget1Valid = false;
         
         $.each(widgets.widget1.items, function(index, item) {
-          if (! isWidgetSettingsDefined(item, widget1RequiredSettings)) {
+          if (isWidgetSettingsDefined(item, widget1RequiredSettings)) {
+            isWidget1Valid = true;
+          } else {
             isWidget1Valid = false;
             return false;
           }
@@ -633,6 +638,28 @@ if ('' != sp.viewer.linkHash) {
       	if (isWidgetSettingsDefined(widgets.widget4.items[0], widget4RequiredSettings)) {
       		implementWidget4(widgets.widget4.items[0]);
       	}
+      }
+      
+      /* Validate Widget 5 */
+      var widget5RequiredSettings = ['hopperText', 'hopperPage'];
+      
+      if (typeof widgets.widget5 !== 'undefined'
+        && typeof widgets.widget5.items !== 'undefined'
+        && widgets.widget5.items.length > 0) {
+        
+        var isWidget5Valid = false;
+        $.each(widgets.widget5.items, function(index, item) {
+          if (isWidgetSettingsDefined(item, widget5RequiredSettings)) {
+            isWidget5Valid = true;
+          } else {
+            isWidget5Valid = false;
+            return false;
+          }
+        });
+          
+        if (isWidget5Valid) {
+          implementWidget5(widgets.widget5.items);
+        }
       }
       
       
@@ -761,7 +788,7 @@ if ('' != sp.viewer.linkHash) {
               } else {
                 
                 // Load default video.
-                $('#sp-widget1-default-player').attr('src', videoSource)
+                $('#sp-widget1-default-player').attr('src', videoSource);
                     
                 // If the previous video was not a default video.
                 if ('#sp-widget1-default-player'
@@ -929,7 +956,7 @@ if ('' != sp.viewer.linkHash) {
       					
       					isLikeButtonClickedSession();
       				}
-      		)
+      		);
       	}
       	
       	
@@ -956,7 +983,7 @@ if ('' != sp.viewer.linkHash) {
         				
         				$('.sp-like-btn').removeClass('sp-hidden');
         			}
-        	)
+        	);
         }
         
         
@@ -979,7 +1006,7 @@ if ('' != sp.viewer.linkHash) {
          	 
          	 if (widget.isCounterEnabled) {
          		 sp.viewer.widgets.widget4.likeCount++;
-         		 formatDisplayLikeCount(sp.viewer.widgets.widget4.likeCount)
+         		 formatDisplayLikeCount(sp.viewer.widgets.widget4.likeCount);
          	 }
          	 
          	 // Change the colour of the button.
@@ -1045,6 +1072,65 @@ if ('' != sp.viewer.linkHash) {
 					
         	$('#sp-count-likes__p').text(likeCountToDisplay);
         }
+      }
+      
+      function implementWidget5(widget) {
+        
+        // Widget 5 - Hopper Widget.
+        $('body').append(
+            '<div class="sp-widget5">' +
+              '<div class="sp-widget5__extend-button">' +
+                '<i class="fa fa-chevron-right" aria-hidden="true"></i>' +
+              '</div>' +
+            '</div>');
+       
+        $.each(widget, function(index, value) {
+          $('.sp-widget5').append(
+          
+          		/**
+							 * Hopper hops structure.
+							 * 
+							 * hopperText is hidden below a certain max-width - see sp-viewer.css media queries.
+							 */
+              '<div class="sp-widget5__hop" id="sp-widget5__hop-' + index + '" data-page-hop="' + value.hopperPage + '">' + 
+                '<p class="sp-widget5__hop-text sp-widget5__hop--hidden">' + value.hopperText + '</p>' + 
+                '<p class="sp-widget5__hop-page sp-widget5__hop--visible">' + value.hopperPage + '</p>' +
+              '</div>'
+          );
+          
+          // Set the hopper colour to be the same as CTA buttons.
+          $('.sp-widget5__hop, .sp-widget5__extend-button').css({
+            'background-color': config.viewer.toolbarButtonBackground,
+            'color': config.viewer.toolbarCta1Color
+          });
+          
+          // Send event.
+          $('#sp-widget5__hop-' + index).on('click', function() {
+            sp.viewer.setCustomerEvent({
+                eventName: sp.viewer.eventName.viewerWidgetHopperClicked, 
+                linkHash: sp.viewer.linkHash,
+                sessionId: sessionid,
+                param1int: PDFViewerApplication.page,
+                param_1_varchar: $('#sp-widget5__hop-' + index + ' .sp-widget5__hop-text').text(),
+                param_2_varchar: $('#sp-widget5__hop-' + index).attr('data-page-hop')
+            });
+            
+            PDFViewerApplication.page = parseInt($('#sp-widget5__hop-' + index).attr('data-page-hop'));
+          });
+        });
+        
+        /**
+         * Open and close the hoppers.
+         * 
+         * The '.sp-widget5__extend-button' button can only be seen under 600px width.
+         */
+        $('.sp-widget5__extend-button').on('click', function() {
+          $('.sp-widget5__hop').toggleClass('sp-widget5__hop-extended');
+          $('.sp-widget5__extend-button i').toggleClass('fa-chevron-right fa-chevron-left');
+          
+          // Toggle visibility of hopper page / hopper text.
+          $('.sp-widget5__hop p').toggleClass('sp-widget5__hop--hidden sp-widget5__hop--visible');
+        });
       }
     }
   });

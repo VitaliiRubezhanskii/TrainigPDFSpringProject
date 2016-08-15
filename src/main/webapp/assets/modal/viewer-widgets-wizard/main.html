@@ -20,6 +20,7 @@
                     <li><a data-toggle="tab" href="#sp-tab-1"><i class="fa fa-video-camera"></i></a></li>
                     <li><a data-toggle="tab" href="#sp-tab-2"><i class="fa fa-calendar"></i></a></li>
                     <li><a data-toggle="tab" href="#sp-tab-4"><i class="fa fa-thumbs-o-up"></i></a></li>
+                    <li><a data-toggle="tab" href="#sp-tab-5"><i class="fa fa-bookmark"></i></a></li>
                 </ul>
                 
                 <div class="tab-content sp-viewer-widgets-modal">
@@ -57,7 +58,7 @@
                                             </div>
                                             
                                             <div class="col-xs-2">
-                                                <input type="number" data-video="videoPageStart" class="sp-video-widget" name="video-widget-page-start" min="1">
+                                                <input type="number" data-video="videoPageStart" class="sp-video-widget" placeholder="e.g. 1" name="video-widget-page-start" min="1">
                                             </div>
                                             
                                             <div class="col-xs-2">
@@ -122,6 +123,52 @@
                             <input type="checkbox" checked name="like-widget-counter-is-enabled"> Enable Like Counter
                             <div>
                             		<small>Show the number of likes within the widget.</small>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Hopper Widget  -->
+                    <div id="sp-tab-5" class="tab-pane">
+                        <div class="panel-body">
+                            <strong>Hopper</strong>
+                            <div class="sp-customization-option__p sp-hide-is-enabled">
+                                <input type="checkbox" name="hopper-widget-is-enabled"> Is Enabled?
+                            </div>
+                            <hr>
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="col-xs-7">
+                                        <p>Hopper Text</p>
+                                    </div>
+                                    
+                                    <div class="col-xs-3">
+                                        <p>Hopper Page</p>
+                                    </div>
+                                </div>
+                                
+                                <div id="sp-hopper-customize__container">
+                                    <div class="row sp-hopper-widget__row">
+                                        <div class="col-xs-7">
+                                            <input type="text" placeholder="e.g. This Interesting Page" maxlength="24" data-item-setting="hopperText" class="sp-hopper__input-elm">
+                                        </div>
+                                        
+                                        <div class="col-xs-3">
+                                            <input type="number" data-item-setting="hopperPage" placeholder="e.g. 1" class="sp-hopper__input-elm" min="1">
+                                        </div>
+                                        
+                                        <div class="col-xs-2">
+                                            <a class="btn btn-white btn-sm sp-delete-hopper-widget__a">
+                                                <i class="fa fa-times" aria-hidden="true"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="sp-add-hopper-container">
+                                <a class="btn btn-white btn-sm  sp-add-hopper-widget__a">
+                                    <i class="fa fa-plus" aria-hidden="true"></i> Add Hopper
+                                </a>
                             </div>
                         </div>
                     </div>
