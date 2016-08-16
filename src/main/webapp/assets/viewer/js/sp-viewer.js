@@ -676,7 +676,7 @@ if ('' != sp.viewer.linkHash) {
         /* Load Video Players API */
         // Default video.
         $('#sp-widget1-video-container').append(
-            '<iframe id="sp-widget1-default-player" frameborder="0" scrolling="no"></iframe>'
+            '<iframe id="sp-widget1-default-player" frameborder="0" scrolling="no" allowfullscreen="true"></iframe>'
         );
         sp.viewer.widgets.widget1.videoPlayersReadyStatus['defaultVideo'] = true;
         
