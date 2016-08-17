@@ -21,6 +21,7 @@
                     <li><a data-toggle="tab" href="#sp-tab-2"><i class="fa fa-calendar"></i></a></li>
                     <li><a data-toggle="tab" href="#sp-tab-4"><i class="fa fa-thumbs-o-up"></i></a></li>
                     <li><a data-toggle="tab" href="#sp-tab-5"><i class="fa fa-bookmark"></i></a></li>
+                    <li><a data-toggle="tab" href="#sp-tab-6"><i class="fa fa-bullhorn"></i></a></li>
                 </ul>
                 
                 <div class="tab-content sp-viewer-widgets-modal">
@@ -170,6 +171,78 @@
                                     <i class="fa fa-plus" aria-hidden="true"></i> Add Hopper
                                 </a>
                             </div>
+                        </div>
+                    </div>
+
+                    <!-- Testimonials Widget  -->
+                    <div id="sp-tab-6" class="tab-pane">
+                        <div class="panel-body">
+                            <strong>Testimonials</strong>
+                            <div class="sp-customization-option__p sp-hide-is-enabled">
+                                <input id="sp-widget6--is-enabled" type="checkbox"> Is Enabled?
+                            </div>
+                            <p class="sp-customization-option__p">Button Text</p>
+                            <input type="text" class="form-control" name="sp-widget6__button-text" placeholder="e.g. Testimonials">
+                            <hr>
+                            <div class="container-fluid">                                
+                                <div class="sp-widget-item">
+                                    <form class="form-horizontal">
+                                        <div class="form-group">
+                                            <label class="col-lg-4 control-label">Person Image</label>
+                                            <div class="col-lg-8">
+                                                <div class="fa fa-user fa-4x sp-widget6__person-image"></div>
+                                            </div>
+                                            <input type="hidden" name="person-image">
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <div class="col-lg-offset-4 col-lg-8">
+                                                <input type="file" class="form-control sp-widget6__input-person-image">
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <label class="col-lg-4 control-label">Testimonial</label>
+                                            <div class="col-lg-8">
+                                                <textarea class="form-control" name="testimonial" placeholder="e.g. Using SlidePiper has increased my sales..." rows="3" maxlength="250"></textarea>
+                                            </div>
+                                        </div>
+                                            
+                                        <div class="form-group">
+                                            <label class="col-lg-4 control-label">Person Name</label>
+                                            <div class="col-lg-8">
+                                                <input type="text" class="form-control" name="person-name" placeholder="e.g. David Cohen" maxlength="50">
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <label class="col-lg-4 control-label">Person Title</label>
+                                            <div class="col-lg-8">
+                                                <input type="text" class="form-control" name="person-title" placeholder="e.g. CEO of Company" maxlength="50">
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <label class="col-lg-4 control-label">Page</label>
+                                            <div class="col-lg-8">
+                                                <input type="number" class="form-control" name="page" placeholder="e.g. 1" min="1">
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <div class="col-lg-12">
+                                                <a class="btn btn-white btn-sm sp-widget__delete-item">
+                                                    <i class="fa fa-times" aria-hidden="true"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            
+                            <a class="btn btn-white btn-sm sp-widget__add-item">
+                                <i class="fa fa-plus" aria-hidden="true"></i> Add Testimonial
+                            </a>
                         </div>
                     </div>
                 </div>

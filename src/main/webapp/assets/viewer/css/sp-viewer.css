@@ -469,11 +469,11 @@
  */
 
 .sp-right-side-widgets {
-  max-width: 200px;
+  max-width: 230px;
   position: fixed;
   right: 0;
   top: 45%;
-  width: 18%;
+  width: 20%;
 }
 
 .sp-widget-button {
@@ -500,7 +500,7 @@
   display: inline-block;
   margin-left: 16px;
   vertical-align: middle;
-  width: 80px;
+  width: 120px;
 }
 
 .sp-widget-button i {
@@ -542,6 +542,37 @@
   font-weight: bold;
   margin-bottom: 2px;
   margin-top: 15px;
+}
+
+
+/* Widget 6 - Testimonials */
+#sp-widget6 {
+  background-color: #009688;
+}
+
+#sp-widget6:hover {
+  background-color: #26a69a;
+}
+
+#sp-widget6__person-image {
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  border-radius: 50%;
+  height: 100px;
+  margin: 0 auto;
+  width: 100px;
+  margin: 15px auto 20px;
+}
+
+#sp-widget6__person-name {
+  font-size: 20px;
+  font-weight: bold;
+  margin-top: 30px;  
+}
+
+#sp-widget6__person-title {
+  margin-top: 10px;  
 }
 
 
@@ -629,7 +660,7 @@
   }
   
   .sp-right-side-widgets {
-    width: 12%;
+    width: 16%;
   }
   
   .sp-widget-button {

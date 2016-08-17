@@ -1,5 +1,201 @@
 var sp = sp || {};
 
+sp.widgets = {
+  widget6: {
+    item: '<hr>' + $('#sp-tab-6 .sp-widget-item').html(),
+    
+    init: (function() {
+      /* Add Item */
+      $('#sp-tab-6 .sp-widget__add-item').click(function() {
+        sp.widgets.widget6.addItem();
+      });
+      
+      /* Delete Item */
+      $(document).on('click', '#sp-tab-6 .sp-widget__delete-item', function() {
+        $(this).closest('.sp-widget-item').remove();
+      });
+      
+      // Set person image.
+      $(document).on('change', '.sp-widget6__input-person-image', function() {
+        var $file = $(this);
+        var file = this.files[0];
+        var reader = new FileReader();
+  
+        reader.addEventListener('load', function() {
+          $file.closest('.sp-widget-item').find('.sp-widget6__person-image')
+              .removeClass('fa fa-user fa-4x')
+              .css('background-image', 'url(' + reader.result + ')');
+          
+          $file.closest('.sp-widget-item').find('[name="person-image"]')
+              .val(reader.result);
+        }, false);
+        
+        if (file) {
+          reader.readAsDataURL(file);
+        }
+      });
+    })(),
+    
+    /**
+     * Add a testimonial item to the widget setting panel.
+     */
+    addItem: function() {
+      $('#sp-tab-6 .container-fluid')
+          .append('<div class="sp-widget-item">' + this.item + '</div>');
+    },
+    
+    /**
+     * Load saved testimonials to the widget setting panel.
+     */
+    displayItems: function(widgetData) {
+      
+      // Display is enabled.
+      $('#sp-widget6--is-enabled')
+          .prop('checked', widgetData.isEnabled)  
+          .closest('div').removeClass('sp-hide-is-enabled');
+      
+      // Display items.
+      var items = widgetData.items;
+      $.each(items, function(index, item) {
+        $.each(item, function(key, value) {
+          switch (key) {
+            case 'buttonText':
+              $('[name="sp-widget6__button-text"]').val(value);
+              break;
+            
+            case 'page':
+              $('.sp-widget-item [name="page"]')[index].value = value;
+              break;
+              
+            case 'personImage':
+              if ('' !== value) {
+                $('.sp-widget6__person-image')[index]
+                    .className = 'sp-widget6__person-image';
+                
+                $('.sp-widget6__person-image')[index]
+                    .style.backgroundImage = 'url(' + value + ')';
+                
+                $('.sp-widget-item [name="person-image"]')[index].value = value;
+              }
+              break;
+              
+            case 'personName':
+              $('.sp-widget-item [name="person-name"]')[index].value = value;
+              break;
+            
+            case 'personTitle':
+              $('.sp-widget-item [name="person-title"]')[index].value = value;
+              break;
+            
+            case 'testimonial':
+              $('.sp-widget-item [name="testimonial"]')[index].value = value;
+              break;            
+          }
+        });
+        
+        if (index < items.length - 1) {
+          sp.widgets.widget6.addItem();
+        }
+      });
+    },
+    
+    /**
+     * Save testimonials from the widget setting panel.
+     */
+    saveItems: function(fileHash) {
+      var widgetSetting = {
+        apiVersion: '1.0',
+        data: {
+          fileHash: fileHash,
+          widgetId: 6,
+          isEnabled: $('#sp-widget6--is-enabled').prop('checked'),
+          items: []
+        }
+      };
+      
+      /* Validation */
+      var validationCode = 0;
+      var items = [];
+      var itemsPages = [];
+      $('.sp-widget-item').each(function() {
+        
+        /* Validate Item */
+        var jqueryObjectsToValidate = [
+            $('[name="sp-widget6__button-text"]'),
+            $(this).find('[name="page"]'),
+            $(this).find('[name="person-name"]'),
+            $(this).find('[name="person-title"]'),
+            $(this).find('[name="testimonial"]')
+        ];
+        
+        var emptyJqueryObects =
+            sp.data.getEmptyJqueryObjects(jqueryObjectsToValidate);
+        
+        // All item properties are empty.
+        if (jqueryObjectsToValidate.length === emptyJqueryObects.length) {
+          
+            // Items have been saved at least once.
+            if (! $('#sp-widget6--is-enabled').parent().hasClass('sp-hide-is-enabled')) {
+              sp.error.handleError('You must fill all fields.');
+              validationCode = 1;
+            }
+            return false;
+            
+        // At least one item property is empty.
+        } else if (emptyJqueryObects.length > 0) {
+          sp.error.handleError('You must fill all fields.');
+          validationCode = 1;
+          return false;
+          
+        // No item property is empty.
+        } else {
+          var buttonText = $('[name="sp-widget6__button-text"]').val();
+          var page = parseInt($(this).find('[name="page"]').val());
+          var personName = $(this).find('[name="person-name"]').val();
+          var personImage = $(this).find('[name="person-image"]').val();
+          var personTitle = $(this).find('[name="person-title"]').val();
+          var testimonial = $(this).find('[name="testimonial"]').val();
+          
+          if (-1 !== itemsPages.indexOf(page)) {
+            sp.error.handleError('You can only enter one testimonial per page.');
+            validationCode = 1;
+            return false;
+          }
+          itemsPages.push(page);
+          
+          /* Save Item */
+          var item = {
+            buttonText: buttonText,
+            page: page,
+            personImage: personImage,
+            personName: personName,
+            personTitle: personTitle,
+            testimonial: testimonial
+          }
+          
+          items.push(item);
+          validationCode = 2;
+        }
+      });
+      
+      if (0 === validationCode || 2 === validationCode) {
+        widgetSetting.data.items = items;
+        
+        // Set isEnabled to true if items are valid and saved for the first time.
+        if (2 === validationCode
+            && $('#sp-widget6--is-enabled').parent().hasClass('sp-hide-is-enabled')) {
+          
+          widgetSetting.data.isEnabled = true;
+        }
+        
+        return widgetSetting;
+      } else {
+        return undefined;
+      }
+    }
+  }
+};
+
 sp.viewerWidgetsModal = {
   
   /**
@@ -51,6 +247,12 @@ sp.viewerWidgetsModal = {
         case 5:
           if (widget.data.items.length > 0) {
             displayWidget5(widget.data);
+          }
+          break;
+          
+        case 6:
+          if (widget.data.items.length > 0) {
+            sp.widgets.widget6.displayItems(widget.data);
           }
           break;
       }
@@ -227,6 +429,13 @@ sp.viewerWidgetsModal = {
     if (! sp.viewerWidgetsModal.isInputEmpty(5)
         || ! $('[name="calendly-widget-is-enabled"]').closest('div').hasClass('sp-hide-is-enabled')) {
       settings.push(sp.viewerWidgetsModal.saveWidget5(fileHash));
+    }
+    
+    var widget6Settings = sp.widgets.widget6.saveItems(fileHash);
+    if (typeof widget6Settings === 'undefined') {
+      settings.push(undefined);
+    } else if (widget6Settings.data.items.length > 0 ) {
+      settings.push(widget6Settings);
     }
     
     var data = {
