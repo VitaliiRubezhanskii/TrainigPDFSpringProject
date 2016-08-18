@@ -67,18 +67,19 @@ sp.viewer = {
     viewerWidgetVideoYouTubePaused: 'VIEWER_WIDGET_VIDEO_YOUTUBE_PAUSED',
     viewerWidgetAskQuestion: 'VIEWER_WIDGET_ASK_QUESTION',
     viewerWidgetLikeClicked: 'VIEWER_WIDGET_LIKE_CLICKED',
-    viewerWidgetHopperClicked: 'VIEWER_WIDGET_HOPPER_CLICKED'
+    viewerWidgetHopperClicked: 'VIEWER_WIDGET_HOPPER_CLICKED',
+    viewerWidgetTestimonialsClicked: 'VIEWER_WIDGET_TESTIMONIALS_CLICKED'
   },
   isPagesLoaded: false,
   paramValue: {
   	videoTabOpened: 'VIEWER_WIDGET_VIDEO_TAB_OPENED',
   	videoTabClosed: 'VIEWER_WIDGET_VIDEO_TAB_CLOSED'
   },
-  lastViewedPage: 0,
   linkHash: getParameterByName('f'),
   widgets: {
     widget1: {
       currentVideoPlayerCssSelector: '',
+     	isValidated: false,
       isVideoPlayerReady: false,
       isVideoCollapseOverride: false,
       videoPlayersReadyStatus: {
@@ -89,6 +90,11 @@ sp.viewer = {
     },
     widget4: {
     	likeCount: 0
+    },
+    widget6: {
+      isReady: false,
+      isValidated: false,
+      lastViewedPage: 0
     }
   },
   
@@ -516,7 +522,8 @@ if ('' != sp.viewer.linkHash) {
               
               switch(widgetId) {
   	            case 1:
-  	              widgetData.items = OrderWidgetDataItemsByPage(widgetData.items);
+  	            case 6:
+  	              widgetData.items = OrderWidgetDataItemsByPage(widgetId, widgetData.items);
   	              break;
   	          }
               
@@ -532,12 +539,21 @@ if ('' != sp.viewer.linkHash) {
            * 
            * @return Sorted widget data.
            */
-          function OrderWidgetDataItemsByPage(items) {
+          function OrderWidgetDataItemsByPage(widgetId, items) {
             var itemsByPage = {};
             var itemsPage = [];
             
             $.each(items, function(index, item) {
-              var page = item.videoPageStart;
+              
+              switch (widgetId) {
+                case 1:
+                  var page = item.videoPageStart;
+                  break;
+                  
+                case 6:
+                  var page = item.page;
+                  break;
+              }
               
               itemsByPage['page' + page.toString()] = item;
               itemsPage.push(page);
@@ -589,6 +605,59 @@ if ('' != sp.viewer.linkHash) {
      */
     function implementWidgets(widgets) {
       
+      /**
+       * The following is a mechanisem for setting a widget item (out of a set of items)
+       * everytime the user changes a page. 
+       */
+      $(document).on('pagesloaded pagechange spYouTubePlayerReady spWidget6Ready', function(event) {
+        if ('pagesloaded' === event.type) {
+          sp.viewer.isPagesLoaded = true;
+        }
+        
+        if (sp.viewer.isPagesLoaded) {
+          
+          /* Widget 1 */
+          if (sp.viewer.widgets.widget1.isValidated) {
+            
+            // Check if all applicable video players are ready.
+            if (! sp.viewer.widgets.widget1.isVideoPlayerReady) {
+              var isVideoPlayerReady = true;
+              
+              $.each(sp.viewer.widgets.widget1.videoPlayersReadyStatus, function(key, isReady) {
+                if (! isReady) {
+                  isVideoPlayerReady = false;
+                  return false;
+                }
+              });
+              
+              sp.viewer.widgets.widget1.isVideoPlayerReady = isVideoPlayerReady;
+            }
+            
+            // Verification before setting a video.
+            if (PDFViewerApplication.page !== sp.viewer.widgets.widget1.lastViewedPage
+                && sp.viewer.widgets.widget1.isVideoPlayerReady) {
+            
+              loadVideo(widgets.widget1.items);
+              sp.viewer.widgets.widget1.lastViewedPage = PDFViewerApplication.page;
+            }
+          }
+          
+          
+          /* Widget 6 */
+          if (sp.viewer.widgets.widget6.isValidated) {
+            
+            // Verification before setting a testimonial.
+            if (PDFViewerApplication.page !== sp.viewer.widgets.widget6.lastViewedPage
+                && sp.viewer.widgets.widget6.isReady) {
+              
+              loadTestimonial(widgets.widget6.items);
+              sp.viewer.widgets.widget6.lastViewedPage = PDFViewerApplication.page;
+            }
+          }
+        }
+      });
+      
+      
       /* Validate Widget 1 */
       var widget1RequiredSettings = ['videoPageStart', 'videoSource', 'videoTitle', 'isYouTubeVideo'];
       
@@ -607,6 +676,7 @@ if ('' != sp.viewer.linkHash) {
         });
         
         if (isWidget1Valid) {
+ 	        sp.viewer.widgets.widget1.isValidated = true;
           implementWidget1(widgets.widget1.items);
         }
       }
@@ -617,7 +687,7 @@ if ('' != sp.viewer.linkHash) {
       
       if (typeof widgets.widget2 !== 'undefined') {
         if (isWidgetSettingsDefined(widgets.widget2.items[0], widget2RequiredSettings)) {
-           implementWidget2(widgets.widget2.items[0]);
+          implementWidget2(widgets.widget2.items[0]);
         }
       }
       
@@ -662,6 +732,30 @@ if ('' != sp.viewer.linkHash) {
         }
       }
       
+      /* Validate Widget 6 */
+      var widget6RequiredSettings =
+          ['page', 'personImage', 'personName', 'personTitle', 'testimonial'];
+      
+      if (typeof widgets.widget6 !== 'undefined'
+          && typeof widgets.widget6.items !== 'undefined'
+          && widgets.widget6.items.length > 0) {
+        var isWidget6Validated = false;
+        
+        $.each(widgets.widget6.items, function(index, item) {
+          if (isWidgetSettingsDefined(item, widget6RequiredSettings)) {
+            isWidget6Validated = true;
+          } else {
+            isWidget6Validated = false;
+            return false;
+          }
+        });
+        
+        if (isWidget6Validated) {
+	        sp.viewer.widgets.widget6.isValidated = true;
+          implementWidget6(widgets.widget6.items);
+        }
+      }
+      
       
       /* Implement Widget 1 */
       function implementWidget1(videos) {
@@ -676,153 +770,60 @@ if ('' != sp.viewer.linkHash) {
         /* Load Video Players API */
         // Default video.
         $('#sp-widget1-video-container').append(
-            '<iframe id="sp-widget1-default-player" frameborder="0" scrolling="no"></iframe>'
+            '<iframe id="sp-widget1-default-player" frameborder="0" scrolling="no" allowfullscreen="true"></iframe>'
         );
         sp.viewer.widgets.widget1.videoPlayersReadyStatus['defaultVideo'] = true;
         
         // YouTube video.
         $('#sp-widget1-video-container').append('<div id="sp-widget1-youtube-player"></div>');
         $.getScript('https://www.youtube.com/iframe_api');
+      }
+      
+      
+      /**
+       * Load a video to the widget container.
+       */
+      function loadVideo(videos) {     
         
-        
-        /**
-         * Load video mechanism.
-         */
-        $(document).on('pagesloaded pagechange spYouTubePlayerReady', function(event) {
-          if ('pagesloaded' === event.type) {
-            sp.viewer.isPagesLoaded = true;
-          }
-          
-          // Check if all applicable video players are ready.
-          if (! sp.viewer.widgets.widget1.isVideoPlayerReady) {
-            var isVideoPlayerReady = true;
-
-            $.each(sp.viewer.widgets.widget1.videoPlayersReadyStatus, function(key, isReady) {
-              if (! isReady) {
-                isVideoPlayerReady = false;
-                return false;
-              }
-            });
-            
-            sp.viewer.widgets.widget1.isVideoPlayerReady = isVideoPlayerReady;
-          }
-          
-          // Format videos array to an object for ease of access.
-          var videosByPage = {};
-          $.each(videos, function(index, video) {
-            videosByPage['page' + video.videoPageStart.toString()] = video;
-          });
-          
-          // Verification before setting a video.
-          if (sp.viewer.isPagesLoaded
-              && sp.viewer.widgets.widget1.isVideoPlayerReady
-              && PDFViewerApplication.page !== sp.viewer.lastViewedPage) {
-            
-            var isVideoCollapsed = true;
-            for (var page = PDFViewerApplication.page; page > -1; page--) {
-              if (typeof videosByPage['page' + page] !== 'undefined') {
-                
-                // If the user didn't define the video to load on
-                // PDFViewerApplication.page than collapse the video.
-                if (PDFViewerApplication.page === page) {
-                  isVideoCollapsed = false;
-                }
-                
-                setVideo(
-                    videosByPage['page' + page].videoSource,
-                    videosByPage['page' + page].videoTitle,
-                    videosByPage['page' + page].isYouTubeVideo,
-                    isVideoCollapsed
-                );
-                
-                // If a page with a video is found, break the loop.
-                break;
-              }
-
-              // If no page with a video is found then do the following
-              if (0 === page) {
-                
-                // Set video to the first available video.
-                setVideo(
-                  videos[0].videoSource,
-                  videos[0].videoTitle,
-                  videos[0].isYouTubeVideo,
-                  true
-                );
-              }
-            }
-          
-            sp.viewer.lastViewedPage = PDFViewerApplication.page;
-          }
-          
-          
-          /**
-           * Set video on the viewer.
-           * 
-           * @param {string} videoSource - The video source.
-           * @param {string} videoTitle - The video title.
-           * @param {boolean} videoSource - Is the video a YouTube video.
-           */
-          function setVideo(videoSource, videoTitle, isYouTubeVideo, isVideoCollapsed) {
-            if (videoSource !== sp.viewer.widgets.widget1.lastVideoSource) {
-              
-              // Stop / remove running videos.
-              spYouTubePlayer.pauseVideo();
-              $('#sp-widget1-default-player').removeAttr('src');
-              
-              if (isYouTubeVideo) {
-                
-                // Load YouTube video.
-                $('#sp-widget1-youtube-player').css('visibility', 'hidden');
-                spYouTubePlayer.cueVideoById(videoSource.split('/')[4]);
-                
-                // If the previous video was not a YouTube video.
-                if ('#sp-widget1-youtube-player'
-                    !== sp.viewer.widgets.widget1.currentVideoPlayerCssSelector) {
-                  
-                  $('#sp-widget1 iframe').hide();
-                  $('#sp-widget1-youtube-player').show();
-                  sp.viewer.widgets.widget1.currentVideoPlayerCssSelector = 
-                      '#sp-widget1-youtube-player';
-                }
-              } else {
-                
-                // Load default video.
-                $('#sp-widget1-default-player').attr('src', videoSource);
-                    
-                // If the previous video was not a default video.
-                if ('#sp-widget1-default-player'
-                    !== sp.viewer.widgets.widget1.currentVideoPlayerCssSelector) {
-                  
-                  $('#sp-widget1 iframe').hide();
-                  $('#sp-widget1-default-player').show();
-                  sp.viewer.widgets.widget1.currentVideoPlayerCssSelector = 
-                      '#sp-widget1-default-player';
-                }
-              }
-              
-              sp.viewer.widgets.widget1.lastVideoSource = videoSource;
-            }
-            
-            // Set video title in video tab.
-            $('#sp-widget1-tab div').text(videoTitle);
-            
-            // Collapse video algorithm.
-            if (! sp.viewer.widgets.widget1.isVideoCollapseOverride) {
-              if (isVideoCollapsed) {
-                $('#sp-widget1-video-container').hide();
-              } else {
-                $('#sp-widget1-video-container').show();
-              }
-            }
-            
-            if ($('#sp-widget1-video-container').is(':visible')) {
-              $('#sp-widget1-fa-chevron').addClass('fa-chevron-down').removeClass('fa-chevron-up');
-            } else {
-              $('#sp-widget1-fa-chevron').addClass('fa-chevron-up').removeClass('fa-chevron-down');
-            }
-          };  
+        // Format videos array to an object for ease of access.
+        var videosByPage = {};
+        $.each(videos, function(index, video) {
+          videosByPage['page' + video.videoPageStart.toString()] = video;
         });
+        
+        var isVideoCollapsed = true;
+        for (var page = PDFViewerApplication.page; page > -1; page--) {
+          if (typeof videosByPage['page' + page] !== 'undefined') {
+            
+            // If the user didn't define the video to load on
+            // PDFViewerApplication.page than collapse the video.
+            if (PDFViewerApplication.page === page) {
+              isVideoCollapsed = false;
+            }
+            
+            setVideo(
+                videosByPage['page' + page].videoSource,
+                videosByPage['page' + page].videoTitle,
+                videosByPage['page' + page].isYouTubeVideo,
+                isVideoCollapsed
+            );
+            
+            // If a page with a video is found, break the loop.
+            break;
+          }
+
+          // If no page with a video is found then do the following
+          if (0 === page) {
+            
+            // Set video to the first available video.
+            setVideo(
+              videos[0].videoSource,
+              videos[0].videoTitle,
+              videos[0].isYouTubeVideo,
+              true
+            );
+          }
+        }
         
         // Video widget tab click mechanism.
         $('#sp-widget1').click(function(event) {          
@@ -837,7 +838,75 @@ if ('' != sp.viewer.linkHash) {
             sendVideoTabClickedEvent(sp.viewer.paramValue.videoTabClosed);
           }
         });
+        
+        /**
+         * Set video on the viewer.
+         * 
+         * @param {string} videoSource - The video source.
+         * @param {string} videoTitle - The video title.
+         * @param {boolean} videoSource - Is the video a YouTube video.
+         */
+        function setVideo(videoSource, videoTitle, isYouTubeVideo, isVideoCollapsed) {
+          if (videoSource !== sp.viewer.widgets.widget1.lastVideoSource) {
+            
+            // Stop / remove running videos.
+            spYouTubePlayer.pauseVideo();
+            $('#sp-widget1-default-player').removeAttr('src');
+            
+            if (isYouTubeVideo) {
+              
+              // Load YouTube video.
+              $('#sp-widget1-youtube-player').css('visibility', 'hidden');
+              spYouTubePlayer.cueVideoById(videoSource.split('/')[4]);
+              
+              // If the previous video was not a YouTube video.
+              if ('#sp-widget1-youtube-player'
+                  !== sp.viewer.widgets.widget1.currentVideoPlayerCssSelector) {
+                
+                $('#sp-widget1 iframe').hide();
+                $('#sp-widget1-youtube-player').show();
+                sp.viewer.widgets.widget1.currentVideoPlayerCssSelector = 
+                    '#sp-widget1-youtube-player';
+              }
+            } else {
+              
+              // Load default video.
+              $('#sp-widget1-default-player').attr('src', videoSource);
+                  
+              // If the previous video was not a default video.
+              if ('#sp-widget1-default-player'
+                  !== sp.viewer.widgets.widget1.currentVideoPlayerCssSelector) {
+                
+                $('#sp-widget1 iframe').hide();
+                $('#sp-widget1-default-player').show();
+                sp.viewer.widgets.widget1.currentVideoPlayerCssSelector = 
+                    '#sp-widget1-default-player';
+              }
+            }
+            
+            sp.viewer.widgets.widget1.lastVideoSource = videoSource;
+          }
+          
+          // Set video title in video tab.
+          $('#sp-widget1-tab div').text(videoTitle);
+          
+          // Collapse video algorithm.
+          if (! sp.viewer.widgets.widget1.isVideoCollapseOverride) {
+            if (isVideoCollapsed) {
+              $('#sp-widget1-video-container').hide();
+            } else {
+              $('#sp-widget1-video-container').show();
+            }
+          }
+          
+          if ($('#sp-widget1-video-container').is(':visible')) {
+            $('#sp-widget1-fa-chevron').addClass('fa-chevron-down').removeClass('fa-chevron-up');
+          } else {
+            $('#sp-widget1-fa-chevron').addClass('fa-chevron-up').removeClass('fa-chevron-down');
+          }
+        };
       };
+      
       
       function implementWidget2(widget) {
         
@@ -848,7 +917,7 @@ if ('' != sp.viewer.linkHash) {
         
         $('.sp-right-side-widgets').append('<button class="sp-widget-button sp-widget-font-fmaily" id="sp-widget2"></button>');
         
-        if ($('.sp-widget-button').length > 1) {
+        if ($('.sp-right-side-widgets button, .sp-right-side-widgets div').length > 1) {
           $('#sp-widget2').css('margin-top', '20px');
         }
         
@@ -876,6 +945,7 @@ if ('' != sp.viewer.linkHash) {
         });
       }
       
+      
       function implementWidget3(widget) {
         
         // Widget 3 - Ask a question widget
@@ -885,7 +955,7 @@ if ('' != sp.viewer.linkHash) {
         
         $('.sp-right-side-widgets').append('<button class="sp-widget-button sp-widget-font-fmaily" id="sp-widget3"></button>');
 
-        if ($('.sp-widget-button').length > 1) {
+        if ($('.sp-right-side-widgets button, .sp-right-side-widgets div').length > 1) {
           $('#sp-widget3').css('margin-top', '20px');
         }
         
@@ -921,6 +991,7 @@ if ('' != sp.viewer.linkHash) {
           });
         });
       }
+      
       
       function implementWidget4(widget) {
 	      	
@@ -1074,6 +1145,7 @@ if ('' != sp.viewer.linkHash) {
         }
       }
       
+      
       function implementWidget5(widget) {
         
         // Widget 5 - Hopper Widget.
@@ -1086,16 +1158,10 @@ if ('' != sp.viewer.linkHash) {
        
         $.each(widget, function(index, value) {
           $('.sp-widget5').append(
-          
-          		/**
-							 * Hopper hops structure.
-							 * 
-							 * hopperText is hidden below a certain max-width - see sp-viewer.css media queries.
-							 */
-              '<div class="sp-widget5__hop" id="sp-widget5__hop-' + index + '" data-page-hop="' + value.hopperPage + '">' + 
-                '<p class="sp-widget5__hop-text sp-widget5__hop--hidden">' + value.hopperText + '</p>' + 
-                '<p class="sp-widget5__hop-page sp-widget5__hop--visible">' + value.hopperPage + '</p>' +
-              '</div>'
+            '<div class="sp-widget5__hop" id="sp-widget5__hop-' + index + '" data-page-hop="' + value.hopperPage + '">' + 
+              '<p class="sp-widget5__hop-text sp-widget5__hop--hidden">' + value.hopperText + '</p>' + 
+              '<p class="sp-widget5__hop-page sp-widget5__hop--visible">' + value.hopperPage + '</p>' +
+            '</div>'
           );
           
           // Set the hopper colour to be the same as CTA buttons.
@@ -1132,7 +1198,111 @@ if ('' != sp.viewer.linkHash) {
           $('.sp-widget5__hop p').toggleClass('sp-widget5__hop--hidden sp-widget5__hop--visible');
         });
       }
-    }
+      
+      
+      function implementWidget6(testimonials) {
+        if (0 === $('.sp-right-side-widgets').length) {
+          $('body').append('<div class="sp-right-side-widgets"></div>');
+        }
+        
+        $('.sp-right-side-widgets').append(
+            '<div id="sp-widget6">' +
+              '<i class="fa fa-user fa-inverse"></i>' +
+            '</div>'
+        );
+        
+        sp.viewer.widgets.widget6.isReady = true;
+        $(document).trigger('spWidget6Ready');
+      }
+      
+      
+      /**
+       * Load a testimonial to the widget container.
+       */
+      function loadTestimonial(testimonials) {
+        
+        // Format testimonials array to an object for ease of access.
+        var testimonialsByPage = {};
+        $.each(testimonials, function(index, testimonial) {
+          testimonialsByPage['page' + testimonial.page.toString()] = testimonial;
+        });
+        
+        for (var page = PDFViewerApplication.page; page > -1; page--) {
+          if (typeof testimonialsByPage['page' + page] !== 'undefined') {
+            
+            setTestimonial(
+                testimonialsByPage['page' + page].buttonText,
+                testimonialsByPage['page' + page].personImage,
+                testimonialsByPage['page' + page].personName,
+                testimonialsByPage['page' + page].personTitle,
+                testimonialsByPage['page' + page].testimonial
+            );
+            
+            // If a page with a testimonial is found, break the loop.
+            break;
+          }
+
+          // If no page with a testimonial is found then do the following
+          if (0 === page) {
+            
+            // Set video to the first available video.
+            setTestimonial(
+              testimonials[0].buttonText,
+              testimonials[0].personImage,
+              testimonials[0].personName,
+              testimonials[0].personTitle,
+              testimonials[0].testimonial
+            );
+          }
+        }
+        
+        function setTestimonial(buttonText, personImage, personName, personTitle, testimonial) {
+          var personImageDiv = '';
+          
+          if ('' !== personImage) {
+            personImageDiv = '<div id="sp-widget6__person-image" style="background-image: url(' + personImage + ');"></div>';
+            $('#sp-widget6')
+                .css({'background-image': 'url(' + personImage + ')', 'background-color': 'transparent'});
+            $('#sp-widget6 i').hide();
+          } else {
+            $('#sp-widget6')
+                .css({'background-image': 'none', 'background-color': '#009688'});
+            $('#sp-widget6 i').show();
+          }
+          
+          $('#sp-widget6')
+              .off('click')
+              .on('click', function() {
+                swal({
+                  title: null,
+                  html: true,
+                  text: personImageDiv +
+                      '<div><i class="fa fa-quote-left"></i> ' + testimonial.replace(/\r\n|\r|\n/g, '<br>') + ' <i class="fa fa-quote-right"></i></div>' +
+                      '<div id="sp-widget6__person-name">' + personName +'</div>' +
+                      '<div id="sp-widget6__person-title">' + personTitle +'</div>'
+                });
+                
+                /**
+                 * Send Ask a Question event.
+                 * 
+                 * param_1_varchar - The text on the Ask a Question button.
+                 * param_2_varchar - The message in the widget form.
+                 * param_3_varchar - The email address to reply to in the widget form.
+                 */
+                sp.viewer.setCustomerEvent({
+                  eventName: sp.viewer.eventName.viewerWidgetTestimonialsClicked,
+                  linkHash: sp.viewer.linkHash,
+                  sessionId: sessionid,
+                  param1int: PDFViewerApplication.page,
+                  param_1_varchar: buttonText,
+                  param_2_varchar: personName,
+                  param_3_varchar: personTitle,
+                  param_4_varchar: testimonial,
+                });
+              });
+        };
+      };
+    };
   });
 }
 

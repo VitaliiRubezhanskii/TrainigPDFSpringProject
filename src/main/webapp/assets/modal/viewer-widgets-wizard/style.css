@@ -1,5 +1,6 @@
 .sp-add-hopper-widget__a,
-.sp-add-video-widget__a {
+.sp-add-video-widget__a,
+.sp-widget__add-item {
   background-color: #FFFFFF;
   background-image: none;
   cursor: pointer;
@@ -13,7 +14,8 @@
 }
 
 .sp-add-hopper-widget__a:hover,
-.sp-add-video-widget__a:hover {
+.sp-add-video-widget__a:hover,
+.sp-widget__add-item:hover {
   color: #1ab394;
   border: 1px solid #1ab394; 
 }
@@ -31,7 +33,8 @@
 }
 
 .sp-delete-hopper-widget__a,
-.sp-delete-video-widget__a {
+.sp-delete-video-widget__a,
+.sp-widget__delete-item {
   background-color: #FFFFFF;
   background-image: none;
   cursor: pointer;
@@ -41,7 +44,8 @@
 }
 
 .sp-delete-hopper-widget__a:hover,
-.sp-delete-video-widget__a:hover {
+.sp-delete-video-widget__a:hover,
+.sp-widget__delete-item:hover {
   color: #ed5565;
   border: 1px solid #ed5565;
 }
@@ -83,4 +87,28 @@
 
 [data-item-setting="hopperPage"] {
   width: 120%;
+}
+
+
+/* Widget 6 - Testimonials */
+#sp-tab-6 .sp-widget__delete-item {
+  float: right;
+}
+
+.sp-widget-item:first-child hr {
+  display: none;
+}
+
+.sp-widget6__person-image {
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  border-radius: 50%;
+  height: 50px;
+  width: 50px;
+}
+
+.sp-widget6__input-person-image {
+  border: none;
+  padding-left: 0;
 }
