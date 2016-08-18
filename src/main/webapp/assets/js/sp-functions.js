@@ -387,6 +387,25 @@ sp = {
     });
   })(),
   
+  data: {
+    
+    /**
+     * The function gets an array of jQuery objects, and returns
+     * an array containig only the empty ones.
+     */
+    getEmptyJqueryObjects: function(jqueryObjects) {
+      var emptyJqueryObjects = [];
+      
+      $.each(jqueryObjects, function(index, jqueryObject) {
+        if ('' === jqueryObject.val()) {
+          emptyJqueryObjects.push(jqueryObject);
+        }
+      });
+      
+      return emptyJqueryObjects;
+    }
+  },
+  
   file: {
     
     fileHash: null,

@@ -469,11 +469,11 @@
  */
 
 .sp-right-side-widgets {
-  max-width: 200px;
+  max-width: 230px;
   position: fixed;
   right: 0;
   top: 45%;
-  width: 18%;
+  width: 20%;
 }
 
 .sp-widget-button {
@@ -500,7 +500,7 @@
   display: inline-block;
   margin-left: 16px;
   vertical-align: middle;
-  width: 80px;
+  width: 120px;
 }
 
 .sp-widget-button i {
@@ -542,6 +542,56 @@
   font-weight: bold;
   margin-bottom: 2px;
   margin-top: 15px;
+}
+
+
+/* Widget 6 - Testimonials */
+#sp-widget6 {
+  background-color: transparent;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  border-radius: 50%;
+  box-shadow: 0px 8px 8px rgba(35, 31, 32, 0.3);
+  cursor: pointer;
+  height: 90px;
+  margin: 30px auto 0 auto;
+  position: relative;
+  width: 90px;
+}
+
+#sp-widget6 i {
+  display: none;
+  font-size: 3em;
+  height: 100%;
+  left: 0;
+  line-height: 90px;
+  position: absolute;
+  text-align: center;
+  top: 0;
+  width: 100%;
+}
+
+#sp-widget6__person-image {
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  border-radius: 50%;
+  height: 100px;
+  margin: 0 auto;
+  width: 100px;
+  margin: 15px auto 20px;
+}
+
+#sp-widget6__person-name {
+  font-size: 20px;
+  font-weight: bold;
+  margin-top: 30px;  
+}
+
+#sp-widget6__person-title {
+  margin-top: 10px;  
 }
 
 
@@ -629,7 +679,7 @@
   }
   
   .sp-right-side-widgets {
-    width: 12%;
+    width: 16%;
   }
   
   .sp-widget-button {
@@ -657,6 +707,17 @@
   
   .sp-widget5__hop-text {
     width: 80%;
+  }
+  
+  #sp-widget6 {
+    height: 75px;
+    margin-top: 25px;
+    width: 75px;
+  }
+  
+  #sp-widget6 i {
+    font-size: 2em;
+    line-height: 75px;
   }
   
   /* Scale Selector */
@@ -699,6 +760,17 @@
   .sp-widget-button i {
     font-size: 1.5em;
     margin-bottom: 0;
+  }
+  
+  #sp-widget6 {
+    height: 50px;
+    margin-top: 20px;
+    width: 50px;
+  }
+  
+  #sp-widget6 i {
+    font-size: 1.5em;
+    line-height: 50px;
   }
   
   /* Terms and Privacy */
@@ -759,6 +831,16 @@
     display: block;
     font-size: 6px;
     padding: 0;
+  }
+  
+  #sp-widget6 {
+    height: 40px;
+    width: 40px;
+  }
+  
+  #sp-widget6 i {
+    font-size: 1em;
+    line-height: 40px;
   }
 }
 
