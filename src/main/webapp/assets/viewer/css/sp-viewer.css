@@ -547,11 +547,30 @@
 
 /* Widget 6 - Testimonials */
 #sp-widget6 {
-  background-color: #009688;
+  background-color: transparent;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  border-radius: 50%;
+  box-shadow: 0px 8px 8px rgba(35, 31, 32, 0.3);
+  cursor: pointer;
+  height: 90px;
+  margin: 30px auto 0 auto;
+  position: relative;
+  width: 90px;
 }
 
-#sp-widget6:hover {
-  background-color: #26a69a;
+#sp-widget6 i {
+  display: none;
+  font-size: 3em;
+  height: 100%;
+  left: 0;
+  line-height: 90px;
+  position: absolute;
+  text-align: center;
+  top: 0;
+  width: 100%;
 }
 
 #sp-widget6__person-image {
@@ -690,6 +709,17 @@
     width: 80%;
   }
   
+  #sp-widget6 {
+    height: 75px;
+    margin-top: 25px;
+    width: 75px;
+  }
+  
+  #sp-widget6 i {
+    font-size: 2em;
+    line-height: 75px;
+  }
+  
   /* Scale Selector */
   
   #scaleSelectContainer {
@@ -730,6 +760,17 @@
   .sp-widget-button i {
     font-size: 1.5em;
     margin-bottom: 0;
+  }
+  
+  #sp-widget6 {
+    height: 50px;
+    margin-top: 20px;
+    width: 50px;
+  }
+  
+  #sp-widget6 i {
+    font-size: 1.5em;
+    line-height: 50px;
   }
   
   /* Terms and Privacy */
@@ -790,6 +831,16 @@
     display: block;
     font-size: 6px;
     padding: 0;
+  }
+  
+  #sp-widget6 {
+    height: 40px;
+    width: 40px;
+  }
+  
+  #sp-widget6 i {
+    font-size: 1em;
+    line-height: 40px;
   }
 }
 

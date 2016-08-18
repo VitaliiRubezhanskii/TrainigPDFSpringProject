@@ -59,10 +59,6 @@ sp.widgets = {
       $.each(items, function(index, item) {
         $.each(item, function(key, value) {
           switch (key) {
-            case 'buttonText':
-              $('[name="sp-widget6__button-text"]').val(value);
-              break;
-            
             case 'page':
               $('.sp-widget-item [name="page"]')[index].value = value;
               break;
@@ -121,7 +117,6 @@ sp.widgets = {
         
         /* Validate Item */
         var jqueryObjectsToValidate = [
-            $('[name="sp-widget6__button-text"]'),
             $(this).find('[name="page"]'),
             $(this).find('[name="person-name"]'),
             $(this).find('[name="person-title"]'),
@@ -149,7 +144,6 @@ sp.widgets = {
           
         // No item property is empty.
         } else {
-          var buttonText = $('[name="sp-widget6__button-text"]').val();
           var page = parseInt($(this).find('[name="page"]').val());
           var personName = $(this).find('[name="person-name"]').val();
           var personImage = $(this).find('[name="person-image"]').val();
@@ -165,7 +159,6 @@ sp.widgets = {
           
           /* Save Item */
           var item = {
-            buttonText: buttonText,
             page: page,
             personImage: personImage,
             personName: personName,

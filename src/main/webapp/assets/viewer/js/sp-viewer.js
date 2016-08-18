@@ -734,7 +734,7 @@ if ('' != sp.viewer.linkHash) {
       
       /* Validate Widget 6 */
       var widget6RequiredSettings =
-          ['buttonText', 'page', 'personImage', 'personName', 'personTitle', 'testimonial'];
+          ['page', 'personImage', 'personName', 'personTitle', 'testimonial'];
       
       if (typeof widgets.widget6 !== 'undefined'
           && typeof widgets.widget6.items !== 'undefined'
@@ -917,7 +917,7 @@ if ('' != sp.viewer.linkHash) {
         
         $('.sp-right-side-widgets').append('<button class="sp-widget-button sp-widget-font-fmaily" id="sp-widget2"></button>');
         
-        if ($('.sp-widget-button').length > 1) {
+        if ($('.sp-right-side-widgets button, .sp-right-side-widgets div').length > 1) {
           $('#sp-widget2').css('margin-top', '20px');
         }
         
@@ -955,7 +955,7 @@ if ('' != sp.viewer.linkHash) {
         
         $('.sp-right-side-widgets').append('<button class="sp-widget-button sp-widget-font-fmaily" id="sp-widget3"></button>');
 
-        if ($('.sp-widget-button').length > 1) {
+        if ($('.sp-right-side-widgets button, .sp-right-side-widgets div').length > 1) {
           $('#sp-widget3').css('margin-top', '20px');
         }
         
@@ -1205,11 +1205,11 @@ if ('' != sp.viewer.linkHash) {
           $('body').append('<div class="sp-right-side-widgets"></div>');
         }
         
-        $('.sp-right-side-widgets').append('<button class="sp-widget-button sp-widget-font-fmaily" id="sp-widget6"></button>');
-
-        if ($('.sp-widget-button').length > 1) {
-          $('#sp-widget6').css('margin-top', '20px');
-        }
+        $('.sp-right-side-widgets').append(
+            '<div id="sp-widget6">' +
+              '<i class="fa fa-user fa-inverse"></i>' +
+            '</div>'
+        );
         
         sp.viewer.widgets.widget6.isReady = true;
         $(document).trigger('spWidget6Ready');
@@ -1261,16 +1261,21 @@ if ('' != sp.viewer.linkHash) {
           
           if ('' !== personImage) {
             personImageDiv = '<div id="sp-widget6__person-image" style="background-image: url(' + personImage + ');"></div>';
+            $('#sp-widget6')
+                .css({'background-image': 'url(' + personImage + ')', 'background-color': 'transparent'});
+            $('#sp-widget6 i').hide();
+          } else {
+            $('#sp-widget6')
+                .css({'background-image': 'none', 'background-color': '#009688'});
+            $('#sp-widget6 i').show();
           }
           
           $('#sp-widget6')
-              .html('<i class="fa fa-bullhorn fa-flip-horizontal"></i><div>' + buttonText + '</div>')
               .off('click')
               .on('click', function() {
                 swal({
                   title: null,
                   html: true,
-                  showConfirmButton: true,
                   text: personImageDiv +
                       '<div><i class="fa fa-quote-left"></i> ' + testimonial.replace(/\r\n|\r|\n/g, '<br>') + ' <i class="fa fa-quote-right"></i></div>' +
                       '<div id="sp-widget6__person-name">' + personName +'</div>' +
