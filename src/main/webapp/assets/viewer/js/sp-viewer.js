@@ -826,7 +826,7 @@ if ('' != sp.viewer.linkHash) {
         }
         
         // Video widget tab click mechanism.
-        $('#sp-widget1').click(function(event) {          
+        $('#sp-widget1').off('click').on('click', function(event) {          
           $('#sp-widget1-video-container').toggle();
           $('#sp-widget1-fa-chevron').toggleClass('fa-chevron-up fa-chevron-down');
           sp.viewer.widgets.widget1.isVideoCollapseOverride = true;

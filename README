@@ -4,9 +4,19 @@ SlidePiper README File
 Change Log
 ----------
 
+### 0.10.12
+
+2016-08-22 Max Prais <maxp@slidepiper.com>, Yaniv Friedensohn <yanivf@slidepiper.com>
+
+* Fixed bug on 'Send Email' and 'Video Widget'
+	1. Fixed bug on Dashboard where email body content appeared in email subject line.
+	2. Fixed bug on Viewer where video widget would not always open and close 
+	on click.
+
+
 ### 0.10.11
 
-2016-08-22 Yaniv Friedensohn <yanivf@slidepiper.com>
+2016-08-22 Max Prais <maxp@slidepiper.com>, Yaniv Friedensohn <yanivf@slidepiper.com>
 
 Dashboard:
 * Revamp functionality and UI of 'Send Documents':
@@ -18,7 +28,7 @@ Dashboard:
     5. Move 'Next' and 'Previous' buttons to the left of the wizard.
     6. Edit default email message when clicking 'Send'.
         - Remove subject line.
-        - Pluralise message body if needed e.g. "view 'these documents' or 'this document'".
+        - Pluralize message body if needed e.g. "view 'these documents' or 'this document'".
 
 * In 'Documents and Customers':
     1. Move 'Upload' and 'Add' buttons to inside their respective tabs.
