@@ -1577,7 +1577,7 @@ chart: {
             {data: 'email'},
           ],
           dom: '<"sp-datatables-search-left"f>ti',
-          scrollY: '50vh',
+          scrollY: '15vh',
           paging: false,
         });
       } else {
@@ -1624,7 +1624,7 @@ chart: {
             {data: 'date'},
           ],
           dom: '<"sp-datatables-search-left"f>ti',
-          scrollY: '50vh',
+          scrollY: '15vh',
           paging: false,
         });
       } else {
@@ -1851,7 +1851,7 @@ chart: {
           dom: '<"sp-datatables-search-left"f>t<"html5buttons"B>i',
           ordering: false,
           paging: false,
-          scrollY: '50vh'                  
+          scrollY: '15vh'                  
         });
       }
       
