@@ -1916,15 +1916,14 @@ chart: {
         });
         
         if (links.length > 1) {
-          documentLengthStr = 'these links to view these documents';
+          documentLengthStr = 'these documents';
         } else {
-          documentLengthStr = 'the link to view this document';
+          documentLengthStr = 'this document';
         }
         
         window.open(
           'mailto:' + emailRecipient
-        + '?subject='
-        + '&body=' + encodeURIComponent('Please follow ' + documentLengthStr + ': ' + '\r\n' + mailBody)
+        + '?body=' + encodeURIComponent('To view ' + documentLengthStr + ' click here:\r\n' + mailBody)
         );
       });
     },
