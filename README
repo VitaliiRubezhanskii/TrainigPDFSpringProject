@@ -4,11 +4,35 @@ SlidePiper README File
 Change Log
 ----------
 
+### 0.10.11
+
+2016-08-22 Yaniv Friedensohn <yanivf@slidepiper.com>
+
+Dashboard:
+* Revamp functionality and UI of 'Send Documents':
+    1. Can Export third step of wizard to a CSV file.
+        - For example, to upload files to send through MailChimp.
+    2. Search bar is on the left of the table.
+    3. 'Send Documents' wizard is relative to the screen size.
+    4. Scrolling is now only on the table data.
+    5. Move 'Next' and 'Previous' buttons to the left of the wizard.
+    6. Edit default email message when clicking 'Send'.
+        - Remove subject line.
+        - Pluralise message body if needed e.g. "view 'these documents' or 'this document'".
+
+* In 'Documents and Customers':
+    1. Move 'Upload' and 'Add' buttons to inside their respective tabs.
+    2. Table height is relative to the screen size.
+    3. Scrolling is now only on table data.
+
+Viewer - Fixed Right-to-Left alignment issues.
+
+
 ### 0.10.10
 
 2016-08-15 Yaniv Friedensohn <yanivf@slidepiper.com>
 
-* Change testimonials widget tab icon.
+* Changed testimonials widget tab icon.
 
 
 ### 0.10.9
