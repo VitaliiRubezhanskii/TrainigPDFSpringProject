@@ -4,6 +4,13 @@ SlidePiper README File
 Change Log
 ----------
 
+### 0.10.13
+
+2016-08-22 Max Prais <maxp@slidepiper.com>
+
+* Fixed height of 'Send Documents' table.
+
+
 ### 0.10.12
 
 2016-08-22 Max Prais <maxp@slidepiper.com>, Yaniv Friedensohn <yanivf@slidepiper.com>
