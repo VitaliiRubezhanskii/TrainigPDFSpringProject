@@ -924,12 +924,11 @@ if ('' != sp.viewer.linkHash) {
         $('#sp-widget2').html('<i class="fa fa-calendar"></i><div>' + widget.buttonText +'</div>');
         $('#sp-widget2').click(function() {
           swal({
-            html: true,
             showCancelButton: true,
             showConfirmButton: false,
-            text: '<iframe src="../../assets/viewer/widget/calendly.html?user=' + widget.userName + '" height="420" frameborder="0"></iframe>',
+            html: '<iframe src="../../assets/viewer/widget/calendly.html?user=' + widget.userName + '" height="420" frameborder="0"></iframe>',
             title: widget.buttonText,
-          });
+          }).done();
           
           /**
            * Send Calendly event.
@@ -962,33 +961,29 @@ if ('' != sp.viewer.linkHash) {
         $('#sp-widget3').html('<i class="fa fa-comment"></i><div>' + widget.buttonText + '</div>');
         $('#sp-widget3').click(function() {
           swal({
-            closeOnConfirm: false,
-            html: true,
             showCancelButton: true,
             showConfirmButton: true,
-            text: '<form class="sp-widget-font-fmaily"><label for="sp-widget3-message" class="sp-widget3-label">Enter your message:</label><textarea id="sp-widget3-message" rows="5" autofocus></textarea><label for="sp-widget3-email" class="sp-widget3-label">Enter your email address:</label><input type="text" id="sp-widget3-email" style="display: block; margin-top: 0;"></form>',
+            html: '<form class="sp-widget-font-fmaily"><label for="sp-widget3-message" class="sp-widget3-label">Enter your message:</label><textarea id="sp-widget3-message" rows="5" autofocus></textarea><label for="sp-widget3-email" class="sp-widget3-label">Enter your email address:</label><input type="text" id="sp-widget3-email" style="display: block; margin-top: 0;"></form>',
             title: widget.buttonText,
-          }, function(isConfirm) {
-            if (isConfirm) {
-              /**
-               * Send Ask a Question event.
-               * 
-               * param_1_varchar - The text on the Ask a Question button.
-               * param_2_varchar - The message in the widget form.
-               * param_3_varchar - The email address to reply to in the widget form.
-               */
-              sp.viewer.setCustomerEvent({
-                eventName: sp.viewer.eventName.viewerWidgetAskQuestion,
-                linkHash: sp.viewer.linkHash,
-                sessionId: sessionid,
-                param_1_varchar: $('#sp-widget3').text(),
-                param_2_varchar: $('#sp-widget3-message').val(),
-                param_3_varchar: $('#sp-widget3-email').val()
-              });
-              
-              swal("Succes!", "Your message has been sent.", "success");
-            }
-          });
+          }).then(function() {
+            /**
+             * Send Ask a Question event.
+             * 
+             * param_1_varchar - The text on the Ask a Question button.
+             * param_2_varchar - The message in the widget form.
+             * param_3_varchar - The email address to reply to in the widget form.
+             */
+            sp.viewer.setCustomerEvent({
+              eventName: sp.viewer.eventName.viewerWidgetAskQuestion,
+              linkHash: sp.viewer.linkHash,
+              sessionId: sessionid,
+              param_1_varchar: $('#sp-widget3').text(),
+              param_2_varchar: $('#sp-widget3-message').val(),
+              param_3_varchar: $('#sp-widget3-email').val()
+            });
+            
+            swal("Succes!", "Your message has been sent.", "success");
+          }).done();
         });
       }
       
@@ -1274,13 +1269,11 @@ if ('' != sp.viewer.linkHash) {
               .off('click')
               .on('click', function() {
                 swal({
-                  title: null,
-                  html: true,
-                  text: personImageDiv +
+                  html: personImageDiv +
                       '<div><i class="fa fa-quote-left"></i> ' + testimonial.replace(/\r\n|\r|\n/g, '<br>') + ' <i class="fa fa-quote-right"></i></div>' +
                       '<div id="sp-widget6__person-name">' + personName +'</div>' +
                       '<div id="sp-widget6__person-title">' + personTitle +'</div>'
-                });
+                }).done();
                 
                 /**
                  * Send Ask a Question event.
