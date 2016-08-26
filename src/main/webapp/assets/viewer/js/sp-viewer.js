@@ -80,12 +80,9 @@ sp.viewer = {
     widget1: {
       currentVideoPlayerCssSelector: '',
      	isValidated: false,
-      isVideoPlayerReady: false,
+      isVideoPlayersReady: false,
       isVideoCollapseOverride: false,
-      videoPlayersReadyStatus: {
-        defaultVideo: false,
-        youTube: false
-      },
+      videoPlayersIsReady: {},
       lastVideoSource: ''
     },
     widget4: {
@@ -609,7 +606,7 @@ if ('' != sp.viewer.linkHash) {
        * The following is a mechanisem for setting a widget item (out of a set of items)
        * everytime the user changes a page. 
        */
-      $(document).on('pagesloaded pagechange spYouTubePlayerReady spWidget6Ready', function(event) {
+      $(document).on('pagesloaded pagechange spDefaultPlayerReady spYouTubePlayerReady spWidget6Ready', function(event) {
         if ('pagesloaded' === event.type) {
           sp.viewer.isPagesLoaded = true;
         }
@@ -620,22 +617,24 @@ if ('' != sp.viewer.linkHash) {
           if (sp.viewer.widgets.widget1.isValidated) {
             
             // Check if all applicable video players are ready.
-            if (! sp.viewer.widgets.widget1.isVideoPlayerReady) {
-              var isVideoPlayerReady = true;
+            if (! sp.viewer.widgets.widget1.isVideoPlayersReady) {
+              var isVideoPlayersReady = false;
               
-              $.each(sp.viewer.widgets.widget1.videoPlayersReadyStatus, function(key, isReady) {
-                if (! isReady) {
-                  isVideoPlayerReady = false;
+              $.each(sp.viewer.widgets.widget1.videoPlayersIsReady, function(videoPlayer, isReady) {
+                if (isReady) {
+                  isVideoPlayersReady = true;
+                } else {
+                  isVideoPlayersReady = false;
                   return false;
                 }
               });
               
-              sp.viewer.widgets.widget1.isVideoPlayerReady = isVideoPlayerReady;
+              sp.viewer.widgets.widget1.isVideoPlayersReady = isVideoPlayersReady;
             }
             
             // Verification before setting a video.
             if (PDFViewerApplication.page !== sp.viewer.widgets.widget1.lastViewedPage
-                && sp.viewer.widgets.widget1.isVideoPlayerReady) {
+                && sp.viewer.widgets.widget1.isVideoPlayersReady) {
             
               loadVideo(widgets.widget1.items);
               sp.viewer.widgets.widget1.lastViewedPage = PDFViewerApplication.page;
@@ -676,6 +675,21 @@ if ('' != sp.viewer.linkHash) {
         });
         
         if (isWidget1Valid) {
+          
+          // Create a unique array of video players to load.
+          var videoPlayers = [];
+          $.each(widgets.widget1.items, function(index, video) {
+            if (video.isYouTubeVideo && -1 === videoPlayers.indexOf('youTube')) {
+              videoPlayers.push('youTube');
+            } else if (-1 === videoPlayers.indexOf('defaultPlayer')) {
+              videoPlayers.push('defaultPlayer');
+            }
+          });
+          
+          $.each(videoPlayers, function(index, videoPlayer) {
+            sp.viewer.widgets.widget1.videoPlayersIsReady[videoPlayer] = false;
+          });
+          
  	        sp.viewer.widgets.widget1.isValidated = true;
           implementWidget1(widgets.widget1.items);
         }
@@ -767,16 +781,33 @@ if ('' != sp.viewer.linkHash) {
                 '<div id="sp-widget1-video-container"></div>' +
             '</div>');
         
-        /* Load Video Players API */
-        // Default video.
-        $('#sp-widget1-video-container').append(
-            '<iframe id="sp-widget1-default-player" frameborder="0" scrolling="no" allowfullscreen="true"></iframe>'
-        );
-        sp.viewer.widgets.widget1.videoPlayersReadyStatus['defaultVideo'] = true;
         
-        // YouTube video.
-        $('#sp-widget1-video-container').append('<div id="sp-widget1-youtube-player"></div>');
-        $.getScript('https://www.youtube.com/iframe_api');
+        /* Load Video Players */
+        $.each(sp.viewer.widgets.widget1.videoPlayersIsReady, function(videoPlayer, isReady) {
+          switch (videoPlayer) {
+          	case 'defaultPlayer':
+          	  loadDefaultPlayer();
+          	  break;
+          	  
+          	case 'youTube':
+          	  loadYouTubePlayer();
+          	  break;
+          }
+        });
+        
+        function loadDefaultPlayer() {
+	        $('#sp-widget1-video-container').append(
+	            '<iframe id="sp-widget1-default-player" frameborder="0" scrolling="no" allowfullscreen="true"></iframe>'
+	        );
+	        
+	        sp.viewer.widgets.widget1.videoPlayersIsReady['defaultPlayer'] = true;
+	        $(document).trigger('spDefaultPlayerReady');
+        }
+        
+        function loadYouTubePlayer() {
+          $('#sp-widget1-video-container').append('<div id="sp-widget1-youtube-player"></div>');
+          $.getScript('https://www.youtube.com/iframe_api');
+        }
       }
       
       
@@ -850,8 +881,13 @@ if ('' != sp.viewer.linkHash) {
           if (videoSource !== sp.viewer.widgets.widget1.lastVideoSource) {
             
             // Stop / remove running videos.
-            spYouTubePlayer.pauseVideo();
-            $('#sp-widget1-default-player').removeAttr('src');
+            if (sp.viewer.widgets.widget1.videoPlayersIsReady.youTube) {
+              spYouTubePlayer.pauseVideo();
+            }
+            
+            if (sp.viewer.widgets.widget1.videoPlayersIsReady.defaultPlayer) {
+              $('#sp-widget1-default-player').removeAttr('src');
+            }
             
             if (isYouTubeVideo) {
               
@@ -924,12 +960,11 @@ if ('' != sp.viewer.linkHash) {
         $('#sp-widget2').html('<i class="fa fa-calendar"></i><div>' + widget.buttonText +'</div>');
         $('#sp-widget2').click(function() {
           swal({
-            html: true,
             showCancelButton: true,
             showConfirmButton: false,
-            text: '<iframe src="../../assets/viewer/widget/calendly.html?user=' + widget.userName + '" height="420" frameborder="0"></iframe>',
+            html: '<iframe src="../../assets/viewer/widget/calendly.html?user=' + widget.userName + '" height="420" frameborder="0"></iframe>',
             title: widget.buttonText,
-          });
+          }).done();
           
           /**
            * Send Calendly event.
@@ -962,33 +997,33 @@ if ('' != sp.viewer.linkHash) {
         $('#sp-widget3').html('<i class="fa fa-comment"></i><div>' + widget.buttonText + '</div>');
         $('#sp-widget3').click(function() {
           swal({
-            closeOnConfirm: false,
-            html: true,
             showCancelButton: true,
             showConfirmButton: true,
-            text: '<form class="sp-widget-font-fmaily"><label for="sp-widget3-message" class="sp-widget3-label">Enter your message:</label><textarea id="sp-widget3-message" rows="5" autofocus></textarea><label for="sp-widget3-email" class="sp-widget3-label">Enter your email address:</label><input type="text" id="sp-widget3-email" style="display: block; margin-top: 0;"></form>',
+            html: '<form class="sp-widget-font-fmaily"><label for="sp-widget3-message" class="sp-widget3-label">Enter your message:</label><textarea class="swal2-textarea" id="sp-widget3-message" rows="5" autofocus></textarea><label for="sp-widget3-email" class="sp-widget3-label">Enter your email address:</label><input type="text" class="swal2-input" id="sp-widget3-email"></form>',
             title: widget.buttonText,
-          }, function(isConfirm) {
-            if (isConfirm) {
-              /**
-               * Send Ask a Question event.
-               * 
-               * param_1_varchar - The text on the Ask a Question button.
-               * param_2_varchar - The message in the widget form.
-               * param_3_varchar - The email address to reply to in the widget form.
-               */
-              sp.viewer.setCustomerEvent({
-                eventName: sp.viewer.eventName.viewerWidgetAskQuestion,
-                linkHash: sp.viewer.linkHash,
-                sessionId: sessionid,
-                param_1_varchar: $('#sp-widget3').text(),
-                param_2_varchar: $('#sp-widget3-message').val(),
-                param_3_varchar: $('#sp-widget3-email').val()
+            preConfirm: function() {
+              return new Promise(function(resolve) {
+                /**
+                 * Send Ask a Question event.
+                 * 
+                 * param_1_varchar - The text on the Ask a Question button.
+                 * param_2_varchar - The message in the widget form.
+                 * param_3_varchar - The email address to reply to in the widget form.
+                 */
+                sp.viewer.setCustomerEvent({
+                  eventName: sp.viewer.eventName.viewerWidgetAskQuestion,
+                  linkHash: sp.viewer.linkHash,
+                  sessionId: sessionid,
+                  param_1_varchar: $('#sp-widget3').text(),
+                  param_2_varchar: $('#sp-widget3-message').val(),
+                  param_3_varchar: $('#sp-widget3-email').val()
+                });
+                resolve();
               });
-              
-              swal("Succes!", "Your message has been sent.", "success");
             }
-          });
+          }).then(function() {
+            swal("Succes!", "Your message has been sent.", "success");
+          }).done();
         });
       }
       
@@ -1274,13 +1309,11 @@ if ('' != sp.viewer.linkHash) {
               .off('click')
               .on('click', function() {
                 swal({
-                  title: null,
-                  html: true,
-                  text: personImageDiv +
+                  html: personImageDiv +
                       '<div><i class="fa fa-quote-left"></i> ' + testimonial.replace(/\r\n|\r|\n/g, '<br>') + ' <i class="fa fa-quote-right"></i></div>' +
                       '<div id="sp-widget6__person-name">' + personName +'</div>' +
                       '<div id="sp-widget6__person-title">' + personTitle +'</div>'
-                });
+                }).done();
                 
                 /**
                  * Send Ask a Question event.
@@ -1341,8 +1374,8 @@ function onYouTubeIframeAPIReady() {
 }
 
 function onPlayerReady(event) {
-  sp.viewer.widgets.widget1.videoPlayersReadyStatus['youTube'] = true;
-  $(document).trigger('spYouTubePlayerReady')
+  sp.viewer.widgets.widget1.videoPlayersIsReady['youTube'] = true;
+  $(document).trigger('spYouTubePlayerReady');
 }
 
 /**

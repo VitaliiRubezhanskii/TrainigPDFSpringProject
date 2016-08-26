@@ -409,9 +409,21 @@ body {
   font-family: sans-serif;  
 }
 
-.sweet-alert iframe {
+
+/* Sweet Alert 2 */
+.swal2-content iframe {
   width: 100%;
 }
+
+.swal2-content form {
+  text-align: left;
+}
+
+.swal2-content input,
+.swal2-content textarea {
+  margin-top: 5px;
+}
+
 
 /* Widget 1 */
 #sp-widget1 {
@@ -521,20 +533,6 @@ body {
 
 #sp-widget3:hover {
   background-color: #b4aa89;
-}
-
-.sweet-alert form {
-  text-align: left;
-}
-
-.sweet-alert textarea {
-  display: block;
-  width: 100%;
-}
-
-.sweet-alert textarea {
-  display: block;
-  width: 100%;
 }
 
 .sp-widget3-label-wrapper {
