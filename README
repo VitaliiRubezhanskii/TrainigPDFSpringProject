@@ -4,6 +4,19 @@ SlidePiper README File
 Change Log
 ----------
 
+### 0.10.14
+
+2016-08-26 Yaniv Friedensohn <yanivf@slidepiper.com>
+
+* Viewer:
+	1. Improve "Ask a Question" widget design & functionality - button colors 
+	are	less transparent, and tab can now be used to switch between form 
+	elements.
+	2. Allow the viewer to only load required video players. Before this 
+	change both YouTube and default (iframe) video players were loaded
+	disregarding if they were actually required.
+
+
 ### 0.10.13
 
 2016-08-22 Max Prais <maxp@slidepiper.com>
