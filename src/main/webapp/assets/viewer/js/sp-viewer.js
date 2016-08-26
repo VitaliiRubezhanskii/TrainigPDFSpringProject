@@ -999,25 +999,29 @@ if ('' != sp.viewer.linkHash) {
           swal({
             showCancelButton: true,
             showConfirmButton: true,
-            html: '<form class="sp-widget-font-fmaily"><label for="sp-widget3-message" class="sp-widget3-label">Enter your message:</label><textarea id="sp-widget3-message" rows="5" autofocus></textarea><label for="sp-widget3-email" class="sp-widget3-label">Enter your email address:</label><input type="text" id="sp-widget3-email" style="display: block; margin-top: 0;"></form>',
+            html: '<form class="sp-widget-font-fmaily"><label for="sp-widget3-message" class="sp-widget3-label">Enter your message:</label><textarea class="swal2-textarea" id="sp-widget3-message" rows="5" autofocus></textarea><label for="sp-widget3-email" class="sp-widget3-label">Enter your email address:</label><input type="text" class="swal2-input" id="sp-widget3-email"></form>',
             title: widget.buttonText,
+            preConfirm: function() {
+              return new Promise(function(resolve) {
+                /**
+                 * Send Ask a Question event.
+                 * 
+                 * param_1_varchar - The text on the Ask a Question button.
+                 * param_2_varchar - The message in the widget form.
+                 * param_3_varchar - The email address to reply to in the widget form.
+                 */
+                sp.viewer.setCustomerEvent({
+                  eventName: sp.viewer.eventName.viewerWidgetAskQuestion,
+                  linkHash: sp.viewer.linkHash,
+                  sessionId: sessionid,
+                  param_1_varchar: $('#sp-widget3').text(),
+                  param_2_varchar: $('#sp-widget3-message').val(),
+                  param_3_varchar: $('#sp-widget3-email').val()
+                });
+                resolve();
+              });
+            }
           }).then(function() {
-            /**
-             * Send Ask a Question event.
-             * 
-             * param_1_varchar - The text on the Ask a Question button.
-             * param_2_varchar - The message in the widget form.
-             * param_3_varchar - The email address to reply to in the widget form.
-             */
-            sp.viewer.setCustomerEvent({
-              eventName: sp.viewer.eventName.viewerWidgetAskQuestion,
-              linkHash: sp.viewer.linkHash,
-              sessionId: sessionid,
-              param_1_varchar: $('#sp-widget3').text(),
-              param_2_varchar: $('#sp-widget3-message').val(),
-              param_3_varchar: $('#sp-widget3-email').val()
-            });
-            
             swal("Succes!", "Your message has been sent.", "success");
           }).done();
         });

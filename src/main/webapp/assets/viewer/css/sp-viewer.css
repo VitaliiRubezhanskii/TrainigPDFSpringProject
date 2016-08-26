@@ -411,19 +411,17 @@ body {
 
 
 /* Sweet Alert 2 */
-.swal2-content iframe,
-.swal2-content input,
-.swal2-content textarea {
+.swal2-content iframe {
   width: 100%;
-}
-
-.swal2-content input,
-.swal2-content textarea {
-  padding: 5px;
 }
 
 .swal2-content form {
   text-align: left;
+}
+
+.swal2-content input,
+.swal2-content textarea {
+  margin-top: 5px;
 }
 
 
