@@ -82,9 +82,7 @@ body {
   display: none !important;
 }
 
-#secondaryPresentationMode,
-#secondaryPrint,
-#secondaryDownload {
+#secondaryPrint {
   display: block !important; 
 }
 
