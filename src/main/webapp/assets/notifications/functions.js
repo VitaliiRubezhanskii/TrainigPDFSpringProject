@@ -303,7 +303,7 @@ $(document).on('click', 'body', function(event) {
     
     // init dotdotdot ellipsis plugin.
     $('.sp-notifications__text-container').dotdotdot();       
-    
+
   } else if (! $('#sp-notifications__list-container').is(event.target)
       && ! $('.sp-notifications__read-button').is(event.target)
       && ! $('#sp-notifications__list-container li').is(event.target)

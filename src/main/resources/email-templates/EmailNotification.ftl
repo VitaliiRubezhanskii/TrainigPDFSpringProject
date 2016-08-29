@@ -576,7 +576,7 @@
                         <tbody><tr>
                             <td class="mcnImageContent" valign="top" style="padding-right: 9px; padding-left: 9px; padding-top: 0; padding-bottom: 0; text-align:center;">
                                 
-                                    
+
                                         <img align="center" alt="" src="${logoUrl!}/assets/email/img/logo_wide_temp.png" width="564" style="max-width:1060px; padding-bottom: 0; display: inline !important; vertical-align: bottom;" class="mcnImage">
                                     
                                 

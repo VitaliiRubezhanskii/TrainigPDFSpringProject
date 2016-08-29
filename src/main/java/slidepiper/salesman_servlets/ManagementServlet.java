@@ -346,8 +346,7 @@ public class ManagementServlet extends HttpServlet {
     		JSONArray notifications = new JSONArray();
     		
     		if (null != request.getParameter("salesmanEmail") && ! request.getParameter("salesmanEmail").equals("")) {
-				parameterList.add(request.getParameter("salesmanEmail"));
-				
+
     			switch(request.getParameter("subAction")) {
     				case "notificationsToolbar":
     					notifications = DbLayer.getNotifications(request.getParameter("salesmanEmail"), Analytics.sqlToolbarNotifications);
