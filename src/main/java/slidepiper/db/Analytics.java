@@ -9,13 +9,13 @@ public class Analytics {
    */
   
   public static final String sqlFilesList =
-      "SELECT\n"
+		"SELECT\n"
       + "  id AS file_hash,\n"
       + "  name AS file_name,\n"
-      + "  DATE_FORMAT(local_timestamp, '%d-%b-%Y') AS date_added_or_modified\n"
+      + "  local_timestamp AS date_added_or_modified\n"
       + "FROM slides\n"
       + "WHERE sales_man_email = ?\n"
-      + "ORDER BY timestamp DESC, file_name";
+      + "ORDER BY date_added_or_modified";
   
   
   /**
@@ -104,10 +104,11 @@ public class Analytics {
       + "  first_name,\n"
       + "  last_name,\n"
       + "  company,\n"
-      + "  email\n"
+      + "  email,\n"
+      + "  customers.timestamp AS 'date'"
       + "FROM customers\n"
       + "WHERE sales_man = ? AND email NOT IN ('" + ConfigProperties.getProperty("default_customer_email") + "', '" + ConfigProperties.getProperty("test_customer_email") + "')\n"
-      + "ORDER BY first_name, last_name";
+      + "ORDER BY date";
   
   
   public static final String sqlCustomersFilesList =
@@ -305,4 +306,67 @@ public class Analytics {
   	+ "AND msg_info.customer_email = ?";
   
   
+  /**
+   * Get notifications for notifications toolbar.
+   * 
+   * Get max 50 notifications.
+   * 
+   * @see 'Format result from TIMEDIFF as dd:hh:mm:ss' http://stackoverflow.com/questions/12024989/format-result-from-timediff-in-dayshoursminsec
+   */
+  public static final String sqlToolbarNotifications = 
+      "SELECT\n"
+	+ "  customer_events.id,\n"	  
+	+ "  event_name AS 'event',\n"
+    + "  is_notification_read AS 'isRead',\n"		  
+	+ "  slides.name AS 'documentName',\n"
+	+ "  msg_info.customer_email AS 'customerEmail',\n"
+	+ "  customer_events.timestamp AS 'timestamp',\n"
+	+ "  current_timestamp() AS 'currentTime',\n"
+	+ "  param_3_varchar AS 'messageReplyEmail'\n"
+	+ "FROM customer_events\n"
+	+ "INNER JOIN msg_info ON msg_info.id = customer_events.msg_id\n"
+	+ "INNER JOIN slides ON msg_info.slides_id = slides.id\n"
+	+ "WHERE event_name IN ('OPEN_SLIDES', 'VIEWER_WIDGET_ASK_QUESTION')\n"
+	+ "AND msg_info.sales_man_email = ?\n"
+	+ "AND customer_events.timestamp > '2016-01-01'\n"
+	+ "AND msg_info.customer_email <> '" + ConfigProperties.getProperty("test_customer_email") + "'"
+	+ "ORDER BY id DESC LIMIT 50";
+  
+  
+  /**
+   * Get notifications for notifications table.
+   * 
+   * Get max 1000 notifications.
+   */
+  public static final String sqlTableNotifications =
+	  "SELECT\n"
+	+ "  customer_events.id AS 'id',\n"	  
+	+ "  msg_info.customer_email AS 'customerEmail',\n"
+	+ "  event_name AS 'event',\n"		  
+	+ "  customer_events.param_2_varchar AS 'messageText',\n"
+	+ "  customer_events.param_3_varchar AS 'messageReplyEmail',\n"
+	+ "  slides.name AS 'documentName',\n"
+	+ "  customer_events.timestamp AS 'time'\n"
+	+ "FROM customer_events\n"
+	+ "INNER JOIN msg_info ON msg_info.id = customer_events.msg_id\n"
+	+ "INNER JOIN slides ON msg_info.slides_id = slides.id\n"
+	+ "WHERE event_name IN ('OPEN_SLIDES', 'VIEWER_WIDGET_ASK_QUESTION')\n"
+	+ "AND msg_info.sales_man_email = ?\n"
+	+ "AND msg_info.customer_email <> '" + ConfigProperties.getProperty("test_customer_email") + "'"
+	+ "AND customer_events.timestamp > '2016-01-01'\n"
+	+ "ORDER BY id DESC LIMIT 1000";
+  
+  
+  /**
+   * Get customer email, salesman email, and document name for email notifications. 
+   */
+  public static final String sqlEmailNotifications = 
+	  "SELECT\n"
+	+ "  msg_info.customer_email AS 'customerEmail',\n"
+    + "  slides.name AS 'documentName',\n"
+    + "  msg_info.sales_man_email AS 'salesmanEmail'\n"
+    + "FROM picascrafxzhbcmd.customer_events\n"
+    + "INNER JOIN msg_info ON msg_info.id = customer_events.msg_id\n"
+    + "INNER JOIN slides ON msg_info.slides_id = slides.id\n"
+    + "WHERE customer_events.id = ?";
 }

@@ -323,6 +323,19 @@ sp = {
             });
           });
           
+
+          /**
+           * Notifications init.
+           * 
+           * Run on init, then every minute.
+           */
+          (function() {
+            sp.notifications.init();
+            
+            setInterval(function() {
+              sp.notifications.init();
+            }, 60000);
+          })();
           
           //$('#side-menu').metisMenu();
           
@@ -377,6 +390,10 @@ sp = {
                 $('#document-wizard-t-0').click();
                 sp.file.getCustomersList(requestOrigin);
                 sp.file.getFilesList(requestOrigin);   
+                break;
+                
+              case 'sp-notifications-table':
+                sp.notifications.getNotifications(sp.notifications.tableNotifications);
                 break;
             }
           }
@@ -451,12 +468,13 @@ sp = {
     sortDocsInDocsMgmtPanel: function (data) {
       var filesArr = [];
       $.each(data['filesList'], function (index, value) {
-      
+        
+        var date = moment.utc(value[2]).toDate();
         var obj = {
-            'date': '<span><i class="fa fa-clock-o sdp-clickable sp-file-clock" data-toggle="tooltip" data-placement="right" title="Date file was added or updated"></i> ' + value[2] + '</span>',
+            'date': moment(date).format('DD-MM-YYYY HH:mm'),
             'document': '<span class="sp-file-mgmt-file-name" data-file-hash="' + value[0] + '">' + value[1] + '</span>',
             'options': '<span>'
-		                    + '<a><span style="margin-left: 300px;" class="label label-primary sp-file-update" data-toggle="modal" data-target="#sp-modal-update-file" data-file-hash="' + value[0] + '">Update</span></a>'
+		                    + '<a><span class="label label-primary sp-file-update" data-toggle="modal" data-target="#sp-modal-update-file" data-file-hash="' + value[0] + '">Update</span></a>'
 		                    + '<a href="#"><span class="label label-danger sp-file-delete" data-file-hash="' + value[0] + '">Delete</span></a></span>'
 		                    + '<a><span data-toggle="modal" data-target="#sp-viewer-widgets-modal" style="margin-left: 10px;" class="label label-success sp-file-customize" data-file-hash="' + value[0] + '">Customize</span></a>'
 		                    + '<a class="sp-preview-file-link"><span id="sp-preview-file-' + index + '" style="margin-left: 10px;" class="label label-warning">Preview</span></a></span>'
@@ -471,6 +489,7 @@ sp = {
 		    );
       });
       
+      $.fn.dataTable.moment('DD-MM-YYYY HH:mm');
       if (!($.fn.dataTable.isDataTable('#sp-files-management'))) {
         $('#sp-files-management').DataTable({
           data: filesArr,
@@ -479,10 +498,15 @@ sp = {
             {data: 'document'},
             {data: 'options'},
           ],
-          order: [[ 0, "desc" ]],
           scrollY: '55vh',
           scrollCollapse: true,
           paging: false,
+          order: [0, 'desc'],
+          initComplete: function(settings) {
+           $('.sp-table-date__info').tooltip({
+              'container': 'body'
+           });  
+          }
         });
       }
       else {
@@ -516,9 +540,6 @@ sp = {
       $('.sp-preview-file-link span').on('click', function() {
     		window.open($(this).attr('data-file-link')); 
       });
-      
-      // init tooltip
-      $('.sp-file-clock').tooltip({delay: {show: 100, hide: 200}, placement: 'right' });
     },
     
     uploadFiles: function(event) {
@@ -670,7 +691,10 @@ sp = {
     sortForDocUpload: function (data) {
       var nameArr = [];
       $.each(data['customersList'], function (i, row) {
+        
+        var date = moment.utc(row[4]).toDate();
         var obj = {
+            'date': moment(date).format('DD-MM-YYYY HH:mm'),
             'name':  '<span id="sp-customer-first-name__td">' + row[0] + '</span> <span id="sp-customer-last-name__td">' + row[1] + '</span></span>' ,
             'company': '<span id="sp-customer-company__td">' + row[2] + '</span>',
             'email':  '<span class="contact-type"><i class="fa fa-envelope"> </i></span>' + '         '  + row[3] + '',
@@ -678,10 +702,13 @@ sp = {
         };
         nameArr.push(obj);
       });
+      
+      $.fn.dataTable.moment('DD-MM-YYYY HH:mm');
       if (!($.fn.dataTable.isDataTable('#sp-customers-management'))) {
         $('#sp-customers-management').DataTable({
           data: nameArr,
           columns: [
+            {data: 'date'},        
             {data: 'name'},
             {data: 'company'},
             {data: 'email'},
@@ -690,6 +717,12 @@ sp = {
           scrollY: '55vh',
           scrollCollapse: true,
           paging: false,
+          order: [[0, 'desc']],
+          initComplete: function(settings) {
+            $('.sp-tooltip-test').tooltip({
+               'container': 'body'
+            });  
+           }
         });
       }
       else {
@@ -699,6 +732,9 @@ sp = {
           .columns.adjust()
           .draw();
       }
+      
+      // init tooltip
+      $('.sp-file-clock').tooltip({delay: {show: 100, hide: 200}, placement: 'right' });
       
       $('a[href="#tab-2"]').on('shown.bs.tab', function () {
         $('#sp-customers-management').DataTable().columns.adjust();
@@ -1558,15 +1594,19 @@ chart: {
       var nameArr = [];
       
       $.each(data['customersList'], function (index, value) {
+        var date = moment.utc(value[4]).toDate();
+        
         var obj = {
             'checkbox' : '<input id= ' + 'checkbox' + index + ' type="checkbox" class="i-checks" name="input[]">',
             'name' : value[0] + ' ' + value[1],
             'company' : value[2],
-            'email' : '<span data-email=' + value[3] +' class="sp-email"> ' + value[3] + '</span>'
+            'email' : '<span data-email=' + value[3] +' class="sp-email"> ' + value[3] + '</span>',
+            'date':  moment(date).format('DD-MM-YYYY HH:mm')
         };
         nameArr.push(obj);
       });
       
+      $.fn.dataTable.moment('DD-MM-YYYY HH:mm');
       if (!($.fn.dataTable.isDataTable('.sp-customer-table'))) {
         $('.sp-customer-table').DataTable({
           data: nameArr,
@@ -1575,8 +1615,10 @@ chart: {
             {data: 'name'},
             {data: 'company'},
             {data: 'email'},
+            {data: 'date'}
           ],
           dom: '<"sp-datatables-search-left"f>ti',
+          order: [[4, 'desc']],
           scrollY: '15vh',
           paging: false,
         });
@@ -1607,14 +1649,17 @@ chart: {
       var fileArr = [];
       
       $.each(data['filesList'], function (index, value) {
+        var date = moment.utc(value[2]).toDate();
+        
         var obj = {
             'checkbox' : '<input id= ' + 'checkbox' + index + ' type="checkbox" class="i-checks" name="input[]">',
             'name' : '<span class="sp-doc-name" data-file-name=' + value[1] +' data-file-hash=' + value[0] +'>' + value[1] + '</span>',
-            'date' : '<span>' + value[2] + '</span>',
+            'date' : moment(date).format('DD-MM-YYYY HH:mm'),
         };
         fileArr.push(obj);
       });
       
+      $.fn.dataTable.moment('DD-MM-YYYY HH:mm');
       if (!($.fn.dataTable.isDataTable('.sp-doc-table'))) {
         $('.sp-doc-table').DataTable({
           data: fileArr,
@@ -1624,6 +1669,7 @@ chart: {
             {data: 'date'},
           ],
           dom: '<"sp-datatables-search-left"f>ti',
+          order: [[2, 'desc']],
           scrollY: '15vh',
           paging: false,
         });
@@ -1839,7 +1885,7 @@ chart: {
                 columns: targetColumns
               },
               filename: 'SlidePiper Links',
-              text: 'Export All To CSV'
+              text: 'Export to CSV'
             },
           ],
           columnDefs: [
@@ -2062,6 +2108,7 @@ chart: {
             'isChatEnabled': $('#sp-enable-chat__checkbox').is(':checked'),
             'isAlertEmailEnabled': $('#sp-enable-alert-emails__checkbox').is(':checked'),
             'isReportEmailEnabled': $('#sp-enable-report-emails__checkbox').is(':checked'),
+            'isNotificationEmailEnabled': $('#sp-enable-notification-emails__checkbox').prop('checked'),
             'salesMan': sp.config.salesman.email
         };
         
@@ -2098,6 +2145,7 @@ chart: {
           $('#sp-enable-chat__checkbox').prop('checked', enabledChat);
           $('#sp-enable-alert-emails__checkbox').prop('checked', sp.config.salesman.email_alert_enabled);
           $('#sp-enable-report-emails__checkbox').prop('checked', sp.config.salesman.email_report_enabled);
+          $('#sp-enable-notification-emails__checkbox').prop('checked', sp.config.salesman.email_notifications_enabled);
         }); 
     }),
     
@@ -2353,7 +2401,7 @@ chart: {
 
 $(document).ready(function() {
   // Init js tooltip
-  $('[data-toggle="tooltip"]').tooltip({delay: {show: 100, hide: 200}, placement: 'auto' }); 
+  $('.sp-doc-settings-info__icon').tooltip({delay: {show: 100, hide: 200}, placement: 'auto' }); 
   
   $('#send_email_to_customers').css('visibility', 'visible');
 

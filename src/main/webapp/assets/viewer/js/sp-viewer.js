@@ -1022,7 +1022,7 @@ if ('' != sp.viewer.linkHash) {
               });
             }
           }).then(function() {
-            swal("Succes!", "Your message has been sent.", "success");
+            swal("Success!", "Your message has been sent.", "success");
           }).done();
         });
       }

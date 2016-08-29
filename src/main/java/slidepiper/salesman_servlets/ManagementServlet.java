@@ -2,6 +2,7 @@ package slidepiper.salesman_servlets;
 
 import java.io.BufferedReader;
 
+import slidepiper.aws.AmazonSES;
 import slidepiper.config.ConfigProperties;
 import slidepiper.dataobjects.Customer;
 import slidepiper.dataobjects.Presentation;
@@ -338,6 +339,32 @@ public class ManagementServlet extends HttpServlet {
       		e.printStackTrace();
       	}
       	break;
+      	
+      	
+      case "getNotifications":
+    	  try {
+    		JSONArray notifications = new JSONArray();
+    		
+    		if (null != request.getParameter("salesmanEmail") && ! request.getParameter("salesmanEmail").equals("")) {
+				parameterList.add(request.getParameter("salesmanEmail"));
+				
+    			switch(request.getParameter("subAction")) {
+    				case "notificationsToolbar":
+    					notifications = DbLayer.getNotifications(request.getParameter("salesmanEmail"), Analytics.sqlToolbarNotifications);
+    					break;
+    					
+    				case "notificationsTable":
+    					notifications = DbLayer.getNotifications(request.getParameter("salesmanEmail"), Analytics.sqlTableNotifications);
+    					break;
+    			}
+    			
+    			data.put("notifications", notifications);
+    		}
+    	  } catch (Exception e) {
+    		  e.printStackTrace();
+    	  }
+    	  break;
+    	  
 	  }
 	  
 	  response.setContentType("application/json; charset=UTF-8");
@@ -515,20 +542,46 @@ public class ManagementServlet extends HttpServlet {
                   URLDecoder.decode(data.getString("param_5_varchar"), "UTF-8"));
           }
           
-          DbLayer.setEvent(DbLayer.CUSTOMER_EVENT_TABLE,
+          // Set event and get event id.
+          long notificationId = DbLayer.setEvent(DbLayer.CUSTOMER_EVENT_TABLE,
               URLDecoder.decode(data.getString("eventName"), "UTF-8"), eventDataMap);
+
+          // Send Email Notification.
+          eventDataMap.put("eventName", data.getString("eventName"));
+          
+          ArrayList<String> emailParamList = new ArrayList<String>();
+          List<String[]> eventList = new ArrayList<String[]>();
+          
+          emailParamList.add(Long.toString(notificationId));
+      	  
+      	  eventList = DbLayer.getEventData(emailParamList, Analytics.sqlEmailNotifications);
+      	  
+      	  // Query will only return one row.
+      	  String[] notificationData = eventList.get(0);
+      	  
+      	  // notificationData[2] - the salesman email.
+          if (AmazonSES.isSalesmanEmailNotificationsEnabled(notificationData[2])) {
+        	  
+        	  // Only send email notifications for 'Ask Question Widget'
+        	  if (data.getString("eventName").equals("VIEWER_WIDGET_ASK_QUESTION")) {
+        		  AmazonSES.setEmailParams(notificationData, eventDataMap);
+        	  }
+          } else {
+        	  System.out.println("SP: Email Notifications not enabled for salesman");
+          }
           break;
    
         case "setSalesmanDocumentSettings":
         	String isChatEnabled = Boolean.toString(input.getBoolean("isChatEnabled"));
         	Boolean isAlertEmailEnabled = input.getBoolean("isAlertEmailEnabled");
         	Boolean isReportEmailEnabled = input.getBoolean("isReportEmailEnabled");
+        	Boolean isNotificationEmailEnabled = input.getBoolean("isNotificationEmailEnabled");
         	String salesMan = input.getString("salesMan");
         	
         	System.out.println("Chat: " + isChatEnabled + ", Alert: " + isAlertEmailEnabled + ", Report: " + isReportEmailEnabled 
  				   + ", User: " + salesMan);
         	
-        	DbLayer.setSalesmenDocumentSettings(isChatEnabled, isAlertEmailEnabled, isReportEmailEnabled, salesMan);
+        	DbLayer.setSalesmenDocumentSettings(isChatEnabled, isAlertEmailEnabled, isReportEmailEnabled, isNotificationEmailEnabled, salesMan);
         	
         	output.put("result", "success");
         	break;
@@ -580,8 +633,20 @@ public class ManagementServlet extends HttpServlet {
           
           output.put("resultCode", resultCode);
           break;
+        
           
+        case "setNotificationRead":
+        	try {
+        		int id = Integer.parseInt(input.getString("id"));
+        		
+        		DbLayer.setNotificationRead(id);
+        	} catch (Exception e) {
+        		e.printStackTrace();
+        	}
+        	
+        	break;
           
+        	
         case "sendEmail":
           String emailBody = URLDecoder.decode(data.getString("emailBody"), "UTF-8");
           String emailSubject = URLDecoder.decode(data.getString("emailSubject"), "UTF-8");
