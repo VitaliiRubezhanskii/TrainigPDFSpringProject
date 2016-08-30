@@ -205,12 +205,16 @@ sp.notifications = {
         
         var date = moment.utc(notification.time).toDate();
         
+        date = moment.utc(notification.time).toDate();
+        
         var tableDataObj = {
           time: moment(date).format('DD-MM-YYYY HH:mm'),
           customer: notification.customerEmail,
           action: action,
           document: notification.documentName
         };
+        
+        delete date;
         
         /**
          * If the message email address is empty and it is a generic link, set customer email to Generic Link.

@@ -346,7 +346,6 @@ public class ManagementServlet extends HttpServlet {
     		JSONArray notifications = new JSONArray();
     		
     		if (null != request.getParameter("salesmanEmail") && ! request.getParameter("salesmanEmail").equals("")) {
-
     			switch(request.getParameter("subAction")) {
     				case "notificationsToolbar":
     					notifications = DbLayer.getNotifications(request.getParameter("salesmanEmail"), Analytics.sqlToolbarNotifications);
@@ -563,7 +562,7 @@ public class ManagementServlet extends HttpServlet {
         	  
         	  // Only send email notifications for 'Ask Question Widget'
         	  if (data.getString("eventName").equals("VIEWER_WIDGET_ASK_QUESTION")) {
-        		  AmazonSES.setEmailParams(notificationData, eventDataMap);
+        		  AmazonSES.setEventEmailParams(notificationData, eventDataMap);
         	  }
           } else {
         	  System.out.println("SP: Email Notifications not enabled for salesman");
