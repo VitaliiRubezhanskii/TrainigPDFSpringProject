@@ -27,8 +27,8 @@ public class CustomerLogger {
 				DriverManager.registerDriver(new com.mysql.jdbc.Driver());
 				conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
 								
-							String sql = "INSERT INTO customer_events (msg_id, event_name, param1int, param2float, param3str, notes, timestamp, session_id, done, param_1_varchar, param_2_varchar, param_3_varchar, param_4_varchar, param_5_varchar, param_6_varchar, param_7_varchar, param_8_varchar, param_9_varchar, param_10_varchar) values "
-									+ "		(?, ?, ?, ?, ?, '', DATE_ADD(UTC_TIMESTAMP(),INTERVAL "+ (-timezone_offset_min)+" MINUTE), ?, 0, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+							String sql = "INSERT INTO customer_events (msg_id, event_name, param1int, param2float, param3str, notes, session_id, done, param_1_varchar, param_2_varchar, param_3_varchar, param_4_varchar, param_5_varchar, param_6_varchar, param_7_varchar, param_8_varchar, param_9_varchar, param_10_varchar) values "
+									+ "		(?, ?, ?, ?, ?, '', ?, 0, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 				//			System.out.println("sql for cust logger is " + sql);
 							PreparedStatement statement = conn.prepareStatement(sql);
 							statement.setString(1, id);						
@@ -49,6 +49,13 @@ public class CustomerLogger {
 							statement.setString(15, param9Varchar);
 							statement.setString(16, param10Varchar);
 							
+							
+							
+							
+							System.out.println(statement);
+							
+							
+							
 							// sends the statement to the database server
 							int row = statement.executeUpdate();
 							if (row > 0) { 
@@ -59,8 +66,8 @@ public class CustomerLogger {
 							// write to sessions table for open slides event
 							if (event_name.equalsIgnoreCase("OPEN_SLIDES"))
 							{							
-										sql = "INSERT INTO customer_sessions (msg_id, ipaddr, session_id, browser, operating_system, all_browser_data, done, timestamp, report_html) values "
-												+ "		(?, ?, ?, ?, ?, ?, 0, DATE_ADD(UTC_TIMESTAMP(),INTERVAL "+ (-timezone_offset_min)+" MINUTE) , '')";
+										sql = "INSERT INTO customer_sessions (msg_id, ipaddr, session_id, browser, operating_system, all_browser_data, done, report_html) values "
+												+ "		(?, ?, ?, ?, ?, ?, 0, '')";
 										//System.out.println("sql for OEN_SLIDES is " + sql);
 										statement = conn.prepareStatement(sql);
 										statement.setString(1, id);						

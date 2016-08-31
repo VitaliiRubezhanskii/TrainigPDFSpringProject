@@ -7,9 +7,11 @@ import java.nio.file.Paths;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 
 import javax.xml.bind.DatatypeConverter;
 
@@ -1720,7 +1722,7 @@ public class DbLayer {
         
         return fileMetaData;
       }
-      
+     
       
       /**
        * Get event related tabular data from the DB.
@@ -1767,6 +1769,74 @@ public class DbLayer {
         return dataEventList;
       }
       
+      /**
+       * Get salesman's notifications from DB.
+       * 
+       * This method will return notifications either for the Toolbar or for the Notifications Table.
+       * 
+       * @param salesmanEmail - The salesman email.
+       * @param sql - The SQL query.
+       * @return notifications - The salesman's notifications.
+       */
+      public static JSONArray getNotifications(String salesmanEmail, String sql) {
+    	  Connection conn = null;
+    	  JSONArray notifications = new JSONArray();
+          
+          try {
+            Constants.updateConstants();
+            conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
+            PreparedStatement ps = conn.prepareStatement(sql);
+
+            ps.setString(1, salesmanEmail);
+            
+            ResultSet rs = ps.executeQuery();
+            ResultSetMetaData md = rs.getMetaData();
+			int columnCount = md.getColumnCount();
+			
+			while (rs.next()) {
+			 JSONObject notification = new JSONObject();
+			 
+			 for (int i = 1; i <= columnCount; i++) {
+				 switch (md.getColumnClassName(i)) {
+			       case "java.lang.String":
+			    	   notification.put(md.getColumnLabel(i), rs.getString(i));
+			    	   break;
+			    
+			       case "java.lang.Integer":
+			    	   notification.put(md.getColumnLabel(i), rs.getInt(i));
+			    	   break;
+			    	   
+			       case "java.lang.Boolean":
+			    	   notification.put(md.getColumnLabel(i), rs.getBoolean(i));
+			    	   break;
+			    	   
+			       case "java.sql.Timestamp":
+			    	   java.util.Calendar cal = Calendar.getInstance();
+			    	   cal.setTimeZone(TimeZone.getTimeZone("UTC"));
+			    	   
+			    	   notification.put(md.getColumnLabel(i), rs.getTimestamp(i, cal));
+			    	   break;
+				 }
+    		 }
+			 
+			 notifications.put(notification);
+    		}
+          } catch (SQLException ex) {
+            System.err.println("Error code: " + ex.getErrorCode() + " - " + ex.getMessage());
+            ex.printStackTrace();
+          } finally {
+            if (null != conn) {
+              try {
+                conn.close();
+              } catch (SQLException ex) {
+                ex.printStackTrace();
+              }
+            }
+          }
+    	  
+		return notifications;
+      }
+ 
       
       /**
        * Get data about a specific salesman such as his first name.
@@ -2009,10 +2079,14 @@ public class DbLayer {
        * @param tableName The table in the DB in which the event would be inserted into.
        * @param eventName The event name.
        * @param eventDataMap A map connecting between tableName column names and values.
+       * 
+       * @returns id - the id of the notification just inserted.
        */
-      public static void setEvent(String tableName, String eventName, Map<String, String> eventDataMap) {
+      public static long setEvent(String tableName, String eventName, Map<String, String> eventDataMap) {
         String sqlColumns = "event_name";
         String sqlValues = "?";
+        long id = 0;
+        
         for (Map.Entry<String, String> mapEntry : eventDataMap.entrySet()) {
           sqlColumns += "," + mapEntry.getKey();
           sqlValues += ",?";
@@ -2023,7 +2097,7 @@ public class DbLayer {
         Connection conn = null;
         try {
           conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
-          PreparedStatement ps = conn.prepareStatement(sqlInsert);
+          PreparedStatement ps = conn.prepareStatement(sqlInsert, Statement.RETURN_GENERATED_KEYS);
           
           ps.setString(1, eventName);
           int i = 2;
@@ -2033,6 +2107,12 @@ public class DbLayer {
           }
                    
           ps.executeUpdate();
+          
+          ResultSet rs = ps.getGeneratedKeys();
+          if (rs.next()) {
+        	  id = rs.getLong(1);
+          }
+          
           System.out.println("SP: " + eventName);
         } catch (SQLException ex) {
           System.err.println("Error code: " + ex.getErrorCode() + " - " + ex.getMessage());
@@ -2046,6 +2126,8 @@ public class DbLayer {
             }
           }
         }
+        
+        return id;
       }
       
       
@@ -2188,7 +2270,40 @@ public class DbLayer {
         
         return fileLinkHash;
       }
-
+      
+      /**
+       * Mark a notification as read.
+       * 
+       * @param id - The notification id in the customer_events table.
+       */
+      public static void setNotificationRead(int id) {
+    	Connection conn = null;
+    	
+    	String sql = "UPDATE customer_events SET is_notification_read = true WHERE customer_events.id = ?";
+    	
+    	try {
+    		conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass); 
+    		PreparedStatement ps = conn.prepareStatement(sql);
+    		
+    		ps.setInt(1, id);
+    		ps.executeUpdate();
+    		
+    		System.out.println("SP: Notification Marked Read: " + id);
+    	} catch (SQLException ex) {
+            System.err.println("Error code: " + ex.getErrorCode() + " - " + ex.getMessage());
+            ex.printStackTrace();
+          } finally {
+            if (null != conn) {
+              try {
+                conn.close();
+              } catch (SQLException ex) {
+                ex.printStackTrace();
+              }
+            }
+          }
+      }
+      
+      
       /**
        * Add a Salesman to the DB after performing validation tests. 
        * 
@@ -2503,7 +2618,7 @@ public class DbLayer {
       }
       
       public static void setSalesmenDocumentSettings (String isChatEnabled, Boolean isAlertEmailEnabled, Boolean isReportEmailEnabled,
-    		  			String salesMan) {
+    		  			Boolean isNotificationEmailEnabled, String salesMan) {
     	  
     	  /**
     	   * @param viewerChatIsEnabled, isAlertEmailEnabled, isReportEmailEnabled
@@ -2513,7 +2628,7 @@ public class DbLayer {
     	  
     	  Connection conn = null;
     	  
-    	  String query = "UPDATE sales_men SET viewer_is_chat_enabled = ?, email_alert_enabled = ?, email_report_enabled = ? WHERE email = ?";
+    	  String query = "UPDATE sales_men SET viewer_is_chat_enabled = ?, email_alert_enabled = ?, email_report_enabled = ?, email_notifications_enabled = ? WHERE email = ?";
     	  
     	  System.out.println(query);
     	  
@@ -2523,7 +2638,8 @@ public class DbLayer {
               stmt.setString(1, isChatEnabled);
               stmt.setBoolean(2, isAlertEmailEnabled);
               stmt.setBoolean(3, isReportEmailEnabled);
-              stmt.setString(4, salesMan);
+              stmt.setBoolean(4,  isNotificationEmailEnabled);
+              stmt.setString(5, salesMan);
               stmt.executeUpdate();
     	  }
     	  catch (SQLException ex) {

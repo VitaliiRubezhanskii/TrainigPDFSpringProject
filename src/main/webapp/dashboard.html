@@ -13,15 +13,18 @@
 <link href="assets/css/animate.css" rel="stylesheet">
 <link href="assets/css/style.css" rel="stylesheet">
 <link href="assets/css/plugins/jquerySteps/jquery.steps.css" rel="stylesheet">
-<!-- <link href="assets/css/plugins/metisMenu/metisMenu.min.css" rel="stylesheet"> -->
+<!-- <link href="assets/css/plugins/metisMenu/metisMenu.min.css" rel="stylesheet">  -->
 <link href="assets/css/plugins/datatables/datatables.min.css" rel="stylesheet">
 <script src="https://www.google.com/jsapi?autoload=%7B%27modules%27:%5B%7B%27name%27:%27visualization%27,%27version%27:%271.1%27,%27packages%27:%5B%27geochart%27%5D%7D%5D%7D"></script>
 <link href="assets/css/plugins/toastr/toastr.css" rel="stylesheet">
 <link href="assets/css/plugins/sweetalerts/sweetalert.css" rel="stylesheet">
 
-<!-- SlidePiper scripts -->
+<!--SlidePiper scripts-->
 <link rel="shortcut icon" type="image/png" href="img/splogo.png" />
 <link href="assets/styles/sp-style.css" rel="stylesheet">
+
+<!-- Dashboard Notifications -->
+<link rel="stylesheet" href="assets/notifications/style.css">
 
 <!-- Heap Analytics -->
 <script type="text/javascript">
@@ -94,6 +97,13 @@
                             <span class="nav-label">Sales Analytics</span> 
                         </a>
                    </li>
+                   
+                   <li class="sp-nav-section" id="sp-nav-notifications" data-dashboard='sp-notifications-table'>
+                        <a href="#" aria-expanded="true">
+                            <i class="fa fa-bell"></i> 
+                            <span class="nav-label">Notifications</span> 
+                        </a>
+                   </li>
                 </ul>
 
             </div>
@@ -112,14 +122,32 @@
                                 <input type="text" placeholder="Search for something..." class="form-control" name="top-search" id="top-search">
                             </div>
                         </form>
-                    </div>
+                     </div>
 
                     <ul class="nav navbar-top-links navbar-right">
+                        <li id="sp-notifications__nav" class="dropdown">
+                            <a class="count-info dropdown" href="#">
+                                <i class="fa fa-bell"></i>
+                                <span id="sp-notifications__count" class="label label-primary"></span>
+                            </a>
+                            <div id="sp-notifications__container" class="dropdown-menu dropdown-messages">
+                                <div id="sp-notifications__header">
+                                    <span id="sp-notifications__header-title">Notifications</span>
+                                    <span id="sp-notifications__header-mark-all-read">Mark all as read</span>
+                                </div>
+                                <ul id="sp-notifications__list-container">
+                                    <!-- Notifications added in notifications/functions.js -->
+                                </ul>
+                                <p id="sp-notifications__see-all">See all</p>
+                            </div>
+                        </li>
+                        
                         <li data-toggle="modal" data-target="#sp-help-salesmen__modal" class="sp-help-salesmen__icon">
                             <a href="#">
                                 <i class="fa fa-question" aria-hidden="true"></i>Help
                             </a>
                         </li>
+                        
                         <li>
                             <div class="btn-group">
                               <button type="button" class="btn btn-default dropdown-toggle sp-settings-dropdown__button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -421,7 +449,7 @@
                                                     <table class="table table-striped table-hover" id="sp-files-management">
                                                         <thead style="z-depth: 1;">
                                                             <tr>
-                                                                <th>Date</th>
+                                                                <th class="sp-customers-management-table__date-th"><i data-toggle="tooltip" data-placement="right" title="Date file was added or updated" class="fa fa-info-circle sp-table-date__info"></i> Date</th>
                                                                 <th>Document</th>
                                                                 <th></th>
                                                             </tr>
@@ -443,6 +471,7 @@
                                                     <table class="table table-striped table-hover" id="sp-customers-management">
                                                         <thead>
                                                             <tr>
+                                                                <th class="sp-customers-management-table__date-th"><i data-toggle="tooltip" data-placement="right" title="Date file was added or updated" class="fa fa-info-circle sp-table-date__info"></i> Date </th>
                                                                 <th>Name</th>
                                                                 <th>Company</th>
                                                                 <th style="margin-left: 30px;">Email</th>
@@ -482,6 +511,7 @@
                                                             <th>Name</th>
                                                             <th>Company</th>
                                                             <th>Email</th>
+                                                            <th>Date</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody></tbody>
@@ -515,6 +545,35 @@
                         </div>
                     </div>
                 </div>
+                
+                <!-- Notifications -->
+                <div class="container-fluid">
+                    <div class="sp-dashboard animated fadeInRight sp-hidden" id="sp-notifications-table">
+                        <div class="col-lg-12">
+                            <div class="ibox float-e-margins">
+                                <div class="ibox-title">
+                                    <h5>Notifications</h5>
+                                </div>
+                                <div class="ibox-content">
+                                    <div class="table-responsive">
+                                        <table class="table table-striped sp-notifications__table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Date</th>
+                                                    <th>Customer</th>
+                                                    <th>Event</th>
+                                                    <th>Document</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody></tbody>
+                                        </table>
+                                    </div>
+                                    <small>We will display up to 1,000 notifications.</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
               
             <div class="footer">
@@ -523,7 +582,6 @@
             </div>
         </div>
     </div>
- 
 
     <!-- Mainly scripts -->
     <script src="assets/js/jquery-2.1.1.js"></script>
@@ -539,10 +597,23 @@
     <script src="assets/js/plugins/chartjs/chart.min.js"></script>
     <script src="assets/js/plugins/toastr/toastr.js"></script>
     <script src="assets/js/plugins/sweetalerts/sweetalert.min.js"></script>
+    <script src="assets/js/plugins/momentjs/moment.min.js"></script>
+    <script src="assets/js/plugins/datetime-moment.js"></script>
+    <script src="assets/js/plugins/dotdotdot/jquery.dotdotdot.min.js"></script>
+    
 
     <!-- SlidePiper scripts -->
     <script src="assets/js/js.cookie.js"></script>
     <script src="assets/js/sp-functions.js"></script>
+    
+    <!-- Dashboard Notifications -->
+    <script src="assets/notifications/functions.js"></script>
+    
+    <!-- Viewer Widgets Modal -->
+    <div class="modal inmodal" id="sp-viewer-widgets-modal" tabindex="-1" role="dialog" aria-hidden="true"></div>
+    
+    <!-- Toolbar Settings Modal -->
+    <div id="sp-toolbar-settings__modal" class="modal inmodal" tabindex="-1" role="dialog" aria-hidden="true"></div>
     
     <!-- Viewer Widgets Modal -->
     <div class="modal inmodal" id="sp-viewer-widgets-modal" tabindex="-1" role="dialog" aria-hidden="true"></div>
@@ -844,6 +915,20 @@
                             <div class="col-md-4 col-sm-4">
                                 <label class="sp-switch"> 
                                   <input id="sp-enable-report-emails__checkbox" class="sp-settings__checkbox" type="checkbox">
+                                  <div class="sp-doc-settings-slider sp-round"></div>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-4 col-md-offset-3 col-sm-4 col-sm-offset-3">
+                                <label class="control-label sp-switch-title__label">
+                                    <i data-toggle="tooltip" data-placement="left" title="Send me an email when I receive a notification" class="fa fa-info-circle sp-clickable sp-doc-settings-info__icon" aria-hidden="true"></i>       Enable Notification Emails
+                                </label>
+                            </div>
+                            <div class="col-md-4 col-sm-4">
+                                <label class="sp-switch"> 
+                                  <input id="sp-enable-notification-emails__checkbox" class="sp-settings__checkbox" type="checkbox">
                                   <div class="sp-doc-settings-slider sp-round"></div>
                                 </label>
                             </div>
