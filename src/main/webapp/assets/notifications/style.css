@@ -52,9 +52,8 @@
 }
 
 .sp-notifications__text-container {
-  overflow: hidden;
-  position: relative;
-  text-overflow: ellipsis;
+  height: 50px;
+  font-size: 11px;
 }
 
 .sp-notifications__time-elapsed {

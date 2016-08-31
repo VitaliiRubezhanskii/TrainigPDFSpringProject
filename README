@@ -4,6 +4,39 @@ SlidePiper README File
 Change Log
 ----------
 
+### 0.11.0
+
+2016-08-31 Max Prais <maxp@slidepiper.com>
+
+* Dashboard Notifications:
+	1. Notifications are loaded when the page loads, and then every minute.
+ 	2. Sorted by date.
+	3. Number of unread notifications are displayed on the dashboard icon.
+	4. Unread notifications appear a darker colour, and have a button to
+	mark them as 'read'.
+	4. 'Mark All As Read' allows all notifications to be marked as read.
+	5. Click 'See All' to be taken to notifications table.
+
+* Table Notifications:
+	1. DataTable displays all notifications
+	2. Sorted by date.
+	3. Date and Time are displayed in the user's timezone.
+
+* Email Notifications:
+	1. Send notifications for Ask Question widget.
+	2. Add switch to 'Document Settings' in Dashboard to enable or disable
+	email notifications per account.
+
+* Documents and Customers:
+	1. Add date field to Documents and Customers table.
+	2. Move buttons in 'Documents' closer to the middle.
+	3. Date and Time are displayed in the user's timezone.
+
+* Send Documents:
+	1. Add date field to first two steps of 'Send Documents' table.
+	2. Date and Time are displayed in the user's timezone.
+
+
 ### 0.10.14
 
 2016-08-26 Yaniv Friedensohn <yanivf@slidepiper.com>

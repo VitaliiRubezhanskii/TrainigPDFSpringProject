@@ -89,6 +89,9 @@ sp.notifications = {
         }
       });
       
+      // init dotdotdot ellipsis - will work if toolbar is open. Otherwise init on click on toolbar icon.
+      $('.sp-notifications__text-container').dotdotdot();   
+      
       // init tooltip
       $('.sp-notifications__is-unread').tooltip({delay: {show: 100, hide: 200}, title: 'Mark As Read', placement: 'left'});
       
@@ -201,10 +204,10 @@ sp.notifications = {
         var date = moment.utc(notification.time).toDate();
         
         var tableDataObj = {
+          time: moment(date).format('DD-MM-YYYY HH:mm'),
           customer: notification.customerEmail,
           action: action,
-          document: notification.documentName,
-          time: moment(date).format('DD-MM-YYYY HH:mm')
+          document: notification.documentName
         };
         
         /**
@@ -232,14 +235,14 @@ sp.notifications = {
             }
           ],
           columns: [
+            {data: 'time'},
             {data: 'customer'},
             {data: 'action'},
-            {data: 'document'},
-            {data: 'time'}
+            {data: 'document'}
           ],
           dom: '<"sp-datatables-search-left"f><"html5buttons"B>ti',
           paging: false,
-          order: [3, 'desc'],
+          order: [0, 'desc'],
           scrollY: '50vh',
         });
       } else {
@@ -295,6 +298,9 @@ $(document).on('click', 'body', function(event) {
    || $('#sp-notifications__nav a').is(event.target)
    || $('#sp-notifications__count').is(event.target)) {
     $('#sp-notifications__nav').toggleClass('open');
+    
+    // init dotdotdot ellipsis plugin.
+    $('.sp-notifications__text-container').dotdotdot();       
     
   } else if (! $('#sp-notifications__list-container').is(event.target)
       && ! $('.sp-notifications__read-button').is(event.target)
