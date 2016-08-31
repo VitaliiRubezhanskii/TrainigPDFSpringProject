@@ -183,20 +183,22 @@ sp.notifications = {
       $.each(notifications, function(index, notification) {
         
         // If it is an Ask Question widget event.
-        if (typeof notification.messageText !== 'undefined' || typeof notification.messageReplyEmail !== 'undefined') {
-          var replyEmail = '';
-          if (typeof notification.messageReplyEmail !== 'undefined' && '' !== notification.messageReplyEmail) {
-            replyEmail = notification.messageReplyEmail;          
-          } else {
-            if (notification.customerEmail === 'default@example.com') {
-              replyEmail = 'Generic Link';
+        if (notification.event === 'VIEWER_WIDGET_ASK_QUESTION') {
+          if (typeof notification.messageText !== 'undefined' || typeof notification.messageReplyEmail !== 'undefined') {
+            var replyEmail = '';
+            if (typeof notification.messageReplyEmail !== 'undefined' && '' !== notification.messageReplyEmail) {
+              replyEmail = notification.messageReplyEmail;          
             } else {
-              replyEmail = notification.customerEmail;
+              if (notification.customerEmail === 'default@example.com') {
+                replyEmail = 'Generic Link';
+              } else {
+                replyEmail = notification.customerEmail;
+              }
             }
-          }
-          action = 
-            '<span>' + replyEmail + " " + setActionValue(notification.event) + ': </span><br>' +
-            '<span><em>' + notification.messageText + '</em></span><br>';
+            action = 
+              '<span>' + replyEmail + " " + setActionValue(notification.event) + ': </span><br>' +
+              '<span><em>' + notification.messageText + '</em></span><br>';
+          } 
         } else {
           action = setActionValue(notification.event);
         }
