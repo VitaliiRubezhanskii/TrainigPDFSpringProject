@@ -12,7 +12,7 @@ public class Analytics {
 		"SELECT\n"
       + "  id AS file_hash,\n"
       + "  name AS file_name,\n"
-      + "  local_timestamp AS date_added_or_modified\n"
+      + "  timestamp AS date_added_or_modified\n"
       + "FROM slides\n"
       + "WHERE sales_man_email = ?\n"
       + "ORDER BY date_added_or_modified";
