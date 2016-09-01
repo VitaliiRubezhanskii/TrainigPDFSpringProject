@@ -4,6 +4,24 @@ SlidePiper README File
 Change Log
 ----------
 
+### 0.11.2
+
+2016-09-01 Max Prais <maxp@slidepiper.com>
+
+* Alert and Report Emails:
+	1. Start sending them using Amazon SES.
+	2. Revamped their email templates.
+	
+
+### 0.11.1
+
+2016-08-31 Max Prais <maxp@slidepiper.com>
+
+* Notifications Table:
+	1. Fixed a bug on OPEN_SLIDES event in Notifications table the OPEN_SLIDES
+	event to not render correctly.
+	
+
 ### 0.11.0
 
 2016-08-31 Max Prais <maxp@slidepiper.com>
