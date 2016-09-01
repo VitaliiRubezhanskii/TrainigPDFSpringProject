@@ -25,6 +25,7 @@ import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.google.api.services.gmail.Gmail;
 
+import slidepiper.aws.AmazonSES;
 import slidepiper.config.ConfigProperties;
 import slidepiper.dataobjects.AlertData;
 import slidepiper.dataobjects.CustomerSession;
@@ -100,66 +101,81 @@ public class EmailSender {
 	
 	
 	// send alert email
-	public static void sendAlertEmail(String id, String sessionId)
-	{
-		  MessageInfo mi = DbLayer.getMessageInfo(id);		  		  
-			String currentviewslink;
-			String chatlink;
-			String urlprefix = ConfigProperties.getProperty("viewer_url", mi.getSalesManEmail()) + "/";
-			
-			String custname = DbLayer.getCustomerName(mi.getCustomerEmail(), mi.getSalesManEmail());
-			String getParams = "sessionid="+sessionId+"&salesman="+DbLayer.getSalesmanName(mi.getSalesManEmail())+"&customername="+ custname +"&role=1";
-			
-			currentviewslink = urlprefix + "viewbarchart.jsp?session_id=" + sessionId;
-			chatlink = urlprefix + "pdfjs/chatwindow.html?" + getParams;
-			String fullchatlink = urlprefix.replaceAll("/$", "") + ConfigProperties.FILE_VIEWER_PATH
-			    + "?" + ConfigProperties.getProperty("file_viewer_query_parameter") + "=" + mi.getId()
-			    + "&" + getParams;
-			
-			String subj = "SlidePiper Alert for " +
-					DbLayer.getCustomerName(mi.getCustomerEmail(),mi.getSalesManEmail()) +
-					" (" + mi.getCustomerEmail() + ")";						
-					  			 			
-			CustomerSession cs = DbLayer.getSessionData(sessionId);
-			
-			String msgtext = HtmlRenderer.getAlertHtml(mi, cs, currentviewslink, chatlink, fullchatlink); 
-			
-			EmailSender.sendEmail(mi.getSalesManEmail(), 
-					subj,				
-						msgtext
-					);
-			
-			System.out.println("********** SENT ALERT EMAIL for " + mi.getSalesManEmail());
+	public static void sendAlertEmail(String id, String sessionId) {
+		MessageInfo mi = DbLayer.getMessageInfo(id);		  		  
+		String currentviewslink;
+		String chatlink;
+		String urlprefix = ConfigProperties.getProperty("viewer_url", mi.getSalesManEmail()) + "/";
+		
+		String custname = DbLayer.getCustomerName(mi.getCustomerEmail(), mi.getSalesManEmail());
+		String getParams = "sessionid="+sessionId+"&salesman="+DbLayer.getSalesmanName(mi.getSalesManEmail())+"&customername="+ custname +"&role=1";
+		
+		currentviewslink = urlprefix + "viewbarchart.jsp?session_id=" + sessionId;
+		chatlink = urlprefix + "pdfjs/chatwindow.html?" + getParams;
+		String fullchatlink = urlprefix.replaceAll("/$", "") 
+								+ ConfigProperties.FILE_VIEWER_PATH
+							    + "?" + ConfigProperties.getProperty("file_viewer_query_parameter") + "=" + mi.getId()
+							    + "&" + getParams;
+		
+		String subj = DbLayer.getCustomerName(mi.getCustomerEmail(),mi.getSalesManEmail()) +
+					  " opened " + DbLayer.getSlidesName(mi.getSlidesId());						
+				  			 			
+		CustomerSession cs = DbLayer.getSessionData(sessionId);
+		
+		String msgtext = HtmlRenderer.getAlertHtml(mi, cs, currentviewslink, chatlink, fullchatlink); 
+		
+		Map<String, String> emailParams = new HashMap<String, String>();
+		emailParams.put("salesmanEmail", mi.getSalesManEmail());
+		emailParams.put("subject", subj);
+		emailParams.put("body", msgtext);
+		
+		int mailTypeId = 2;
+		
+		try {
+			AmazonSES.setEmailFields(mailTypeId, emailParams);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	// report email after customer stops viewing presentation
 	// called from KeepAliveTask
-	public static void sendReportEmail(KeepAlivePacket p)
-	{					
-			MessageInfo mi = DbLayer.getMessageInfo(p.getMsgId());													
-			AlertData ai = DbLayer.getAlert(p.getSessionId(),mi.getSalesManEmail());			
-			String chatMessages = "";
-			ArrayList<String> msgs = DbLayer.getChatMessages(p.getSessionId());			
-			for(String msg : msgs)
-			{
-				chatMessages += (msg+"<BR>");
-			}			
-			if (msgs.isEmpty()) chatMessages = "No messages.";
-			
-			String custname = DbLayer.getCustomerName(mi.getCustomerEmail(),mi.getSalesManEmail());
-			
-			String subj = "SlidePiper Report for " +
-					custname +
-					" (" + mi.getCustomerEmail() + ")";
-			
-			String msg = HtmlRenderer.getReportHtml(ai, chatMessages);
-			
-			// write in session without enclosing html. only enclosing table.
-			DbLayer.updateSessionReport(p.getSessionId(), "<table>"+msg+"</table>");
-					 
-			EmailSender.sendEmail(mi.getSalesManEmail(), subj , msg);
-			
-			System.out.println("********** SENT REPORT EMAIL for " + mi.getSalesManEmail());
+	public static void sendReportEmail(KeepAlivePacket p) {					
+		MessageInfo mi = DbLayer.getMessageInfo(p.getMsgId());													
+		AlertData ai = DbLayer.getAlert(p.getSessionId(),mi.getSalesManEmail());			
+		String chatMessages = "";
+		ArrayList<String> msgs = DbLayer.getChatMessages(p.getSessionId());			
+		for(String msg : msgs) {
+			chatMessages += (msg+"<BR>");
+		}			
+		
+		if (msgs.isEmpty()) {
+			chatMessages = "No messages.";
+		}
+		
+		String subj = DbLayer.getCustomerName(mi.getCustomerEmail(),mi.getSalesManEmail()) +
+					  " viewed " +
+					  DbLayer.getSlidesName(mi.getSlidesId());
+		
+		String msgtext = HtmlRenderer.getReportHtml(ai, chatMessages);
+		
+		// write in session without enclosing html. only enclosing table.
+		DbLayer.updateSessionReport(p.getSessionId(), "<table>"+msgtext+"</table>");
+		
+		Map<String, String> emailParams = new HashMap<String, String>();
+		emailParams.put("salesmanEmail", mi.getSalesManEmail());
+		emailParams.put("subject", subj);
+		emailParams.put("body", msgtext);
+		
+		int mailTypeId = 3;
+		
+		try {
+			AmazonSES.setEmailFields(mailTypeId, emailParams);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	

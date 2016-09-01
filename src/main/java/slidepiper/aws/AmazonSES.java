@@ -55,8 +55,9 @@ public class AmazonSES {
      * @param notificationData - The notification data from SQL query: customerEmail, documentName, salesmanEmail.
      * @param eventDataMap - The event data from the Viewer.
      */
-    public static void setEmailParams(String[] notificationData, Map<String, String> eventDataMap) {
+    public static void setEventEmailParams(String[] notificationData, Map<String, String> eventDataMap) {
     	Map<String, String> emailParams = new HashMap<String, String>();
+    	int mailTypeId = 0;
     	
     	if (notificationData[0].equals("default@example.com")) {
     		emailParams.put("customerEmail", "Generic Link");
@@ -70,6 +71,7 @@ public class AmazonSES {
 		
 		switch(eventDataMap.get("eventName")) {
 			case "VIEWER_WIDGET_ASK_QUESTION":
+				mailTypeId = 1;
 				emailParams.put("eventName", "sent you a message on");
 				emailParams.put("messageText", eventDataMap.get("param_2_varchar").toString());
 				emailParams.put("messageReplyEmail", eventDataMap.get("param_3_varchar").toString());
@@ -79,7 +81,7 @@ public class AmazonSES {
 		try {
 			
 			// Set email fields once necessary email parameters have been filled.
-			setEmailFields(emailParams);
+			setEmailFields(mailTypeId, emailParams);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -94,19 +96,31 @@ public class AmazonSES {
      * @param emailParams - The parameters for the email, as set in @function setEmailParams().
      * @throws IOException
      */
-    public static void setEmailFields(Map<String, String> emailParams) throws IOException {
-    	String fromEmail = null;
+    public static void setEmailFields(int mailTypeId, Map<String, String> emailParams) throws IOException {
     	
-    	if (null == emailParams.get("messageReplyEmail") || emailParams.get("messageReplyEmail").equals("")) {
-    		fromEmail = emailParams.get("customerEmail");
-    	} else {
-    		fromEmail = emailParams.get("messageReplyEmail");
+    	switch(mailTypeId) {
+    		case 1:
+    			String fromEmail = null;
+    			
+    	    	if (null == emailParams.get("messageReplyEmail") || emailParams.get("messageReplyEmail").equals("")) {
+    	    		fromEmail = emailParams.get("customerEmail");
+    	    	} else {
+    	    		fromEmail = emailParams.get("messageReplyEmail");
+    	    	}
+    	    	
+    	    	TO = emailParams.get("salesmanEmail");
+    	    	SUBJECT = fromEmail + " " + emailParams.get("eventName") + " " + emailParams.get("documentName");
+    	    	BODY = getEmailNotificationsTemplate(emailParams);
+    			break;
+    			
+    		case 2:
+    		case 3:
+    			TO = emailParams.get("salesmanEmail");
+    	    	SUBJECT = emailParams.get("subject");
+    	    	BODY = emailParams.get("body");
+    			break;
     	}
-    	
-    	TO = emailParams.get("salesmanEmail");
-    	SUBJECT = fromEmail + " " + emailParams.get("eventName") + " " + emailParams.get("documentName");
-    	BODY = getEmailNotificationsTemplate(emailParams);
-    	
+
     	if (null != FROM && null != TO && null != SUBJECT && null != BODY) {
     		try {
 				sendEmail();

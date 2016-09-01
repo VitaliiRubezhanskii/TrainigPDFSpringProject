@@ -49,13 +49,6 @@ public class CustomerLogger {
 							statement.setString(15, param9Varchar);
 							statement.setString(16, param10Varchar);
 							
-							
-							
-							
-							System.out.println(statement);
-							
-							
-							
 							// sends the statement to the database server
 							int row = statement.executeUpdate();
 							if (row > 0) { 
