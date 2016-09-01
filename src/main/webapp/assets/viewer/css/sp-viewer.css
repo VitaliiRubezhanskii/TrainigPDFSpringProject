@@ -846,9 +846,28 @@ body {
   }
 }
 
+@media only screen and (max-height: 670px) {
+  #sp-widget5__hop-9,
+  #sp-widget5__hop-10 {
+    display: none;
+  }
+}
+
 @media only screen and (max-height: 600px) {
+  #sp-widget5__hop-8 {
+    display: none;
+  }
+  
   .sp-widget5 {
-    top: 130px;
+    top: 140px;
+  }
+}
+
+@media only screen and (max-height: 540px) {
+  #sp-widget5__hop-5,
+  #sp-widget5__hop-6,
+  #sp-widget5__hop-7 {
+    display: none;
   }
 }
 
