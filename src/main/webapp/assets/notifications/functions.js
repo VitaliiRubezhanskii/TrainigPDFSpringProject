@@ -205,12 +205,16 @@ sp.notifications = {
         
         var date = moment.utc(notification.time).toDate();
         
+        date = moment.utc(notification.time).toDate();
+        
         var tableDataObj = {
           time: moment(date).format('DD-MM-YYYY HH:mm'),
           customer: notification.customerEmail,
           action: action,
           document: notification.documentName
         };
+        
+        delete date;
         
         /**
          * If the message email address is empty and it is a generic link, set customer email to Generic Link.
@@ -303,7 +307,7 @@ $(document).on('click', 'body', function(event) {
     
     // init dotdotdot ellipsis plugin.
     $('.sp-notifications__text-container').dotdotdot();       
-    
+
   } else if (! $('#sp-notifications__list-container').is(event.target)
       && ! $('.sp-notifications__read-button').is(event.target)
       && ! $('#sp-notifications__list-container li').is(event.target)
