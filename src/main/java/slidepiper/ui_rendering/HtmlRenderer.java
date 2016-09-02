@@ -192,7 +192,6 @@ public class HtmlRenderer {
 	            	data.put("customerEmail", customerEmail);
 	            }
 	            
-	            data.put("openTime", mi.getTimestamp().substring(0, 16));
 	            data.put("documentName", DbLayer.getSlidesName(mi.getSlidesId()));
 	            data.put("customerName", DbLayer.getCustomerName(mi.getCustomerEmail(), mi.getSalesManEmail()));
 	            data.put("chatLink", fullchatlink);
