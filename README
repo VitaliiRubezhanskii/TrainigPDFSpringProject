@@ -4,6 +4,14 @@ SlidePiper README File
 Change Log
 ----------
 
+### 0.11.3
+
+2016-09-02 Max Prais <maxp@slidepiper.com>
+
+* Alert Email:
+	1. Removed 'Time Opened' from Alert Email.
+	
+
 ### 0.11.2
 
 2016-09-01 Max Prais <maxp@slidepiper.com>
