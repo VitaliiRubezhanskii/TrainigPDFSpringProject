@@ -4,10 +4,10 @@ import slidepiper.config.ConfigProperties;
 
 public class Constants {	
 		  public static Boolean constantsSet = false;
-		  public static String MYSQL_USERNAME = System.getenv("OPENSHIFT_MYSQL_DB_USERNAME");
-		  public static String MYSQL_PASSWORD = System.getenv("OPENSHIFT_MYSQL_DB_PASSWORD");
-		  public static String MYSQL_DATABASE_HOST = System.getenv("OPENSHIFT_MYSQL_DB_HOST");
-		  public static String MYSQL_DATABASE_PORT = System.getenv("OPENSHIFT_MYSQL_DB_PORT");
+		  public static String MYSQL_USERNAME = System.getProperty("OPENSHIFT_MYSQL_DB_USERNAME");
+		  public static String MYSQL_PASSWORD = System.getProperty("OPENSHIFT_MYSQL_DB_PASSWORD");
+		  public static String MYSQL_DATABASE_HOST = System.getProperty("OPENSHIFT_MYSQL_DB_HOST");
+		  public static String MYSQL_DATABASE_PORT = System.getProperty("OPENSHIFT_MYSQL_DB_PORT");
 		  public static final String MYSQL_DATABASE_NAME = "picascrafxzhbcmd";
 		  
 		  public static String dbUser = MYSQL_USERNAME; //"adminS16x82l";
@@ -48,19 +48,19 @@ public class Constants {
 					 {
 						 	System.out.println("Initializing constants on OpenShift");
 						  System.out.println("Constants: mysql user " + dbUser + " pw " + dbPass + " url " + dbURL);
-						  System.out.println("Env variable: OPENSHIFT_APP_NAME" + System.getenv("OPENSHIFT_APP_NAME"));
-						  System.out.println("Env variable: OPENSHIFT_APP_DNS" + System.getenv("OPENSHIFT_APP_DNS"));
-						  System.out.println("Env variable: OPENSHIFT_SECRET_TOKEN" + System.getenv("OPENSHIFT_SECRET_TOKEN"));
-						  System.out.println("Env variable: OPENSHIFT_MYSQL_PORT" + System.getenv("OPENSHIFT_MYSQL_PORT"));
-						  System.out.println("Env variable: OPENSHIFT_MYSQL_IP" + System.getenv("OPENSHIFT_MYSQL_IP"));
-						  System.out.println("Env variable: OPENSHIFT_JBOSSEWS_PORT" + System.getenv("OPENSHIFT_JBOSSEWS_PORT"));
-						  System.out.println("Env variable: OPENSHIFT_JBOSSEWS_IP" + System.getenv("OPENSHIFT_JBOSSEWS_IP"));
+						  System.out.println("Env variable: OPENSHIFT_APP_NAME" + System.getProperty("OPENSHIFT_APP_NAME"));
+						  System.out.println("Env variable: OPENSHIFT_APP_DNS" + System.getProperty("OPENSHIFT_APP_DNS"));
+						  System.out.println("Env variable: OPENSHIFT_SECRET_TOKEN" + System.getProperty("OPENSHIFT_SECRET_TOKEN"));
+						  System.out.println("Env variable: OPENSHIFT_MYSQL_PORT" + System.getProperty("OPENSHIFT_MYSQL_PORT"));
+						  System.out.println("Env variable: OPENSHIFT_MYSQL_IP" + System.getProperty("OPENSHIFT_MYSQL_IP"));
+						  System.out.println("Env variable: OPENSHIFT_JBOSSEWS_PORT" + System.getProperty("OPENSHIFT_JBOSSEWS_PORT"));
+						  System.out.println("Env variable: OPENSHIFT_JBOSSEWS_IP" + System.getProperty("OPENSHIFT_JBOSSEWS_IP"));
 						  
-						  System.out.println("Env variable: OPENSHIFT_HOMEDIR" + System.getenv("OPENSHIFT_HOMEDIR"));
-						  System.out.println("Env variable: OPENSHIFT_DATA_DIR" + System.getenv("OPENSHIFT_DATA_DIR"));
-						  System.out.println("Env variable: OPENSHIFT_MAX_SESSIONS_PER_GEAR" + System.getenv("OPENSHIFT_MAX_SESSIONS_PER_GEAR"));
-						  System.out.println("Env variable: OPENSHIFT_GEAR_NAME" + System.getenv("OPENSHIFT_GEAR_NAME"));
-						  System.out.println("Env variable: OPENSHIFT_GEAR_DNS" + System.getenv("OPENSHIFT_GEAR_DNS"));						  						 						  
+						  System.out.println("Env variable: OPENSHIFT_HOMEDIR" + System.getProperty("OPENSHIFT_HOMEDIR"));
+						  System.out.println("Env variable: OPENSHIFT_DATA_DIR" + System.getProperty("OPENSHIFT_DATA_DIR"));
+						  System.out.println("Env variable: OPENSHIFT_MAX_SESSIONS_PER_GEAR" + System.getProperty("OPENSHIFT_MAX_SESSIONS_PER_GEAR"));
+						  System.out.println("Env variable: OPENSHIFT_GEAR_NAME" + System.getProperty("OPENSHIFT_GEAR_NAME"));
+						  System.out.println("Env variable: OPENSHIFT_GEAR_DNS" + System.getProperty("OPENSHIFT_GEAR_DNS"));						  						 						  
 					 }
 			  }
 			  //System.out.println("Some constants:\n mysql user " + dbUser + " pw " + dbPass + " url " + dbURL);
