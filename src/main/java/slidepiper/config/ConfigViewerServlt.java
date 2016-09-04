@@ -80,6 +80,14 @@ public class ConfigViewerServlt extends HttpServlet {
         
         viewer.put("isYoutubeVideo", Boolean.parseBoolean(salesman.get("viewer_widget1_is_youtube_video").toString()));
         
+        
+        // Presentation & Download Settings.
+        viewer.put("isMobileToolbarSecondaryPresentationEnabled",
+        		salesman.get("viewer_toolbar_secondary_is_mobile_presentation_enabled"));
+        viewer.put("isMobileToolbarSecondaryDownloadEnabled",
+        		salesman.get("viewer_toolbar_secondary_is_mobile_download_enabled"));
+        
+        
         // CTA buttons.
         viewer.put("toolbarCtaBorderRadius",
             salesman.get("viewer_toolbar_cta_border_radius"));

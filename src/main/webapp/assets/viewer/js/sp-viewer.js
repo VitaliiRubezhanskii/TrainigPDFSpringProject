@@ -475,6 +475,18 @@ if ('' != sp.viewer.linkHash) {
     }
     
     
+    /* Presentation & Download Settings */
+    if (typeof config.viewer.isMobileToolbarSecondaryPresentationEnabled !== 'undefined'
+        && ! config.viewer.isMobileToolbarSecondaryPresentationEnabled) {
+      $('#secondaryPresentationMode').addClass('hiddenMediumView');
+    }
+    
+    if (typeof config.viewer.isMobileToolbarSecondaryDownloadEnabled !== 'undefined'
+        && ! config.viewer.isMobileToolbarSecondaryDownloadEnabled) {
+      $('#secondaryDownload').addClass('hiddenMediumView');
+    }
+    
+    
     /* Chat Settings */
     if (true == config.viewer.isChatEnabled) {
       if (true == config.viewer.isChatOpen && sp.viewer.breakPoint < $(window).width()) {
