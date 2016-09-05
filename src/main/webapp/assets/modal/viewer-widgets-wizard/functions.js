@@ -420,7 +420,7 @@ sp.viewerWidgetsModal = {
     settings.push(sp.viewerWidgetsModal.saveLikeWidgetSettings(fileHash));
     
     if (! sp.viewerWidgetsModal.isInputEmpty(5)
-        || ! $('[name="calendly-widget-is-enabled"]').closest('div').hasClass('sp-hide-is-enabled')) {
+        || ! $('[name="hopper-widget-is-enabled"]').closest('div').hasClass('sp-hide-is-enabled')) {
       settings.push(sp.viewerWidgetsModal.saveWidget5(fileHash));
     }
     
@@ -468,6 +468,18 @@ sp.viewerWidgetsModal = {
   postWidgetSettings: function(data, fileHash, targetId) {	  
     $.post('ManagementServlet', JSON.stringify(data), function(data) {
       $('button[data-dismiss="modal"]').click();
+      
+      // Return modal content to pre-saving state.
+      $('.tabs-container').contents().show();
+      $('#sp-save-widgets-settings__button, #sp-save-test-widgets-settings__button')
+          .attr('disabled', 'false');
+
+      if (targetId === 'sp-save-widgets-settings__button') {
+        $('#' + targetId).text('Save');
+      } else {
+        $('#' + targetId).text('Save & Preview');
+      }
+      $('.sp-widgets-customisation__spinner').removeClass('sp-widgets-customisation__spinner-show');
       
       var resultCode = data.resultCode;
       if (0 == resultCode) {
@@ -827,11 +839,9 @@ sp.viewerWidgetsModal = {
   },
   
   /**
-   * Check if video URL is a YouTube link.
+   * Convert YouTube, Vimeo or Barclays video link to embed link.
    * 
    * @param {string} videoSource - The video URL.
-   * 
-   * If videoSource is a youtube video, generate a YouTube embed link.
    * 
    * @return an [] - Whether the checkbox checking whether the URL is a youtube video is checked
    * and the videoSource.
@@ -840,13 +850,22 @@ sp.viewerWidgetsModal = {
     if (typeof videoSource !== 'undefined') {
       var domain = null;
       
-      if (videoSource.indexOf("://") > -1) {
+      if (videoSource.indexOf("//") > -1) {
         domain = videoSource.split('/')[2];
       } else {
         domain = videoSource.split('/')[0];
       }
+      
       domain = domain.split('.');
-      domain = domain[domain.length - 2];
+      
+      // e.g. If address is www.media.barclays.co.uk
+      if (domain.length > 3) {
+        domain = domain[domain.length - 3];
+        
+      // e.g. If address is www.youtube.com
+      } else {
+        domain = domain[domain.length - 2];
+      }
       
       if ('youtube' == domain) {
         $('[name="video-widget-is-youtube-video"]').prop('checked', true);
@@ -857,10 +876,24 @@ sp.viewerWidgetsModal = {
         $('[name="video-widget-is-youtube-video"]').prop('checked', false);
       }
       
-      // Allow for saving a regular YouTube link, and not only an embed one.
+      // Allow for saving a regular YouTube, Vimeo, or Barclays link, and not only an embed one.
       if (typeof domain !== 'undefined') {
-        if ('youtube' == domain.toLowerCase() && videoSource.indexOf('?') > -1) {
-          videoSource = 'https://www.youtube.com/embed/' + getParameterByKey('v', videoSource);
+        switch(domain) {
+          case 'youtube':
+            if (videoSource.indexOf('?') > -1) {
+              videoSource = 'https://www.youtube.com/embed/' + getParameterByKey('v', videoSource);
+            }
+            break;
+            
+          case 'vimeo':
+            
+            // Video source id is always last part of Vimeo link after the final '/'.
+            videoSource = 'https://player.vimeo.com/video/' + videoSource.split('/')[videoSource.split('/').length - 1];
+            break;
+          
+          case 'barclays':
+            videoSource = '//www.media.barclays.co.uk/player/?id=' + getParameterByKey('?', videoSource);
+            break;
         }
       }
 
