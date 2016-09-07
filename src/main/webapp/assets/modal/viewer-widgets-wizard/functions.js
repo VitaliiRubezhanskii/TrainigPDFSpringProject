@@ -191,22 +191,38 @@ sp.widgets = {
   widget7: {
     init: (function() {
       // Set person image.
-      $(document).on('change', '.sp-widget7__input-form-logo', function() {
+      $(document).on('change', '.sp-widget7__input-form-image', function() {
         var $file = $(this);
         var file = this.files[0];
         var reader = new FileReader();
 
         reader.addEventListener('load', function() {
-          $file.closest('.sp-widget-item').find('.sp-widget7__form-logo')
+          $file.closest('.sp-widget-item').find('.sp-widget7__form-image')
               .removeClass('fa fa-picture-o fa-4x')
               .css('background-image', 'url(' + reader.result + ')');
           
-          $file.closest('.sp-widget-item').find('[name="formLogo"]')
+          $file.closest('.sp-widget-item').find('[name="formImage"]')
               .val(reader.result);
         }, false);
         
         if (file) {
           reader.readAsDataURL(file);
+        }
+      });
+      
+      $('[name="formSelectType"]').on('change', function(event) {
+        switch($(event.currentTarget).attr('id')) {
+          case 'sp-widget7__upload-form-radio':
+            $('.sp-widget7__image-elements').hide();
+            $('.sp-widget7__form-elements').show();
+            $('.sp-widget7__form-image').parent().prev('label').text('Company Logo');
+            break;
+            
+          case 'sp-widget7__upload-image-radio':
+            $('.sp-widget7__image-elements').show();
+            $('.sp-widget7__form-elements').hide();
+            $('.sp-widget7__form-image').parent().prev('label').text('Image');
+            break;
         }
       });
     })()
@@ -392,8 +408,8 @@ sp.viewerWidgetsModal = {
         	.closest('div').removeClass('sp-hide-is-enabled');
       
       $('#sp-tab-7 [name*="form"]').each(function(index) {
-        if ($(this).attr('name') === 'formLogo') {
-          $('.sp-widget7__form-logo')
+        if ($(this).attr('name') === 'formImage') {
+					$('.sp-widget7__form-image')
             .removeClass('fa fa-picture-o fa-4x')
             .css('background-image', 'url(' + widget.items[0][$(this).attr('name')] + ')');
         }
@@ -761,11 +777,19 @@ sp.viewerWidgetsModal = {
     var item = {};
     
     $('#sp-tab-7 [name*="form"]').each(function() {
-      if ('' === $(this).val() && $(this).attr('name') !== 'formLogo') {
+      
+      if ('' === $(this).val() 
+        && $(this).attr('name') !== 'formSelectType'
+        && $(this).attr('name') !== 'formImage'
+        && $(this).attr('name') !== 'formTitle'
+        && $(this).is(':visible')) {
+        
         sp.error.handleError('You must fill the field.');
         $(this).addClass('sp-widget-form-error');
         sp.viewerWidgetsModal.openErrorTab();
         isWidget7SettingEmpty = true;
+      } else if ($(this).attr('name') === 'formSelectType') {
+        item[$(this).attr('name')] = $('[name="formSelectType"]:checked').attr('data-widget-type');
       } else {
         item[$(this).attr('name')] = $(this).val();
       }

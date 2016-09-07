@@ -68,7 +68,9 @@ sp.viewer = {
     viewerWidgetAskQuestion: 'VIEWER_WIDGET_ASK_QUESTION',
     viewerWidgetLikeClicked: 'VIEWER_WIDGET_LIKE_CLICKED',
     viewerWidgetHopperClicked: 'VIEWER_WIDGET_HOPPER_CLICKED',
-    viewerWidgetTestimonialsClicked: 'VIEWER_WIDGET_TESTIMONIALS_CLICKED'
+    viewerWidgetTestimonialsClicked: 'VIEWER_WIDGET_TESTIMONIALS_CLICKED',
+    viewerWidgetFormButtonClicked: 'VIEWER_WIDGET_FORM__BUTTON_CLICKED',
+    viewerWidgetFormConfirmClicked: 'VIEWER_WIDGET_FORM_CONFIRM_CLCKED',
   },
   isPagesLoaded: false,
   paramValue: {
@@ -782,8 +784,7 @@ if ('' != sp.viewer.linkHash) {
       }
       
       /* Validate Widget 7 */
-      var widget7RequiredSettings = ['formLogo', 'formCancelButton', 'formConfirmButton', 'formSuccess', 'formSuccessMessage',
-                                     'formSuccessTitle', 'formUrl'];
+      var widget7RequiredSettings = ['formButtonText', 'formButtonIcon', 'formConfirmButton'];
       
       if (typeof widgets.widget7 !== 'undefined'
         && typeof widgets.widget7.items !== 'undefined'
@@ -1381,54 +1382,95 @@ if ('' != sp.viewer.linkHash) {
       $('.sp-right-side-widgets').append('<button class="sp-widget-button sp-widget-font-fmaily" id="sp-widget7"></button>');
       
       if ($('.sp-right-side-widgets button, .sp-right-side-widgets div').length > 1) {
-        $('#sp-widget7').css('margin-top', '20px');
+        $('#sp-widget7').css({
+          'background-color': config.viewer.toolbarButtonBackground,
+          'color': config.viewer.toolbarCta1Color,
+          'margin-top': '20px'
+        });
       }
       
-      $('#sp-widget7').html('<i class="fa fa-file-text-o"></i><div>' + widget.formButtonText + '</div>');
+      $('#sp-widget7').html('<i class="fa ' + widget.formButtonIcon + '"></i><div>' + widget.formButtonText + '</div>');
+      
       $('#sp-widget7').click(function() {
-        swal({
-          allowOutsideClick: false,
-          cancelButtonText: widget.formCancelButton,
-          confirmButtonText: widget.formConfirmButton,
-          imageUrl: widget.formLogo,            
-          imageWidth: 100,
-          imageHeight: 62,
-          showCancelButton: true,
-          showConfirmButton: true,
-          html: '<iframe id="sp-hag-form" style="height: 430px; width: 100%" src="' + widget.formUrl + '" frameborder="0"></iframe>',
-          title: widget.formTitle,
-          width: 800,
-          preConfirm: function() {
-            return new Promise(function(resolve, reject) {
-              
-              // Get form success script.
-              $.getScript(widget.formSuccess)
-                .done(function() {
-                  resolve();
-                });
-            });
-          },
-        }).then(function() {
-          swal(widget.formSuccessTitle,
-              widget.formSuccessMessage,
-              'success');
-        }).done();
+        
+        switch(widget.formSelectType) {
+        case 'image':
+          imageSwal();
+          break;
+          
+        case 'form':
+          formSwal();
+          break;
+      }
+        
+        function formSwal() {
+          swal({
+            allowOutsideClick: false,
+            cancelButtonText: widget.formCancelButton,
+            confirmButtonText: widget.formConfirmButton,
+            imageUrl: widget.formImage,            
+            imageWidth: 100,
+            imageHeight: 62,
+            showCancelButton: true,
+            showConfirmButton: true,
+            html: '<iframe id="sp-hag-form" style="height: 430px; width: 100%" src="' + widget.formUrl + '" frameborder="0"></iframe>',
+            title: widget.formTitle,
+            width: 800,
+            preConfirm: function() {
+              return new Promise(function(resolve, reject) {
+                
+                // Get form success script.
+                $.getScript(widget.formSuccess)
+                  .done(function() {
+                    resolve();
+                  });
+              });
+            },
+          }).then(function() {
+            swal(widget.formSuccessTitle,
+                widget.formSuccessMessage,
+                'success');
+          }).done();
+        }
+        
+        function imageSwal() {
+          swal({
+            confirmButtonText: widget.formConfirmButton,
+            showConfirmButton: true,
+            html: '<img src="' + widget.formImage + '" style="width: 100%; height: 100%; max-width: ' 
+                  + widget.formImageMaxWidth + '; max-height: ' + widget.formImageMaxWidth + ';">',
+            title: widget.formTitle
+          }).done();
+        }
         
         /**
          * Send Calendly event.
          * 
          * param_1_varchar - The text on the Calendly button.
          */
-        sp.viewer.setCustomerEvent({
-          eventName: sp.viewer.eventName.viewerWidgetCalendlyClicked,
-          linkHash: sp.viewer.linkHash,
-          sessionId: sessionid,
-          param_1_varchar: $(this).text()
+        $('#sp-widget7, .swal2-confirm').click(function() {
+          var eventName = '';
+          
+          switch($(this).attr('class')) {
+            case 'sp-widget-button sp-widget-font-fmaily':
+              eventName = sp.viewer.eventName.viewerWidgetFormButtonClicked
+              break;
+              
+            case 'swal2-confirm styled':
+              eventName = sp.viewer.viewerWidgetFormConfirmClicked
+              break;
+          }
+          
+          sp.viewer.setCustomerEvent({
+            eventName: eventName,
+            linkHash: sp.viewer.linkHash,
+            sessionId: sessionid,
+            param1int: PDFViewerApplication.page,
+            param_1_varchar: $(this).text()
+          });
         });
       });
     }
-    
-    
   });
 }
 

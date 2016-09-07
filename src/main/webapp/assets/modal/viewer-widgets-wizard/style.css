@@ -119,12 +119,20 @@
 }
 
 /* Widget 7 - Form */
-.sp-widget7__input-form-logo {
+.sp-widget7__company-logo-label {
+  margin-bottom: 10px !important;  
+}
+
+.sp-widget7__image-elements {
+  display: none;
+}
+
+.sp-widget7__input-form-image {
   border: none;
   padding-left: 0;
 }
 
-.sp-widget7__form-logo {
+.sp-widget7__form-image {
   background-position: center center;
   background-repeat: no-repeat;
   background-size: contain;
@@ -134,4 +142,14 @@
 
 .sp-widget7__label-nowrap {
   white-space: nowrap;
+}
+
+#sp-widget7__form-type-container {
+  text-align: center;
+  margin-top: 20px !important;
+  margin-bottom: 20px !important;
+}
+
+#sp-widget7__form-type-container input:nth-child(2) {
+  margin-left: 32px;
 }
