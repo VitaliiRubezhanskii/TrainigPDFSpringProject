@@ -113,7 +113,7 @@ sp.widgets = {
       var validationCode = 0;
       var items = [];
       var itemsPages = [];
-      $('.sp-widget-item').each(function() {
+      $('#sp-tab-6 .sp-widget-item').each(function() {
         
         /* Validate Item */
         var jqueryObjectsToValidate = [
@@ -164,7 +164,7 @@ sp.widgets = {
             personName: personName,
             personTitle: personTitle,
             testimonial: testimonial
-          }
+          };
           
           items.push(item);
           validationCode = 2;
@@ -186,6 +186,46 @@ sp.widgets = {
         return undefined;
       }
     }
+  },
+  
+  widget7: {
+    init: (function() {
+      // Set person image.
+      $(document).on('change', '.sp-widget7__input-form-image', function() {
+        var $file = $(this);
+        var file = this.files[0];
+        var reader = new FileReader();
+
+        reader.addEventListener('load', function() {
+          $file.closest('.sp-widget-item').find('.sp-widget7__form-image')
+              .removeClass('fa fa-picture-o fa-4x')
+              .css('background-image', 'url(' + reader.result + ')');
+          
+          $file.closest('.sp-widget-item').find('[name="formImage"]')
+              .val(reader.result);
+        }, false);
+        
+        if (file) {
+          reader.readAsDataURL(file);
+        }
+      });
+      
+      $('[name="formSelectType"]').on('change', function(event) {
+        switch($(event.currentTarget).attr('id')) {
+          case 'sp-widget7__upload-form-radio':
+            $('.sp-widget7__image-elements').hide();
+            $('.sp-widget7__form-elements').show();
+            $('.sp-widget7__form-image').parent().prev('label').text('Company Logo');
+            break;
+            
+          case 'sp-widget7__upload-image-radio':
+            $('.sp-widget7__image-elements').show();
+            $('.sp-widget7__form-elements').hide();
+            $('.sp-widget7__form-image').parent().prev('label').text('Image');
+            break;
+        }
+      });
+    })()
   }
 };
 
@@ -246,6 +286,12 @@ sp.viewerWidgetsModal = {
         case 6:
           if (widget.data.items.length > 0) {
             sp.widgets.widget6.displayItems(widget.data);
+          }
+          break;
+          
+        case 7:
+          if (widget.data.items.length > 0) {
+            displayWidget7(widget.data);
           }
           break;
       }
@@ -350,6 +396,26 @@ sp.viewerWidgetsModal = {
         });
       });
     }
+    
+    /**
+     * Display settings for the Form widget.
+     * 
+     * @params {object} widget - The form widget settings.
+     */
+    function displayWidget7(widget) {
+      $('[name="widget7-is-enabled"]')
+        	.prop('checked', widget.isEnabled)
+        	.closest('div').removeClass('sp-hide-is-enabled');
+      
+      $('#sp-tab-7 [name*="form"]').each(function(index) {
+        if ($(this).attr('name') === 'formImage') {
+					$('.sp-widget7__form-image')
+            .removeClass('fa fa-picture-o fa-4x')
+            .css('background-image', 'url(' + widget.items[0][$(this).attr('name')] + ')');
+        }
+        $(this).val(widget.items[0][$(this).attr('name')]); 
+      });
+    }
   },
   
   /**
@@ -431,6 +497,11 @@ sp.viewerWidgetsModal = {
       settings.push(widget6Settings);
     }
     
+    if (! sp.viewerWidgetsModal.isInputEmpty(7)
+        || ! $('[name="widget7-is-enabled"]').closest('div').hasClass('sp-hide-is-enabled')) {
+      settings.push(sp.viewerWidgetsModal.saveWidget7(fileHash));
+    }
+    
     var data = {
         action: 'setWidgetsSettings',
         widgetsSettings: settings
@@ -451,6 +522,12 @@ sp.viewerWidgetsModal = {
     });
     
     if (isValidWidgetSettings) {
+      $('.tabs-container').contents().hide();
+      $('#sp-save-widgets-settings__button, #sp-save-test-widgets-settings__button')
+          .attr('disabled', 'true');
+      $('#' + targetId).text('Saving...');
+      $('.sp-widgets-customisation__spinner').addClass('sp-widgets-customisation__spinner-show');
+      
       sp.viewerWidgetsModal.postWidgetSettings(data, fileHash, targetId);
     } else if (0 === settings.length) {
     	$('button[data-dismiss="modal"]').click();
@@ -667,6 +744,61 @@ sp.viewerWidgetsModal = {
     
     if (! isHopperSettingEmpty) {
       return widget5;
+    } else {
+      return undefined;
+    }
+  },
+  
+  
+  /**
+   * Form widget.
+   * 
+   * Save params for the form widget.
+   * 
+   * @param fileHash
+   * @returns {object} widget7 - The widget data.
+   */
+  saveWidget7: function(fileHash) {
+    if ($('[name="widget7-is-enabled"]').closest('div').hasClass('sp-hide-is-enabled')) {
+      $('[name="widget7-is-enabled"]').prop('checked', true);
+    }
+    
+    var widget7 = {
+        apiVersion: '1.0',
+        data: {
+          fileHash: fileHash,
+          widgetId: 7,
+          isEnabled: $('[name="widget7-is-enabled"]').prop('checked'),
+          items: []
+        }
+    };
+    
+    var isWidget7SettingEmpty = false;
+    var item = {};
+    
+    $('#sp-tab-7 [name*="form"]').each(function() {
+      
+      if ('' === $(this).val() 
+        && $(this).attr('name') !== 'formSelectType'
+        && $(this).attr('name') !== 'formImage'
+        && $(this).attr('name') !== 'formTitle'
+        && $(this).is(':visible')) {
+        
+        sp.error.handleError('You must fill the field.');
+        $(this).addClass('sp-widget-form-error');
+        sp.viewerWidgetsModal.openErrorTab();
+        isWidget7SettingEmpty = true;
+      } else if ($(this).attr('name') === 'formSelectType') {
+        item[$(this).attr('name')] = $('[name="formSelectType"]:checked').attr('data-widget-type');
+      } else {
+        item[$(this).attr('name')] = $(this).val();
+      }
+    });
+    
+    widget7.data.items.push(item);
+    
+    if (! isWidget7SettingEmpty) {
+      return widget7;
     } else {
       return undefined;
     }

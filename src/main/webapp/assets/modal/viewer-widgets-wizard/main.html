@@ -22,6 +22,8 @@
                     <li><a data-toggle="tab" href="#sp-tab-4"><i class="fa fa-thumbs-o-up"></i></a></li>
                     <li><a data-toggle="tab" href="#sp-tab-5"><i class="fa fa-bookmark"></i></a></li>
                     <li><a data-toggle="tab" href="#sp-tab-6"><i class="fa fa-user"></i></a></li>
+                    <li><a data-toggle="tab" href="#sp-tab-7"><i class="fa fa-file-text-o"></i></a></li>
+                    <li><a data-toggle="tab" href="#sp-tab-8"><i class="fa fa-code"></i></a></li>
                 </ul>
                 
                 <div class="tab-content sp-viewer-widgets-modal">
@@ -243,16 +245,189 @@
                             </a>
                         </div>
                     </div>
+                    
+                    <!-- Form Widget  -->
+                    <div id="sp-tab-7" class="tab-pane">
+                        <div class="panel-body">
+                            <strong>Form</strong>
+                            <div class="sp-customization-option__p sp-hide-is-enabled">
+                                <input class="sp-widget--is-enabled" name="widget7-is-enabled" type="checkbox"> Is Enabled?
+                            </div>
+                            <hr>
+                            <div class="container-fluid">                                
+                                <div class="sp-widget-item">
+                                    <form class="form-horizontal">
+                                        <div class="form-group">
+                                            <label for="sp-widget7__form-url" class="col-lg-4 control-label">Button Text</label>
+                                            <div class="col-lg-8">
+                                                <input type="text" placeholder="e.g. Sign Up Here!" class="form-control" name="formButtonText">
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <label for="sp-widget7__form-url" class="col-lg-4 control-label">
+                                                Button Icon
+                                                <i class="fa fa-info-circle sp-video-link-tooltip" data-toggle="tooltip" data-original-title="You can find icons at http://fontawesome.io/icons/."></i>
+                                            </label>
+                                            <div class="col-lg-8">
+                                                <input type="text" placeholder="e.g. fa-file-text" class="form-control" name="formButtonIcon">
+                                            </div>
+                                        </div>
+                                        
+                                        <hr>
+                                        
+                                        <div class="form-group">
+                                            <label for="sp-widget7__form-url" class="col-lg-4 control-label">Form Title</label>
+                                            <div class="col-lg-8">
+                                                <input type="text" placeholder="e.g. My Company's Form" class="form-control" name="formTitle">
+                                            </div>
+                                        </div>
+                                        
+                                        <div id="sp-widget7__form-type-container" class="form-group">
+                                            <input id="sp-widget7__upload-form-radio" data-widget-type="form" type="radio" checked name="formSelectType"> Upload Form
+                                            <input id="sp-widget7__upload-image-radio" data-widget-type="image" type="radio" name="formSelectType"> Upload Image
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <label class="col-lg-4 control-label sp-widget7__company-logo-label">Company Logo</label>
+                                            <div class="col-lg-8">
+                                                <div class="fa fa-picture-o fa-4x sp-widget7__form-image"></div>
+                                            </div>
+                                            <input type="hidden" name="formImage">
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <div class="col-lg-offset-4 col-lg-8">
+                                                <input type="file" class="form-control sp-widget7__input-form-image">
+                                            </div>
+                                        </div>
+                                         
+                                        <div class="form-group sp-widget7__image-elements">
+                                            <label class="col-lg-4 control-label">Image Max Width</label>
+                                            <div class="col-lg-8">
+                                                <input type="text" placeholder="e.g. 250px"  class="form-control" name="formImageMaxWidth">
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="form-group sp-widget7__image-elements">
+                                            <label class="col-lg-4 control-label">Image Max Width</label>
+                                            <div class="col-lg-8">
+                                                <input type="text" placeholder="e.g. 250px"  class="form-control" name="formImageMaxHeight">
+                                            </div>
+                                        </div> 
+                                         
+                                        <div class="form-group sp-widget7__form-elements">
+                                            <label for="sp-widget7__form-cancel-button" class="col-lg-4 control-label">Cancel Button</label>
+                                            <div class="col-lg-8">
+                                                <input type="text" placeholder="e.g. Cancel" class="form-control" name="formCancelButton">
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <label for="sp-widget7__form-confirm-button" class="col-lg-4 control-label">Confirm Button</label>
+                                            <div class="col-lg-8">
+                                                <input type="text" placeholder="e.g. Confirm"  class="form-control" name="formConfirmButton">
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="form-group sp-widget7__form-elements">
+                                            <label for="sp-widget7__form-url" class="col-lg-4 control-label">Form URL</label>
+                                            <div class="col-lg-8">
+                                                <input type="text" placeholder="e.g. www.slidepiper.com/form.html" class="form-control" name="formUrl">
+                                            </div>
+                                        </div>
+                                        
+                                        <hr class="sp-widget7__form-elements">
+                                        
+                                        <div class="form-group sp-widget7__form-elements">
+                                            <label for="sp-widget7__form-success-title" class="col-lg-4 control-label">
+                                                Success Title
+                                                <i class="fa fa-info-circle sp-video-link-tooltip" data-toggle="tooltip" data-original-title="The title of the message displayed in the window after the user has submitted the form."></i>
+                                            </label>
+                                            <div class="col-lg-8">
+                                                <input type="text" placeholder="e.g. Success!" class="form-control" name="formSuccessTitle">
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="form-group sp-widget7__form-elements">
+                                            <label for="sp-widget7__form-success-text-body" class="col-lg-4 control-label">
+                                                Success Message
+                                            </label>
+                                            <div class="col-lg-8">
+                                                <input type="text" placeholder="e.g. Your form has been submitted successfully" class="form-control" name="formSuccessMessage">
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="form-group sp-widget7__form-elements">
+                                            <label for="sp-widget7__form-url" class="col-lg-4 control-label sp-widget7__label-nowrap">Success File (JS)</label>
+                                            <div class="col-lg-8">
+                                                <input type="text" placeholder="e.g. www.slidepiper.com/form.js" class="form-control" name="formSuccess">
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Code Widget  -->
+                    <div id="sp-tab-8" class="tab-pane">
+                        <div class="panel-body">
+                            <strong>Code</strong>
+                            <div class="sp-customization-option__p sp-hide-is-enabled">
+                                <input class="sp-widget--is-enabled" type="checkbox"> Is Enabled?
+                            </div>
+                            <hr>
+                            <div class="container-fluid">                                
+                                <div class="sp-widget-item">
+                                    <div class="form-group">
+                                        <label for="sp-widget8__code-description" class="control-label" placeholder="e.g. Google Analytics">Code Description (optional)</label>
+                                        <input type="text" id="sp-widget8__code-description" class="form-control">
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label>Code Location</labe>
+                                        <div class="radio">
+                                            <label><input type="radio" name="sp-widget7__code-location" value="beforeClosingHead" checked="checked">Before the closing &lt/head&gt</label>
+                                        </div>
+                                        
+                                        <div class="radio">
+                                            <label><input type="radio" name="sp-widget7__code-location" value="afterOpeningBody">After the opening &ltbody&gt</label>
+                                        </div>
+                                        
+                                        <div class="radio">
+                                            <label><input type="radio" name="sp-widget7__code-location" value="beforeClosingBody">Before the closing &lt/body&gt</label>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                     <label for="sp-widget8__code">Code</label>
+                                        <textarea class="form-control" rows="5" id="sp-widget8__code"></textarea>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <a class="btn btn-white btn-sm sp-widget__delete-item">
+                                            <i class="fa fa-times" aria-hidden="true"></i>
+                                        </a>
+                                     </div>
+                                </div>
+                            </div>
+                            
+                            <a class="btn btn-white btn-sm sp-widget__add-item">
+                                <i class="fa fa-plus" aria-hidden="true"></i> Add Code
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
-                        
+            
             <div class="sk-spinner sk-spinner-wave sp-widgets-customisation__spinner">
                 <div class="sk-rect1"></div>
                 <div class="sk-rect2"></div>
                 <div class="sk-rect3"></div>
                 <div class="sk-rect4"></div>
                 <div class="sk-rect5"></div>
-            </div>       
+            </div> 
         </div>
         
         <div class="modal-footer">
