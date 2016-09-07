@@ -6415,13 +6415,13 @@ var PDFViewerApplication = {
       this.setTitle(url);
     }
   },
-
+  
   setTitle: function pdfViewSetTitle(title) {
     if (this.isViewerEmbedded) {
       // Embedded PDF viewers should not be changing their parent page's title.
       return;
     }
-    document.title = 'SlidePiper';
+    // Removed document.title assignment.
   },
 
   /**

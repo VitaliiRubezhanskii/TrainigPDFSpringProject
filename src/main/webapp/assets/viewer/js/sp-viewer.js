@@ -140,6 +140,13 @@ sp.viewer = {
 if ('' != sp.viewer.linkHash) {
   $.getJSON('../../config-viewer', {linkHash: sp.viewer.linkHash}, function(config) {
     
+    // Set document title.
+    if (typeof config.viewer.documentTitle !== 'undefined' || '' === config.viewer.documentTitle) {
+      document.title =  config.viewer.documentTitle;
+    } else {
+      document.title = 'SlidePiper';
+    }
+    
     PDFViewerApplication.open(config.appUrl + '/file/' + sp.viewer.linkHash
         + '?file-name=' + config.viewer.file.fileName);
     
