@@ -39,6 +39,8 @@ public class ConfigViewerServlt extends HttpServlet {
         Map<String, Object> salesman = DbLayer.getSalesman(salesmanEmail);
         JSONObject viewer = new JSONObject();
         
+        viewer.put("documentTitle", 
+        		salesman.get("viewer_document_title"));
         viewer.put("toolbarBackground",
             salesman.get("viewer_toolbar_background"));
         viewer.put("toolbarButtonBackground",
