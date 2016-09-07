@@ -77,6 +77,11 @@
   padding-left: 0;
 }
 
+.sp-widgets-customisation__spinner-show {
+  display: block;
+  margin: 70px auto 70px auto !important;
+}
+
 [name="video-widget-page-start"] {
   width: 79px;
 }
@@ -95,7 +100,7 @@
   float: right;
 }
 
-.sp-widget-item:first-child hr {
+.#sp-tab-6 .sp-widget-item:first-child hr {
   display: none;
 }
 
@@ -111,4 +116,40 @@
 .sp-widget6__input-person-image {
   border: none;
   padding-left: 0;
+}
+
+/* Widget 7 - Form */
+.sp-widget7__company-logo-label {
+  margin-bottom: 10px !important;  
+}
+
+.sp-widget7__image-elements {
+  display: none;
+}
+
+.sp-widget7__input-form-image {
+  border: none;
+  padding-left: 0;
+}
+
+.sp-widget7__form-image {
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  height: 50px;
+  width: 100px;
+}
+
+.sp-widget7__label-nowrap {
+  white-space: nowrap;
+}
+
+#sp-widget7__form-type-container {
+  text-align: center;
+  margin-top: 20px !important;
+  margin-bottom: 20px !important;
+}
+
+#sp-widget7__form-type-container input:nth-child(2) {
+  margin-left: 32px;
 }

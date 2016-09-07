@@ -113,7 +113,7 @@ sp.widgets = {
       var validationCode = 0;
       var items = [];
       var itemsPages = [];
-      $('.sp-widget-item').each(function() {
+      $('#sp-tab-6 .sp-widget-item').each(function() {
         
         /* Validate Item */
         var jqueryObjectsToValidate = [
@@ -164,7 +164,7 @@ sp.widgets = {
             personName: personName,
             personTitle: personTitle,
             testimonial: testimonial
-          }
+          };
           
           items.push(item);
           validationCode = 2;
@@ -186,6 +186,46 @@ sp.widgets = {
         return undefined;
       }
     }
+  },
+  
+  widget7: {
+    init: (function() {
+      // Set person image.
+      $(document).on('change', '.sp-widget7__input-form-image', function() {
+        var $file = $(this);
+        var file = this.files[0];
+        var reader = new FileReader();
+
+        reader.addEventListener('load', function() {
+          $file.closest('.sp-widget-item').find('.sp-widget7__form-image')
+              .removeClass('fa fa-picture-o fa-4x')
+              .css('background-image', 'url(' + reader.result + ')');
+          
+          $file.closest('.sp-widget-item').find('[name="formImage"]')
+              .val(reader.result);
+        }, false);
+        
+        if (file) {
+          reader.readAsDataURL(file);
+        }
+      });
+      
+      $('[name="formSelectType"]').on('change', function(event) {
+        switch($(event.currentTarget).attr('id')) {
+          case 'sp-widget7__upload-form-radio':
+            $('.sp-widget7__image-elements').hide();
+            $('.sp-widget7__form-elements').show();
+            $('.sp-widget7__form-image').parent().prev('label').text('Company Logo');
+            break;
+            
+          case 'sp-widget7__upload-image-radio':
+            $('.sp-widget7__image-elements').show();
+            $('.sp-widget7__form-elements').hide();
+            $('.sp-widget7__form-image').parent().prev('label').text('Image');
+            break;
+        }
+      });
+    })()
   }
 };
 
@@ -246,6 +286,12 @@ sp.viewerWidgetsModal = {
         case 6:
           if (widget.data.items.length > 0) {
             sp.widgets.widget6.displayItems(widget.data);
+          }
+          break;
+          
+        case 7:
+          if (widget.data.items.length > 0) {
+            displayWidget7(widget.data);
           }
           break;
       }
@@ -350,6 +396,26 @@ sp.viewerWidgetsModal = {
         });
       });
     }
+    
+    /**
+     * Display settings for the Form widget.
+     * 
+     * @params {object} widget - The form widget settings.
+     */
+    function displayWidget7(widget) {
+      $('[name="widget7-is-enabled"]')
+        	.prop('checked', widget.isEnabled)
+        	.closest('div').removeClass('sp-hide-is-enabled');
+      
+      $('#sp-tab-7 [name*="form"]').each(function(index) {
+        if ($(this).attr('name') === 'formImage') {
+					$('.sp-widget7__form-image')
+            .removeClass('fa fa-picture-o fa-4x')
+            .css('background-image', 'url(' + widget.items[0][$(this).attr('name')] + ')');
+        }
+        $(this).val(widget.items[0][$(this).attr('name')]); 
+      });
+    }
   },
   
   /**
@@ -420,7 +486,7 @@ sp.viewerWidgetsModal = {
     settings.push(sp.viewerWidgetsModal.saveLikeWidgetSettings(fileHash));
     
     if (! sp.viewerWidgetsModal.isInputEmpty(5)
-        || ! $('[name="calendly-widget-is-enabled"]').closest('div').hasClass('sp-hide-is-enabled')) {
+        || ! $('[name="hopper-widget-is-enabled"]').closest('div').hasClass('sp-hide-is-enabled')) {
       settings.push(sp.viewerWidgetsModal.saveWidget5(fileHash));
     }
     
@@ -429,6 +495,11 @@ sp.viewerWidgetsModal = {
       settings.push(undefined);
     } else if (widget6Settings.data.items.length > 0 ) {
       settings.push(widget6Settings);
+    }
+    
+    if (! sp.viewerWidgetsModal.isInputEmpty(7)
+        || ! $('[name="widget7-is-enabled"]').closest('div').hasClass('sp-hide-is-enabled')) {
+      settings.push(sp.viewerWidgetsModal.saveWidget7(fileHash));
     }
     
     var data = {
@@ -451,6 +522,12 @@ sp.viewerWidgetsModal = {
     });
     
     if (isValidWidgetSettings) {
+      $('.tabs-container').contents().hide();
+      $('#sp-save-widgets-settings__button, #sp-save-test-widgets-settings__button')
+          .attr('disabled', 'true');
+      $('#' + targetId).text('Saving...');
+      $('.sp-widgets-customisation__spinner').addClass('sp-widgets-customisation__spinner-show');
+      
       sp.viewerWidgetsModal.postWidgetSettings(data, fileHash, targetId);
     } else if (0 === settings.length) {
     	$('button[data-dismiss="modal"]').click();
@@ -468,6 +545,18 @@ sp.viewerWidgetsModal = {
   postWidgetSettings: function(data, fileHash, targetId) {	  
     $.post('ManagementServlet', JSON.stringify(data), function(data) {
       $('button[data-dismiss="modal"]').click();
+      
+      // Return modal content to pre-saving state.
+      $('.tabs-container').contents().show();
+      $('#sp-save-widgets-settings__button, #sp-save-test-widgets-settings__button')
+          .attr('disabled', 'false');
+
+      if (targetId === 'sp-save-widgets-settings__button') {
+        $('#' + targetId).text('Save');
+      } else {
+        $('#' + targetId).text('Save & Preview');
+      }
+      $('.sp-widgets-customisation__spinner').removeClass('sp-widgets-customisation__spinner-show');
       
       var resultCode = data.resultCode;
       if (0 == resultCode) {
@@ -660,6 +749,61 @@ sp.viewerWidgetsModal = {
     }
   },
   
+  
+  /**
+   * Form widget.
+   * 
+   * Save params for the form widget.
+   * 
+   * @param fileHash
+   * @returns {object} widget7 - The widget data.
+   */
+  saveWidget7: function(fileHash) {
+    if ($('[name="widget7-is-enabled"]').closest('div').hasClass('sp-hide-is-enabled')) {
+      $('[name="widget7-is-enabled"]').prop('checked', true);
+    }
+    
+    var widget7 = {
+        apiVersion: '1.0',
+        data: {
+          fileHash: fileHash,
+          widgetId: 7,
+          isEnabled: $('[name="widget7-is-enabled"]').prop('checked'),
+          items: []
+        }
+    };
+    
+    var isWidget7SettingEmpty = false;
+    var item = {};
+    
+    $('#sp-tab-7 [name*="form"]').each(function() {
+      
+      if ('' === $(this).val() 
+        && $(this).attr('name') !== 'formSelectType'
+        && $(this).attr('name') !== 'formImage'
+        && $(this).attr('name') !== 'formTitle'
+        && $(this).is(':visible')) {
+        
+        sp.error.handleError('You must fill the field.');
+        $(this).addClass('sp-widget-form-error');
+        sp.viewerWidgetsModal.openErrorTab();
+        isWidget7SettingEmpty = true;
+      } else if ($(this).attr('name') === 'formSelectType') {
+        item[$(this).attr('name')] = $('[name="formSelectType"]:checked').attr('data-widget-type');
+      } else {
+        item[$(this).attr('name')] = $(this).val();
+      }
+    });
+    
+    widget7.data.items.push(item);
+    
+    if (! isWidget7SettingEmpty) {
+      return widget7;
+    } else {
+      return undefined;
+    }
+  },
+  
   /**
    * Validate then save Video Widget Settings.
    * 
@@ -827,11 +971,9 @@ sp.viewerWidgetsModal = {
   },
   
   /**
-   * Check if video URL is a YouTube link.
+   * Convert YouTube, Vimeo or Barclays video link to embed link.
    * 
    * @param {string} videoSource - The video URL.
-   * 
-   * If videoSource is a youtube video, generate a YouTube embed link.
    * 
    * @return an [] - Whether the checkbox checking whether the URL is a youtube video is checked
    * and the videoSource.
@@ -840,13 +982,22 @@ sp.viewerWidgetsModal = {
     if (typeof videoSource !== 'undefined') {
       var domain = null;
       
-      if (videoSource.indexOf("://") > -1) {
+      if (videoSource.indexOf("//") > -1) {
         domain = videoSource.split('/')[2];
       } else {
         domain = videoSource.split('/')[0];
       }
+      
       domain = domain.split('.');
-      domain = domain[domain.length - 2];
+      
+      // e.g. If address is www.media.barclays.co.uk
+      if (domain.length > 3) {
+        domain = domain[domain.length - 3];
+        
+      // e.g. If address is www.youtube.com
+      } else {
+        domain = domain[domain.length - 2];
+      }
       
       if ('youtube' == domain) {
         $('[name="video-widget-is-youtube-video"]').prop('checked', true);
@@ -857,10 +1008,24 @@ sp.viewerWidgetsModal = {
         $('[name="video-widget-is-youtube-video"]').prop('checked', false);
       }
       
-      // Allow for saving a regular YouTube link, and not only an embed one.
+      // Allow for saving a regular YouTube, Vimeo, or Barclays link, and not only an embed one.
       if (typeof domain !== 'undefined') {
-        if ('youtube' == domain.toLowerCase() && videoSource.indexOf('?') > -1) {
-          videoSource = 'https://www.youtube.com/embed/' + getParameterByKey('v', videoSource);
+        switch(domain) {
+          case 'youtube':
+            if (videoSource.indexOf('?') > -1) {
+              videoSource = 'https://www.youtube.com/embed/' + getParameterByKey('v', videoSource);
+            }
+            break;
+            
+          case 'vimeo':
+            
+            // Video source id is always last part of Vimeo link after the final '/'.
+            videoSource = 'https://player.vimeo.com/video/' + videoSource.split('/')[videoSource.split('/').length - 1];
+            break;
+          
+          case 'barclays':
+            videoSource = '//www.media.barclays.co.uk/player/?id=' + getParameterByKey('?', videoSource);
+            break;
         }
       }
 

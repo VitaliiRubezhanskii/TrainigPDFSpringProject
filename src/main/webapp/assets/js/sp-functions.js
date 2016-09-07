@@ -1542,7 +1542,7 @@ chart: {
         enableCancelButton: false,
         enableFinishButton: false,
         headerTag : 'h3',
-        transitionEffect : 'slideLeft',
+        transitionEffect : 'none',
         onStepChanging: function (event, currentIndex, newIndex){
           if (currentIndex > newIndex){
             return true;

@@ -82,9 +82,7 @@ body {
   display: none !important;
 }
 
-#secondaryPresentationMode,
-#secondaryPrint,
-#secondaryDownload {
+#secondaryPrint {
   display: block !important; 
 }
 
@@ -488,7 +486,7 @@ body {
   max-width: 230px;
   position: fixed;
   right: 0;
-  top: 45%;
+  top: 20%;
   width: 20%;
 }
 
