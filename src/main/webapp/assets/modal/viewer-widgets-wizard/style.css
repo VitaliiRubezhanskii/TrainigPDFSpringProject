@@ -77,6 +77,11 @@
   padding-left: 0;
 }
 
+.sp-widgets-customisation__spinner-show {
+  display: block;
+  margin: 70px auto 70px auto !important;
+}
+
 [name="video-widget-page-start"] {
   width: 79px;
 }
