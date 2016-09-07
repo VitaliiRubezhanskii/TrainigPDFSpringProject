@@ -4,6 +4,14 @@ SlidePiper README File
 Change Log
 ----------
 
+### 0.12.1
+
+2016-09-07 Max Prais <maxp@slidepiper.com>
+
+* Dashboard:
+	1. Hide Code Widget code as it is not yet complete.
+
+
 ### 0.12.0
 
 2016-09-07 Max Prais <maxp@slidepiper.com>
