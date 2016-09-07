@@ -4,6 +4,28 @@ SlidePiper README File
 Change Log
 ----------
 
+### 0.12.0
+
+2016-09-07 Max Prais <maxp@slidepiper.com>
+
+* Migrate application from OpenShift to AWS.
+
+* Viewer:
+	1. Fixed download file name, which had returned to 'document.pdf'.
+	2. Added ability to hide presentation and download secondary toolbar 
+	buttons on mobile devices.
+	3. Created Form Widget - Supports forms and images.
+	4. Added ability to set the title of a Viewer document.
+
+* Dashboard:
+	1. Fixed bug causing hopper widget to validate when no settings had been
+	entered.
+	2. Added loading spinner when saving widgets.
+	3. Expand support for videos in Video Widget to include Barclays and Vimeo.
+	4. Saving Form Widget Settings - Can save settings for an image or a form
+	inside this widget.
+
+
 ### 0.11.3
 
 2016-09-02 Max Prais <maxp@slidepiper.com>
