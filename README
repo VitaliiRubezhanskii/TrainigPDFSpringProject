@@ -4,6 +4,20 @@ SlidePiper README File
 Change Log
 ----------
 
+### 0.12.2
+
+2016-09-08 Max Prais <maxp@slidepiper.com>
+
+* Dashboard: 
+	1. Fix bug where hopper would not validate.
+	2. Add (beta) after Form widget title, add text asking
+	customers to contact us if they want to use it.
+
+* Viewer:
+	1. Fix bug where alert message was being shown from pdfjs.
+
+
+
 ### 0.12.1
 
 2016-09-07 Max Prais <maxp@slidepiper.com>
