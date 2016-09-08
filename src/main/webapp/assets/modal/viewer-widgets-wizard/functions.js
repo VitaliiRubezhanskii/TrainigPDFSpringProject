@@ -775,14 +775,25 @@ sp.viewerWidgetsModal = {
     
     var isWidget7SettingEmpty = false;
     var item = {};
+    var fieldsToValidate = [];
     
-    $('#sp-tab-7 [name*="form"]').each(function() {
+    switch($('[name="formSelectType"]:checked').attr('id')) {
+      case 'sp-widget7__upload-form-radio':
+        fieldsToValidate = $('#sp-tab-7 .form-group:not(.sp-widget7__image-elements)').find('input');
+        break;
+        
+      case 'sp-widget7__upload-image-radio':
+        fieldsToValidate = $('#sp-tab-7 .form-group:not(.sp-widget7__form-elements)').find('input');
+        break;
+    }
+    
+    $.each(fieldsToValidate, function() {
       
       if ('' === $(this).val() 
         && $(this).attr('name') !== 'formSelectType'
         && $(this).attr('name') !== 'formImage'
         && $(this).attr('name') !== 'formTitle'
-        && $(this).is(':visible')) {
+        && $(this).attr('type') !== 'file' ) {
         
         sp.error.handleError('You must fill the field.');
         $(this).addClass('sp-widget-form-error');
@@ -930,7 +941,7 @@ sp.viewerWidgetsModal = {
    */
   isInputEmpty: function(widgetId) {	  
     var isEmpty = false;
-    $('#sp-tab-' + widgetId).find('input:not(input[type="checkbox"])').each(function(index, input) {
+    $('#sp-tab-' + widgetId).find('input[type="text"]').each(function(index, input) {
       if ('' === $(input).val()) {
         isEmpty = true;
       } else {
