@@ -142,7 +142,8 @@ function getSalesmanData() {
         contentType : "application/json; charset=utf-8",
         processData : false,
         error : function(XmlHttpRequest, status, error) {
-            alert('get sm email from msgid error from returned json' + error);
+            // Commented this out, as it was showing errors to customers in the view.
+            // alert('get sm email from msgid error from returned json' + error);
         },
         success : function(msg) {
             salesman_email = msg.salesman_email;
