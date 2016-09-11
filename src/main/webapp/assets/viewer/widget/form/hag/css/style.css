@@ -1,0 +1,109 @@
+/* Hide Elements */
+section:not([data-section-id="0"]),
+.beneficiary,
+.fund,
+#beneficiaries-container,
+#independent,
+#kids-insurance-container,
+#medical-questionnaire-2-yes-container,
+#medical-questionnaire-3-yes-container,
+#medical-questionnaire-4-yes-container,
+#medical-questionnaire-5-yes-container,
+#medical-questionnaire-6-yes-container,
+#partner,
+#partner-no-kids-no-container,
+#partner-no-kids-yes-container,
+#retirement-age-female,
+#retirement-age-male,
+#smoking-amount-container,
+#smoking-when-stopped-container,
+#transfer-funds-container {
+  display: none;
+}
+
+
+/* Settings */
+body {
+  direction: rtl;
+}
+
+canvas {
+  border-radius: 3px;
+  border: 1px solid #b7b7b7;
+}
+
+h2 {
+  margin-bottom: 30px;
+}
+
+.container {
+  margin-top: 10px;
+}
+
+.pagination a {
+  height: 55px;
+  width: 110px;
+}
+
+.sp-direction--ltr {
+  direction: ltr;
+}
+
+.sp-checkbox--rtl {
+  margin-left: 5px !important;
+}
+
+select + .help-block,
+.sp-checkbox-inline .help-block,
+.sp-radio .help-block,
+.sp-radio + .help-block,
+#retirement-age .help-block {
+  display: none !important;
+}
+
+.sp-radio input[type="checkbox"],
+.sp-radio input[type="radio"] {
+  vertical-align: sub;
+}
+
+.sp-text-align--right {
+  text-align: right;
+}
+
+.has-feedback .form-control {
+  padding-right: 12px;
+  padding-left: 42.5px;
+}
+
+.has-feedback .form-control-feedback {
+  left: 0;
+  right: auto;
+}
+
+.pagination {
+  padding: 0;
+}
+
+.panel {
+  padding: 20px 20px 10px;
+  min-height: 260px;
+}
+
+.progress-bar {
+  float: right;
+  width: 25%;
+}
+
+.sp--text-align-center {
+  text-align: center;
+}
+
+#hag-is-confirm-container {
+  margin-top: 10px;
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+#phone-number-error {
+  margin-bottom: 0;
+}
