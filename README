@@ -4,17 +4,30 @@ SlidePiper README File
 Change Log
 ----------
 
+### 0.12.3
+
+2016-09-12 Max Prais <maxp@slidepiper.com>
+
+* Created ip_whitelist table:
+	1. Holds the IP addresses that are whitelisted.
+
+* Created IP whitelist functionality:
+	1. If a file is whitelisted but the client IP is not on the whitelist, user
+	is redirected to SlidePiper homepage.
+	2. If the client IP matches the IP on the whitelist, user is shown the file.
+	
+
 ### 0.12.2
 
 2016-09-08 Max Prais <maxp@slidepiper.com>
 
 * Dashboard: 
-	1. Fix bug where hopper would not validate.
-	2. Add (beta) after Form widget title, add text asking
+	1. Fixed bug where form would not validate.
+	2. Added (beta) after Form widget title, added text asking
 	customers to contact us if they want to use it.
 
 * Viewer:
-	1. Fix bug where alert message was being shown from pdfjs.
+	1. Fixed bug where alert message was sometimes being shown.
 
 
 
