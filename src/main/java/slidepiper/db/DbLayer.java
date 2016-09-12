@@ -1307,6 +1307,62 @@ public class DbLayer {
         
         return isEmailExist;
       }
+			 
+	  /**
+	   * Check if client IP in request matches IP for file in ip_whitelist table.
+	   * 
+	   * @param fileLinkHash - The file link hash being opened.
+	   * @param ip - The IP address of the client request.
+	   * @return isIPMatchClientIP - If the client IP matches the IP in the DB.
+	   */
+	  public static boolean isIPMatchClientIP(String fileLinkHash, String ip) {
+		  
+		Constants.updateConstants();
+		try {
+		  Class.forName("com.mysql.jdbc.Driver");
+		} catch (ClassNotFoundException e) {
+		  e.printStackTrace();
+		}
+		
+		String sql = "SELECT EXISTS(\n"
+						+ "SELECT\n" 
+						+ "	whitelist_ip\n"
+						+ "FROM ip_whitelist\n"
+						+ "INNER JOIN slides ON ip_whitelist.FK_file_id_ai = slides.id_ai\n"
+						+ "INNER JOIN msg_info ON msg_info.slides_id = slides.id\n"
+					    + "WHERE whitelist_ip = ?\n"
+					    + "AND msg_info.id = ?\n"
+					+ ")";
+		
+		Connection conn = null;
+		boolean isIPMatchClientIP = false;
+		
+	    try {
+		  conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
+		  PreparedStatement ps = conn.prepareStatement(sql); 
+		  
+		  ps.setString(1, ip);
+		  ps.setString(2, fileLinkHash);
+		  ResultSet rs = ps.executeQuery();
+		  
+		  while(rs.next()) {
+			  isIPMatchClientIP = rs.getBoolean(1);
+		  }
+	 		  
+	    } catch (SQLException e) {
+	 		e.printStackTrace();
+		} finally {
+	        if (null != conn) {
+	          try {
+	            conn.close();
+	          } catch (SQLException ex) {
+	            ex.printStackTrace();
+	          }
+	        }
+	    }
+	    
+		return isIPMatchClientIP;
+	  }
 			
 			
 			/**
@@ -1723,6 +1779,64 @@ public class DbLayer {
         return fileMetaData;
       }
      
+      
+      /**
+		* Check whether a file is whitelisted.
+		* 
+		* @param fileLinkHash - The file link hash.
+		* @return flag -
+		* 				1 - file does not exist.
+		* 				2 - file is not whitelisted.
+		* 				3 - file is whitelisted.
+		*/
+      public static int getFileWhiteListFlag(String fileLinkHash) {
+			
+		Constants.updateConstants();
+		try {
+		  Class.forName("com.mysql.jdbc.Driver");
+		} catch (ClassNotFoundException e) {
+		  e.printStackTrace();
+		}
+			
+		String sql = "SELECT\n"
+		  			+ "	is_ip_whitelist\n"
+		  			+ "FROM slides\n"
+		  			+ "JOIN msg_info ON msg_info.slides_id = slides.id\n"
+		  			+ "WHERE msg_info.id = ?";
+			
+		int flag = 1;
+		Connection conn = null;
+			
+	    try {
+		  conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
+		  PreparedStatement ps = conn.prepareStatement(sql); 
+			  
+		  ps.setString(1, fileLinkHash);
+		  ResultSet rs = ps.executeQuery();
+		  
+		  // If query returns a field, the file exists, otherwise it does not, and flag = 1.
+		  if (rs.next()) {
+			  if (rs.getBoolean("is_ip_whitelist")) {
+				  flag = 3;
+			  } else {
+				  flag = 2;
+			  }
+		  }
+		} catch (SQLException e) {
+		 	  e.printStackTrace();
+		} finally {
+		  if (null != conn) {
+			  try {
+			      conn.close();
+			  } catch (SQLException ex) {
+			    ex.printStackTrace();
+			  }
+		  }
+		}
+		    
+	    return flag;
+      }
+	
       
       /**
        * Get event related tabular data from the DB.
