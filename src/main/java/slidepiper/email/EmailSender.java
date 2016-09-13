@@ -112,17 +112,12 @@ public class EmailSender {
 		
 		currentviewslink = urlprefix + "viewbarchart.jsp?session_id=" + sessionId;
 		chatlink = urlprefix + "pdfjs/chatwindow.html?" + getParams;
-		String fullchatlink = urlprefix.replaceAll("/$", "") 
-								+ ConfigProperties.FILE_VIEWER_PATH
-							    + "?" + ConfigProperties.getProperty("file_viewer_query_parameter") + "=" + mi.getId()
-							    + "&" + getParams;
-		
 		String subj = DbLayer.getCustomerName(mi.getCustomerEmail(),mi.getSalesManEmail()) +
 					  " opened " + DbLayer.getSlidesName(mi.getSlidesId());						
 				  			 			
 		CustomerSession cs = DbLayer.getSessionData(sessionId);
 		
-		String msgtext = HtmlRenderer.getAlertHtml(mi, cs, currentviewslink, chatlink, fullchatlink); 
+		String msgtext = HtmlRenderer.getAlertHtml(mi, cs, currentviewslink, chatlink); 
 		
 		Map<String, String> emailParams = new HashMap<String, String>();
 		emailParams.put("salesmanEmail", mi.getSalesManEmail());

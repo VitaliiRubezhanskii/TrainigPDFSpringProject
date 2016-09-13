@@ -2105,7 +2105,6 @@ chart: {
       $('#sp-save-doc-settings-changes').on('click', function () {
         var docSettingsData = {
             'action': 'setSalesmanDocumentSettings',
-            'isChatEnabled': $('#sp-enable-chat__checkbox').is(':checked'),
             'isAlertEmailEnabled': $('#sp-enable-alert-emails__checkbox').is(':checked'),
             'isReportEmailEnabled': $('#sp-enable-report-emails__checkbox').is(':checked'),
             'isNotificationEmailEnabled': $('#sp-enable-notification-emails__checkbox').prop('checked'),
@@ -2141,8 +2140,6 @@ chart: {
     getSalesmanDocSettings: $(function () {
         
         $('[data-target="#sp-document-settings__modal"]').on('click', function () {
-          var enabledChat = (sp.config.salesman.viewer_is_chat_enabled === "true") ? true: false;
-          $('#sp-enable-chat__checkbox').prop('checked', enabledChat);
           $('#sp-enable-alert-emails__checkbox').prop('checked', sp.config.salesman.email_alert_enabled);
           $('#sp-enable-report-emails__checkbox').prop('checked', sp.config.salesman.email_report_enabled);
           $('#sp-enable-notification-emails__checkbox').prop('checked', sp.config.salesman.email_notifications_enabled);

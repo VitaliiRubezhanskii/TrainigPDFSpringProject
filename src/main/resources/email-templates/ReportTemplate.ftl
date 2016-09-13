@@ -676,7 +676,6 @@
                         <td valign="top" class="mcnTextContent" style="padding: 0px 18px 9px; font-weight: normal;"> 
                             <p class="lead"><b>${customerName!"Generic Link"}</b> ${customerEmail!} viewed <b>${documentName!}</b></p>
                             <p>Time opened: ${openTime!} GMT</p>
-                            <p>${messages!}</p>
                             <p>${documentActions!}</p>
                             <br>
                             <p>To view more detailed analytics, go to the <a target="_blank" href="http://www.slidepiper.com/dashboard.html">SlidePiper Dashboard</a></p>

@@ -128,15 +128,6 @@ public class HtmlRenderer {
 	            	data.put("customerEmail", customerEmail);
 	            }
 	            
-	            String chatMessageHTML = "";
-	            if (! chatMessages.equals("No messages.")) {
-	            	String chatMessagesHeader = "<p><b>Questions asked: </b></p>";
-	            	chatMessageHTML += chatMessagesHeader;
-	            	chatMessageHTML += chatMessages;
-	            	
-	            	data.put("messages", chatMessageHTML);
-	            }
-	            
 	            data.put("openTime", ai.getOpen_time().substring(0, 16));
 	            data.put("customerName", ai.getCustomer_name());
 	            data.put("mailReportData", mailReportData);
@@ -159,7 +150,7 @@ public class HtmlRenderer {
 			return reportHTML;			
 		}
 
-		public static String getAlertHtml(MessageInfo mi, CustomerSession cs, String currentviewslink, String chatlink, String fullchatlink) {	
+		public static String getAlertHtml(MessageInfo mi, CustomerSession cs, String currentviewslink, String chatlink) {	
 			Configuration cfg = new Configuration();
 			
 			try {
@@ -194,7 +185,6 @@ public class HtmlRenderer {
 	            
 	            data.put("documentName", DbLayer.getSlidesName(mi.getSlidesId()));
 	            data.put("customerName", DbLayer.getCustomerName(mi.getCustomerEmail(), mi.getSalesManEmail()));
-	            data.put("chatLink", fullchatlink);
 	            data.put("mailAlertData", mailAlertData);
 	            data.put("logoUrl", appUrl);
      

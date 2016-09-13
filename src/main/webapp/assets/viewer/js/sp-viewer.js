@@ -496,30 +496,6 @@ if ('' != sp.viewer.linkHash) {
     }
     
     
-    /* Chat Settings */
-    if (true == config.viewer.isChatEnabled) {
-      if (true == config.viewer.isChatOpen && sp.viewer.breakPoint < $(window).width()) {
-        $('.sp-chat').css('display', 'block');
-      }     
-      $('#sp-live-chat').css('visibility', 'visible');
-    }
-    
-    $('#sp-live-chat header').on('click', function () {
-      // If chat is visible, it means when clicking we will shut it, so the max-width
-      // should be set for when it will be closed, and vice versa.
-      if ($('.sp-chat').is(':visible')) {
-        $('#sp-live-chat').animate({
-          'width': '40%'
-        }, function () {
-          $('#sp-live-chat h4').css('width', '100%');
-        });
-      } else {
-        $('#sp-live-chat h4').css('max-width', '100%');
-        $('#sp-live-chat').css('width', 'auto');
-      }
-    });
-    
-    
     /* Widget Mechanism */
     $.getJSON(
         '../../ManagementServlet',

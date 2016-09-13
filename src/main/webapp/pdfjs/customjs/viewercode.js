@@ -60,7 +60,8 @@ function send_event(ename, eparam1, eparam2, eparam3) {
             // to check.
         },
         fail : function() {
-            alert("Error in sending event AJAX");
+            // Commented this out.
+            // alert("Error in sending event AJAX");
         }
     });
 }
@@ -150,18 +151,6 @@ function getSalesmanData() {
             customername = msg.customername;
             salesman = msg.salesman;
             console.log("rcvd salesman data: smemail " + salesman_email + " custname: "+ customername +" sm name:"+ salesman);
-
-            if (mobilecheck() == false)
-                {
-                            console.log("loading chat. mobilecheck " + mobilecheck());
-                    //      I need this loaded data for the chat window.
-                        loadChatWindow();
-                }
-            else
-                {                   
-                        console.log("loading chat. mobilecheck " + mobilecheck() + " must load it for the slide changes...");
-                        loadChatWindow();
-                }
         }
     }); // end of ajax call
 }
@@ -195,8 +184,6 @@ function preInitView()
                 browser_data = "Browser name: " + navigator.appName + " " + navigator.appVersion 
                 + "<BR>Platform: " + navigator.platform 
                 + "<BR>Is mobile device: " + mobilecheck() + "<BR>";
-                
-                socketconnected=0; // will be set to 1 in chatwindow
 
                 // the salesman does not control the slides.
                 // If it's true, the out-of-window event is not taken care of
@@ -280,36 +267,33 @@ function initView() {
             if (role==0)
                 {
                         send_event("INIT_SLIDES", "0", "0", ipaddr);
-                        
-                        if (mobilecheck() == true) {hideChat();} 
-                        // hide on mobile
                 }
                 
-            console.log("binding sendmsg click");
-            $("#sendq").unbind(); // first unbind all.
-            $("#sendq").bind(
-                    "click",
-                    function(event, ui) {
-                        // event of clicking on button.
-                        send_event("CUSTOMER_QUESTION_CLICKED", "0", "0", "");
-        
-                        var q = window.prompt("Please enter your question.", "");
-                        if (q != null)
-                            //
-                            // salesman_email = getCookie("salesman_email");
-                            mailtourl = "mailto:" + salesman_email
-                                    + "?Subject=Message from customer " +
-                                    // $("#cust_email").text() +
-                                    "&body=" + q;
-                        // mailtourl = "mailto:david.salesmaster@gmail.com"
-                        send_event("CUSTOMER_QUESTION", "0", "0", "[slide "
-                                + $("#pageNumber").val() + "]: " + q);
-                        // alert("Sending message for q " + $("#cust_question").val());
-                        setTimeout(function() {
-                            // location.href = mailtourl;
-                        }, 2000);
-                    });
-            console.log("binding sendmsg click - DONE OK");
+//            console.log("binding sendmsg click");
+//            $("#sendq").unbind(); // first unbind all.
+//            $("#sendq").bind(
+//                    "click",
+//                    function(event, ui) {
+//                        // event of clicking on button.
+//                        send_event("CUSTOMER_QUESTION_CLICKED", "0", "0", "");
+//        
+//                        var q = window.prompt("Please enter your question.", "");
+//                        if (q != null)
+//                            //
+//                            // salesman_email = getCookie("salesman_email");
+//                            mailtourl = "mailto:" + salesman_email
+//                                    + "?Subject=Message from customer " +
+//                                    // $("#cust_email").text() +
+//                                    "&body=" + q;
+//                        // mailtourl = "mailto:david.salesmaster@gmail.com"
+//                        send_event("CUSTOMER_QUESTION", "0", "0", "[slide "
+//                                + $("#pageNumber").val() + "]: " + q);
+//                        // alert("Sending message for q " + $("#cust_question").val());
+//                        setTimeout(function() {
+//                            // location.href = mailtourl;
+//                        }, 2000);
+//                    });
+//            console.log("binding sendmsg click - DONE OK");
         
             // request pagefit after 1 sec
             /*setTimeout(function() {
@@ -370,11 +354,6 @@ function initView() {
 
                     function isFunction(possibleFunction) {
                           return typeof(possibleFunction) === typeof(Function);
-                        }
-                    // send the current slide num to others in chat.
-                    if (socketconnected ==1) // only if set to 1 in chatwindow
-                        {                   
-                                sendSlideNum();
                         }
         
                     // update prev variables.
@@ -445,71 +424,7 @@ function getSessionParams()
                 // viewing the pdf.             
         }
     
-    // we're in this file - it's not quickchat.
-    quickchatmode = 0;
     //encodeuricomponent replaces the spaces with %20 and other required stuff for uri.
-}
-
-// runs at the end, after everything has been initialized. 
-function loadChatWindow()
-{
-    // load chat window into chatdiv.
-    chatDiv = $("#chatDiv");
-    
-                    startClient();
-                        setTimeout(function() {
-                                        
-                            //showChat(); // must show before changing properties
-                            
-                            // otherwise it doesn't change correctly.
-                            // position it correctly
-                            //maxY = window.outerHeight;                                
-                            //chatDivHeight = chatDiv.outerHeight();
-                            //console.log("maxY " + maxY + " chatDivHeight " + chatDivHeight);                                                      
-                            //maxX = window.outerWidth;
-                            //chatDivWidth = chatDiv.outerWidth();                          
-                            //console.log("maxX " + maxX + " chatDivWidth " + chatDivWidth);                            
-                            
-                            //leftVal = maxX - chatDivWidth-25;
-                            //topVal = maxY - chatDivHeight;
-                            
-                            // the calculation doesn't work well...
-                            //topVal = 40;
-                            //console.log("Setting chatDiv top " + topVal + " left " + leftVal);
-                            
-                            //chatDiv[0].style.top = topVal+"px";
-                            //chatDiv[0].style.left = leftVal+"px"; 
-                            //finally, show it.
-                            
-                            if (mobilecheck() == true)
-                            {
-                                    hideChat(); // hide it on mobile,                                       
-                                //  chatDiv[0].style = "font-size:5px;";
-                                //  chatDiv[0].style.font-size = "5px;";
-                                    // but it still transfers slide change msgs.
-                                    console.log("mobile. hiding chat");
-                            }
-                            else
-                            {
-                                console.log("desktop. showing chat");
-                                  showChat(); //desktop device
-                                  minimizeChat();
-                            }
-                                            
-                        },  2000);
-                        // 2 seconds are good because the first events
-                        // make chat show on mobile. so after 2 sec
-                        // it disappears.
-    //      });
-    
-
-    // last thing: display privacy msg.
-    $('#sp-terms-privacy').css('visibility', 'visible');
-    
-    // now blur and focus will work:
-    initDone = true;
-    
-    PDFJS.openExternalLinksInNewWindow = true;
 }
 
  //document.addEventListener("pagerendered", function(e) {
