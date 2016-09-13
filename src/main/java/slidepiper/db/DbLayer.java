@@ -2731,7 +2731,7 @@ public class DbLayer {
         }
       }
       
-      public static void setSalesmenDocumentSettings (String isChatEnabled, Boolean isAlertEmailEnabled, Boolean isReportEmailEnabled,
+      public static void setSalesmenDocumentSettings (Boolean isAlertEmailEnabled, Boolean isReportEmailEnabled,
     		  			Boolean isNotificationEmailEnabled, String salesMan) {
     	  
     	  /**
@@ -2742,18 +2742,17 @@ public class DbLayer {
     	  
     	  Connection conn = null;
     	  
-    	  String query = "UPDATE sales_men SET viewer_is_chat_enabled = ?, email_alert_enabled = ?, email_report_enabled = ?, email_notifications_enabled = ? WHERE email = ?";
+    	  String query = "UPDATE sales_men SET email_alert_enabled = ?, email_report_enabled = ?, email_notifications_enabled = ? WHERE email = ?";
     	  
     	  System.out.println(query);
     	  
     	  try {
     		  conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
               PreparedStatement stmt = conn.prepareStatement(query);
-              stmt.setString(1, isChatEnabled);
-              stmt.setBoolean(2, isAlertEmailEnabled);
-              stmt.setBoolean(3, isReportEmailEnabled);
-              stmt.setBoolean(4,  isNotificationEmailEnabled);
-              stmt.setString(5, salesMan);
+              stmt.setBoolean(1, isAlertEmailEnabled);
+              stmt.setBoolean(2, isReportEmailEnabled);
+              stmt.setBoolean(3,  isNotificationEmailEnabled);
+              stmt.setString(4, salesMan);
               stmt.executeUpdate();
     	  }
     	  catch (SQLException ex) {

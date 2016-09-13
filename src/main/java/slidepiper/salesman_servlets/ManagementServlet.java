@@ -570,16 +570,12 @@ public class ManagementServlet extends HttpServlet {
           break;
    
         case "setSalesmanDocumentSettings":
-        	String isChatEnabled = Boolean.toString(input.getBoolean("isChatEnabled"));
         	Boolean isAlertEmailEnabled = input.getBoolean("isAlertEmailEnabled");
         	Boolean isReportEmailEnabled = input.getBoolean("isReportEmailEnabled");
         	Boolean isNotificationEmailEnabled = input.getBoolean("isNotificationEmailEnabled");
         	String salesMan = input.getString("salesMan");
         	
-        	System.out.println("Chat: " + isChatEnabled + ", Alert: " + isAlertEmailEnabled + ", Report: " + isReportEmailEnabled 
- 				   + ", User: " + salesMan);
-        	
-        	DbLayer.setSalesmenDocumentSettings(isChatEnabled, isAlertEmailEnabled, isReportEmailEnabled, isNotificationEmailEnabled, salesMan);
+        	DbLayer.setSalesmenDocumentSettings(isAlertEmailEnabled, isReportEmailEnabled, isNotificationEmailEnabled, salesMan);
         	
         	output.put("result", "success");
         	break;
