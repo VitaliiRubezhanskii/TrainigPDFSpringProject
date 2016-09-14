@@ -20,33 +20,12 @@ import com.maxmind.geoip2.record.Subdivision;
 public class Geolocation {
 
   /**
-   * Return the highest accurate possibility of the client IP from an HTTP request.
+   * Return the client IP from an HTTP request.
    * 
    * @param request An HttpServletRequest object.
    * @return An IP address.
    */
   public static String getIpFromRequest(HttpServletRequest request) {
-    String[] httpHeaders = { 
-      "X-Forwarded-For",
-      "Proxy-Client-IP",
-      "WL-Proxy-Client-IP",
-      "HTTP_X_FORWARDED_FOR",
-      "HTTP_X_FORWARDED",
-      "HTTP_X_CLUSTER_CLIENT_IP",
-      "HTTP_CLIENT_IP",
-      "HTTP_FORWARDED_FOR",
-      "HTTP_FORWARDED",
-      "HTTP_VIA",
-      "REMOTE_ADDR"
-    };
-    
-    for (String header : httpHeaders) {
-      String ipFromHeader = request.getHeader(header);
-      
-      if (ipFromHeader != null && ! ipFromHeader.isEmpty() && ! "unknown".equalsIgnoreCase(ipFromHeader)) {
-        return ipFromHeader;
-      }
-    }
     return request.getRemoteAddr();
   }
   
