@@ -4,6 +4,21 @@ SlidePiper README File
 Change Log
 ----------
 
+### 0.12.4
+
+2016-09-14 Max Prais <maxp@slidepiper.com>
+
+* Removed chat and websockets:
+	1. Removed all instances of websockets.
+	2. Removed the chat functionality from the viewer.
+	3. A consequence of removing chat was removing co-browsing.
+		a. Co-browsing option has been removed from Alert Emails.
+
+* Send page number on all viewer events:
+	1. The page number on which every widget event took place in the viewer is
+	recorded.
+	
+
 ### 0.12.3
 
 2016-09-12 Max Prais <maxp@slidepiper.com>
@@ -28,7 +43,6 @@ Change Log
 
 * Viewer:
 	1. Fixed bug where alert message was sometimes being shown.
-
 
 
 ### 0.12.1
