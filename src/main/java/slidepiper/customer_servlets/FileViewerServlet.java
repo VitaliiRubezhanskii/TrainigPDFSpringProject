@@ -19,7 +19,6 @@ public class FileViewerServlet extends HttpServlet {
       throws ServletException, IOException {
     
 	String fileLinkHash = request.getParameter("f");
-	System.out.println("SP - IP Address From Client Request: " + request.getRemoteAddr());
 	
 	switch(DbLayer.getFileWhiteListFlag(fileLinkHash)) {
 	
