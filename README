@@ -4,6 +4,23 @@ SlidePiper README File
 Change Log
 ----------
 
+### 0.12.5
+
+2016-09-14 Max Prais <maxp@slidepiper.com>
+
+* Refactored Hopper Widget:
+	1. Increased hop height.
+	2. Increased the number of characters allowed in the hop.
+	3. Adjusted at which screen heights the hops are hidden.
+
+* Form Widget Validation:
+	1. Removed validation on the FormJS field.
+
+* Added special SP file redirection links for:
+	1. Broken links.
+	2. IP restricted links.
+	
+
 ### 0.12.4
 
 2016-09-14 Max Prais <maxp@slidepiper.com>
