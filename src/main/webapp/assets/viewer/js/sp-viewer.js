@@ -58,7 +58,6 @@ $('#secondaryDownload').on('click', function() {
  */
 var sp = sp || {};
 sp.viewer = {
-  breakPoint: 768,
   eventName: {
     clickedCta: 'CLICKED_CTA',
     viewerWidgetCalendlyClicked: 'VIEWER_WIDGET_CALENDLY_CLICKED',
@@ -132,6 +131,14 @@ sp.viewer = {
         action: 'setCustomerEvent',
         data: eventData
       };
+      
+      // Send page number of event.
+      if (typeof PDFViewerApplication !== 'undefined') {
+        data.data.param1int = PDFViewerApplication.page;
+      } else {
+        data.data.param1int = 0;
+      }
+      
       $.post('../../ManagementServlet', JSON.stringify(data));
     }
   }
@@ -1124,7 +1131,6 @@ if ('' != sp.viewer.linkHash) {
          	 sp.viewer.setCustomerEvent({
          		 eventName: sp.viewer.eventName.viewerWidgetLikeClicked,
              linkHash: sp.viewer.linkHash,
-             param1int: PDFViewerApplication.page,
              sessionId: sessionid
            });
          	 
@@ -1229,7 +1235,6 @@ if ('' != sp.viewer.linkHash) {
                 eventName: sp.viewer.eventName.viewerWidgetHopperClicked, 
                 linkHash: sp.viewer.linkHash,
                 sessionId: sessionid,
-                param1int: PDFViewerApplication.page,
                 param_1_varchar: $('#sp-widget5__hop-' + index + ' .sp-widget5__hop-text').text(),
                 param_2_varchar: $('#sp-widget5__hop-' + index).attr('data-page-hop')
             });
@@ -1344,7 +1349,6 @@ if ('' != sp.viewer.linkHash) {
                   eventName: sp.viewer.eventName.viewerWidgetTestimonialsClicked,
                   linkHash: sp.viewer.linkHash,
                   sessionId: sessionid,
-                  param1int: PDFViewerApplication.page,
                   param_1_varchar: buttonText,
                   param_2_varchar: personName,
                   param_3_varchar: personTitle,
@@ -1377,14 +1381,26 @@ if ('' != sp.viewer.linkHash) {
       $('#sp-widget7').click(function() {
         
         switch(widget.formSelectType) {
-        case 'image':
-          imageSwal();
-          break;
-          
-        case 'form':
-          formSwal();
-          break;
-      }
+          case 'image':
+            imageSwal();
+            break;
+            
+          case 'form':
+            formSwal();
+            break;
+        }
+        
+        /**
+         * Send form button click event.
+         * 
+         * param_1_varchar - The text on the button.
+         */
+        sp.viewer.setCustomerEvent({
+          eventName: sp.viewer.eventName.viewerWidgetFormButtonClicked,
+          linkHash: sp.viewer.linkHash,
+          sessionId: sessionid,
+          param_1_varchar: $(this).text()
+        });
         
         function formSwal() {
           swal({
@@ -1427,28 +1443,15 @@ if ('' != sp.viewer.linkHash) {
         }
         
         /**
-         * Send Calendly event.
+         * Send form confirm click event.
          * 
-         * param_1_varchar - The text on the Calendly button.
+         * param_1_varchar - The text on the button.
          */
-        $('#sp-widget7, .swal2-confirm').click(function() {
-          var eventName = '';
-          
-          switch($(this).attr('class')) {
-            case 'sp-widget-button sp-widget-font-fmaily':
-              eventName = sp.viewer.eventName.viewerWidgetFormButtonClicked
-              break;
-              
-            case 'swal2-confirm styled':
-              eventName = sp.viewer.viewerWidgetFormConfirmClicked
-              break;
-          }
-          
+        $('.swal2-confirm').off('click').on('click', function() {
           sp.viewer.setCustomerEvent({
-            eventName: eventName,
+            eventName: sp.viewer.eventName.viewerWidgetFormConfirmClicked,
             linkHash: sp.viewer.linkHash,
             sessionId: sessionid,
-            param1int: PDFViewerApplication.page,
             param_1_varchar: $(this).text()
           });
         });
