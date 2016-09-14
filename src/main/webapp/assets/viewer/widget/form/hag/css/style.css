@@ -22,7 +22,7 @@ section:not([data-section-id="0"]),
 }
 
 
-/* Settings */
+/* Specific Settings */
 body {
   direction: rtl;
 }
@@ -44,6 +44,14 @@ h2 {
   height: 55px;
   width: 110px;
 }
+
+.sp-back-section {
+  margin-left: 10px !important;
+}
+
+#form-6 .sp-back-section {
+  margin-left: 0 !important;
+} 
 
 .sp-direction--ltr {
   direction: ltr;

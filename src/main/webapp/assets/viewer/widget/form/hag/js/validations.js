@@ -190,22 +190,32 @@ $(function() {
         minlength: 2,
         required: true
       },
+      partnerNoKidsNo: {
+        required: true
+      },
+      partnerNoKidsYes: {
+        required: true
+      },
       percentage: {
         number: true,
         //isTotal100: true
-      },
-      phoneHomeNumber: {
-        exactLength: 7,
-        number:true,
-        required: true
       },
       phoneMobileNumber: {
         exactLength: 7,
         number:true,
         required: true
+      },
+      street: {
+        required: true
       }
     },
     messages: {
+      partnerNoKidsNo: {
+        required: 'לא ניתן לעבור למסך הבא ללא סימון הסעיף שלעיל'
+      },
+      partnerNoKidsYes: {
+        required: 'לא ניתן לעבור למסך הבא ללא סימון הסעיף שלעיל'
+      }
     },
     highlight: highlight,
     errorElement: errorElement,
@@ -223,7 +233,10 @@ $(function() {
       pensionPlan: {
         required: true
       },
-      retirementAge: {
+      retirementAgeMale: {
+        required: true
+      },
+      retirementAgeFemale: {
         required: true
       }
     },
@@ -239,17 +252,17 @@ $(function() {
   
   $('#form-3').validate({
     rules: {
-      employerContact: {
-        required: true
-      },
       employerName: {
         required: true
       },
-      independentDeposit: {
+      isNotInsured: {
         required: true
       }
     },
     messages: {
+      isNotInsured: {
+        required: 'לא ניתן לעבור למסך הבא ללא סימון הסעיף שלעיל'
+      }
     },
     highlight: highlight,
     errorElement: errorElement,

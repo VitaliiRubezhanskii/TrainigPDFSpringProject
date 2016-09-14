@@ -5,64 +5,90 @@ $(function() {
     var sectionId = parseInt($(this).closest('section').attr('data-section-id'));
     console.log('Currently on section: ' + sectionId);
     
-    var isFormValid = false;   
+    if (! $('#form-' + sectionId).valid()) {
+      if (0 === $('#form-not-valid').length) {
+        $(this).closest('.form-group').before('<div class="form-group has-error" id="form-not-valid"><label class="control-label">לא כל שדות החובה מלאים, ולכן לא ניתן לעבור למסך הבא</label></div>');
+      }
+      return false;
+    } else {
+      $('#form-not-valid').remove();
+    }
     
     switch (sectionId) {
       case 0:
-        if ($('#form-' + sectionId).valid()) {
-          isFormValid = true;
-          $('.pagination-container').removeClass('hidden');
-          
-          $('#id').val($('#id-init').val());
-          $('#first-name').val($('#first-name-init').val());
-          $('#last-name, #last-name-partner').val($('#last-name-init').val());
-          
-          var mobileOperatorCode = ['050', '052', '054', '055', '057', '058'];
-          if (mobileOperatorCode.indexOf($('#phone-operator-code-init').val()) > -1) {
-            $('#phone-mobile-operator-code').val($('#phone-operator-code-init').val());
-            $('#phone-mobile-number').val($('#phone-number-init').val());
-          } else {
-            $('#phone-home-operator-code').val($('#phone-operator-code-init').val());
-            $('#phone-home-number').val($('#phone-number-init').val());
-          }
-          
-          $('#email').val($('#email-init').val());
+        $('.pagination-container').removeClass('hidden');
+        
+        $('#id').val($('#id-init').val());
+        $('#first-name').val($('#first-name-init').val());
+        $('#last-name').val($('#last-name-init').val());
+        
+        var mobileOperatorCode = ['050', '052', '054', '055', '057', '058'];
+        if (mobileOperatorCode.indexOf($('#phone-operator-code-init').val()) > -1) {
+          $('#phone-mobile-operator-code').val($('#phone-operator-code-init').val());
+          $('#phone-mobile-number').val($('#phone-number-init').val());
+        } else {
+          $('#phone-home-operator-code').val($('#phone-operator-code-init').val());
+          $('#phone-home-number')
+            .val($('#phone-number-init').val())
+            .rules( "add", {
+              exactLength: 7,
+              number:true,
+              required: true
+          });
         }
+        
+        $('#email').val($('#email-init').val());
         break;
         
       case 1:
-        if ($('#form-' + sectionId).valid()) {
-          isFormValid = true;
-          if ('male' === $('[name="gender"]:checked').val()) {
-            $('#retirement-age-male').show();
-          } else {
-            $('#retirement-age-female').show();
-          }
-        }
-        break;
-        
-      default:
-        if ($('#form-' + sectionId).valid()) {
-          isFormValid = true;
+        if ('male' === $('[name="gender"]:checked').val()) {
+          $('#retirement-age-female').hide();
+          $('#retirement-age-male').show();
+        } else {
+          $('#retirement-age-male').hide();
+          $('#retirement-age-female').show();
         }
         break;
     }
     
-    if (isFormValid) {
-      // Section settings.
-      $('section').hide();
-      sectionId++;
-      $('section[data-section-id="' + sectionId.toString() + '"]').show();
-      
-      // Pagination settings.
-      $('.pagination li').removeClass('active');
-      $('#pagination-' + sectionId.toString()).addClass('active');
-    }
+    
+    // Section settings.
+    $('section').hide();
+    sectionId++;
+    $('section[data-section-id="' + sectionId.toString() + '"]').show();
+    
+    // Pagination settings.
+    $('.pagination li').removeClass('active');
+    $('#pagination-' + sectionId.toString()).addClass('active');
   });
   
+  $('.sp-back-section').click(function() {
+    $('#form-not-valid').remove();
+    
+    var sectionId = parseInt($(this).closest('section').attr('data-section-id'));
+    $('section').hide();
+    sectionId--;
+    $('section[data-section-id="' + sectionId.toString() + '"]').show();
+  });
   
   /* Form 1 Settings */
+  $('#city').select2({
+    dir: 'rtl',
+    language: 'he',
+    placeholder: 'בחר עיר',
+    theme: 'bootstrap'
+  });
+  
+  $('#street').select2({
+    dir: 'rtl',
+    language: 'he',
+    placeholder: 'בחר רחוב',
+    theme: 'bootstrap'
+  });
+  
   $('#city').change(function() {
+    $(this).valid();
+    
     $('#street').closest('.form-group').append(
       '<div id="street-loading">טוען...</div>'
     );
@@ -70,6 +96,7 @@ $(function() {
     var data = {
       resource_id: 'a7296d1a-f8c9-4b70-96c2-6ebb4352f8e3',
       filters: {'סמל_ישוב': $(this).val()},
+      sort: 'שם_רחוב asc',
       limit: 1000000000000
     };
     
@@ -79,15 +106,46 @@ $(function() {
       data: JSON.stringify(data)
     }).done(function(data) {
       $('#street-loading').remove();
-      $('#street').empty();
-      $.each(data.result.records, function(index, object) {
+      $('#street')
+        .empty()
+        .append('<option value=""></option>');
+      
+      
+      /*
+      If the first and the second results are equal, then we assume
+      that the API has duplicated the rows. In that case loop over every
+      second element.
+      */
+      var increment = 0;
+      if (typeof data.result.records[1] !== 'undefined' && (data.result.records[0]['סמל_רחוב'] === data.result.records[1]['סמל_רחוב'])) {
+        increment = 2;
+      } else {
+        increment = 1;
+      }
+      
+      for (var i = 0; i < data.result.records.length; i += increment) {
         $('#street').append(
-          '<option value="' + object['סמל_רחוב'].replace(/"/g, '&quot;') + '">' + object['שם_רחוב'] + '</option>'
+          '<option value="' + data.result.records[i]['סמל_רחוב'].replace(/"/g, '&quot;') + '">' + data.result.records[i]['שם_רחוב'] + '</option>'
         );
-      })
+      }
+      
       console.log(data);
     });  
   });
+  
+  $('#street').change(function() {
+    $(this).valid();
+  });
+  
+  
+  // Family status.
+  $('#family-status').change(function() {
+    if ('2' === $(this).val()) {
+      $('#is-has-partner-yes').trigger('click');
+      $('[name="isHasPartner"]').valid();
+    }
+  });
+  
   
   // Partner & Kids settings.
   $('[name="isHasPartner"], [name="isHasKids"]').change(function() {
@@ -118,13 +176,13 @@ $(function() {
   
   $('#beneficiary-add').click(function() {
     var beneficiariesCount = $('#beneficiaries .beneficiary:visible').length;
-    if (beneficiariesCount <= 6) {
+    if (beneficiariesCount <= 2) {
       beneficiariesCount++;
       $('#beneficiary-' + beneficiariesCount).show();
     }
   });
   
-  $('#beneficiary-remove', function() {
+  $('#beneficiary-remove').click(function() {
     var beneficiariesCount = $('#beneficiaries .beneficiary:visible').length;
     $('#beneficiary-' + beneficiariesCount).hide();
   });
@@ -141,16 +199,24 @@ $(function() {
     }
   });
   
-  $('#employer-name').change(function() {
-    if ('0' !== $(this).val()) {
-      $('#employer-hp').val($(this).val());
-      $('#employer-hp').prop('readonly', true);
-    } else {
-      $('#employer-hp').val('');
-      $('#employer-hp').prop('readonly', false);
-    }
+  $('#employer-name').select2({
+    dir: 'rtl',
+    language: 'he',
+    placeholder: 'בחר מעסיק (אם לא קיים ברשימה, המשך/י להקלידו, ולחץ/י על שמו בסיום)',
+    tags: true,
+    theme: 'bootstrap'
   });
   
+  $('#employer-name').change(function() {
+    $(this).valid();
+    
+    var $option = $('#employer-name [value="' + $(this).val() + '"]'); 
+    if ('0' !== $option.val() && '1' === $option.attr('data-is-original')) {
+      $('#employer-hp').val($(this).val());
+    } else {
+      $('#employer-hp').val('');
+    }
+  })
   
   /* Form 4 Settings */
   $('[name="smoking"]').change(function() {
@@ -223,7 +289,9 @@ $(function() {
   });
   
   $('.fund-name').change(function() {
-    $(this).closest('.fund').find('.fund-code').val($(this).val());
+    $(this).closest('.fund').find('.fund-code')
+        .val($(this).val())
+        .valid();
   });
   
   $('#fund-remove').click(function() {
