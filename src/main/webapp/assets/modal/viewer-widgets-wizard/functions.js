@@ -793,7 +793,8 @@ sp.viewerWidgetsModal = {
         && $(this).attr('name') !== 'formSelectType'
         && $(this).attr('name') !== 'formImage'
         && $(this).attr('name') !== 'formTitle'
-        && $(this).attr('type') !== 'file' ) {
+        && $(this).attr('type') !== 'file'
+        && $(this).attr('name') !== 'formSuccess') {
         
         sp.error.handleError('You must fill the field.');
         $(this).addClass('sp-widget-form-error');

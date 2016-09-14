@@ -19,16 +19,15 @@ public class FileViewerServlet extends HttpServlet {
       throws ServletException, IOException {
     
 	String fileLinkHash = request.getParameter("f");
-	System.out.println("SP - IP Address From Client Request: " + request.getRemoteAddr());
 	
 	switch(DbLayer.getFileWhiteListFlag(fileLinkHash)) {
 	
 		// File does not exist.
 		case 1:
 			
-			// Redirect to SlidePiper home page - Send 301.
+			// Redirect to SP broken link page.
 			response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
-			response.setHeader("Location", ConfigProperties.getProperty("app_url"));
+			response.setHeader("Location", ConfigProperties.getProperty("file_viewer_broken_link"));
 			break;
 		
 		// File is not whitelisted.
@@ -48,9 +47,9 @@ public class FileViewerServlet extends HttpServlet {
 				request.getRequestDispatcher(ConfigProperties.getProperty("file_viewer")).forward(request, response);
 			} else {
 				
-				// Redirect to SlidePiper home page - Send 301. 
+				// Redirect to SP ip restricted page. 
 				response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
-				response.setHeader("Location", ConfigProperties.getProperty("app_url"));
+				response.setHeader("Location", ConfigProperties.getProperty("file_viewer_ip_restricted"));
 			}
 			break;
 	}
