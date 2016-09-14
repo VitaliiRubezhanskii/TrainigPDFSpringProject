@@ -68,18 +68,6 @@ public class ConfigViewerServlt extends HttpServlet {
         viewer.put("toolbarLogoCollapseMaxWidth",
             salesman.get("viewer_toolbar_logo_collapse_max_width"));
         
-        if (null != salesman.get("viewer_is_chat_enabled")) {
-      	viewer.put("isChatEnabled", Boolean.parseBoolean(salesman.get("viewer_is_chat_enabled").toString()));
-        } else {
-      	viewer.put("isChatEnabled", false);
-        }
-        
-        if (null != salesman.get("viewer_is_chat_open")) {
-        	viewer.put("isChatOpen", Boolean.parseBoolean(salesman.get("viewer_is_chat_open").toString()));
-        } else {
-        	viewer.put("isChatOpen", false);
-        }
-        
         viewer.put("isYoutubeVideo", Boolean.parseBoolean(salesman.get("viewer_widget1_is_youtube_video").toString()));
         
         

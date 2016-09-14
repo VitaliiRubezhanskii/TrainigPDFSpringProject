@@ -675,7 +675,6 @@
                         
                         <td valign="top" class="mcnTextContent" style="padding: 0px 18px 9px; font-weight: normal;">     
                             <p class="lead"><b>${customerName!"Generic Link"}</b> ${customerEmail!} has just opened <b>${documentName!}</b></p>
-                            <p><a href="${chatLink!}">Co-browse and Chat With Client</a></p>
                             <br>
                             <p>To view more detailed analytics, go to the <a target="_blank" href="http://www.slidepiper.com/dashboard.html">SlidePiper Dashboard</a></p>
 
