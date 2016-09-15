@@ -3,7 +3,9 @@ package slidepiper.customer_servlets;
 import java.io.IOException;
 
 import slidepiper.*;
+import slidepiper.config.ConfigProperties;
 import slidepiper.constants.Constants;
+import slidepiper.db.DbLayer;
 
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -41,7 +43,30 @@ public class DownloadSlidesServlet extends HttpServlet {
     	// now I can access servlet as name/5  where 5 is the parameter!
     	// no ? for get request! this allows to use this with pdfjs.
     	  //System.out.println("parameter to Slides servlet: " + msgid);
-    	  
+    	
+    	switch(DbLayer.getFileWhiteListFlag(msgid)) {
+    	
+			// File does not exist.
+			case 1:
+				
+				// Redirect to SP broken link page.
+				response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
+				response.setHeader("Location", ConfigProperties.getProperty("file_viewer_broken_link"));
+				break;
+			
+			// File is whitelisted.
+			case 3:
+				
+				// Check if request IP matches IP in ip_whitelist table.
+				if (! DbLayer.isIPMatchClientIP(msgid, request.getRemoteAddr())) {
+					
+					// Redirect to SP ip restricted page. 
+					response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
+					response.setHeader("Location", ConfigProperties.getProperty("file_viewer_ip_restricted"));
+				}
+				break;
+    	}
+    	
         Connection conn = null; // connection to the database
         String slides_id;
         String fileName;
