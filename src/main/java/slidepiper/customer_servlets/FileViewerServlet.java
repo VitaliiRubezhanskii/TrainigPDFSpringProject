@@ -42,9 +42,36 @@ public class FileViewerServlet extends HttpServlet {
 			
 			// Check if request IP matches IP in ip_whitelist table.
 			if (DbLayer.isIPMatchClientIP(fileLinkHash, request.getRemoteAddr())) {
-				 
-				// Continue to view file.
-				request.getRequestDispatcher(ConfigProperties.getProperty("file_viewer")).forward(request, response);
+
+				// Get user agent.
+				String userAgent = request.getHeader("User-Agent");
+				
+				boolean isUnsupportedBrowser = false;
+				
+				String[] outdatedIEVersions = new String[5];
+				outdatedIEVersions[0] = "MSIE 9.0";
+				outdatedIEVersions[1] = "MSIE 8.0";
+				outdatedIEVersions[2] = "MSIE 7.0";
+				outdatedIEVersions[3] = "MSIE 6.0";
+				outdatedIEVersions[4] = "MSIE 5.0";
+				for (int i = 0; i < outdatedIEVersions.length; i++) {
+					if (userAgent.contains(outdatedIEVersions[i])) {
+						isUnsupportedBrowser = true;
+						break;
+					}
+				}
+				
+				if (isUnsupportedBrowser) {
+					
+					// Redirect to specified location. 
+					response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
+					response.setHeader("Location", "http://community.barclays.intranet/sites/globe/MyGlobeEditions/myglobe-Summer16.pdf");
+				} else {
+
+					// Continue to view file.
+					request.getRequestDispatcher(ConfigProperties.getProperty("file_viewer")).forward(request, response);
+				}
+				
 			} else {
 				
 				// Redirect to SP ip restricted page. 
