@@ -62,10 +62,18 @@ public class FileViewerServlet extends HttpServlet {
 				}
 				
 				if (isUnsupportedBrowser) {
+					String redirectLink = null;
+					String fileLink = DbLayer.getFileLinkFromFileLinkHash(fileLinkHash);
+					
+					if (null != fileLink && ! fileLink.equals("")) {
+						redirectLink = fileLink;
+					} else {
+						redirectLink = ConfigProperties.getProperty("app_url");
+					}
 					
 					// Redirect to specified location. 
 					response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
-					response.setHeader("Location", "http://community.barclays.intranet/sites/globe/MyGlobeEditions/myglobe-Summer16.pdf");
+					response.setHeader("Location", redirectLink);
 				} else {
 
 					// Continue to view file.
