@@ -4,6 +4,19 @@ SlidePiper README File
 Change Log
 ----------
 
+### 0.12.6
+
+2016-09-14 Max Prais <maxp@slidepiper.com>
+
+* Enhanced IP Restriction:
+	1. IP restriction applies to downloading a file i.e. 
+	slidepiper.com/file/{fileid}.
+
+* Barclays IE support:
+	1. Redirect to Barclays PDF link if request is from IE 9 or lower, and IP
+	is on the whitelist.
+	
+
 ### 0.12.5
 
 2016-09-14 Max Prais <maxp@slidepiper.com>
