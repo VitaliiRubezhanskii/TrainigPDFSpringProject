@@ -72,6 +72,8 @@ public class ConfigViewerServlt extends HttpServlet {
         
         
         // Presentation & Download Settings.
+        viewer.put("isViewerToolbarIsDownloadEnabled", 
+        		salesman.get("viewer_toolbar_secondary_is_download_enabled"));
         viewer.put("isMobileToolbarSecondaryPresentationEnabled",
         		salesman.get("viewer_toolbar_secondary_is_mobile_presentation_enabled"));
         viewer.put("isMobileToolbarSecondaryDownloadEnabled",

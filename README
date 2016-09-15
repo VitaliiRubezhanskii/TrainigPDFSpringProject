@@ -4,6 +4,19 @@ SlidePiper README File
 Change Log
 ----------
 
+## 0.13.0
+
+2016-09-14 Max Prais <maxp@slidepiper.com>
+
+* Added file viewing support for IE 9 and lower:
+	1. If browser is lower than IE 9 and IP is restricted:
+		- If file_link is provided, redirect to that.
+		- If not, redirect to SP homepage.
+
+* Added ability to hide download button in the Viewer:
+	1. This field can be set in the sales_man table.
+	
+
 ### 0.12.6
 
 2016-09-14 Max Prais <maxp@slidepiper.com>

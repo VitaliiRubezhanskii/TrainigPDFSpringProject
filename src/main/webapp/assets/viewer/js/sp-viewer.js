@@ -492,6 +492,11 @@ if ('' != sp.viewer.linkHash) {
     
     
     /* Presentation & Download Settings */
+    if (typeof config.viewer.isViewerToolbarIsDownloadEnabled !== 'undefined'
+      && ! config.viewer.isViewerToolbarIsDownloadEnabled) {
+      $('#secondaryDownload').addClass('hidden');
+    }
+    
     if (typeof config.viewer.isMobileToolbarSecondaryPresentationEnabled !== 'undefined'
         && ! config.viewer.isMobileToolbarSecondaryPresentationEnabled) {
       $('#secondaryPresentationMode').addClass('hiddenMediumView');
