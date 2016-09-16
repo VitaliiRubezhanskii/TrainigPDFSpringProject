@@ -26,8 +26,7 @@ public class FileViewerServlet extends HttpServlet {
 		case 1:
 			
 			// Redirect to SP broken link page.
-			response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
-			response.setHeader("Location", ConfigProperties.getProperty("file_viewer_broken_link"));
+			response.sendRedirect(ConfigProperties.getProperty("file_viewer_broken_link"));
 			break;
 		
 		// File is not whitelisted.
@@ -72,8 +71,7 @@ public class FileViewerServlet extends HttpServlet {
 					}
 					
 					// Redirect to specified location. 
-					response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
-					response.setHeader("Location", redirectLink);
+					response.sendRedirect(redirectLink);
 				} else {
 
 					// Continue to view file.
@@ -83,8 +81,7 @@ public class FileViewerServlet extends HttpServlet {
 			} else {
 				
 				// Redirect to SP ip restricted page. 
-				response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
-				response.setHeader("Location", ConfigProperties.getProperty("file_viewer_ip_restricted"));
+				response.sendRedirect(ConfigProperties.getProperty("file_viewer_ip_restricted"));
 			}
 			break;
 	}
