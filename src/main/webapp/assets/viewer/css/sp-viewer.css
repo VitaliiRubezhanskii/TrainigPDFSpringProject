@@ -309,6 +309,12 @@ body {
   background-color: #b4aa89;
 }
 
+#sp-widget-3-form-message {
+  font-size: 0.9em;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
 .sp-widget3-label-wrapper {
   margin: 20px 0 5px;
 }
