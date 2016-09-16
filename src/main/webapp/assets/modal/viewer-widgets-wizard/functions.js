@@ -360,6 +360,7 @@ sp.viewerWidgetsModal = {
         .closest('div').removeClass('sp-hide-is-enabled');
           
       $('[name="question-widget-text"]').val(widget.items[0].buttonText);
+      $('[name="spWidget3FormMessage"]').val(widget.items[0].formMessage);
     }
     
     function displayLikeWidgetSettings(widget) {
@@ -662,7 +663,8 @@ sp.viewerWidgetsModal = {
           isEnabled: $('[name="question-widget-is-enabled"]').prop('checked'),
           items: [
             {
-            	buttonText: $('[name="question-widget-text"]').val()     
+            	buttonText: $('[name="question-widget-text"]').val(),
+            	formMessage: $('[name="spWidget3FormMessage"]').val()
             }
           ]
         }

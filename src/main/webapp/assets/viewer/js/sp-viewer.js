@@ -1025,11 +1025,17 @@ if ('' != sp.viewer.linkHash) {
         }
         
         $('#sp-widget3').html('<i class="fa fa-comment"></i><div>' + widget.buttonText + '</div>');
+        
+        var formMessage = '';
+        if (typeof widget.formMessage !== 'undefined' &&  widget.formMessage !== '') {
+          formMessage = '<div id="sp-widget-3-form-message">' + widget.formMessage + '</div>';
+        }
+        
         $('#sp-widget3').click(function() {
           swal({
             showCancelButton: true,
             showConfirmButton: true,
-            html: '<form class="sp-widget-font-fmaily"><label for="sp-widget3-message" class="sp-widget3-label">Enter your message:</label><textarea class="swal2-textarea" id="sp-widget3-message" rows="5" autofocus></textarea><label for="sp-widget3-email" class="sp-widget3-label">Enter your email address:</label><input type="text" class="swal2-input" id="sp-widget3-email"></form>',
+            html: '<form class="sp-widget-font-fmaily"><label for="sp-widget3-message" class="sp-widget3-label">Enter your message:</label><textarea class="swal2-textarea" id="sp-widget3-message" rows="5" autofocus></textarea><label for="sp-widget3-email" class="sp-widget3-label">Enter your email address:</label><input type="text" class="swal2-input" id="sp-widget3-email">' + formMessage + '</form>',
             title: widget.buttonText,
             preConfirm: function() {
               return new Promise(function(resolve) {
