@@ -4,6 +4,13 @@ SlidePiper README File
 Change Log
 ----------
 
+### 0.13.2
+
+2016-09-16 Yaniv Friedensohn <yanivp@slidepiper.com>
+
+* Add ability to add a message to the ask a question widget form.
+
+
 ### 0.13.1
 
 2016-09-16 Yaniv Friedensohn <yanivp@slidepiper.com>
