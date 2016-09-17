@@ -4,6 +4,13 @@ SlidePiper README File
 Change Log
 ----------
 
+### 0.13.3
+
+2016-09-16 Yaniv Friedensohn <yanivp@slidepiper.com>
+
+* Changed 301 redirect to 302 for broken link, restricted IP, and unsupported browser.
+
+
 ### 0.13.2
 
 2016-09-16 Yaniv Friedensohn <yanivp@slidepiper.com>
