@@ -1537,7 +1537,55 @@ public class DbLayer {
       
         return customerEmail;
       }
-    
+      
+      /**
+       * Get document URL from fileLinkHash.
+       * 
+       * The document_url field is on the slides table. And the file is stored in Amazon S3.
+       * 
+       * @param fileLinkHash
+       * @return documentUrl
+       */
+      public static String getDocumentUrlFromFileLinkHash(String fileLinkHash) {
+    	  
+		Constants.updateConstants();
+	    try {
+	      Class.forName("com.mysql.jdbc.Driver");
+	    } catch (ClassNotFoundException e) {
+	      e.printStackTrace();
+	    }
+      
+  		String documentUrl = null;
+  		String sql = "SELECT document_url\n"
+					+ "FROM slides\n"
+					+ "JOIN msg_info ON msg_info.slides_id = slides.id\n"
+					+ "WHERE msg_info.id = ?";
+  		
+  		Connection conn = null;
+  		try {
+  			conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
+  			PreparedStatement ps = conn.prepareStatement(sql);
+  			ps.setString(1, fileLinkHash);
+  			ResultSet rs = ps.executeQuery();
+  		  
+  		  if (rs.next()) {
+  			documentUrl = rs.getString("document_url");
+  		  }
+  			 
+  		} catch (SQLException e) {
+  			e.printStackTrace();
+  		} finally {
+	      if (null != conn) {
+	        try {
+	          conn.close();
+	        } catch (SQLException ex) {
+	          ex.printStackTrace();
+	        }
+	      }
+  		}
+      		
+      	return documentUrl;
+      }
     	
     	/**
     	 * Get the fileHash from a file link hash.

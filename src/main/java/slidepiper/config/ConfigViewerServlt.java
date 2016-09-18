@@ -201,6 +201,11 @@ public class ConfigViewerServlt extends HttpServlet {
         file.put("fileName", 
             StringEscapeUtils.escapeHtml4(
                 DbLayer.getFileMetaData(fileLinkHash).get("fileName")));
+        
+        // S3 document_url.
+        file.put("documentUrl", 
+        		DbLayer.getDocumentUrlFromFileLinkHash(fileLinkHash));
+        
         viewer.put("file", file);
         
         config.put("viewer", viewer);

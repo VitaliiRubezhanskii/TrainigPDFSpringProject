@@ -148,14 +148,23 @@ if ('' != sp.viewer.linkHash) {
   $.getJSON('../../config-viewer', {linkHash: sp.viewer.linkHash}, function(config) {
     
     // Set document title.
-    if (typeof config.viewer.documentTitle !== 'undefined' || '' === config.viewer.documentTitle) {
+    if (typeof config.viewer.documentTitle !== 'undefined'
+        && null !== config.viewer.documentTitle
+        && '' !== config.viewer.documentTitle) {
       document.title =  config.viewer.documentTitle;
     } else {
       document.title = 'SlidePiper';
     }
     
-    PDFViewerApplication.open(config.appUrl + '/file/' + sp.viewer.linkHash
-        + '?file-name=' + config.viewer.file.fileName);
+    // Load file from Amazon S3 or from slides table.
+    if (typeof config.viewer.file.documentUrl !== 'undefined'
+    		&& null !== config.viewer.file.documentUrl
+    		&& '' !== config.viewer.file.documentUrl) {
+      PDFViewerApplication.open(encodeURI(config.viewer.file.documentUrl));
+    } else {
+      PDFViewerApplication.open(config.appUrl + '/file/' + sp.viewer.linkHash
+          + '?file-name=' + config.viewer.file.fileName);
+    }
     
     // Customization settings.
     if (typeof config.viewer.toolbarBackground !== 'undefined') {

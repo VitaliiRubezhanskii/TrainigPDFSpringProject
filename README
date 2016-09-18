@@ -4,6 +4,17 @@ SlidePiper README File
 Change Log
 ----------
 
+### 0.13.4
+
+2016-09-18 Max Prais <maxp@slidepiper.com>
+
+* Implement functionality to load file from URL:
+	1. If document URL is provided, load this URL in the viewer.
+	2. If not, load the file saved in the slides table.
+
+* Change fill colour of the Viewer loading bar.
+
+
 ### 0.13.3
 
 2016-09-16 Yaniv Friedensohn <yanivp@slidepiper.com>
