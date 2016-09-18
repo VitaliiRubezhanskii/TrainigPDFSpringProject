@@ -71,6 +71,10 @@ body {
   border-bottom-color: #c3c3c3;
 }
 
+#loadingBar .progress {
+  background-color: #616161;
+}
+
 #viewerContainer {
   background-color: #f6f6f6;
 }
