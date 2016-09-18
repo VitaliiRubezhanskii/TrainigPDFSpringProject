@@ -27,6 +27,21 @@ body {
   direction: rtl;
 }
 
+.breadcrumb > li + li:before {
+  color: #455A64;
+  content: " >";
+  font-weight: 900;
+}
+
+.breadcrumb > li {
+  color: #777;
+}
+
+.breadcrumb > .active {
+  color: #337ab7;
+  font-weight: bold;
+}
+
 canvas {
   border-radius: 3px;
   border: 1px solid #b7b7b7;

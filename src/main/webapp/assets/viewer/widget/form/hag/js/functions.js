@@ -58,7 +58,7 @@ $(function() {
     $('section[data-section-id="' + sectionId.toString() + '"]').show();
     
     // Pagination settings.
-    $('.pagination li').removeClass('active');
+    $('.breadcrumb li').removeClass('active');
     $('#pagination-' + sectionId.toString()).addClass('active');
   });
   
@@ -69,6 +69,10 @@ $(function() {
     $('section').hide();
     sectionId--;
     $('section[data-section-id="' + sectionId.toString() + '"]').show();
+    
+    // Pagination settings.
+    $('.breadcrumb li').removeClass('active');
+    $('#pagination-' + sectionId.toString()).addClass('active');
   });
   
   /* Form 1 Settings */
