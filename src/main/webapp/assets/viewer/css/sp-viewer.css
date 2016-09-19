@@ -630,14 +630,20 @@ body {
   }
 }
 
-@media only screen and (max-height: 700px) {
+@media only screen and (max-height: 810px) {
+  #sp-widget5__hop-11 {
+    display: none;
+  }
+}
+
+@media only screen and (max-height: 760px) {
   #sp-widget5__hop-9,
   #sp-widget5__hop-10 {
     display: none;
   }
 }
 
-@media only screen and (max-height: 645px) {
+@media only screen and (max-height: 660px) {
   #sp-widget5__hop-8 {
     display: none;
   }
@@ -647,7 +653,7 @@ body {
   }
 }
 
-@media only screen and (max-height: 575px) {
+@media only screen and (max-height: 590px) {
   #sp-widget5__hop-5,
   #sp-widget5__hop-6,
   #sp-widget5__hop-7 {
