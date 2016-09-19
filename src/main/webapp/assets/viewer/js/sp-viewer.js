@@ -1,3 +1,17 @@
+/**
+ * Set document links to open in a new tab.
+ */
+$(document).on('textlayerrendered', function() {
+  var aArray = document.getElementsByTagName('a');
+  for (var i = 0; i < aArray.length; i++) {
+    var a = aArray[i];
+    if (null === a.getAttribute('target')) {
+      a.setAttribute('target', '_blank');
+    }
+  };
+});
+
+
 /* Initialize initView() in viewercode.js */
 $(document).on('pagesloaded pagechange', function(event) {
   var isPagesLoaded = false;
