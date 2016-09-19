@@ -4,6 +4,13 @@ SlidePiper README File
 Change Log
 ----------
 
+### 0.13.6
+
+2016-09-19 Yaniv Friedensohn <yanivf@slidepiper.com>
+
+* Make links in a document open in a new tab.
+
+
 ### 0.13.5
 
 2016-09-19 Max Prais <maxp@slidepiper.com>
