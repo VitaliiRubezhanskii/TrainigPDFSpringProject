@@ -1096,14 +1096,14 @@ sp.viewerWidgetsModal = {
   
   // Hopper.
   $(document).off('click', '.sp-add-hopper-widget__a').on('click', '.sp-add-hopper-widget__a', function() {
-    if ($('.sp-hopper-widget__row').length < 10) {
+    if ($('.sp-hopper-widget__row').length < 12) {
       $('#sp-hopper-customize__container').append(
           '<div class="row sp-hopper-widget__row">' + 
             sp.viewerWidgetsModal.hopperHtml + 
           '</div>'      
       );
     } else {
-      sp.error.handleError('You can add a maximum of 10 hoppers.');
+      sp.error.handleError('You can add a maximum of 12 hoppers.');
     }
   });
 
