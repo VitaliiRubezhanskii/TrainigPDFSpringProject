@@ -4,15 +4,25 @@ SlidePiper README File
 Change Log
 ----------
 
+### 0.13.5
+
+2016-09-19 Max Prais <maxp@slidepiper.com>
+
+* Enhanced Form Widget Saving:
+	1. Depending on whether details for an image or a form have been saved,
+	the modal will open showing those details with the 'Upload Image' or
+	'Upload Form' radio checked.
+	
+
 ### 0.13.4
 
 2016-09-18 Max Prais <maxp@slidepiper.com>
 
-* Implement functionality to load file from URL:
+* Implemented functionality to load file from URL:
 	1. If document URL is provided, load this URL in the viewer.
 	2. If not, load the file saved in the slides table.
 
-* Change fill colour of the Viewer loading bar.
+* Changed fill colour of the Viewer loading bar.
 
 
 ### 0.13.3

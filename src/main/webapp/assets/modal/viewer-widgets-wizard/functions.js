@@ -414,6 +414,13 @@ sp.viewerWidgetsModal = {
             .removeClass('fa fa-picture-o fa-4x')
             .css('background-image', 'url(' + widget.items[0][$(this).attr('name')] + ')');
         }
+        
+        if ('formSelectType' === $(this).attr('name')) {
+          $('[data-widget-type=' + widget.items[0][$(this).attr('name')] + ']')
+            .prop('checked', true)
+            .change();
+        }
+        
         $(this).val(widget.items[0][$(this).attr('name')]); 
       });
     }
