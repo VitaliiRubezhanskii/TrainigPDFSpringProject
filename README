@@ -4,6 +4,13 @@ SlidePiper README File
 Change Log
 ----------
 
+### 0.13.7
+
+2016-09-19 Max Prais <maxp@slidepiper.com>
+
+* Changed hopper widget to add up to 12 hops.
+
+
 ### 0.13.6
 
 2016-09-19 Yaniv Friedensohn <yanivf@slidepiper.com>
