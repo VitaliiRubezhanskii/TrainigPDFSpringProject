@@ -28,7 +28,8 @@ $(function() {
       id: {
         exactLength: 9,
         number:true,
-        required: true
+        required: true,
+        validId: true
       },
       lastName: {
         minlength: 2,
@@ -77,42 +78,50 @@ $(function() {
       id: {
         exactLength: 9,
         number: true,
-        required: true
+        required: true,
+        validId: true
       },
       idPartner: {
         exactLength: 9,
         number: true,
-        required: true
+        required: true,
+        validId: true
       },
       idBeneficiary1: {
         exactLength: 9,
         number: true,
-        required: true
+        required: true,
+        validId: true
       },
       idBeneficiary2: {
         exactLength: 9,
         number: true,
-        required: true
+        required: true,
+        validId: true
       },
       idBeneficiary3: {
         exactLength: 9,
         number: true,
-        required: true
+        required: true,
+        validId: true
       },
       idBeneficiary4: {
         exactLength: 9,
         number: true,
-        required: true
+        required: true,
+        validId: true
       },
       idBeneficiary5: {
         exactLength: 9,
         number: true,
-        required: true
+        required: true,
+        validId: true
       },
       idBeneficiary6: {
         exactLength: 9,
         number: true,
-        required: true
+        required: true,
+        validId: true
       },
       familyStatus: {
         required: true

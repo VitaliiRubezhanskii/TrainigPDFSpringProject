@@ -51,7 +51,6 @@ $(function() {
         break;
     }
     
-    
     // Section settings.
     $('section').hide();
     sectionId++;
@@ -325,12 +324,11 @@ $(function() {
     return this.optional(element) || value.length == param;
   });
   
-  /*
-  jQuery.validator.addMethod("isTotal100", function(value, element, param) {
-    return this.optional(element) || value.length == param;
-  });
-  */
   
+  jQuery.validator.addMethod("validId", function(value, element, param) {
+    return this.optional(element) || isIdValid(value) === param;
+  });
+      
   jQuery.extend(jQuery.validator.messages, {
     email: 'כתובת מייל לא חוקית',
     exactLength: 'השדה צריך להיות בעל {0} תווים',
@@ -338,8 +336,7 @@ $(function() {
     minlength: 'השדה צריך להיות בעל יותר מ- {0} תווים',
     number: 'השדה יכול להכיל רק מספרים',
     required: 'נא למלא את השדה',
-    isTotal100: 'סכום אחוז הקרבה שונה מ- 100'
-    //lettersonly: 'השדה יכול להכיל רק אותיות'
+    validId: 'ת.ז. שהוזנה אינה תקינה'
   });
   
   
@@ -375,5 +372,46 @@ $(function() {
     } else {
       parent.swal.disableConfirmButton();
     }
+  }
+  
+  
+  /**
+   * Returns true if input is a valid Israel ID.
+   */
+  function isIdValid(id) {
+    var isIdValid = false;
+    var sum = 0;
+    var lastDigitCalculated = -1;
+    
+    if (id.length === 9) {
+      for (var n = 1; n < 9; n++) {
+        var i = n - 1;
+        var digit = parseInt(id.charAt(i));
+        if (NaN !== digit) {
+          
+          if (n % 2 === 0) {
+            if (digit * 2 > 9) {
+              sum += 1 + parseInt((digit * 2).toString().charAt(1));
+            } else {
+              sum += digit * 2;
+            }
+          } else {
+            sum += digit;
+          }
+        }
+      }
+      
+      if (sum % 10 === 0) {
+        lastDigitCalculated = 0;
+      } else {
+        lastDigitCalculated = Math.floor(sum / 10) * 10 + 10 - sum;
+      }
+      
+      if (parseInt(id.charAt(8)) === lastDigitCalculated) {
+        isIdValid = true;
+      }
+    }
+    
+    return isIdValid;
   }
 });
