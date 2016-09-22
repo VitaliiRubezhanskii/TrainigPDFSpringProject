@@ -25,6 +25,12 @@ section:not([data-section-id="0"]),
 /* Specific Settings */
 body {
   direction: rtl;
+  overflow: hidden;
+}
+
+.breadcrumb {
+  line-height: 22px;
+  margin-bottom: 10px;
 }
 
 .breadcrumb > li + li:before {
@@ -62,6 +68,7 @@ h2 {
 
 .sp-back-section {
   margin-left: 10px !important;
+  display: none;
 }
 
 #form-6 .sp-back-section {
@@ -103,18 +110,30 @@ select + .help-block,
   right: auto;
 }
 
-.pagination {
-  padding: 0;
-}
-
 .panel {
-  padding: 20px 20px 10px;
-  min-height: 260px;
+  height: 350px;
+  margin-bottom: 10px;
+  padding: 15px;
+  overflow-y: scroll;
 }
 
 .progress-bar {
   float: right;
   width: 25%;
+}
+
+.sp-back-section,
+.sp-next-section {
+  margin-top: 10px;
+  padding: 3px 10px;
+}
+
+.sp-form__complete-icon {
+  color: #a5dc86;
+}
+
+.sp-form__whitespace-nowrap {
+  white-space: nowrap;
 }
 
 .sp--text-align-center {
@@ -127,6 +146,80 @@ select + .help-block,
   font-weight: bold;
 }
 
+#form-7 h4 {
+  margin-top: 0;
+}
+
+#form-not-valid {
+  margin-bottom: 0;
+  text-align: center;
+}
+
+#form-not-valid label {
+  margin-bottom: 0;
+}
+
 #phone-number-error {
   margin-bottom: 0;
+}
+
+#sp-form__signature {
+  height: 100px;
+  max-width: 300px;
+  width: 100%; 
+}
+
+/* Media Queries */
+@media only screen and (max-height: 450px) {
+  .breadcrumb {
+    line-height: 11px;
+  }
+  
+  .panel {
+    height: 310px;
+  }
+}
+
+@media only screen and (max-height: 400px) {
+  .panel {
+    height: 260px;
+  }
+}
+
+@media only screen and (max-height: 350px) {
+  .panel {
+    height: 210px;
+  }
+}
+
+@media screen and (max-height: 700px) and (max-width: 400px) {
+  .sp-form__container,
+  .breadcrumb > li {
+    font-size: 10px;
+  }
+    
+  .panel {
+    height: 225px;
+  }
+}
+
+@media only screen and (max-height: 366px) and (max-width: 270px) { 
+  .breadcrumb {
+    line-height: 11px;
+  }
+  
+  .panel {
+    height: 115px;
+    padding: 9px;
+  }
+}
+
+@media only screen and (max-height: 115px) and (max-width: 228px) {
+  .breadcrumb {
+    line-height: 9px;
+  }
+  
+  .panel {
+    height: 62px;
+  }
 }

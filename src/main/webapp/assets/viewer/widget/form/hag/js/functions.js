@@ -1,8 +1,8 @@
 $(function() {
-  parent.swal.disableConfirmButton();  
+  parent.swal.disableConfirmButton();
+  var sectionId = 0;
   
   $('.sp-next-section').click(function() {
-    var sectionId = parseInt($(this).closest('section').attr('data-section-id'));
     console.log('Currently on section: ' + sectionId);
     
     if (! $('#form-' + sectionId).valid()) {
@@ -17,6 +17,8 @@ $(function() {
     switch (sectionId) {
       case 0:
         $('.pagination-container').removeClass('hidden');
+        
+        $('.sp-back-section').hide();
         
         $('#id').val($('#id-init').val());
         $('#first-name').val($('#first-name-init').val());
@@ -48,11 +50,24 @@ $(function() {
           $('#retirement-age-male').hide();
           $('#retirement-age-female').show();
         }
+        
+        $('.sp-back-section').show();
+        break;
+        
+      case 5:
+        $('.sp-next-section').text('שלח טופס');
+        
+        sendFormButton();
+        break;
+        
+      case 6:
+        $('.sp-next-section, .sp-back-section').css('visibility', 'hidden');
         break;
     }
     
     // Section settings.
     $('section').hide();
+    
     sectionId++;
     $('section[data-section-id="' + sectionId.toString() + '"]').show();
     
@@ -64,10 +79,21 @@ $(function() {
   $('.sp-back-section').click(function() {
     $('#form-not-valid').remove();
     
-    var sectionId = parseInt($(this).closest('section').attr('data-section-id'));
     $('section').hide();
     sectionId--;
     $('section[data-section-id="' + sectionId.toString() + '"]').show();
+    
+    switch(sectionId) {
+      case 0:
+      case 1:
+        $('.sp-back-section').hide();
+        break;
+    }
+    
+    // If previous section set next button to be 'Finish'.
+    $('.sp-next-section')
+      .prop('disabled', false)
+      .text('המשך');
     
     // Pagination settings.
     $('.breadcrumb li').removeClass('active');
@@ -187,7 +213,9 @@ $(function() {
   
   $('#beneficiary-remove').click(function() {
     var beneficiariesCount = $('#beneficiaries .beneficiary:visible').length;
-    $('#beneficiary-' + beneficiariesCount).hide();
+    if (beneficiariesCount > 1) {
+      $('#beneficiary-' + beneficiariesCount).hide();
+    }
   });
   
   
@@ -299,7 +327,9 @@ $(function() {
   
   $('#fund-remove').click(function() {
     var fundsCount = $('#funds .fund:visible').length;
-    $('#fund-' + fundsCount).hide();
+    if (fundsCount > 1) {
+      $('#fund-' + fundsCount).hide();
+    }
   });
   
   var fund = $('#funds').html();
@@ -356,7 +386,7 @@ $(function() {
   var signaturePad = new SignaturePad(canvas, {
     onEnd: function() {
       isSignaturePadClear = false;
-      sendFormButton()
+      sendFormButton();
     }
   });
   
@@ -368,9 +398,9 @@ $(function() {
   
   function sendFormButton() {
     if ($('#is-confirm-statements').is(':checked') && ! signaturePad.isEmpty() && ! isSignaturePadClear) {
-      parent.swal.enableConfirmButton();
+      $('.sp-next-section').prop('disabled', false);
     } else {
-      parent.swal.disableConfirmButton();
+      $('.sp-next-section').prop('disabled', true);
     }
   }
   

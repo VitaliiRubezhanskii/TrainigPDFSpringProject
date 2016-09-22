@@ -10,23 +10,24 @@
   <link rel="stylesheet" href="css/font-awesome.min.css">
   <link rel="stylesheet" href="css/select2/select2.min.css">
   <link rel="stylesheet" href="css/select2/select2-bootstrap.min.css">
+  <link rel="stylesheet" href="../../../../font-awesome/css/font-awesome.min.css">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
 <div class="container-fluid">
+  <div class="pagination-container sp--text-align-center hidden">
+    <ol class="breadcrumb">
+      <li class="active sp-form__whitespace-nowrap" id="pagination-1">פרטים אישיים</li>
+      <li class="sp-form__whitespace-nowrap" id="pagination-2">בחירת תוכנית ומסלול השקעה</li>
+      <li class="sp-form__whitespace-nowrap" id="pagination-3">עיסוק</li>
+      <li class="sp-form__whitespace-nowrap" id="pagination-4">הצהרת בריאות</li>
+      <li class="sp-form__whitespace-nowrap" id="pagination-5">העברת קופה (אופציונאלי)</li>
+      <li class="sp-form__whitespace-nowrap" id="pagination-6">ת.ז וחתימת הלקוח</li>
+    </ol>
+  </div>
+  
   <div class="panel panel-default">
-    <div class="pagination-container sp--text-align-center hidden">
-      <ol class="breadcrumb">
-        <li class="active" id="pagination-1">פרטים אישיים</li>
-        <li id="pagination-2">בחירת תוכנית ומסלול השקעה</li>
-        <li id="pagination-3">עיסוק</li>
-        <li id="pagination-4">הצהרת בריאות</li>
-        <li id="pagination-5">העברת קופה (אופציונאלי)</li>
-        <li id="pagination-6">ת.ז וחתימת הלקוח</li>
-      </ol>
-    </div>
-    
     <section data-section-id="0">
       <form id="form-0">
         <div class="form-group">
@@ -81,9 +82,6 @@
           <label class="control-label" for="email-init">כתובת מייל:</label>
           <input type="email" class="form-control" id="email-init" name="email" placeholder="הכנס כתובת מייל">
           <span class="glyphicon form-control-feedback"></span>
-        </div>
-        <div class="form-group sp--text-align-center">
-          <button type="button" class="btn btn-primary sp-next-section">המשך</button>
         </div>
       </form>
     </section>
@@ -1918,10 +1916,6 @@
             <button type="button" class="btn btn-primary" id="beneficiary-add">הוסף מוטב</button>
           </div>
         </div>
-        
-        <div class="form-group sp--text-align-center">
-          <button type="button" class="btn btn-primary sp-next-section">המשך</button>
-        </div>
       </form>
     </section>
       
@@ -2050,11 +2044,6 @@
           ידוע לי באם בחרתי במסלול שאינו תואם את גילי, יופקדו כספים במסלול שבו בחרתי וזאת עד להודעתי בדבר בחירת מסלול השקעה שונה.<br>
           בחירת מסלולי השקעה והכיסוי נעשתה על פי בחירתי והנני פוטר בזאת את החברה המנהלת מכל אחראיות בקשר עם בחירתו זו.<br>
           בבחירה במסלול השקעות התואם את גילי, תועבר הצבירה בין המסלולים בהתאם לגילי במנגנון אוטומטי.<br>
-        </div>
-        
-        <div class="form-group sp--text-align-center">
-          <button type="button" class="btn btn-primary sp-back-section">חזרה</button>
-          <button type="button" class="btn btn-primary sp-next-section">המשך</button>
         </div>
       </form>
     </section>
@@ -5995,11 +5984,6 @@
             </label>
           </div>
         </div>
-        
-        <div class="form-group sp--text-align-center">
-          <button type="button" class="btn btn-primary sp-back-section">חזרה</button>
-          <button type="button" class="btn btn-primary sp-next-section">המשך</button>
-        </div>
       </form>
     </section>
     
@@ -6257,11 +6241,6 @@
             הנני מצהיר כי כל הפרטים שמסרתי בהצהרה זו, כולם או חלקם, הינם הפרטים הנכונים והמלאים לגבי מצב בריאותי במועד ההצהרה וכי לא אהיה זכאי לפנסיית נכות, ושאיריי לא יהיו זכאים לפנסיית שאירים, ככל שהנכות או הפטירה, לפי העניין, אירעו כתוצאה ממצבי הבריאותי, שעליו לא דיוותי כנדרש, דיווח מלא, נכון ומדויק.<br>
             הנני מוותר ומייפה את כוחה של החברה המנהלת ו/או מי מטעמה לקבל בשמי כל מידע רפואי מאת רופא ו/או מוסד רפואי, בקשר עם מצבי הבריאותי.
           </label>
-        </div>
-        
-        <div class="form-group sp--text-align-center">
-          <button type="button" class="btn btn-primary sp-back-section">חזרה</button>
-          <button type="button" class="btn btn-primary sp-next-section">המשך</button>
         </div>
       </form>
     </section>
@@ -6606,11 +6585,6 @@
             <button type="button" class="btn btn-primary" id="fund-add">הוסף קופה</button>
           </div>
         </div>
-        
-        <div class="form-group sp--text-align-center">
-          <button type="button" class="btn btn-primary sp-back-section">חזרה</button>
-          <button type="button" class="btn btn-primary sp-next-section">המשך</button>
-        </div>
       </form>
     </section>
     
@@ -6625,20 +6599,41 @@
         
         <div class="form-group">
           <label>חתימה:</label><br>
-          <canvas></canvas><br>
+          <canvas id="sp-form__signature"></canvas><br>
           <button id="hag-signature--clear" type="button" class="btn btn-default">נקה</button>
         </div>
         
         <div class="form-group">
           <label class="control-label">לאחר שליחת הטופס ישלח אליך קישור דרכו תוכל/י להעלות צילום ת.ז. ומסמכים דרושים נוספים.</label>
         </div>
-        
+      </form>
+    </section>
+    
+    <section data-section-id="7">
+      <form id="form-7">
         <div class="form-group sp--text-align-center">
-          <button type="button" class="btn btn-primary sp-back-section">חזרה</button>
+            <h4>הצלחה!</h4>
+            <h5>בקשת ההצטרפות לקרן פנסיה מקיפה ברירת מחדל נשלחה בהצלחה</h5>
+            <div class="fa-stack fa-2x">
+                <i class="fa fa-circle-thin fa-stack-2x sp-form__complete-icon"></i>
+                <i class="fa fa-check fa-stack-1x sp-form__complete-icon"></i>
+            </div>
+            <h5>
+              מיד ישלח אליך אימייל / סמס עם קישור לאתר בו תוכל/י להעלות מסמכים נדרשים (ת.ז. למשל) לצורך סיום תהליך ההצטרפות
+              <br>
+              <br>
+              כעת ניתן לסגור את החלון
+            </h5>
         </div>
       </form>
     </section>
   </div>
+  
+  <div class="form-group sp--text-align-center">
+     <button type="button" class="btn btn-primary sp-back-section sp-form__buttons">חזרה</button>
+     <button type="button" class="btn btn-primary sp-next-section sp-form__buttons">המשך</button>
+  </div>
+  <hr>
 </div>
 
 <!-- Scripts -->

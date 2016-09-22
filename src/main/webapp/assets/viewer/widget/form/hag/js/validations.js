@@ -13,6 +13,10 @@ $(function() {
     $(element).closest('.form-group')
       .addClass('has-success has-feedback').removeClass('has-error')
       .find('.form-control-feedback').addClass('glyphicon-ok').removeClass('glyphicon-remove');
+    
+    if ($('.has-error').length === 1) {
+      $('#form-not-valid').remove();
+    }
   }
   
   $('#form-0').validate({
