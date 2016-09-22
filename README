@@ -4,6 +4,20 @@ SlidePiper README File
 Change Log
 ----------
 
+### 0.13.8
+
+2016-09-22 Yaniv Friedensohn <yanivf@slidepiper.com>
+
+Log initial document link requests:
+- Document does not exists
+- Document exists
+- Unsupported Browser
+- IP not whitelisted
+
+For each event we log the requested document link hash, originating IP,
+referring website, and redirect link where applicable.
+
+
 ### 0.13.7
 
 2016-09-19 Max Prais <maxp@slidepiper.com>
