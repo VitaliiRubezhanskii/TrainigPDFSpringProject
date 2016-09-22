@@ -1,6 +1,8 @@
 package slidepiper.customer_servlets;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -20,12 +22,21 @@ public class FileViewerServlet extends HttpServlet {
     
 	String fileLinkHash = request.getParameter("f");
 	
+	Map<String, String> eventDataMap = new HashMap<String, String>();
+	eventDataMap.put("msg_id", fileLinkHash);
+	eventDataMap.put("session_id", "-1");
+	eventDataMap.put("param_1_varchar", request.getRemoteAddr());
+	eventDataMap.put("param_2_varchar", request.getHeader("User-Agent"));
+	eventDataMap.put("param_3_varchar", request.getHeader("referer"));
+	
 	switch(DbLayer.getFileWhiteListFlag(fileLinkHash)) {
 	
 		// File does not exist.
 		case 1:
 			
 			// Redirect to SP broken link page.
+			eventDataMap.put("param_4_varchar", ConfigProperties.getProperty("file_viewer_broken_link"));
+			DbLayer.setEvent("customer_events", ConfigProperties.getProperty("init_document_not_exists"), eventDataMap);
 			response.sendRedirect(ConfigProperties.getProperty("file_viewer_broken_link"));
 			break;
 		
@@ -33,6 +44,7 @@ public class FileViewerServlet extends HttpServlet {
 		case 2:
 			
 			// Continue to view file.
+			DbLayer.setEvent("customer_events", ConfigProperties.getProperty("init_document_exists"), eventDataMap);
 			request.getRequestDispatcher(ConfigProperties.getProperty("file_viewer")).forward(request, response);
 			break;
 		
@@ -70,17 +82,24 @@ public class FileViewerServlet extends HttpServlet {
 						redirectLink = ConfigProperties.getProperty("app_url");
 					}
 					
-					// Redirect to specified location. 
+					// Redirect to specified location.
+					eventDataMap.put("param_4_varchar", redirectLink);
+					DbLayer.setEvent("customer_events", ConfigProperties.getProperty("init_unsupported_browser"), eventDataMap);
 					response.sendRedirect(redirectLink);
 				} else {
 
 					// Continue to view file.
+					DbLayer.setEvent("customer_events", ConfigProperties.getProperty("init_document_exists"), eventDataMap);
 					request.getRequestDispatcher(ConfigProperties.getProperty("file_viewer")).forward(request, response);
 				}
 				
 			} else {
 				
-				// Redirect to SP ip restricted page. 
+				// Redirect to SP ip restricted page.
+				String ipRestrictedDocumentLink = ConfigProperties.getProperty("file_viewer_ip_restricted");
+				eventDataMap.put("param_4_varchar", ipRestrictedDocumentLink);
+				
+				DbLayer.setEvent("customer_events", ConfigProperties.getProperty("init_ip_not_whitelisted"), eventDataMap);
 				response.sendRedirect(ConfigProperties.getProperty("file_viewer_ip_restricted"));
 			}
 			break;
