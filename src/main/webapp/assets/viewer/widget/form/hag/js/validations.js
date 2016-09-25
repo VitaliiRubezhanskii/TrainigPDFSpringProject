@@ -3,21 +3,21 @@ $(function() {
     $(element).closest('.form-group')
       .addClass('has-error has-feedback').removeClass('has-success')
       .find('.form-control-feedback').addClass('glyphicon-remove').removeClass('glyphicon-ok');
-  }
+  };
   var errorElement = 'span';
   var errorClass = 'help-block';
   var errorPlacement = function(error, element) {
     element.closest('.form-group').append(error);
-  }
+  };
   var success = function(element) {
     $(element).closest('.form-group')
       .addClass('has-success has-feedback').removeClass('has-error')
       .find('.form-control-feedback').addClass('glyphicon-ok').removeClass('glyphicon-remove');
     
-    if ($('.has-error').length === 1) {
+    if ($(element).closest('section').find('.has-error').length === 0) {
       $('#form-not-valid').remove();
     }
-  }
+  };
   
   $('#form-0').validate({
     rules: {
@@ -172,10 +172,6 @@ $(function() {
         required: true
       },
       lastName: {
-        minlength: 2,
-        required: true
-      },
-      lastNamePartner: {
         minlength: 2,
         required: true
       },

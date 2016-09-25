@@ -1679,13 +1679,6 @@
           </div>
         </div>
         
-        <div class="form-group">
-          <label>
-            אני מבקש לקבל עדכונים ודיווחים תקופתיים באמצעות הדוא"ל עד אשר אודיעכם אחרת.
-            <input type="checkbox" class="pull-right sp-checkbox--rtl" id="receiveUpdatesByEmail">
-          </label>
-        </div>
-        
         <hr>
         
         <div class="form-group">
@@ -1708,7 +1701,7 @@
         </div>
         
         <div class="form-group sp-radio">
-          <label class="control-label">האם יש בן/בת זוג:</label>
+          <label class="control-label">האם יש בן/בת זוג (ידוע/ה בציבור):</label>
           <div>
             <input type="radio" id="is-has-partner-yes" name="isHasPartner" value="כן">
             <label class="radio-inline" for="is-has-partner-yes">
@@ -1729,12 +1722,6 @@
           <div class="form-group">
             <label class="control-label" for="id-partner">תעודת זהות:</label>
             <input type="text" class="form-control" id="id-partner" name="idPartner" placeholder="הכנס תעודת זהות">
-            <span class="glyphicon form-control-feedback"></span>
-          </div>
-        
-          <div class="form-group">
-            <label class="control-label" for="last-name-partner">שם משפחה:</label>
-            <input type="text" class="form-control" id="last-name-partner" name="lastNamePartner" placeholder="הכנס שם משפחה">
             <span class="glyphicon form-control-feedback"></span>
           </div>
           
@@ -1922,7 +1909,7 @@
     <section data-section-id="2">
       <form id="form-2">
       	<div class="form-group">
-          <label class="control-label">בחירת תוכנית ביטוח:</label>
+          <label class="control-label">בחירת תוכנית ביטוח:</label><i id="pensionPlanTooltip" class="fa fa-info-circle sp-tooltip"></i>
           <div class="sp-radio">
             <input type="radio" id="pension-plan-1" name="pensionPlan">
             <label class="radio-inline" for="pension-plan-1">
@@ -1975,7 +1962,7 @@
         
         
       	<div class="form-group">
-          <label class="control-label">בחירת מסלול השקעה:</label>
+          <label class="control-label">בחירת מסלול השקעה:</label><i id="investmentPlanTooltip" class="fa fa-info-circle sp-tooltip"></i>
           <div class="sp-radio">
             <input type="radio" id="investment-plan-1" name="investmentPlan">
             <label class="radio-inline" for="investment-plan-1">

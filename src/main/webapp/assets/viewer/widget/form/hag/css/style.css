@@ -100,6 +100,19 @@ select + .help-block,
   text-align: right;
 }
 
+.sp-tooltip {
+  margin-right: 5px;
+}
+
+.sp-tooltip-a {
+  color: #fff;
+}
+
+.sp-tooltip-a:hover {
+  color: #fff;
+}
+
+
 .has-feedback .form-control {
   padding-right: 12px;
   padding-left: 42.5px;
@@ -130,6 +143,11 @@ select + .help-block,
 
 .sp-form__complete-icon {
   color: #a5dc86;
+}
+
+.sp-form__menu-section--seen {
+  cursor: pointer;
+  font-weight: bold; 
 }
 
 .sp-form__whitespace-nowrap {

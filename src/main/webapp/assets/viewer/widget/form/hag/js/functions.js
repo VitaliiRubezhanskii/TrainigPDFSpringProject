@@ -1,17 +1,11 @@
 $(function() {
-  parent.swal.disableConfirmButton();
   var sectionId = 0;
   
   $('.sp-next-section').click(function() {
     console.log('Currently on section: ' + sectionId);
     
-    if (! $('#form-' + sectionId).valid()) {
-      if (0 === $('#form-not-valid').length) {
-        $(this).closest('.form-group').before('<div class="form-group has-error" id="form-not-valid"><label class="control-label">לא כל שדות החובה מלאים, ולכן לא ניתן לעבור למסך הבא</label></div>');
-      }
+    if (! isFormValid()) {
       return false;
-    } else {
-      $('#form-not-valid').remove();
     }
     
     switch (sectionId) {
@@ -50,8 +44,6 @@ $(function() {
           $('#retirement-age-male').hide();
           $('#retirement-age-female').show();
         }
-        
-        $('.sp-back-section').show();
         break;
         
       case 5:
@@ -61,44 +53,91 @@ $(function() {
         break;
         
       case 6:
-        $('.sp-next-section, .sp-back-section').css('visibility', 'hidden');
+        $('.pagination-container, .sp-next-section, .sp-back-section')
+            .css('visibility', 'hidden');
         break;
     }
     
-    // Section settings.
-    $('section').hide();
-    
     sectionId++;
-    $('section[data-section-id="' + sectionId.toString() + '"]').show();
-    
-    // Pagination settings.
-    $('.breadcrumb li').removeClass('active');
-    $('#pagination-' + sectionId.toString()).addClass('active');
+    setSectionView();
   });
+  
   
   $('.sp-back-section').click(function() {
     $('#form-not-valid').remove();
     
-    $('section').hide();
     sectionId--;
-    $('section[data-section-id="' + sectionId.toString() + '"]').show();
-    
-    switch(sectionId) {
-      case 0:
-      case 1:
-        $('.sp-back-section').hide();
-        break;
-    }
+    setSectionView();
     
     // If previous section set next button to be 'Finish'.
     $('.sp-next-section')
       .prop('disabled', false)
       .text('המשך');
-    
-    // Pagination settings.
-    $('.breadcrumb li').removeClass('active');
-    $('#pagination-' + sectionId.toString()).addClass('active');
   });
+  
+  
+  // Navigate the form on the navbar.
+  $('.breadcrumb li').click(function() {
+    if ($(this).hasClass('sp-form__menu-section--seen')) {
+      var newSectionId = parseInt($(this).attr('id').split('-')[1]);
+      
+      // If current section is the same old the clicked section, do nothing.
+      if (newSectionId !== sectionId) {
+        
+        // If newSectionId is greater than current Id, then validate. 
+        // If it is not valid, break the function.
+        if (newSectionId > sectionId && ! isFormValid()) {
+          return false;
+          
+          // If newSectionId is lower than current Id, remove error message. 
+        } else if (newSectionId < sectionId) {
+          $('#form-not-valid').remove();
+        }
+        
+        // Set new section Id. 
+        sectionId = newSectionId;
+        setSectionView();
+      }
+    }
+  });
+  
+  function isFormValid() {
+    if (! $('#form-' + sectionId).valid()) {
+      if (0 === $('#form-not-valid').length) {
+        $('.panel').after('<div class="form-group has-error" id="form-not-valid"><label class="control-label">לא כל שדות החובה מלאים, ולכן לא ניתן לעבור למסך הבא</label></div>');
+      }
+      return false;
+    } else {
+      $('#form-not-valid').remove();
+      return true;
+    }
+  }
+  
+  function setSectionView() {
+    
+    // Section settings.
+    $('section').hide();
+    $('section[data-section-id="' + sectionId.toString() + '"]').show();
+    
+    // Breadcrumb settings.
+    $('.breadcrumb li').removeClass('active');
+    $('#pagination-' + sectionId.toString()).addClass('active sp-form__menu-section--seen');
+    
+    if (6 === sectionId) {
+      $('.sp-next-section').text('שלח טופס');
+      sendFormButton();
+    } else {
+      $('.sp-next-section')
+        .prop('disabled', false)
+        .text('המשך');
+    }
+    
+    if (sectionId <= 1) {
+      $('.sp-back-section').hide();
+    } else {
+      $('.sp-back-section').show();
+    }
+  }
   
   /* Form 1 Settings */
   $('#city').select2({
@@ -157,8 +196,6 @@ $(function() {
           '<option value="' + data.result.records[i]['סמל_רחוב'].replace(/"/g, '&quot;') + '">' + data.result.records[i]['שם_רחוב'] + '</option>'
         );
       }
-      
-      console.log(data);
     });  
   });
   
@@ -347,6 +384,27 @@ $(function() {
     sendFormButton();
   });
   
+  
+  /* Tooltip */
+  $('#pensionPlanTooltip').tooltip({
+    delay: {
+      show: 300,
+      hide: 4000
+    },
+    html: true,
+    placement: 'left',
+    title: '<a class="sp-tooltip-a" target="_blank" href="http://www.hag.co.il/%d7%a7%d7%a8%d7%a0%d7%95%d7%aa-%d7%a4%d7%a0%d7%a1%d7%99%d7%94/%d7%aa%d7%95%d7%9b%d7%a0%d7%99%d7%95%d7%aa-%d7%91%d7%99%d7%98%d7%95%d7%97/">לחצ/י כאן ללמידה על תכניות הביטוח הקיימות</a>'
+  });
+  
+  $('#investmentPlanTooltip').tooltip({
+    delay: {
+      show: 300,
+      hide: 4000
+    },
+    html: true,
+    placement: 'left',
+    title: '<a class="sp-tooltip-a" target="_blank" href="http://www.hag.co.il/%d7%a7%d7%a8%d7%a0%d7%95%d7%aa-%d7%a4%d7%a0%d7%a1%d7%99%d7%94/%d7%a7%d7%a8%d7%a0%d7%95%d7%aa-%d7%94%d7%a4%d7%a0%d7%a1%d7%99%d7%94-%d7%a9%d7%9c%d7%a0%d7%95/%d7%94%d7%9c%d7%9e%d7%9f-%d7%90%d7%9c%d7%93%d7%95%d7%91%d7%99-%d7%a7%d7%a8%d7%9f-%d7%a4%d7%a0%d7%a1%d7%99%d7%94-%d7%9e%d7%a7%d7%99%d7%a4%d7%94/%d7%9e%d7%a1%d7%9c%d7%95%d7%9c%d7%99-%d7%a7%d7%a8%d7%9f-%d7%a4%d7%a0%d7%a1%d7%99%d7%94-%d7%9e%d7%a7%d7%99%d7%a4%d7%94/">לחצ/י כאן ללמידה על מסלולי קרן פנסיה מקיפה</a>'
+  });
   
   
   /* jQuery Validation */
