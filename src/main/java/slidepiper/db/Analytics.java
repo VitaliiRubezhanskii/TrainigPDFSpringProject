@@ -72,7 +72,7 @@ public class Analytics {
         "SELECT\n"
       + "  file_hash,\n"
       + "  slides.name AS file_name,\n"
-      + "  file_link,\n"
+      + "  view_file_agg_by_session_event_name.file_link,\n"
       + "  SUM(IF(event_name = 'OPEN_SLIDES', 1, 0)) AS file_sum_open,\n"
       + "  (SUM(IF(event_name = 'OPEN_SLIDES',1,0)) - SUM(IF(event_name = 'VIEW_SLIDE' AND count_distinct_pages_viewed>1,1,0))) / SUM(IF(event_name = 'OPEN_SLIDES',1,0)) AS file_bounce_rate,\n"
       + "  SUM(IF(event_name = 'VIEW_SLIDE', view_duration, 0)) / SUM(IF(event_name = 'VIEW_SLIDE', 1, 0)) AS average_view_duration,\n"
