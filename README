@@ -4,6 +4,14 @@ SlidePiper README File
 Change Log
 ----------
 
+### 0.13.9
+
+2016-09-23 Max Prais <maxp@slidepiper.com>
+
+* Fixed DB bug which was stopping Sales Analytics metrics from being viewed
+in the Dashboard.
+
+
 ### 0.13.8
 
 2016-09-22 Yaniv Friedensohn <yanivf@slidepiper.com>
