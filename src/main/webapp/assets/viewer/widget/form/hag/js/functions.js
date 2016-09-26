@@ -1,5 +1,6 @@
 $(function() {
   var sectionId = 0;
+  var beneficiariesPercentageValidationFlag = false;
   
   $('.sp-next-section').click(function() {
     console.log('Currently on section: ' + sectionId);
@@ -245,6 +246,8 @@ $(function() {
     if (beneficiariesCount <= 2) {
       beneficiariesCount++;
       $('#beneficiary-' + beneficiariesCount).show();
+      
+      $('[name="percentageBeneficiary1"]').valid();
     }
   });
   
@@ -252,6 +255,8 @@ $(function() {
     var beneficiariesCount = $('#beneficiaries .beneficiary:visible').length;
     if (beneficiariesCount > 1) {
       $('#beneficiary-' + beneficiariesCount).hide();
+      
+      $('[name="percentageBeneficiary1"]').valid();
     }
   });
   
@@ -412,9 +417,12 @@ $(function() {
     return this.optional(element) || value.length == param;
   });
   
-  
   jQuery.validator.addMethod("validId", function(value, element, param) {
     return this.optional(element) || isIdValid(value) === param;
+  });
+  
+  jQuery.validator.addMethod("totalPercentage100", function(value, element, param) {
+    return this.optional(element) || isTotalPercentage100(element) === param;
   });
       
   jQuery.extend(jQuery.validator.messages, {
@@ -424,43 +432,9 @@ $(function() {
     minlength: 'השדה צריך להיות בעל יותר מ- {0} תווים',
     number: 'השדה יכול להכיל רק מספרים',
     required: 'נא למלא את השדה',
-    validId: 'ת.ז. שהוזנה אינה תקינה'
+    validId: 'ת.ז. שהוזנה אינה תקינה',
+    totalPercentage100: 'סך אחוז המוטב/ים צריך להיות שווה ל- 100'
   });
-  
-  
-  /* Date Picker */
-  $('#datetimepicker1, #datetimepicker2').datetimepicker({
-    format: 'DD/MM/YYYY',
-    icons: {
-      date: "fa fa-calendar"
-    },
-    viewMode: 'years'
-  });
-  
-  
-  /* Signature Pad */
-  var isSignaturePadClear = true;
-  var canvas = document.querySelector('canvas');
-  var signaturePad = new SignaturePad(canvas, {
-    onEnd: function() {
-      isSignaturePadClear = false;
-      sendFormButton();
-    }
-  });
-  
-  $('#hag-signature--clear').click(function() {
-    signaturePad.clear();
-    isSignaturePadClear = true;
-    sendFormButton();
-  });
-  
-  function sendFormButton() {
-    if ($('#is-confirm-statements').is(':checked') && ! signaturePad.isEmpty() && ! isSignaturePadClear) {
-      $('.sp-next-section').prop('disabled', false);
-    } else {
-      $('.sp-next-section').prop('disabled', true);
-    }
-  }
   
   
   /**
@@ -501,5 +475,101 @@ $(function() {
     }
     
     return isIdValid;
+  }
+  
+  
+  /**
+   * Validate opposite percentageBenficiary field if value of the other is empty.
+   */
+  $('[name^="percentageBeneficiary"]').keyup(function() {
+    
+    if ('' === $(this).val()) {
+      if ($(this).attr('name') === 'percentageBeneficiary1') {
+        $('[name="percentageBeneficiary2"]').valid();
+      } else {
+        $('[name="percentageBeneficiary1"]').valid();
+      }
+      
+      // Remove success class.
+      $(this)
+        .closest('.form-group')
+        .removeClass('has-success has-feedback')
+        .find('.form-control-feedback').removeClass('glyphicon-ok')
+        .nextAll('.help-block').remove();
+        
+    }
+  });
+  
+  
+  /**
+   * Returns true if the total beneficiaries percentage fields equals 100.
+   */
+  function isTotalPercentage100(element) {
+    
+    console.log(beneficiariesPercentageValidationFlag);
+    
+    var isTotalPercentage100 = false;
+    var totalPercentage = 0;
+    
+    $('[name^="percentageBeneficiary"]:visible').each(function() {
+      totalPercentage += parseInt($(this).val());
+    });
+    
+    
+    if (100 === totalPercentage) {
+      isTotalPercentage100 = true;
+    }
+        
+    if ($('[name^="percentageBeneficiary"]:visible').length === 2) {
+    
+      if (! beneficiariesPercentageValidationFlag) {
+        beneficiariesPercentageValidationFlag = true;
+        
+        if ($(element).attr('name') === 'percentageBeneficiary1') {
+          $('[name="percentageBeneficiary2"]').valid();
+        } else {
+          $('[name="percentageBeneficiary1"]').valid();
+        }
+      } else {
+        beneficiariesPercentageValidationFlag = false;
+      }
+    }
+             
+    return isTotalPercentage100;
+  }
+  
+  
+  /* Date Picker */
+  $('#datetimepicker1, #datetimepicker2').datetimepicker({
+    format: 'DD/MM/YYYY',
+    icons: {
+      date: "fa fa-calendar"
+    },
+    viewMode: 'years'
+  });
+  
+  
+  /* Signature Pad */
+  var isSignaturePadClear = true;
+  var canvas = document.querySelector('canvas');
+  var signaturePad = new SignaturePad(canvas, {
+    onEnd: function() {
+      isSignaturePadClear = false;
+      sendFormButton();
+    }
+  });
+  
+  $('#hag-signature--clear').click(function() {
+    signaturePad.clear();
+    isSignaturePadClear = true;
+    sendFormButton();
+  });
+  
+  function sendFormButton() {
+    if ($('#is-confirm-statements').is(':checked') && ! signaturePad.isEmpty() && ! isSignaturePadClear) {
+      $('.sp-next-section').prop('disabled', false);
+    } else {
+      $('.sp-next-section').prop('disabled', true);
+    }
   }
 });

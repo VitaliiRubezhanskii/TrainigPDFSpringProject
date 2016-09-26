@@ -10,9 +10,22 @@ $(function() {
     element.closest('.form-group').append(error);
   };
   var success = function(element) {
+    
+    // Remove error.
     $(element).closest('.form-group')
-      .addClass('has-success has-feedback').removeClass('has-error')
-      .find('.form-control-feedback').addClass('glyphicon-ok').removeClass('glyphicon-remove');
+        .removeClass('has-error')
+        .find('.form-control-feedback').removeClass('glyphicon-remove');
+    
+    if (! (($(element).prevAll('input').attr('name') === 'percentageBeneficiary1' 
+        || $(element).prevAll('input').attr('name') === 'percentageBeneficiary2') 
+        && '' === $(element).prevAll('input').val())) {
+     
+      // Add success.
+      $(element).closest('.form-group')
+          .addClass('has-success has-feedback')
+          .find('.form-control-feedback').addClass('glyphicon-ok');
+    }
+   
     
     if ($(element).closest('section').find('.has-error').length === 0) {
       $('#form-not-valid').remove();
@@ -205,9 +218,13 @@ $(function() {
       partnerNoKidsYes: {
         required: true
       },
-      percentage: {
+      percentageBeneficiary1: {
         number: true,
-        //isTotal100: true
+        totalPercentage100: true
+      },
+      percentageBeneficiary2: {
+        number: true,
+        totalPercentage100: true
       },
       phoneMobileNumber: {
         exactLength: 7,
