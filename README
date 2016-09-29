@@ -4,6 +4,13 @@ SlidePiper README File
 Change Log
 ----------
 
+### 0.13.11
+
+2016-09-29 Yaniv Friedensohn <yanivf@slidepiper.com>
+
+* Change viewer pre-rendering from 20 pages to 10. 
+
+
 ### 0.13.10
 
 2016-09-28 Yaniv Friedensohn <yanivf@slidepiper.com>
