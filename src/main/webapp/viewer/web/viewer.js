@@ -29,7 +29,7 @@
  * Sets the amount of pages to be pre-rendered upon the page loading
  * in the browser. 
  */
-var PRERENDERED_PAGES_NUMBER = 20;
+var PRERENDERED_PAGES_NUMBER = 10;
 
 var DEFAULT_URL = '';
 var DEFAULT_SCALE_DELTA = 1.1;
