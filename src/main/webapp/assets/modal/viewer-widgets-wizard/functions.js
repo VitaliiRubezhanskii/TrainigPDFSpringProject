@@ -226,6 +226,53 @@ sp.widgets = {
         }
       });
     })()
+  },
+  
+  widget8: {
+    html: $('#sp-tab-8 .sp-widget-item').html(),
+    addItem: function() {
+      $('#sp-tab-8 .container-fluid').append(
+          '<div class="sp-widget-item">' +
+            sp.widgets.widget8.html +
+          '</div>'
+      );
+      
+      // Set Code Location radio name attribute.
+      var codeLocationOptions = ['beforeClosingHead', 'afterOpeningBody', 'beforeClosingBody'];
+      $('#sp-tab-8 .sp-widget-item').each(function(index, item) {
+        $(item)
+          .find('[name*="codeLocation"]').attr('name', 'codeLocation-' + index)
+          .each(function(ind) {
+            $(this).attr('data-code-location-' + index, codeLocationOptions[ind]);
+          });
+      });
+    },
+    init: (function() {
+      
+      // Add.
+      $(document).off('click', '#sp-tab-8 .sp-widget__add-item').on('click', '#sp-tab-8 .sp-widget__add-item', function() {
+        sp.widgets.widget8.addItem();
+      });
+      
+      // Delete.
+      $(document).on('click', '#sp-tab-8 .sp-widget__delete-item', function() {
+        $(this).closest('.sp-widget-item').remove();
+      });
+    })(),
+    
+    validate: function() {
+      var isEmpty = false;
+      
+      $('#sp-tab-8 .sp-widget-item').each(function() {
+        if ('' === $(this).find('textarea').val()) {
+          isEmpty = true;
+        } else {
+          isEmpty = false;
+        }
+      });
+      
+      return isEmpty;
+    }
   }
 };
 
@@ -292,6 +339,12 @@ sp.viewerWidgetsModal = {
         case 7:
           if (widget.data.items.length > 0) {
             displayWidget7(widget.data);
+          }
+          break;
+          
+        case 8:
+          if (widget.data.items.length > 0) {
+            displayWidget8(widget.data);
           }
           break;
       }
@@ -424,6 +477,28 @@ sp.viewerWidgetsModal = {
         $(this).val(widget.items[0][$(this).attr('name')]); 
       });
     }
+    
+    function displayWidget8(widget) {
+      for (var i = 0; i < widget.items.length - 1; i++) {
+        sp.widgets.widget8.addItem();
+      }
+      
+      $('[name="sp-widget8__is-enabled"]')
+        .prop('checked', widget.isEnabled)
+        .closest('div').removeClass('sp-hide-is-enabled');
+      
+      $('#sp-tab-8 .sp-widget-item').each(function(index) {
+        $(this).find('[name*="code"]').each(function() {
+          if ('codeLocation' === $(this).attr('name')) {
+            if ($(this).val() === widget.items[index][$(this).attr('name')]) {
+              $(this).prop('checked', true);
+            }
+          } else {
+            $(this).val(widget.items[index][$(this).attr('name')]);
+          }
+        });
+      });
+    }
   },
   
   /**
@@ -508,6 +583,11 @@ sp.viewerWidgetsModal = {
     if (! sp.viewerWidgetsModal.isInputEmpty(7)
         || ! $('[name="widget7-is-enabled"]').closest('div').hasClass('sp-hide-is-enabled')) {
       settings.push(sp.viewerWidgetsModal.saveWidget7(fileHash));
+    }
+    
+    if (! sp.widgets.widget8.validate()
+        || ! $('[name="sp-widget8__is-enabled"]').closest('div').hasClass('sp-hide-is-enabled')) {
+      settings.push(sp.viewerWidgetsModal.saveWidget8(fileHash));
     }
     
     var data = {
@@ -820,6 +900,67 @@ sp.viewerWidgetsModal = {
     
     if (! isWidget7SettingEmpty) {
       return widget7;
+    } else {
+      return undefined;
+    }
+  },
+  
+  /**
+   * Save settings for Code Widget
+   * 
+   * @param {string} fileHash - The file hash.
+   * @returns {object} widget8 - Code Widget settings.
+   */
+  saveWidget8: function(fileHash) {
+    if ($('[name="sp-widget8__is-enabled"]').closest('div').hasClass('sp-hide-is-enabled')) {
+      $('[name="sp-widget8__is-enabled"]').prop('checked', true);
+    }
+    
+    var widget8 = {
+        apiVersion: '1.0',
+        data: {
+          fileHash: fileHash,
+          widgetId: 8,
+          isEnabled: $('[name="sp-widget8__is-enabled"]').prop('checked'),
+          items: []
+        }
+    };
+    
+    var isWidget8SettingEmpty = false;
+    
+    $('#sp-tab-8 .sp-widget-item').each(function(index) {
+      var item = {};
+      
+      $(this).find('[name*=code]').each(function() {
+        switch($(this).attr('name')) {
+          case 'codeContent':
+            if ('' === $(this).val()) {
+              sp.error.handleError('You must fill the field.');
+              $(this).addClass('sp-widget-form-error');
+              sp.viewerWidgetsModal.openErrorTab();
+              isWidget8SettingEmpty = true;
+            } else {
+              item[$(this).attr('name')] = $(this).val();
+            }
+            break;
+            
+          case 'codeLocation':
+            if ($(this).is(':checked')) {
+              item[$(this).attr('name')] = $(this).val();
+            }
+            break;
+            
+          case 'codeDescription':
+            item[$(this).attr('name')] = $(this).val();
+            break;
+        }
+      });
+      
+      widget8.data.items.push(item);
+    });
+    
+    if (! isWidget8SettingEmpty) {
+      return widget8;
     } else {
       return undefined;
     }

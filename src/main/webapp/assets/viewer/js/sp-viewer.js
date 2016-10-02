@@ -87,21 +87,21 @@ sp.viewer = {
   },
   isPagesLoaded: false,
   paramValue: {
-  	videoTabOpened: 'VIEWER_WIDGET_VIDEO_TAB_OPENED',
-  	videoTabClosed: 'VIEWER_WIDGET_VIDEO_TAB_CLOSED'
+    videoTabOpened: 'VIEWER_WIDGET_VIDEO_TAB_OPENED',
+    videoTabClosed: 'VIEWER_WIDGET_VIDEO_TAB_CLOSED'
   },
   linkHash: getParameterByName('f'),
   widgets: {
     widget1: {
       currentVideoPlayerCssSelector: '',
-     	isValidated: false,
+      isValidated: false,
       isVideoPlayersReady: false,
       isVideoCollapseOverride: false,
       videoPlayersIsReady: {},
       lastVideoSource: ''
     },
     widget4: {
-    	likeCount: 0
+      likeCount: 0
     },
     widget6: {
       isReady: false,
@@ -172,8 +172,8 @@ if ('' != sp.viewer.linkHash) {
     
     // Load file from Amazon S3 or from slides table.
     if (typeof config.viewer.file.documentUrl !== 'undefined'
-    		&& null !== config.viewer.file.documentUrl
-    		&& '' !== config.viewer.file.documentUrl) {
+        && null !== config.viewer.file.documentUrl
+        && '' !== config.viewer.file.documentUrl) {
       PDFViewerApplication.open(encodeURI(config.viewer.file.documentUrl));
     } else {
       PDFViewerApplication.open(config.appUrl + '/file/' + sp.viewer.linkHash
@@ -550,11 +550,11 @@ if ('' != sp.viewer.linkHash) {
               var widgetId = widgetData.widgetId;
               
               switch(widgetId) {
-  	            case 1:
-  	            case 6:
-  	              widgetData.items = OrderWidgetDataItemsByPage(widgetId, widgetData.items);
-  	              break;
-  	          }
+                case 1:
+                case 6:
+                  widgetData.items = OrderWidgetDataItemsByPage(widgetId, widgetData.items);
+                  break;
+              }
               
               widgets['widget' + widgetId.toString()] = widgetData;
             }
@@ -722,7 +722,7 @@ if ('' != sp.viewer.linkHash) {
             sp.viewer.widgets.widget1.videoPlayersIsReady[videoPlayer] = false;
           });
           
- 	        sp.viewer.widgets.widget1.isValidated = true;
+          sp.viewer.widgets.widget1.isValidated = true;
           implementWidget1(widgets.widget1.items);
         }
       }
@@ -774,9 +774,9 @@ if ('' != sp.viewer.linkHash) {
       var widget4RequiredSettings = ['isCounterEnabled'];
       
       if (typeof widgets.widget4 !== 'undefined' && widgets.widget4.isEnabled) {
-      	if (isWidgetSettingsDefined(widgets.widget4.items[0], widget4RequiredSettings)) {
-      		implementWidget4(widgets.widget4.items[0]);
-      	}
+        if (isWidgetSettingsDefined(widgets.widget4.items[0], widget4RequiredSettings)) {
+          implementWidget4(widgets.widget4.items[0]);
+        }
       }
       
       /* Validate Widget 5 */
@@ -823,6 +823,28 @@ if ('' != sp.viewer.linkHash) {
         }
       }
       
+      /* Validate Widget 8 */
+      var widget8RequiredSettings = ['codeLocation', 'codeContent'];
+      
+      if (typeof widgets.widget8 !== 'undefined'
+          && typeof widgets.widget8.items !== 'undefined'
+          && widgets.widget8.items.length > 0) {
+        
+        var isWidget8Validated = false;
+        $.each(widgets.widget8.items, function(index, item) {
+          if (isWidgetSettingsDefined(item, widget8RequiredSettings)) {
+            isWidget8Validated = true;
+          } else {
+            isWidget8Validated = false;
+            return false;
+          }
+        });
+       
+        if (isWidget8Validated) {
+          implementWidget8(widgets.widget8.items);
+        }
+      }
+      
       
       /* Implement Widget 1 */
       function implementWidget1(videos) {
@@ -838,23 +860,23 @@ if ('' != sp.viewer.linkHash) {
         /* Load Video Players */
         $.each(sp.viewer.widgets.widget1.videoPlayersIsReady, function(videoPlayer, isReady) {
           switch (videoPlayer) {
-          	case 'defaultPlayer':
-          	  loadDefaultPlayer();
-          	  break;
-          	  
-          	case 'youTube':
-          	  loadYouTubePlayer();
-          	  break;
+            case 'defaultPlayer':
+              loadDefaultPlayer();
+              break;
+              
+            case 'youTube':
+              loadYouTubePlayer();
+              break;
           }
         });
         
         function loadDefaultPlayer() {
-	        $('#sp-widget1-video-container').append(
-	            '<iframe id="sp-widget1-default-player" frameborder="0" scrolling="no" allowfullscreen="true"></iframe>'
-	        );
-	        
-	        sp.viewer.widgets.widget1.videoPlayersIsReady['defaultPlayer'] = true;
-	        $(document).trigger('spDefaultPlayerReady');
+          $('#sp-widget1-video-container').append(
+              '<iframe id="sp-widget1-default-player" frameborder="0" scrolling="no" allowfullscreen="true"></iframe>'
+          );
+          
+          sp.viewer.widgets.widget1.videoPlayersIsReady['defaultPlayer'] = true;
+          $(document).trigger('spDefaultPlayerReady');
         }
         
         function loadYouTubePlayer() {
@@ -1088,15 +1110,15 @@ if ('' != sp.viewer.linkHash) {
       
       
       function implementWidget4(widget) {
-	      	
-      	// Widget 4 - Like button widget.
+          
+        // Widget 4 - Like button widget.
         $('body').append('<div class="sp-like-button-widget"></div>');
               
         $('.sp-like-button-widget').append(
-        	'<button class="sp-like-btn sp-hidden">' +	
-        	    '<i id="sp-thumbs-up__i" class="fa fa-thumbs-o-up" aria-hidden="true"></i>' +	  
-        	    '<p id="sp-count-likes__p"></p>' +
-        	'</button>'
+          '<button class="sp-like-btn sp-hidden">' +  
+              '<i id="sp-thumbs-up__i" class="fa fa-thumbs-o-up" aria-hidden="true"></i>' +   
+              '<p id="sp-count-likes__p"></p>' +
+          '</button>'
         );
         
         getLikeCount();
@@ -1106,25 +1128,25 @@ if ('' != sp.viewer.linkHash) {
          * Get the number of likes a document has received.
          */
         function getLikeCount() {
-        	$.getJSON(
-      				'../../ManagementServlet',
-      				{
-      					action: 'getViewerWidgetMetrics',
+          $.getJSON(
+              '../../ManagementServlet',
+              {
+                action: 'getViewerWidgetMetrics',
                 fileLinkHash: sp.viewer.linkHash,
                 wigdetId: 4
-      				},
-      				function(data) {
-      					sp.viewer.widgets.widget4.likeCount = parseInt(data.widgetMetrics.metrics[0]);
-      					if (widget.isCounterEnabled) {
-      						formatDisplayLikeCount(sp.viewer.widgets.widget4.likeCount);
-      					}
-      					
-      					isLikeButtonClickedSession();
-      				}
-      		);
-      	}
-      	
-      	
+              },
+              function(data) {
+                sp.viewer.widgets.widget4.likeCount = parseInt(data.widgetMetrics.metrics[0]);
+                if (widget.isCounterEnabled) {
+                  formatDisplayLikeCount(sp.viewer.widgets.widget4.likeCount);
+                }
+                
+                isLikeButtonClickedSession();
+              }
+          );
+        }
+        
+        
         /**
          * Check if the Like Button has been clicked this session.
          * 
@@ -1132,23 +1154,23 @@ if ('' != sp.viewer.linkHash) {
          * the 'click' event listener.
          */
         function isLikeButtonClickedSession() {
-        	$.getJSON(
-        			'../../ManagementServlet',
-        			{
-        				action: 'isLikeButtonClicked',
-        				sessionid: sessionid
-        			},
-        			function(data) {
-        				if (data.isLikeButtonClicked) {
-        					$('.sp-like-btn').addClass('sp-like-btn-clicked');
-        					$('#sp-thumbs-up__i, #sp-count-likes__p').css('color', '#fff');
-        				} else {
-        					likeButtonClickEventListener();
-        				}
-        				
-        				$('.sp-like-btn').removeClass('sp-hidden');
-        			}
-        	);
+          $.getJSON(
+              '../../ManagementServlet',
+              {
+                action: 'isLikeButtonClicked',
+                sessionid: sessionid
+              },
+              function(data) {
+                if (data.isLikeButtonClicked) {
+                  $('.sp-like-btn').addClass('sp-like-btn-clicked');
+                  $('#sp-thumbs-up__i, #sp-count-likes__p').css('color', '#fff');
+                } else {
+                  likeButtonClickEventListener();
+                }
+                
+                $('.sp-like-btn').removeClass('sp-hidden');
+              }
+          );
         }
         
         
@@ -1161,21 +1183,21 @@ if ('' != sp.viewer.linkHash) {
          * Update the like counter if it is enabled.
          */
         function likeButtonClickEventListener() {
-        	$('.sp-like-btn').one('click', function() {
-         	 sp.viewer.setCustomerEvent({
-         		 eventName: sp.viewer.eventName.viewerWidgetLikeClicked,
+          $('.sp-like-btn').one('click', function() {
+           sp.viewer.setCustomerEvent({
+             eventName: sp.viewer.eventName.viewerWidgetLikeClicked,
              linkHash: sp.viewer.linkHash,
              sessionId: sessionid
            });
-         	 
-         	 if (widget.isCounterEnabled) {
-         		 sp.viewer.widgets.widget4.likeCount++;
-         		 formatDisplayLikeCount(sp.viewer.widgets.widget4.likeCount);
-         	 }
-         	 
-         	 // Change the colour of the button.
-         	 $('.sp-like-btn').addClass('sp-like-btn-clicked');
- 	         $('#sp-thumbs-up__i, #sp-count-likes__p').css('color', '#fff');
+           
+           if (widget.isCounterEnabled) {
+             sp.viewer.widgets.widget4.likeCount++;
+             formatDisplayLikeCount(sp.viewer.widgets.widget4.likeCount);
+           }
+           
+           // Change the colour of the button.
+           $('.sp-like-btn').addClass('sp-like-btn-clicked');
+           $('#sp-thumbs-up__i, #sp-count-likes__p').css('color', '#fff');
          });
         }
         
@@ -1185,56 +1207,56 @@ if ('' != sp.viewer.linkHash) {
          * 
          * In the switch case, format the result before it appears in the Viewer.
          * e.g. 1,200 likes will appear as 1.2k.
-         * 			15,700 likes will appear as 15k.
-         * 			More than 99,999 likes will appear as 99k+.
+         *      15,700 likes will appear as 15k.
+         *      More than 99,999 likes will appear as 99k+.
          * 
          * @param likeCount - The like count.
          */
         function formatDisplayLikeCount(likeCount) {
-        	var likeCountString = likeCount.toString();
-        	var likeCountLength = likeCountString.length;
-        	var likeCountToDisplay = '';
-        	
-        	switch(likeCountLength) {
-  					case 1:
-  					case 2:
-  					case 3:
-  						if (0 === likeCount) {
-  							likeCountToDisplay = '';
-  						} else {
-  							likeCountToDisplay = likeCountString;
-  						}
-  					  
-  						if (3 === likeCountLength) {
-  							$('#sp-count-likes__p').addClass('sp-widget4-count-likes-4-digit');
-  						}
-  						break;
-  						
-  					case 4:
-  						if (likeCountString.charAt(1) === '0') {
-  							likeCountToDisplay = likeCountString.slice(0, 1) + 'k';
-  						} else {
-  							likeCountToDisplay = likeCountString.slice(0, 1) + '.' + likeCountString.slice(1, 2) + 'k';
-  							$('#sp-count-likes__p').addClass('sp-widget4-count-likes-4-digit');
-  						}
-  						break;
-  						
-  					case 5:
-  						likeCountToDisplay = likeCountString.slice(0, 2) + 'k';
-  						$('#sp-count-likes__p')
-  								.removeClass('sp-widget4-count-likes-4-digit')
-  								.addClass('sp-widget4-count-likes-5-digit');
-  						break;
-  						
-  					default:
-  						likeCountToDisplay = '99k+';
-  					$('#sp-count-likes__p')
-  								.removeClass('sp-widget4-count-likes-5-digit')
-  								.addClass('sp-widget4-count-likes-6-digit');
-  						break;
-					}
-					
-        	$('#sp-count-likes__p').text(likeCountToDisplay);
+          var likeCountString = likeCount.toString();
+          var likeCountLength = likeCountString.length;
+          var likeCountToDisplay = '';
+          
+          switch(likeCountLength) {
+            case 1:
+            case 2:
+            case 3:
+              if (0 === likeCount) {
+                likeCountToDisplay = '';
+              } else {
+                likeCountToDisplay = likeCountString;
+              }
+              
+              if (3 === likeCountLength) {
+                $('#sp-count-likes__p').addClass('sp-widget4-count-likes-4-digit');
+              }
+              break;
+              
+            case 4:
+              if (likeCountString.charAt(1) === '0') {
+                likeCountToDisplay = likeCountString.slice(0, 1) + 'k';
+              } else {
+                likeCountToDisplay = likeCountString.slice(0, 1) + '.' + likeCountString.slice(1, 2) + 'k';
+                $('#sp-count-likes__p').addClass('sp-widget4-count-likes-4-digit');
+              }
+              break;
+              
+            case 5:
+              likeCountToDisplay = likeCountString.slice(0, 2) + 'k';
+              $('#sp-count-likes__p')
+                  .removeClass('sp-widget4-count-likes-4-digit')
+                  .addClass('sp-widget4-count-likes-5-digit');
+              break;
+              
+            default:
+              likeCountToDisplay = '99k+';
+            $('#sp-count-likes__p')
+                  .removeClass('sp-widget4-count-likes-5-digit')
+                  .addClass('sp-widget4-count-likes-6-digit');
+              break;
+          }
+          
+          $('#sp-count-likes__p').text(likeCountToDisplay);
         }
       }
       
@@ -1489,6 +1511,29 @@ if ('' != sp.viewer.linkHash) {
             param_1_varchar: $(this).text()
           });
         });
+      });
+    }
+    
+    /**
+     * Implement widget 8 - Code widget.
+     * 
+     * @params {array} items - The codes to be inserted into the viewer.
+     */
+    function implementWidget8(items) {
+      $.each(items, function(index, item) {
+        switch(item.codeLocation) {
+          case 'beforeClosingHead':
+            $('head').append(item.codeContent);
+            break;
+            
+          case 'afterOpeningBody':
+            $('body').prepend(item.codeContent);
+            break;
+            
+          case 'beforeClosingBody':
+            $('body').append(item.codeContent);
+            break;
+        }
       });
     }
   });

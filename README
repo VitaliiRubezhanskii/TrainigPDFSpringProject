@@ -4,6 +4,15 @@ SlidePiper README File
 Change Log
 ----------
 
+### 0.13.12
+
+2016-10-02 Yaniv Friedensohn <yanivf@slidepiper.com>, Max Prais <maxp@slidepiper.com>
+
+* Created the Code widget. The widget currently supports adding only one code snippet.
+
+* Removed pinch zoom functionality from the viewer.
+
+
 ### 0.13.11
 
 2016-09-29 Yaniv Friedensohn <yanivf@slidepiper.com>
