@@ -23,7 +23,7 @@
                     <li><a data-toggle="tab" href="#sp-tab-5"><i class="fa fa-bookmark"></i></a></li>
                     <li><a data-toggle="tab" href="#sp-tab-6"><i class="fa fa-user"></i></a></li>
                     <li><a data-toggle="tab" href="#sp-tab-7"><i class="fa fa-file-text-o"></i></a></li>
-                    <!-- <li><a data-toggle="tab" href="#sp-tab-8"><i class="fa fa-code"></i></a></li> -->
+                    <li><a data-toggle="tab" href="#sp-tab-8"><i class="fa fa-code"></i></a></li>
                 </ul>
                 
                 <div class="tab-content sp-viewer-widgets-modal">
@@ -376,53 +376,59 @@
                     </div>
                     
                     <!-- Code Widget  -->
-                    <!-- <div id="sp-tab-8" class="tab-pane">
+                    <div id="sp-tab-8" class="tab-pane">
                         <div class="panel-body">
-                            <strong>Code</strong>
+                            <strong>Code (Beta)</strong>
+                            <br>
+                            <small>To use this widget, please <a class="text-info" target="_blank" href="mailto:info@slidepiper.com">contact us</a>.</small>
                             <div class="sp-customization-option__p sp-hide-is-enabled">
-                                <input class="sp-widget--is-enabled" type="checkbox"> Is Enabled?
+                                <input class="sp-widget--is-enabled" type="checkbox" name="sp-widget8__is-enabled"> Is Enabled?
                             </div>
                             <hr>
                             <div class="container-fluid">                                
                                 <div class="sp-widget-item">
                                     <div class="form-group">
                                         <label for="sp-widget8__code-description" class="control-label" placeholder="e.g. Google Analytics">Code Description (optional)</label>
-                                        <input type="text" id="sp-widget8__code-description" class="form-control">
+                                        <input type="text" class="form-control" id="sp-widget8__code-description" name="codeDescription">
                                     </div>
                                     
                                     <div class="form-group">
                                         <label>Code Location</labe>
                                         <div class="radio">
-                                            <label><input type="radio" name="sp-widget7__code-location" value="beforeClosingHead" checked="checked">Before the closing &lt/head&gt</label>
+                                            <label><input type="radio" name="codeLocation" value="beforeClosingHead" checked="checked">Before the closing &lt/head&gt</label>
                                         </div>
                                         
                                         <div class="radio">
-                                            <label><input type="radio" name="sp-widget7__code-location" value="afterOpeningBody">After the opening &ltbody&gt</label>
+                                            <label><input type="radio" name="codeLocation" value="afterOpeningBody">After the opening &ltbody&gt</label>
                                         </div>
                                         
                                         <div class="radio">
-                                            <label><input type="radio" name="sp-widget7__code-location" value="beforeClosingBody">Before the closing &lt/body&gt</label>
+                                            <label><input type="radio" name="codeLocation" value="beforeClosingBody">Before the closing &lt/body&gt</label>
                                         </div>
                                     </div>
                                     
                                     <div class="form-group">
-                                     <label for="sp-widget8__code">Code</label>
-                                        <textarea class="form-control" rows="5" id="sp-widget8__code"></textarea>
+                                     <label for="sp-widget8__code-content">Code</label>
+                                        <textarea class="form-control" rows="5" id="sp-widget8__code-content" name="codeContent"></textarea>
                                     </div>
                                     
+                                    <!--
                                     <div class="form-group">
                                         <a class="btn btn-white btn-sm sp-widget__delete-item">
                                             <i class="fa fa-times" aria-hidden="true"></i>
                                         </a>
-                                     </div>
+                                    </div>
+                                    -->
                                 </div>
                             </div>
                             
+                            <!--
                             <a class="btn btn-white btn-sm sp-widget__add-item">
                                 <i class="fa fa-plus" aria-hidden="true"></i> Add Code
                             </a>
+                            -->
                         </div>
-                    </div> -->
+                    </div>
                 </div>
             </div>
             
