@@ -116,30 +116,6 @@ $(function() {
         required: true,
         validId: true
       },
-      idBeneficiary3: {
-        exactLength: 9,
-        number: true,
-        required: true,
-        validId: true
-      },
-      idBeneficiary4: {
-        exactLength: 9,
-        number: true,
-        required: true,
-        validId: true
-      },
-      idBeneficiary5: {
-        exactLength: 9,
-        number: true,
-        required: true,
-        validId: true
-      },
-      idBeneficiary6: {
-        exactLength: 9,
-        number: true,
-        required: true,
-        validId: true
-      },
       familyStatus: {
         required: true
       },
@@ -156,22 +132,6 @@ $(function() {
         required: true
       },
       firstNameBeneficiary2: {
-        minlength: 2,
-        required: true
-      },
-      firstNameBeneficiary3: {
-        minlength: 2,
-        required: true
-      },
-      firstNameBeneficiary4: {
-        minlength: 2,
-        required: true
-      },
-      firstNameBeneficiary5: {
-        minlength: 2,
-        required: true
-      },
-      firstNameBeneficiary6: {
         minlength: 2,
         required: true
       },
@@ -193,22 +153,6 @@ $(function() {
         required: true
       },
       lastNameBeneficiary2: {
-        minlength: 2,
-        required: true
-      },
-      lastNameBeneficiary3: {
-        minlength: 2,
-        required: true
-      },
-      lastNameBeneficiary4: {
-        minlength: 2,
-        required: true
-      },
-      lastNameBeneficiary5: {
-        minlength: 2,
-        required: true
-      },
-      lastNameBeneficiary6: {
         minlength: 2,
         required: true
       },
@@ -278,7 +222,16 @@ $(function() {
   
   $('#form-3').validate({
     rules: {
+      employerContact: {
+        required: true
+      },
+      employerEmail: {
+        email: true
+      },
       employerName: {
+        required: true
+      },
+      employerPhone: {
         required: true
       },
       isNotInsured: {

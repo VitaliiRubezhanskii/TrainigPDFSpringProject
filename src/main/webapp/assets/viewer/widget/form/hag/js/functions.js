@@ -1,6 +1,8 @@
 $(function() {
-  var sectionId = 0;
   var beneficiariesPercentageValidationFlag = false;
+  var payload = {};
+  var sectionId = 0;
+  
   
   $('.sp-next-section').click(function() {
     console.log('Currently on section: ' + sectionId);
@@ -46,7 +48,7 @@ $(function() {
           $('#retirement-age-female').show();
         }
         break;
-        
+      
       case 5:
         $('.sp-next-section').text('שלח טופס');
         
@@ -59,7 +61,13 @@ $(function() {
         break;
     }
     
+    // Save current entries into the payload object.
+    saveEntries(sectionId);
+    
     sectionId++;
+    if (5 === sectionId) {
+      $('.sp-next-section').click();
+    }
     setSectionView();
   });
   
@@ -68,6 +76,9 @@ $(function() {
     $('#form-not-valid').remove();
     
     sectionId--;
+    if (5 === sectionId) {
+      $('.sp-back-section').click();
+    }
     setSectionView();
     
     // If previous section set next button to be 'Finish'.
@@ -194,7 +205,7 @@ $(function() {
       
       for (var i = 0; i < data.result.records.length; i += increment) {
         $('#street').append(
-          '<option value="' + data.result.records[i]['סמל_רחוב'].replace(/"/g, '&quot;') + '">' + data.result.records[i]['שם_רחוב'] + '</option>'
+          '<option value="' + data.result.records[i]['סמל_רחוב'] + '">' + data.result.records[i]['שם_רחוב'].replace(/"/g, '&quot;') + '</option>'
         );
       }
     });  
@@ -207,7 +218,7 @@ $(function() {
   
   // Family status.
   $('#family-status').change(function() {
-    if ('2' === $(this).val()) {
+    if ('נשוי/אה' === $(this).val()) {
       $('#is-has-partner-yes').trigger('click');
       $('[name="isHasPartner"]').valid();
     }
@@ -226,8 +237,10 @@ $(function() {
         $('#partner-no-kids-no-container').hide();
         $('#partner-no-kids-yes-container').show();
       }
-    } else {
-      $('#partner-no-kids-no-container', '#partner-no-kids-yes-container').hide()
+      
+      $('#partner-kids-waiver-statement').show();
+    } else if ($('#is-has-partner-yes').is(':checked')) {
+      $('#partner-no-kids-no-container, #partner-no-kids-yes-container, #partner-kids-waiver-statement').hide()
       $('#partner').show();
     }
   });
@@ -385,6 +398,11 @@ $(function() {
   
   
   /* Form 6 Settings */
+  $('#general-statements').click(function() {
+    $('#general-statements .fa').toggleClass('fa-plus-square fa-minus-square');
+    $('#is-confirm-statements').prop('disabled', false);
+  });
+  
   $('#is-confirm-statements').change(function() {
     sendFormButton();
   });
@@ -505,9 +523,6 @@ $(function() {
    * Returns true if the total beneficiaries percentage fields equals 100.
    */
   function isTotalPercentage100(element) {
-    
-    console.log(beneficiariesPercentageValidationFlag);
-    
     var isTotalPercentage100 = false;
     var totalPercentage = 0;
     
@@ -572,4 +587,300 @@ $(function() {
       $('.sp-next-section').prop('disabled', true);
     }
   }
+  
+  
+  /* Save Entries */
+  function saveEntries(sectionId) {
+    switch (sectionId) {
+      case 0:
+        payload = {
+          id_num: $('#id-init').val(),
+          first_name: $('#first-name-init').val(),
+          last_name: $('#last-name-init').val(),
+          email: $('#email-init').val()
+        }
+        break;
+        
+      case 1:
+        payload =  {
+          bdate: $('#birth-date').val(),
+          city: $('#city [value="' + $('#city').val() + '"]').text(),
+          email: $('#email').val(),
+          first_name: $('#first-name').val(),
+          house_num: $('#house-number').val(),
+          id_num: $('#id').val(),
+          last_name: $('#last-name').val(),
+          street: $('#street [value="' + $('#street').val() + '"]').text(),
+          zip: $('#zip-code').val()
+        }
+        
+        if (null !== $('#family-status').val()) {
+          payload['status'] = $('#family-status').val();
+        }
+        
+        if ('' !== $('#phone-mobile-number').val()) {
+          payload['phone'] = $('#phone-mobile-operator-code').val() + '-' + $('#phone-mobile-number').val();
+        }
+        
+        if ('' !== $('#phone-home-number').val()) {
+          payload['phone_home'] = $('#phone-home-operator-code').val() + '-' + $('#phone-home-number').val();
+        }
+        
+        if ('male' === $('[name="gender"]:checked').val()) {
+          payload['gender'] = 'זכר';
+        } else if ('female' === $('[name="gender"]:checked').val()) {
+          payload['gender'] = 'נקבה';
+        }
+        
+        if ($('#beneficiaries-new').is(':checked')) {
+          payload['id_num_Mutav'] = $('#id-beneficiary-1').val();
+          payload['last_name_Mutav'] = $('#last-name-beneficiary-1').val();
+          payload['first_name_Mutav'] = $('#first-name-beneficiary-1').val();
+          payload['Kirva _Mutav'] = $('#closeness-beneficiary-1').val();
+          payload['percent'] = $('#percentage-beneficiary-1').val();
+          payload['address_motav'] = $('#address-beneficiary-1').val();
+          payload['id_num_Mutav2'] = $('#id-beneficiary-2').val();
+          payload['last_name_Mutav2'] = $('#first-name-beneficiary-2').val();
+          payload['first_name_Mutav2'] = $('#last-name-beneficiary-2').val();
+          payload['Kirva _Mutav2'] = $('#closeness-beneficiary-2').val();
+          payload['percent2'] = $('#percentage-beneficiary-2').val();
+          payload['address_motav2'] = $('#address-beneficiary-2').val()
+        } else {
+          payload['id_num_Mutav'] = '';
+          payload['last_name_Mutav'] = '';
+          payload['first_name_Mutav'] = '';
+          payload['Kirva _Mutav'] = '';
+          payload['percent'] = '';
+          payload['address_motav'] = '';
+          payload['id_num_Mutav2'] = '';
+          payload['last_name_Mutav2'] = '';
+          payload['first_name_Mutav2'] = '';
+          payload['Kirva _Mutav2'] = '';
+          payload['percent2'] = '';
+          payload['address_motav2'] = '';
+        }
+        
+        if ($('#is-has-partner-no').is(':checked')) {
+          if ($('#is-has-kids-no').is(':checked')) {
+            if ($('#partner-no-kids-no').is(':checked')) {
+              payload['vitor1'] = 'X';
+              payload['vitor2'] = '';
+            }
+          } else if ($('#is-has-kids-yes').is(':checked')) {
+            if ($('#partner-no-kids-yes').is(':checked')) {
+              payload['vitor1'] = '';
+              payload['vitor2'] = 'X';
+            }
+            
+            if ($('#kids-insurance-increased').is(':checked')) {
+              payload['child1'] = '';
+              payload['child2'] = 'X';
+            } else {
+              payload['child1'] = 'X';
+              payload['child2'] = '';
+            }
+          }
+
+          payload['bdate_zug'] = '';
+          payload['first_name_zug'] = '';
+          payload['id_num_zug'] = '';
+        } else {
+          payload['bdate_zug'] = $('#birth-date-partner').val();
+          payload['first_name_zug'] = $('#first-name-partner').val();
+          payload['id_num_zug'] = $('#id-partner').val();
+        }
+        break;
+        
+      case 2:
+        $('[name="pensionPlan"]').each(function(index) {
+          if ($(this).is(':checked')) {
+            payload['t' + (index + 1).toString()] = 'X';
+          } else {
+            payload['t' + (index + 1).toString()] = '';
+          }
+        });
+        
+        var investmentPlans = ['by age', 'm50-', 'm50-60', 'm60'];
+        $('[name="investmentPlan"]').each(function(index) {
+          if ($(this).is(':checked')) {
+            payload[investmentPlans[index]] = 'X';
+          } else {
+            payload[investmentPlans[index]] = '';
+          }
+        });
+        
+        payload['g60'] = '';
+        payload['g64'] = '';
+        payload['g67'] = '';
+        if ('male' === $('[name="gender"]:checked').val()) {
+          payload[$('[name="retirementAgeMale"]:checked').val()] = 'X';
+        } else if ('female' === $('[name="gender"]:checked').val()) {
+          payload[$('[name="retirementAgeFemale"]:checked').val()] = 'X';
+        }
+        break;
+        
+      case 3:
+        if ($('#career-employment').is(':checked')) {
+          payload['name_m'] = $('#employer-name [value="' + $('#employer-name').val() + '"]').text();
+          payload['num_m'] = $('#employer-hp').val();
+          payload['address_m'] = $('#employer-address').val();
+          payload['phone_m'] = $('#employer-phone').val();
+          payload['contact'] = $('#employer-contact').val();
+          payload['email _m'] = $('#employer-email').val();
+          
+          payload['sum_hafkada'] = '';
+        } else {
+          payload['name_m'] = '';
+          payload['num_m'] = '';
+          payload['address_m'] = '';
+          payload['phone_m'] = '';
+          payload['contact'] = '';
+          payload['email _m'] = '';
+          
+          payload['sum_hafkada'] = $('#independent-deposit').val();
+        }
+        break;
+        
+      case 4:
+        payload['full_name'] = $('#first-name').val() + ' ' + $('#last-name').val();
+        payload['height'] = $('#height').val();
+        payload['weight'] = $('#weight').val();
+        payload['doctor'] = $('#doctor-name').val();
+        payload['hmo'] = $('#medical-organization').val();
+        
+        if ($('#smoking-no').is(':checked')) {
+          payload['smoking_no'] = 'X';
+          payload['smoking_yes'] = '';
+          payload['count'] = '';
+          payload['when_ss'] = $('#smoking-when-stopped').val();
+        } else if ($('#smoking-yes').is(':checked')) {
+          payload['smoking_no'] = '';
+          payload['smoking_yes'] = 'X';
+          payload['count'] = $('#smoking-amount').val();
+          payload['when_ss'] = '';
+        }
+        
+        if ($('#alcohol-no').is(':checked')) {
+          payload['alcohol_no'] = 'X';
+          payload['alcohol_yes'] = '';
+        } else if ($('#alcohol-yes').is(':checked')) {
+          payload['alcohol_no'] = '';
+          payload['alcohol_yes'] = 'X';
+        }
+        payload['when_sa'] = $('#alcohol-when-stopped').val();
+        payload['gmilaa'] = $('#alcohol-is-tapering').val();
+        payload['when'] = $('#alcohol-when-tapering').val();
+        
+        if ($('#drugs-no').is(':checked')) {
+          payload['drugs_no'] = 'X';
+          payload['drugs_yes'] = '';
+        } else if ($('#drugs-yes').is(':checked')) {
+          payload['drugs_no'] = '';
+          payload['drugs_yes'] = 'X';
+        }
+        payload['type'] = $('#drugs-type-duration').val();
+        payload['when_sd'] = $('#drugs-when-stopped').val();
+        
+        for (var i = 1; i <= 14; i++) {
+          if ($('#medical-questionnaire-1-' + i + '-no').is(':checked')) {
+            payload['no1' + i] = 'X';
+            payload['yes1' + i] = '';
+          } else if ($('#medical-questionnaire-1-' + i + '-yes').is(':checked')) {
+            payload['no1' + i] = '';
+            payload['yes1' + i] = 'X';
+          }
+        }
+        
+        for (var i = 2; i <= 6; i++) {
+          if ($('#medical-questionnaire-' + i + '-no').is(':checked')) {
+            payload[i + 'no'] = 'X';
+            payload[i + 'yes'] = '';
+            payload['details' + i] = '';
+          } else if ($('#medical-questionnaire-' + i + '-yes').is(':checked')) {
+            payload[i + 'no'] = '';
+            payload[i + 'yes'] = 'X';
+            payload['details' + i] = $('#medical-questionnaire-' + i + '-yes-details').val();
+          }
+        }
+        break;
+        
+      case 6:
+        var date = new Date();
+        var day = date.getDate();
+        var month = date.getMonth() + 1;
+        var year = date.getFullYear();
+
+        if (day < 10) {
+          day = '0' + day;
+        } 
+
+        if (month < 10) {
+          month = '0' + month;
+        } 
+
+        payload['date'] = day + '/' + month + '/' + year;
+        payload['statement'] = 'X';
+        payload['signatureBase64'] = signaturePad.toDataURL();
+        sendPayload();
+        break;
+    }
+  }
+  
+  
+  /**
+   * 
+   * @param payload
+   * @returns
+   */
+  function sendPayload() { 
+    // Send to WebMerge.
+    console.log(payload);
+    
+    $.ajax({
+      contentType: 'application/json',
+      method: 'POST',
+      url: 'https://www.webmerge.me/merge/78260/7gp54r',
+      data: JSON.stringify(payload)
+    });
+    
+    
+    // Send to HA.
+    var haPayload = {
+      firstName: payload['first_name'], 
+      lastName: payload['last_name'], 
+      idNumber: payload['id_num'], 
+      phone: payload['phone'], 
+      formType: "minimal", 
+      email: payload['email'],
+      subject: 'פנסיה',
+      customMessage: 'שלום רב, בהמשך למילוי הטופס הדיגיטלי, מצ"ב קישור לצירוף מסמכים נדרשים. בברכה, הלמן אלדובי'
+    }
+    console.log(haPayload);
+    
+    $.ajax({
+      contentType: 'application/json',
+      method: 'POST',
+      url: 'http://halman-easysend.herokuapp.com/api/halman/sendform',
+      data: JSON.stringify(haPayload)
+    });
+    
+    
+    // Send to SP.
+    var data = {
+      action: 'setCustomerEvent',
+      data: {
+        eventName: 'HELMAN_ALDUBI_SENT_FORM',
+        param_1_varchar: document.location.href,
+        param_2_varchar: document.referrer
+      }
+    };
+    console.log(data);
+    
+    $.ajax({
+      contentType: 'application/json',
+      method: 'POST',
+      url: 'http://www.slidepiper.com/',
+      data: JSON.stringify(haPayload)
+    });
+  };
 });

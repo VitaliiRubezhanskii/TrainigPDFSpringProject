@@ -11,10 +11,9 @@ section:not([data-section-id="0"]),
 #medical-questionnaire-5-yes-container,
 #medical-questionnaire-6-yes-container,
 #partner,
+#partner-kids-waiver-statement,
 #partner-no-kids-no-container,
 #partner-no-kids-yes-container,
-#retirement-age-female,
-#retirement-age-male,
 #smoking-amount-container,
 #smoking-when-stopped-container,
 #transfer-funds-container {
@@ -123,13 +122,6 @@ select + .help-block,
   right: auto;
 }
 
-.panel {
-  height: 350px;
-  margin-bottom: 10px;
-  padding: 15px;
-  overflow-y: scroll;
-}
-
 .progress-bar {
   float: right;
   width: 25%;
@@ -177,14 +169,24 @@ select + .help-block,
   margin-bottom: 0;
 }
 
+#general-statements .fa {
+  margin-left: 5px;
+}
+
+#panel {
+  height: 350px;
+  margin-bottom: 10px;
+  padding: 15px;
+  overflow-y: scroll;
+}
+
 #phone-number-error {
   margin-bottom: 0;
 }
 
 #sp-form__signature {
-  height: 100px;
-  max-width: 300px;
-  width: 100%; 
+  height: 150px;
+  width: 300px;
 }
 
 /* Media Queries */
@@ -193,19 +195,19 @@ select + .help-block,
     line-height: 11px;
   }
   
-  .panel {
+  #panel {
     height: 310px;
   }
 }
 
 @media only screen and (max-height: 400px) {
-  .panel {
+  #panel {
     height: 260px;
   }
 }
 
 @media only screen and (max-height: 350px) {
-  .panel {
+  #panel {
     height: 210px;
   }
 }
@@ -216,7 +218,7 @@ select + .help-block,
     font-size: 10px;
   }
     
-  .panel {
+  #panel {
     height: 225px;
   }
 }
@@ -226,7 +228,7 @@ select + .help-block,
     line-height: 11px;
   }
   
-  .panel {
+  #panel {
     height: 115px;
     padding: 9px;
   }
@@ -237,7 +239,7 @@ select + .help-block,
     line-height: 9px;
   }
   
-  .panel {
+  #panel {
     height: 62px;
   }
 }

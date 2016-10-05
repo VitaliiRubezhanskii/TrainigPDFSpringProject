@@ -22,12 +22,12 @@
       <li class="sp-form__whitespace-nowrap" id="pagination-2">בחירת תוכנית ומסלול השקעה</li>
       <li class="sp-form__whitespace-nowrap" id="pagination-3">עיסוק</li>
       <li class="sp-form__whitespace-nowrap" id="pagination-4">הצהרת בריאות</li>
-      <li class="sp-form__whitespace-nowrap" id="pagination-5">העברת קופה (אופציונאלי)</li>
+      <!-- <li class="sp-form__whitespace-nowrap" id="pagination-5">העברת קופה (אופציונאלי)</li>  -->
       <li class="sp-form__whitespace-nowrap" id="pagination-6">ת.ז וחתימת הלקוח</li>
     </ol>
   </div>
   
-  <div class="panel panel-default">
+  <div class="panel panel-default" id="panel">
     <section data-section-id="0">
       <form id="form-0">
         <div class="form-group">
@@ -1684,17 +1684,17 @@
         <div class="form-group">
           <label class="control-label" for="family-status">מצב משפחתי:</label>
           <select class="form-control" id="family-status" name="familyStatus">
-            <option value="" selected disabled>בחר</option>
-            <option value="1">
+            <option value="" selected disabled>בחר מצב משפחתי</option>
+            <option value="רווק/ה">
               רווק/ה
             </option>
-            <option value="2">
+            <option value="נשוי/אה">
               נשוי/אה
             </option>
-            <option value="3">
+            <option value="גרוש/ה">
               גרוש/ה
             </option>
-            <option value="4">
+            <option value="אלמן/נה">
               אלמן/נה
             </option>
           </select>
@@ -1789,8 +1789,20 @@
           </div>
         </div>
         
+        <p id="partner-kids-waiver-statement">
+        הצהרה: הנני מצהיר כי אין לי בן/בת זוג ו/או ילדים (כהגדרת מונחים אלה בתקנון הקרן) בהתאם לבחירתי שלעיל והנני מבקש להצטרף לקרן בתוכנית הביטוח שבחרתי, תוך ויתור על כיסוי ביטוחי לשאירים המקנה זכויות לבן/בת הזוג ו/או לילדים בהתאם לבחירתי לעיל. ידוע לי כי הויתור הינו לתקופה של 24 חודשים או עד למועד בו אודיע לקרן כי נוספו לי בן/בת זוג ו/או ילדים העונים על הגדרת שאירי מבוטח לפי המוקדם מבין השניים. הנני מתחייב להודיע לקרן בכתב על כל שינוי שיחול בהצהרה זו.
+        <br>
+        ידוע לי כי בתום תקופת הויתור יתחדש הביטוח לשאירים במסגרת תוכנית הביטוח שבחרתי, אלא אם הודעתי לקרן בכתב 60 יום לפני תום התקופה הנ"ל על רצוני להמשיך לוותר על כיסוי ביטוחי לשאירים כאמור.
+        </p>
+        
         <hr>
         
+        <p>
+        בהעדר שאירים זכאים במועד פטירתי (חו"ח), הריני להנחות את החברה לשלם את ערכי הפדיון של היתרה הצבורה שתיצבר לזכותי בקרן למוטבים המפורטים בטבלה שלהלן, על פי החלקים המצוינים בטבלה.
+        <br>
+        ידוע לי כי במידה ולא אמנה מוטבים, ערכי הפדיון של היתרה הצבורה שתיצבר לזכותי בקרן יחולקו לאחר מותי (חו"ח) ליורשי על פי דין או לזוכים על פי צוואתי, בהתאם לחלקם בעיזבון.
+        </p>
+          
         <div class="form-group sp-radio">
           <label class="control-label">מינוי מוטבים:</label>
           <div>
@@ -1844,7 +1856,7 @@
               
               <div class="form-group">
                 <label class="control-label" for="address-beneficiary-1">כתובת:</label>
-                <input type="number" class="form-control" id="address-beneficiary-1" name="addressBeneficiary1" placeholder="הכנס כתובת">
+                <input type="text" class="form-control" id="address-beneficiary-1" name="addressBeneficiary1" placeholder="הכנס כתובת">
                 <span class="glyphicon form-control-feedback"></span>
               </div>
             </div>
@@ -1889,7 +1901,7 @@
               
               <div class="form-group">
                 <label class="control-label" for="address-beneficiary-2">כתובת:</label>
-                <input type="number" class="form-control" id="address-beneficiary-2" name="addressBeneficiary2" placeholder="הכנס כתובת">
+                <input type="text" class="form-control" id="address-beneficiary-2" name="addressBeneficiary2" placeholder="הכנס כתובת">
                 <span class="glyphicon form-control-feedback"></span>
               </div>
             </div>
@@ -1998,29 +2010,29 @@
           
           <div id="retirement-age-male">
             <div class="sp-radio">
-              <input type="radio" id="retirement-age-male-1" name="retirementAgeMale" checked>
+              <input type="radio" id="retirement-age-male-1" name="retirementAgeMale" value="g67" checked>
               <label class="radio-inline" for="retirement-age-male-1">67</label>
             </div>
             
             <div class="sp-radio">
-              <input type="radio" id="retirement-age-male-2" name="retirementAgeMale">
+              <input type="radio" id="retirement-age-male-2" name="retirementAgeMale" value="g60">
               <label class="radio-inline" for="retirement-age-male-2">60</label>
             </div>
           </div>
           
           <div id="retirement-age-female">
             <div class="sp-radio">
-              <input type="radio" id="retirement-age-female-1" name="retirementAgeFemale">
+              <input type="radio" id="retirement-age-female-1" name="retirementAgeFemale" value="g60">
               <label class="radio-inline" for="retirement-age-male-1">60</label>
             </div>
             
             <div class="sp-radio">
-              <input type="radio" id="retirement-age-female-2" name="retirementAgeFemale" checked>
+              <input type="radio" id="retirement-age-female-2" name="retirementAgeFemale" value="g64" checked>
               <label class="radio-inline" for="retirement-age-male-2">64</label>
             </div>
             
             <div class="sp-radio">
-              <input type="radio" id="retirement-age-female-3" name="retirementAgeFemale">
+              <input type="radio" id="retirement-age-female-3" name="retirementAgeFemale" value="g67">
               <label class="radio-inline" for="retirement-age-female-3">67</label>
             </div>
           </div>
@@ -5925,15 +5937,17 @@
           
           <div class="form-group">
             <label class="control-label" for="employer-phone">טלפון:</label>
-            <input type="text" class="form-control" id="employer-phone">
+            <input type="text" class="form-control" id="employer-phone" name="employerPhone">
             <span class="glyphicon form-control-feedback"></span>
           </div>
           
+          <!--
           <div class="form-group">
             <label class="control-label" for="employer-fax">פקס:</label>
             <input type="text" class="form-control" id="employer-fax">
             <span class="glyphicon form-control-feedback"></span>
           </div>
+           -->
           
           <div class="form-group">
             <label class="control-label" for="employer-contact">איש קשר:</label>
@@ -5943,7 +5957,7 @@
           
           <div class="form-group">
             <label class="control-label" for="employer-email">כתובת מייל המעסיק:</label>
-            <input type="email" class="form-control" id="employer-email">
+            <input type="email" class="form-control" id="employer-email" name="employerEmail">
             <span class="glyphicon form-control-feedback"></span>
           </div>
         </div>
@@ -6089,78 +6103,78 @@
             </thead>
             <tbody>
               <tr>
-                <td><button type="button" class="btn btn-info btn-xs" id="medical-questionnaire-no-for-all">לא לכולם</button></td>
+                <td><button type="button" class="btn btn-info btn-xs" id="medical-questionnaire-no-for-all">סימון לא בכל הסעיפים</button></td>
                 <td></td>
                 <td>1. האם הנך מאובחן / אובחנת בעבר ו/או הינך בתהליך בירור למחלה הנוגע ל:</td>
               </tr>
               <tr>
-                <td><input type="radio" class="medical-questionnaire-no" id="medical-questionnaire-1.1-no" name="medical-questionnaire-1.1"></td>
-                <td><input type="radio"  id="medical-questionnaire-1.1-yes" name="medical-questionnaire-1.1"></td>
+                <td><input type="radio" class="medical-questionnaire-no" id="medical-questionnaire-1-1-no" name="medical-questionnaire-1-1"></td>
+                <td><input type="radio"  id="medical-questionnaire-1-1-yes" name="medical-questionnaire-1-1"></td>
                 <td>1.1. לב, כלי דם, אירוע מוחי ,לחץ דם, מערכת כלי דם פריפריאלית (היקפית)</td>
               </tr>
               <tr>
-                <td><input type="radio" class="medical-questionnaire-no" id="medical-questionnaire-1.2-no" name="medical-questionnaire-1.2"></td>
-                <td><input type="radio"  id="medical-questionnaire-1.2-yes" name="medical-questionnaire-1.2"></td>
+                <td><input type="radio" class="medical-questionnaire-no" id="medical-questionnaire-1-2-no" name="medical-questionnaire-1-2"></td>
+                <td><input type="radio"  id="medical-questionnaire-1-2-yes" name="medical-questionnaire-1-2"></td>
                 <td>1.2. מערכת העצבים והמוח</td>
               </tr>
               <tr>
-                <td><input type="radio" class="medical-questionnaire-no" id="medical-questionnaire-1.3-no" name="medical-questionnaire-1.3"></td>
-                <td><input type="radio"  id="medical-questionnaire-1.3-yes" name="medical-questionnaire-1.3"></td>
+                <td><input type="radio" class="medical-questionnaire-no" id="medical-questionnaire-1-3-no" name="medical-questionnaire-1-3"></td>
+                <td><input type="radio"  id="medical-questionnaire-1-3-yes" name="medical-questionnaire-1-3"></td>
                 <td>1.3. בעיה/הפרעה ו/או מחלה נפשית מאובחנת וניסיונות התאבדות</td>
               </tr>
               <tr>
-                <td><input type="radio" class="medical-questionnaire-no" id="medical-questionnaire-1.4-no" name="medical-questionnaire-1.4"></td>
-                <td><input type="radio"  id="medical-questionnaire-1.4-yes" name="medical-questionnaire-1.4"></td>
+                <td><input type="radio" class="medical-questionnaire-no" id="medical-questionnaire-1-4-no" name="medical-questionnaire-1-4"></td>
+                <td><input type="radio"  id="medical-questionnaire-1-4-yes" name="medical-questionnaire-1-4"></td>
                 <td>1.4. סוכרת, שומנים בדם ומחלות הקשורות בבלוטות</td>
               </tr>
               <tr>
-                <td><input type="radio" class="medical-questionnaire-no" id="medical-questionnaire-1.5-no" name="medical-questionnaire-1.5"></td>
-                <td><input type="radio"  id="medical-questionnaire-1.5-yes" name="medical-questionnaire-1.5"></td>
+                <td><input type="radio" class="medical-questionnaire-no" id="medical-questionnaire-1-5-no" name="medical-questionnaire-1-5"></td>
+                <td><input type="radio"  id="medical-questionnaire-1-5-yes" name="medical-questionnaire-1-5"></td>
                 <td>1.5. סרטן, גידולים ומחלות ממאירות</td>
               </tr>
               <tr>
-                <td><input type="radio" class="medical-questionnaire-no" id="medical-questionnaire-1.6-no" name="medical-questionnaire-1.6"></td>
-                <td><input type="radio"  id="medical-questionnaire-1.6-yes" name="medical-questionnaire-1.6"></td>
+                <td><input type="radio" class="medical-questionnaire-no" id="medical-questionnaire-1-6-no" name="medical-questionnaire-1-6"></td>
+                <td><input type="radio"  id="medical-questionnaire-1-6-yes" name="medical-questionnaire-1-6"></td>
                 <td>1.6. מערכת העיכול, המעיים, טחול, לבלב, פי הטבעת</td>
               </tr>
               <tr>
-                <td><input type="radio" class="medical-questionnaire-no" id="medical-questionnaire-1.7-no" name="medical-questionnaire-1.7"></td>
-                <td><input type="radio"  id="medical-questionnaire-1.7-yes" name="medical-questionnaire-1.7"></td>
+                <td><input type="radio" class="medical-questionnaire-no" id="medical-questionnaire-1-7-no" name="medical-questionnaire-1-7"></td>
+                <td><input type="radio"  id="medical-questionnaire-1-7-yes" name="medical-questionnaire-1-7"></td>
                 <td>1.7. כליות ודרכי שתן, ערמונית, מחלות מין ואשכים</td>
               </tr>
               <tr>
-                <td><input type="radio" class="medical-questionnaire-no" id="medical-questionnaire-1.8-no" name="medical-questionnaire-1.8"></td>
-                <td><input type="radio"  id="medical-questionnaire-1.8-yes" name="medical-questionnaire-1.8"></td>
+                <td><input type="radio" class="medical-questionnaire-no" id="medical-questionnaire-1-8-no" name="medical-questionnaire-1-8"></td>
+                <td><input type="radio"  id="medical-questionnaire-1-8-yes" name="medical-questionnaire-1-8"></td>
                 <td>1.8. לנשים - בעיות גניקולוגיות ושדיים</td>
               </tr>
               <tr>
-                <td><input type="radio" class="medical-questionnaire-no" id="medical-questionnaire-1.9-no" name="medical-questionnaire-1.9"></td>
-                <td><input type="radio"  id="medical-questionnaire-1.9-yes" name="medical-questionnaire-1.9"></td>
+                <td><input type="radio" class="medical-questionnaire-no" id="medical-questionnaire-1-9-no" name="medical-questionnaire-1-9"></td>
+                <td><input type="radio"  id="medical-questionnaire-1-9-yes" name="medical-questionnaire-1-9"></td>
                 <td>1.9. מחלת כבד, מחלת צהבת (למעט מסוג A ) והפרעה בתפקודי כבד</td>
               </tr>
               <tr>
-                <td><input type="radio" class="medical-questionnaire-no" id="medical-questionnaire-1.10-no" name="medical-questionnaire-1.10"></td>
-                <td><input type="radio"  id="medical-questionnaire-1.10-yes" name="medical-questionnaire-1.10"></td>
+                <td><input type="radio" class="medical-questionnaire-no" id="medical-questionnaire-1-10-no" name="medical-questionnaire-1-10"></td>
+                <td><input type="radio"  id="medical-questionnaire-1-10-yes" name="medical-questionnaire-1-10"></td>
                 <td>1.10. ריאות ודרכי נשימה</td>
               </tr>
               <tr>
-                <td><input type="radio" class="medical-questionnaire-no" id="medical-questionnaire-1.11-no" name="medical-questionnaire-1.11"></td>
-                <td><input type="radio"  id="medical-questionnaire-1.11-yes" name="medical-questionnaire-1.11"></td>
+                <td><input type="radio" class="medical-questionnaire-no" id="medical-questionnaire-1-11-no" name="medical-questionnaire-1-11"></td>
+                <td><input type="radio"  id="medical-questionnaire-1-11-yes" name="medical-questionnaire-1-11"></td>
                 <td>1.11. בעיות אורתופדיות כולל גב ועמוד שידרה ודלקות פרקים</td>
               </tr>
               <tr>
-                <td><input type="radio" class="medical-questionnaire-no" id="medical-questionnaire-1.12-no" name="medical-questionnaire-1.12"></td>
-                <td><input type="radio"  id="medical-questionnaire-1.12-yes" name="medical-questionnaire-1.12"></td>
+                <td><input type="radio" class="medical-questionnaire-no" id="medical-questionnaire-1-12-no" name="medical-questionnaire-1-12"></td>
+                <td><input type="radio"  id="medical-questionnaire-1-12-yes" name="medical-questionnaire-1-12"></td>
                 <td>1.12. מחלות זיהומיות ואיידס/ נשא HIV</td>
               </tr>
               <tr>
-                <td><input type="radio" class="medical-questionnaire-no" id="medical-questionnaire-1.13-no" name="medical-questionnaire-1.13"></td>
-                <td><input type="radio"  id="medical-questionnaire-1.13-yes" name="medical-questionnaire-1.13"></td>
+                <td><input type="radio" class="medical-questionnaire-no" id="medical-questionnaire-1-13-no" name="medical-questionnaire-1-13"></td>
+                <td><input type="radio"  id="medical-questionnaire-1-13-yes" name="medical-questionnaire-1-13"></td>
                 <td>1.13. בעיות ומחלות עור</td>
               </tr>
               <tr>
-                <td><input type="radio" class="medical-questionnaire-no" id="medical-questionnaire-1.14-no" name="medical-questionnaire-1.14"></td>
-                <td><input type="radio"  id="medical-questionnaire-1.14-yes" name="medical-questionnaire-1.14"></td>
+                <td><input type="radio" class="medical-questionnaire-no" id="medical-questionnaire-1-14-no" name="medical-questionnaire-1-14"></td>
+                <td><input type="radio"  id="medical-questionnaire-1-14-yes" name="medical-questionnaire-1-14"></td>
                 <td>1.14. בעיות ומחלות:  עיניים (כולל מספר עדשות מעל 8), אף אוזן גרון וחלל הפה</td>
               </tr>
               <tr>
@@ -6442,7 +6456,7 @@
               
               <div class="form-group">
                 <label class="control-label" for="fund-name-4">קופה מעבירה:</label>
-                <select class="form-control" id="fund-name-4" name="fundName4">
+                <select class="form-control fund-name" id="fund-name-4" name="fundName4">
                   <option value="" selected disabled>בחר קופה מעבירה</option>
                   <option value="131">איילון-פיסגה קרן פנסיה</option>
                   <option value="0">איילון חברה לביטוח </option>
@@ -6577,9 +6591,82 @@
     
     <section data-section-id="6">
       <form id="form-6">
+      
+        <div class="panel-group">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h4 class="panel-title">
+                <a data-toggle="collapse" href="#collapse" id="general-statements"><i class="fa fa-plus-square"></i>הצהרת המועמד להצטרפות לקרן (חובה לקרוא ולאשר)</a>
+              </h4>
+            </div>
+            <div id="collapse" class="panel-collapse collapse">
+              <div class="panel-body">
+              1. אני החתום מטה מצהיר כי כל הפרטים שמסרתי בבקשת הצטרפות זו הינם מלאים נכונים ומדויקים.
+              <br>
+              2. אם אתקבל כמבוטח בקרן הריני מתחייב להודיעכם על כל מידע שלא היה בידיעתי בעת הצהרת זו ועל כל שינוי שיחול בפרטים אלה תוך 30 יום ממועד השינוי. 
+              <br>
+              3. כמו כן, ידוע לי כי במקרה של מסירת פרטים לא נכונים או לא מלאים או לא מדויקים שיש בהם להשפיע על קבלתי או זכויותיי בקרן או במקרה של פיגור בתשלומים, רשאית החברה המנהלת לשלול ו/או להפחית תשלומים ו/או זכויות כלשהן, 
+              <strong>
+              לרבות זכויות ביחס לכיסוי ביטוחי.  
+              </strong>
+              <br>
+              4. ידוע לי כי קבלת דמי גמולים על ידי הקרן אין בה כשלעצמה משום הסכמה  לקבלני כמבוטח בקרן. 
+              <br>
+              5. ידוע לי כי זכויותיי וחובותיי בקרן הינן בהתאם לתקנון הקרן והחלטות החברה, כפי שתהיינה מעת לעת והכל בהתאם ובכפוף להוראות הדין, כפי שתהיינה מעת לעת.
+              <br>
+              6. הנני נותן הסכמתי לחברה המנהלת או למי מטעמה לבצע אימות נתונים מול מרשם האוכלוסין של משרד הפנים לנתונים אשר מופיעים בתעודת הזהות.
+              <br>
+              הנני מאשר לכם לשנות את פרטי המען בהתאם למרשם התושבים.
+              <br>
+              7. ידוע לי כי ההפרשה לקרן פנסיה מקיפה מוגבלת 
+              <strong>
+              ל20.5% מפעמיים השכר הממוצע במשק.
+              </strong>
+               במקרה שיועברו לקרן פנסיה דמי גמולים העולים על המותר, הנני מורה לכם להעביר את הסכום העודף 
+              <strong>
+              ל"הלמן אלדובי קרן פנסיה כללית".
+              </strong>
+              <br>
+              8. 
+              <strong>
+              ככל שההצטרפות הינה באמצעות בעל רישיון: ידוע לי כי בהתאם לחוק הפיקוח על שירותים פיננסים (עיסוק בייעוץ פנסיוני ובשיווק פנסיוני):התשס"ה-2005 על בעל הרישיון להתאים את המוצר הפנסיוני ללקוח, ככל שהלקוח הסכים ליתן מידע. אני מאשר כי קיבלתי ייעוץ כאמור לגבי בקשת הצטרפותי לקרן. ידוע לי כי נציג הקופה/הסוכן הינו בעל זיקה לקרן הפנסיה של החברה וכי הוא אינו יועץ פנסיוני.
+              </strong>
+              <br>
+              9. לגבי הקרן הכללית: דמי הניהול שייגבו מחשבוני יסתכמו בשיעור שנתי של עד 1.1% מהיתרה הצבורה, ועד 4% מכל הפקדה. החברה המנהלת רשאית להוציא הסדרים פרטניים לגביית דמי הניהול הנמוכים.
+              <br>
+              10. קיבלתי את הצהרת החברה כי לא תינתן ולא ניתנה על ידה כל הטבה למעבידי או לארגון מעבידים או לארגון עובדים או לגוף אחר שמוחזק בידי מי מהם (במישרין או בעקיפין, יהא שיעור האחזקות אשר יהא) עקב הצטרפותי לקרן.
+              <br>
+              11. אני מסכים כי החברה תעביר מידע ושירותים בקשר עם חשבוני באמצעות הטלפון, האינטרנט או באמצעות תקשורת חליפית(להלן:"קווי תקשורת") וכי אוכל לבצע פעולות באמצעות קווי התקשורת. ידוע לי, כי במקרה זה יתכנו תקלות, טעויות, עיכובים, השמטות וכן אפשרות של חשיפת פרטים המהווים פגיעה בפרטיות, והחברה לא תהא אחראית בקשר עם השימוש בקווי התקשורת.
+              <br>
+              אני מאשר ומסכים שהחברה תהא רשאית להקליט את התקשורת שתתקיים עימי בקווי התקשורת.     
+              <br>
+              12.  לא יהא תוקף לשינויים ומחיקות במסמך זה שיערכו ללא חתימה של החברה בצד שינויים או המחיקות. חתימה כאמור הינה תנאי מהותי לקבלת השינוי.
+              <br>
+              13.  עמית שכיר: ידוע לי כי עליי לבדוק בכל חודש אם הכספים הופקדו על ידי מעבידי במועדם, ובכל מקרה של פיגור בהפקדתם אתריע על כך בפניכם.
+              <br>
+              14.  אם יתברר בעתיד כי חשבוני זוכה בטעות בסכומי כסף שלא הגיעו לי, הנני מסמיך את החברה לחייב את חשבוני/נותיי בגין סכומים אלה בצירוף רווחים שהצטברו על כל סכומים אלה מיום הזיכוי ועד למועד תיקון הטעות.
+              <br>
+              15. אם ובעתיד אחליט למשוך או להעביר את יתרת הקרן, אני מסמיך את נציגיה המורשים של החברה לפנות אליי ולעניין אותי בביטול בקשתי ידוע לי כי נציגים אלו הינם סוכנים בעלי זיקה.
+              <br>
+              16.
+              <strong>
+              אני מייפה את כוחו של בעל הרישיון ששמו נזכר להלן לקבל מידע אודות חשבוני מהחברה, עד אשר אודיעם אחרת.
+              </strong>
+              <br>
+              17. 
+              <strong>
+              ידוע לי כי עם חתימתי לצד הצהרה זו להלן, הנני נותן הסכמתי לכך כי הנתונים אודותיי ישמרו במאגרי המידע בבעלות החברה ו/או החברות הקשורות לה ו/או גורמים מטעמן וישמשו את הגורמים הנזכרים לעיל לצורך ניהול קשרי לקוחות ו/או מידע סטטיסטי ו/או פעולות ו/או פניות שיווקיות, לרבות תכנים שיווקים, בקשר עם מוצרים פנסיונים ו/או פיננסים ו/או אחרים בדרך של דיוור, לרבות דיוור ישיר או שירותי דיוור ישיר או בדרך אחרת, לרבות באמצעות פקסימיליה, הודעה אלקטרונית, הודעת מסר קצר 
+              (sms)
+               ומערכת חיוג אוטומטי. ידוע לי כי בכל עת אני רשאי לבקש מהחברה, בכתב, כי הנתונים אודותיי לא ישמשו לצרכים הנזכרים לעיל.
+              </strong>
+              </div>
+            </div>
+          </div>
+        </div>
+      
         <div class="form-group confirm-statements">
           <label>
-            <input type="checkbox" class="pull-right sp-checkbox--rtl" id="is-confirm-statements" name="isConfirmStatements">
+            <input type="checkbox" class="pull-right sp-checkbox--rtl" id="is-confirm-statements" name="isConfirmStatements" disabled>
             אני מאשר כי קראתי את הצהרות המועמד
           </label>
         </div>
