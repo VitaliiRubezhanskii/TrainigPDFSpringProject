@@ -4,6 +4,13 @@ SlidePiper README File
 Change Log
 ----------
 
+### 0.13.13
+
+2016-10-06 Yaniv Friedensohn <yanivf@slidepiper.com>
+
+* Change hopper text max length from 43 to 44.
+
+
 ### 0.13.12
 
 2016-10-02 Yaniv Friedensohn <yanivf@slidepiper.com>, Max Prais <maxp@slidepiper.com>
