@@ -84,6 +84,7 @@ sp.viewer = {
     viewerWidgetTestimonialsClicked: 'VIEWER_WIDGET_TESTIMONIALS_CLICKED',
     viewerWidgetFormButtonClicked: 'VIEWER_WIDGET_FORM__BUTTON_CLICKED',
     viewerWidgetFormConfirmClicked: 'VIEWER_WIDGET_FORM_CONFIRM_CLCKED',
+    viewerWidgetFormCancelClicked: 'VIEWER_WIDGET_FORM_CANCEL_CLICKED'
   },
   isPagesLoaded: false,
   paramValue: {
@@ -1471,17 +1472,18 @@ if ('' != sp.viewer.linkHash) {
             html: '<iframe id="sp-widget7-form" style="width: 100%" src="' + widget.formUrl + '" frameborder="0"></iframe>',
             title: widget.formTitle,
             width: 950,
-            preConfirm: function() {
-              return new Promise(function(resolve, reject) {
-                
-                // Get form success script.
-                $.getScript(widget.formSuccess)
-                  .done(function() {
-                    resolve();
-                  });
+          }).then(function() {
+          },
+          function(dismiss) {
+            if (dismiss === 'cancel') {
+              sp.viewer.setCustomerEvent({
+                eventName: sp.viewer.eventName.viewerWidgetFormCancelClicked,
+                linkHash: sp.viewer.linkHash,
+                sessionId: sessionid,
+                param_1_varchar: $('.swal2-cancel').text()
               });
-            },
-          }).done();
+            }
+          });
         }
         
         function imageSwal() {

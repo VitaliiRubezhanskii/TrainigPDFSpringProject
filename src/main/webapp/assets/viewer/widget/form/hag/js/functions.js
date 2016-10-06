@@ -819,7 +819,6 @@ $(function() {
         } 
 
         payload['date'] = day + '/' + month + '/' + year;
-        payload['statement'] = 'X';
         payload['signatureBase64'] = signaturePad.toDataURL();
         sendPayload();
         break;
@@ -839,7 +838,7 @@ $(function() {
     $.ajax({
       contentType: 'application/json',
       method: 'POST',
-      url: 'https://www.webmerge.me/merge/78260/7gp54r',
+      url: 'https://www.webmerge.me/merge/78047/g33bvk?test=1',
       data: JSON.stringify(payload)
     });
     
@@ -850,7 +849,7 @@ $(function() {
       lastName: payload['last_name'], 
       idNumber: payload['id_num'], 
       phone: payload['phone'], 
-      formType: "minimal", 
+      formType: 'minimal', 
       email: payload['email'],
       subject: 'פנסיה',
       customMessage: 'שלום רב, בהמשך למילוי הטופס הדיגיטלי, מצ"ב קישור לצירוף מסמכים נדרשים. בברכה, הלמן אלדובי'
@@ -879,7 +878,7 @@ $(function() {
     $.ajax({
       contentType: 'application/json',
       method: 'POST',
-      url: 'http://www.slidepiper.com/',
+      url: 'http://ts1.slidepiper.com/ManagementServlet',
       data: JSON.stringify(haPayload)
     });
   };
