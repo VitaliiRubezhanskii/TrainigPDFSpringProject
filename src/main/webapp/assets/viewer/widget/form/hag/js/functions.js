@@ -1,14 +1,16 @@
 $(function() {
   var beneficiariesPercentageValidationFlag = false;
+  var isFormValidBoolean = false;
   var payload = {};
   var sectionId = 0;
   
   
   $('.sp-next-section').click(function() {
-    console.log('Currently on section: ' + sectionId);
-    
     if (! isFormValid()) {
+      isFormValidBoolean = false
       return false;
+    } else {
+      isFormValidBoolean = true;
     }
     
     switch (sectionId) {
@@ -65,12 +67,12 @@ $(function() {
     saveEntries(sectionId);
     
     sectionId++;
+    console.log('Currently on section: ' + sectionId);
     if (5 === sectionId) {
       $('.sp-next-section').click();
     }
     setSectionView();
   });
-  
   
   $('.sp-back-section').click(function() {
     $('#form-not-valid').remove();
@@ -92,23 +94,20 @@ $(function() {
   $('.breadcrumb li').click(function() {
     if ($(this).hasClass('sp-form__menu-section--seen')) {
       var newSectionId = parseInt($(this).attr('id').split('-')[1]);
-      
-      // If current section is the same old the clicked section, do nothing.
+
+      // newSectionId is the clicked breadcrumb section ID.
       if (newSectionId !== sectionId) {
-        
-        // If newSectionId is greater than current Id, then validate. 
-        // If it is not valid, break the function.
-        if (newSectionId > sectionId && ! isFormValid()) {
-          return false;
+        if (newSectionId > sectionId) {
           
-          // If newSectionId is lower than current Id, remove error message. 
-        } else if (newSectionId < sectionId) {
+          do {
+            $('.sp-next-section').click();
+          } while (sectionId < newSectionId && isFormValidBoolean);
+          
+        } else {
           $('#form-not-valid').remove();
+          sectionId = newSectionId;
+          setSectionView();
         }
-        
-        // Set new section Id. 
-        sectionId = newSectionId;
-        setSectionView();
       }
     }
   });
@@ -116,7 +115,7 @@ $(function() {
   function isFormValid() {
     if (! $('#form-' + sectionId).valid()) {
       if (0 === $('#form-not-valid').length) {
-        $('.panel').after('<div class="form-group has-error" id="form-not-valid"><label class="control-label">לא כל שדות החובה מלאים, ולכן לא ניתן לעבור למסך הבא</label></div>');
+        $('#panel').after('<div class="form-group has-error" id="form-not-valid"><label class="control-label">לא כל שדות החובה מלאים, ולכן לא ניתן לעבור למסך הבא</label></div>');
       }
       return false;
     } else {
@@ -205,7 +204,7 @@ $(function() {
       
       for (var i = 0; i < data.result.records.length; i += increment) {
         $('#street').append(
-          '<option value="' + data.result.records[i]['סמל_רחוב'] + '">' + data.result.records[i]['שם_רחוב'].replace(/"/g, '&quot;') + '</option>'
+          '<option value="' + data.result.records[i]['סמל_רחוב'] + '">' + data.result.records[i]['שם_רחוב'].replace(/"/g, '&quot;').replace(/\)(.+)\(/g, '($1)') + '</option>'
         );
       }
     });  
