@@ -202,6 +202,23 @@ body {
   margin-top: 5px;
 }
 
+.sp-widget7__swal .swal2-spacer {
+  display: none !important;
+}
+ 
+.sp-widget7__swal .swal2-image {
+  margin: 0 auto !important;
+} 
+
+.sp-widget7__swal h2 {
+  font-size: 20px !important;
+  margin-bottom: 10px !important;
+  line-height: 30px !important;
+}
+
+.sp-widget7__swal button.styled {
+  padding: 5px 15px !important;
+}
 
 /* Widget 1 */
 #sp-widget1 {
@@ -446,6 +463,74 @@ body {
 .sp-widget5__extend-button i {
   color: #fff;
   font-size: 10px;
+}
+
+
+/* Widget 7 - Form Widget */
+#sp-widget7-form {
+  height: 500px;
+}
+
+@media only screen and (max-height: 900px) {
+  #sp-widget7-form {
+    height: 450px;
+  }
+}
+
+@media only screen and (max-height: 800px) {
+  #sp-widget7-form {
+    height: 400px;
+  }
+}
+
+@media only screen and (max-height: 700px) {
+  #sp-widget7-form {
+    height: 350px;
+  }
+}
+
+/* iPad */
+@media only screen and (max-height: 960px) and (max-width: 768px) {
+  #sp-widget7-form {
+    height: 300px;
+  }
+}
+
+/* iPhone 6 */
+@media only screen and (max-height: 760px) and (max-width: 415px) {
+  #sp-widget7-form {
+    height: 390px;
+  }
+  
+  .sp-widget7__swal button.styled {
+    padding: 5px 25px !important;
+  }
+  
+  .sp-widget7__swal .swal2-image {
+    display: none !important;
+  }
+  
+  .sp-widget7__swal {
+    padding: 15px !important;
+  }
+  
+  .sp-widget7__swal h2 {
+    display: none !important;
+  }
+}
+
+/* iPhone 5 */
+@media only screen and (max-height: 568px) and (max-width: 320px) {
+  #sp-widget7-form {
+    height: 280px;
+  }
+}
+
+/* iPhone 4 */
+@media only screen and (max-height: 372px) and (max-width: 320px) {
+  #sp-widget7-form {
+    height: 120px;
+  }
 }
 
 
