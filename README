@@ -6,6 +6,15 @@ Change Log
 
 ### 0.13.13
 
+2016-10-09 Yaniv Friedensohn <yanivf@slidepiper.com>
+
+* Created HA form.
+
+* Enhanced the form widget to support adding external forms.
+ 
+
+### 0.13.13
+
 2016-10-06 Yaniv Friedensohn <yanivf@slidepiper.com>
 
 * Change hopper text max length from 43 to 44.
