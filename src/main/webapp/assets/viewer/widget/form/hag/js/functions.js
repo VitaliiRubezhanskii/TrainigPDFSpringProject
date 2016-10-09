@@ -67,12 +67,12 @@ $(function() {
     saveEntries(sectionId);
     
     sectionId++;
-    console.log('Currently on section: ' + sectionId);
     if (5 === sectionId) {
       $('.sp-next-section').click();
     }
     setSectionView();
   });
+  
   
   $('.sp-back-section').click(function() {
     $('#form-not-valid').remove();
@@ -112,6 +112,7 @@ $(function() {
     }
   });
   
+  
   function isFormValid() {
     if (! $('#form-' + sectionId).valid()) {
       if (0 === $('#form-not-valid').length) {
@@ -122,9 +123,12 @@ $(function() {
       $('#form-not-valid').remove();
       return true;
     }
-  }
+  };
+  
   
   function setSectionView() {
+    console.log('Currently on section: ' + sectionId);
+    sendSlidePiper('HELMAN_ALDUBI_CURRENT_SECTION', sectionId);
     
     // Section settings.
     $('section').hide();
@@ -148,7 +152,8 @@ $(function() {
     } else {
       $('.sp-back-section').show();
     }
-  }
+  };
+  
   
   /* Form 1 Settings */
   $('#city').select2({
@@ -492,7 +497,7 @@ $(function() {
     }
     
     return isIdValid;
-  }
+  };
   
   
   /**
@@ -550,7 +555,7 @@ $(function() {
     }
              
     return isTotalPercentage100;
-  }
+  };
   
   
   /* Date Picker */
@@ -585,7 +590,7 @@ $(function() {
     } else {
       $('.sp-next-section').prop('disabled', true);
     }
-  }
+  };
   
   
   /* Save Entries */
@@ -593,11 +598,15 @@ $(function() {
     switch (sectionId) {
       case 0:
         payload = {
-          id_num: $('#id-init').val(),
+          email: $('#email-init').val(),
           first_name: $('#first-name-init').val(),
+          id_num: $('#id-init').val(),
           last_name: $('#last-name-init').val(),
-          email: $('#email-init').val()
+          phoneInit: $('#phone-operator-code-init').val() + '-' + $('#phone-number-init').val()
         }
+        
+        sendWebMerge('https://www.webmerge.me/merge/79450/1yz2sv');
+        sendSlidePiper('HELMAN_ALDUBI_COMPLETED_INITIAL_SECTION');
         break;
         
       case 1:
@@ -819,31 +828,29 @@ $(function() {
 
         payload['date'] = day + '/' + month + '/' + year;
         payload['signatureBase64'] = signaturePad.toDataURL();
-        sendPayload();
+        sendWebMerge('https://www.webmerge.me/merge/78047/g33bvk');
+        sendHA();
         break;
     }
-  }
+  };
   
   
-  /**
-   * 
-   * @param payload
-   * @returns
-   */
-  function sendPayload() { 
+  function sendWebMerge(url) {
+
     // Send to WebMerge.
-    console.log(payload);
-    
     $.ajax({
       contentType: 'application/json',
       method: 'POST',
-      url: 'https://www.webmerge.me/merge/78047/g33bvk?test=1',
+      url: url,
       data: JSON.stringify(payload)
     });
-    
+  };
+  
+  
+  function sendHA() {
     
     // Send to HA.
-    var haPayload = {
+    var attachmentPayload = {
       firstName: payload['first_name'], 
       lastName: payload['last_name'], 
       idNumber: payload['id_num'], 
@@ -853,32 +860,68 @@ $(function() {
       subject: 'פנסיה',
       customMessage: 'שלום רב, בהמשך למילוי הטופס הדיגיטלי, מצ"ב קישור לצירוף מסמכים נדרשים. בברכה, הלמן אלדובי'
     }
-    console.log(haPayload);
     
     $.ajax({
       contentType: 'application/json',
       method: 'POST',
       url: 'http://halman-easysend.herokuapp.com/api/halman/sendform',
-      data: JSON.stringify(haPayload)
+      data: JSON.stringify(attachmentPayload),
+      error: function(jqXHR, textStatus, errorThrown) {
+        
+        // Send error to SlidePiper.
+        var data = {
+          textStatus: textStatus,
+          errorThrown: errorThrown,
+        };
+        sendSlidePiper('HELMAN_ALDUBI_ATTACHMENT_PAYLOAD_NOT_SENT', JSON.stringify(data));
+        
+        // Send error with more details to SlidePiper's WebMerge.
+        data['firstName'] = payload['first_name']; 
+        data['lastName'] = payload['last_name'], 
+        data['idNumber'] = payload['id_num'], 
+        data['phone'] = payload['phone'],  
+        data['email'] = payload['email'],
+        $.ajax({
+          contentType: 'application/json',
+          method: 'POST',
+          url: 'https://www.webmerge.me/merge/79448/1rqtm1',
+          data: JSON.stringify(data)
+        });
+      }
     });
     
+    // Send to SlidePiper.
+    sendSlidePiper('HELMAN_ALDUBI_SENT_FORM');
+  };
+  
+  
+  /**
+   * Send Data to SlidePiper.
+   * 
+   * @param eventName The event name.
+   */
+  function sendSlidePiper(eventName, arg1) {
+    if (typeof arg1 === 'undefined') {
+      arg1 = '';
+    }
     
-    // Send to SP.
     var data = {
       action: 'setCustomerEvent',
       data: {
-        eventName: 'HELMAN_ALDUBI_SENT_FORM',
+        eventName: eventName,
+        linkHash: document.referrer.split('=').pop(),
         param_1_varchar: document.location.href,
-        param_2_varchar: document.referrer
+        param_2_varchar: document.referrer,
+        param_3_varchar: arg1.toString(),
+        sessionId: ''
       }
     };
-    console.log(data);
     
     $.ajax({
       contentType: 'application/json',
       method: 'POST',
-      url: 'http://ts1.slidepiper.com/ManagementServlet',
-      data: JSON.stringify(haPayload)
+      url: location.protocol + '//' + location.host + '/ManagementServlet',
+      data: JSON.stringify(data)
     });
   };
 });
