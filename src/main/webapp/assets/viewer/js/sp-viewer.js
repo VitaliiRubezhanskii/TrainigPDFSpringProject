@@ -84,6 +84,7 @@ sp.viewer = {
     viewerWidgetTestimonialsClicked: 'VIEWER_WIDGET_TESTIMONIALS_CLICKED',
     viewerWidgetFormButtonClicked: 'VIEWER_WIDGET_FORM__BUTTON_CLICKED',
     viewerWidgetFormConfirmClicked: 'VIEWER_WIDGET_FORM_CONFIRM_CLCKED',
+    viewerWidgetFormCancelClicked: 'VIEWER_WIDGET_FORM_CANCEL_CLICKED'
   },
   isPagesLoaded: false,
   paramValue: {
@@ -802,7 +803,7 @@ if ('' != sp.viewer.linkHash) {
       }
       
       /* Validate Widget 7 */
-      var widget7RequiredSettings = ['formButtonText', 'formButtonIcon', 'formConfirmButton'];
+      var widget7RequiredSettings = ['formButtonText', 'formButtonIcon'];
       
       if (typeof widgets.widget7 !== 'undefined'
         && typeof widgets.widget7.items !== 'undefined'
@@ -1462,30 +1463,27 @@ if ('' != sp.viewer.linkHash) {
           swal({
             allowOutsideClick: false,
             cancelButtonText: widget.formCancelButton,
-            confirmButtonText: widget.formConfirmButton,
+            cancelButtonColor: widget.formCancelButtonColor,
+            customClass: 'sp-widget7__swal',
             imageUrl: widget.formImage,            
-            imageWidth: 100,
-            imageHeight: 62,
+            imageHeight: 65,
             showCancelButton: true,
-            showConfirmButton: true,
-            html: '<iframe id="sp-hag-form" style="height: 430px; width: 100%" src="' + widget.formUrl + '" frameborder="0"></iframe>',
+            showConfirmButton: false,
+            html: '<iframe id="sp-widget7-form" style="width: 100%" src="' + widget.formUrl + '" frameborder="0"></iframe>',
             title: widget.formTitle,
-            width: 800,
-            preConfirm: function() {
-              return new Promise(function(resolve, reject) {
-                
-                // Get form success script.
-                $.getScript(widget.formSuccess)
-                  .done(function() {
-                    resolve();
-                  });
-              });
-            },
+            width: 950,
           }).then(function() {
-            swal(widget.formSuccessTitle,
-                widget.formSuccessMessage,
-                'success');
-          }).done();
+          },
+          function(dismiss) {
+            if (dismiss === 'cancel') {
+              sp.viewer.setCustomerEvent({
+                eventName: sp.viewer.eventName.viewerWidgetFormCancelClicked,
+                linkHash: sp.viewer.linkHash,
+                sessionId: sessionid,
+                param_1_varchar: $('.swal2-cancel').text()
+              });
+            }
+          });
         }
         
         function imageSwal() {
