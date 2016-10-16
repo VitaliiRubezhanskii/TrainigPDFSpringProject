@@ -4,7 +4,14 @@ SlidePiper README File
 Change Log
 ----------
 
-### 0.13.13
+### 0.13.15
+
+2016-10-16 Yaniv Friedensohn <yanivf@slidepiper.com>
+
+* Fix having the document and widgets not showing correctly on RTL browsers.
+
+
+### 0.13.14
 
 2016-10-09 Yaniv Friedensohn <yanivf@slidepiper.com>
 

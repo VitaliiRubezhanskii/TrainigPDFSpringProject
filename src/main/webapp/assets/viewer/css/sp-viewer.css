@@ -1,8 +1,8 @@
 /**
  * General Settings
  */
-
-body {
+ 
+.sp--direction-ltr {
   direction: ltr;
 }
  
@@ -149,7 +149,8 @@ body {
 #sp-terms-privacy {
   background-color: rgba(246, 246, 246, 0.8);
   bottom: 0;
-  font-size: 12px; 
+  font-size: 12px;
+  left: 0;
   margin: 0 0 1px 4px;
   position: fixed;
   width: 150px;
