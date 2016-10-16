@@ -44,7 +44,7 @@ $(document).on('pagesloaded pagechange', function(event) {
     '<a href="../../tou.html" target="_blank">Terms</a> · <a href="../../privacy.html" target="_blank">Privacy</a><br>' +
     'Powered by <span class="sp-powered-by"><a target="_blank" href="http://www.slidepiper.com">SlidePiper</a></span>';
   
-  $('body').append('<div id="sp-terms-privacy">' + innerTermsPrivacy + '</div>');
+  $('body').append('<div class="sp--direction-ltr" id="sp-terms-privacy">' + innerTermsPrivacy + '</div>');
   $('#secondaryToolbarButtonContainer').append(
      '<div class="horizontalToolbarSeparator"></div>' +
      '<div id="sp-terms-privacy-secondary-toolbar">' + innerTermsPrivacy + '</div>');
@@ -852,7 +852,7 @@ if ('' != sp.viewer.linkHash) {
         
         // Create widget structure. 
         $('body').append(
-            '<div id="sp-widget1">' +
+            '<div class="sp--direction-ltr" id="sp-widget1">' +
                 '<div id="sp-widget1-tab"><i class="fa fa-video-camera"></i><div class="sp-widget-font-fmaily">Loading...</div></div><i id="sp-widget1-fa-chevron" class="fa fa-chevron-up"></i>' +
                 '<div id="sp-widget1-video-container"></div>' +
             '</div>');
@@ -1027,7 +1027,7 @@ if ('' != sp.viewer.linkHash) {
           $('body').append('<div class="sp-right-side-widgets"></div>');
         }
         
-        $('.sp-right-side-widgets').append('<button class="sp-widget-button sp-widget-font-fmaily" id="sp-widget2"></button>');
+        $('.sp-right-side-widgets').append('<button class="sp-widget-button sp-widget-font-fmaily sp--direction-ltr" id="sp-widget2"></button>');
         
         if ($('.sp-right-side-widgets button, .sp-right-side-widgets div').length > 1) {
           $('#sp-widget2').css('margin-top', '20px');
@@ -1064,7 +1064,7 @@ if ('' != sp.viewer.linkHash) {
           $('body').append('<div class="sp-right-side-widgets"></div>');
         }
         
-        $('.sp-right-side-widgets').append('<button class="sp-widget-button sp-widget-font-fmaily" id="sp-widget3"></button>');
+        $('.sp-right-side-widgets').append('<button class="sp-widget-button sp-widget-font-fmaily sp--direction-ltr" id="sp-widget3"></button>');
 
         if ($('.sp-right-side-widgets button, .sp-right-side-widgets div').length > 1) {
           $('#sp-widget3').css('margin-top', '20px');
@@ -1079,6 +1079,7 @@ if ('' != sp.viewer.linkHash) {
         
         $('#sp-widget3').click(function() {
           swal({
+            customClass: 'sp--direction-ltr',
             showCancelButton: true,
             showConfirmButton: true,
             html: '<form class="sp-widget-font-fmaily"><label for="sp-widget3-message" class="sp-widget3-label">Enter your message:</label><textarea class="swal2-textarea" id="sp-widget3-message" rows="5" autofocus></textarea><label for="sp-widget3-email" class="sp-widget3-label">Enter your email address:</label><input type="text" class="swal2-input" id="sp-widget3-email">' + formMessage + '</form>',
@@ -1266,7 +1267,7 @@ if ('' != sp.viewer.linkHash) {
         
         // Widget 5 - Hopper Widget.
         $('body').append(
-            '<div class="sp-widget5">' +
+            '<div class="sp-widget5 sp--direction-ltr">' +
               '<div class="sp-widget5__extend-button">' +
                 '<i class="fa fa-chevron-right" aria-hidden="true"></i>' +
               '</div>' +
@@ -1389,6 +1390,7 @@ if ('' != sp.viewer.linkHash) {
               .off('click')
               .on('click', function() {
                 swal({
+                  customClass: 'sp--direction-ltr',
                   html: personImageDiv +
                       '<div><i class="fa fa-quote-left"></i> ' + testimonial.replace(/\r\n|\r|\n/g, '<br>') + ' <i class="fa fa-quote-right"></i></div>' +
                       '<div id="sp-widget6__person-name">' + personName +'</div>' +
@@ -1423,7 +1425,7 @@ if ('' != sp.viewer.linkHash) {
         $('body').append('<div class="sp-right-side-widgets"></div>');
       }
       
-      $('.sp-right-side-widgets').append('<button class="sp-widget-button sp-widget-font-fmaily" id="sp-widget7"></button>');
+      $('.sp-right-side-widgets').append('<button class="sp-widget-button sp-widget-font-fmaily sp--direction-ltr" id="sp-widget7"></button>');
       
       if ($('.sp-right-side-widgets button, .sp-right-side-widgets div').length > 1) {
         $('#sp-widget7').css({
