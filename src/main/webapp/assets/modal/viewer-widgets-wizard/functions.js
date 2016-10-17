@@ -474,6 +474,13 @@ sp.viewerWidgetsModal = {
             .change();
         }
         
+        if ('formWidgetPlacement' === $(this).attr('name')
+            && typeof widget.items[0][$(this).attr('name')] !== 'undefined') {
+          $('[data-widget-placement=' + widget.items[0][$(this).attr('name')] + ']')
+            .prop('checked', true)
+            .change();
+        }
+        
         $(this).val(widget.items[0][$(this).attr('name')]); 
       });
     }
@@ -881,6 +888,9 @@ sp.viewerWidgetsModal = {
       if ('' === $(this).val() 
         && $(this).attr('name') !== 'formSelectType'
         && $(this).attr('name') !== 'formImage'
+        && $(this).attr('name') !== 'formImageMaxWidth'
+        && $(this).attr('name') !== 'formImageMaxHeight'
+        && $(this).attr('name') !== 'formWidgetPlacement'
         && $(this).attr('name') !== 'formTitle'
         && $(this).attr('type') !== 'file'
         && $(this).attr('name') !== 'formSuccess') {
@@ -891,7 +901,9 @@ sp.viewerWidgetsModal = {
         isWidget7SettingEmpty = true;
       } else if ($(this).attr('name') === 'formSelectType') {
         item[$(this).attr('name')] = $('[name="formSelectType"]:checked').attr('data-widget-type');
-      } else {
+      } else if ($(this).attr('name') === 'formWidgetPlacement') {
+        item[$(this).attr('name')] = $('[name="formWidgetPlacement"]:checked').attr('data-widget-placement');
+      } else if (typeof $(this).attr('name') !== 'undefined') {
         item[$(this).attr('name')] = $(this).val();
       }
     });
