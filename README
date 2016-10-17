@@ -4,6 +4,15 @@ SlidePiper README File
 Change Log
 ----------
 
+### 0.13.16
+
+2016-10-18 Yaniv Friedensohn <yanivf@slidepiper.com>
+
+* Create form widget mobile / tablet toolbar button.
+
+* Restore HA form title on mobile.
+
+
 ### 0.13.15
 
 2016-10-16 Yaniv Friedensohn <yanivf@slidepiper.com>
