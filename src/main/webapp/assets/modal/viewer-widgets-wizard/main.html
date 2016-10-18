@@ -282,15 +282,39 @@
                                         <hr>
                                         
                                         <div class="form-group">
-                                            <label for="sp-widget7__form-url" class="col-lg-4 control-label">Form Title</label>
+                                            <label class="col-lg-4 control-label">
+                                                Mobile & Tablet Widget Location
+                                            </label>
+                                            <div class="col-lg-4">
+                                                <label class="radio-inline">
+                                                    <input type="radio" data-widget-placement="right" checked name="formWidgetPlacement">Right Side
+                                                </label>
+                                            </div>
+                                            
+                                            <div class="col-lg-4">
+                                                <label class="radio-inline">
+                                                    <input type="radio" data-widget-placement="belowToolbar" name="formWidgetPlacement">Below Toolbar
+                                                </label>
+                                            </div>
+                                        </div>
+                                        
+                                        <hr>
+                                        
+                                        <div class="form-group">
+                                            <label for="sp-widget7__form-title" class="col-lg-4 control-label">Form Title</label>
                                             <div class="col-lg-8">
-                                                <input type="text" placeholder="e.g. My Company's Form" class="form-control" name="formTitle">
+                                                <input id="sp-widget7__form-title" type="text" placeholder="e.g. My Company's Form" class="form-control" name="formTitle">
                                             </div>
                                         </div>
                                         
                                         <div id="sp-widget7__form-type-container" class="form-group">
-                                            <input id="sp-widget7__upload-form-radio" data-widget-type="form" type="radio" checked name="formSelectType"> Upload Form
-                                            <input id="sp-widget7__upload-image-radio" data-widget-type="image" type="radio" name="formSelectType"> Upload Image
+                                            <label class="radio-inline">
+                                                <input id="sp-widget7__upload-form-radio" data-widget-type="form" type="radio" checked name="formSelectType"> Upload Form
+                                            </label>
+                                            
+                                            <label class="radio-inline">
+                                                <input id="sp-widget7__upload-image-radio" data-widget-type="image" type="radio" name="formSelectType"> Upload Image
+                                            </label>
                                         </div>
                                         
                                         <div class="form-group">
@@ -315,7 +339,7 @@
                                         </div>
                                         
                                         <div class="form-group sp-widget7__image-elements">
-                                            <label class="col-lg-4 control-label">Image Max Width</label>
+                                            <label class="col-lg-4 control-label">Image Max Height</label>
                                             <div class="col-lg-8">
                                                 <input type="text" placeholder="e.g. 250px"  class="form-control" name="formImageMaxHeight">
                                             </div>
