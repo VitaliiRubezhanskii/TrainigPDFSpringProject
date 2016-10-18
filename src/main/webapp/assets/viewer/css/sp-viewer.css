@@ -349,6 +349,12 @@
 }
 
 
+/* Widget 4 - Like */
+.sp-like-button-widget {
+  z-index: 2;
+}
+
+
 /* Widget 6 - Testimonials */
 #sp-widget6 {
   background-color: transparent;
@@ -468,8 +474,55 @@
 
 
 /* Widget 7 - Form Widget */
+
+.sp-widget7__toolbar-button-container--visibility {
+  display: none;
+}
+
+#sp-widget7__toolbar-button-container {
+  background-color: rgba(70, 70, 70, 0.5);
+  height: 49px;
+  position: fixed;
+  top: 49px;
+  width: 100%;
+}
+
+#sp-widget7__toolbar-button {
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  display: block;
+  left: 50%;
+  min-height: 25px;
+  margin: 0 auto;
+  padding: 4px 14px;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+#sp-widget7__toolbar-button p {
+  font-size: 12px;
+  text-align: center;
+  white-space: nowrap;
+}
+
 #sp-widget7-form {
   height: 500px;
+}
+
+@media only screen and (max-width: 850px) {  
+  .sp-widget7--hidden {
+    display: none;
+  }
+  
+  .sp-widget7__toolbar-button-container--visibility {
+    display: block;
+  }
+  
+  #sp-widget7__toolbar-button i {
+    display: none;
+  }
 }
 
 @media only screen and (max-height: 900px) {
@@ -500,7 +553,7 @@
 /* iPhone 6 */
 @media only screen and (max-height: 760px) and (max-width: 415px) {
   #sp-widget7-form {
-    height: 390px;
+    height: 340px;
   }
   
   .sp-widget7__swal button.styled {
@@ -516,7 +569,8 @@
   }
   
   .sp-widget7__swal h2 {
-    display: none !important;
+    font-size: 12px !important;
+    margin-bottom: 5px !important;
   }
 }
 

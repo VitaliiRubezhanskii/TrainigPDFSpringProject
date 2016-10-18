@@ -116,7 +116,7 @@ $(function() {
   function isFormValid() {
     if (! $('#form-' + sectionId).valid()) {
       if (0 === $('#form-not-valid').length) {
-        $('#panel').after('<div class="form-group has-error" id="form-not-valid"><label class="control-label">לא כל שדות החובה מלאים, ולכן לא ניתן לעבור למסך הבא</label></div>');
+        $('#panel').after('<div class="form-group has-error" id="form-not-valid"><label id="form-not-valid-label" class="control-label">לא כל שדות החובה מלאים, ולכן לא ניתן לעבור למסך הבא</label></div>');
       }
       return false;
     } else {

@@ -1421,6 +1421,7 @@ if ('' != sp.viewer.linkHash) {
     function implementWidget7(widget) {
       
       // Widget 7 - Form widget
+      // Widget location - right side.
       if (0 == $('.sp-right-side-widgets').length) {
         $('body').append('<div class="sp-right-side-widgets"></div>');
       }
@@ -1428,16 +1429,32 @@ if ('' != sp.viewer.linkHash) {
       $('.sp-right-side-widgets').append('<button class="sp-widget-button sp-widget-font-fmaily sp--direction-ltr" id="sp-widget7"></button>');
       
       if ($('.sp-right-side-widgets button, .sp-right-side-widgets div').length > 1) {
-        $('#sp-widget7').css({
-          'background-color': config.viewer.toolbarButtonBackground,
-          'color': config.viewer.toolbarCta1Color,
-          'margin-top': '20px'
-        });
+        $('#sp-widget7').css('margin-top', '20px');
       }
       
       $('#sp-widget7').html('<i class="fa ' + widget.formButtonIcon + '"></i><div>' + widget.formButtonText + '</div>');
       
-      $('#sp-widget7').click(function() {
+      // Widget location - below toolbar.
+      if ('belowToolbar' === widget.formWidgetPlacement) {
+        $('body').append(
+            '<div id="sp-widget7__toolbar-button-container">' +
+              '<button id="sp-widget7__toolbar-button"></button>' +
+            '</div>'
+        );
+        
+        $('#sp-widget7__toolbar-button').html('<p>' + widget.formButtonText.replace(/(?:<br>)+/g,'<br>') + '<p>');
+        
+        $('#sp-widget7__toolbar-button-container').addClass('sp-widget7__toolbar-button-container--visibility');
+        
+        $('#sp-widget7').addClass('sp-widget7--hidden');
+      }
+      
+      $('#sp-widget7, #sp-widget7__toolbar-button').css({
+        'background-color': config.viewer.toolbarButtonBackground,
+        'color': config.viewer.toolbarCta1Color,
+      });
+      
+      $('#sp-widget7, #sp-widget7__toolbar-button').click(function() {
         
         switch(widget.formSelectType) {
           case 'image':
