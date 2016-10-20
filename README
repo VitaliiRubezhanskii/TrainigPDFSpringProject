@@ -4,6 +4,13 @@ SlidePiper README File
 Change Log
 ----------
 
+### 0.13.17
+
+2016-10-20 Yaniv Friedensohn <yanivf@slidepiper.com>
+
+* Removed the form widget image type confirm button text setting from the viewer.
+
+
 ### 0.13.16
 
 2016-10-18 Yaniv Friedensohn <yanivf@slidepiper.com>

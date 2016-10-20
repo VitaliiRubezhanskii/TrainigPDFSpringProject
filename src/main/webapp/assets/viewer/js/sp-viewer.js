@@ -1507,11 +1507,9 @@ if ('' != sp.viewer.linkHash) {
         
         function imageSwal() {
           swal({
-            confirmButtonText: widget.formConfirmButton,
-            showConfirmButton: true,
             html: '<img src="' + widget.formImage + '" style="width: 100%; height: 100%; max-width: ' 
                   + widget.formImageMaxWidth + '; max-height: ' + widget.formImageMaxWidth + ';">',
-            title: widget.formTitle
+            title: widget.formTitle,
           }).done();
         }
         
