@@ -4,6 +4,13 @@ SlidePiper README File
 Change Log
 ----------
 
+### 0.13.19
+
+2016-10-20 Max Prais <maxp@slidepiper.com>
+
+* Fixed bug causing charts to not load when the Dashboard first loads.
+
+
 ### 0.13.18
 
 2016-10-20 Max Prais <maxp@slidepiper.com>
