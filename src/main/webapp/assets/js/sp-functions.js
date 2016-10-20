@@ -1086,7 +1086,27 @@ sp = {
   },
   
 chart: {
-    
+	averageViewDurationData: {},
+	totalViewsData: {},
+	performanceBenchmarkData: {},
+	
+	/**
+     * Resize the charts to fit their .ibox-content container when the window resizes.
+     */
+	resizeCharts: (function() {
+		var timer = {};
+		
+		$(window).resize(function() {
+			clearTimeout(timer);
+			
+			timer = setTimeout(function() {
+				sp.chart.loadBarChart(sp.chart.averageViewDurationData);
+				sp.chart.loadFileLine(sp.chart.totalViewsData);
+				sp.chart.loadFilePerformance(sp.chart.performanceBenchmarkData);
+			}, 500);
+        });
+	})(),
+	
     /**
      * Get the file bar chart.
      */
@@ -1094,14 +1114,30 @@ chart: {
       if (typeof customerEmail == 'undefined') {
         customerEmail = null;
       }
-      $.getJSON('ManagementServlet', {action: 'getFileBarChart',
-          fileHash: fileHash, salesmanEmail: sp.config.salesman.email, customerEmail: customerEmail}, function(data) {
-          
+      $.getJSON(
+          'ManagementServlet',
+          {
+            action: 'getFileBarChart',
+            fileHash: fileHash,
+            salesmanEmail: sp.config.salesman.email,
+            customerEmail: customerEmail
+          },
+          function(data) {
+       	    sp.chart.averageViewDurationData = data;
+       	    sp.chart.loadBarChart(data);
+          }
+       );
+    },
+      
+    loadBarChart: function(data) {
         if (typeof sp.chart.fileBar !== 'undefined') {
           sp.chart.fileBar.destroy();
-          $('#barChart').remove();
+          
+          var canvasHeight = $('#barChart').height();
+          var chartContainerWidth = $('#sp-bar-chart-container').closest('.ibox-content').width();
           $('#sp-bar-chart-container')
-              .append('<canvas id="barChart" height="354" width="760" style="width: 760px; height: 354px;"></canvas>');
+              .empty()
+              .append('<canvas id="barChart" height="' + canvasHeight + '" width="' + chartContainerWidth + '"></canvas>');
         }
       
         var barData = {
@@ -1124,11 +1160,10 @@ chart: {
             scaleGridLineColor: "rgba(0,0,0,.05)",
             scaleGridLineWidth: 1,
             barShowStroke: true,
-            barStrokeWidth: 2,
-            barValueSpacing: 15,
-            barDatasetSpacing: 1,
-            responsive: true,
-            tooltipTemplate: "<%if (label){%><%='Page ' + label%>: <%}%><%= value + ' sec.' %>"
+            barStrokeWidth: 0,
+            barValueSpacing: 6,
+            responsive: false,
+            tooltipTemplate: "<%if (label){%><%='Page ' + label%>: <%}%><%= value + ' sec.' %>",
         };
         
         if (typeof data.fileBarChart[0] !== 'undefined' ) {
@@ -1138,10 +1173,18 @@ chart: {
           });
         }
         
+    	var ctx = $('#barChart')[0].getContext('2d');
         
-        var ctx = $('#barChart')[0].getContext('2d');
+        if ((data.fileBarChart.length * 18) > chartContainerWidth) {
+        	ctx.canvas.width = data.fileBarChart.length * 18;
+        	
+        	// IE & Firefox solution to fix issue where adding a scrollbar adds height to the container.
+        	$('.sp-chart__container').height($('#sp-bar-chart-container').height());
+        } else {
+        	ctx.canvas.width = chartContainerWidth;
+        }
+        
         sp.chart.fileBar = new Chart(ctx).Bar(barData, barOptions);
-      });
     },
     
     /**
@@ -1151,14 +1194,30 @@ chart: {
       if (typeof customerEmail == 'undefined') {
         customerEmail = null;
       }
-      $.getJSON('ManagementServlet', {action: 'getFileLineChart',
-          fileHash: fileHash, salesmanEmail: sp.config.salesman.email, customerEmail: customerEmail}, function(data) {
-            
+      $.getJSON(
+		  'ManagementServlet',
+		  {
+			action: 'getFileLineChart',
+		    fileHash: fileHash,
+			salesmanEmail: sp.config.salesman.email,
+	  	    customerEmail: customerEmail,
+		  },
+		  function(data) {   
+    	    sp.chart.totalViewsData = data;
+    	    sp.chart.loadFileLine(data);	  
+		  }
+      );
+    },
+        
+    loadFileLine: function(data) {
         if (typeof sp.chart.fileLine !== 'undefined') {
           sp.chart.fileLine.destroy();
-          $('#lineChart').remove();
+          
+          var chartContainerWidth = $('#sp-line-chart-container').closest('.ibox-content').width();
+          var canvasHeight = $('#lineChart').height();
           $('#sp-line-chart-container')
-              .append('<canvas id="lineChart" height="354" width="760" style="width: 760px; height: 354px;"></canvas>');
+          	  .empty()	
+              .append('<canvas id="lineChart" height="' + canvasHeight + '" width="' + chartContainerWidth +'"></canvas>');
         }
         
         var lineData = {
@@ -1196,11 +1255,11 @@ chart: {
             pointDot: true,
             pointDotRadius: 4,
             pointDotStrokeWidth: 1,
-            pointHitDetectionRadius: 20,
+            pointHitDetectionRadius: 1,
             datasetStroke: true,
             datasetStrokeWidth: 2,
             datasetFill: true,
-            responsive: true,
+            responsive: false,
             multiTooltipTemplate: "<%= datasetLabel + ': ' + value %>"
         };
           
@@ -1214,22 +1273,46 @@ chart: {
         }
           
         var ctx = $('#lineChart')[0].getContext('2d');
+        
+        if ((data.fileLineChart.length * 18) > chartContainerWidth) {
+        	ctx.canvas.width = data.fileLineChart.length * 18;
+        	
+        	// IE & Firefox solution to fix issue where adding a scrollbar adds height to the container.
+        	$('.sp-chart__container ').height($('#sp-line-chart-container').height());
+        } else {
+        	ctx.canvas.width = chartContainerWidth;
+        }
+        
         sp.chart.fileLine = new Chart(ctx).Line(lineData, lineOptions);
-      });
     },
     
     /**
      * Get the file performance chart.
      */
     getFilePerformance: function(fileHash) {
-      $.getJSON('ManagementServlet', {action: 'getFilePerformanceChart',
-          fileHash: fileHash, salesmanEmail: sp.config.salesman.email}, function(data) {
-            
+      $.getJSON(
+		  'ManagementServlet',
+		  {
+			  action: 'getFilePerformanceChart',
+			  fileHash: fileHash,
+			  salesmanEmail: sp.config.salesman.email
+		  },
+		  function(data) {
+			  sp.chart.performanceBenchmarkData = data;
+			  sp.chart.loadFilePerformance(data);
+		  }
+	  );
+    },
+      
+    loadFilePerformance: function(data) {
         if (typeof sp.chart.filePerformance !== 'undefined') {
           sp.chart.filePerformance.destroy();
-          $('#lineChart2').remove();
+          
+          var canvasHeight = $('#lineChart2').height();
+          var chartContainerWidth = $('#sp-line-chart-2-container').closest('.ibox-content').width();
           $('#sp-line-chart-2-container')
-              .append('<canvas id="lineChart2" height="354" width="760" style="width: 760px; height: 354px;"></canvas>');
+              .empty()		 
+              .append('<canvas id="lineChart2" height="' + canvasHeight + '" width="' + chartContainerWidth + '"></canvas>');
         }
         
         var lineData = {
@@ -1274,11 +1357,11 @@ chart: {
             pointDot: true,
             pointDotRadius: 4,
             pointDotStrokeWidth: 1,
-            pointHitDetectionRadius: 20,
+            pointHitDetectionRadius: 1,
             datasetStroke: true,
             datasetStrokeWidth: 2,
             datasetFill: false,
-            responsive: true,
+            responsive: false,
             multiTooltipTemplate: "<%= datasetLabel + ': ' + value %>"
         };
           
@@ -1308,8 +1391,17 @@ chart: {
         }
           
         var ctx = $('#lineChart2')[0].getContext('2d');
+
+        if ((data.filePerformanceChart.length * 18) > chartContainerWidth) {
+        	ctx.canvas.width = data.filePerformanceChart.length * 18;
+        	
+        	// IE & Firefox solution to fix issue where adding a scrollbar adds height to the container.
+        	$('.sp-chart__container').height($('#sp-line-chart-2-container').height());
+        } else {
+        	ctx.canvas.width = chartContainerWidth;
+        }
+        
         sp.chart.filePerformance = new Chart(ctx).Line(lineData, lineOptions);
-      });
     },
     
     /**
@@ -1345,7 +1437,7 @@ chart: {
           projection: 'kavrayskiy-vii',
           sizeAxis: {
             minValue: 0
-          }
+          },
         };
         
         if (typeof sp.chart.visitorsMap == 'undefined') {
@@ -1358,6 +1450,8 @@ chart: {
           sp.chart.visitorsMap = new google.visualization.GeoChart(document.getElementById('sp-google-geochart'));
           sp.chart.visitorsMap.draw(mapData, options);
         });
+        
+        $('#sp-google-geochart').parent().height($('.sp-chart__container').height());
       });
     }
   },
