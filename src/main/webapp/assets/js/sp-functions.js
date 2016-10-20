@@ -1132,13 +1132,13 @@ chart: {
     loadBarChart: function(data) {
         if (typeof sp.chart.fileBar !== 'undefined') {
           sp.chart.fileBar.destroy();
-          
-          var canvasHeight = $('#barChart').height();
-          var chartContainerWidth = $('#sp-bar-chart-container').closest('.ibox-content').width();
-          $('#sp-bar-chart-container')
-              .empty()
-              .append('<canvas id="barChart" height="' + canvasHeight + '" width="' + chartContainerWidth + '"></canvas>');
         }
+        
+        var canvasHeight = $('#barChart').height();
+        var chartContainerWidth = $('#sp-bar-chart-container').closest('.ibox-content').width();
+        $('#sp-bar-chart-container')
+            .empty()
+            .append('<canvas id="barChart" height="' + canvasHeight + '" width="' + chartContainerWidth + '"></canvas>');
       
         var barData = {
             labels: [],
@@ -1212,13 +1212,13 @@ chart: {
     loadFileLine: function(data) {
         if (typeof sp.chart.fileLine !== 'undefined') {
           sp.chart.fileLine.destroy();
+        } 
           
-          var chartContainerWidth = $('#sp-line-chart-container').closest('.ibox-content').width();
-          var canvasHeight = $('#lineChart').height();
-          $('#sp-line-chart-container')
-          	  .empty()	
-              .append('<canvas id="lineChart" height="' + canvasHeight + '" width="' + chartContainerWidth +'"></canvas>');
-        }
+        var chartContainerWidth = $('#sp-line-chart-container').closest('.ibox-content').width();
+        var canvasHeight = $('#lineChart').height();
+        $('#sp-line-chart-container')
+        	.empty()	
+            .append('<canvas id="lineChart" height="' + canvasHeight + '" width="' + chartContainerWidth +'"></canvas>');
         
         var lineData = {
             labels: [],
@@ -1307,13 +1307,13 @@ chart: {
     loadFilePerformance: function(data) {
         if (typeof sp.chart.filePerformance !== 'undefined') {
           sp.chart.filePerformance.destroy();
+        }  
           
-          var canvasHeight = $('#lineChart2').height();
-          var chartContainerWidth = $('#sp-line-chart-2-container').closest('.ibox-content').width();
-          $('#sp-line-chart-2-container')
-              .empty()		 
-              .append('<canvas id="lineChart2" height="' + canvasHeight + '" width="' + chartContainerWidth + '"></canvas>');
-        }
+        var canvasHeight = $('#lineChart2').height();
+        var chartContainerWidth = $('#sp-line-chart-2-container').closest('.ibox-content').width();
+        $('#sp-line-chart-2-container')
+            .empty()		 
+            .append('<canvas id="lineChart2" height="' + canvasHeight + '" width="' + chartContainerWidth + '"></canvas>');
         
         var lineData = {
             labels: [],
