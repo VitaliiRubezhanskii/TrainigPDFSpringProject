@@ -4,6 +4,18 @@ SlidePiper README File
 Change Log
 ----------
 
+### 0.13.18
+
+2016-10-20 Max Prais <maxp@slidepiper.com>
+
+* Dashboard:
+	1. Charts can now contain unlimited amounts of data while remaining
+	readable, as they are scrollable.
+	2. Fixed Map height issue which now follows the height of the other charts.
+	3. Removed the 'Send' button from 'Send Documents'.
+	4. Fixed typo on the SlidePiper website.
+	
+
 ### 0.13.17
 
 2016-10-20 Yaniv Friedensohn <yanivf@slidepiper.com>
