@@ -198,6 +198,36 @@ td.sp-file-hash {
 
 /* Metrics - Widgets */
 
+/* Bar, Line & Map Charts */
+.sp-chart__container {
+  overflow-x: auto;
+}
+
+/**
+ * Styling of scrollbar.
+ *
+ * -webkit-scollbar - The scrollbar container.
+ * -webkit-scrollbar-thumb - The scrollbar block that is used to scroll. 
+ */
+.sp-chart__container::-webkit-scrollbar {
+  -webkit-appearance: none;
+  background-color: transparent;
+  height: 7px;
+}
+
+.sp-chart__container::-webkit-scrollbar-thumb {
+  background-color: #808080;
+  border-radius: 3px;
+}
+
+/**
+ * Set map height to 294 in order to be in line with chart.js 
+ * charts (which have a height of 290). 
+ */
+#sp-google-geochart {
+  height: 294px;
+}
+
 /* Video & Like Widget */
 .sp-widget-like-metric__i,
 .sp-widget-video-youtube-metric-title__i {
