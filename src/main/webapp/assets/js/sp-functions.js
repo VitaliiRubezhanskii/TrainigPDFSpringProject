@@ -1904,7 +1904,6 @@ chart: {
                       '<th>Document</th>' +
                       '<th>Link</th>' +
                       '<th></th>' +
-                      '<th></th>' +
                   '</tr>' +
               '</thead>' +
               '<tbody></tbody>' +
@@ -1939,10 +1938,6 @@ chart: {
                                      '<i class="fa fa-copy sp-mail__icon"></i> Copy' +
                                    '</button>';
           
-          customerTableData.send = '<button class="btn btn-white btn-xs sp-send-to-all__button sp-mail-all__button sp-send-all">' +
-                                     '<i class="fa fa-envelope sp-mail__icon"></i> Send' +
-                                   '</button>'; 
-          
           customerTableData['sp-file-name-' + (index + 1)] = sp.customerFileLinksGenerator.getDocumentName(fileData.fileHash, files);
           customerTableData['sp-file-link-' + (index + 1)] = sp.config.viewerUrlWithoutFileLink + fileData.fileLink;
         });
@@ -1964,7 +1959,7 @@ chart: {
        *          Hidden columns - sp-file-name-x, and sp-file-link-x.
        */
       var targetColumns = [0];
-      for (var i = 5; i < dataTableColumns.length; i++) {
+      for (var i = 4; i < dataTableColumns.length; i++) {
           targetColumns.push(i);
       }
       
@@ -1995,7 +1990,6 @@ chart: {
         });
       }
       
-      sp.customerFileLinksGenerator.sendAll();
       sp.customerFileLinksGenerator.copyAll();
     },
     
@@ -2025,46 +2019,6 @@ chart: {
             return target;
           }
         });
-      });
-    },
-    
-    /**
-     * This function opens a mail window to a particular email address with all
-     * documents in the body. The subject and body are encoded as some mail 
-     * clients have issues rendering the unencoded information
-     */
-    sendAll: function () {
-      $('.sp-send-all').on('click', function () {
-        var emailRecipient = $(this).closest('tr').find('.sp-send-documents__email-address').text();
-        
-        // This will create an array of file links.
-        var links = [];
-        $(this).closest('tr').find('.sp-send-documents__file-link').each(function() {
-          links.push($(this).text()); 
-        });
-        
-        // This creates an array of filenames.
-        var fileNames = [];
-        $(this).closest('tr').find('.sp-send-documents__file-name').each(function() {
-          fileNames.push($(this).text());
-        });  
-          
-        var mailBody = '';
-        var documentLengthStr = '';
-        $.each(fileNames, function (index, value) {
-          mailBody += value + ' - ' + links[index] + '\r\n';
-        });
-        
-        if (links.length > 1) {
-          documentLengthStr = 'these documents';
-        } else {
-          documentLengthStr = 'this document';
-        }
-        
-        window.open(
-          'mailto:' + emailRecipient
-        + '?body=' + encodeURIComponent('To view ' + documentLengthStr + ' click here:\r\n' + mailBody)
-        );
       });
     },
     
