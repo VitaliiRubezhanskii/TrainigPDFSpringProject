@@ -4,6 +4,13 @@ SlidePiper README File
 Change Log
 ----------
 
+### 0.13.20
+
+2016-10-21 Yaniv Friedensohn <yanivf@slidepiper.com>
+
+* Force the HA panel vertical scrollbar on WebKit browsers. 
+
+
 ### 0.13.19
 
 2016-10-20 Max Prais <maxp@slidepiper.com>
