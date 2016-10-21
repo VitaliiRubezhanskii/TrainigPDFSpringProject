@@ -204,20 +204,16 @@ td.sp-file-hash {
 }
 
 /**
- * Styling of scrollbar.
- *
- * -webkit-scollbar - The scrollbar container.
- * -webkit-scrollbar-thumb - The scrollbar block that is used to scroll. 
+ * Styling of charts scrollbar. 
  */
 .sp-chart__container::-webkit-scrollbar {
   -webkit-appearance: none;
-  background-color: transparent;
   height: 7px;
 }
 
 .sp-chart__container::-webkit-scrollbar-thumb {
   background-color: #808080;
-  border-radius: 3px;
+  border-radius: 4px;
 }
 
 /**
