@@ -180,6 +180,16 @@ select + .help-block,
   overflow-y: scroll;
 }
 
+#panel::-webkit-scrollbar {
+  -webkit-appearance: none;
+  width: 7px;
+}
+
+#panel::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, .5);
+  border-radius: 4px;
+}
+
 #phone-number-error {
   margin-bottom: 0;
 }
