@@ -1475,7 +1475,7 @@ if ('' != sp.viewer.linkHash) {
       			function() {
       				
       				// Open form.
-      				$('#sp-widget7, #sp-widget7__toolbar-button').click();
+      				$('#sp-widget7').click();
       			},
       			
       			// Time is converted to milliseconds.
@@ -1484,7 +1484,7 @@ if ('' != sp.viewer.linkHash) {
       }
       
       $('#sp-widget7, #sp-widget7__toolbar-button').click(function() {
-        
+      
         switch(widget.formSelectType) {
           case 'image':
             imageSwal();

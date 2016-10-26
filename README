@@ -4,6 +4,13 @@ SlidePiper README File
 Change Log
 ----------
 
+### 0.13.22
+
+2016-10-27 Yaniv Friedensohn <yanivf@slidepiper.com>
+
+* Prevent the form widget from auto loading the form twice.
+
+
 ### 0.13.21
 
 2016-10-26 Max Prais <maxp@slidepiper.com>
