@@ -4,6 +4,17 @@ SlidePiper README File
 Change Log
 ----------
 
+### 0.13.21
+
+2016-10-26 Max Prais <maxp@slidepiper.com>
+
+* Form Widget:
+	1. Added 'beating' animation to the Form Widget Button.
+	2. Added the option of a second line to the button text.
+	3. Added functionality allowing the salesman to select after how many seconds
+	the Form Widget can open automatically.
+	
+
 ### 0.13.20
 
 2016-10-21 Yaniv Friedensohn <yanivf@slidepiper.com>
