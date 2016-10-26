@@ -263,19 +263,45 @@
                                 <div class="sp-widget-item">
                                     <form class="form-horizontal">
                                         <div class="form-group">
-                                            <label for="sp-widget7__form-url" class="col-lg-4 control-label">Button Text</label>
+                                            <label class="col-lg-4 control-label">Button Text<br>(Line 1)</label>
                                             <div class="col-lg-8">
-                                                <input type="text" placeholder="e.g. Sign Up Here!" class="form-control" name="formButtonText">
+                                                <input type="text" placeholder="e.g. Sign Up Here!" maxlength="40" class="form-control" name="formButtonTextLine1">
                                             </div>
                                         </div>
                                         
                                         <div class="form-group">
-                                            <label for="sp-widget7__form-url" class="col-lg-4 control-label">
+                                            <label class="col-lg-4 control-label">Button Text<br>(Line 2)</label>
+                                            <div class="col-lg-8">
+                                                <input type="text" placeholder="e.g. By clicking here" maxlength="40" class="form-control" name="formButtonTextLine2">
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <label class="col-lg-4 control-label">
                                                 Button Icon
                                                 <i class="fa fa-info-circle sp-video-link-tooltip" data-toggle="tooltip" data-original-title="You can find icons at http://fontawesome.io/icons/."></i>
                                             </label>
                                             <div class="col-lg-8">
                                                 <input type="text" placeholder="e.g. fa-file-text" class="form-control" name="formButtonIcon">
+                                            </div>
+                                        </div>
+                                        
+                                        <hr>
+                                        
+                                        <div class="form-group">
+                                            <label class="col-lg-4 control-label">Beat Animation</label>
+                                            <div class="col-lg-8">
+                                                <label class="checkbox-inline">
+                                                    <input type="checkbox" name="isWidgetButtonPulseEnabled"> Is Enabled?
+                                                </label>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <label class="col-lg-4 control-label">Pop Animation</label>
+                                            <div class="col-lg-8">
+	                                              <input type="number" value="" class="form-control" placeholder="Input in seconds" name="formAutoLoadTimeout">
+	                                              <small>Number of seconds after which to make the form automatically pop.</small>
                                             </div>
                                         </div>
                                         
@@ -308,13 +334,20 @@
                                         </div>
                                         
                                         <div id="sp-widget7__form-type-container" class="form-group">
-                                            <label class="radio-inline">
-                                                <input id="sp-widget7__upload-form-radio" data-widget-type="form" type="radio" checked name="formSelectType"> Upload Form
+                                        		<label class="col-lg-4 control-label">
+                                                Form Type
                                             </label>
+                                            <div class="col-lg-4">
+	                                            <label class="radio-inline">
+	                                                <input id="sp-widget7__upload-form-radio" data-widget-type="form" type="radio" checked name="formSelectType"> Upload Form
+	                                            </label>
+                                            </div>
                                             
-                                            <label class="radio-inline">
-                                                <input id="sp-widget7__upload-image-radio" data-widget-type="image" type="radio" name="formSelectType"> Upload Image
-                                            </label>
+                                            <div class="col-lg-4">
+	                                            <label class="radio-inline">
+	                                                <input id="sp-widget7__upload-image-radio" data-widget-type="image" type="radio" name="formSelectType"> Upload Image
+	                                            </label>
+                                            </div>
                                         </div>
                                         
                                         <div class="form-group">
@@ -363,15 +396,6 @@
                                             <label for="sp-widget7__form-url" class="col-lg-4 control-label">Form URL</label>
                                             <div class="col-lg-8">
                                                 <input type="text" placeholder="e.g. www.slidepiper.com/form.html" class="form-control" name="formUrl">
-                                            </div>
-                                        </div>
-                                        
-                                        <hr class="sp-widget7__form-elements">
-                                        
-                                        <div class="form-group sp-widget7__form-elements">
-                                            <label for="sp-widget7__form-url" class="col-lg-4 control-label sp-widget7__label-nowrap">Success File (JS)</label>
-                                            <div class="col-lg-8">
-                                                <input type="text" placeholder="e.g. www.slidepiper.com/form.js" class="form-control" name="formSuccess">
                                             </div>
                                         </div>
                                     </form>
