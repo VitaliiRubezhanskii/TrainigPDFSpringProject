@@ -803,7 +803,7 @@ if ('' != sp.viewer.linkHash) {
       }
       
       /* Validate Widget 7 */
-      var widget7RequiredSettings = ['formButtonText', 'formButtonIcon'];
+      var widget7RequiredSettings = ['formButtonTextLine1', 'formButtonIcon'];
       
       if (typeof widgets.widget7 !== 'undefined'
         && typeof widgets.widget7.items !== 'undefined'
@@ -1420,7 +1420,7 @@ if ('' != sp.viewer.linkHash) {
     
     function implementWidget7(widget) {
       
-      // Widget 7 - Form widget
+      // Widget 7 - Form widget.
       // Widget location - right side.
       if (0 == $('.sp-right-side-widgets').length) {
         $('body').append('<div class="sp-right-side-widgets"></div>');
@@ -1432,7 +1432,12 @@ if ('' != sp.viewer.linkHash) {
         $('#sp-widget7').css('margin-top', '20px');
       }
       
-      $('#sp-widget7').html('<i class="fa ' + widget.formButtonIcon + '"></i><div>' + widget.formButtonText + '</div>');
+      $('#sp-widget7').html('<i class="fa ' + widget.formButtonIcon + '"></i><div><p>' + widget.formButtonTextLine1 + '</p></div>');
+      if ('' !== widget.formButtonTextLine2) {
+      	$('#sp-widget7 p').after(
+      			'<p>' + widget.formButtonTextLine2 + '</p>'
+      	);
+      }
       
       // Widget location - below toolbar.
       if ('belowToolbar' === widget.formWidgetPlacement) {
@@ -1442,7 +1447,12 @@ if ('' != sp.viewer.linkHash) {
             '</div>'
         );
         
-        $('#sp-widget7__toolbar-button').html('<p>' + widget.formButtonText.replace(/(?:<br>)+/g,'<br>') + '<p>');
+        $('#sp-widget7__toolbar-button').html('<p>' + widget.formButtonTextLine1 + '</p>');
+        if ('' !== widget.formButtonTextLine2) {
+        	$('#sp-widget7__toolbar-button p').after(
+        			'<p>' + widget.formButtonTextLine2 + '</p>'
+        	);
+        }
         
         $('#sp-widget7__toolbar-button-container').addClass('sp-widget7__toolbar-button-container--visibility');
         
@@ -1453,6 +1463,25 @@ if ('' != sp.viewer.linkHash) {
         'background-color': config.viewer.toolbarButtonBackground,
         'color': config.viewer.toolbarCta1Color,
       });
+      
+      // Widget Animation.
+      if (widget.isWidgetButtonPulseEnabled) {
+      	$('#sp-widget7, #sp-widget7__toolbar-button').addClass('sp-widget7--beat');
+      }
+      
+      var formAutoLoadTimeout = parseInt(widget.formAutoLoadTimeout);
+      if (formAutoLoadTimeout > -1) {
+      	setTimeout(
+      			function() {
+      				
+      				// Open form.
+      				$('#sp-widget7, #sp-widget7__toolbar-button').click();
+      			},
+      			
+      			// Time is converted to milliseconds.
+      			Math.floor(formAutoLoadTimeout * 1000)
+      	);
+      }
       
       $('#sp-widget7, #sp-widget7__toolbar-button').click(function() {
         
