@@ -483,6 +483,8 @@ sp.viewerWidgetsModal = {
         
         $(this).val(widget.items[0][$(this).attr('name')]); 
       });
+
+      $('[name="isWidgetButtonPulseEnabled"]').prop('checked', widget.items[0]['isWidgetButtonPulseEnabled']);
     }
     
     function displayWidget8(widget) {
@@ -893,7 +895,9 @@ sp.viewerWidgetsModal = {
         && $(this).attr('name') !== 'formWidgetPlacement'
         && $(this).attr('name') !== 'formTitle'
         && $(this).attr('type') !== 'file'
-        && $(this).attr('name') !== 'formSuccess') {
+        && $(this).attr('name') !== 'isWidgetButtonPulseEnabled'
+        && $(this).attr('name') !== 'formAutoLoadTimeout'
+        && $(this).attr('name') !== 'formButtonTextLine2') {
         
         sp.error.handleError('You must fill the field.');
         $(this).addClass('sp-widget-form-error');
@@ -903,6 +907,8 @@ sp.viewerWidgetsModal = {
         item[$(this).attr('name')] = $('[name="formSelectType"]:checked').attr('data-widget-type');
       } else if ($(this).attr('name') === 'formWidgetPlacement') {
         item[$(this).attr('name')] = $('[name="formWidgetPlacement"]:checked').attr('data-widget-placement');
+      } else if ($(this).attr('name') === 'isWidgetButtonPulseEnabled') {
+      	item[$(this).attr('name')] = $('[name="isWidgetButtonPulseEnabled"]').prop('checked');
       } else if (typeof $(this).attr('name') !== 'undefined') {
         item[$(this).attr('name')] = $(this).val();
       }
