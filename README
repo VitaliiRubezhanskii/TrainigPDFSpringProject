@@ -4,6 +4,27 @@ SlidePiper README File
 Change Log
 ----------
 
+### 0.13.23
+
+2016-10-27 Max Prais <maxp@slidepiper.com>
+
+* Dashboard Charts:
+	1. Updated Dashboard charts to chart.js version 2.
+	2. Display file names in file performance chart tooltips for max
+	performance and for the document name.
+	
+* Send Documents:
+	1. Added 'Add Customers' Button appears in the 'Select Customers' panel of
+	Send Documents.
+	2. Added information icon to 'Export to CSV' button in final step of Send
+	Documents.
+	3. Increased size of copy button and increase font size of text inside
+	the button.
+	
+* Login:
+	1. Removed 'Beta' from Login button.
+
+
 ### 0.13.22
 
 2016-10-27 Yaniv Friedensohn <yanivf@slidepiper.com>
