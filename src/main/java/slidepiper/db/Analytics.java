@@ -175,17 +175,22 @@ public class Analytics {
   
   
   public static final String sqlFilePerformanceChart = 
-        "SELECT\n"
-      + "  t1.date,\n"
-      + "  MAX(t1.file_performance) AS max_file_performance,\n"
-      + "  AVG(t1.file_performance) AS avg_file_performance,\n"
-      + "  t2.file_performance AS individual_file_performance\n"
-      + "FROM view_file_performance_agg_by_date_file_hash as t1\n"
-      + "LEFT JOIN view_file_performance_agg_by_date_file_hash AS t2 ON t2.date = t1.date AND t2.file_hash = ?\n"
-      + "WHERE t1.salesman_email = ?\n"
-      + "GROUP BY t1.date\n"
-      + "HAVING individual_file_performance IS NOT NULL\n"
-      + "ORDER BY t1.date";
+	    "SELECT\n"
+	  + "  t1.date,\n"
+	  + "  MAX(t2.file_performance) AS max_file_performance,\n"
+	  + "  AVG(t3.file_performance) AS avg_file_performance,\n"
+	  + "  t1.file_performance AS individual_file_performance,\n"    
+      + "  s3.name AS max_performance_name,\n"
+      + "  s1.name AS file_performance_name\n"
+	  + "FROM view_file_performance_agg_by_date_file_hash as t1\n"
+	  + "INNER JOIN view_file_performance_agg_by_date_file_hash AS t2 ON t2.date = t1.date AND t2.salesman_email = ?\n"
+	  + "INNER JOIN view_file_performance_agg_by_date_file_hash AS t3 ON t3.date = t1.date AND t3.salesman_email = ?\n"
+	  + "INNER JOIN slides AS s1 ON s1.id = t1.file_hash\n"
+	  + "INNER JOIN slides AS s3 ON s3.id = t3.file_hash\n"
+	  + "WHERE t1.file_hash = ?\n"
+	  + "GROUP BY t1.date\n"
+	  + "HAVING individual_file_performance IS NOT NULL\n"
+	  + "ORDER BY t1.date";
   
   
   public static final String sqlFileVisitorsMap =
