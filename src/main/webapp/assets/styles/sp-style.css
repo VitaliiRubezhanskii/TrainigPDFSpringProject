@@ -203,6 +203,45 @@ td.sp-file-hash {
   overflow-x: auto;
 }
 
+.sp-chart__chartjs-tooltip-color-key {
+	border-width: 2px;
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin-right: 5px;
+}
+
+#sp-total-views--tooltip {
+  min-width: 120px;
+  max-width: 300px;
+}
+
+#sp-performance-benchmark--tooltip {
+  min-width: 200px;
+  max-width: 350px;
+}
+
+#sp-total-views--tooltip,
+#sp-performance-benchmark--tooltip {
+  background: rgb(38, 38, 38);
+  color: white;
+  border-radius: 3px;
+  opacity: 1;
+  pointer-events: none;
+  position: absolute;
+  -webkit-transform: translate(-50%, 0);
+  -webkit-transition: all .1s ease;
+  transition: all .1s ease;
+  transform: translate(-50%, 0);
+  z-index: 2;
+}
+
+#sp-file-dashboard canvas {
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+}
+
 /**
  * Styling of charts scrollbar. 
  */
