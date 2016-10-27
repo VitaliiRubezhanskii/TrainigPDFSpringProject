@@ -183,8 +183,9 @@ public class ManagementServlet extends HttpServlet {
         break;
         
       case "getFilePerformanceChart":
-        parameterList.add(request.getParameter("fileHash"));
         parameterList.add(request.getParameter("salesmanEmail"));
+        parameterList.add(request.getParameter("salesmanEmail"));
+        parameterList.add(request.getParameter("fileHash"));
         sqlData = DbLayer.getEventData(parameterList, Analytics.sqlFilePerformanceChart);
         data.put("filePerformanceChart", sqlData);
         break;

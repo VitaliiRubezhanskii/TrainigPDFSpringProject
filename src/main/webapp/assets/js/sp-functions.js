@@ -836,6 +836,7 @@ sp = {
         success: function(data, textStatus, jqXHR) {
           if(typeof data.error === 'undefined') {
             sp.file.getCustomersList('fileUploadDashboard');
+            sp.file.getCustomersList('customerFileLinksGenerator');
             $('button[data-dismiss="modal"]').click();
             
             if (-1 == data.newCustomer) {
@@ -1085,27 +1086,27 @@ sp = {
     }
   },
   
-chart: {
-	averageViewDurationData: {},
-	totalViewsData: {},
-	performanceBenchmarkData: {},
-	
-	/**
-     * Resize the charts to fit their .ibox-content container when the window resizes.
-     */
-	resizeCharts: (function() {
-		var timer = {};
+  chart: {
+		averageViewDurationData: {},
+		totalViewsData: {},
+		performanceBenchmarkData: {},
 		
-		$(window).resize(function() {
-			clearTimeout(timer);
+		/**
+	    * Resize the charts to fit their .ibox-content container when the window resizes.
+	    */
+		resizeCharts: (function() {
+			var timer = {};
 			
-			timer = setTimeout(function() {
-				sp.chart.loadBarChart(sp.chart.averageViewDurationData);
-				sp.chart.loadFileLine(sp.chart.totalViewsData);
-				sp.chart.loadFilePerformance(sp.chart.performanceBenchmarkData);
-			}, 500);
-        });
-	})(),
+			$(window).resize(function() {
+				clearTimeout(timer);
+				
+				timer = setTimeout(function() {
+					sp.chart.loadBarChart(sp.chart.averageViewDurationData);
+					sp.chart.loadFileLine(sp.chart.totalViewsData);
+					sp.chart.loadFilePerformance(sp.chart.performanceBenchmarkData);
+				}, 500);
+	    });
+		})(),
 	
     /**
      * Get the file bar chart.
@@ -1144,26 +1145,15 @@ chart: {
             labels: [],
             datasets: [
                 {
-                    label: "My Second dataset",
-                    fillColor: "rgba(26,179,148,0.5)",
-                    strokeColor: "rgba(26,179,148,0.8)",
-                    highlightFill: "rgba(26,179,148,0.75)",
-                    highlightStroke: "rgba(26,179,148,1)",
-                    data: []
+                  label: "Average view duration per page",
+                  backgroundColor: "rgba(26,179,148,0.5)",
+                  borderColor: "rgba(26,179,148,0.8)",
+                  borderWidth: 1,
+                  hoverBackgroundColor: "rgba(26,179,148,0.75)",
+                  hoverBorderColor: "rgba(26,179,148,1)",
+                  data: []
                 }
             ]
-        };
-  
-        var barOptions = {
-            scaleBeginAtZero: true,
-            scaleShowGridLines: true,
-            scaleGridLineColor: "rgba(0,0,0,.05)",
-            scaleGridLineWidth: 1,
-            barShowStroke: true,
-            barStrokeWidth: 0,
-            barValueSpacing: 6,
-            responsive: false,
-            tooltipTemplate: "<%if (label){%><%='Page ' + label%>: <%}%><%= value + ' sec.' %>",
         };
         
         if (typeof data.fileBarChart[0] !== 'undefined' ) {
@@ -1173,7 +1163,7 @@ chart: {
           });
         }
         
-    	var ctx = $('#barChart')[0].getContext('2d');
+        var ctx = $('#barChart')[0].getContext('2d');
         
         if ((data.fileBarChart.length * 18) > chartContainerWidth) {
         	ctx.canvas.width = data.fileBarChart.length * 18;
@@ -1184,7 +1174,33 @@ chart: {
         	ctx.canvas.width = chartContainerWidth;
         }
         
-        sp.chart.fileBar = new Chart(ctx).Bar(barData, barOptions);
+        sp.chart.fileBar = new Chart.Bar(ctx, {
+        	type: 'bar',
+        	data: barData,
+        	options: {
+        		responsive: false,
+        		scales: {
+      				yAxes: [{
+      					ticks: {
+      						beginAtZero: true
+      					}
+      				}],
+      			},
+        		tooltips: {
+        			callbacks: {
+        				label: function(tooltipItem, data) {
+        					return 'Page ' + tooltipItem.xLabel + ': ' + tooltipItem.yLabel + ' secs';
+        				},
+        				title: function(tooltipItem, data) {
+        					return '';
+        				},
+        			},
+        		},
+        		legend: {
+        			display: false,
+        		},
+        	},
+        });
     },
     
     /**
@@ -1195,17 +1211,17 @@ chart: {
         customerEmail = null;
       }
       $.getJSON(
-		  'ManagementServlet',
-		  {
-			action: 'getFileLineChart',
-		    fileHash: fileHash,
-			salesmanEmail: sp.config.salesman.email,
-	  	    customerEmail: customerEmail,
-		  },
-		  function(data) {   
-    	    sp.chart.totalViewsData = data;
-    	    sp.chart.loadFileLine(data);	  
-		  }
+			  'ManagementServlet',
+			  {
+			  	action: 'getFileLineChart',
+			    fileHash: fileHash,
+			    salesmanEmail: sp.config.salesman.email,
+		  	  customerEmail: customerEmail,
+			  },
+			  function(data) {
+	    	  sp.chart.totalViewsData = data;
+	    	  sp.chart.loadFileLine(data);
+			  }
       );
     },
         
@@ -1224,43 +1240,38 @@ chart: {
             labels: [],
             datasets: [
                 {
-                    label: "Total views",
-                    fillColor: "rgba(220,220,220,0.5)",
-                    strokeColor: "rgba(220,220,220,1)",
-                    pointColor: "rgba(220,220,220,1)",
-                    pointStrokeColor: "#fff",
-                    pointHighlightFill: "#fff",
-                    pointHighlightStroke: "rgba(220,220,220,1)",
-                    data: []
+                  label: 'Total views',
+                  backgroundColor: 'rgba(220,220,220,0.5)',
+                  borderColor: 'rgba(220,220,220,1)',
+                  fill: false,
+                  pointBorderColor: 'rgba(220,220,220,1)',
+                  pointBackgroundColor: 'rgba(220,220,220,1)',
+                  pointBorderWidth: 1,
+                  pointHoverRadius: 3,
+                  pointHoverBackgroundColor: 'rgba(220,220,220,1)',
+                  pointHoverBorderColor: '#fff',
+                  pointHoverBorderWidth: 1,
+                  pointRadius: 3,
+                  pointHitRadius: 1,
+                  data: [],
                 },
                 {
-                    label: "Actual views",
-                    fillColor: "rgba(26,179,148,0.5)",
-                    strokeColor: "rgba(26,179,148,0.7)",
-                    pointColor: "rgba(26,179,148,1)",
-                    pointStrokeColor: "#fff",
-                    pointHighlightFill: "#fff",
-                    pointHighlightStroke: "rgba(26,179,148,1)",
-                    data: []
+                  label: 'Actual views',
+                  backgroundColor: 'rgba(26,179,148,0.5)',
+                  borderColor: 'rgba(26,179,148,0.7)',
+                  fill: false,
+                  pointBorderColor: 'rgba(26,179,148,1)',
+                  pointBackgroundColor: 'rgba(26,179,148,1)',
+                  pointBorderWidth: 1,
+                  pointHoverRadius: 3,
+                  pointHoverBackgroundColor: 'rgba(26,179,148,1)',
+                  pointHoverBorderColor: '#fff',
+                  pointHoverBorderWidth: 1,
+                  pointRadius: 3,
+                  pointHitRadius: 1,
+                  data: []
                 }
             ]
-        };
-          
-        var lineOptions = {
-            scaleShowGridLines: true,
-            scaleGridLineColor: "rgba(0,0,0,.05)",
-            scaleGridLineWidth: 1,
-            bezierCurve: true,
-            bezierCurveTension: 0.4,
-            pointDot: true,
-            pointDotRadius: 4,
-            pointDotStrokeWidth: 1,
-            pointHitDetectionRadius: 1,
-            datasetStroke: true,
-            datasetStrokeWidth: 2,
-            datasetFill: true,
-            responsive: false,
-            multiTooltipTemplate: "<%= datasetLabel + ': ' + value %>"
         };
           
         if (typeof data.fileLineChart[0] !== 'undefined' ) {
@@ -1283,7 +1294,78 @@ chart: {
         	ctx.canvas.width = chartContainerWidth;
         }
         
-        sp.chart.fileLine = new Chart(ctx).Line(lineData, lineOptions);
+        sp.chart.fileLine = new Chart.Line(ctx, {
+        	data: lineData,
+        	options: {
+        		hover: {
+        			mode: 'x-axis',
+        		},
+        		scales: {
+      				yAxes: [{
+      					ticks: {
+      						beginAtZero: true
+      					}
+      				}],
+      			},
+        		responsive: false,
+        		tooltips: {
+        		  enabled: false,
+        			mode: 'x-axis',
+        			custom: function(tooltip) {
+        				
+        				// Tooltip Element.
+          			var tooltipEl = $('#sp-total-views--tooltip');
+
+          			// Hide if no tooltip.
+          			if (tooltip.opacity === 0) {
+          				tooltipEl.css('opacity', '0');
+          				return;
+          			}
+
+          			function getBody(bodyItem) {
+          				return bodyItem.lines;
+          			}
+          			
+          			// Set tooltip text.
+          			if (tooltip.body) {
+          				var tooltipTitles = tooltip.title || [];
+          				var tooltipBody = tooltip.body.map(getBody);
+          				
+          				var innerHtml = '<thead>';
+          				$.each(tooltipTitles, function() {
+          					innerHtml += '<tr><th>' + this + '</th></tr><br>';
+          				});
+          				
+          				innerHtml += '</thead><tbody>';
+          				
+          				$.each(tooltipBody, function(index, body) {
+          					var colors = tooltip.labelColors[index];
+          					var style = 'background:' + colors.backgroundColor + '; border-color:' + colors.borderColor;
+          					var tooltipColorKey = '<span class="sp-chart__chartjs-tooltip-color-key" style="' + style + '"></span>';
+          					
+          					innerHtml += '<tr><td>' + tooltipColorKey + body + '</td></tr><br>';
+          				});
+          				
+          				innerHtml += '</tbody>';
+          				tooltipEl.html(innerHtml);
+          			}
+          			
+          			var chartLeftPosition = $('#sp-line-chart-container').offset().left;
+          			
+          			// Display, position, and set styles for font.
+          			tooltipEl.css({
+          				'opacity': '1',
+          				'left':  (event.pageX - chartLeftPosition) + 'px',
+          				'top': tooltip.y,
+          				'font-family': tooltip._bodyFontFamily,
+          				'font-size': tooltip.bodyFontSize,
+          				'font-style': tooltip._bodyFontStyle,
+          				'padding': tooltip.yPadding + 'px ' + tooltip.xPadding + 'px'
+          			});
+        			},
+        		},
+        	},
+        });
     },
     
     /**
@@ -1319,56 +1401,73 @@ chart: {
             labels: [],
             datasets: [
                 {
-                    label: "Max performance",
-                    strokeColor: "rgba(248,172,89,0.7)",
-                    pointColor: "rgba(248,172,89,1)",
-                    pointStrokeColor: "#fff",
-                    pointHighlightFill: "#fff",
-                    pointHighlightStroke: "rgba(248,172,89,1)",
-                    data: []
+                  label: 'Maximum',
+                  backgroundColor: 'rgba(255, 156, 71 ,0.7)',
+                  borderColor: 'rgba(255, 156, 71 ,0.7)',
+                  fill: false,
+                  pointBorderColor: 'rgba(255, 156, 71 ,0.7)',
+                  pointBackgroundColor: 'rgba(255, 156, 71 ,0.7)',
+                  pointBorderWidth: 1,
+                  pointHoverRadius: 3,
+                  pointHoverBackgroundColor: 'rgba(255, 156, 71 ,0.7)',
+                  pointHoverBorderColor: '#fff',
+                  pointHoverBorderWidth: 1,
+                  pointRadius: 3,
+                  pointHitRadius: 1,
+                  data: []
                 },
                 {
-                    label: "Average performance",
-                    strokeColor: "rgba(26,179,148,0.7)",
-                    pointColor: "rgba(26,179,148,1)",
-                    pointStrokeColor: "#fff",
-                    pointHighlightFill: "#fff",
-                    pointHighlightStroke: "rgba(26,179,148,1)",
-                    data: []
+                  label: 'Average',
+                  backgroundColor: 'rgba(30, 166, 129, 0.7)',
+                  borderColor: 'rgba(30, 166, 129, 0.7)',
+                  fill: false,
+                  pointBorderColor: 'rgba(30, 166, 129, 0.7)',
+                  pointBackgroundColor: 'rgba(30, 166, 129, 0.7)',
+                  pointBorderWidth: 1,
+                  pointHoverRadius: 3,
+                  pointHoverBackgroundColor: 'rgba(30, 166, 129, 0.7)',
+                  pointHoverBorderColor: '#fff',
+                  pointHoverBorderWidth: 1,
+                  pointRadius: 3,
+                  pointHitRadius: 1,
+                  data: []
                 },
                 {
-                  label: "File performance",
-                  strokeColor: "rgba(28,132,198,0.7)",
-                  pointColor: "rgba(28,132,198,1)",
-                  pointStrokeColor: "#fff",
-                  pointHighlightFill: "#fff",
-                  pointHighlightStroke: "rgba(28,132,198,1)",
+                  label: 'Document',
+                  backgroundColor: 'rgba(26, 111, 186, 0.7)',
+                  borderColor: 'rgba(26, 111, 186, 0.7)',
+                  fill: false,
+                  pointBorderColor: 'rgba(26, 111, 186, 0.7)',
+                  pointBackgroundColor: 'rgba(26, 111, 186, 0.7)',
+                  pointBorderWidth: 1,
+                  pointHoverRadius: 3,
+                  pointHoverBackgroundColor: 'rgba(26, 111, 186, 0.7)',
+                  pointHoverBorderColor: '#fff',
+                  pointHoverBorderWidth: 1,
+                  pointRadius: 3,
+                  pointHitRadius: 1,
                   data: []
               }
             ]
         };
-          
-        var lineOptions = {
-            scaleShowGridLines: true,
-            scaleGridLineColor: "rgba(0,0,0,.05)",
-            scaleGridLineWidth: 1,
-            bezierCurve: true,
-            bezierCurveTension: 0.4,
-            pointDot: true,
-            pointDotRadius: 4,
-            pointDotStrokeWidth: 1,
-            pointHitDetectionRadius: 1,
-            datasetStroke: true,
-            datasetStrokeWidth: 2,
-            datasetFill: false,
-            responsive: false,
-            multiTooltipTemplate: "<%= datasetLabel + ': ' + value %>"
-        };
-          
+
+  	  	var individualPerformanceFileName = '';
+  	  	
+  	  	/**
+  	  	 * This will contain key:value pairs of {date: fileName} e.g. 22-10-16: myfile.pdf
+  	  	 */
+  	  	var dateToFileNameMap = {};
+  	  	
         if (typeof data.filePerformanceChart[0] !== 'undefined' ) {
           $.each(data.filePerformanceChart, function(index, value) {
+        	  
+          	individualPerformanceFileName = value[5];
+        	  
             dateParts = value[0].split('-');
-            lineData.labels.push(dateParts[2] + '-' + dateParts[1] + '-' + dateParts[0]);
+            var date = dateParts[2] + '-' + dateParts[1] + '-' + dateParts[0];
+            lineData.labels.push(date);
+            
+            dateToFileNameMap[date] = value[4];
             
             if (0 == value[1]) {
               lineData.datasets[0].data.push(1);
@@ -1401,7 +1500,108 @@ chart: {
         	ctx.canvas.width = chartContainerWidth;
         }
         
-        sp.chart.filePerformance = new Chart(ctx).Line(lineData, lineOptions);
+        sp.chart.filePerformance = new Chart.Line(ctx, {
+        	data: lineData,
+        	options: {
+        		hover: {
+        			mode: 'x-axis',
+        		},
+        		scales: {
+      				yAxes: [{
+      					ticks: {
+      						beginAtZero: true
+      					}
+      				}],
+      			},
+        		responsive: false,
+        		tooltips: {
+        			enabled: false,
+            	mode: 'x-axis',
+              custom: function(tooltip) {
+              	
+              	// Tooltip Element.
+          			var tooltipEl = $('#sp-performance-benchmark--tooltip');
+
+          			// Hide if no tooltip.
+          			if (tooltip.opacity === 0) {
+          				tooltipEl.css('opacity', '0');
+          				return;
+          			}
+          			
+          			function getBody(bodyItem) {
+          				return bodyItem.lines;
+          			}
+          			
+          			// Set tooltip text.
+          			if (tooltip.body) {
+          				var tooltipTitles = tooltip.title || [];
+          				var tooltipBody = tooltip.body.map(getBody);
+          				
+          				var innerHtml = '<thead>';
+          				$.each(tooltipTitles, function() {
+          					innerHtml += '<tr><th>' + this + '</th></tr><br>';
+          				});
+          				
+          				innerHtml += '</thead><tbody>';
+          				
+          				$.each(tooltipBody, function(index, body) {
+          					var colors = tooltip.labelColors[index];
+          					var style = 'background:' + colors.backgroundColor;
+          					style += '; border-color:' + colors.borderColor;
+          					style += '; border-width: 2px'; 
+          					var tooltipColorKey = '<span class="sp-chart__chartjs-tooltip-color-key" style="' + style + '"></span>';
+          					var fileData = '';
+          					
+          					switch(index) {
+	          					case 0:
+	          						var fileName = '';
+	          						
+	          						$.each(dateToFileNameMap, function(date, file) {
+	          							if (tooltip.title.toString() === date) {
+	          								fileName = file;
+	          							}
+	          						});
+	          						
+	          						// Max Performance.
+	          						fileData = fileName + ': ' + body[0].split(':').pop();	
+	          						break;
+          						
+	          					case 1:
+	          						
+	          						// Average.
+	          						fileData = body;
+	          						break;
+          					
+	          					case 2:
+	          						
+	          						// Current document.
+	          						fileData = individualPerformanceFileName + ': ' + body[0].split(':').pop();	
+	          						break;
+          					}
+          						
+          					innerHtml += '<tr><td>' + tooltipColorKey + fileData + '</td></tr><br>';
+          				});
+          				
+          				innerHtml += '</tbody>';
+          				tooltipEl.html(innerHtml);
+          			}
+          			
+          			var chartLeftPosition = $('#sp-line-chart-2-container').offset().left;
+          			
+          			// Display, position, and set styles for font.
+          			tooltipEl.css({
+          				'opacity': '1',
+          				'left':  (event.pageX - chartLeftPosition) + 'px',
+          				'top': tooltip.y,
+          				'font-family': tooltip._bodyFontFamily,
+          				'font-size': tooltip.bodyFontSize,
+          				'font-style': tooltip._bodyFontStyle,
+          				'padding': tooltip.yPadding + 'px ' + tooltip.xPadding + 'px'
+          			});
+              },
+        		},
+          },
+        });
     },
     
     /**
@@ -1711,7 +1911,28 @@ chart: {
             {data: 'email'},
             {data: 'date'}
           ],
-          dom: '<"sp-datatables-search-left"f>ti',
+          buttons: [
+            {
+              action: function(e, dt, node, config) {
+                $('#sp-modal-add-update-customer .modal-title').text('Add Customer');
+                $('#sp-modal-add-update-customer .modal-sub-title')
+                    .text('Fill the fields below and then click on add a customer.');
+                $('#sp-modal-add-update-customer__button').text('Add Customer');
+                $('#sp-modal-add-update-customer input[type=submit]').val('Add Customer');
+                $('#sp-modal-add-update-customer input#add-update').val('add');
+                
+                $('#sp-modal-add-update-customer input:not(#add-update, [type=submit])').val('');
+                $('#sp-modal-add-update-customer input[name="customerEmail"]')
+                    .prop('readonly', false);
+                
+              	$('#sp-modal-add-update-customer').modal();
+              },
+              className: 'sp-send-email__add-customer',
+              text: 'Add a Customer'
+
+            },
+          ],
+          dom: '<"sp-datatables-search-left"f><"sp-send-email__add-customer"B>ti',
           order: [[4, 'desc']],
           scrollY: '15vh',
           paging: false,
@@ -1934,8 +2155,8 @@ chart: {
           customerTableData.document = documentName;
           customerTableData.link = documentLink;
           
-          customerTableData.copy = '<button class="btn btn-white btn-xs sp-mail-all__button sp-copy-all">' +
-                                     '<i class="fa fa-copy sp-mail__icon"></i> Copy' +
+          customerTableData.copy = '<button class="btn btn-white btn-sm sp-mail-all__button sp-copy-all">' +
+                                     '<i class="fa fa-copy sp-mail__icon"></i><span> Copy</span>' +
                                    '</button>';
           
           customerTableData['sp-file-name-' + (index + 1)] = sp.customerFileLinksGenerator.getDocumentName(fileData.fileHash, files);
@@ -1974,7 +2195,7 @@ chart: {
                 columns: targetColumns
               },
               filename: 'SlidePiper Links',
-              text: 'Export to CSV'
+              text: '<i title="Export links for mass mailing on platforms such as MailChimp" class="fa fa-info-circle sp-clickable sp-send-email__export-info" aria-hidden="true"></i>    Export to CSV'
             },
           ],
           columnDefs: [
@@ -1991,6 +2212,7 @@ chart: {
       }
       
       sp.customerFileLinksGenerator.copyAll();
+      $('.sp-send-email__export-info').tooltip({delay: {show: 100, hide: 200}, placement: 'auto' });
     },
     
     

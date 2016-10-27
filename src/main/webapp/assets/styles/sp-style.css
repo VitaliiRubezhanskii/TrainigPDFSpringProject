@@ -203,6 +203,45 @@ td.sp-file-hash {
   overflow-x: auto;
 }
 
+.sp-chart__chartjs-tooltip-color-key {
+	border-width: 2px;
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin-right: 5px;
+}
+
+#sp-total-views--tooltip {
+  min-width: 120px;
+  max-width: 300px;
+}
+
+#sp-performance-benchmark--tooltip {
+  min-width: 200px;
+  max-width: 350px;
+}
+
+#sp-total-views--tooltip,
+#sp-performance-benchmark--tooltip {
+  background: rgb(38, 38, 38);
+  color: white;
+  border-radius: 3px;
+  opacity: 1;
+  pointer-events: none;
+  position: absolute;
+  -webkit-transform: translate(-50%, 0);
+  -webkit-transition: all .1s ease;
+  transition: all .1s ease;
+  transform: translate(-50%, 0);
+  z-index: 2;
+}
+
+#sp-file-dashboard canvas {
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+}
+
 /**
  * Styling of charts scrollbar. 
  */
@@ -485,6 +524,10 @@ td.sp-file-hash {
   margin-left: -10px;
 }
 
+.sp-mail-all__button span {
+	font-size: 13px;
+}
+
 .sp-mail-all__button:hover {
   color: #1ab394;
 }
@@ -499,6 +542,32 @@ td.sp-file-hash {
 
 .sp-send-to-all__button {
   margin-left: -20px;
+}
+
+.sp-send-email__export-info {
+  color: #1ab394;
+}
+
+.sp-send-email__add-customer {
+	border-color: #1ab394;
+  box-shadow: none;
+  clear: left;
+  color: #1ab394;
+  display: inline-block;
+  padding: 6px 8px;
+  font-size: 12px;
+}
+
+.sp-send-email__add-customer div {
+	margin-left: 20px;
+	margin-top: 11px;
+}
+
+.sp-send-email__add-customer:hover,
+.sp-send-email__add-customer:focus:active {
+  background-color: #fff;
+  border-color: #d2d2d2;
+  color: #1ab394;
 }
 
 #sp-send-email {
