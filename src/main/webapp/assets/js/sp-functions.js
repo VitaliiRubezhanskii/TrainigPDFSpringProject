@@ -836,6 +836,7 @@ sp = {
         success: function(data, textStatus, jqXHR) {
           if(typeof data.error === 'undefined') {
             sp.file.getCustomersList('fileUploadDashboard');
+            sp.file.getCustomersList('customerFileLinksGenerator');
             $('button[data-dismiss="modal"]').click();
             
             if (-1 == data.newCustomer) {
@@ -1910,7 +1911,28 @@ sp = {
             {data: 'email'},
             {data: 'date'}
           ],
-          dom: '<"sp-datatables-search-left"f>ti',
+          buttons: [
+            {
+              action: function(e, dt, node, config) {
+                $('#sp-modal-add-update-customer .modal-title').text('Add Customer');
+                $('#sp-modal-add-update-customer .modal-sub-title')
+                    .text('Fill the fields below and then click on add a customer.');
+                $('#sp-modal-add-update-customer__button').text('Add Customer');
+                $('#sp-modal-add-update-customer input[type=submit]').val('Add Customer');
+                $('#sp-modal-add-update-customer input#add-update').val('add');
+                
+                $('#sp-modal-add-update-customer input:not(#add-update, [type=submit])').val('');
+                $('#sp-modal-add-update-customer input[name="customerEmail"]')
+                    .prop('readonly', false);
+                
+              	$('#sp-modal-add-update-customer').modal();
+              },
+              className: 'sp-send-email__add-customer',
+              text: 'Add a Customer'
+
+            },
+          ],
+          dom: '<"sp-datatables-search-left"f><"sp-send-email__add-customer"B>ti',
           order: [[4, 'desc']],
           scrollY: '15vh',
           paging: false,
@@ -2133,8 +2155,8 @@ sp = {
           customerTableData.document = documentName;
           customerTableData.link = documentLink;
           
-          customerTableData.copy = '<button class="btn btn-white btn-xs sp-mail-all__button sp-copy-all">' +
-                                     '<i class="fa fa-copy sp-mail__icon"></i> Copy' +
+          customerTableData.copy = '<button class="btn btn-white btn-sm sp-mail-all__button sp-copy-all">' +
+                                     '<i class="fa fa-copy sp-mail__icon"></i><span> Copy</span>' +
                                    '</button>';
           
           customerTableData['sp-file-name-' + (index + 1)] = sp.customerFileLinksGenerator.getDocumentName(fileData.fileHash, files);
@@ -2173,7 +2195,7 @@ sp = {
                 columns: targetColumns
               },
               filename: 'SlidePiper Links',
-              text: 'Export to CSV'
+              text: '<i title="Export links for mass mailing on platforms such as MailChimp" class="fa fa-info-circle sp-clickable sp-send-email__export-info" aria-hidden="true"></i>    Export to CSV'
             },
           ],
           columnDefs: [
@@ -2190,6 +2212,7 @@ sp = {
       }
       
       sp.customerFileLinksGenerator.copyAll();
+      $('.sp-send-email__export-info').tooltip({delay: {show: 100, hide: 200}, placement: 'auto' });
     },
     
     

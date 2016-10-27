@@ -524,6 +524,10 @@ td.sp-file-hash {
   margin-left: -10px;
 }
 
+.sp-mail-all__button span {
+	font-size: 13px;
+}
+
 .sp-mail-all__button:hover {
   color: #1ab394;
 }
@@ -538,6 +542,32 @@ td.sp-file-hash {
 
 .sp-send-to-all__button {
   margin-left: -20px;
+}
+
+.sp-send-email__export-info {
+  color: #1ab394;
+}
+
+.sp-send-email__add-customer {
+	border-color: #1ab394;
+  box-shadow: none;
+  clear: left;
+  color: #1ab394;
+  display: inline-block;
+  padding: 6px 8px;
+  font-size: 12px;
+}
+
+.sp-send-email__add-customer div {
+	margin-left: 20px;
+	margin-top: 11px;
+}
+
+.sp-send-email__add-customer:hover,
+.sp-send-email__add-customer:focus:active {
+  background-color: #fff;
+  border-color: #d2d2d2;
+  color: #1ab394;
 }
 
 #sp-send-email {
