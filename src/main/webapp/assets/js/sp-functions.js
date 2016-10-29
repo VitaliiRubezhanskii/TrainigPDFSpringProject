@@ -1182,14 +1182,19 @@ sp = {
         		scales: {
       				yAxes: [{
       					ticks: {
-      						beginAtZero: true
+      						beginAtZero: true,
+      						callback: function(value, index, values) {
+                    if (Math.floor(value) === value) {
+                      return value;
+                    }
+                  }
       					}
       				}],
       			},
         		tooltips: {
         			callbacks: {
         				label: function(tooltipItem, data) {
-        					return 'Page ' + tooltipItem.xLabel + ': ' + tooltipItem.yLabel + ' secs';
+        					return 'Page ' + tooltipItem.xLabel + ': ' + tooltipItem.yLabel + ' sec.';
         				},
         				title: function(tooltipItem, data) {
         					return '';
@@ -1303,7 +1308,12 @@ sp = {
         		scales: {
       				yAxes: [{
       					ticks: {
-      						beginAtZero: true
+      						beginAtZero: true,
+      						callback: function(value, index, values) {
+      						  if (Math.floor(value) === value) {
+                      return value;
+      						  }
+      					  }
       					}
       				}],
       			},
@@ -1509,7 +1519,12 @@ sp = {
         		scales: {
       				yAxes: [{
       					ticks: {
-      						beginAtZero: true
+      						beginAtZero: true,
+      						callback: function(value, index, values) {
+                    if (Math.floor(value) === value) {
+                      return value;
+                    }
+                  }
       					}
       				}],
       			},
