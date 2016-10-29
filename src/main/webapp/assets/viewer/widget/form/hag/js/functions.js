@@ -864,7 +864,7 @@ $(function() {
     $.ajax({
       contentType: 'application/json',
       method: 'POST',
-      url: 'http://halman-easysend.herokuapp.com/api/halman/sendform',
+      url: 'https://halman-easysend.herokuapp.com/api/halman/sendform',
       data: JSON.stringify(attachmentPayload),
       error: function(jqXHR, textStatus, errorThrown) {
         

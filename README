@@ -4,6 +4,13 @@ SlidePiper README File
 Change Log
 ----------
 
+### 0.13.24
+
+2016-10-28 Yaniv Friedensohn <yanivf@slidepiper.com>
+
+* Changed HA attachment service URL from HTTP to HTTPS.
+
+
 ### 0.13.23
 
 2016-10-27 Max Prais <maxp@slidepiper.com>
@@ -14,8 +21,8 @@ Change Log
 	performance and for the document name.
 	
 * Send Documents:
-	1. Added 'Add Customers' Button appears in the 'Select Customers' panel of
-	Send Documents.
+	1. Added 'Add Customers' Button which appears in the 'Select Customers' 
+	panel of Send Documents.
 	2. Added information icon to 'Export to CSV' button in final step of Send
 	Documents.
 	3. Increased size of copy button and increase font size of text inside
