@@ -4,6 +4,16 @@ SlidePiper README File
 Change Log
 ----------
 
+### 0.13.25
+
+2016-10-29 Yaniv Friedensohn <yanivf@slidepiper.com>
+
+* Fixed the performance benchmark chart from not always showing the right MAX 
+file name.
+
+* Disabled showing fractional y-axis ticks.
+
+
 ### 0.13.24
 
 2016-10-28 Yaniv Friedensohn <yanivf@slidepiper.com>

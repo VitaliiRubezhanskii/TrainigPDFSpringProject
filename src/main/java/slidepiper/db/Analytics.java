@@ -177,20 +177,21 @@ public class Analytics {
   public static final String sqlFilePerformanceChart = 
 	    "SELECT\n"
 	  + "  t1.date,\n"
-	  + "  MAX(t2.file_performance) AS max_file_performance,\n"
-	  + "  AVG(t3.file_performance) AS avg_file_performance,\n"
-	  + "  t1.file_performance AS individual_file_performance,\n"    
-      + "  s3.name AS max_performance_name,\n"
-      + "  s1.name AS file_performance_name\n"
-	  + "FROM view_file_performance_agg_by_date_file_hash as t1\n"
-	  + "INNER JOIN view_file_performance_agg_by_date_file_hash AS t2 ON t2.date = t1.date AND t2.salesman_email = ?\n"
-	  + "INNER JOIN view_file_performance_agg_by_date_file_hash AS t3 ON t3.date = t1.date AND t3.salesman_email = ?\n"
-	  + "INNER JOIN slides AS s1 ON s1.id = t1.file_hash\n"
-	  + "INNER JOIN slides AS s3 ON s3.id = t3.file_hash\n"
-	  + "WHERE t1.file_hash = ?\n"
-	  + "GROUP BY t1.date\n"
-	  + "HAVING individual_file_performance IS NOT NULL\n"
-	  + "ORDER BY t1.date";
+	  + "  t1.file_performance AS max_file_performance,\n"
+	  + "  t4.avg_file_performance,\n"
+	  + "  t3.individual_file_performance,\n"
+	  + "  COALESCE(s1.name, 'File Not Found') AS max_performance_name,\n"
+	  + "  COALESCE(s2.name, 'File Not Found') AS file_performance_name\n"
+      + "FROM view_file_performance_agg_by_date_file_hash as t1\n"
+	  + "INNER JOIN (SELECT date, salesman_email, max(file_performance) AS max_file_performance FROM picascrafxzhbcmd.view_file_performance_agg_by_date_file_hash GROUP BY date, salesman_email) AS t2 ON t1.date = t2.date AND t1.salesman_email = t2.salesman_email AND t1.file_performance = t2.max_file_performance\n"
+	  + "LEFT JOIN picascrafxzhbcmd.slides AS s1 ON t1.file_hash = s1.id\n"
+	  + "INNER JOIN (SELECT date, file_hash, file_performance AS individual_file_performance FROM picascrafxzhbcmd.view_file_performance_agg_by_date_file_hash WHERE file_hash = ?) AS t3 ON t1.date = t3.date\n"
+	  + "LEFT JOIN picascrafxzhbcmd.slides AS s2 ON t3.file_hash = s2.id\n"
+	  + "INNER JOIN (SELECT date, salesman_email, AVG(file_performance) AS avg_file_performance FROM picascrafxzhbcmd.view_file_performance_agg_by_date_file_hash GROUP BY date, salesman_email) AS t4 ON t1.date = t4.date AND t1.salesman_email = t4.salesman_email\n"
+	  + "WHERE t1.salesman_email = ?\n"
+      + "GROUP BY t1.date, t1.salesman_email\n"
+      + "ORDER BY t1.date";
+
   
   
   public static final String sqlFileVisitorsMap =
