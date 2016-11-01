@@ -273,6 +273,95 @@ sp.widgets = {
       
       return isEmpty;
     }
+  },
+
+  widget9: {
+    html: $('#sp-tab-9 .sp-widget-item').html(),
+    init: (function() {
+      
+      // Add item.
+      $(document).off('click', '#sp-tab-9 .sp-widget__add-item').on('click', '#sp-tab-9 .sp-widget__add-item', function() {
+        $('#sp-tab-9 .sp-widget-item').append(sp.widgets.widget9.html);
+      });
+      
+      // Delete item.
+      $(document).on('click', '#sp-tab-9 .sp-widget__delete-item', function() {
+        $(this).closest('form').remove();
+      });
+    })(),
+    
+    /**
+     * If url doesn't have //, i.e. the url provided is missing a protocol such as http://.
+     * 
+     * @params {string} url - The link given by the user for the link widget.
+     * @returns {string} url - If the url did not have a protocol attached, it is returned with a protocol,
+     * otherwise it is returned as it was received.
+     */ 
+    urlHttpConfig: function(url) {
+      
+      if (! url.match(/\/\//)) {
+          url = '//' + url;
+      }
+      
+      return url;
+    },
+    validate: function() {
+      var isEmpty = false;
+      
+      // buttonText2 is not a required field.
+      $('#sp-tab-9 form').find('input:not([data-item-setting="buttonText2"])').each(function() {
+
+        if ('' === $(this).val()) {
+          isEmpty = true;
+        } else {
+          isEmpty = false;
+          return false;
+        }
+      });
+      
+      return isEmpty;
+    },
+    isWidgetPageOrderValid: function() {
+    	var pagesWithLinkWidget = [];
+    	var isPageOrderCorrect = false;
+    	
+    	$('#sp-tab-9 form').each(function() {
+    		
+    		var pageFrom = parseInt($(this).find('[data-item-setting="pageFrom"]').val());
+    		var pageTo = parseInt($(this).find('[data-item-setting="pageTo"]').val());
+    		
+    		if (pageFrom > pageTo) {
+    			$(this).find('[data-item-setting="pageFrom"]').addClass('sp-widget-form-error');
+    			$(this).find('[data-item-setting="pageTo"]').addClass('sp-widget-form-error');
+    			sp.error.handleError('You cannot set the widget to hide before it shows.');
+    			sp.viewerWidgetsModal.openErrorTab();
+    			
+    			return isPageOrderCorrect;
+    		} else {
+    			
+    			for (var i = pageFrom; i <= pageTo; i++) {
+    				if (pagesWithLinkWidget.indexOf(i) === -1) {
+    					pagesWithLinkWidget.push(i);
+    					
+    					isPageOrderCorrect = true;
+    				} else {
+    					$('#sp-tab-9 form').find('[type="number"]').each(function() {
+      					if (i === parseInt($(this).val())) {
+          				$(this).addClass('sp-widget-form-error');
+          				sp.error.handleError('The pages on each link widget must not overlap.');
+          			}
+    					});
+    					sp.viewerWidgetsModal.openErrorTab();
+    					
+    					isPageOrderCorrect = false;
+    					break;
+    				}
+    			}
+    		}
+    	});
+    	
+    	return isPageOrderCorrect;
+    },
   }
 };
 
@@ -345,6 +434,12 @@ sp.viewerWidgetsModal = {
         case 8:
           if (widget.data.items.length > 0) {
             displayWidget8(widget.data);
+          }
+          break;
+
+        case 9:
+          if (widget.data.items.length > 0) {
+          	displayWidget9(widget.data);
           }
           break;
       }
@@ -508,6 +603,30 @@ sp.viewerWidgetsModal = {
         });
       });
     }
+    
+    /**
+     * Display settings for Link Widget
+     * 
+     * @params {object} widget - The Link Widget settings. 
+     */
+    function displayWidget9(widget) {
+      $('[name="sp-widget9--is-enabled"]')
+        .prop('checked', widget.isEnabled)
+        .closest('div').removeClass('sp-hide-is-enabled');
+      
+      for (var i = 0; i < widget.items.length - 1; i++) {
+        $('#sp-tab-9 .sp-widget-item').append(
+            sp.widgets.widget9.html  
+        );
+      }
+      
+      // Link data.
+      $('#sp-tab-9 form').each(function(index) {
+        $(this).find('[data-item-setting]').each(function() {
+          $(this).val(widget.items[index][$(this).attr('data-item-setting')]);
+        });
+      });
+    }
   },
   
   /**
@@ -597,6 +716,11 @@ sp.viewerWidgetsModal = {
     if (! sp.widgets.widget8.validate()
         || ! $('[name="sp-widget8__is-enabled"]').closest('div').hasClass('sp-hide-is-enabled')) {
       settings.push(sp.viewerWidgetsModal.saveWidget8(fileHash));
+    }
+    
+    if (! sp.widgets.widget9.validate()
+        || ! $('[name="sp-widget9--is-enabled"]').closest('div').hasClass('sp-hide-is-enabled')) {
+      settings.push(sp.viewerWidgetsModal.saveWidget9(fileHash));
     }
     
     var data = {
@@ -979,6 +1103,66 @@ sp.viewerWidgetsModal = {
     
     if (! isWidget8SettingEmpty) {
       return widget8;
+    }
+  },
+  
+  /**
+   * Save and validate settings for the Link Widget
+   * 
+   * If there is a validation error, this function returns undefined, causing all settings
+   * to not be saved.
+   * 
+   * @param fileHash
+   * @returns widget9 || undefined
+   */
+  saveWidget9: function(fileHash) {
+    
+    if ($('[name="sp-widget9--is-enabled"]').closest('div').hasClass('sp-hide-is-enabled')) {
+      $('[name="sp-widget9--is-enabled"]').prop('checked', true);
+    }
+    
+    var widget9 = {
+        apiVersion: '1.0',
+        data: {
+          fileHash: fileHash,
+          widgetId: 9,
+          isEnabled: $('[name="sp-widget9--is-enabled"]').prop('checked'),
+          items: []
+        }
+    };
+    
+    var isWidget9SettingEmpty = false;
+
+    $('#sp-tab-9 form').each(function() {
+      var item = {};
+      
+      $(this).find('[data-item-setting]').each(function() {
+        
+        if ('' === $(this).val() && $(this).attr('data-item-setting') !== 'buttonText2') {
+          sp.error.handleError('You must fill the field.');
+          $(this).addClass('sp-widget-form-error');
+          sp.viewerWidgetsModal.openErrorTab();
+          isWidget9SettingEmpty = true;
+          
+        } else if ('link' === $(this).attr('data-item-setting')) {
+          var url = sp.widgets.widget9.urlHttpConfig($(this).val());
+          item[$(this).attr('data-item-setting')] = url;
+          
+        } else {
+          item[$(this).attr('data-item-setting')] = $(this).val();
+        }
+      });
+      
+      widget9.data.items.push(item);
+    });
+    
+    if (! isWidget9SettingEmpty) {
+
+    	if (sp.widgets.widget9.isWidgetPageOrderValid()) {
+    		return widget9;
+    	} else {
+    		return undefined;
+    	}
     } else {
       return undefined;
     }
