@@ -4,6 +4,17 @@ SlidePiper README File
 Change Log
 ----------
 
+### 0.13.26
+
+2016-11-01 Max Prais <maxp@slidepiper.com>
+
+* Created Link Widget:
+	1. Widget appears on the right side of the Viewer. 
+	2. It's functionality consists of supporting an external link.
+	3. Added ability to set Link Widget settings in Viewer Widgets Modal in
+	the Dashboard.
+
+
 ### 0.13.25
 
 2016-10-29 Yaniv Friedensohn <yanivf@slidepiper.com>
