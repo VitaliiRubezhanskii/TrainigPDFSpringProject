@@ -10,6 +10,9 @@
   visibility: hidden;
 }
 
+.sp--display-none {
+	display: none !important;
+}
 
 /**
  * Toolbar Settings.
@@ -472,6 +475,19 @@
   font-size: 10px;
 }
 
+/* Widget 9 */
+
+#sp-widget9 {
+  transition: transform 1s ease-in-out;
+}
+
+.sp-widget9__transition {
+  transform: translateX(100%);
+}
+
+.sp-widget9__text p:nth-child(2) {
+  margin-top: 20px;
+}
 
 /* Widget 7 - Form Widget */
 

@@ -84,7 +84,8 @@ sp.viewer = {
     viewerWidgetTestimonialsClicked: 'VIEWER_WIDGET_TESTIMONIALS_CLICKED',
     viewerWidgetFormButtonClicked: 'VIEWER_WIDGET_FORM__BUTTON_CLICKED',
     viewerWidgetFormConfirmClicked: 'VIEWER_WIDGET_FORM_CONFIRM_CLCKED',
-    viewerWidgetFormCancelClicked: 'VIEWER_WIDGET_FORM_CANCEL_CLICKED'
+    viewerWidgetFormCancelClicked: 'VIEWER_WIDGET_FORM_CANCEL_CLICKED',
+    viewerWidgetLinkClicked: 'VIEWER_WIDGET_LINK_CLICKED',
   },
   isPagesLoaded: false,
   paramValue: {
@@ -105,6 +106,11 @@ sp.viewer = {
       likeCount: 0
     },
     widget6: {
+      isReady: false,
+      isValidated: false,
+      lastViewedPage: 0
+    },
+    widget9: {
       isReady: false,
       isValidated: false,
       lastViewedPage: 0
@@ -551,11 +557,12 @@ if ('' != sp.viewer.linkHash) {
               var widgetId = widgetData.widgetId;
               
               switch(widgetId) {
-                case 1:
-                case 6:
-                  widgetData.items = OrderWidgetDataItemsByPage(widgetId, widgetData.items);
-                  break;
-              }
+  	            case 1:
+  	            case 6:
+  	            case 9:
+  	              widgetData.items = OrderWidgetDataItemsByPage(widgetId, widgetData.items);
+  	              break;
+  	          }
               
               widgets['widget' + widgetId.toString()] = widgetData;
             }
@@ -582,6 +589,10 @@ if ('' != sp.viewer.linkHash) {
                   
                 case 6:
                   var page = item.page;
+                  break;
+                  
+                case 9:
+                  var page = item.pageFrom;
                   break;
               }
               
@@ -639,7 +650,7 @@ if ('' != sp.viewer.linkHash) {
        * The following is a mechanisem for setting a widget item (out of a set of items)
        * everytime the user changes a page. 
        */
-      $(document).on('pagesloaded pagechange spDefaultPlayerReady spYouTubePlayerReady spWidget6Ready', function(event) {
+      $(document).on('pagesloaded pagechange spDefaultPlayerReady spYouTubePlayerReady spWidget6Ready spWidget9Ready', function(event) {
         if ('pagesloaded' === event.type) {
           sp.viewer.isPagesLoaded = true;
         }
@@ -683,6 +694,18 @@ if ('' != sp.viewer.linkHash) {
                 && sp.viewer.widgets.widget6.isReady) {
               
               loadTestimonial(widgets.widget6.items);
+              sp.viewer.widgets.widget6.lastViewedPage = PDFViewerApplication.page;
+            }
+          }
+          
+          /* Widget 9 */
+          if (sp.viewer.widgets.widget9.isValidated) {
+            
+            // Verification before setting a link.
+            if (PDFViewerApplication.page !== sp.viewer.widgets.widget9.lastViewedPage
+                && sp.viewer.widgets.widget9.isReady) {
+              
+              loadWidget9Link(widgets.widget9.items);
               sp.viewer.widgets.widget6.lastViewedPage = PDFViewerApplication.page;
             }
           }
@@ -846,6 +869,28 @@ if ('' != sp.viewer.linkHash) {
         }
       }
       
+      /* Validate Widget 9 */
+      var widget9RequiredSettings = ['buttonText1', 'link', 'pageFrom', 'pageTo'];
+      
+      if (typeof widgets.widget9 !== 'undefined'
+        && typeof widgets.widget9.items !== 'undefined'
+        && widgets.widget9.items.length > 0) {
+       var isWidget9Validated = false;
+        
+        $.each(widgets.widget9.items, function(index, item) {
+          if (isWidgetSettingsDefined(item, widget9RequiredSettings)) {
+            isWidget9Validated = true;
+          } else {
+            isWidget9Validated = false;
+            return false;
+          }
+        });
+        
+        if (isWidget9Validated) {
+          sp.viewer.widgets.widget9.isValidated = true;
+          implementWidget9(widgets.widget9);
+        }
+      }
       
       /* Implement Widget 1 */
       function implementWidget1(videos) {
@@ -1579,6 +1624,99 @@ if ('' != sp.viewer.linkHash) {
             break;
         }
       });
+    }
+
+    function implementWidget9(widget) {
+      
+      // Widget 9 - Link Widget.
+      if (0 == $('.sp-right-side-widgets').length) {
+        $('body').append('<div class="sp-right-side-widgets"></div>');
+      }
+      
+      $('.sp-right-side-widgets').append(
+          '<button class="sp-widget-button sp-widget-font-fmaily sp--direction-ltr sp--display-none" id="sp-widget9">' +
+            '<i class="fa fa-external-link"></i><div class="sp-widget9__text"></div>' +
+          '</button>'
+      );
+      
+      $('#sp-widget9').css({
+      	'background-color': config.viewer.toolbarButtonBackground,
+        'color': config.viewer.toolbarCta1Color,
+      });
+      
+      if ($('.sp-right-side-widgets button, .sp-right-side-widgets div').length > 1) {
+        $('#sp-widget9').css({
+          'margin-top': '20px'
+        });
+      }
+      
+      sp.viewer.widgets.widget9.isReady = true;
+      $(document).trigger('spWidget9Ready');
+    }
+    
+    function loadWidget9Link(links) {
+      
+      // Format links array to an object for ease of access.
+      var linksByPageFrom = {};
+      var linksByPageTo = {};
+      
+      // +1 to the linkPageStop, so that the button is visible on the page the user has selected
+      // the button to be visible until. The button is hidden on this page.
+      $.each(links, function(index, link) {
+      	linksByPageFrom['page' + link.pageFrom.toString()] = link;
+      	linksByPageTo['page' + (parseInt(link.pageTo) + 1).toString()] = link;
+      });
+      
+      for (var page = PDFViewerApplication.page; page > -1; page--) {
+      	
+      	if (typeof linksByPageFrom['page' + page] !== 'undefined') {
+      		$('#sp-widget9').removeClass('sp--display-none sp-widget9__transition');
+      	
+          setWidget9Link(
+          		linksByPageFrom['page' + page].buttonText1,
+          		linksByPageFrom['page' + page].buttonText2,
+          		linksByPageFrom['page' + page].link,
+          		linksByPageFrom['page' + page].pageFrom,
+          		linksByPageFrom['page' + page].pageTo
+          );
+          
+          // If a page with a link is found, break the loop.
+          break;
+        } else if (typeof linksByPageTo['page' + page] !== 'undefined') {
+           $('#sp-widget9').addClass('sp-widget9__transition');
+           
+           break;
+        }
+      	
+      	if (0 === page) {
+      		$('#sp-widget9').addClass('sp-widget9__transition');
+      	}
+      }
+    }
+    
+    function setWidget9Link(buttonText1, buttonText2, link, pageFrom, pageTo) {
+      $('.sp-widget9__text')
+      	.empty()
+      	.append('<p>' + buttonText1 + '</p>');
+      
+      if ('' !== buttonText2) {
+      	$('.sp-widget9__text p').after('<p>' + buttonText2 + '</p>');
+      }
+      
+       $('#sp-widget9').off('click').on('click', function() {
+         window.open(link); 
+      	 
+          sp.viewer.setCustomerEvent({
+            eventName: sp.viewer.eventName.viewerWidgetLinkClicked,
+            linkHash: sp.viewer.linkHash,
+            sessionId: sessionid,
+            param_1_varchar: buttonText1,
+            param_2_varchar: buttonText2,
+            param_3_varchar: link,
+            param_4_varchar: pageFrom,
+            param_5_varchar: pageTo,
+          });
+       });
     }
   });
 }
