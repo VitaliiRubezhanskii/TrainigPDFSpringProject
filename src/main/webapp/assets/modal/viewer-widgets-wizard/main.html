@@ -24,6 +24,7 @@
                     <li><a data-toggle="tab" href="#sp-tab-6"><i class="fa fa-user"></i></a></li>
                     <li><a data-toggle="tab" href="#sp-tab-7"><i class="fa fa-file-text-o"></i></a></li>
                     <li><a data-toggle="tab" href="#sp-tab-8"><i class="fa fa-code"></i></a></li>
+                    <li><a data-toggle="tab" href="#sp-tab-9"><i class="fa fa-external-link"></i></a></li>
                 </ul>
                 
                 <div class="tab-content sp-viewer-widgets-modal">
@@ -456,6 +457,72 @@
                                 <i class="fa fa-plus" aria-hidden="true"></i> Add Code
                             </a>
                             -->
+                        </div>
+                    </div>
+                    
+                    <div id="sp-tab-9" class="tab-pane">
+                        <div class="panel-body">
+                            <strong>Link Widget</strong>
+                            <div class="sp-customization-option__p sp-hide-is-enabled">
+                                <input type="checkbox" name="sp-widget9--is-enabled"> Is Enabled?
+                            </div>
+
+                            <div class="container-fluid">                   
+                                <div class="sp-widget-item">
+                                    <form class="form-horizontal">
+                                    
+                                    <hr>
+                                    
+                                        <div class="form-group">
+                                            <label class="col-lg-4 control-label">Link Text<br>(Line 1)</label>
+                                            <div class="col-lg-8">
+                                                <input class="form-control" data-item-setting="buttonText1" placeholder="e.g. My Website" maxlength="40">
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <label class="col-lg-4 control-label">Link Text<br>(Line 2)</label>
+                                            <div class="col-lg-8">
+                                                <input class="form-control" data-item-setting="buttonText2" placeholder="e.g. Is through this link..." maxlength="40">
+                                            </div>
+                                        </div>
+                                            
+                                        <div class="form-group">
+                                            <label class="col-lg-4 control-label">Link URL</label>
+                                            <div class="col-lg-8">
+                                                <input type="text" class="form-control" data-item-setting="link" placeholder="e.g. http://www.slidepiper.com">
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <label class="col-lg-4 control-label">From Page</label>
+                                            <div class="col-lg-8">
+                                                <input type="number" class="form-control" data-item-setting="pageFrom" placeholder="e.g. 1" min="1">
+                                                <small>On this page, the widget will appear from the right side of the page.</small>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <label class="col-lg-4 control-label">To Page</label>
+                                            <div class="col-lg-8">
+                                                <input type="number" class="form-control" data-item-setting="pageTo" placeholder="e.g. 3" min="1">
+                                                <small>After this page, the widget will hide on the right side of the page.</small>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <div class="col-lg-12">
+                                                <a class="btn btn-white btn-sm sp-widget__delete-item">
+                                                    <i class="fa fa-times" aria-hidden="true"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <a class="btn btn-white btn-sm sp-widget__add-item">
+                                <i class="fa fa-plus" aria-hidden="true"></i> Add Link
+                            </a>
                         </div>
                     </div>
                 </div>

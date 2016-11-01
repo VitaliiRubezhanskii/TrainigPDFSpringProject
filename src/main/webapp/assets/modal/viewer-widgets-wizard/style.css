@@ -153,3 +153,9 @@
 #sp-widget7__form-type-container input:nth-child(2) {
   margin-left: 32px;
 }
+
+/* Widget 9 - Link Widget */
+
+#sp-tab-9 .sp-widget__delete-item {
+  float: right;
+}
