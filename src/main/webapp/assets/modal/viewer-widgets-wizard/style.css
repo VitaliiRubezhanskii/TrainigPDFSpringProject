@@ -82,6 +82,10 @@
   margin: 70px auto 70px auto !important;
 }
 
+.sp-widgets-customization-window__tab {
+  padding: 10px 12px 10px 17px !important;
+}
+
 [name="video-widget-page-start"] {
   width: 79px;
 }

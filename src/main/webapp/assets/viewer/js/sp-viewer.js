@@ -1634,7 +1634,7 @@ if ('' != sp.viewer.linkHash) {
       }
       
       $('.sp-right-side-widgets').append(
-          '<button class="sp-widget-button sp-widget-font-fmaily sp--direction-ltr sp--display-none" id="sp-widget9">' +
+          '<button class="sp-widget-button sp-widget-font-fmaily sp--direction-ltr sp-hidden" id="sp-widget9">' +
             '<i class="fa fa-external-link"></i><div class="sp-widget9__text"></div>' +
           '</button>'
       );
@@ -1670,7 +1670,7 @@ if ('' != sp.viewer.linkHash) {
       for (var page = PDFViewerApplication.page; page > -1; page--) {
       	
       	if (typeof linksByPageFrom['page' + page] !== 'undefined') {
-      		$('#sp-widget9').removeClass('sp--display-none sp-widget9__transition');
+      		$('#sp-widget9').removeClass('sp-widget9__transition sp-hidden');
       	
           setWidget9Link(
           		linksByPageFrom['page' + page].buttonText1,
