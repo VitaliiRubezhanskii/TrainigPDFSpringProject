@@ -42,10 +42,26 @@ public class FileViewerServlet extends HttpServlet {
 		
 		// File is not whitelisted.
 		case 2:
+			if (isUnsupportedBrowser(request.getHeader("User-Agent"))) {
+				String redirectLink = null;
+				String fileLink = DbLayer.getFileLinkFromFileLinkHash(fileLinkHash);
+				
+				if (null != fileLink && ! fileLink.equals("")) {
+					redirectLink = fileLink;
+				} else {
+					redirectLink = ConfigProperties.getProperty("app_url");
+				}
+				
+				// Redirect to specified location.
+				eventDataMap.put("param_4_varchar", redirectLink);
+				DbLayer.setEvent("customer_events", ConfigProperties.getProperty("init_unsupported_browser"), eventDataMap);
+				response.sendRedirect(redirectLink);
+			} else {
 			
-			// Continue to view file.
-			DbLayer.setEvent("customer_events", ConfigProperties.getProperty("init_document_exists"), eventDataMap);
-			request.getRequestDispatcher(ConfigProperties.getProperty("file_viewer")).forward(request, response);
+				// Continue to view file.
+				DbLayer.setEvent("customer_events", ConfigProperties.getProperty("init_document_exists"), eventDataMap);
+				request.getRequestDispatcher(ConfigProperties.getProperty("file_viewer")).forward(request, response);
+			}
 			break;
 		
 		// File is whitelisted.
@@ -53,26 +69,7 @@ public class FileViewerServlet extends HttpServlet {
 			
 			// Check if request IP matches IP in ip_whitelist table.
 			if (DbLayer.isIPMatchClientIP(fileLinkHash, request.getRemoteAddr())) {
-
-				// Get user agent.
-				String userAgent = request.getHeader("User-Agent");
-				
-				boolean isUnsupportedBrowser = false;
-				
-				String[] outdatedIEVersions = new String[5];
-				outdatedIEVersions[0] = "MSIE 9.0";
-				outdatedIEVersions[1] = "MSIE 8.0";
-				outdatedIEVersions[2] = "MSIE 7.0";
-				outdatedIEVersions[3] = "MSIE 6.0";
-				outdatedIEVersions[4] = "MSIE 5.0";
-				for (int i = 0; i < outdatedIEVersions.length; i++) {
-					if (userAgent.contains(outdatedIEVersions[i])) {
-						isUnsupportedBrowser = true;
-						break;
-					}
-				}
-				
-				if (isUnsupportedBrowser) {
+				if (isUnsupportedBrowser(request.getHeader("User-Agent"))) {
 					String redirectLink = null;
 					String fileLink = DbLayer.getFileLinkFromFileLinkHash(fileLinkHash);
 					
@@ -104,5 +101,28 @@ public class FileViewerServlet extends HttpServlet {
 			}
 			break;
 	}
+  }
+  
+  
+  /**
+   * Check if the browser is unsupported by our application.
+   */
+  public static boolean isUnsupportedBrowser(String userAgent) {
+	  boolean isUnsupportedBrowser = false;
+	  
+	  String[] outdatedIEVersions = new String[5];
+	  outdatedIEVersions[0] = "MSIE 9.0";
+	  outdatedIEVersions[1] = "MSIE 8.0";
+	  outdatedIEVersions[2] = "MSIE 7.0";
+	  outdatedIEVersions[3] = "MSIE 6.0";
+	  outdatedIEVersions[4] = "MSIE 5.0";
+	  for (int i = 0; i < outdatedIEVersions.length; i++) {
+		  if (userAgent.contains(outdatedIEVersions[i])) {
+			  isUnsupportedBrowser = true;
+			  break;
+		  }
+	  }
+	  
+	  return isUnsupportedBrowser;
   }
 }
