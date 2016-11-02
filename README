@@ -4,6 +4,17 @@ SlidePiper README File
 Change Log
 ----------
 
+### 0.13.27
+
+2016-11-02 Yaniv Friedensohn <yanivf@slidepiper.com>
+
+* Dashboard - Reduce widgets tab size in the customization window tabs bar to 
+allow for all of the widgets to appear in one line.
+
+* Viewer - Fix having the link widget from popping out on instances where it 
+should have slide.
+
+
 ### 0.13.26
 
 2016-11-01 Max Prais <maxp@slidepiper.com>
