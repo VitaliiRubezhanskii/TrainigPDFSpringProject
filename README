@@ -4,6 +4,13 @@ SlidePiper README File
 Change Log
 ----------
 
+### 0.13.30
+
+2016-11-03 Max Prais <maxp@slidepiper.com>
+
+* Dashboard - Fix charts disappearance issue.
+
+
 ### 0.13.29
 
 2016-11-03 Yaniv Friedensohn <yanivf@slidepiper.com>
