@@ -605,7 +605,12 @@ $(function() {
           phoneInit: $('#phone-operator-code-init').val() + '-' + $('#phone-number-init').val()
         }
         
+        // SP WebMerge.
         sendWebMerge('https://www.webmerge.me/merge/79450/1yz2sv');
+        
+        // HA WebMerge.
+        sendWebMerge('https://www.webmerge.me/merge/82651/98sjf8');
+        
         sendSlidePiper('HELMAN_ALDUBI_COMPLETED_INITIAL_SECTION');
         break;
         
@@ -885,6 +890,14 @@ $(function() {
           contentType: 'application/json',
           method: 'POST',
           url: 'https://www.webmerge.me/merge/79448/1rqtm1',
+          data: JSON.stringify(data)
+        });
+        
+        // Send error with more details to HA WebMerge.
+        $.ajax({
+          contentType: 'application/json',
+          method: 'POST',
+          url: 'https://www.webmerge.me/merge/82653/7m8af3',
           data: JSON.stringify(data)
         });
       }
