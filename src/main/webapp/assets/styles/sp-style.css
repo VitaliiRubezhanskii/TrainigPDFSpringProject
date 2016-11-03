@@ -200,7 +200,13 @@ td.sp-file-hash {
 
 /* Bar, Line & Map Charts */
 .sp-chart__container {
+  min-height: 300px;
   overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.sp-chart__container canvas {
+  min-height: 290px;
 }
 
 .sp-chart__chartjs-tooltip-color-key {
@@ -260,7 +266,7 @@ td.sp-file-hash {
  * charts (which have a height of 290). 
  */
 #sp-google-geochart {
-  height: 294px;
+  height: 290px;
 }
 
 /* Video & Like Widget */
