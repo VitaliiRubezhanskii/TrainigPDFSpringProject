@@ -4,6 +4,13 @@ SlidePiper README File
 Change Log
 ----------
 
+### 0.13.28
+
+2016-11-03 Yaniv Friedensohn <yanivf@slidepiper.com>
+
+* Add flat PDF redirection ability for unrestricted documents.
+
+
 ### 0.13.27
 
 2016-11-02 Yaniv Friedensohn <yanivf@slidepiper.com>
