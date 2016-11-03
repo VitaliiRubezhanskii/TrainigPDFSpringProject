@@ -116,8 +116,8 @@ sp = {
               sp.metric.getViewerWidgetMetrics(files[fileHash]);
               sp.chart.getFileLine(fileHash);
               sp.chart.getFileBar(fileHash);
-              sp.chart.getFileVisitorsMap(fileHash);
               sp.chart.getFilePerformance(fileHash);
+              sp.chart.getFileVisitorsMap(fileHash);
               sp.table.getFilesTable(filesData);
               
 
@@ -1156,7 +1156,7 @@ sp = {
             ]
         };
         
-        if (typeof data.fileBarChart[0] !== 'undefined' ) {
+        if (typeof data.fileBarChart !== 'undefined' && typeof data.fileBarChart[0] !== 'undefined' ) {
           $.each(data.fileBarChart, function(index, value) {
             barData.labels.push(parseInt(value[0]));
             barData.datasets[0].data.push(parseFloat(value[1]).toFixed(1));
@@ -1279,7 +1279,7 @@ sp = {
             ]
         };
           
-        if (typeof data.fileLineChart[0] !== 'undefined' ) {
+        if (typeof data.fileLineChart !== 'undefined' && typeof data.fileLineChart[0] !== 'undefined') {
           $.each(data.fileLineChart, function(index, value) {
             dateParts = value[0].split('-');
             lineData.labels.push(dateParts[2] + '-' + dateParts[1] + '-' + dateParts[0]);
@@ -1468,7 +1468,7 @@ sp = {
   	  	 */
   	  	var dateToFileNameMap = {};
   	  	
-        if (typeof data.filePerformanceChart[0] !== 'undefined' ) {
+        if (typeof data.filePerformanceChart !== 'undefined' && typeof data.filePerformanceChart[0] !== 'undefined') {
           $.each(data.filePerformanceChart, function(index, value) {
         	  
           	individualPerformanceFileName = value[5];
@@ -1665,8 +1665,6 @@ sp = {
           sp.chart.visitorsMap = new google.visualization.GeoChart(document.getElementById('sp-google-geochart'));
           sp.chart.visitorsMap.draw(mapData, options);
         });
-        
-        $('#sp-google-geochart').parent().height($('.sp-chart__container').height());
       });
     }
   },
