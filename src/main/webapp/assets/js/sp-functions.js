@@ -167,6 +167,7 @@ sp = {
           
           $('.sp-logout').click(function() {
             Cookies.remove('SalesmanEmail');
+            Cookies.remove('SalesmanEmailBase64');
             location.href = sp.config.appUrl;
           });
           

@@ -24,6 +24,7 @@ import org.json.JSONObject;
 import slidepiper.config.ConfigProperties;
 import slidepiper.constants.Constants;
 import slidepiper.dataobjects.*;
+import slidepiper.integration.HubSpot;
 
 public class DbLayer {
   
@@ -1457,6 +1458,56 @@ public class DbLayer {
 			
 			
       /**
+       * Get a provider access token.
+       */
+      public static String getAccessToken(int userId, String provider) {
+        String accessToken = null;
+        
+        Constants.updateConstants();
+        try {
+          Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+          e.printStackTrace();
+        }
+          
+        String sql = "SELECT * FROM integration WHERE isEnabled = 1 AND fk_user_id = ? AND provider = ?";
+
+        Connection conn = null;
+        try {
+          conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
+          PreparedStatement ps = conn.prepareStatement(sql); 
+            
+          ps.setInt(1, userId);
+          ps.setString(2, provider);
+          ResultSet rs = ps.executeQuery();
+          
+          if (rs.next()) {
+            
+            // If provider is HubSpot.
+            if (rs.getString("provider").equals("hubspot")) {
+              String refreshToken = rs.getString("refreshToken");
+              String redirectUri = rs.getString("redirectUri");
+              
+              accessToken = HubSpot.getNewAccessToken(userId, refreshToken, redirectUri);
+            }
+          }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+          if (conn != null) {
+            try {
+              conn.close();
+            } catch (SQLException ex) {
+              ex.printStackTrace();
+            }
+          }
+        }
+        
+        return accessToken;
+      }
+      
+      
+      /**
        * Get data about a specific customer such as his first name. 
        * 
        * @param customerEmail The customer email address.
@@ -2825,6 +2876,54 @@ public class DbLayer {
           }
         }
       }
+      
+      
+      /**
+       * Set a provider access token.
+       * 
+       * @return The access token.
+       */
+      public static String setAccessToken(int userId, String provider, String accessToken, Long expiresIn,
+          String refreshToken, String redirectUri) {
+        
+        Constants.updateConstants();
+        try {
+          Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+          e.printStackTrace();
+        }
+        Connection conn = null;
+        
+        String sql = "INSERT INTO integration (fk_user_id, provider, accessToken, expiresIn, refreshToken, redirectUri) VALUES (?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE accessToken = VALUES(accessToken), expiresIn = VALUES(expiresIn), refreshToken = VALUES(refreshToken), redirectUri = VALUES(redirectUri)";
+        
+        try {
+          conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);  
+          PreparedStatement ps = conn.prepareStatement(sql);
+          
+          ps.setInt(1, userId);
+          ps.setString(2, provider);
+          ps.setString(3, accessToken);
+          ps.setLong(4, expiresIn);
+          ps.setString(5, refreshToken);
+          ps.setString(6, redirectUri);
+          ps.executeUpdate();
+          
+        } catch (SQLException ex) {
+          System.err.println("Error code: " + ex.getErrorCode() + " - " + ex.getMessage());
+          ex.printStackTrace();
+        } finally {
+          if (null != conn) {
+            try {
+              conn.close();
+            } catch (SQLException ex) {
+              ex.printStackTrace();
+            }
+          }
+        }
+        
+        return accessToken;
+      }
+      
       
       public static void setSalesmenDocumentSettings (Boolean isAlertEmailEnabled, Boolean isReportEmailEnabled,
     		  			Boolean isNotificationEmailEnabled, String salesMan) {

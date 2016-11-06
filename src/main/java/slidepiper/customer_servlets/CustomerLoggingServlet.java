@@ -8,6 +8,7 @@ import slidepiper.dataobjects.AlertData;
 import slidepiper.dataobjects.MessageInfo;
 import slidepiper.db.DbLayer;
 import slidepiper.email.EmailSender;
+import slidepiper.integration.HubSpot;
 import slidepiper.logging.CustomerLogger;
 import slidepiper.salesman_servlets.Geolocation;
 
@@ -84,6 +85,18 @@ public class CustomerLoggingServlet extends HttpServlet {
     							EmailSender.sendAlertEmail(id, sessionId);
     						}	else {
   			    			System.out.println("SP: Didn't send alert email");
+  			    		}
+  			    		
+  			    		// Set Timeline event for HubSpot.
+  			    		Map<String, Object> salesMan = DbLayer.getSalesman(salesmanEmail);
+  			    		int userId = (int) salesMan.get("id");
+                
+  			    		Map<String, String> documentProperties = DbLayer.getFileMetaData(id);
+                String documentName = documentProperties.get("fileName");
+                
+  			    		String HubSpotAccessToken = DbLayer.getAccessToken(userId, "hubspot");
+  			    		if (HubSpotAccessToken != null) {
+  			    		  HubSpot.setTimelineEvent(HubSpotAccessToken, sessionId, customerEmail, documentName);
   			    		}
     	        }
     	}
