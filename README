@@ -4,6 +4,13 @@ SlidePiper README File
 Change Log
 ----------
 
+### 0.13.31
+
+2016-11-08 Yaniv Friedensohn <yanivf@slidepiper.com>, Max Prais <maxp@slidepiper.com>
+
+* Create an integration with the HubSpot Timeline API.
+
+
 ### 0.13.30
 
 2016-11-03 Max Prais <maxp@slidepiper.com>

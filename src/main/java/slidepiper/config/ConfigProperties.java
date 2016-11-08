@@ -66,12 +66,17 @@ public class ConfigProperties {
         String appHost = (null != props.getProperty("app_alias")) 
             ? props.getProperty("app_alias").replaceAll("/$", "")
             : props.getProperty("app_server").replaceAll("/$", "");
-        String appPort = props.getProperty("app_port", "80");
+        
+        String appPort = props.getProperty("app_port", "");
+        if (! appPort.isEmpty()) {
+          appPort = ":" + appPort;
+        }
+        
         String appContextPath = ("/" + props.getProperty("app_contextpath", ""))
             .replaceAll("/$", "");
         String webSocketsPort = props.getProperty("websockets_port", "80");
 
-        props.setProperty("app_url", appScheme + "://" + appHost + ":" + appPort
+        props.setProperty("app_url", appScheme + "://" + appHost + appPort
             + appContextPath);
 
         props.setProperty("websockets_url", appScheme + "://" + appHost + ":"
@@ -163,11 +168,16 @@ public class ConfigProperties {
         String appHost = (null != props.getProperty("app_alias")) 
             ? props.getProperty("app_alias").replaceAll("/$", "")
             : props.getProperty("app_server").replaceAll("/$", "");
-        String appPort = props.getProperty("app_port", "80");
+        
+        String appPort = props.getProperty("app_port", "");
+        if (! appPort.isEmpty()) {
+          appPort = ":" + appPort;
+        }
+        
         String appContextPath = ("/" + props.getProperty("app_contextpath", ""))
             .replaceAll("/$", "");
 
-        props.setProperty("app_url", appScheme + "://" + appHost + ":" + appPort
+        props.setProperty("app_url", appScheme + "://" + appHost + appPort
             + appContextPath);
         
         if (key.equals("viewer_url")) {

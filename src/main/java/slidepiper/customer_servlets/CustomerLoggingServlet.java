@@ -8,6 +8,7 @@ import slidepiper.dataobjects.AlertData;
 import slidepiper.dataobjects.MessageInfo;
 import slidepiper.db.DbLayer;
 import slidepiper.email.EmailSender;
+import slidepiper.integration.HubSpot;
 import slidepiper.logging.CustomerLogger;
 import slidepiper.salesman_servlets.Geolocation;
 
@@ -57,6 +58,7 @@ public class CustomerLoggingServlet extends HttpServlet {
 			    		
 			    		String ip = null;
 			    		List<String> ipData = null;
+			    		
 			    		if (event_name.equals("OPEN_SLIDES")) {
 			    		  ip = Geolocation.getIpFromRequest(request);
 			    		  ipData = Geolocation.ipData(ip);
@@ -84,6 +86,23 @@ public class CustomerLoggingServlet extends HttpServlet {
     							EmailSender.sendAlertEmail(id, sessionId);
     						}	else {
   			    			System.out.println("SP: Didn't send alert email");
+  			    		}
+  			    		
+  			    		if (! customerEmail.equals(ConfigProperties.getProperty("test_customer_email"))) {
+    			    		
+    			    		// Set Timeline event for HubSpot.
+    			    		Map<String, Object> userData = DbLayer.getSalesman(salesmanEmail);
+    			    		int userId = (int) userData.get("id");
+    			    		
+    			    		Map<String, String> documentProperties = DbLayer.getFileMetaData(id);
+                  String documentName = documentProperties.get("fileName");
+                  
+                  Long timestamp = DbLayer.getCustomerEventTimstamp(sessionId, "OPEN_SLIDES", id).getTime();
+                  
+    			    		String HubSpotAccessToken = DbLayer.getAccessToken(userId, "hubspot");
+    			    		if (HubSpotAccessToken != null) {
+    			    		  HubSpot.setTimelineEvent(HubSpotAccessToken, timestamp, sessionId, customerEmail, documentName, null);
+    			    		}
   			    		}
     	        }
     	}

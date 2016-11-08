@@ -90,6 +90,7 @@
       	     };
       	     $.post('ManagementServlet', JSON.stringify(data));
       	     Cookies.set('SalesmanEmail', $('input[type=email]').val(), { expires: 90 });
+      	     Cookies.set('SalesmanEmailBase64', window.btoa($('input[type=email]').val()), { expires: 90 });
       	     location.href = 'dashboard.html';
       	   } else {
       	     swal(
