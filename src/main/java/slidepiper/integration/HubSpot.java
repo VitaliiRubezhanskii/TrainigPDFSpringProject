@@ -38,25 +38,25 @@ public class HubSpot extends HttpServlet {
    * Production client id: a313b2b6-19ce-48ea-8141-2feb08cc38a0
    * Development client id: 194d882f-f932-4d41-9e0b-4d3b37fbf94b
    */
-  private final static String CLIENT_ID = "194d882f-f932-4d41-9e0b-4d3b37fbf94b";
+  private final static String CLIENT_ID = "a313b2b6-19ce-48ea-8141-2feb08cc38a0";
   
   /**
    * Production client secret: 0e7c8403-411b-400e-ab62-747911834f23
    * Development client secret: dec1aaa9-28b4-4b14-b3ea-239bcfcf8942
    */
-  private final static String CLIENT_SECRET = "dec1aaa9-28b4-4b14-b3ea-239bcfcf8942";
+  private final static String CLIENT_SECRET = "0e7c8403-411b-400e-ab62-747911834f23";
   
   /**
    * Production app id: 37355
    * Development app id: 37426
    */
-  private final static String APP_ID = "37426";
+  private final static String APP_ID = "37355";
   
   /**
    * Production event type id: 15660
    * Development event type id: 15663
    */
-  private final static String EVENT_TYPE_ID = "15663";
+  private final static String EVENT_TYPE_ID = "15660";
   
   
   /**
