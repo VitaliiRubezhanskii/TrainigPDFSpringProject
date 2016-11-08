@@ -375,4 +375,20 @@ public class Analytics {
     + "INNER JOIN msg_info ON msg_info.id = customer_events.msg_id\n"
     + "INNER JOIN slides ON msg_info.slides_id = slides.id\n"
     + "WHERE customer_events.id = ?";
+
+  
+  /**
+   * Get viewer data for SlidePiper Integrations.
+   */
+  public static final String sqlSessionData = 
+	  "SELECT\n"
+	+ "  t1.param1int AS page_number,\n"
+	+ "  t1.event_name AS event,\n"
+	+ "  COUNT(t1.event_name) AS count_event,\n"
+	+ "  FLOOR(t2.view_duration) AS view_duration\n"
+	+ "FROM customer_events AS t1\n"
+	+ "INNER JOIN view_file_page_duration_agg_by_session_page_number AS t2 ON t1.param1int = t2.page_number AND t1.session_id = t2.session_id\n"
+	+ "WHERE t1.session_id = ?\n"
+	+ "GROUP BY t1.param1int, t1.event_name\n"
+	+ "ORDER BY t1.param1int";
 }

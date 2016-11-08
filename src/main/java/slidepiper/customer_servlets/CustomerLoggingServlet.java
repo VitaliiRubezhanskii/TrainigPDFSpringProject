@@ -58,6 +58,7 @@ public class CustomerLoggingServlet extends HttpServlet {
 			    		
 			    		String ip = null;
 			    		List<String> ipData = null;
+			    		
 			    		if (event_name.equals("OPEN_SLIDES")) {
 			    		  ip = Geolocation.getIpFromRequest(request);
 			    		  ipData = Geolocation.ipData(ip);
@@ -87,16 +88,21 @@ public class CustomerLoggingServlet extends HttpServlet {
   			    			System.out.println("SP: Didn't send alert email");
   			    		}
   			    		
-  			    		// Set Timeline event for HubSpot.
-  			    		Map<String, Object> salesMan = DbLayer.getSalesman(salesmanEmail);
-  			    		int userId = (int) salesMan.get("id");
-                
-  			    		Map<String, String> documentProperties = DbLayer.getFileMetaData(id);
-                String documentName = documentProperties.get("fileName");
-                
-  			    		String HubSpotAccessToken = DbLayer.getAccessToken(userId, "hubspot");
-  			    		if (HubSpotAccessToken != null) {
-  			    		  HubSpot.setTimelineEvent(HubSpotAccessToken, sessionId, customerEmail, documentName);
+  			    		if (! customerEmail.equals(ConfigProperties.getProperty("test_customer_email"))) {
+    			    		
+    			    		// Set Timeline event for HubSpot.
+    			    		Map<String, Object> userData = DbLayer.getSalesman(salesmanEmail);
+    			    		int userId = (int) userData.get("id");
+    			    		
+    			    		Map<String, String> documentProperties = DbLayer.getFileMetaData(id);
+                  String documentName = documentProperties.get("fileName");
+                  
+                  Long timestamp = DbLayer.getCustomerEventTimstamp(sessionId, "OPEN_SLIDES", id).getTime();
+                  
+    			    		String HubSpotAccessToken = DbLayer.getAccessToken(userId, "hubspot");
+    			    		if (HubSpotAccessToken != null) {
+    			    		  HubSpot.setTimelineEvent(HubSpotAccessToken, timestamp, sessionId, customerEmail, documentName, null);
+    			    		}
   			    		}
     	        }
     	}
