@@ -7,10 +7,14 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
+import org.json.JSONObject;
+
 import java.util.TimerTask;
 
 import slidepiper.db.DbLayer;
 import slidepiper.email.EmailSender;
+import slidepiper.integration.HubSpot;
 import slidepiper.logging.CustomerLogger;
 import slidepiper.ui_rendering.HtmlRenderer;
 
@@ -85,7 +89,23 @@ public class KeepAliveTask extends TimerTask {
 					// remove current element in 
 					// thread-safe, collection-safe, hash-safe, iterator-safe way.
 					iter.remove(); 				
-					System.out.println("dead packet " + p.toString() + " LOGGED AND EMAILED - DELETED!");	
+					System.out.println("dead packet " + p.toString() + " LOGGED AND EMAILED - DELETED!");
+					
+					// Set Timeline event for HubSpot.
+					Map<String, Object> userData = DbLayer.getSalesman(salesmanEmail);
+					int userId = (int) userData.get("id");
+					
+          Map<String, String> documentProperties = DbLayer.getFileMetaData(p.getMsgId());
+          String documentName = documentProperties.get("fileName");
+          
+          Long timestamp = DbLayer.getCustomerEventTimstamp(p.getSessionId(), "OPEN_SLIDES", p.getMsgId()).getTime();
+          
+          JSONObject extraData = null;
+          
+          String HubSpotAccessToken = DbLayer.getAccessToken(userId, "hubspot");
+          if (HubSpotAccessToken != null) {
+            HubSpot.setTimelineEvent(HubSpotAccessToken, timestamp, p.getSessionId(), customerEmail, documentName, extraData);
+          }
 				}			
 		}
 

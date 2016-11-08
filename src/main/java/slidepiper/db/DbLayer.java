@@ -2331,7 +2331,49 @@ public class DbLayer {
       }
 	   
       
-     
+      /**
+       * Get the time stamp of a customer event.
+       */
+      public static Timestamp getCustomerEventTimstamp(String sessionId, String eventName, String documentLinkHash) {
+        Timestamp timestamp = null;
+        
+        Constants.updateConstants();
+        try {
+          Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+          e.printStackTrace();
+        }
+        Connection conn = null;
+        
+        String sql = "SELECT timestamp FROM customer_events WHERE session_id = ? AND event_name = ? AND msg_id = ?";
+        try {
+          conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
+          PreparedStatement ps = conn.prepareStatement(sql);
+          ps.setString(1, sessionId);
+          ps.setString(2, eventName);
+          ps.setString(3, documentLinkHash);
+          
+          ResultSet rs = ps.executeQuery();
+          if (rs.next()) {
+            timestamp = rs.getTimestamp(1);
+          }
+          
+        } catch (SQLException ex) {
+          System.err.println("Error code: " + ex.getErrorCode() + " - " + ex.getMessage());
+          ex.printStackTrace();
+        } finally {
+          if (null != conn) {
+            try {
+              conn.close();
+            } catch (SQLException ex) {
+              ex.printStackTrace();
+            }
+          }
+        }
+        
+        return timestamp;
+      }
+      
       
      /**
        * Add a customer or salesman event to the DB.
@@ -3008,5 +3050,7 @@ public class DbLayer {
         
         return resultCode;
       }
+      
+      
 }
 

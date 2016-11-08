@@ -35,6 +35,31 @@ import slidepiper.db.DbLayer;
 public class HubSpot extends HttpServlet {
   
   /**
+   * Production client id: a313b2b6-19ce-48ea-8141-2feb08cc38a0
+   * Development client id: 194d882f-f932-4d41-9e0b-4d3b37fbf94b
+   */
+  private final static String CLIENT_ID = "194d882f-f932-4d41-9e0b-4d3b37fbf94b";
+  
+  /**
+   * Production client secret: 0e7c8403-411b-400e-ab62-747911834f23
+   * Development client secret: dec1aaa9-28b4-4b14-b3ea-239bcfcf8942
+   */
+  private final static String CLIENT_SECRET = "dec1aaa9-28b4-4b14-b3ea-239bcfcf8942";
+  
+  /**
+   * Production app id: 37355
+   * Development app id: 37426
+   */
+  private final static String APP_ID = "37426";
+  
+  /**
+   * Production event type id: 15660
+   * Development event type id: 15663
+   */
+  private final static String EVENT_TYPE_ID = "15663";
+  
+  
+  /**
    * Initialize oAuth connection and set initial access token.
    */
 	protected void doGet(HttpServletRequest servletRequest, HttpServletResponse servletResponse)
@@ -47,7 +72,7 @@ public class HubSpot extends HttpServlet {
   		try {
   		  oAuthRequest = OAuthClientRequest
   				.authorizationLocation("https://app.hubspot.com/oauth/authorize")
-  				.setClientId("a313b2b6-19ce-48ea-8141-2feb08cc38a0")
+  				.setClientId(CLIENT_ID)
   				.setRedirectURI(redirectUri)
   				.setScope("timeline")
   				.buildQueryMessage();
@@ -61,8 +86,8 @@ public class HubSpot extends HttpServlet {
 	      oAuthRequest = OAuthClientRequest
           .tokenLocation("https://api.hubapi.com/oauth/v1/token")
           .setGrantType(GrantType.AUTHORIZATION_CODE)
-          .setClientId("a313b2b6-19ce-48ea-8141-2feb08cc38a0")
-          .setClientSecret("0e7c8403-411b-400e-ab62-747911834f23")
+          .setClientId(CLIENT_ID)
+          .setClientSecret(CLIENT_SECRET)
           .setRedirectURI(redirectUri)
           .setCode(servletRequest.getParameter("code"))
           .buildQueryMessage();
@@ -120,8 +145,8 @@ public class HubSpot extends HttpServlet {
 	    oAuthRequest = OAuthClientRequest
         .tokenLocation("https://api.hubapi.com/oauth/v1/token")
         .setGrantType(GrantType.REFRESH_TOKEN)
-        .setClientId("a313b2b6-19ce-48ea-8141-2feb08cc38a0")
-        .setClientSecret("0e7c8403-411b-400e-ab62-747911834f23")
+        .setClientId(CLIENT_ID)
+        .setClientSecret(CLIENT_SECRET)
         .setRedirectURI(redirectUri)
         .setRefreshToken(refreshToken)
         .buildQueryMessage();
@@ -145,19 +170,22 @@ public class HubSpot extends HttpServlet {
   /**
    * Set a Timeline event in HubSpot.
    */
-	public static void setTimelineEvent(String accessToken, String sessionId, String customerEmail, String documentName) {
+	public static void setTimelineEvent(String accessToken, Long timestamp,
+	    String sessionId, String customerEmail, String documentName,
+	    JSONObject extraData) {
+	  
 	  HttpClient httpClient = HttpClientBuilder.create().build();
-	  HttpPut putRequest = new HttpPut("https://api.hubapi.com/integrations/v1/37355/timeline/event");
+	  HttpPut putRequest = new HttpPut("https://api.hubapi.com/integrations/v1/" + APP_ID + "/timeline/event");
 	  putRequest.addHeader("Authorization", "Bearer " + accessToken);
 	  putRequest.addHeader("Content-Type", "application/json");
-    
-	  System.out.println("TL: " + sessionId);
 	  
     JSONObject data = new JSONObject();
     data.put("documentName", documentName);
     data.put("email", customerEmail);
-    data.put("eventTypeId", "15660");
+    data.put("eventTypeId", EVENT_TYPE_ID);
     data.put("id", sessionId);
+    data.put("extraData", extraData);
+    data.put("timestamp", timestamp);
     
     StringEntity se = null;
     try {
