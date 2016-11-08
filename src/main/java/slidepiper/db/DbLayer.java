@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Paths;
 import java.sql.*;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -1482,13 +1483,22 @@ public class DbLayer {
           ResultSet rs = ps.executeQuery();
           
           if (rs.next()) {
+            String refreshToken = rs.getString("refreshToken");
+            String redirectUri = rs.getString("redirectUri");
             
-            // If provider is HubSpot.
-            if (rs.getString("provider").equals("hubspot")) {
-              String refreshToken = rs.getString("refreshToken");
-              String redirectUri = rs.getString("redirectUri");
+            long expiresIn = rs.getLong("expiresIn");
+            long updatedAt = rs.getTimestamp("updatedAt").getTime() / 1000;
+            long currentTime = Instant.now().getEpochSecond();
+            int buffer = 1800; // Half an hour.
+            
+            if (updatedAt + expiresIn - currentTime > buffer) {
+              accessToken = rs.getString("accessToken");
+            } else {
               
-              accessToken = HubSpot.getNewAccessToken(userId, refreshToken, redirectUri);
+              // If provider is HubSpot.
+              if (rs.getString("provider").equals(provider)) {
+                accessToken = HubSpot.getNewAccessToken(userId, refreshToken, redirectUri);
+              }
             }
           }
         } catch (SQLException e) {
