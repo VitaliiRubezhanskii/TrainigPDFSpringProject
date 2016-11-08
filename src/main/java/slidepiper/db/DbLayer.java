@@ -2040,6 +2040,90 @@ public class DbLayer {
       }
       
       /**
+       * Get session data for HubSpot Timeline integration.
+       * 
+       * @param sessionId - The session id
+       * @return hubspotData - The session data to be sent to HubSpot.
+       */
+      public static JSONObject getSessionDataForHubspot(String sessionId) {
+        JSONObject hubspotData = new JSONObject();
+        
+        Connection conn = null;
+  	    Map<String, String> engagementAliasMap = new HashMap<String, String>();
+  		  
+  	    engagementAliasMap.put("VIEWER_WIDGET_CALENDLY_CLICKED", ":calendar: Clicked on Calendly");
+  	    engagementAliasMap.put("VIEWER_WIDGET_VIDEO_TAB_CLICKED", ":presentation: Clicked on video tab");
+  	    engagementAliasMap.put("VIEWER_WIDGET_VIDEO_YOUTUBE_PLAYED", ":play: Played YouTube video");
+  	    engagementAliasMap.put("VIEWER_WIDGET_VIDEO_YOUTUBE_PAUSED", ":pause: Paused YouTube video");
+  	    engagementAliasMap.put("VIEWER_WIDGET_ASK_QUESTION", ":comments-o: Sent feedback");
+  	    engagementAliasMap.put("VIEWER_WIDGET_LIKE_CLICKED", ":task-check: Liked the document");
+  	    engagementAliasMap.put("VIEWER_WIDGET_HOPPER_CLICKED", ":price-tag: Hopped to a page");
+  	    engagementAliasMap.put("VIEWER_WIDGET_TESTIMONIALS_CLICKED", ":contacts: Viewed testimonial");
+  	    engagementAliasMap.put("VIEWER_WIDGET_FORM__BUTTON_CLICKED", ":file-text: Opened form");
+  	    engagementAliasMap.put("VIEWER_WIDGET_FORM_CONFIRM_CLCKED", ":handshake: Submitted form");
+  	    engagementAliasMap.put("VIEWER_WIDGET_FORM_CANCEL_CLICKED", ":close: Closed form");
+  	    engagementAliasMap.put("VIEWER_WIDGET_LINK_CLICKED", ":external-link: Clicked on a link button");
+  	    engagementAliasMap.put("PRINT", ":sequences: Printed document");
+  	    engagementAliasMap.put("DOWNLOAD", ":download: Downloaded document");
+  	    engagementAliasMap.put("CLICKED_CTA", ":cta-click: Clicked on a CTA button");
+  		  
+  	    Constants.updateConstants();
+  	    try {
+  	      Class.forName("com.mysql.jdbc.Driver");
+  	    } catch (ClassNotFoundException e) {
+  	      e.printStackTrace();
+  	    }
+  	    
+  	    try {
+      		conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
+    		  PreparedStatement ps = conn.prepareStatement(Analytics.sqlSessionData);
+    		  ps.setString(1, sessionId);
+    		  ResultSet rs = ps.executeQuery();
+    		 
+    		  JSONArray pagesData = new JSONArray();
+    		  List<Integer> pageNumbers = new ArrayList<Integer>();
+    		  while (rs.next()) {
+    		    if (! pageNumbers.contains(rs.getInt("page_number"))) {
+    		      pageNumbers.add(rs.getInt("page_number"));
+    				  
+    		      JSONObject page = new JSONObject();
+    		      JSONArray pageEngagements = new JSONArray();
+    		      
+    		      page.put("pageNumber", rs.getInt("page_number"));
+    		      page.put("pageDuration", rs.getInt("view_duration"));
+    		      page.put("pageEngagements", pageEngagements);
+    				 
+    		      pagesData.put(page);
+    		    }
+      		  
+    		    String eventName = rs.getString("event");
+    		    if (null != engagementAliasMap.get(eventName)) {
+    		      JSONObject engagement = new JSONObject();
+    				 
+    		      engagement.put("engagementName", engagementAliasMap.get(eventName));
+    				 
+    		      int countEvent = rs.getInt("count_event");
+    		      if (countEvent > 1) {
+    		        engagement.put("engagementCount", countEvent + " times");
+    		      } else {
+    		        engagement.put("engagementCount", countEvent + " time");
+    		      }
+    				 
+    		      JSONObject latestPageData = pagesData.getJSONObject(pagesData.length() - 1);
+    		      latestPageData.getJSONArray("pageEngagements").put(engagement);
+    		    }
+    		  }
+		 
+  		    hubspotData.put("pages", pagesData);
+  	    } catch (SQLException e) {
+  	      e.printStackTrace();
+  	    }
+  	    
+  	    return hubspotData;
+      }
+      
+      
+      /**
        * Get salesman's notifications from DB.
        * 
        * This method will return notifications either for the Toolbar or for the Notifications Table.
