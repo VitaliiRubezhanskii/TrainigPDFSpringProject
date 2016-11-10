@@ -1,7 +1,7 @@
 /* Hide Elements */
 section:not([data-section-id="0"]),
 .beneficiary,
-.fund,
+#account-number-container-1,
 #beneficiaries-container,
 #independent,
 #kids-insurance-container,
@@ -16,8 +16,21 @@ section:not([data-section-id="0"]),
 #partner-no-kids-yes-container,
 #smoking-amount-container,
 #smoking-when-stopped-container,
-#transfer-funds-container {
+#transfer-funds-container,
+#transfer-fund-statement-6-container,
+#transfer-fund-statement-7-container,
+#transfer-funds-statements {
   display: none;
+}
+
+/* Genetal Settings */
+.sp--font-weight-normal {
+  font-weight: normal;
+}
+
+/* Bootstrap Settings */
+.radio-inline {
+  display: inline;
 }
 
 
@@ -30,11 +43,12 @@ body {
 .breadcrumb {
   line-height: 22px;
   margin-bottom: 10px;
+  padding: 8px 4px;
 }
 
 .breadcrumb > li + li:before {
   color: #455A64;
-  content: " >";
+  content: ">";
   font-weight: 900;
 }
 
@@ -225,7 +239,7 @@ select + .help-block,
 @media screen and (max-height: 700px) and (max-width: 400px) {
   .sp-form__container,
   .breadcrumb > li {
-    font-size: 10px;
+    font-size: 9px;
   }
   
   #form-not-valid-label {
