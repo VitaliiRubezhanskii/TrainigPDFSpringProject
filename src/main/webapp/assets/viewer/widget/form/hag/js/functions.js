@@ -2,6 +2,7 @@ $(function() {
   var beneficiariesPercentageValidationFlag = false;
   var isFormValidBoolean = false;
   var payload = {};
+  var transferFundPayload = {};
   var sectionId = 0;
   
   
@@ -67,9 +68,6 @@ $(function() {
     saveEntries(sectionId);
     
     sectionId++;
-    if (5 === sectionId) {
-      $('.sp-next-section').click();
-    }
     setSectionView();
   });
   
@@ -78,9 +76,6 @@ $(function() {
     $('#form-not-valid').remove();
     
     sectionId--;
-    if (5 === sectionId) {
-      $('.sp-back-section').click();
-    }
     setSectionView();
     
     // If previous section set next button to be 'Finish'.
@@ -287,6 +282,8 @@ $(function() {
       $('#employer').hide();
       $('#independent').show()
     }
+    
+    $('[name="memberStatus1"]').change();
   });
   
   $('#employer-name').select2({
@@ -371,35 +368,38 @@ $(function() {
   
   /* Form 5 Settings */
   $('[name="isTransferFunds"]').change(function() {
+    
     if ($('#is-transfer-funds-yes').is(':checked')) {
-      $('#transfer-funds-container, #fund-1').show();
+      $('#transfer-funds-container, #transfer-funds-statements').show();
     } else {
-      $('#transfer-funds-container').hide();
+      $('#transfer-funds-container, #transfer-funds-statements').hide();
     }
   });
   
   $('.fund-name').change(function() {
-    $(this).closest('.fund').find('.fund-code')
-        .val($(this).val())
-        .valid();
-  });
-  
-  $('#fund-remove').click(function() {
-    var fundsCount = $('#funds .fund:visible').length;
-    if (fundsCount > 1) {
-      $('#fund-' + fundsCount).hide();
+    if (parseInt($(this).val()) > 0) {
+      $(this).closest('.fund').find('.fund-code').val($(this).val());
+      $('#account-number-container-1').hide();
+    } else {
+      $(this).closest('.fund').find('.fund-code').val('0');
+      $('#account-number-container-1').show();
     }
   });
   
-  var fund = $('#funds').html();
-  $('#fund-add').click(function() {
-    var fundsCount = $('#funds .fund:visible').length;
-    if (fundsCount <= 5) {
-      fundsCount++;
-      $('#fund-' + fundsCount).show();
+  $('[name="memberStatus1"]').change(function() {
+    if ($('#active-member-1').is(':checked')) {
+      
+      if ($('#career-employment').is(':checked')) {
+        $('#transfer-fund-statement-6-container').show();
+      } else {
+        $('#transfer-fund-statement-6-container').hide();
+      }
+      
+      $('#transfer-fund-statement-7-container').show();
+    } else {
+      $('#transfer-fund-statement-7-container, #transfer-fund-statement-6-container').hide();
     }
   });
-  
   
   /* Form 6 Settings */
   $('#general-statements').click(function() {
@@ -419,7 +419,7 @@ $(function() {
       hide: 4000
     },
     html: true,
-    placement: 'left',
+    placement: 'auto left',
     title: '<a class="sp-tooltip-a" target="_blank" href="http://www.hag.co.il/%d7%a7%d7%a8%d7%a0%d7%95%d7%aa-%d7%a4%d7%a0%d7%a1%d7%99%d7%94/%d7%aa%d7%95%d7%9b%d7%a0%d7%99%d7%95%d7%aa-%d7%91%d7%99%d7%98%d7%95%d7%97/">לחצ/י כאן ללמידה על תכניות הביטוח הקיימות</a>'
   });
   
@@ -429,8 +429,17 @@ $(function() {
       hide: 4000
     },
     html: true,
-    placement: 'left',
+    placement: 'auto left',
     title: '<a class="sp-tooltip-a" target="_blank" href="http://www.hag.co.il/%d7%a7%d7%a8%d7%a0%d7%95%d7%aa-%d7%a4%d7%a0%d7%a1%d7%99%d7%94/%d7%a7%d7%a8%d7%a0%d7%95%d7%aa-%d7%94%d7%a4%d7%a0%d7%a1%d7%99%d7%94-%d7%a9%d7%9c%d7%a0%d7%95/%d7%94%d7%9c%d7%9e%d7%9f-%d7%90%d7%9c%d7%93%d7%95%d7%91%d7%99-%d7%a7%d7%a8%d7%9f-%d7%a4%d7%a0%d7%a1%d7%99%d7%94-%d7%9e%d7%a7%d7%99%d7%a4%d7%94/%d7%9e%d7%a1%d7%9c%d7%95%d7%9c%d7%99-%d7%a7%d7%a8%d7%9f-%d7%a4%d7%a0%d7%a1%d7%99%d7%94-%d7%9e%d7%a7%d7%99%d7%a4%d7%94/">לחצ/י כאן ללמידה על מסלולי קרן פנסיה מקיפה</a>'
+  });
+  
+  $('#memberStatusTooltip').tooltip({
+    delay: {
+      show: 300,
+      hide: 4000
+    },
+    placement: 'auto left',
+    title: 'עמית פעיל  - עמית שבחשבונו הפקדה בחצי שנה האחרונה'
   });
   
   
@@ -606,26 +615,33 @@ $(function() {
         }
         
         // SP WebMerge.
-        sendWebMerge('https://www.webmerge.me/merge/79450/1yz2sv');
+        sendWebMerge('https://www.webmerge.me/merge/79450/1yz2sv', payload);
         
         // HA WebMerge.
-        sendWebMerge('https://www.webmerge.me/merge/82651/98sjf8');
+        sendWebMerge('https://www.webmerge.me/merge/82651/98sjf8', payload);
         
         sendSlidePiper('HELMAN_ALDUBI_COMPLETED_INITIAL_SECTION');
         break;
         
       case 1:
-        payload =  {
-          bdate: $('#birth-date').val(),
-          city: $('#city [value="' + $('#city').val() + '"]').text(),
-          email: $('#email').val(),
-          first_name: $('#first-name').val(),
-          house_num: $('#house-number').val(),
-          id_num: $('#id').val(),
-          last_name: $('#last-name').val(),
-          street: $('#street [value="' + $('#street').val() + '"]').text(),
-          zip: $('#zip-code').val()
+        payload['bdate'] = $('#birth-date').val();
+        payload['city'] = $('#city [value="' + $('#city').val() + '"]').text();
+        payload['email'] = $('#email').val();
+        payload['first_name'] = $('#first-name').val();
+        payload['house_num'] = $('#house-number').val();
+        payload['id_num'] = $('#id').val();
+        payload['last_name'] = $('#last-name').val();
+        payload['street'] = $('#street [value="' + $('#street').val() + '"]').text();
+        payload['zip'] = $('#zip-code').val();
+        
+        var zip = '';
+        if ('' !== payload['zip']) {
+          zip = ', ' + payload['zip'];
         }
+        transferFundPayload['address'] = payload['street'] + ' ' + payload['house_num'] + ', ' +  payload['city'] + zip;
+        transferFundPayload['first_name'] = $('#first-name').val();
+        transferFundPayload['id_num'] = $('#id').val();
+        transferFundPayload['last_name'] = $('#last-name').val();
         
         if (null !== $('#family-status').val()) {
           payload['status'] = $('#family-status').val();
@@ -742,6 +758,9 @@ $(function() {
           payload['email _m'] = $('#employer-email').val();
           
           payload['sum_hafkada'] = '';
+          
+          transferFundPayload['employee'] = 'X';
+          transferFundPayload['independent'] = '';
         } else {
           payload['name_m'] = '';
           payload['num_m'] = '';
@@ -751,6 +770,8 @@ $(function() {
           payload['email _m'] = '';
           
           payload['sum_hafkada'] = $('#independent-deposit').val();
+          transferFundPayload['employee'] = '';
+          transferFundPayload['independent'] = 'X';
         }
         break;
         
@@ -817,6 +838,44 @@ $(function() {
         }
         break;
         
+      case 5:
+        if ($('#is-transfer-funds-yes').is(':checked')) {
+          var fundCode = '';
+          if (parseInt($('#fund-name-1').val()) > 0) {
+            fundCode = ' - ' + $('#fund-name-1').val();
+            transferFundPayload['account'] = '';
+          } else {
+            fundCode = '';
+            transferFundPayload['account'] = $('#account-number-1').val();
+          }
+          transferFundPayload['kupa_otzar_m'] = $('#fund-name-1 [value="' + $('#fund-name-1').val() + '"]').text() + fundCode;
+          
+          if ($('#active-member-1').is(':checked')) {
+            transferFundPayload['active'] = 'X';
+            transferFundPayload['no_active'] = '';
+            transferFundPayload['active3'] = 'X';
+          } else {
+            transferFundPayload['active'] = '';
+            transferFundPayload['no_active'] = 'X';
+            transferFundPayload['active3'] = '';
+          }
+          
+          if ($('#transfer-fund-statement-6').is(':checked')) {
+            transferFundPayload['active0'] = 'X';
+          } else {
+            transferFundPayload['active0'] = '';
+          }
+          
+          if ($('#transferFundStatement7Option1').is(':checked')) {
+            transferFundPayload['active1'] = 'X';
+            transferFundPayload['active2'] = '';
+          } else if ($('#transferFundStatement7Option2').is(':checked')) {
+            transferFundPayload['active1'] = '';
+            transferFundPayload['active2'] = 'X';
+          }
+        }
+        break;
+        
       case 6:
         var date = new Date();
         var day = date.getDate();
@@ -833,14 +892,23 @@ $(function() {
 
         payload['date'] = day + '/' + month + '/' + year;
         payload['signatureBase64'] = signaturePad.toDataURL();
-        sendWebMerge('https://www.webmerge.me/merge/78047/g33bvk');
+        sendWebMerge('https://www.webmerge.me/merge/78047/g33bvk', payload);
+        
+        if ($('#is-transfer-funds-yes').is(':checked')) {
+          transferFundPayload['date'] = payload['date'];
+          transferFundPayload['email'] = payload['email'];
+          transferFundPayload['signatureBase64'] = payload['signatureBase64'];
+          sendWebMerge('https://www.webmerge.me/merge/79990/1qdska', transferFundPayload);
+        }
+        
         sendHA();
+        sendSlidePiper('HELMAN_ALDUBI_SENT_FORM');
         break;
     }
   };
   
   
-  function sendWebMerge(url) {
+  function sendWebMerge(url, payload) {
 
     // Send to WebMerge.
     $.ajax({
@@ -902,9 +970,6 @@ $(function() {
         });
       }
     });
-    
-    // Send to SlidePiper.
-    sendSlidePiper('HELMAN_ALDUBI_SENT_FORM');
   };
   
   

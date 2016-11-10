@@ -284,37 +284,19 @@ $(function() {
   
   $('#form-5').validate({
     rules: {
-      isTransferFunds: {
+      accountNumber1: {
         required: true
       },
       fundName1: {
         required: true
       },
-      fundCode1: {
+      isTransferFunds: {
         required: true
       },
-      fundName2: {
+      memberStatus1: {
         required: true
       },
-      fundCode2: {
-        required: true
-      },
-      fundName3: {
-        required: true
-      },
-      fundCode3: {
-        required: true
-      },
-      fundName4: {
-        required: true
-      },
-      fundCode4: {
-        required: true
-      },
-      fundName5: {
-        required: true
-      },
-      fundCode5: {
+      transferFundStatement7: {
         required: true
       }
     },
