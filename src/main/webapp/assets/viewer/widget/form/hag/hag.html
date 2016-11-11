@@ -22,7 +22,7 @@
       <li class="sp-form__whitespace-nowrap" id="pagination-2">בחירת תוכנית ומסלול השקעה</li>
       <li class="sp-form__whitespace-nowrap" id="pagination-3">עיסוק</li>
       <li class="sp-form__whitespace-nowrap" id="pagination-4">הצהרת בריאות</li>
-      <!-- <li class="sp-form__whitespace-nowrap" id="pagination-5">העברת קופה (אופציונאלי)</li>  -->
+      <li class="sp-form__whitespace-nowrap" id="pagination-5">העברת קופה</li>
       <li class="sp-form__whitespace-nowrap" id="pagination-6">ת.ז וחתימת הלקוח</li>
     </ol>
   </div>
@@ -6249,9 +6249,13 @@
     <section data-section-id="5">
       <form id="form-5">
         <div class="form-group sp-radio">
-          <label class="control-label">ברצוני להעביר קופה מגוף אחר:</label>
+          <label class="control-label">
+          ברצוני להעביר קופה מגוף אחר:
+          <br>
+          (העברת מלוא הכספים שנצברו בחשבונך, בכל מרכיבי החשבון ולכל מסלולי השקעה)
+          </label>
           <div>
-            <input type="radio" id="is-transfer-funds-yes" name="isTransferFunds"  value="כן">
+            <input type="radio" id="is-transfer-funds-yes" name="isTransferFunds" value="כן">
             <label class="radio-inline" for="is-transfer-funds-yes">
               כן
             </label>
@@ -6270,34 +6274,34 @@
                 <select class="form-control fund-name" id="fund-name-1" name="fundName1">
                   <option value="" selected disabled>בחר קופה מעבירה</option>
                   <option value="131">איילון-פיסגה קרן פנסיה</option>
-                  <option value="0">איילון חברה לביטוח </option>
+                  <option value="-1">איילון חברה לביטוח</option>
                   <option value="657">איילון פיסגה מנהלים</option>
                   <option value="1329">אלטשולר שחם פנסיה כללית</option>
                   <option value="1328">אלטשולר שחם פנסיה מקיפה</option>
                   <option value="267">גילעד גמלאות לעובדים דתיים</option>
-                  <option value="0">הכשרת היישוב חברה לביטוח </option>
+                  <option value="-2">הכשרת היישוב חברה לביטוח</option>
                   <option value="1177">הלמן-אלדובי קרן פנסיה כללית</option>
                   <option value="1032">הלמן אלדובי קרן פנסיה מקיפה</option>
-                  <option value="0">הפניקס חברה לביטוח </option>
+                  <option value="-3">הפניקס חברה לביטוח</option>
                   <option value="209">הפניקס פנסיה מקיפה</option>
                   <option value="671">הפניקס פנסיה משלימה</option>
                   <option value="214">הראל  פנסיה</option>
-                  <option value="0">הראל חברה לביטוח </option>
+                  <option value="-4">הראל חברה לביטוח</option>
                   <option value="662">הראל פנסיה כללית</option>
                   <option value="414">יוזמה קרן פנסיה לעצמאים</option>
-                  <option value="0">כלל חברה לביטוח </option>
+                  <option value="-5">כלל חברה לביטוח</option>
                   <option value="170">כלל פנסיה</option>
                   <option value="667">כלל פנסיה משלימה</option>
                   <option value="168">מבטחים החדשה</option>
                   <option value="665">מבטחים החדשה פלוס</option>
                   <option value="316">מבטחים מוסד לביטוח סוציאלי של העובדים בע&quot;מ</option>
-                  <option value="0">מגדל חברה לביטוח </option>
+                  <option value="-6">מגדל חברה לביטוח</option>
                   <option value="162">מגדל מקפת אישית</option>
                   <option value="659">מגדל מקפת משלימה</option>
                   <option value="325">מגן קרן פנסיה ותיקה</option>
                   <option value="660">מיטב דש פנסיה כללית</option>
                   <option value="163">מיטב דש פנסיה מקיפה</option>
-                  <option value="0">מנורה מבטחים חברה לביטוח </option>
+                  <option value="-7">מנורה מבטחים חברה לביטוח</option>
                   <option value="332">נתיב - קרן הפנסיה של פועלי ועובדי מפעלי משק ההסתדרות בע&quot;מ</option>
                   <option value="347">עמית</option>
                   <option value="447">עתידית קופת פנסיה בע&quot;מ</option>
@@ -6318,272 +6322,78 @@
                 </select>
               </div>
               
+              <!--
               <div class="form-group">
                 <label class="control-label" for="fund-code-1">מספר באוצר:</label>
                 <input type="text" class="form-control fund-code" id="fund-code-1" name="fundCode1" readonly>
                 <span class="glyphicon form-control-feedback"></span>
               </div>
-            </div>
-            
-            <div class="fund" id="fund-2">
-              <hr>
-            
-              <div class="form-group">
-                <label class="control-label" for="fund-name-2">קופה מעבירה:</label>
-                <select class="form-control fund-name" id="fund-name-2" name="fundName2">
-                  <option value="" selected disabled>בחר קופה מעבירה</option>
-                  <option value="131">איילון-פיסגה קרן פנסיה</option>
-                  <option value="0">איילון חברה לביטוח </option>
-                  <option value="657">איילון פיסגה מנהלים</option>
-                  <option value="1329">אלטשולר שחם פנסיה כללית</option>
-                  <option value="1328">אלטשולר שחם פנסיה מקיפה</option>
-                  <option value="267">גילעד גמלאות לעובדים דתיים</option>
-                  <option value="0">הכשרת היישוב חברה לביטוח </option>
-                  <option value="1177">הלמן-אלדובי קרן פנסיה כללית</option>
-                  <option value="1032">הלמן אלדובי קרן פנסיה מקיפה</option>
-                  <option value="0">הפניקס חברה לביטוח </option>
-                  <option value="209">הפניקס פנסיה מקיפה</option>
-                  <option value="671">הפניקס פנסיה משלימה</option>
-                  <option value="214">הראל  פנסיה</option>
-                  <option value="0">הראל חברה לביטוח </option>
-                  <option value="662">הראל פנסיה כללית</option>
-                  <option value="414">יוזמה קרן פנסיה לעצמאים</option>
-                  <option value="0">כלל חברה לביטוח </option>
-                  <option value="170">כלל פנסיה</option>
-                  <option value="667">כלל פנסיה משלימה</option>
-                  <option value="168">מבטחים החדשה</option>
-                  <option value="665">מבטחים החדשה פלוס</option>
-                  <option value="316">מבטחים מוסד לביטוח סוציאלי של העובדים בע&quot;מ</option>
-                  <option value="0">מגדל חברה לביטוח </option>
-                  <option value="162">מגדל מקפת אישית</option>
-                  <option value="659">מגדל מקפת משלימה</option>
-                  <option value="325">מגן קרן פנסיה ותיקה</option>
-                  <option value="660">מיטב דש פנסיה כללית</option>
-                  <option value="163">מיטב דש פנסיה מקיפה</option>
-                  <option value="0">מנורה מבטחים חברה לביטוח </option>
-                  <option value="332">נתיב - קרן הפנסיה של פועלי ועובדי מפעלי משק ההסתדרות בע&quot;מ</option>
-                  <option value="347">עמית</option>
-                  <option value="447">עתידית קופת פנסיה בע&quot;מ</option>
-                  <option value="1531">פסגות פנסיה מקיפה</option>
-                  <option value="1532">פסגות קרן פנסיה כללית</option>
-                  <option value="278">קופה לתגמולים ופנסיה של עובדי הסוכנות היהודית לא&quot;י בע&quot;מ</option>
-                  <option value="1097">קופת הגמל המרכזית לקצבה של עובדי חברת החשמל לישראל בע&quot;מ</option>
-                  <option value="274">קופת הפנסיה לעובדי הדסה  בע&quot;מ</option>
-                  <option value="307">קרן ביטוח ופנסיה לפועלים חקלאים ובלתי מקצועיים בישראל אג' שיתופית בע&quot;מ</option>
-                  <option value="269">קרן גמלאות של חברי דן בע&quot;מ</option>
-                  <option value="389">קרן גמלאות של עורכי דין בישראל</option>
-                  <option value="360">קרן הביטוח והפנסיה של פועלי בניין ועבודות ציבוריות א.ש. בע&quot;מ</option>
-                  <option value="279">קרן הגמלאות המרכזית של עובדי ההסתדרות בע&quot;מ</option>
-                  <option value="212">קרן הגמלאות של חברי &quot;אגד&quot; בע&quot;מ</option>
-                  <option value="300">קרן הפנסיה עתודות</option>
-                  <option value="313">קרן מקפת מרכז לפנסיה ותגמולים אגודה שיתופית בע&quot;מ</option>
-                  <option value="283">קרן פנסיה ה.ע.ל</option>
-                </select>
-              </div>
+              -->
               
-              <div class="form-group">
-                <label class="control-label" for="fund-code-2">מספר באוצר:</label>
-                <input type="text" class="form-control fund-code" id="fund-code-2" name="fundCode2" readonly>
+              <div class="form-group" id="account-number-container-1">
+                <label class="control-label" for="account-number-1">מספר חשבון:</label>
+                <input type="text" class="form-control" id="account-number-1" name="accountNumber1">
                 <span class="glyphicon form-control-feedback"></span>
               </div>
-            </div>
-            
-            <div class="fund" id="fund-3">
-              <hr>
               
-              <div class="form-group">
-                <label class="control-label" for="fund-name-3">קופה מעבירה:</label>
-                <select class="form-control fund-name" id="fund-name-3" name="fundName3">
-                  <option value="" selected disabled>בחר קופה מעבירה</option>
-                  <option value="131">איילון-פיסגה קרן פנסיה</option>
-                  <option value="0">איילון חברה לביטוח </option>
-                  <option value="657">איילון פיסגה מנהלים</option>
-                  <option value="1329">אלטשולר שחם פנסיה כללית</option>
-                  <option value="1328">אלטשולר שחם פנסיה מקיפה</option>
-                  <option value="267">גילעד גמלאות לעובדים דתיים</option>
-                  <option value="0">הכשרת היישוב חברה לביטוח </option>
-                  <option value="1177">הלמן-אלדובי קרן פנסיה כללית</option>
-                  <option value="1032">הלמן אלדובי קרן פנסיה מקיפה</option>
-                  <option value="0">הפניקס חברה לביטוח </option>
-                  <option value="209">הפניקס פנסיה מקיפה</option>
-                  <option value="671">הפניקס פנסיה משלימה</option>
-                  <option value="214">הראל  פנסיה</option>
-                  <option value="0">הראל חברה לביטוח </option>
-                  <option value="662">הראל פנסיה כללית</option>
-                  <option value="414">יוזמה קרן פנסיה לעצמאים</option>
-                  <option value="0">כלל חברה לביטוח </option>
-                  <option value="170">כלל פנסיה</option>
-                  <option value="667">כלל פנסיה משלימה</option>
-                  <option value="168">מבטחים החדשה</option>
-                  <option value="665">מבטחים החדשה פלוס</option>
-                  <option value="316">מבטחים מוסד לביטוח סוציאלי של העובדים בע&quot;מ</option>
-                  <option value="0">מגדל חברה לביטוח </option>
-                  <option value="162">מגדל מקפת אישית</option>
-                  <option value="659">מגדל מקפת משלימה</option>
-                  <option value="325">מגן קרן פנסיה ותיקה</option>
-                  <option value="660">מיטב דש פנסיה כללית</option>
-                  <option value="163">מיטב דש פנסיה מקיפה</option>
-                  <option value="0">מנורה מבטחים חברה לביטוח </option>
-                  <option value="332">נתיב - קרן הפנסיה של פועלי ועובדי מפעלי משק ההסתדרות בע&quot;מ</option>
-                  <option value="347">עמית</option>
-                  <option value="447">עתידית קופת פנסיה בע&quot;מ</option>
-                  <option value="1531">פסגות פנסיה מקיפה</option>
-                  <option value="1532">פסגות קרן פנסיה כללית</option>
-                  <option value="278">קופה לתגמולים ופנסיה של עובדי הסוכנות היהודית לא&quot;י בע&quot;מ</option>
-                  <option value="1097">קופת הגמל המרכזית לקצבה של עובדי חברת החשמל לישראל בע&quot;מ</option>
-                  <option value="274">קופת הפנסיה לעובדי הדסה  בע&quot;מ</option>
-                  <option value="307">קרן ביטוח ופנסיה לפועלים חקלאים ובלתי מקצועיים בישראל אג' שיתופית בע&quot;מ</option>
-                  <option value="269">קרן גמלאות של חברי דן בע&quot;מ</option>
-                  <option value="389">קרן גמלאות של עורכי דין בישראל</option>
-                  <option value="360">קרן הביטוח והפנסיה של פועלי בניין ועבודות ציבוריות א.ש. בע&quot;מ</option>
-                  <option value="279">קרן הגמלאות המרכזית של עובדי ההסתדרות בע&quot;מ</option>
-                  <option value="212">קרן הגמלאות של חברי &quot;אגד&quot; בע&quot;מ</option>
-                  <option value="300">קרן הפנסיה עתודות</option>
-                  <option value="313">קרן מקפת מרכז לפנסיה ותגמולים אגודה שיתופית בע&quot;מ</option>
-                  <option value="283">קרן פנסיה ה.ע.ל</option>
-                </select>
+              <div class="form-group sp-radio">
+                <label class="control-label">סטטוס עמית:</label><i id="memberStatusTooltip" class="fa fa-info-circle sp-tooltip"></i>
+                <div>
+                  <input type="radio" id="active-member-1" name="memberStatus1">
+                  <label class="radio-inline" for="active-member-1">עמית פעיל</label>
+                  <input type="radio" id="inactive-member-1" name="memberStatus1">
+                  <label class="radio-inline" for="inactive-member-1">עמית לא פעיל</label>
+                </div>
+              </div>
+              
+              <div class="form-group" id="transfer-fund-statement-6-container">
+                <p>
+                  ידוע לי כי בקשתי האמורה מותנית בכך שלא יחלפו למעלה מ-120 ימים ממועד הגשת הבקשה ועד למועד שבו יופקדו בשלי לראשונה בקופת הגמל המקבלת כספים, אלא אם כן אודיע להלמן-אלדובי קופות גמל ופנסיה בע"מ. כי לא יופקדו בשלי כספים בקופת הגמל המקבלת, בתוך התקופה האמורה. כמו כן ידוע לי כי אם אודיע כאמור, איחשב לעניין המועד הקובע כעמית לא פעיל.
+                </p>
+                
+                <label class="sp--font-weight-normal">
+                  <input type="checkbox" class="pull-right sp-checkbox--rtl" id="transfer-fund-statement-6">
+                  אני מבקש כבר עכשיו להודיע כי לא יופקדו בשלי כספים לקופת הגמל המקבלת בתוך 120 ימים ממועד חתימתי על בקשה זו. (במידה ואני עמית פעיל בקרן ולא יופקדו בשלי כספים בקופת הגמל המקבלת)
+                </label>
+              
+                <hr>
+              </div>
+              
+              <div class="form-group" id="transfer-fund-statement-7-container">
+                <div class="sp-radio">
+                  <input type="radio" id="transferFundStatement7Option1" name="transferFundStatement7">
+                  <label class="radio-inline" for="transferFundStatement7Option1">
+                    אני מצהיר כי למיטב ידיעתי הקופה המעבירה לא קבעה לגבי תנאים או סייגים לעניין הכיסוי הביטוחי לסיכוני מוות או הכיסוי הביטוחי לסיכוני נכות.
+                  </label>
+                </div>
+                
+                <br>
+                
+                <div class="sp-radio">
+                  <input type="radio" id="transferFundStatement7Option2" name="transferFundStatement7">
+                  <label class="radio-inline" for="transferFundStatement7Option2">
+                    אני מצהיר כי למיטב ידיעתי הקופה המעבירה קבעה לגבי תנאים או סייגים לעניין הכיסוי הביטוחי לסיכוני מוות או הביטוחי לסיכוני נכות. ידוע לי כי ככל שנקבעו לגבי תנאים או סייגים לעניין הכיסוי הביטוחי לסיכוני מוות או הכיסוי הביטוחי לסיכוני נכות אחויב בצבירת תקופת אכשרה מחדש בקרן המקבלת. 
+                  </label>
+                </div>
+                
+                <br>
+                
+                <label class="sp--font-weight-normal">
+                  <input type="checkbox" class="pull-right sp-checkbox--rtl" checked disabled>
+                  בהעברה מקופת גמל שאינה קרן זכאית במידה שיתרת הכספים המועברים לפי סעיף 2 לעיל עולים על הסכום המירבי, אני נותן בזה את הסכמתי לכך שההפרש שבין היתרה האמורה לבין הסכום המירבי יועבר 
+                  <strong>
+                  קופת גמל המקבלת</strong>.
+                </label>
+                
+                <hr>
               </div>
               
               <div class="form-group">
-                <label class="control-label" for="fund-code-3">מספר באוצר:</label>
-                <input type="text" class="form-control fund-code" id="fund-code-3" name="fundCode3" readonly>
-                <span class="glyphicon form-control-feedback"></span>
+                <strong>
+                לידיעתך, בקשת העברה זו ניתנת לביטול תוך 18 ימי עסקים ממועד שנמסרה הודעה לגביה לקופה המעבירה ובלבד שהכספים טרם הועברו. ביטול ייעשה על ידי חתימה על טופס הודעת הביטול והעברתו לקופה המעבירה (הקופה ממנה מועברים הכספים). העברת הטופס אפשרית בין היתר בפקס, בדואר או בדוא"ל
+                </strong>
               </div>
             </div>
-            
-            <div class="fund" id="fund-4">
-              <hr>
-              
-              <div class="form-group">
-                <label class="control-label" for="fund-name-4">קופה מעבירה:</label>
-                <select class="form-control fund-name" id="fund-name-4" name="fundName4">
-                  <option value="" selected disabled>בחר קופה מעבירה</option>
-                  <option value="131">איילון-פיסגה קרן פנסיה</option>
-                  <option value="0">איילון חברה לביטוח </option>
-                  <option value="657">איילון פיסגה מנהלים</option>
-                  <option value="1329">אלטשולר שחם פנסיה כללית</option>
-                  <option value="1328">אלטשולר שחם פנסיה מקיפה</option>
-                  <option value="267">גילעד גמלאות לעובדים דתיים</option>
-                  <option value="0">הכשרת היישוב חברה לביטוח </option>
-                  <option value="1177">הלמן-אלדובי קרן פנסיה כללית</option>
-                  <option value="1032">הלמן אלדובי קרן פנסיה מקיפה</option>
-                  <option value="0">הפניקס חברה לביטוח </option>
-                  <option value="209">הפניקס פנסיה מקיפה</option>
-                  <option value="671">הפניקס פנסיה משלימה</option>
-                  <option value="214">הראל  פנסיה</option>
-                  <option value="0">הראל חברה לביטוח </option>
-                  <option value="662">הראל פנסיה כללית</option>
-                  <option value="414">יוזמה קרן פנסיה לעצמאים</option>
-                  <option value="0">כלל חברה לביטוח </option>
-                  <option value="170">כלל פנסיה</option>
-                  <option value="667">כלל פנסיה משלימה</option>
-                  <option value="168">מבטחים החדשה</option>
-                  <option value="665">מבטחים החדשה פלוס</option>
-                  <option value="316">מבטחים מוסד לביטוח סוציאלי של העובדים בע&quot;מ</option>
-                  <option value="0">מגדל חברה לביטוח </option>
-                  <option value="162">מגדל מקפת אישית</option>
-                  <option value="659">מגדל מקפת משלימה</option>
-                  <option value="325">מגן קרן פנסיה ותיקה</option>
-                  <option value="660">מיטב דש פנסיה כללית</option>
-                  <option value="163">מיטב דש פנסיה מקיפה</option>
-                  <option value="0">מנורה מבטחים חברה לביטוח </option>
-                  <option value="332">נתיב - קרן הפנסיה של פועלי ועובדי מפעלי משק ההסתדרות בע&quot;מ</option>
-                  <option value="347">עמית</option>
-                  <option value="447">עתידית קופת פנסיה בע&quot;מ</option>
-                  <option value="1531">פסגות פנסיה מקיפה</option>
-                  <option value="1532">פסגות קרן פנסיה כללית</option>
-                  <option value="278">קופה לתגמולים ופנסיה של עובדי הסוכנות היהודית לא&quot;י בע&quot;מ</option>
-                  <option value="1097">קופת הגמל המרכזית לקצבה של עובדי חברת החשמל לישראל בע&quot;מ</option>
-                  <option value="274">קופת הפנסיה לעובדי הדסה  בע&quot;מ</option>
-                  <option value="307">קרן ביטוח ופנסיה לפועלים חקלאים ובלתי מקצועיים בישראל אג' שיתופית בע&quot;מ</option>
-                  <option value="269">קרן גמלאות של חברי דן בע&quot;מ</option>
-                  <option value="389">קרן גמלאות של עורכי דין בישראל</option>
-                  <option value="360">קרן הביטוח והפנסיה של פועלי בניין ועבודות ציבוריות א.ש. בע&quot;מ</option>
-                  <option value="279">קרן הגמלאות המרכזית של עובדי ההסתדרות בע&quot;מ</option>
-                  <option value="212">קרן הגמלאות של חברי &quot;אגד&quot; בע&quot;מ</option>
-                  <option value="300">קרן הפנסיה עתודות</option>
-                  <option value="313">קרן מקפת מרכז לפנסיה ותגמולים אגודה שיתופית בע&quot;מ</option>
-                  <option value="283">קרן פנסיה ה.ע.ל</option>
-                </select>
-              </div>
-              
-              <div class="form-group">
-                <label class="control-label" for="fund-code-4">מספר באוצר:</label>
-                <input type="text" class="form-control fund-code" id="fund-code-4" name="fundCode4" readonly>
-                <span class="glyphicon form-control-feedback"></span>
-              </div>
-            </div>
-            
-            <div class="fund" id="fund-5">
-              <hr>
-              
-              <div class="form-group">
-                <label class="control-label" for="fund-name-5">קופה מעבירה:</label>
-                <select class="form-control fund-name" id="fund-name-5" name="fundName5">
-                  <option value="" selected disabled>בחר קופה מעבירה</option>
-                  <option value="131">איילון-פיסגה קרן פנסיה</option>
-                  <option value="0">איילון חברה לביטוח </option>
-                  <option value="657">איילון פיסגה מנהלים</option>
-                  <option value="1329">אלטשולר שחם פנסיה כללית</option>
-                  <option value="1328">אלטשולר שחם פנסיה מקיפה</option>
-                  <option value="267">גילעד גמלאות לעובדים דתיים</option>
-                  <option value="0">הכשרת היישוב חברה לביטוח </option>
-                  <option value="1177">הלמן-אלדובי קרן פנסיה כללית</option>
-                  <option value="1032">הלמן אלדובי קרן פנסיה מקיפה</option>
-                  <option value="0">הפניקס חברה לביטוח </option>
-                  <option value="209">הפניקס פנסיה מקיפה</option>
-                  <option value="671">הפניקס פנסיה משלימה</option>
-                  <option value="214">הראל  פנסיה</option>
-                  <option value="0">הראל חברה לביטוח </option>
-                  <option value="662">הראל פנסיה כללית</option>
-                  <option value="414">יוזמה קרן פנסיה לעצמאים</option>
-                  <option value="0">כלל חברה לביטוח </option>
-                  <option value="170">כלל פנסיה</option>
-                  <option value="667">כלל פנסיה משלימה</option>
-                  <option value="168">מבטחים החדשה</option>
-                  <option value="665">מבטחים החדשה פלוס</option>
-                  <option value="316">מבטחים מוסד לביטוח סוציאלי של העובדים בע&quot;מ</option>
-                  <option value="0">מגדל חברה לביטוח </option>
-                  <option value="162">מגדל מקפת אישית</option>
-                  <option value="659">מגדל מקפת משלימה</option>
-                  <option value="325">מגן קרן פנסיה ותיקה</option>
-                  <option value="660">מיטב דש פנסיה כללית</option>
-                  <option value="163">מיטב דש פנסיה מקיפה</option>
-                  <option value="0">מנורה מבטחים חברה לביטוח </option>
-                  <option value="332">נתיב - קרן הפנסיה של פועלי ועובדי מפעלי משק ההסתדרות בע&quot;מ</option>
-                  <option value="347">עמית</option>
-                  <option value="447">עתידית קופת פנסיה בע&quot;מ</option>
-                  <option value="1531">פסגות פנסיה מקיפה</option>
-                  <option value="1532">פסגות קרן פנסיה כללית</option>
-                  <option value="278">קופה לתגמולים ופנסיה של עובדי הסוכנות היהודית לא&quot;י בע&quot;מ</option>
-                  <option value="1097">קופת הגמל המרכזית לקצבה של עובדי חברת החשמל לישראל בע&quot;מ</option>
-                  <option value="274">קופת הפנסיה לעובדי הדסה  בע&quot;מ</option>
-                  <option value="307">קרן ביטוח ופנסיה לפועלים חקלאים ובלתי מקצועיים בישראל אג' שיתופית בע&quot;מ</option>
-                  <option value="269">קרן גמלאות של חברי דן בע&quot;מ</option>
-                  <option value="389">קרן גמלאות של עורכי דין בישראל</option>
-                  <option value="360">קרן הביטוח והפנסיה של פועלי בניין ועבודות ציבוריות א.ש. בע&quot;מ</option>
-                  <option value="279">קרן הגמלאות המרכזית של עובדי ההסתדרות בע&quot;מ</option>
-                  <option value="212">קרן הגמלאות של חברי &quot;אגד&quot; בע&quot;מ</option>
-                  <option value="300">קרן הפנסיה עתודות</option>
-                  <option value="313">קרן מקפת מרכז לפנסיה ותגמולים אגודה שיתופית בע&quot;מ</option>
-                  <option value="283">קרן פנסיה ה.ע.ל</option>
-                </select>
-              </div>
-              
-              <div class="form-group">
-                <label class="control-label" for="fund-code-5">מספר באוצר:</label>
-                <input type="text" class="form-control fund-code" id="fund-code-5" name="fundCode5" readonly>
-                <span class="glyphicon form-control-feedback"></span>
-              </div>
-            </div>
-          </div>
-          
-          <div class="form-group">
-            <button type="button" class="btn btn-default" id="fund-remove">הסר קופה</button>
-          </div>
-          
-          <div class="form-group">
-            <button type="button" class="btn btn-primary" id="fund-add">הוסף קופה</button>
           </div>
         </div>
       </form>
@@ -6601,64 +6411,94 @@
             </div>
             <div id="collapse" class="panel-collapse collapse">
               <div class="panel-body">
-              1. אני החתום מטה מצהיר כי כל הפרטים שמסרתי בבקשת הצטרפות זו הינם מלאים נכונים ומדויקים.
-              <br>
-              2. אם אתקבל כמבוטח בקרן הריני מתחייב להודיעכם על כל מידע שלא היה בידיעתי בעת הצהרת זו ועל כל שינוי שיחול בפרטים אלה תוך 30 יום ממועד השינוי. 
-              <br>
-              3. כמו כן, ידוע לי כי במקרה של מסירת פרטים לא נכונים או לא מלאים או לא מדויקים שיש בהם להשפיע על קבלתי או זכויותיי בקרן או במקרה של פיגור בתשלומים, רשאית החברה המנהלת לשלול ו/או להפחית תשלומים ו/או זכויות כלשהן, 
-              <strong>
-              לרבות זכויות ביחס לכיסוי ביטוחי.  
-              </strong>
-              <br>
-              4. ידוע לי כי קבלת דמי גמולים על ידי הקרן אין בה כשלעצמה משום הסכמה  לקבלני כמבוטח בקרן. 
-              <br>
-              5. ידוע לי כי זכויותיי וחובותיי בקרן הינן בהתאם לתקנון הקרן והחלטות החברה, כפי שתהיינה מעת לעת והכל בהתאם ובכפוף להוראות הדין, כפי שתהיינה מעת לעת.
-              <br>
-              6. הנני נותן הסכמתי לחברה המנהלת או למי מטעמה לבצע אימות נתונים מול מרשם האוכלוסין של משרד הפנים לנתונים אשר מופיעים בתעודת הזהות.
-              <br>
-              הנני מאשר לכם לשנות את פרטי המען בהתאם למרשם התושבים.
-              <br>
-              7. ידוע לי כי ההפרשה לקרן פנסיה מקיפה מוגבלת 
-              <strong>
-              ל20.5% מפעמיים השכר הממוצע במשק.
-              </strong>
-               במקרה שיועברו לקרן פנסיה דמי גמולים העולים על המותר, הנני מורה לכם להעביר את הסכום העודף 
-              <strong>
-              ל"הלמן אלדובי קרן פנסיה כללית".
-              </strong>
-              <br>
-              8. 
-              <strong>
-              ככל שההצטרפות הינה באמצעות בעל רישיון: ידוע לי כי בהתאם לחוק הפיקוח על שירותים פיננסים (עיסוק בייעוץ פנסיוני ובשיווק פנסיוני):התשס"ה-2005 על בעל הרישיון להתאים את המוצר הפנסיוני ללקוח, ככל שהלקוח הסכים ליתן מידע. אני מאשר כי קיבלתי ייעוץ כאמור לגבי בקשת הצטרפותי לקרן. ידוע לי כי נציג הקופה/הסוכן הינו בעל זיקה לקרן הפנסיה של החברה וכי הוא אינו יועץ פנסיוני.
-              </strong>
-              <br>
-              9. לגבי הקרן הכללית: דמי הניהול שייגבו מחשבוני יסתכמו בשיעור שנתי של עד 1.1% מהיתרה הצבורה, ועד 4% מכל הפקדה. החברה המנהלת רשאית להוציא הסדרים פרטניים לגביית דמי הניהול הנמוכים.
-              <br>
-              10. קיבלתי את הצהרת החברה כי לא תינתן ולא ניתנה על ידה כל הטבה למעבידי או לארגון מעבידים או לארגון עובדים או לגוף אחר שמוחזק בידי מי מהם (במישרין או בעקיפין, יהא שיעור האחזקות אשר יהא) עקב הצטרפותי לקרן.
-              <br>
-              11. אני מסכים כי החברה תעביר מידע ושירותים בקשר עם חשבוני באמצעות הטלפון, האינטרנט או באמצעות תקשורת חליפית(להלן:"קווי תקשורת") וכי אוכל לבצע פעולות באמצעות קווי התקשורת. ידוע לי, כי במקרה זה יתכנו תקלות, טעויות, עיכובים, השמטות וכן אפשרות של חשיפת פרטים המהווים פגיעה בפרטיות, והחברה לא תהא אחראית בקשר עם השימוש בקווי התקשורת.
-              <br>
-              אני מאשר ומסכים שהחברה תהא רשאית להקליט את התקשורת שתתקיים עימי בקווי התקשורת.     
-              <br>
-              12.  לא יהא תוקף לשינויים ומחיקות במסמך זה שיערכו ללא חתימה של החברה בצד שינויים או המחיקות. חתימה כאמור הינה תנאי מהותי לקבלת השינוי.
-              <br>
-              13.  עמית שכיר: ידוע לי כי עליי לבדוק בכל חודש אם הכספים הופקדו על ידי מעבידי במועדם, ובכל מקרה של פיגור בהפקדתם אתריע על כך בפניכם.
-              <br>
-              14.  אם יתברר בעתיד כי חשבוני זוכה בטעות בסכומי כסף שלא הגיעו לי, הנני מסמיך את החברה לחייב את חשבוני/נותיי בגין סכומים אלה בצירוף רווחים שהצטברו על כל סכומים אלה מיום הזיכוי ועד למועד תיקון הטעות.
-              <br>
-              15. אם ובעתיד אחליט למשוך או להעביר את יתרת הקרן, אני מסמיך את נציגיה המורשים של החברה לפנות אליי ולעניין אותי בביטול בקשתי ידוע לי כי נציגים אלו הינם סוכנים בעלי זיקה.
-              <br>
-              16.
-              <strong>
-              אני מייפה את כוחו של בעל הרישיון ששמו נזכר להלן לקבל מידע אודות חשבוני מהחברה, עד אשר אודיעם אחרת.
-              </strong>
-              <br>
-              17. 
-              <strong>
-              ידוע לי כי עם חתימתי לצד הצהרה זו להלן, הנני נותן הסכמתי לכך כי הנתונים אודותיי ישמרו במאגרי המידע בבעלות החברה ו/או החברות הקשורות לה ו/או גורמים מטעמן וישמשו את הגורמים הנזכרים לעיל לצורך ניהול קשרי לקוחות ו/או מידע סטטיסטי ו/או פעולות ו/או פניות שיווקיות, לרבות תכנים שיווקים, בקשר עם מוצרים פנסיונים ו/או פיננסים ו/או אחרים בדרך של דיוור, לרבות דיוור ישיר או שירותי דיוור ישיר או בדרך אחרת, לרבות באמצעות פקסימיליה, הודעה אלקטרונית, הודעת מסר קצר 
-              (sms)
-               ומערכת חיוג אוטומטי. ידוע לי כי בכל עת אני רשאי לבקש מהחברה, בכתב, כי הנתונים אודותיי לא ישמשו לצרכים הנזכרים לעיל.
-              </strong>
+                <div>
+                  1. אני החתום מטה מצהיר כי כל הפרטים שמסרתי בבקשת הצטרפות זו הינם מלאים נכונים ומדויקים.
+                  <br>
+                  2. אם אתקבל כמבוטח בקרן הריני מתחייב להודיעכם על כל מידע שלא היה בידיעתי בעת הצהרת זו ועל כל שינוי שיחול בפרטים אלה תוך 30 יום ממועד השינוי. 
+                  <br>
+                  3. כמו כן, ידוע לי כי במקרה של מסירת פרטים לא נכונים או לא מלאים או לא מדויקים שיש בהם להשפיע על קבלתי או זכויותיי בקרן או במקרה של פיגור בתשלומים, רשאית החברה המנהלת לשלול ו/או להפחית תשלומים ו/או זכויות כלשהן, 
+                  <strong>
+                  לרבות זכויות ביחס לכיסוי ביטוחי.  
+                  </strong>
+                  <br>
+                  4. ידוע לי כי קבלת דמי גמולים על ידי הקרן אין בה כשלעצמה משום הסכמה  לקבלני כמבוטח בקרן. 
+                  <br>
+                  5. ידוע לי כי זכויותיי וחובותיי בקרן הינן בהתאם לתקנון הקרן והחלטות החברה, כפי שתהיינה מעת לעת והכל בהתאם ובכפוף להוראות הדין, כפי שתהיינה מעת לעת.
+                  <br>
+                  6. הנני נותן הסכמתי לחברה המנהלת או למי מטעמה לבצע אימות נתונים מול מרשם האוכלוסין של משרד הפנים לנתונים אשר מופיעים בתעודת הזהות.
+                  <br>
+                  הנני מאשר לכם לשנות את פרטי המען בהתאם למרשם התושבים.
+                  <br>
+                  7. ידוע לי כי ההפרשה לקרן פנסיה מקיפה מוגבלת 
+                  <strong>
+                  ל20.5% מפעמיים השכר הממוצע במשק.
+                  </strong>
+                   במקרה שיועברו לקרן פנסיה דמי גמולים העולים על המותר, הנני מורה לכם להעביר את הסכום העודף 
+                  <strong>
+                  ל"הלמן אלדובי קרן פנסיה כללית".
+                  </strong>
+                  <br>
+                  8. 
+                  <strong>
+                  ככל שההצטרפות הינה באמצעות בעל רישיון: ידוע לי כי בהתאם לחוק הפיקוח על שירותים פיננסים (עיסוק בייעוץ פנסיוני ובשיווק פנסיוני):התשס"ה-2005 על בעל הרישיון להתאים את המוצר הפנסיוני ללקוח, ככל שהלקוח הסכים ליתן מידע. אני מאשר כי קיבלתי ייעוץ כאמור לגבי בקשת הצטרפותי לקרן. ידוע לי כי נציג הקופה/הסוכן הינו בעל זיקה לקרן הפנסיה של החברה וכי הוא אינו יועץ פנסיוני.
+                  </strong>
+                  <br>
+                  9. לגבי הקרן הכללית: דמי הניהול שייגבו מחשבוני יסתכמו בשיעור שנתי של עד 1.1% מהיתרה הצבורה, ועד 4% מכל הפקדה. החברה המנהלת רשאית להוציא הסדרים פרטניים לגביית דמי הניהול הנמוכים.
+                  <br>
+                  10. קיבלתי את הצהרת החברה כי לא תינתן ולא ניתנה על ידה כל הטבה למעבידי או לארגון מעבידים או לארגון עובדים או לגוף אחר שמוחזק בידי מי מהם (במישרין או בעקיפין, יהא שיעור האחזקות אשר יהא) עקב הצטרפותי לקרן.
+                  <br>
+                  11. אני מסכים כי החברה תעביר מידע ושירותים בקשר עם חשבוני באמצעות הטלפון, האינטרנט או באמצעות תקשורת חליפית(להלן:"קווי תקשורת") וכי אוכל לבצע פעולות באמצעות קווי התקשורת. ידוע לי, כי במקרה זה יתכנו תקלות, טעויות, עיכובים, השמטות וכן אפשרות של חשיפת פרטים המהווים פגיעה בפרטיות, והחברה לא תהא אחראית בקשר עם השימוש בקווי התקשורת.
+                  <br>
+                  אני מאשר ומסכים שהחברה תהא רשאית להקליט את התקשורת שתתקיים עימי בקווי התקשורת.     
+                  <br>
+                  12.  לא יהא תוקף לשינויים ומחיקות במסמך זה שיערכו ללא חתימה של החברה בצד שינויים או המחיקות. חתימה כאמור הינה תנאי מהותי לקבלת השינוי.
+                  <br>
+                  13.  עמית שכיר: ידוע לי כי עליי לבדוק בכל חודש אם הכספים הופקדו על ידי מעבידי במועדם, ובכל מקרה של פיגור בהפקדתם אתריע על כך בפניכם.
+                  <br>
+                  14.  אם יתברר בעתיד כי חשבוני זוכה בטעות בסכומי כסף שלא הגיעו לי, הנני מסמיך את החברה לחייב את חשבוני/נותיי בגין סכומים אלה בצירוף רווחים שהצטברו על כל סכומים אלה מיום הזיכוי ועד למועד תיקון הטעות.
+                  <br>
+                  15. אם ובעתיד אחליט למשוך או להעביר את יתרת הקרן, אני מסמיך את נציגיה המורשים של החברה לפנות אליי ולעניין אותי בביטול בקשתי ידוע לי כי נציגים אלו הינם סוכנים בעלי זיקה.
+                  <br>
+                  16.
+                  <strong>
+                  אני מייפה את כוחו של בעל הרישיון ששמו נזכר להלן לקבל מידע אודות חשבוני מהחברה, עד אשר אודיעם אחרת.
+                  </strong>
+                  <br>
+                  17. 
+                  <strong>
+                  ידוע לי כי עם חתימתי לצד הצהרה זו להלן, הנני נותן הסכמתי לכך כי הנתונים אודותיי ישמרו במאגרי המידע בבעלות החברה ו/או החברות הקשורות לה ו/או גורמים מטעמן וישמשו את הגורמים הנזכרים לעיל לצורך ניהול קשרי לקוחות ו/או מידע סטטיסטי ו/או פעולות ו/או פניות שיווקיות, לרבות תכנים שיווקים, בקשר עם מוצרים פנסיונים ו/או פיננסים ו/או אחרים בדרך של דיוור, לרבות דיוור ישיר או שירותי דיוור ישיר או בדרך אחרת, לרבות באמצעות פקסימיליה, הודעה אלקטרונית, הודעת מסר קצר 
+                  (sms)
+                   ומערכת חיוג אוטומטי. ידוע לי כי בכל עת אני רשאי לבקש מהחברה, בכתב, כי הנתונים אודותיי לא ישמשו לצרכים הנזכרים לעיל.
+                  </strong>
+                </div>
+                <div id="transfer-funds-statements">
+                  <hr>
+                  <strong>
+                  הצהרות  טופס העברה
+                  </strong>
+                  <br>
+                  1. לגבי עמית הרוכש כיסויים ביטוחיים במסגרת הקופה המקבלת – אני מצהיר כי קבלתי את התנאים לעניין הכיסוי הביטוחי בקופת הגמל המקבלת וכי הוסבר לי תנאים אלה, ככל שנקבעו תנאים כאמור.
+                  <br>
+                  2. אני נותן בזה את הסכמתי לכך שתמסרו את כל הפרטים, הנתונים והמסמכים שיש לכם לגבי, ובכלל זה פירוט בדבר התנאים או הסייגים שנקבעו לגבי בקופה המעבירה לעניין הכיסוי הביטוחי לסיכוני מוות או הכיסוי הביטוחי לסיכוני נכות ככל שנקבע, ואשר נדרשים לפי הוראות הממונה על שוק ההון, ביטוח וחסכון במשרד האוצר לפי סעיף 23 (ד) לחוק הפיקוח על השירותים הפיננסים (קופת גמל), התשס"ה-2005 ל"הלמן-אלדובי קופות גמל ופנסיה בע"מ.
+                  <br>
+                  3. ידוע לי כי החל במועד הקובע ואילך תהיו פטורים מלשלם לי כל תשלום שהוא, לרבות בשל חבות ביטוחית, הנובע מהכספים שהועברו לקופת הגמל המקבלת.
+                  <br>
+                  4. אני מצהיר, כי למיטב ידיעתי, במועד חתימתי על בקשת העברה זו מתקיימים כל התנאים המפורטים להלן:
+                  <br>
+                  4.1 לא קיים צו עיקול על חשבוני בקופת הגמל המעבירה במלוא גובה הסכום שביקשתי להעביר כאמור לעיל;
+                  <br>
+                  4.2 לא קיים שעבוד שנעשה כדין על חשבוני בקופת הגמל המעבירה במלוא גובה הסכום שביקשתי להעביר כאמור לעיל;
+                  <br>
+                  4.3 לא קיימת בחשבוני בקופת הגמל המעבירה יתרת חוב בשל הלוואה שטרם נפרעה במלואה;
+                  <br>
+                  4.4 לא התחלתי לקבל קבצת זקנה מקופת הגמל המעבירה בגין הסכום להעברה;
+                  <br>
+                  4.5 לא הגשתי בקשה לקבלת קצבת נכות מקופת הגמל המעבירה שעודה תלויה ועומדת ולא אושרה זכאותי לקבל קצבת נכות מקופת הגמל המעבירה שטרם פקעה;
+                  <br>
+                  ידוע לי ככל שמתקיימים לגביי במועד חתימתי על בקשת העברה זו ועד למועד ההעברה אחד מהתנאים האמורים, תבוטל בקשת ההעברה ולא תבוצע העברת כספים לקופת הגמל המקבלת.
+                  <br>
+                  5. חתימתי על בקשה זו נעשית לאחר שקראתי אותה בעיון ותוכנה הוסבר לי היטב, ולאחר ששקלתי את האמור בה וגמרתי אומר להתחייב בה.
+                </div>
               </div>
             </div>
           </div>
