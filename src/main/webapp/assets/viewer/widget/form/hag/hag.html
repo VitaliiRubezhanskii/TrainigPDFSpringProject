@@ -6092,143 +6092,293 @@
         
         <hr>
         
-        <div class="form-group">
+        <div>
           <table class="table table-condensed">
             <thead>
               <tr>
-                <th class="sp-text-align--right col-xs-1">לא</th>
-                <th class="sp-text-align--right col-xs-1">כן</th>
+                <th class="sp-text-align--right col-xs-2"></th>
                 <th class="sp-text-align--right col-xs-10">במידה והתשובה לאחת מהשאלות היא חיובית, נא לצרף מסמכים רפואיים ו/או שאלוני חיתום מתאימים</th>
               </tr>
             </thead>
             <tbody>
               <tr>
                 <td><button type="button" class="btn btn-info btn-xs" id="medical-questionnaire-no-for-all">סימון לא בכל הסעיפים</button></td>
-                <td></td>
                 <td>1. האם הנך מאובחן / אובחנת בעבר ו/או הינך בתהליך בירור למחלה הנוגע ל:</td>
               </tr>
               <tr>
-                <td><input type="radio" class="medical-questionnaire-no" id="medical-questionnaire-1-1-no" name="medical-questionnaire-1-1"></td>
-                <td><input type="radio"  id="medical-questionnaire-1-1-yes" name="medical-questionnaire-1-1"></td>
+              	<td>
+              	  <div class="form-group sp-radio sp-medical-questionnaire">
+                    <div>
+		              <input type="radio" class="medical-questionnaire-no" id="medical-questionnaire-1-1-no" name="medical-questionnaire-1-1">
+		              <label class="radio-inline" for="medical-questionnaire-1-1-no">לא</label>
+	                  <input type="radio"  id="medical-questionnaire-1-1-yes" name="medical-questionnaire-1-1">
+	                  <label class="radio-inline" for="medical-questionnaire-1-1-yes">כן</label>
+		            </div>
+		          </div>
+              	</td>
                 <td>1.1. לב, כלי דם, אירוע מוחי ,לחץ דם, מערכת כלי דם פריפריאלית (היקפית)</td>
               </tr>
               <tr>
-                <td><input type="radio" class="medical-questionnaire-no" id="medical-questionnaire-1-2-no" name="medical-questionnaire-1-2"></td>
-                <td><input type="radio"  id="medical-questionnaire-1-2-yes" name="medical-questionnaire-1-2"></td>
-                <td>1.2. מערכת העצבים והמוח</td>
-              </tr>
-              <tr>
-                <td><input type="radio" class="medical-questionnaire-no" id="medical-questionnaire-1-3-no" name="medical-questionnaire-1-3"></td>
-                <td><input type="radio"  id="medical-questionnaire-1-3-yes" name="medical-questionnaire-1-3"></td>
-                <td>1.3. בעיה/הפרעה ו/או מחלה נפשית מאובחנת וניסיונות התאבדות</td>
-              </tr>
-              <tr>
-                <td><input type="radio" class="medical-questionnaire-no" id="medical-questionnaire-1-4-no" name="medical-questionnaire-1-4"></td>
-                <td><input type="radio"  id="medical-questionnaire-1-4-yes" name="medical-questionnaire-1-4"></td>
-                <td>1.4. סוכרת, שומנים בדם ומחלות הקשורות בבלוטות</td>
-              </tr>
-              <tr>
-                <td><input type="radio" class="medical-questionnaire-no" id="medical-questionnaire-1-5-no" name="medical-questionnaire-1-5"></td>
-                <td><input type="radio"  id="medical-questionnaire-1-5-yes" name="medical-questionnaire-1-5"></td>
-                <td>1.5. סרטן, גידולים ומחלות ממאירות</td>
-              </tr>
-              <tr>
-                <td><input type="radio" class="medical-questionnaire-no" id="medical-questionnaire-1-6-no" name="medical-questionnaire-1-6"></td>
-                <td><input type="radio"  id="medical-questionnaire-1-6-yes" name="medical-questionnaire-1-6"></td>
-                <td>1.6. מערכת העיכול, המעיים, טחול, לבלב, פי הטבעת</td>
-              </tr>
-              <tr>
-                <td><input type="radio" class="medical-questionnaire-no" id="medical-questionnaire-1-7-no" name="medical-questionnaire-1-7"></td>
-                <td><input type="radio"  id="medical-questionnaire-1-7-yes" name="medical-questionnaire-1-7"></td>
-                <td>1.7. כליות ודרכי שתן, ערמונית, מחלות מין ואשכים</td>
-              </tr>
-              <tr>
-                <td><input type="radio" class="medical-questionnaire-no" id="medical-questionnaire-1-8-no" name="medical-questionnaire-1-8"></td>
-                <td><input type="radio"  id="medical-questionnaire-1-8-yes" name="medical-questionnaire-1-8"></td>
-                <td>1.8. לנשים - בעיות גניקולוגיות ושדיים</td>
-              </tr>
-              <tr>
-                <td><input type="radio" class="medical-questionnaire-no" id="medical-questionnaire-1-9-no" name="medical-questionnaire-1-9"></td>
-                <td><input type="radio"  id="medical-questionnaire-1-9-yes" name="medical-questionnaire-1-9"></td>
-                <td>1.9. מחלת כבד, מחלת צהבת (למעט מסוג A ) והפרעה בתפקודי כבד</td>
-              </tr>
-              <tr>
-                <td><input type="radio" class="medical-questionnaire-no" id="medical-questionnaire-1-10-no" name="medical-questionnaire-1-10"></td>
-                <td><input type="radio"  id="medical-questionnaire-1-10-yes" name="medical-questionnaire-1-10"></td>
-                <td>1.10. ריאות ודרכי נשימה</td>
-              </tr>
-              <tr>
-                <td><input type="radio" class="medical-questionnaire-no" id="medical-questionnaire-1-11-no" name="medical-questionnaire-1-11"></td>
-                <td><input type="radio"  id="medical-questionnaire-1-11-yes" name="medical-questionnaire-1-11"></td>
-                <td>1.11. בעיות אורתופדיות כולל גב ועמוד שידרה ודלקות פרקים</td>
-              </tr>
-              <tr>
-                <td><input type="radio" class="medical-questionnaire-no" id="medical-questionnaire-1-12-no" name="medical-questionnaire-1-12"></td>
-                <td><input type="radio"  id="medical-questionnaire-1-12-yes" name="medical-questionnaire-1-12"></td>
-                <td>1.12. מחלות זיהומיות ואיידס/ נשא HIV</td>
-              </tr>
-              <tr>
-                <td><input type="radio" class="medical-questionnaire-no" id="medical-questionnaire-1-13-no" name="medical-questionnaire-1-13"></td>
-                <td><input type="radio"  id="medical-questionnaire-1-13-yes" name="medical-questionnaire-1-13"></td>
-                <td>1.13. בעיות ומחלות עור</td>
-              </tr>
-              <tr>
-                <td><input type="radio" class="medical-questionnaire-no" id="medical-questionnaire-1-14-no" name="medical-questionnaire-1-14"></td>
-                <td><input type="radio"  id="medical-questionnaire-1-14-yes" name="medical-questionnaire-1-14"></td>
-                <td>1.14. בעיות ומחלות:  עיניים (כולל מספר עדשות מעל 8), אף אוזן גרון וחלל הפה</td>
-              </tr>
-              <tr>
-                <td><input type="radio" class="medical-questionnaire-no" id="medical-questionnaire-2-no" name="medical-questionnaire-2"></td>
-                <td><input type="radio" id="medical-questionnaire-2-yes" name="medical-questionnaire-2"></td>
                 <td>
+                  <div class="form-group sp-radio sp-medical-questionnaire">
+                    <div>
+		              <input type="radio" class="medical-questionnaire-no" id="medical-questionnaire-1-2-no" name="medical-questionnaire-1-2">
+		              <label class="radio-inline" for="medical-questionnaire-1-2-no">לא</label>
+	                  <input type="radio"  id="medical-questionnaire-1-2-yes" name="medical-questionnaire-1-2">
+	                  <label class="radio-inline" for="medical-questionnaire-1-2-yes">כן</label>
+		            </div>
+		          </div>
+              	</td>
+              	<td>1.2. מערכת העצבים והמוח</td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="form-group sp-radio sp-medical-questionnaire">
+                    <div>
+		              <input type="radio" class="medical-questionnaire-no" id="medical-questionnaire-1-3-no" name="medical-questionnaire-1-3">
+		              <label class="radio-inline" for="medical-questionnaire-1-3-no">לא</label>
+	                  <input type="radio"  id="medical-questionnaire-1-3-yes" name="medical-questionnaire-1-3">
+	                  <label class="radio-inline" for="medical-questionnaire-1-3-yes">כן</label>
+		            </div>
+		          </div>
+              	</td>
+              	<td>1.3. בעיה/הפרעה ו/או מחלה נפשית מאובחנת וניסיונות התאבדות</td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="form-group sp-radio sp-medical-questionnaire">
+                    <div>
+		              <input type="radio" class="medical-questionnaire-no" id="medical-questionnaire-1-4-no" name="medical-questionnaire-1-4">
+		              <label class="radio-inline" for="medical-questionnaire-1-4-no">לא</label>
+	                  <input type="radio"  id="medical-questionnaire-1-4-yes" name="medical-questionnaire-1-4">
+	                  <label class="radio-inline" for="medical-questionnaire-1-4-yes">כן</label>
+		            </div>
+		          </div>
+              	</td>
+              	<td>1.4. סוכרת, שומנים בדם ומחלות הקשורות בבלוטות</td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="form-group sp-radio sp-medical-questionnaire">
+                    <div>
+		              <input type="radio" class="medical-questionnaire-no" id="medical-questionnaire-1-5-no" name="medical-questionnaire-1-5">
+		              <label class="radio-inline" for="medical-questionnaire-1-5-no">לא</label>
+	                  <input type="radio"  id="medical-questionnaire-1-5-yes" name="medical-questionnaire-1-5">
+	                  <label class="radio-inline" for="medical-questionnaire-1-5-yes">כן</label>
+		            </div>
+		          </div>
+              	</td>
+              	<td>1.5. סרטן, גידולים ומחלות ממאירות</td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="form-group sp-radio sp-medical-questionnaire">
+                    <div>
+		              <input type="radio" class="medical-questionnaire-no" id="medical-questionnaire-1-6-no" name="medical-questionnaire-1-6">
+		              <label class="radio-inline" for="medical-questionnaire-1-6-no">לא</label>
+	                  <input type="radio"  id="medical-questionnaire-1-6-yes" name="medical-questionnaire-1-6">
+	                  <label class="radio-inline" for="medical-questionnaire-1-6-yes">כן</label>
+		            </div>
+		          </div>
+              	</td>
+              	<td>1.6. מערכת העיכול, המעיים, טחול, לבלב, פי הטבעת</td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="form-group sp-radio sp-medical-questionnaire">
+                    <div>
+		              <input type="radio" class="medical-questionnaire-no" id="medical-questionnaire-1-7-no" name="medical-questionnaire-1-7">
+		              <label class="radio-inline" for="medical-questionnaire-1-7-no">לא</label>
+	                  <input type="radio"  id="medical-questionnaire-1-7-yes" name="medical-questionnaire-1-7">
+	                  <label class="radio-inline" for="medical-questionnaire-1-7-yes">כן</label>
+		            </div>
+		          </div>
+              	</td>
+              	<td>1.7. כליות ודרכי שתן, ערמונית, מחלות מין ואשכים</td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="form-group sp-radio sp-medical-questionnaire">
+                    <div>
+		              <input type="radio" class="medical-questionnaire-no" id="medical-questionnaire-1-8-no" name="medical-questionnaire-1-8">
+		              <label class="radio-inline" for="medical-questionnaire-1-8-no">לא</label>
+	                  <input type="radio"  id="medical-questionnaire-1-8-yes" name="medical-questionnaire-1-8">
+	                  <label class="radio-inline" for="medical-questionnaire-1-8-yes">כן</label>
+		            </div>
+		          </div>
+              	</td>
+              	<td>1.8. לנשים - בעיות גניקולוגיות ושדיים</td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="form-group sp-radio sp-medical-questionnaire">
+                    <div>
+		              <input type="radio" class="medical-questionnaire-no" id="medical-questionnaire-1-9-no" name="medical-questionnaire-1-9">
+		              <label class="radio-inline" for="medical-questionnaire-1-9-no">לא</label>
+	                  <input type="radio"  id="medical-questionnaire-1-9-yes" name="medical-questionnaire-1-9">
+	                  <label class="radio-inline" for="medical-questionnaire-1-9-yes">כן</label>
+		            </div>
+		          </div>
+              	</td>
+              	<td>1.9. מחלת כבד, מחלת צהבת (למעט מסוג A ) והפרעה בתפקודי כבד</td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="form-group sp-radio sp-medical-questionnaire">
+                    <div>
+		              <input type="radio" class="medical-questionnaire-no" id="medical-questionnaire-1-10-no" name="medical-questionnaire-1-10">
+		              <label class="radio-inline" for="medical-questionnaire-1-10-no">לא</label>
+	                  <input type="radio"  id="medical-questionnaire-1-10-yes" name="medical-questionnaire-1-10">
+	                  <label class="radio-inline" for="medical-questionnaire-1-10-yes">כן</label>
+		            </div>
+		          </div>
+              	</td>
+              	<td>1.10. ריאות ודרכי נשימה</td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="form-group sp-radio sp-medical-questionnaire">
+                    <div>
+		              <input type="radio" class="medical-questionnaire-no" id="medical-questionnaire-1-11-no" name="medical-questionnaire-1-11">
+		              <label class="radio-inline" for="medical-questionnaire-1-11-no">לא</label>
+	                  <input type="radio"  id="medical-questionnaire-1-11-yes" name="medical-questionnaire-1-11">
+	                  <label class="radio-inline" for="medical-questionnaire-1-11-yes">כן</label>
+		            </div>
+		          </div>
+              	</td>
+              	<td>1.11. בעיות אורתופדיות כולל גב ועמוד שידרה ודלקות פרקים</td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="form-group sp-radio sp-medical-questionnaire">
+                    <div>
+		              <input type="radio" class="medical-questionnaire-no" id="medical-questionnaire-1-12-no" name="medical-questionnaire-1-12">
+		              <label class="radio-inline" for="medical-questionnaire-1-12-no">לא</label>
+	                  <input type="radio"  id="medical-questionnaire-1-12-yes" name="medical-questionnaire-1-12">
+	                  <label class="radio-inline" for="medical-questionnaire-1-12-yes">כן</label>
+		            </div>
+		          </div>
+              	</td>
+              	<td>1.12. מחלות זיהומיות ואיידס/ נשא HIV</td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="form-group sp-radio sp-medical-questionnaire">
+                    <div>
+		              <input type="radio" class="medical-questionnaire-no" id="medical-questionnaire-1-13-no" name="medical-questionnaire-1-13">
+		              <label class="radio-inline" for="medical-questionnaire-1-13-no">לא</label>
+	                  <input type="radio"  id="medical-questionnaire-1-13-yes" name="medical-questionnaire-1-13">
+	                  <label class="radio-inline" for="medical-questionnaire-1-13-yes">כן</label>
+		            </div>
+		          </div>
+              	</td>
+              	<td>1.13. בעיות ומחלות עור</td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="form-group sp-radio sp-medical-questionnaire">
+                    <div>
+		              <input type="radio" class="medical-questionnaire-no" id="medical-questionnaire-1-14-no" name="medical-questionnaire-1-14">
+		              <label class="radio-inline" for="medical-questionnaire-1-14-no">לא</label>
+	                  <input type="radio"  id="medical-questionnaire-1-14-yes" name="medical-questionnaire-1-14">
+	                  <label class="radio-inline" for="medical-questionnaire-1-14-yes">כן</label>
+		            </div>
+		          </div>
+              	</td>
+              	<td>1.14. בעיות ומחלות:  עיניים (כולל מספר עדשות מעל 8), אף אוזן גרון וחלל הפה</td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="form-group sp-radio sp-medical-questionnaire">
+                    <div>
+		              <input type="radio" class="medical-questionnaire-no" id="medical-questionnaire-2-no" name="medical-questionnaire-2">
+		              <label class="radio-inline" for="medical-questionnaire-2-no">לא</label>
+	                  <input type="radio"  id="medical-questionnaire-2-yes" name="medical-questionnaire-2">
+	                  <label class="radio-inline" for="medical-questionnaire-2-yes">כן</label>
+		            </div>
+		          </div>
+              	</td>
+              	<td>
                   2. האם יש לך מום מולד כלשהו או הייתה לך נכות ו/או אתה מקבל או בתהליך קבלת קצבת נכות או אובדן כושר עבודה?
                   <div class="form-group" id="medical-questionnaire-2-yes-container">
                     <label class="control-label" for="medical-questionnaire-2-yes-details">פרט:</label>
-                    <textarea class="form-control" id="medical-questionnaire-2-yes-details" rows="3" maxlength="500"></textarea>
+                    <textarea class="form-control" id="medical-questionnaire-2-yes-details" name="medical-questionnaire-2-yes-details" rows="3" maxlength="500"></textarea>
                   </div>
                 </td>
               </tr>
               <tr>
-                <td><input type="radio" class="medical-questionnaire-no" id="medical-questionnaire-3-no" name="medical-questionnaire-3"></td>
-                <td><input type="radio" id="medical-questionnaire-3-yes" name="medical-questionnaire-3"></td>
                 <td>
+                  <div class="form-group sp-radio sp-medical-questionnaire">
+                    <div>
+		              <input type="radio" class="medical-questionnaire-no" id="medical-questionnaire-3-no" name="medical-questionnaire-3">
+		              <label class="radio-inline" for="medical-questionnaire-3-no">לא</label>
+	                  <input type="radio"  id="medical-questionnaire-3-yes" name="medical-questionnaire-3">
+	                  <label class="radio-inline" for="medical-questionnaire-3-yes">כן</label>
+		            </div>
+		          </div>
+              	</td>
+              	<td>
                   3. האם למיטב ידיעתך התגלו בקרב אחד מקרוביך (אם/אב/אח/אחות) אחת מהמחלות הבאות מחלות לב, שבץ מוחי, סרטן, סוכרת, כליות פוליציסטיות ,טרשת נפוצה, ניוון שרירים ,מחלת הנטינגטון, מחלות נפשיות, מחלת פרקינסון, מחלת  אלצהיימר?
                   <div class="form-group" id="medical-questionnaire-3-yes-container">
                     <label class="control-label" for="medical-questionnaire-3-yes-details">פרט מי  ובאיזה גיל  חלה:</label>
-                    <textarea class="form-control" id="medical-questionnaire-3-yes-details" rows="3" maxlength="500"></textarea>
+                    <textarea class="form-control" id="medical-questionnaire-3-yes-details" name="medical-questionnaire-3-yes-details" rows="3" maxlength="500"></textarea>
                   </div>
                 </td>
               </tr>
               <tr>
-                <td><input type="radio" class="medical-questionnaire-no" id="medical-questionnaire-4-no" name="medical-questionnaire-4"></td>
-                <td><input type="radio" id="medical-questionnaire-4-yes" name="medical-questionnaire-4"></td>
                 <td>
+                  <div class="form-group sp-radio sp-medical-questionnaire">
+                    <div>
+		              <input type="radio" class="medical-questionnaire-no" id="medical-questionnaire-4-no" name="medical-questionnaire-4">
+		              <label class="radio-inline" for="medical-questionnaire-4-no">לא</label>
+	                  <input type="radio"  id="medical-questionnaire-4-yes" name="medical-questionnaire-4">
+	                  <label class="radio-inline" for="medical-questionnaire-4-yes">כן</label>
+		            </div>
+		          </div>
+              	</td>
+              	<td>
                   4. האם אתה נמצא בבירור רפואי כלשהו ו/או נוטל תרופות באופן קבוע בחמש השנים האחרונות? או האם טופלת במשך תקופה של יותר משבועיים ברציפות במהלך ה-24 חודשים האחרונים?
                   <div class="form-group" id="medical-questionnaire-4-yes-container">
                     <label class="control-label" for="medical-questionnaire-4-yes-details">פרט:</label>
-                    <textarea class="form-control" id="medical-questionnaire-4-yes-details" rows="3" maxlength="500"></textarea>
+                    <textarea class="form-control" id="medical-questionnaire-4-yes-details" name="medical-questionnaire-4-yes-details" rows="3" maxlength="500"></textarea>
                   </div>
                 </td>
               </tr>
               <tr>
-                <td><input type="radio" class="medical-questionnaire-no" id="medical-questionnaire-5-no" name="medical-questionnaire-5"></td>
-                <td><input type="radio" id="medical-questionnaire-5-yes" name="medical-questionnaire-5"></td>
                 <td>
+                  <div class="form-group sp-radio sp-medical-questionnaire">
+                    <div>
+		              <input type="radio" class="medical-questionnaire-no" id="medical-questionnaire-5-no" name="medical-questionnaire-5">
+		              <label class="radio-inline" for="medical-questionnaire-5-no">לא</label>
+	                  <input type="radio"  id="medical-questionnaire-5-yes" name="medical-questionnaire-5">
+	                  <label class="radio-inline" for="medical-questionnaire-5-yes">כן</label>
+		            </div>
+		          </div>
+              	</td>
+              	<td>
                   5. האם נעדרת מהעבודה מסיבה רפואית או היית בחופשת מחלה יותר מ 10 יום רצופים ב 24 החודשים האחרונים?
                   <div class="form-group" id="medical-questionnaire-5-yes-container">
                     <label class="control-label" for="medical-questionnaire-5-yes-details">פרט:</label>
-                    <textarea class="form-control" id="medical-questionnaire-5-yes-details" rows="3" maxlength="500"></textarea>
+                    <textarea class="form-control" id="medical-questionnaire-5-yes-details" name="medical-questionnaire-5-yes-details" rows="3" maxlength="500"></textarea>
                   </div>
                 </td>
               </tr>
               <tr>
-                <td><input type="radio" class="medical-questionnaire-no" id="medical-questionnaire-6-no" name="medical-questionnaire-6"></td>
-                <td><input type="radio" id="medical-questionnaire-6-yes" name="medical-questionnaire-6"></td>
                 <td>
+                  <div class="form-group sp-radio sp-medical-questionnaire">
+                    <div>
+		              <input type="radio" class="medical-questionnaire-no" id="medical-questionnaire-6-no" name="medical-questionnaire-6">
+		              <label class="radio-inline" for="medical-questionnaire-6-no">לא</label>
+	                  <input type="radio"  id="medical-questionnaire-6-yes" name="medical-questionnaire-6">
+	                  <label class="radio-inline" for="medical-questionnaire-6-yes">כן</label>
+		            </div>
+		          </div>
+              	</td>
+              	<td>
                   6. האם אושפזת בבית חולים לתקופה מעבר ל 5 ימים ו/או עברת ניתוח כלשהו ב 24 חודשים האחרונים או שידוע לך על צורך באשפוז, ניתוח או בדיקה פולשנית?
                   <div class="form-group" id="medical-questionnaire-6-yes-container">
                     <label class="control-label" for="medical-questionnaire-6-yes-details">פרט:</label>
-                    <textarea class="form-control" id="medical-questionnaire-6-yes-details" rows="3" maxlength="500"></textarea>
+                    <textarea class="form-control" id="medical-questionnaire-6-yes-details" name="medical-questionnaire-6-yes-details" rows="3" maxlength="500"></textarea>
                   </div>
                 </td>
               </tr>

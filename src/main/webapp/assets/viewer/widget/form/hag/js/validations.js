@@ -262,6 +262,78 @@ $(function() {
       isHealthConfirmed: {
         required: true
       },
+      'medical-questionnaire-1-1': {
+        required: true
+      },
+      'medical-questionnaire-1-2': {
+        required: true
+      },
+      'medical-questionnaire-1-3': {
+        required: true
+      },
+      'medical-questionnaire-1-4': {
+        required: true
+      },
+      'medical-questionnaire-1-5': {
+        required: true
+      },
+      'medical-questionnaire-1-6': {
+        required: true
+      },
+      'medical-questionnaire-1-7': {
+        required: true
+      },
+      'medical-questionnaire-1-8': {
+        required: true
+      },
+      'medical-questionnaire-1-9': {
+        required: true
+      },
+      'medical-questionnaire-1-10': {
+        required: true
+      },
+      'medical-questionnaire-1-11': {
+        required: true
+      },
+      'medical-questionnaire-1-12': {
+        required: true
+      },
+      'medical-questionnaire-1-13': {
+        required: true
+      },
+      'medical-questionnaire-1-14': {
+        required: true
+      },
+      'medical-questionnaire-2': {
+        required: true
+      },
+      'medical-questionnaire-3': {
+        required: true
+      },
+      'medical-questionnaire-4': {
+        required: true
+      },
+      'medical-questionnaire-5': {
+        required: true
+      },
+      'medical-questionnaire-6': {
+        required: true
+      },
+      'medical-questionnaire-2-yes-details': {
+        required: true
+      },
+      'medical-questionnaire-3-yes-details': {
+        required: true
+      },
+      'medical-questionnaire-4-yes-details': {
+        required: true
+      },
+      'medical-questionnaire-5-yes-details': {
+        required: true
+      },
+      'medical-questionnaire-6-yes-details': {
+        required: true
+      },
       smoking: {
         required: true
       },
