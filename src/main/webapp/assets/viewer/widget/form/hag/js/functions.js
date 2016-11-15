@@ -317,7 +317,9 @@ $(function() {
   });
   
   $('#medical-questionnaire-no-for-all').click(function() {
-    $('.medical-questionnaire-no').prop('checked', true);
+    $('.medical-questionnaire-no')
+      .click()
+      .valid();
     $('#medical-questionnaire-2-yes-container').hide();
     $('#medical-questionnaire-3-yes-container').hide();
     $('#medical-questionnaire-4-yes-container').hide();
@@ -615,7 +617,7 @@ $(function() {
         }
         
         // SP WebMerge.
-        sendWebMerge('https://www.webmerge.me/merge/79450/1yz2sv', payload);
+        sendWebMerge('https://www.webmerge.me/merge/82067/921dra?test=1', payload);
         
         // HA WebMerge.
         sendWebMerge('https://www.webmerge.me/merge/82651/98sjf8', payload);
