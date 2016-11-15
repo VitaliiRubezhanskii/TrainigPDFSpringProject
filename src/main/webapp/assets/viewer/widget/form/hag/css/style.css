@@ -213,6 +213,13 @@ select + .help-block,
   width: 300px;
 }
 
+
+/* Form 4 */
+.sp-medical-questionnaire {
+  margin-bottom: 0; 
+}
+
+
 /* Media Queries */
 @media only screen and (max-height: 450px) {
   .breadcrumb {
