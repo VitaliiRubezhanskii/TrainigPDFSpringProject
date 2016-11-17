@@ -366,13 +366,13 @@ sp.widgets = {
 };
 
 sp.viewerWidgetsModal = {
-  
   /**
    * Get a file widget settings from the DB.
    * 
    * @param {string} fileHash - The file hash.
    */
   getWidgetsSettings: function(fileHash) {
+  	var widgetSettingsData = null;
     $.getJSON(
         'ManagementServlet',
         {
@@ -380,10 +380,25 @@ sp.viewerWidgetsModal = {
           fileHash: fileHash
         },
         function(data) {
-          sp.viewerWidgetsModal.displayWidgetsSettings(data.widgetsSettings);
+        	widgetSettingsData = data.widgetsSettings;
+        	
+          sp.viewerWidgetsModal.displayWidgetsSettings(widgetSettingsData);
           sp.viewerWidgetsModal.setSaveButtons(fileHash);
         }
     );
+    
+    // Show widgets when loaded.
+    var intervalCount = 0;
+    var interval = 200;
+    var setIntervalToDisplayWidgetsSettings = setInterval(function() {
+    	intervalCount += interval;
+    	if (widgetSettingsData && intervalCount >= 1000) {
+    		 $('.sp-widgets-customisation__spinner').removeClass('sp-widgets-customisation__spinner-show');
+         $('#sp-viewer-widgets-modal .tabs-container').removeClass('sp-hidden');
+         
+         clearInterval(setIntervalToDisplayWidgetsSettings);
+    	}
+    }, interval);
   },
   
   /**
@@ -506,9 +521,14 @@ sp.viewerWidgetsModal = {
       $('[name="question-widget-is-enabled"]')
         .prop('checked', widget.isEnabled)
         .closest('div').removeClass('sp-hide-is-enabled');
-          
+      
       $('[name="question-widget-text"]').val(widget.items[0].buttonText);
+      $('[name="spWidget3CancelButtonText"]').val(widget.items[0].cancelButtonText);
       $('[name="spWidget3FormMessage"]').val(widget.items[0].formMessage);
+      $('[name="spWidget3ConfirmButtonText"]').val(widget.items[0].confirmButtonText);
+      $('[name="spWidget3CustomMessageLabel"]').val(widget.items[0].customMessageLabel);
+      $('[name="spWidget3CustomEmailLabel"]').val(widget.items[0].customEmailLabel);
+      $('[name="spWidget3CustomEmailValidationErrorMessage"]').val(widget.items[0].customEmailValidationErrorMessage);
     }
     
     function displayLikeWidgetSettings(widget) {
@@ -876,7 +896,7 @@ sp.viewerWidgetsModal = {
     }
    
     var askQuestionWidgetData = {
-    		apiVersion: '1.0',
+    		apiVersion: '1.1',
     		data: {
           fileHash: fileHash,
           widgetId: 3,
@@ -884,7 +904,12 @@ sp.viewerWidgetsModal = {
           items: [
             {
             	buttonText: $('[name="question-widget-text"]').val(),
-            	formMessage: $('[name="spWidget3FormMessage"]').val()
+            	formMessage: $('[name="spWidget3FormMessage"]').val(),
+            	confirmButtonText: $('[name="spWidget3ConfirmButtonText"]').val(),
+            	cancelButtonText: $('[name="spWidget3CancelButtonText"]').val(),
+            	customMessageLabel: $('[name="spWidget3CustomMessageLabel"]').val(),
+            	customEmailLabel: $('[name="spWidget3CustomEmailLabel"]').val(),
+            	customEmailValidationErrorMessage: $('[name="spWidget3CustomEmailValidationErrorMessage"]').val(),
             }
           ]
         }

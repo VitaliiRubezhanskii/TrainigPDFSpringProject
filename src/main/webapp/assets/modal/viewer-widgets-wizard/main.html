@@ -14,7 +14,7 @@
         </div>
         
         <div class="modal-body">
-            <div class="tabs-container">
+            <div class="tabs-container sp-hidden">
                 <ul class="nav nav-tabs">
                     <li class="active"><a class="sp-widgets-customization-window__tab" data-toggle="tab" href="#sp-tab-3"><i class="fa fa-comment"></i></a></li>
                     <li><a class="sp-widgets-customization-window__tab" data-toggle="tab" href="#sp-tab-1"><i class="fa fa-video-camera"></i></a></li>
@@ -107,15 +107,64 @@
                     <div id="sp-tab-3" class="tab-pane active">
                         <div class="panel-body">
                             <strong>Ask a Question / Give Feedback Widget</strong>
-                            <div class="sp-customization-option__p sp-hide-is-enabled">
+                            <div class="sp-customization-option__p">
                                 <input type="checkbox" name="question-widget-is-enabled"> Is Enabled?
                             </div>
                             <hr>
-                            <p class="sp-customization-option__p">Call to Action Text</p>
-                            <input type="text" name="question-widget-text" class="form-control" placeholder="e.g. Ask a Question / Give Feedback">
-                            
-                            <p class="sp-customization-option__p">Form Message (optional)</p>
-                            <input type="text" id="sp-widget3__message" class="form-control" name="spWidget3FormMessage" maxlength="250">
+                            <div class="container-fluid">
+                            	<form class="form-horizontal">
+				                    <div class="form-group">
+			                          <label class="col-lg-4 control-label"><span class="sp-widgets__required-setting">* </span>Call to Action Button Text</label>
+			                          <div class="col-lg-8">
+			                            <input type="text" value="Any Questions? Click Here" name="question-widget-text" class="form-control" placeholder="e.g. Ask a Question / Give Feedback">
+			                            </div>
+				                    </div>
+		                            
+		                            <hr>
+		                            
+		                            <div class="form-group">
+		                              <label class="col-lg-4 control-label">Custom Message Label</label>
+		                              <div class="col-lg-8">
+		                                  <input type="text" placeholder="e.g. Enter your message:" class="form-control" name="spWidget3CustomMessageLabel" maxlength="250">
+		                              </div>
+			                        </div>
+			                          
+			                        <div class="form-group">
+		                              <label class="col-lg-4 control-label">Custom Email Label</label>
+		                              <div class="col-lg-8">
+		                                  <input type="text" placeholder="e.g. Enter your email address:" class="form-control" name="spWidget3CustomEmailLabel" maxlength="250">
+		                              </div>
+			                        </div>
+		                            
+		                            <div class="form-group">
+		                              <label class="col-lg-4 control-label">Confirm Button Text</label>
+		                              <div class="col-lg-8">
+		                                  <input type="text" placeholder="e.g. Submit" class="form-control" name="spWidget3ConfirmButtonText" maxlength="50">
+		                              </div>
+			                        </div>
+			                          
+			                        <div class="form-group">
+		                              <label class="col-lg-4 control-label">Cancel Button Text</label>
+		                              <div class="col-lg-8">
+		                                  <input type="text" placeholder="e.g. Cancel" class="form-control" name="spWidget3CancelButtonText" maxlength="50">
+		                              </div>
+			                        </div>
+		                            
+			                        <div class="form-group">
+		                              <label class="col-lg-4 control-label">Custom Email Error Message</label>
+		                              <div class="col-lg-8">
+		                                  <input type="text" placeholder="e.g. Enter a valid email address." class="form-control" name="spWidget3CustomEmailValidationErrorMessage" maxlength="250">
+		                              </div>
+			                        </div>
+			                          
+			                        <div class="form-group">
+		                              <label class="col-lg-4 control-label">Custom Form Message</label>
+		                              <div class="col-lg-8">
+		                                  <input type="text" placeholder="e.g. We will reply in 3 business days." id="sp-widget3__message" class="form-control" name="spWidget3FormMessage" maxlength="250">
+		                              </div>
+			                        </div>
+                            	</form>
+                            </div>
                         </div>
                     </div>
                     

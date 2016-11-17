@@ -86,6 +86,10 @@
   padding: 10px 12px 10px 17px !important;
 }
 
+.sp-widgets__required-setting {
+	color: #ed5565;
+}
+
 [name="video-widget-page-start"] {
   width: 79px;
 }

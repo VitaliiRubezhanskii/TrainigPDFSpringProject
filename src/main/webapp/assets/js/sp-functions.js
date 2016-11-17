@@ -530,7 +530,12 @@ sp = {
         
         $('#sp-viewer-widgets-modal').load('assets/modal/viewer-widgets-wizard/main.html', function () {
           $.getScript('assets/modal/viewer-widgets-wizard/functions.js', function() {
-            sp.viewerWidgetsModal.getWidgetsSettings(fileHash);  
+          	$('.sp-widgets-customisation__spinner').addClass('sp-widgets-customisation__spinner-show');
+          	sp.viewerWidgetsModal.getWidgetsSettings(fileHash);
+            
+            $('#sp-viewer-widgets-modal').off('hidden.bs.modal').on('hidden.bs.modal', function() {
+            	$(this).find('.tabs-container').addClass('sp-hidden');
+            });
           });
         });
       });
