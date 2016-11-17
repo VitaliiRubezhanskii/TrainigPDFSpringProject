@@ -10,6 +10,33 @@
   visibility: hidden;
 }
 
+/**
+ * Validation
+ */
+
+.has-feedback {
+  margin-bottom: 10px;
+}
+
+.has-success .swal2-input {
+  border-color: #1ab394 !important;
+}
+
+.has-error .swal2-input {
+  border-color: #ed5565 !important;
+}
+.has-success label {
+  color: #1ab394 !important;
+}
+
+.has-error label {
+  color: #ed5565 !important;
+}
+
+.sp-validation__error-message {
+  color: #ed5565;
+  font-size: 14px;
+}
 
 /**
  * Toolbar Settings.
@@ -203,6 +230,10 @@
   margin-top: 5px;
 }
 
+.swal2-input {
+	margin: 5px auto 5px auto !important;
+}
+
 .sp-widget7__swal .swal2-spacer {
   display: none !important;
 }
@@ -334,6 +365,7 @@
 #sp-widget-3-form-message {
   font-size: 0.9em;
   margin-bottom: 10px;
+  margin-top: 10px;
   text-align: center;
 }
 
@@ -348,6 +380,9 @@
   margin-top: 15px;
 }
 
+.sp-widget3-label span {
+	color: #ed5565;
+}
 
 /* Widget 4 - Like */
 .sp-like-button-widget {

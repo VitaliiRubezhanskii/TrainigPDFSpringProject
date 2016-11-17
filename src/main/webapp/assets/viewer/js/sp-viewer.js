@@ -1,4 +1,12 @@
 /**
+ * Disable cache on AJAX requests.
+ */
+$.ajaxSetup({
+	cache: false
+});
+
+
+/**
  * Set document links to open in a new tab.
  */
 $(document).on('textlayerrendered', function() {
@@ -1117,41 +1125,95 @@ if ('' != sp.viewer.linkHash) {
         
         $('#sp-widget3').html('<i class="fa fa-comment"></i><div>' + widget.buttonText + '</div>');
         
+        var confirmButtonText = 'Submit';
+        if (typeof widget.confirmButtonText !== 'undefined' && widget.confirmButtonText !== '') {
+        	confirmButtonText = widget.confirmButtonText;
+        }
+
+        var cancelButtonText = 'Cancel';
+        if (typeof widget.cancelButtonText !== 'undefined' && widget.cancelButtonText !== '') {
+        	cancelButtonText = widget.cancelButtonText;
+        }
+        
         var formMessage = '';
         if (typeof widget.formMessage !== 'undefined' &&  widget.formMessage !== '') {
           formMessage = '<div id="sp-widget-3-form-message">' + widget.formMessage + '</div>';
         }
         
+        var customMessageLabel = 'Enter your message:';
+        if (typeof widget.customMessageLabel !== 'undefined' && widget.customMessageLabel !== '') {
+        	customMessageLabel = widget.customMessageLabel;
+        }
+        
+        var customEmailLabel = 'Enter your email address:';
+        if (typeof widget.customEmailLabel !== 'undefined' && widget.customEmailLabel !== '') {
+        	customEmailLabel = widget.customEmailLabel;
+        }
+        
+        sp.validate = sp.validate || {};
+        sp.validate.errorMessage = 'You must provide a valid email address.';
+        if (typeof widget.customEmailValidationErrorMessage !== 'undefined' && widget.customEmailValidationErrorMessage !== '') {
+        	sp.validate.errorMessage = widget.customEmailValidationErrorMessage;
+        }
+        
         $('#sp-widget3').click(function() {
-          swal({
-            customClass: 'sp--direction-ltr',
-            showCancelButton: true,
-            showConfirmButton: true,
-            html: '<form class="sp-widget-font-fmaily"><label for="sp-widget3-message" class="sp-widget3-label">Enter your message:</label><textarea class="swal2-textarea" id="sp-widget3-message" rows="5" autofocus></textarea><label for="sp-widget3-email" class="sp-widget3-label">Enter your email address:</label><input type="text" class="swal2-input" id="sp-widget3-email">' + formMessage + '</form>',
-            title: widget.buttonText,
-            preConfirm: function() {
-              return new Promise(function(resolve) {
-                /**
-                 * Send Ask a Question event.
-                 * 
-                 * param_1_varchar - The text on the Ask a Question button.
-                 * param_2_varchar - The message in the widget form.
-                 * param_3_varchar - The email address to reply to in the widget form.
-                 */
-                sp.viewer.setCustomerEvent({
-                  eventName: sp.viewer.eventName.viewerWidgetAskQuestion,
-                  linkHash: sp.viewer.linkHash,
-                  sessionId: sessionid,
-                  param_1_varchar: $('#sp-widget3').text(),
-                  param_2_varchar: $('#sp-widget3-message').val(),
-                  param_3_varchar: $('#sp-widget3-email').val()
+        	$.getScript('../../assets/viewer/js/plugins/validationjs/jquery.validate.min.js', function() {
+          	$.getScript('../../assets/viewer/js/sp-viewer-validation.js', function() {
+          		loadSwal();
+          	});
+          });
+        	
+        	function loadSwal() {
+        		swal({
+              customClass: 'sp--direction-ltr',
+              confirmButtonText: confirmButtonText,
+              cancelButtonText: cancelButtonText,
+              showCancelButton: true,
+              showConfirmButton: true,
+              html: '<form id="widget3-form" class="sp-widget-font-fmaily">' + 
+              				'<div class="form-group">' +
+                				'<label for="sp-widget3-message" class="sp-widget3-label">' + customMessageLabel + '</label>' +
+                				'<textarea class="swal2-textarea" id="sp-widget3-message" rows="5" autofocus></textarea>' +
+              				'</div>' +
+              				'<div class="form-group">' +
+              					'<label for="sp-widget3-email" class="sp-widget3-label"><span>* </span>' + customEmailLabel + '</label>' + 
+              					'<input type="text" name="widget3Email" class="swal2-input" id="sp-widget3-email">' +
+              					'<span class="form-control-feedback fa"></span>' + 
+              				'</div>' + 
+              				formMessage +
+              			'</form>',
+              title: widget.buttonText,
+              preConfirm: function() {
+                return new Promise(function(resolve) {
+                  /**
+                   * Send Ask a Question event.
+                   * 
+                   * param_1_varchar - The text on the Ask a Question button.
+                   * param_2_varchar - The message in the widget form.
+                   * param_3_varchar - The email address to reply to in the widget form.
+                   */
+                	if ($('#widget3-form').valid()) {
+                		sp.viewer.setCustomerEvent({
+                      eventName: sp.viewer.eventName.viewerWidgetAskQuestion,
+                      linkHash: sp.viewer.linkHash,
+                      sessionId: sessionid,
+                      param_1_varchar: $('#sp-widget3').text(),
+                      param_2_varchar: $('#sp-widget3-message').val(),
+                      param_3_varchar: $('#sp-widget3-email').val(),
+                      param_4_varchar: confirmButtonText,
+                      param_5_varchar: cancelButtonText,
+                      param_6_varchar: customMessageLabel,
+                      param_7_varchar: customEmailLabel,
+                      param_8_varchar: sp.validate.errorMessage,
+                    });
+                    resolve();
+                	}
                 });
-                resolve();
-              });
-            }
-          }).then(function() {
-            swal("Success!", "Your message has been sent.", "success");
-          }).done();
+              }
+            }).then(function() {
+              swal("Success!", "Your message has been sent.", "success");
+            }).done();
+        	}
         });
       }
       
