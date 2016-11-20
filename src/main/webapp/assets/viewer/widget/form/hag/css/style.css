@@ -23,12 +23,17 @@ section:not([data-section-id="0"]),
   display: none;
 }
 
-/* Genetal Settings */
+/* General Settings */
 .sp--font-weight-normal {
   font-weight: normal;
 }
 
-/* Bootstrap Settings */
+
+/* Bootstrap & Third Party Libraries Settings */
+.bootstrap-datetimepicker-widget.dropdown-menu {
+	width: 16em !important;
+}
+
 .radio-inline {
   display: inline;
 }
