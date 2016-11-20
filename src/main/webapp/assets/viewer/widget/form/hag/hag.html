@@ -31,25 +31,25 @@
     <section data-section-id="0">
       <form id="form-0">
         <div class="form-group">
-          <label class="control-label" for="id-init">תעודת זהות:</label>
+          <label class="control-label" for="id-init"><span class="mandatory-field">*</span> תעודת זהות:</label>
           <input type="text" class="form-control" id="id-init" name="id" placeholder="הכנס תעודת זהות">
           <span class="glyphicon form-control-feedback"></span>
         </div>
       
         <div class="form-group">
-          <label class="control-label" for="first-name-init">שם פרטי:</label>
+          <label class="control-label" for="first-name-init"><span class="mandatory-field">*</span> שם פרטי:</label>
           <input type="text" class="form-control" id="first-name-init" name="firstName" placeholder="הכנס שם פרטי">
           <span class="glyphicon form-control-feedback"></span>
         </div>
         
         <div class="form-group">
-          <label class="control-label" for="last-name-init">שם משפחה:</label>
+          <label class="control-label" for="last-name-init"><span class="mandatory-field">*</span> שם משפחה:</label>
           <input type="text" class="form-control" id="last-name-init" name="lastName" placeholder="הכנס שם משפחה">
           <span class="glyphicon form-control-feedback"></span>
         </div>
         
         <div class="form-group">
-          <label class="control-label" for="phone-number-init">טלפון נייד / נייח:</label>
+          <label class="control-label" for="phone-number-init"><span class="mandatory-field">*</span> טלפון נייד / נייח:</label>
           <div class="row">
             <div class="col-xs-4">
               <select class="form-control" id="phone-operator-code-init">
@@ -79,7 +79,7 @@
         </div>
         
         <div class="form-group">
-          <label class="control-label" for="email-init">כתובת מייל:</label>
+          <label class="control-label" for="email-init"><span class="mandatory-field">*</span> כתובת מייל:</label>
           <input type="email" class="form-control" id="email-init" name="email" placeholder="הכנס כתובת מייל">
           <span class="glyphicon form-control-feedback"></span>
         </div>
@@ -89,35 +89,35 @@
     <section data-section-id="1">
       <form id="form-1">
         <div class="form-group">
-          <label class="control-label" for="id">תעודת זהות:</label>
+          <label class="control-label" for="id"><span class="mandatory-field">*</span> תעודת זהות:</label>
           <input type="text" class="form-control" id="id" name="id" placeholder="הכנס תעודת זהות">
           <span class="glyphicon form-control-feedback"></span>
         </div>
         
         <div class="form-group">
-          <label class="control-label" for="last-name">שם משפחה:</label>
+          <label class="control-label" for="last-name"><span class="mandatory-field">*</span> שם משפחה:</label>
           <input type="text" class="form-control" id="last-name" name="lastName" placeholder="הכנס שם משפחה">
           <span class="glyphicon form-control-feedback"></span>
         </div>
         
         <div class="form-group">
-          <label class="control-label" for="first-name">שם פרטי:</label>
+          <label class="control-label" for="first-name"><span class="mandatory-field">*</span> שם פרטי:</label>
           <input type="text" class="form-control" id="first-name" name="firstName" placeholder="הכנס שם פרטי">
           <span class="glyphicon form-control-feedback"></span>
         </div>
         
         <div class="form-group">
-          <label class="control-label" for="birth-date">תאריך לידה:</label>
+          <label class="control-label" for="birth-date"><span class="mandatory-field">*</span> תאריך לידה: (ע"פ נהלי החברה, לא ניתן להצטרף לקרן הפנסיה מתחת לגיל 18 או מגיל 55 ומעלה)</label>
           <div class="input-group date sp-direction--ltr" id="datetimepicker1">
             <span class="input-group-addon">
               <span class="fa fa-calendar"></span>
             </span>
-            <input type="text" class="form-control sp-text-align--right" id="birth-date" name="birthDate">
+            <input type="text" class="form-control sp-text-align--right" id="birth-date" name="birthDate" onkeydown="return false">
           </div>
         </div>
         
         <div class="form-group sp-radio">
-          <label class="control-label">מין:</label>
+          <label class="control-label"><span class="mandatory-field">*</span> מין:</label>
           <div>
             <input type="radio" id="male" name="gender" value="male">
             <label class="radio-inline" for="male">זכר</label>
@@ -127,7 +127,7 @@
         </div>
         
         <div class="form-group">
-          <label class="control-label" for="city">עיר:</label>
+          <label class="control-label" for="city"><span class="mandatory-field">*</span> עיר:</label>
           <select class="form-control" id="city" name="city" style="width: 100%">
             <option value=""></option>
 			<option value="967">אבו ג'ווייעד (שבט)</option>
@@ -1612,14 +1612,14 @@
         </div>
         
         <div class="form-group">
-          <label class="control-label" for="street">רחוב:</label>
+          <label class="control-label" for="street"><span class="mandatory-field">*</span> רחוב:</label>
           <select class="form-control" id="street" name="street" style="width: 100%">
             <option value=""></option>
           </select>
         </div>
         
         <div class="form-group">
-          <label class="control-label" for="house-number">מספר:</label>
+          <label class="control-label" for="house-number"><span class="mandatory-field">*</span> מספר:</label>
           <input type="text" class="form-control" id="house-number" name="houseNumber" placeholder="הכנס מספר בית">
           <span class="glyphicon form-control-feedback"></span>
         </div>
@@ -1631,13 +1631,13 @@
         </div>
         
         <div class="form-group">
-          <label class="control-label" for="email">כתובת מייל:</label>
+          <label class="control-label" for="email"><span class="mandatory-field">*</span> כתובת מייל:</label>
           <input type="email" class="form-control" id="email" name="email" placeholder="הכנס כתובת מייל">
           <span class="glyphicon form-control-feedback"></span>
         </div>
         
         <div class="form-group">
-          <label class="control-label" for="phone-mobile-number">טלפון נייד:</label>
+          <label class="control-label" for="phone-mobile-number" id="phone-mobile-number-label">טלפון נייד:</label>
           <div class="row">
             <div class="col-xs-4">
               <select class="form-control" id="phone-mobile-operator-code">
@@ -1656,7 +1656,7 @@
         </div>
         
         <div class="form-group">
-          <label class="control-label" for="phone-home-number">טלפון בית:</label>
+          <label class="control-label" for="phone-home-number" id="phone-home-number-label">טלפון בית:</label>
           <div class="row">
             <div class="col-xs-4">
               <select class="form-control" id="phone-home-operator-code">
@@ -1682,7 +1682,7 @@
         <hr>
         
         <div class="form-group">
-          <label class="control-label" for="family-status">מצב משפחתי:</label>
+          <label class="control-label" for="family-status"><span class="mandatory-field">*</span> מצב משפחתי:</label>
           <select class="form-control" id="family-status" name="familyStatus">
             <option value="" selected disabled>בחר מצב משפחתי</option>
             <option value="רווק/ה">
@@ -1701,7 +1701,7 @@
         </div>
         
         <div class="form-group sp-radio">
-          <label class="control-label">האם יש בן/בת זוג (ידוע/ה בציבור):</label>
+          <label class="control-label"><span class="mandatory-field">*</span> האם יש בן/בת זוג (ידוע/ה בציבור):</label>
           <div>
             <input type="radio" id="is-has-partner-yes" name="isHasPartner" value="כן">
             <label class="radio-inline" for="is-has-partner-yes">
@@ -1720,19 +1720,19 @@
           </div>
             
           <div class="form-group">
-            <label class="control-label" for="id-partner">תעודת זהות:</label>
+            <label class="control-label" for="id-partner"><span class="mandatory-field">*</span> תעודת זהות:</label>
             <input type="text" class="form-control" id="id-partner" name="idPartner" placeholder="הכנס תעודת זהות">
             <span class="glyphicon form-control-feedback"></span>
           </div>
           
           <div class="form-group">
-            <label class="control-label" for="first-name-partner">שם פרטי:</label>
+            <label class="control-label" for="first-name-partner"><span class="mandatory-field">*</span> שם פרטי:</label>
             <input type="text" class="form-control" id="first-name-partner" name="firstNamePartner" placeholder="הכנס שם פרטי">
             <span class="glyphicon form-control-feedback"></span>
           </div>
           
           <div class="form-group">
-            <label class="control-label" for="birth-date-partner">תאריך לידה:</label>
+            <label class="control-label" for="birth-date-partner"><span class="mandatory-field">*</span> תאריך לידה:</label>
             <div class="input-group date sp-direction--ltr" id="datetimepicker2">
               <span class="input-group-addon">
                 <span class="fa fa-calendar"></span>
@@ -1743,7 +1743,7 @@
         </div>
         
         <div class="form-group sp-radio">
-          <label class="control-label">האם יש ילד/ים:</label>
+          <label class="control-label"><span class="mandatory-field">*</span> האם יש ילד/ים:</label>
           <div>
             <input type="radio" id="is-has-kids-yes" name="isHasKids" value="כן">
             <label class="radio-inline" for="is-has-kids-yes">
@@ -1760,7 +1760,7 @@
           <label>
             <input type="checkbox" class="pull-right sp-checkbox--rtl" id="partner-no-kids-no" name="partnerNoKidsNo">
             <strong>
-            מבוטח ללא בן/בת זוג וללא ילדים
+            <span class="mandatory-field">*</span> מבוטח ללא בן/בת זוג וללא ילדים
             </strong> 
             ויתור על כיסוי הביטוחי לבן/בת זוג וילדים במקרה של פטירת המבוטח
           </label>
@@ -1771,7 +1771,7 @@
             <label class="control-label">
               <input type="checkbox" class="pull-right sp-checkbox--rtl" id="partner-no-kids-yes" name="partnerNoKidsYes">
               <strong>
-              מבוטח ללא בן/בת זוג ועם ילדים
+              <span class="mandatory-field">*</span> מבוטח ללא בן/בת זוג ועם ילדים
               </strong>
                ויתור על כיסוי הביטוחי לבן/ת זוג במקרה של פטירת המבוטח
             </label>
@@ -1804,7 +1804,7 @@
         </p>
           
         <div class="form-group sp-radio">
-          <label class="control-label">מינוי מוטבים:</label>
+          <label class="control-label"><span class="mandatory-field">*</span> מינוי מוטבים:</label>
           <div>
             <input type="radio" id="beneficiaries-existing" name="beneficiaries" value="יורשים קיימים">
             <label class="radio-inline" for="beneficiaries-existing">
@@ -1825,19 +1825,19 @@
               </div>
               
               <div class="form-group">
-                <label class="control-label" for="id-beneficiary-1">תעודת זהות:</label>
+                <label class="control-label" for="id-beneficiary-1"><span class="mandatory-field">*</span> תעודת זהות:</label>
                 <input type="text" class="form-control" id="id-beneficiary-1" name="idBeneficiary1" placeholder="הכנס תעודת זהות">
                 <span class="glyphicon form-control-feedback"></span>
               </div>
             
               <div class="form-group">
-                <label class="control-label" for="last-name-beneficiary-1">שם משפחה:</label>
+                <label class="control-label" for="last-name-beneficiary-1"><span class="mandatory-field">*</span> שם משפחה:</label>
                 <input type="text" class="form-control" id="last-name-beneficiary-1" name="lastNameBeneficiary1" placeholder="הכנס שם משפחה">
                 <span class="glyphicon form-control-feedback"></span>
               </div>
               
               <div class="form-group">
-                <label class="control-label" for="first-name-beneficiary-1">שם פרטי:</label>
+                <label class="control-label" for="first-name-beneficiary-1"><span class="mandatory-field">*</span> שם פרטי:</label>
                 <input type="text" class="form-control" id="first-name-beneficiary-1" name="firstNameBeneficiary1" placeholder="הכנס שם פרטי">
                 <span class="glyphicon form-control-feedback"></span>
               </div>
@@ -1869,20 +1869,20 @@
               </div>
               
               <div class="form-group">
-                <label class="control-label" for="id-beneficiary-2">תעודת זהות:</label>
+                <label class="control-label" for="id-beneficiary-2"><span class="mandatory-field">*</span> תעודת זהות:</label>
                 <input type="text" class="form-control" id="id-beneficiary-2" name="idBeneficiary2" placeholder="הכנס תעודת זהות">
                 <span class="glyphicon form-control-feedback"></span>
               </div>
             
             
               <div class="form-group">
-                <label class="control-label" for="last-name-beneficiary-2">שם משפחה:</label>
+                <label class="control-label" for="last-name-beneficiary-2"><span class="mandatory-field">*</span> שם משפחה:</label>
                 <input type="text" class="form-control" id="last-name-beneficiary-2" name="lastNameBeneficiary2" placeholder="הכנס שם משפחה">
                 <span class="glyphicon form-control-feedback"></span>
               </div>
               
               <div class="form-group">
-                <label class="control-label" for="first-name-beneficiary-2">שם פרטי:</label>
+                <label class="control-label" for="first-name-beneficiary-2"><span class="mandatory-field">*</span> שם פרטי:</label>
                 <input type="text" class="form-control" id="first-name-beneficiary-2" name="firstNameBeneficiary2" placeholder="הכנס שם פרטי">
                 <span class="glyphicon form-control-feedback"></span>
               </div>
@@ -1921,7 +1921,7 @@
     <section data-section-id="2">
       <form id="form-2">
       	<div class="form-group">
-          <label class="control-label">בחירת תוכנית ביטוח:</label><i id="pensionPlanTooltip" class="fa fa-info-circle sp-tooltip"></i>
+          <label class="control-label"><span class="mandatory-field">*</span> בחירת תוכנית ביטוח:</label><i id="pensionPlanTooltip" class="fa fa-info-circle sp-tooltip"></i>
           <div class="sp-radio">
             <input type="radio" id="pension-plan-1" name="pensionPlan">
             <label class="radio-inline" for="pension-plan-1">
@@ -1974,7 +1974,7 @@
         
         
       	<div class="form-group">
-          <label class="control-label">בחירת מסלול השקעה:</label><i id="investmentPlanTooltip" class="fa fa-info-circle sp-tooltip"></i>
+          <label class="control-label"><span class="mandatory-field">*</span> בחירת מסלול השקעה:</label><i id="investmentPlanTooltip" class="fa fa-info-circle sp-tooltip"></i>
           <div class="sp-radio">
             <input type="radio" id="investment-plan-1" name="investmentPlan">
             <label class="radio-inline" for="investment-plan-1">
@@ -2006,7 +2006,7 @@
         
         
         <div class="form-group" id="retirement-age">
-          <label class="control-label">בחירת גיל פרישה לפנסיית זקנה:</label>
+          <label class="control-label"><span class="mandatory-field">*</span> בחירת גיל פרישה לפנסיית זקנה:</label>
           
           <div id="retirement-age-male">
             <div class="sp-radio">
@@ -2064,7 +2064,7 @@
       
         <div id="employer">
           <div class="form-group">
-            <label class="control-label" for="employer-name">שם מעסיק:</label>
+            <label class="control-label" for="employer-name"><span class="mandatory-field">*</span> שם מעסיק:</label>
               <select class="form-control" id="employer-name" name="employerName" style="width: 100%">
                 <option data-is-original="1" value=""></option>
                 <option data-is-original="1" value="512380205">א א קולדוני תעשיות בע&quot;מ</option>
@@ -5936,7 +5936,7 @@
           </div>
           
           <div class="form-group">
-            <label class="control-label" for="employer-phone">טלפון:</label>
+            <label class="control-label" for="employer-phone"><span class="mandatory-field">*</span> טלפון:</label>
             <input type="text" class="form-control" id="employer-phone" name="employerPhone">
             <span class="glyphicon form-control-feedback"></span>
           </div>
@@ -5950,7 +5950,7 @@
            -->
           
           <div class="form-group">
-            <label class="control-label" for="employer-contact">איש קשר:</label>
+            <label class="control-label" for="employer-contact"><span class="mandatory-field">*</span> איש קשר:</label>
             <input type="text" class="form-control" id="employer-contact" name="employerContact">
             <span class="glyphicon form-control-feedback"></span>
           </div>
@@ -5977,7 +5977,7 @@
           <div class="form-group">
             <label>
               <input type="checkbox" class="pull-right sp-checkbox--rtl" id="is-not-insured" name="isNotInsured">
-              הנני מצהיר/ה כי 
+              <span class="mandatory-field">*</span> הנני מצהיר/ה כי 
               <strong>
               איני
               </strong>                
@@ -5991,13 +5991,13 @@
     <section data-section-id="4">
       <form id="form-4">
         <div class="form-group">
-          <label class="control-label" for="height">גובה (ס&quot;מ):</label>
+          <label class="control-label" for="height"><span class="mandatory-field">*</span> גובה (ס&quot;מ):</label>
           <input type="number" class="form-control" id="height" name="height" placeholder="הכנס גובה">
           <span class="glyphicon form-control-feedback"></span>
         </div>
         
         <div class="form-group">
-          <label class="control-label" for="height">משקל (ק&quot;ג):</label>
+          <label class="control-label" for="height"><span class="mandatory-field">*</span> משקל (ק&quot;ג):</label>
           <input type="number" class="form-control" id="weight" name="weight" placeholder="הכנס משקל">
           <span class="glyphicon form-control-feedback"></span>
         </div>
@@ -6015,7 +6015,7 @@
         </div>
         
         <div class="form-group sp-radio">
-          <label class="control-label">עישון:</label>
+          <label class="control-label"><span class="mandatory-field">*</span> עישון:</label>
           <div>
             <input type="radio" id="smoking-yes" name="smoking" value="כן">
             <label class="radio-inline" for="smoking-yes">כן</label>
@@ -6039,7 +6039,7 @@
         <hr>
         
         <div class="form-group sp-radio">
-          <label class="control-label">אלכוהול - צריכת אלכוהול כעת/ואו בעבר יותר מכוס אחת ביום של בירה / יין או משקה אלכוהולי אחר:</label>
+          <label class="control-label"><span class="mandatory-field">*</span> אלכוהול - צריכת אלכוהול כעת/ואו בעבר יותר מכוס אחת ביום של בירה / יין או משקה אלכוהולי אחר:</label>
           <div>
             <input type="radio" id="alcohol-yes" name="alcohol" value="כן">
             <label class="radio-inline" for="alcohol-yes">כן</label>
@@ -6116,7 +6116,7 @@
 		            </div>
 		          </div>
               	</td>
-                <td>1.1. לב, כלי דם, אירוע מוחי ,לחץ דם, מערכת כלי דם פריפריאלית (היקפית)</td>
+                <td><span class="mandatory-field">*</span> 1.1. לב, כלי דם, אירוע מוחי ,לחץ דם, מערכת כלי דם פריפריאלית (היקפית)</td>
               </tr>
               <tr>
                 <td>
@@ -6129,7 +6129,7 @@
 		            </div>
 		          </div>
               	</td>
-              	<td>1.2. מערכת העצבים והמוח</td>
+              	<td><span class="mandatory-field">*</span> 1.2. מערכת העצבים והמוח</td>
               </tr>
               <tr>
                 <td>
@@ -6142,7 +6142,7 @@
 		            </div>
 		          </div>
               	</td>
-              	<td>1.3. בעיה/הפרעה ו/או מחלה נפשית מאובחנת וניסיונות התאבדות</td>
+              	<td><span class="mandatory-field">*</span> 1.3. בעיה/הפרעה ו/או מחלה נפשית מאובחנת וניסיונות התאבדות</td>
               </tr>
               <tr>
                 <td>
@@ -6155,7 +6155,7 @@
 		            </div>
 		          </div>
               	</td>
-              	<td>1.4. סוכרת, שומנים בדם ומחלות הקשורות בבלוטות</td>
+              	<td><span class="mandatory-field">*</span> 1.4. סוכרת, שומנים בדם ומחלות הקשורות בבלוטות</td>
               </tr>
               <tr>
                 <td>
@@ -6168,7 +6168,7 @@
 		            </div>
 		          </div>
               	</td>
-              	<td>1.5. סרטן, גידולים ומחלות ממאירות</td>
+              	<td><span class="mandatory-field">*</span> 1.5. סרטן, גידולים ומחלות ממאירות</td>
               </tr>
               <tr>
                 <td>
@@ -6181,7 +6181,7 @@
 		            </div>
 		          </div>
               	</td>
-              	<td>1.6. מערכת העיכול, המעיים, טחול, לבלב, פי הטבעת</td>
+              	<td><span class="mandatory-field">*</span> 1.6. מערכת העיכול, המעיים, טחול, לבלב, פי הטבעת</td>
               </tr>
               <tr>
                 <td>
@@ -6194,7 +6194,7 @@
 		            </div>
 		          </div>
               	</td>
-              	<td>1.7. כליות ודרכי שתן, ערמונית, מחלות מין ואשכים</td>
+              	<td><span class="mandatory-field">*</span> 1.7. כליות ודרכי שתן, ערמונית, מחלות מין ואשכים</td>
               </tr>
               <tr>
                 <td>
@@ -6207,7 +6207,7 @@
 		            </div>
 		          </div>
               	</td>
-              	<td>1.8. לנשים - בעיות גניקולוגיות ושדיים</td>
+              	<td><span class="mandatory-field">*</span> 1.8. לנשים - בעיות גניקולוגיות ושדיים</td>
               </tr>
               <tr>
                 <td>
@@ -6220,7 +6220,7 @@
 		            </div>
 		          </div>
               	</td>
-              	<td>1.9. מחלת כבד, מחלת צהבת (למעט מסוג A ) והפרעה בתפקודי כבד</td>
+              	<td><span class="mandatory-field">*</span> 1.9. מחלת כבד, מחלת צהבת (למעט מסוג A ) והפרעה בתפקודי כבד</td>
               </tr>
               <tr>
                 <td>
@@ -6233,7 +6233,7 @@
 		            </div>
 		          </div>
               	</td>
-              	<td>1.10. ריאות ודרכי נשימה</td>
+              	<td><span class="mandatory-field">*</span> 1.10. ריאות ודרכי נשימה</td>
               </tr>
               <tr>
                 <td>
@@ -6246,7 +6246,7 @@
 		            </div>
 		          </div>
               	</td>
-              	<td>1.11. בעיות אורתופדיות כולל גב ועמוד שידרה ודלקות פרקים</td>
+              	<td><span class="mandatory-field">*</span> 1.11. בעיות אורתופדיות כולל גב ועמוד שידרה ודלקות פרקים</td>
               </tr>
               <tr>
                 <td>
@@ -6259,7 +6259,7 @@
 		            </div>
 		          </div>
               	</td>
-              	<td>1.12. מחלות זיהומיות ואיידס/ נשא HIV</td>
+              	<td><span class="mandatory-field">*</span> 1.12. מחלות זיהומיות ואיידס/ נשא HIV</td>
               </tr>
               <tr>
                 <td>
@@ -6272,7 +6272,7 @@
 		            </div>
 		          </div>
               	</td>
-              	<td>1.13. בעיות ומחלות עור</td>
+              	<td><span class="mandatory-field">*</span> 1.13. בעיות ומחלות עור</td>
               </tr>
               <tr>
                 <td>
@@ -6285,7 +6285,7 @@
 		            </div>
 		          </div>
               	</td>
-              	<td>1.14. בעיות ומחלות:  עיניים (כולל מספר עדשות מעל 8), אף אוזן גרון וחלל הפה</td>
+              	<td><span class="mandatory-field">*</span> 1.14. בעיות ומחלות:  עיניים (כולל מספר עדשות מעל 8), אף אוזן גרון וחלל הפה</td>
               </tr>
               <tr>
                 <td>
@@ -6299,9 +6299,9 @@
 		          </div>
               	</td>
               	<td>
-                  2. האם יש לך מום מולד כלשהו או הייתה לך נכות ו/או אתה מקבל או בתהליך קבלת קצבת נכות או אובדן כושר עבודה?
+                  <span class="mandatory-field">*</span> 2. האם יש לך מום מולד כלשהו או הייתה לך נכות ו/או אתה מקבל או בתהליך קבלת קצבת נכות או אובדן כושר עבודה?
                   <div class="form-group" id="medical-questionnaire-2-yes-container">
-                    <label class="control-label" for="medical-questionnaire-2-yes-details">פרט:</label>
+                    <label class="control-label" for="medical-questionnaire-2-yes-details"><span class="mandatory-field">*</span> פרט:</label>
                     <textarea class="form-control" id="medical-questionnaire-2-yes-details" name="medical-questionnaire-2-yes-details" rows="3" maxlength="500"></textarea>
                   </div>
                 </td>
@@ -6318,9 +6318,9 @@
 		          </div>
               	</td>
               	<td>
-                  3. האם למיטב ידיעתך התגלו בקרב אחד מקרוביך (אם/אב/אח/אחות) אחת מהמחלות הבאות מחלות לב, שבץ מוחי, סרטן, סוכרת, כליות פוליציסטיות ,טרשת נפוצה, ניוון שרירים ,מחלת הנטינגטון, מחלות נפשיות, מחלת פרקינסון, מחלת  אלצהיימר?
+                  <span class="mandatory-field">*</span> 3. האם למיטב ידיעתך התגלו בקרב אחד מקרוביך (אם/אב/אח/אחות) אחת מהמחלות הבאות מחלות לב, שבץ מוחי, סרטן, סוכרת, כליות פוליציסטיות ,טרשת נפוצה, ניוון שרירים ,מחלת הנטינגטון, מחלות נפשיות, מחלת פרקינסון, מחלת  אלצהיימר?
                   <div class="form-group" id="medical-questionnaire-3-yes-container">
-                    <label class="control-label" for="medical-questionnaire-3-yes-details">פרט מי  ובאיזה גיל  חלה:</label>
+                    <label class="control-label" for="medical-questionnaire-3-yes-details"><span class="mandatory-field">*</span> פרט מי  ובאיזה גיל  חלה:</label>
                     <textarea class="form-control" id="medical-questionnaire-3-yes-details" name="medical-questionnaire-3-yes-details" rows="3" maxlength="500"></textarea>
                   </div>
                 </td>
@@ -6337,9 +6337,9 @@
 		          </div>
               	</td>
               	<td>
-                  4. האם אתה נמצא בבירור רפואי כלשהו ו/או נוטל תרופות באופן קבוע בחמש השנים האחרונות? או האם טופלת במשך תקופה של יותר משבועיים ברציפות במהלך ה-24 חודשים האחרונים?
+                  <span class="mandatory-field">*</span> 4. האם אתה נמצא בבירור רפואי כלשהו ו/או נוטל תרופות באופן קבוע בחמש השנים האחרונות? או האם טופלת במשך תקופה של יותר משבועיים ברציפות במהלך ה-24 חודשים האחרונים?
                   <div class="form-group" id="medical-questionnaire-4-yes-container">
-                    <label class="control-label" for="medical-questionnaire-4-yes-details">פרט:</label>
+                    <label class="control-label" for="medical-questionnaire-4-yes-details"><span class="mandatory-field">*</span> פרט:</label>
                     <textarea class="form-control" id="medical-questionnaire-4-yes-details" name="medical-questionnaire-4-yes-details" rows="3" maxlength="500"></textarea>
                   </div>
                 </td>
@@ -6356,9 +6356,9 @@
 		          </div>
               	</td>
               	<td>
-                  5. האם נעדרת מהעבודה מסיבה רפואית או היית בחופשת מחלה יותר מ 10 יום רצופים ב 24 החודשים האחרונים?
+                  <span class="mandatory-field">*</span> 5. האם נעדרת מהעבודה מסיבה רפואית או היית בחופשת מחלה יותר מ 10 יום רצופים ב 24 החודשים האחרונים?
                   <div class="form-group" id="medical-questionnaire-5-yes-container">
-                    <label class="control-label" for="medical-questionnaire-5-yes-details">פרט:</label>
+                    <label class="control-label" for="medical-questionnaire-5-yes-details"><span class="mandatory-field">*</span> פרט:</label>
                     <textarea class="form-control" id="medical-questionnaire-5-yes-details" name="medical-questionnaire-5-yes-details" rows="3" maxlength="500"></textarea>
                   </div>
                 </td>
@@ -6375,9 +6375,9 @@
 		          </div>
               	</td>
               	<td>
-                  6. האם אושפזת בבית חולים לתקופה מעבר ל 5 ימים ו/או עברת ניתוח כלשהו ב 24 חודשים האחרונים או שידוע לך על צורך באשפוז, ניתוח או בדיקה פולשנית?
+                  <span class="mandatory-field">*</span> 6. האם אושפזת בבית חולים לתקופה מעבר ל 5 ימים ו/או עברת ניתוח כלשהו ב 24 חודשים האחרונים או שידוע לך על צורך באשפוז, ניתוח או בדיקה פולשנית?
                   <div class="form-group" id="medical-questionnaire-6-yes-container">
-                    <label class="control-label" for="medical-questionnaire-6-yes-details">פרט:</label>
+                    <label class="control-label" for="medical-questionnaire-6-yes-details"><span class="mandatory-field">*</span> פרט:</label>
                     <textarea class="form-control" id="medical-questionnaire-6-yes-details" name="medical-questionnaire-6-yes-details" rows="3" maxlength="500"></textarea>
                   </div>
                 </td>
@@ -6389,6 +6389,7 @@
         <div class="form-group">
           <label>
             <input type="checkbox" class="pull-right sp-checkbox--rtl" id="is-health-confirmed" name="isHealthConfirmed">
+            <span class="mandatory-field">*</span> 
             הנני מצהיר כי כל הפרטים שמסרתי בהצהרה זו, כולם או חלקם, הינם הפרטים הנכונים והמלאים לגבי מצב בריאותי במועד ההצהרה וכי לא אהיה זכאי לפנסיית נכות, ושאיריי לא יהיו זכאים לפנסיית שאירים, ככל שהנכות או הפטירה, לפי העניין, אירעו כתוצאה ממצבי הבריאותי, שעליו לא דיוותי כנדרש, דיווח מלא, נכון ומדויק.<br>
             הנני מוותר ומייפה את כוחה של החברה המנהלת ו/או מי מטעמה לקבל בשמי כל מידע רפואי מאת רופא ו/או מוסד רפואי, בקשר עם מצבי הבריאותי.
           </label>
@@ -6400,7 +6401,7 @@
       <form id="form-5">
         <div class="form-group sp-radio">
           <label class="control-label">
-          ברצוני להעביר קופה מגוף אחר:
+          <span class="mandatory-field">*</span> ברצוני להעביר קופה מגוף אחר:
           <br>
           (העברת מלוא הכספים שנצברו בחשבונך, בכל מרכיבי החשבון ולכל מסלולי השקעה)
           </label>
@@ -6420,7 +6421,7 @@
           <div id="funds">
             <div class="fund" id="fund-1">
               <div class="form-group">
-                <label class="control-label" for="fund-name-1">קופה מעבירה:</label>
+                <label class="control-label" for="fund-name-1"><span class="mandatory-field">*</span> קופה מעבירה:</label>
                 <select class="form-control fund-name" id="fund-name-1" name="fundName1">
                   <option value="" selected disabled>בחר קופה מעבירה</option>
                   <option value="131">איילון-פיסגה קרן פנסיה</option>
@@ -6481,13 +6482,13 @@
               -->
               
               <div class="form-group" id="account-number-container-1">
-                <label class="control-label" for="account-number-1">מספר חשבון:</label>
+                <label class="control-label" for="account-number-1"><span class="mandatory-field">*</span> מספר חשבון:</label>
                 <input type="text" class="form-control" id="account-number-1" name="accountNumber1">
                 <span class="glyphicon form-control-feedback"></span>
               </div>
               
               <div class="form-group sp-radio">
-                <label class="control-label">סטטוס עמית:</label><i id="memberStatusTooltip" class="fa fa-info-circle sp-tooltip"></i>
+                <label class="control-label"><span class="mandatory-field">*</span> סטטוס עמית:</label><i id="memberStatusTooltip" class="fa fa-info-circle sp-tooltip"></i>
                 <div>
                   <input type="radio" id="active-member-1" name="memberStatus1">
                   <label class="radio-inline" for="active-member-1">עמית פעיל</label>
@@ -6510,6 +6511,7 @@
               </div>
               
               <div class="form-group" id="transfer-fund-statement-7-container">
+              	<label class="control-label"><span class="mandatory-field">*</span> נא לבחור מבין 2 הסעיפים:</label>
                 <div class="sp-radio">
                   <input type="radio" id="transferFundStatement7Option1" name="transferFundStatement7">
                   <label class="radio-inline" for="transferFundStatement7Option1">
@@ -6657,12 +6659,12 @@
         <div class="form-group confirm-statements">
           <label>
             <input type="checkbox" class="pull-right sp-checkbox--rtl" id="is-confirm-statements" name="isConfirmStatements" disabled>
-            אני מאשר כי קראתי את הצהרות המועמד
+            <span class="mandatory-field">*</span> אני מאשר כי קראתי את הצהרות המועמד
           </label>
         </div>
         
         <div class="form-group">
-          <label>חתימה:</label><br>
+          <label><span class="mandatory-field">*</span> חתימה:</label><br>
           <canvas id="sp-form__signature"></canvas><br>
           <button id="hag-signature--clear" type="button" class="btn btn-default">נקה</button>
         </div>
@@ -6707,7 +6709,8 @@
 <script src="js/jquery.validate.min.js"></script>
 <script src="js/additional-methods.min.js"></script>
 
-<script src="js/moment.js"></script>
+<script src="js/moment/moment.js"></script>
+<script src="js/moment/he.js"></script>
 <script src="js/collapse.js"></script>
 <script src="js/transition.js"></script>
 <script src="js/bootstrap-datetimepicker.min.js"></script>

@@ -170,11 +170,6 @@ $(function() {
         number: true,
         totalPercentage100: true
       },
-      phoneMobileNumber: {
-        exactLength: 7,
-        number:true,
-        required: true
-      },
       street: {
         required: true
       }
