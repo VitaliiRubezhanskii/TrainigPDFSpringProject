@@ -50,7 +50,7 @@ $(document).on('pagesloaded pagechange', function(event) {
       
   var innerTermsPrivacy =
     '<a href="../../tou.html" target="_blank">Terms</a> · <a href="../../privacy.html" target="_blank">Privacy</a><br>' +
-    'Powered by <span class="sp-powered-by"><a target="_blank" href="http://www.slidepiper.com">SlidePiper</a></span>';
+    'Powered by <span class="sp-powered-by"><a target="_blank" href="https://www.slidepiper.com">SlidePiper</a></span>';
   
   $('body').append('<div class="sp--direction-ltr" id="sp-terms-privacy">' + innerTermsPrivacy + '</div>');
   $('#secondaryToolbarButtonContainer').append(
