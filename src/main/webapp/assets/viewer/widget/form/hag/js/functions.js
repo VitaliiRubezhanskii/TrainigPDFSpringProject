@@ -27,7 +27,17 @@ $(function() {
         var mobileOperatorCode = ['050', '052', '054', '055', '057', '058'];
         if (mobileOperatorCode.indexOf($('#phone-operator-code-init').val()) > -1) {
           $('#phone-mobile-operator-code').val($('#phone-operator-code-init').val());
-          $('#phone-mobile-number').val($('#phone-number-init').val());
+          $('#phone-mobile-number')
+            .val($('#phone-number-init').val())
+            .rules( "add", {
+              exactLength: 7,
+              number:true,
+              required: true
+            });
+          
+          $('#phone-mobile-number-label').html(function(index, oldHtml) {
+            return '<span class="mandatory-field">*</span> ' + oldHtml;
+          });
         } else {
           $('#phone-home-operator-code').val($('#phone-operator-code-init').val());
           $('#phone-home-number')
@@ -36,6 +46,10 @@ $(function() {
               exactLength: 7,
               number:true,
               required: true
+            });
+          
+          $('#phone-home-number-label').html(function(index, oldHtml) {
+            return '<span class="mandatory-field">*</span> ' + oldHtml;
           });
         }
         
@@ -571,11 +585,18 @@ $(function() {
   
   /* Date Picker */
   $('#datetimepicker1, #datetimepicker2').datetimepicker({
+    allowInputToggle: true,
     format: 'DD/MM/YYYY',
     icons: {
       date: "fa fa-calendar"
     },
+    locale: 'he',
     viewMode: 'years'
+  });
+  
+  $('#datetimepicker1').on('dp.show', function() {
+    $('#datetimepicker1').data("DateTimePicker").maxDate(moment().subtract(18, 'years'));
+    $('#datetimepicker1').data("DateTimePicker").minDate(moment().subtract(55, 'years').add(1, 'days'));
   });
   
   
