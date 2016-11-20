@@ -30,14 +30,15 @@ section:not([data-section-id="0"]),
 
 
 /* Bootstrap & Third Party Libraries Settings */
-.bootstrap-datetimepicker-widget.dropdown-menu {
-	width: 16em !important;
-}
-
 .radio-inline {
   display: inline;
 }
 
+@media only screen and (max-width: 640px) {
+	.bootstrap-datetimepicker-widget.dropdown-menu {
+		width: 16em !important;
+	}
+}
 
 /* Specific Settings */
 body {
