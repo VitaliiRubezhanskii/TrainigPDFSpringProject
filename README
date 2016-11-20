@@ -4,6 +4,13 @@ SlidePiper README File
 Change Log
 ----------
 
+### 0.13.39
+
+2016-11-20 Yaniv Friedensohn <yanivf@slidepiper.com>, Max Prais <maxp@slidepiper.com>
+
+* Reduced calendar size only on mobile for HA form.
+
+
 ### 0.13.38
 
 2016-11-20 Yaniv Friedensohn <yanivf@slidepiper.com>, Max Prais <maxp@slidepiper.com>
