@@ -1,2 +1,0 @@
-#!/bin/bash
-mysqldump -h $OPENSHIFT_MYSQL_DB_HOST -P $OPENSHIFT_MYSQL_DB_PORT -u $OPENSHIFT_MYSQL_DB_USERNAME --password=$OPENSHIFT_MYSQL_DB_PASSWORD picascrafxzhbcmd > $OPENSHIFT_DATA_DIR\picascrafxzhbcmd_"$(date +%F_%T)".sql

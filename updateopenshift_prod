@@ -1,6 +1,0 @@
-git pull
-git add .
-git commit -m "old laptop commit in prod instance automatic commit"
-git push
-rhc tail -a sp -n slidepiper
-

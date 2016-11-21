@@ -1,6 +1,0 @@
-git pull
-git add .
-git commit -m "STABLE ver - chat at top."
-git push
-rhc tail -a slidepipertest -n slidepiper
-

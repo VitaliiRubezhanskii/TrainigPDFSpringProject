@@ -22,6 +22,10 @@ import org.hashids.Hashids;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.slidepiper.CustomerEvent;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import slidepiper.config.ConfigProperties;
 import slidepiper.constants.Constants;
 import slidepiper.dataobjects.*;
@@ -2466,6 +2470,56 @@ public class DbLayer {
         }
         
         return timestamp;
+      }
+      
+      
+      /**
+       * Set customer event.
+       */
+      public static long setCustomerEvent(CustomerEvent customerEvent) {
+        Constants.updateConstants();
+        try {
+          Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+          e.printStackTrace();
+        }
+        Connection conn = null;
+        
+        long eventId = 0;
+        String sql = "INSERT INTO customer_events (msg_id, event_name, eventData) VALUES (?, ?, ?)";
+        
+        try {
+          conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
+          PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+          
+          ps.setString(1, customerEvent.getDocumentLinkHash());
+          ps.setString(2, customerEvent.getEventName());
+          
+          ObjectMapper objectMapper = new ObjectMapper();
+          ps.setString(3, objectMapper.writeValueAsString(customerEvent));
+          ps.executeUpdate();
+          
+          ResultSet rs = ps.getGeneratedKeys();
+          if (rs.next()) {
+            eventId = rs.getLong(1);
+          }
+          
+        } catch (SQLException ex) {
+          System.err.println("Error code: " + ex.getErrorCode() + " - " + ex.getMessage());
+          ex.printStackTrace();
+        } catch (JsonProcessingException e) {
+          e.printStackTrace();
+        } finally {
+          if (null != conn) {
+            try {
+              conn.close();
+            } catch (SQLException ex) {
+              ex.printStackTrace();
+            }
+          }
+        }
+        
+        return eventId;
       }
       
       

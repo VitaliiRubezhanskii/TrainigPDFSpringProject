@@ -2,6 +2,7 @@ package slidepiper.salesman_servlets;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.file.Paths;
 
 import slidepiper.config.ConfigProperties;
@@ -24,6 +25,7 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.json.JSONObject;
 
 @SuppressWarnings("serial")
 @WebServlet("/upload-file")
@@ -51,6 +53,7 @@ public class UploadFile extends HttpServlet {
     upload.setHeaderEncoding("UTF-8");
     
     // Parse the request
+    int flag = 0;
     try {
       List<FileItem> items = upload.parseRequest(request);
       String action = null;
@@ -113,6 +116,8 @@ public class UploadFile extends HttpServlet {
               DbLayer.setEvent(DbLayer.SALESMAN_EVENT_TABLE,
                   ConfigProperties.getProperty("event_uploaded_file"), eventDataMap);
             }
+            
+            flag = 1;
           }
         }
       } else if (action.equals("updateFile")) {
@@ -133,6 +138,8 @@ public class UploadFile extends HttpServlet {
             
             DbLayer.setEvent(DbLayer.SALESMAN_EVENT_TABLE,
                 ConfigProperties.getProperty("event_updated_file"), eventDataMap);
+            
+            flag = 2;
           }
         }
       }
@@ -140,6 +147,12 @@ public class UploadFile extends HttpServlet {
       e.printStackTrace();
     }
     
-    getServletContext().getRequestDispatcher("/uploadmessage.html").forward(request, response);
+    JSONObject data = new JSONObject();
+    data.put("flag", flag);
+    
+    response.setContentType("application/json; charset=UTF-8");
+    PrintWriter output = response.getWriter();
+    output.print(data);
+    output.close();
   }
 }
