@@ -1,6 +1,10 @@
-/target
-target
-.settings/*
-!.settings/.jsdtscope
-.project
+# Eclipse
 .classpath
+.project
+.settings/
+
+# Gradle
+gradle.properties
+.gradle/
+bin/
+build/

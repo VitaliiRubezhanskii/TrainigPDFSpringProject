@@ -678,7 +678,7 @@
                             <p>Time opened: ${openTime!} GMT</p>
                             <p>${documentActions!}</p>
                             <br>
-                            <p>To view more detailed analytics, go to the <a target="_blank" href="http://www.slidepiper.com/dashboard.html">SlidePiper Dashboard</a></p>
+                            <p>To view more detailed analytics, go to the <a target="_blank" href="${logoUrl!}/dashboard.html">SlidePiper Dashboard</a></p>
                         </td>
                     </tr>
                 </tbody></table>
@@ -793,7 +793,7 @@
                                                                         <tbody><tr>
                                                                             
                                                                                 <td align="center" valign="middle" width="24" class="mcnFollowIconContent">
-                                                                                    <a href="http://www.slidepiper.com" target="_blank"><img src="${logoUrl!}/assets/email/img/weblink.png" style="display:block;" height="24" width="24" class=""></a>
+                                                                                    <a href="${logoUrl!}" target="_blank"><img src="${logoUrl!}/assets/email/img/weblink.png" style="display:block;" height="24" width="24" class=""></a>
                                                                                 </td>
                                                                         </tr>
                                                                     </tbody></table>

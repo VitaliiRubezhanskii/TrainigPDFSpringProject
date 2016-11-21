@@ -793,7 +793,7 @@
                                                                         <tbody><tr>
                                                                             
                                                                                 <td align="center" valign="middle" width="24" class="mcnFollowIconContent">
-                                                                                    <a href="http://www.slidepiper.com" target="_blank"><img src="${logoUrl!}/assets/email/img/weblink.png" style="display:block;" height="24" width="24" class=""></a>
+                                                                                    <a href="${logoUrl!}" target="_blank"><img src="${logoUrl!}/assets/email/img/weblink.png" style="display:block;" height="24" width="24" class=""></a>
                                                                                 </td>
                                                                         </tr>
                                                                     </tbody></table>

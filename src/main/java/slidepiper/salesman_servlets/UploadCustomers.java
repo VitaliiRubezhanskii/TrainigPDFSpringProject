@@ -1,12 +1,10 @@
 package slidepiper.salesman_servlets;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-
 import slidepiper.*;
 import slidepiper.constants.Constants;
 import slidepiper.db.DbLayer;
 
+import java.util.List;
 import java.util.Random;
 import java.io.*;
 import java.sql.Connection;
@@ -16,17 +14,21 @@ import java.sql.SQLException;
 
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.Part;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.IOUtils;
 import org.json.JSONObject;
 
@@ -39,17 +41,44 @@ public class UploadCustomers extends HttpServlet {
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		
-		String salesman_email = request.getParameter("salesman_email_for_csv");
-		//String name = request.getParameter("name");		
+	  /**
+     * @see https://commons.apache.org/proper/commons-fileupload/using.html
+     */
+    // Create a factory for disk-based file items
+    DiskFileItemFactory factory = new DiskFileItemFactory();
+
+    // Configure a repository (to ensure a secure temp location is used)
+    ServletContext servletContext = this.getServletConfig().getServletContext();
+    File repository = (File) servletContext.getAttribute("javax.servlet.context.tempdir");
+    factory.setRepository(repository);
+
+    // Create a new file upload handler
+    ServletFileUpload upload = new ServletFileUpload(factory);
+    
+    // @see http://stackoverflow.com/questions/5021295/servlet-file-upload-filename-encoding
+    upload.setHeaderEncoding("UTF-8");
+
+    String salesman_email = null;
+    InputStream fileInputStram = null;
+    try {
+      List<FileItem> items = upload.parseRequest(request);
+      
+      for (FileItem file: items) {
+        if (file.getFieldName().equals("salesman_email_for_csv")) {
+          salesman_email = file.getString();
+        } else if (file.getFieldName().equals("filecsv")) {
+          fileInputStram = file.getInputStream();
+        }
+      }
+    } catch (FileUploadException e) {
+      e.printStackTrace();
+    }
 		
 		System.out.println("uploadCustomers servlet Parameters - email " + salesman_email );
 		//" name of pres: " + name);
 		
-		// obtains the upload file part in this multipart request
-		Part filePart = request.getPart("filecsv");
-		
 		CSVParser parser = CSVParser.parse(
-		    IOUtils.toString(filePart.getInputStream(), "UTF-8"),
+		    IOUtils.toString(fileInputStram, "UTF-8"),
 		    CSVFormat.DEFAULT);
 		System.out.println("Parser: " + parser);
 		
