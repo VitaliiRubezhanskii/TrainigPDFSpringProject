@@ -4,6 +4,16 @@ SlidePiper README File
 Change Log
 ----------
 
+### 0.14.0
+
+2016-11-21 Yaniv Friedensohn <yanivf@slidepiper.com>
+
+* Installed Gradle.
+* Installed Spring Boot.
+* Change HTTP URLs to HTTPS.
+* Created an initial REST API for setting customer events.
+
+
 ### 0.13.39
 
 2016-11-20 Yaniv Friedensohn <yanivf@slidepiper.com>, Max Prais <maxp@slidepiper.com>
