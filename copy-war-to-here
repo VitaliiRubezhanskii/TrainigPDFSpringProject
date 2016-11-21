@@ -1,2 +1,0 @@
-scp 558979585973cac5bc00008e@slidepipertest-slidepiper.rhcloud.com:~/app-root/dependencies/jbossews/webapps/*.war .
-
