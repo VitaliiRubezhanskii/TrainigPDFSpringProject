@@ -4,6 +4,14 @@ SlidePiper README File
 Change Log
 ----------
 
+### 0.14.1
+
+2016-11-22 Yaniv Friedensohn <yanivf@slidepiper.com>
+
+* Remove unused libraries to fix an exception generated while 
+deploying v0.14.0 WAR file to Tomcat.
+
+
 ### 0.14.0
 
 2016-11-21 Yaniv Friedensohn <yanivf@slidepiper.com>
