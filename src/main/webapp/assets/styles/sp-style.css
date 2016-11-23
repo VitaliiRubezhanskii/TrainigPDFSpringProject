@@ -617,23 +617,33 @@ td.sp-file-hash {
   color: #1ab394;
 }
 
+
 /* Help Modal */
 
-.sp-help-done__h3 {
-  margin-top: 20px;
+.sp-help-modal__button-container {
+	display: inline-block;
+	padding: 0 10px;
 }
 
-.sp-help-info-mailto__button{
-  margin-top: 7px;
+#sp-help-salesmen__modal iframe {
+	border: 1px solid #e5e5e5;
+	height: 75vh;
+	width: 100%;
 }
 
-.sp-help-modal__container {
-  margin-bottom: -35px;
+#sp-help-salesmen__modal .modal-body {
+	padding: 8px;
 }
 
-.middle-box {
-  margin-top: -60px !important;
+#sp-help-salesmen__modal .modal-header {
+	padding: 6px 10px 4px;
 }
+
+#sp-help-salesmen__modal .modal-footer {
+	text-align: center;
+	padding: 10px;
+}
+
 
 /* Documents and Customers */
 
