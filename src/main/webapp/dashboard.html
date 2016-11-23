@@ -144,7 +144,7 @@
                         
                         <li data-toggle="modal" data-target="#sp-help-salesmen__modal" class="sp-help-salesmen__icon">
                             <a href="#">
-                                <i class="fa fa-question" aria-hidden="true"></i>Help
+                                <i class="fa fa-info-circle" aria-hidden="true"></i>Help
                             </a>
                         </li>
                         
@@ -938,39 +938,27 @@
     
     <!-- Help Salesman Modal -->
     <div id="sp-help-salesmen__modal" class="modal inmodal" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">
-                        <span aria-hidden="true">&times;</span>
-                        <span class="sr-only">Close</span>
-                    </button>
-                    <h4 class="modal-title">How to Use SlidePiper</h4>
-                    <small class="font-bold modal-sub-title"></small>
-                </div>
                 <div class="modal-body">
-                    <div class="wrapper wrapper-content">
-                        <div class="middle-box text-center">
-                            <h2 class="font-bold">Welcome to SlidePiper</h2>
-                            <div class="error-desc sp-help-modal__container">
-                                <p>To send documents to customers you need to do 3 things:</p>
-                                <br>
-                                <h3>1. Add Customers</h3>
-                                <h3>2. Upload Documents</h3>
-                                <h3>3. Add Interactive Widgets To Your Documents</h3>
-                                <p>Inside the Documents tab, click 'Customize'</p>
-                                <h3>4. Use the wizard to send documents</h3>
-                                <p>Click Send Documents</p>
-                                <h3 class="sp-help-done__h3">
-                                    <i class="fa fa-thumbs-up" aria-hidden="true"></i> Once you're done, check out the Anayltics
-                                </h3>
-                                <p>For support please contact us at:</p>
-                                <a target="_blank"  class="sp-help-info-mailto__button btn btn-primary" href="mailto:info@slidepiper.com">info@slidepiper.com</a>
-                            </div>
-                        </div>
-                    </div>
+                	<iframe src="https://www.slidepiper.com/view?f=5pn1e9#zoom=55"></iframe>
                 </div>
-                <div class="modal-footer"></div>
+
+                <div class="modal-footer">
+	                <div class="sp-help-modal__buton-wrapper">
+	                  <div class="sp-help-modal__button-container">
+	                    <a target="_blank" class="btn btn-primary" href="mailto:support@slidepiper.com">Click for Support</a>
+	                  </div>
+	                  
+	                  <div class="sp-help-modal__button-container">
+	                    <a target="_blank" class="btn btn-primary" href="https://www.slidepiper.com/view?f=5pn1e9">Open Manual in New Tab</a>
+	                  </div>
+	                  
+	                  <div class="sp-help-modal__button-container">
+	                    <button data-dismiss="modal" class="btn btn-default">Close Window</button>
+	                  </div>
+	                </div>
+                </div>
             </div>
         </div>
     </div>

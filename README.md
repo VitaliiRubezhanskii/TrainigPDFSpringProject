@@ -4,6 +4,16 @@ SlidePiper README File
 Change Log
 ----------
 
+### 0.14.2
+
+2016-11-23 Max Prais <maxp@slidepiper.com>
+
+* Dashboard - Added SlidePiper User Manual to the Help Modal, and removed the
+old instructions.
+
+* Login - Added 'Forgot Password' solution to the login page.
+
+
 ### 0.14.1
 
 2016-11-22 Yaniv Friedensohn <yanivf@slidepiper.com>
