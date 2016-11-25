@@ -19,6 +19,7 @@
     <!-- SlidePiper Settings -->
     <link rel="shortcut icon" type="image/png" href="/assets/website/img/logo-square-75x75.png" />
     <link href="assets/css/style.css" rel="stylesheet">
+    <link href="assets/website/css/style.css" rel="stylesheet">
     
     <!-- Google Analytics -->
     <script>
@@ -33,75 +34,72 @@
     </script>
 </head>
 <body id="page-top" class="landing-page">
-<div class="navbar-wrapper">
-        <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
-            <div class="container">
-                <div class="navbar-header page-scroll">
-                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <!-- <a class="navbar-brand" href="index.html"><img src="assets/img/logo.png"></a> -->
-                    <a href="index.html"><img src="assets/img/logo.png"></a>
-                    
-                </div>
-                <div id="navbar" class="navbar-collapse collapse">
-                    <ul class="nav navbar-nav navbar-right">
-                        <li><a class="page-scroll" href="#page-top">Home</a></li>
-                        <li><a class="page-scroll" href="#features">Features</a></li>
-                        <!-- <li><a class="page-scroll" href="#testimonials">Testimonials</a></li> -->
-                        <li><a class="page-scroll" href="#pricing">Pricing</a></li>
-                        <li><a class="page-scroll" href="#team">Team</a></li>
-                        <li><a class="page-scroll" href="#contact">Contact</a></li>
-                        <li><a class="page-scroll" href="login.html">Login</a></li>
-                        <li><a class="page-scroll" href="signup.html">Sign Up</a></li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-</div>
+ <nav class="navbar navbar-default navbar-fixed-top">
+  <div class="sp-navbar-container container">
+    <div class="navbar-header">
+      <button id="sp-hamburger" type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a id="sp-logo" class="navbar-brand" href="#">
+        <img alt="Brand" src="assets/img/SPlogo.png">
+      </a>
+    </div>
+    
+    <div id="navbar" class="navbar-collapse collapse navbar-right">
+      <ul id="sp-navbar__navigation" class="nav navbar-nav">
+        <li class="active"><a class="sp-navbar__titles page-scroll" href="#">HOME</a></li>
+        <li><a class="sp-navbar__titles page-scroll" href="#solution">SOLUTION</a></li>
+        <li><a class="sp-navbar__titles page-scroll" href="#pricing">PRICING</a></li>
+        <li><a class="sp-navbar__titles page-scroll" href="#customers">CUSTOMERS</a></li>
+        <li><a class="sp-navbar__titles page-scroll" href="login.html">LOGIN</a></li>
+        <li><a class="sp-navbar__titles page-scroll" href="signup.html">SIGN UP</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
 <div id="inSlider" class="carousel carousel-fade" data-ride="carousel">
     <ol class="carousel-indicators">
         <li data-target="#inSlider" data-slide-to="0" class="active"></li>
         <li data-target="#inSlider" data-slide-to="1"></li>
     </ol>
     <div class="carousel-inner" role="listbox">
-        <div class="item active">
-            <div class="container">
-                <div class="carousel-caption">
-                    <h1>We track<br/>
-                        any document sent <br/>
-                        to a customer<br/>
-                        White papers, presentations<br/>
-                     one-pagers etc.</h1>
-                    <p>Real-time analytics of what actually happens with them.</p>
-                    <p>
-                        <a class="btn btn-lg btn-primary" href="#" role="button">LEARN MORE</a>
-                        <!-- <a class="caption-link" href="#" role="button">SlidePiper</a> -->
-                    </p>
-                </div>
-                <div class="carousel-image wow zoomIn">
-                    <img src="assets/img/landing/laptop.png" alt="laptop"/>
-                </div>
-            </div>
-            <!-- Set background for slide in css -->
-            <div class="header-back one"></div>
-
-        </div>
-        <div class="item">
+    		<div class="item active">
             <div class="container">
                 <div class="carousel-caption blank">
-                    <h1>We enable engagement <br/> through your documents.</h1>
-                    <p>Gather questions, insights and help you focus on what matters.</p>
-                    <p><a class="btn btn-lg btn-primary" href="#" role="button">Learn more</a></p>
+                    <h1>transform any PDF into a web package<br>
+                    Make them interactive, Engaging and Trackable<br> 
+                    </h1>
+                    <p>we are breaking the margins of the document giving your customers, comunities and partners<br>
+                    All the tools and information they need to learn, engage and purchase your products and services</p>
                 </div>
             </div>
             <!-- Set background for slide in css -->
             <div class="header-back two"></div>
         </div>
+        <div class="item">
+            <div class="container">
+                <div class="carousel-caption">
+                    <h1>bridge the gap between Marketing and sales<br/>
+                        lead your customer into direct communication with your sales reps <br/>
+                    </h1>
+                    <p>Running a sales intensive business?<br />
+                        Would more interactive and engaging documents help your teams close more deals?<br /></p>
+                    <p>
+                        <!-- <a class="caption-link" href="#" role="button">SlidePiper</a> -->
+                    </p>
+                </div>
+                <div class="carousel-image wow zoomIn">
+                    <!-- <img src="assets/img/landing/laptop.png" alt="laptop"/> -->
+                </div>
+            </div>
+            <!-- Set background for slide in css -->
+            <div class="header-back one"></div>
+        </div>    
     </div>
+    
     <a class="left carousel-control" href="#inSlider" role="button" data-slide="prev">
         <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
         <span class="sr-only">Previous</span>
@@ -112,347 +110,63 @@
     </a>
 </div>
 
-
-<section id="features" class="container services">
-    <div class="row">
-        <div class="col-sm-2">
-            <h2>Real time alerts</h2>
-            <p>When a document is opened we can immediate alert you so you know when would be the best time to contact and engage with your customer.</p>
-            <p><a class="navy-link" href="#" role="button">Details &raquo;</a></p>
-        </div>
-        <div class="col-sm-2">
-            <h2>Page by page tracking</h2>
-            <p>Get analytics on every page that matters, when they are opened, how long it's viewed, points of interest and much more.</p>
-            <p><a class="navy-link" href="#" role="button">Details &raquo;</a></p>
-        </div>
-        <div class="col-sm-2">
-            <h2>Predictive analytics</h2>
-            <p>With our proprietary patented algorithms, we know who is your most interested customer and what they are most interested in.</p>
-            <p><a class="navy-link" href="#" role="button">Details &raquo;</a></p>
-        </div>
-        <div class="col-sm-2">
-            <h2>IRM Features</h2>
-            <p>Information Rights Management helps protect sensitive documents. Our technology tracks who and how many viewers are allowed for a specific document. The document can literally be "shut down" whenever needed.</p>
-            <p><a class="navy-link" href="#" role="button">Details &raquo;</a></p>
-        </div>
-        <div class="col-sm-2">
-            <h2>A/B testing</h2>
-            <p>We give you aggregative insights, dashboards and benchmarks on document views as a whole that you can compare and know what works best.</p>
-            <p><a class="navy-link" href="#" role="button">Details &raquo;</a></p>
-        </div>
-        <div class="col-sm-2">
-            <h2>Live engagement</h2>
-            <p>each of your documents turns into an engagement with your customer with Live chat, screen control and personalization of your own viewer.</p>
-            <p><a class="navy-link" href="#" role="button">Details &raquo;</a></p>
-        </div>
-
-
-    </div>
-</section>
-
-<section  class="container features">
+<section id="solution" class="container features">
     <div class="row">
         <div class="col-lg-12 text-center">
             <div class="navy-line"></div>
-            <h1><br/> <span class="navy"> <strong>Today everything is tracked, we believe that documents should be too.</strong></strong></span> </h1>
-            <h2>“When performance is measured, performance improves. When performance is measured and reported, the rate of improvement accelerates.” — Thomas Monson</h2>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-3 text-center wow fadeInLeft">
-            <div>
-                <i class="fa fa-eye features-icon"></i>
-                <h2>Total views</h2>
-                <p>How many people really open the documents you attach, what is the bounce rate.</p>
-            </div>
-            <div class="m-t-lg">
-                <i class="fa fa-bar-chart features-icon"></i>
-                <h2>What pages are interesting</h2>
-                <p>Have your documents been viewed through, how long was spent on each page, what is the "Top Exit" page.</p>
-            </div>
-          
-        </div>
-        <div class="col-md-6 text-center  wow zoomIn">
-            <img src="assets/img/landing/perspective.png" alt="dashboard" class="img-responsive">
-        </div>
-        <div class="col-md-3 text-center wow fadeInRight">
-            <div>
-                <i class="fa fa-map-marker features-icon"></i>
-                <h2>Where is your document being viewed</h2>
-                <p>Know what part of the world / market is viewing your document.</p>
-            </div>
-            <div class="m-t-lg">
-                <i class="fa fa-signal features-icon"></i>
-                <h2>Benchmark across the board</h2>
-                <p>See what works best and what is the relative performance of your documents.</p>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-lg-12 text-center">
-            <div class="navy-line"></div>
-            <h1>Aggregative dashboards that make sense</h1>
-            <p>We've worked hard to make sure you get all that you need. </p>
+            <h1><span class="navy"><strong>Our Solution</strong></span></h1>
+            <h5><strong>SlidePiper brings ordinary documents to life! Our technology transforms static documents into interactive web packages.</strong></h5>
+            <h5><strong>Turn nurturing materials, white papers, brochures, research documents, turn them all into an interactive sales opportunity.</strong></h5>
         </div>
     </div>
     <div class="row features-block">
-        <div class="col-lg-6 features-text wow fadeInLeft">
-            <small>SlidePiper</small>
-            <h2>Perfectly designed </h2>
-            <p>SlidePiper is a premium solution for tracking any document in the business world. Whether you're a business development, sales rep or a marketing Mgr. you will have all that you need to do your job better with more insight and data. </p>
-            <a href="" class="btn btn-primary">Learn more</a>
+        <div class="col-sm-4 features-text wow fadeInLeft">
+            <h2><span class="navy"><strong>VIEWER</strong></span></h2>
+            <h5><strong>
+            	Your customer will view your PDF documents in our highly 
+            	customizable, and personalized SlidePiper Viewer.<br>
+            </strong></h5>
+            <p>Custom Web Forms.</p>
+            <p>Video Enrichment.</p>
+            <p>Strong Visual Branding.</p>
+            <p>Highly Visible CTA Buttons.</p>
+            <p>Ask Questions & Get Feedback.</p>
+            <p>Book Meetings.</p>
+            <p>Testimonials.</p>
         </div>
-        <div class="col-lg-6 text-right wow fadeInRight">
-            <img src="assets/img/landing/dashboard.png" alt="dashboard" class="img-responsive pull-right">
+        <div class="col-sm-8 wow fadeInRight">
+            <iframe src="https://www.slidepiper.com/view?f=2nko12" class="sp-viewer-demo"></iframe>
+        </div>
+    </div>
+    
+    <div class="row features-block">
+        <div class="col-sm-4 col-sm-push-8 features-text wow fadeInLeft">
+          <h2><span class="sp--color-gold"><strong>DASHBOARD</strong></span></h2>
+          <h5><strong>
+            	When your clients read your documents, your data will be aggregated 
+            	into your own personal Dashboard.<br>
+            </strong></h5>
+          <p>Real Time Alerts.</p>
+          <p>Big Data Dashboard.</p>
+          <p>Customer Scoring.</p>
+          <p>Confidential Document Control.</p>
+          <p>Location & Device Tracking.</p>
+          <p>Performance Benchmark.</p>
+          <p>HubSpot Integration.</p>
+        </div>
+        <div class="col-sm-8 col-sm-pull-4 text-right wow fadeInRight">
+          <img src="assets/img/sp-dashboard.png" class="img-responsive sp-dashboard-demo">
         </div>
     </div>
 </section>
 
-
-
-<section class="features">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12 text-center">
-                <div class="navy-line"></div>
-                <h1>SlidePiper is all cloud and web based</h1>
-                <p>We offer a SaaS solution, scalable to fit all your needs. </p>
-            </div>
-        </div>
-        <div class="row features-block">
-            <div class="col-lg-3 features-text wow fadeInLeft">
-                <small>SlidePiper</small>
-                <h2>No installation required</h2>
-                <p>Works on the web with all browsers. We've taken the most powerful program that is already on every machine and used it to enable a well rounded solution that is avilable to all users and viewers right out of the box.</p>
-                <a href="" class="btn btn-primary">Learn more</a>
-            </div>
-            <div class="col-lg-6 text-right m-t-n-lg wow zoomIn">
-                <img src="assets/img/landing/iphone.jpg" class="img-responsive" alt="dashboard">
-            </div>
-            <div class="col-lg-3 features-text text wow fadeInRight">
-                <small>SlidePiper</small>
-                <h2>Responsive design </h2>
-                <p>We've used the latest and most powerful web technologies to make your experience amazing, and enabling you to take the insights where ever you go. Try it on your tablet, cell and PC.</p>
-                <a href="" class="btn btn-primary">Learn more</a>
-            </div>
-        </div>
-    </div>
-
-</section>
-
-
-<section class="timeline gray-section">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12 text-center">
-                <div class="navy-line"></div>
-                <h1>Our workflow</h1>
-                <p>You can be using SlidePiper in minutes</p>
-            </div>
-        </div>
-        <div class="row features-block">
-
-            <div class="col-lg-12">
-                <div id="vertical-timeline" class="vertical-container light-timeline center-orientation">
-                    <div class="vertical-timeline-block">
-                        <div class="vertical-timeline-icon navy-bg">
-                            <i class="fa fa-briefcase"></i>
-                        </div>
-
-                        <div class="vertical-timeline-content">
-                            <h2>Onboarding</h2>
-                            <p>Signup, get your user id and login. Upload your email addresses directly and seamlessly from your Outlook or Gmail.
-                            </p>
-                            <a href="#" class="btn btn-xs btn-primary"> More info</a>
-                            <span class="vertical-date"> Time needed <br/> <small>5 minutes</small> </span>
-                        </div>
-                    </div>
-
-                    <div class="vertical-timeline-block">
-                        <div class="vertical-timeline-icon navy-bg">
-                            <i class="fa fa-file-text"></i>
-                        </div>
-
-                        <div class="vertical-timeline-content">
-                            <h2>Upload Documents</h2>
-                            <p>Upload as many documents as you need and send them to your contacts.</p>
-                            <a href="#" class="btn btn-xs btn-primary"> More info</a>
-                            <span class="vertical-date"> Automatic mass mailing <br/> <small> Custom templates</small> </span>
-                        </div>
-                    </div>
-
-                    <div class="vertical-timeline-block">
-                        <div class="vertical-timeline-icon navy-bg">
-                            <i class="fa fa-cogs"></i>
-                        </div>
-
-                        <div class="vertical-timeline-content">
-                            <h2>See the performance</h2>
-                            <p>Open your dashboard and see how your documents perform, whom your latest viewers were and much more.  </p>
-                            <a href="#" class="btn btn-xs btn-primary"> More info</a>
-                            <span class="vertical-date"> You'll also get alerts <br/> <small>Real-time viewers you can engage</small> </span>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-
-        </div>
-    </div>
-
-</section>
-
-
-
-<!--
-    <section id="testimonials" class="navy-section testimonials" style="margin-top: 0">
-
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12 text-center wow zoomIn">
-                <i class="fa fa-comment big-icon"></i>
-                <h1>
-                    What our users say
-                </h1>
-                <div class="testimonials-text">
-                    <i>"Becouse of SlidePiper our customers ask us questions directly throught the document, we answer either realtime or later and this is very powerfull for our sales effort"</i>
-                </div>
-                <small>
-                    <strong> </n> </strong>
-                </small>
-                <small>
-                    <strong>01.2016 - Gil Azrak Sqream Technologies</strong>
-                </small>
-                <div class="testimonials-text">
-                    <i>SlidePiper has changed the way we use our collateral and the way we engage with customers through it. We now use better and more engaging documents because of the analytics we see and we close deals more often."</i>
-                </div>
-                <small>
-                    <strong>02.2016 - Natalie Halimi SimilarWeb</strong>
-                </small>
-            </div>
-        </div>
-    </div>
-
-</section>
--->
-
-<!--<section class="comments gray-section" style="margin-top: 0">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12 text-center">
-                <div class="navy-line"></div>
-                <h1>What our partners say</h1>
-                <p>Donec sed odio dui. Etiam porta sem malesuada. </p>
-            </div>
-        </div>
-        <div class="row features-block">
-            <div class="col-lg-4">
-                <div class="bubble">
-                    "Uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like)."
-                </div>
-                <div class="comments-avatar">
-                    <a href="" class="pull-left">
-                        <img alt="image" src="assets/img/landing/avatar3.jpg">
-                    </a>
-                    <div class="media-body">
-                        <div class="commens-name">
-                            Andrew Williams
-                        </div>
-                        <small class="text-muted">Company X from California</small>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-lg-4">
-                <div class="bubble">
-                    "Uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like)."
-                </div>
-                <div class="comments-avatar">
-                    <a href="" class="pull-left">
-                        <img alt="image" src="assets/img/landing/Sivanpicweb.jpg">
-                    </a>
-                    <div class="media-body">
-                        <div class="commens-name">
-                            Andrew Williams
-                        </div>
-                        <small class="text-muted">Company X from California</small>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-lg-4">
-                <div class="bubble">
-                    "Uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like)."
-                </div>
-                <div class="comments-avatar">
-                    <a href="" class="pull-left">
-                        <img alt="image" src="assets/img/landing/avatar2.jpg">
-                    </a>
-                    <div class="media-body">
-                        <div class="commens-name">
-                            Andrew Williams
-                        </div>
-                        <small class="text-muted">Company X from California</small>
-                    </div>
-                </div>
-            </div>
-
-
-
-        </div>
-    </div>
-
-</section>
--->
-<!--
-<section class="features">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12 text-center">
-                <div class="navy-line"></div>
-                <h1>More and more extra great feautres</h1>
-                <p>Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. </p>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-5 col-lg-offset-1 features-text">
-                <small>INSPINIA</small>
-                <h2>Perfectly designed </h2>
-                <i class="fa fa-bar-chart big-icon pull-right"></i>
-                <p>INSPINIA Admin Theme is a premium admin dashboard template with flat design concept. It is fully responsive admin dashboard template built with Bootstrap 3+ Framework, HTML5 and CSS3, Media query. It has a huge collection of reusable UI components and integrated with.</p>
-            </div>
-            <div class="col-lg-5 features-text">
-                <small>INSPINIA</small>
-                <h2>Perfectly designed </h2>
-                <i class="fa fa-bolt big-icon pull-right"></i>
-                <p>INSPINIA Admin Theme is a premium admin dashboard template with flat design concept. It is fully responsive admin dashboard template built with Bootstrap 3+ Framework, HTML5 and CSS3, Media query. It has a huge collection of reusable UI components and integrated with.</p>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-5 col-lg-offset-1 features-text">
-                <small>INSPINIA</small>
-                <h2>Perfectly designed </h2>
-                <i class="fa fa-clock-o big-icon pull-right"></i>
-                <p>INSPINIA Admin Theme is a premium admin dashboard template with flat design concept. It is fully responsive admin dashboard template built with Bootstrap 3+ Framework, HTML5 and CSS3, Media query. It has a huge collection of reusable UI components and integrated with.</p>
-            </div>
-            <div class="col-lg-5 features-text">
-                <small>INSPINIA</small>
-                <h2>Perfectly designed </h2>
-                <i class="fa fa-users big-icon pull-right"></i>
-                <p>INSPINIA Admin Theme is a premium admin dashboard template with flat design concept. It is fully responsive admin dashboard template built with Bootstrap 3+ Framework, HTML5 and CSS3, Media query. It has a huge collection of reusable UI components and integrated with.</p>
-            </div>
-        </div>
-    </div>
-
-</section>
-    -->
 <section id="pricing" class="pricing">
     <div class="container">
         <div class="row m-b-lg">
             <div class="col-lg-12 text-center">
                 <div class="navy-line"></div>
-                <h1>SlidePiper Pricing</h1>
-                <p>Within an organization you can have different users. Contact us and we'll set you up with exactly what your team needs.</p>
+                <h1><span class="navy"><strong>Pricing</strong></span></h1>
+                <h5><strong>Within an organization you can have different users. Contact us and we'll set you up with exactly what your team needs.</strong></h5>
             </div>
         </div>
         <div class="row">
@@ -483,7 +197,7 @@
                         Email support
                     </li>
                     <li>
-                        <a class="btn btn-primary btn-xs" href="mailto:info@slidepiper.com">Contact us</a>
+                        <a class="btn btn-primary btn-xs" href="signup.html">Sign Up</a>
                     </li>
                 </ul>
             </div>
@@ -515,7 +229,7 @@
                         Online support
                     </li>
                     <li class="plan-action">
-                        <a class="btn btn-primary btn-xs" href="mailto:info@slidepiper.com">Contact us</a>
+                        <a class="btn btn-primary btn-xs" href="signup.html">Sign Up</a>
                     </li>
                 </ul>
             </div>
@@ -538,7 +252,7 @@
                         Dedicated subdomain
                     </li>
                     <li>
-                        Customer profiling
+                        Customer Scoring
                     </li>
                     <li>
                         <strong>Predictive Analytics</strong>
@@ -546,8 +260,11 @@
                     <li>
                         Online support
                     </li>
+                    <li>
+                        HubSpot Integration
+                    </li>
                     <li class="plan-action">
-                        <a class="btn btn-primary btn-xs" href="mailto:info@slidepiper.com">Contact us</a>
+                        <a class="btn btn-primary btn-xs" href="signup.html">Sign Up</a>
                     </li>
                 </ul>
             </div>
@@ -579,7 +296,7 @@
                         24/7 support
                     </li>
                     <li>
-                        <a class="btn btn-primary btn-xs" href="mailto:info@slidepiper.com">Contact us</a>
+                        <a target="_blank" class="btn btn-primary btn-xs" href="mailto:info@slidepiper.com">Contact us</a>
                     </li>
                 </ul>
             </div>
@@ -593,104 +310,104 @@
         <div class="row m-b-lg">
             <div class="col-lg-12 text-center">
                 <div class="navy-line"></div>
-                <h1>Customers</h1>
-                <table style="margin-top: 15px; width: 100%;">
-                  <tr>
-                    <td style="padding:20px 0; text-align: center;"><img height="50" src="assets/website/img/HalmanAldobi.png"></td>
-                    <td style="padding:20px 0; text-align: center;"><img height="50" src="assets/website/img/Barclays.png"></td>
-                    <td style="padding:20px 0; text-align: center;"><img height="40" src="assets/website/img/wpp.png"></td>
-                    <td style="padding:20px 0; text-align: center;"><img height="45" src="assets/website/img/Brandz.png"></td>
-                  </tr>
-                  <tr>
-                    <td style="padding:20px 0; text-align: center;"><img height="50" src="assets/website/img/Accelario_Logo_Positive.png"></td>
-                    <td style="padding:20px 0; text-align: center;"><img height="50" src="assets/website/img/Techstars.png"></td>
-                    <td style="padding:20px 0; text-align: center;"><img height="50" src="assets/website/img/cockpit.png"></td>
-                    <td style="padding:20px 0; text-align: center;"><img height="50" src="assets/website/img/meeco.me.png"></td>
-                  </tr>
-                </table>
-            </div>
+                <h1><span class="navy"><strong>Customers</strong></span></h1>
+             </div>
+             <div class="row">
+             		<div class="col-lg-3">
+                	<img src="assets/website/img/HalmanAldobi.png">
+                </div>
+                <div class="col-lg-3">
+                	<img src="assets/website/img/Barclays.png">
+                </div>
+                <div class="col-lg-3">
+                	<img src="assets/website/img/pwclogo.png">
+                </div>
+                <div class="col-lg-3">
+                	<img src="assets/website/img/Brandz.png">
+                </div>
+             </div>
+             
+             <div class="row">
+             		<div class="col-lg-3">
+                	<img src="assets/website/img/Accelario_Logo_Positive.png">
+                </div>
+                <div class="col-lg-3">
+                	<img src="assets/website/img/wpp.png">
+                </div>
+                <div class="col-lg-3">
+                	<img src="assets/website/img/cockpit.png">
+                </div>
+                <div class="col-lg-3">
+                	<img src="assets/website/img/meeco.me.png">
+                </div>
+             </div>
+             
+             <div class="row">
+             		<div style="text-align: center;" class="col-lg-12">
+             			<img src="assets/website/img/Techstars.png">
+                </div>
+             </div>
         </div>
     </div>
 </section>
 
-
-    <section id="team" class="team">
-        <div class="container">
-            <div class="row m-b-lg">
-                <div class="col-lg-12 text-center">
-                    <div class="navy-line"></div>
-                    <h1>Our Team</h1>
-                    <p>Dedicated to excellence and building great business products.</p>
+<section id="team" class="team">
+    <div class="container">
+        <div class="row m-b-lg">
+            <div class="col-lg-12 text-center">
+                <div class="navy-line"></div>
+                <h1><span class="navy">Our Team</span></h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-3 wow fadeInRight">
+                <div class="team-member">
+                    <img src="assets/img/landing/Sivanpicweb.jpg" class="img-responsive img-circle img-small" alt="">
+                    <h4><span class="navy">Sivan Bender</span></h4>
+                    <h4>Co-Founder & CEO</h4>
+                    <p>SlidePiper is a solution to a challenge Sivan faced during his EA consulting career. 
+                    Sivan is an I&M engineer with strong physics and computer science background.</p>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-sm-4 wow fadeInLeft">
-                    <div class="team-member">
-                        <img src="assets/img/landing/avatar3.jpg" class="img-responsive img-circle img-small" alt="">
-                        <h4><span class="navy">Now Hiring</span></h4>
-                        <h4>CMO</h4>
-                        <p>We are searching for a talented and creative M&S wizard to join our team, if you think your it contact us.</p>
-                        <ul class="list-inline social-icon">
-                            <li>
-                                <a href="#"><i class="fa fa-twitter"></i></a>
-                            </li>
-                            <li>
-                                <a href="#"><i class="fa fa-facebook"></i></a>
-                            </li>
-                            <li>
-                                <a href="#"><i class="fa fa-linkedin"></i></a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-sm-4">
-                    <div class="team-member wow zoomIn">
-                        <img src="assets/img/landing/Sivanpicweb.jpg" class="img-responsive img-circle" alt="">
-                        <h4><span class="navy">Sivan Bender</span></h4>
-                        <h4>Founder & CEO</h4>
-                        <p>SlidePiper is a solution to a challenge Sivan faced during his EA consulting career. Sivan is an I&M engineer with strong physics and computer science background.</p>
-                        <ul class="list-inline social-icon">
-                            <li>
-                                <a href="https://twitter.com/sivanbdr"><i class="fa fa-twitter"></i></a>
-                            </li>
-                            <li>
-                                <a href="https://www.facebook.com/sivan.bender"><i class="fa fa-facebook"></i></a>
-                            </li>
-                            <li>
-                                <a href="https://il.linkedin.com/in/sivanbender"><i class="fa fa-linkedin"></i></a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-sm-4 wow fadeInRight">
-                    <div class="team-member">
-                        <img src="assets/img/landing/Yaniv.jpg" class="img-responsive img-circle img-small" alt="">
-                        <h4><span class="navy">Yaniv Friedensohn</span></h4>
-                        <h4>Co-Founder & CTO</h4>
-                        <p>Yaniv has over 10 years of development experience with a strong background of marketing and business experience.</p>
-                        <ul class="list-inline social-icon">
-                            <!--
-                            <li>
-                                <a href="#"><i class="fa fa-twitter"></i></a>
-                            </li>
-                            -->
-                            <li>
-                                <a href="https://www.facebook.com/fr.yaniv"><i class="fa fa-facebook"></i></a>
-                            </li>
-                            <li>
-                                <a href="https://il.linkedin.com/in/yanivf"><i class="fa fa-linkedin"></i></a>
-                            </li>
-                        </ul>
-                    </div>
+            
+            <div class="col-sm-3 wow fadeInRight">
+                <div class="team-member">
+                    <img src="assets/img/landing/Yaniv.jpg" class="img-responsive img-circle img-small" alt="">
+                    <h4><span class="navy">Yaniv Friedensohn</span></h4>
+                    <h4>Co-Founder & CTO</h4>
+                    <p>Yaniv has over 10 years of development experience with a strong background
+                     of marketing and business experience.</p>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-lg-8 col-lg-offset-2 text-center m-t-lg m-b-lg">
-                    <p>We are looking to hire several positions on our team in the near future, CMO, Sales & BusDev, Developers: front end, Java and full stack.</p>
+            
+            <div class="col-sm-3 wow fadeInRight">
+                <div class="team-member">
+                    <img src="assets/img/landing/maxpic.png" class="img-responsive img-circle img-small" alt="">
+                    <h4><span class="navy">Max Prais</span></h4>
+                    <h4>Full-Stack Developer</h4>
+                    <p>Max is our experienced developer. He also has previous experience in
+                    marketing.</p>
+                </div>
+            </div>
+            
+            <div class="col-sm-3 wow fadeInLeft">
+                <div class="team-member">
+                    <img src="assets/img/landing/avatar3.jpg" class="img-responsive img-circle img-small" alt="">
+                    <h4><span class="navy">Now Hiring</span></h4>
+                    <h4>SDR</h4>
+                    <p>We are searching for a talented and creative M&S wizard to join our team,
+                    if you think you're it, contact us.</p>
                 </div>
             </div>
         </div>
-    </section>
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 text-center m-t-lg m-b-lg">
+                <p><span class="navy">We are looking to hire several positions on our team in the near future, CMO, 
+                Sales & BizDev, Developers: front end, Java and full stack.</span></p>
+            </div>
+        </div>
+    </div>
+</section>
 
 
 <section id="contact" class="gray-section contact">
@@ -698,8 +415,8 @@
         <div class="row m-b-lg">
             <div class="col-lg-12 text-center">
                 <div class="navy-line"></div>
-                <h1>Contact Us</h1>
-                <p>Our team is always willing to engage with you and assist, contact us :-)</p>
+                <h1><span class="navy">Contact Us</span></h1>
+                <p>Our team is always willing to engage with you and assist, contact us!</p>
             </div>
         </div>
         <div class="row m-b-lg">
@@ -717,22 +434,16 @@
                 </p>
             </div>
         </div>
+        <div class="row sp-contact__send-mail-container">
+        	 <div class="col-lg-12 text-center">
+          		<a href="mailto:info@slidepiper.com" class="btn btn-primary">Send us mail</a>      
+           </div>
+        </div>
         <div class="row">
-            <div class="col-lg-12 text-center">
-                <a href="mailto:info@slidepiper.com" class="btn btn-primary">Send us mail</a>
-                <!--
-                <p class="m-t-sm">
-                    Or follow us on social platform
-                </p>
-                <ul class="list-inline social-icon">
-                    <li><a href="#"><i class="fa fa-twitter"></i></a>
-                    </li>
-                    <li><a href="#"><i class="fa fa-facebook"></i></a>
-                    </li>
-                    <li><a href="#"><i class="fa fa-linkedin"></i></a>
-                    </li>
-                </ul>
-                -->
+            <div class="col-lg-12 text-center">   
+		        	<a target="_blank" class="sp-contact__social" href="https://twitter.com/slidepiper"><i class="fa fa-2x fa-twitter-square"></i></a>
+		        	<a target="_blank" class="sp-contact__social" href="https://www.facebook.com/slidepiper"><i class="fa fa-2x fa-facebook-square"></i></a>
+		        	<a target="_blank" class="sp-contact__social" href="https://www.linkedin.com/company/10374732"><i class="fa fa-2x fa-linkedin-square"></i></a>
             </div>
         </div>
         <div class="row">
@@ -764,7 +475,7 @@
             offset: 80
         });
 
-        // Page scrolling feature
+        // Smooth page scrolling.
         $('a.page-scroll').bind('click', function(event) {
             var link = $(this);
             $('html, body').stop().animate({
@@ -775,7 +486,7 @@
         });
     });
 
-    var cbpAnimatedHeader = (function() {
+   /*  var cbpAnimatedHeader = (function() {
         var docElem = document.documentElement,
                 header = document.querySelector( '.navbar-default' ),
                 didScroll = false,
@@ -803,7 +514,7 @@
         }
         init();
 
-    })();
+    })(); */
 
     // Activate WOW.js plugin for animation on scrol
     new WOW().init();

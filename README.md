@@ -4,6 +4,13 @@ SlidePiper README File
 Change Log
 ----------
 
+### 0.14.3
+
+2016-11-25 Max Prais <maxp@slidepiper.com>, Yaniv Friedensohn <yanivf@slidepiper.com>
+
+* Updated SlidePiper website.
+
+
 ### 0.14.2
 
 2016-11-23 Max Prais <maxp@slidepiper.com>
