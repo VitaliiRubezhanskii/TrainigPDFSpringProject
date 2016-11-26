@@ -4,6 +4,13 @@ SlidePiper README File
 Change Log
 ----------
 
+### 0.14.4
+
+2016-11-27 Yaniv Friedensohn <yanivf@slidepiper.com>
+
+* Set favicon in a correct way.
+
+
 ### 0.14.3
 
 2016-11-25 Max Prais <maxp@slidepiper.com>, Yaniv Friedensohn <yanivf@slidepiper.com>
