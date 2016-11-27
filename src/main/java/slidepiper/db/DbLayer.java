@@ -2764,13 +2764,14 @@ public class DbLayer {
        * @param lastName    The salesman last name.
        * @param magic     An administrator password.
        * @param password    The salesman password for logging in.
+       * @param promoCode   The promo code. 
        * 
        * @return    A status code representing possible validation errors,
        *        and addition success.  
      * @throws IOException 
        */
       public static int setSalesman(String company, String email, String emailClient, String firstName, String lastName, String password,
-    		  String telephone, String viewerToolbarBackground, InputStream viewerToolbarLogoImage, String viewerToolbarLogoLink, String viewerToolbarCTABackground,
+    		  String telephone, String promoCode, String viewerToolbarBackground, InputStream viewerToolbarLogoImage, String viewerToolbarLogoLink, String viewerToolbarCTABackground,
     		  String viewerToolbarCta2IsEnabled, String viewerToolbarCta3IsEnabled,
     		  String viewerToolbarCta2Text, String viewerToolbarCta2Link, String viewerToolbarCta1Text, String viewerToolbarCta1Link) throws IOException {
     	  
@@ -2801,7 +2802,7 @@ public class DbLayer {
           String viewerToolbarColor = null;
           String viewerToolbarFindBackground = null;
           String viewerToolbarFindColor = null;
-    	  String viewerToolbarCta1Color = "#fff";
+          String viewerToolbarCta1Color = "#fff";
           String viewerToolbarCta2Color = "#fff";
           String viewerToolbarCta3Color = "#fff";
           if (null == viewerToolbarBackground) {
@@ -2826,9 +2827,9 @@ public class DbLayer {
           			 + "viewer_toolbar_cta1_link, viewer_toolbar_cta_border_radius, viewer_toolbar_cta_font, viewer_toolbar_cta_margin, viewer_toolbar_cta_padding,\n"
           			 + "viewer_toolbar_color, viewer_toolbar_cta1_color, viewer_toolbar_cta2_color, viewer_toolbar_cta3_color, emailpassword,\n"
           			 + "viewer_toolbar_button_background, viewer_toolbar_find_background, viewer_toolbar_logo_collapse_max_width,\n"
-          			 + "viewer_toolbar_cta1_collapse_max_width, viewer_toolbar_cta2_collapse_max_width, viewer_toolbar_find_color, telephone)\n"
+          			 + "viewer_toolbar_cta1_collapse_max_width, viewer_toolbar_cta2_collapse_max_width, viewer_toolbar_find_color, telephone, promo_code)\n"
           			 + "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'true', ?, ?, '3px', 'bold 14px Ariel, sans-serif',\n"
-            		 + "'3px 5px', '4px 10px 5px', ?, ?, ?, ?, '', ?, ?, '650px', '950px', '1260px', ?, ?)";
+            		 + "'3px 5px', '4px 10px 5px', ?, ?, ?, ?, '', ?, ?, '650px', '950px', '1260px', ?, ?, ?)";
 
               try {
                 conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
@@ -2862,6 +2863,7 @@ public class DbLayer {
                 stmt.setString(27, viewerToolbarFindBackground);
                 stmt.setString(28, viewerToolbarFindColor);
                 stmt.setString(29, telephone);
+                stmt.setString(30, promoCode);
                 stmt.executeUpdate();
                 
                 // The user was added successfully.

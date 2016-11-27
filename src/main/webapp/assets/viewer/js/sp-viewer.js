@@ -48,14 +48,13 @@ $(document).on('pagesloaded pagechange', function(event) {
   $('#toolbarViewerMiddle')
       .append('<div class="sp-toolbar-logo"><a target="_blank" href="#"></a></div>');
       
-  var innerTermsPrivacy =
-    '<a href="../../tou.html" target="_blank">Terms</a> · <a href="../../privacy.html" target="_blank">Privacy</a><br>' +
-    'Powered by <span class="sp-powered-by"><a target="_blank" href="https://www.slidepiper.com">SlidePiper</a></span>';
+  var poweredBySlidePiper = 'Powered by <span class="sp-powered-by"><a target="_blank" href="https://www.slidepiper.com">SlidePiper</a></span>';
+  var termsAndPrivacy = '<a href="https://www.slidepiper.com/tou.html" target="_blank">Terms</a> · <a href="https://www.slidepiper.com/privacy.html" target="_blank">Privacy</a>';
   
-  $('body').append('<div class="sp--direction-ltr" id="sp-terms-privacy">' + innerTermsPrivacy + '</div>');
+  $('body').append('<div class="sp--direction-ltr" id="sp-terms-privacy">' + poweredBySlidePiper + ' · ' + termsAndPrivacy + '</div>');
   $('#secondaryToolbarButtonContainer').append(
      '<div class="horizontalToolbarSeparator"></div>' +
-     '<div id="sp-terms-privacy-secondary-toolbar">' + innerTermsPrivacy + '</div>');
+     '<div id="sp-terms-privacy-secondary-toolbar">' + poweredBySlidePiper + '<br>' + termsAndPrivacy + '</div>');
 })();
 
 
