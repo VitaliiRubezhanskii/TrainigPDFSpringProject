@@ -176,11 +176,10 @@
 #sp-terms-privacy {
   background-color: rgba(246, 246, 246, 0.8);
   bottom: 0;
-  font-size: 12px;
-  left: 0;
-  margin: 0 0 1px 4px;
+  font-size: 1.2rem;
   position: fixed;
-  width: 150px;
+  text-align: center;
+  width: 100%;
 }
 
 #sp-terms-privacy,
@@ -198,14 +197,6 @@
   font-weight: bold;
 }
 
-.sp-clearfix { *zoom: 1; } /* For IE 6/7 */
-
-.sp-clearfix:before, .clearfix:after {
-  content: "";
-  display: table;
-}
-
-.sp-clearfix:after { clear: both; }
 
 /**
  * Widget Settings.
@@ -256,12 +247,11 @@
 #sp-widget1 {
   background-color: white;
   border: 1px solid #8D8D8D;
-  border-top-left-radius: 5px;
   border-top-right-radius: 5px;
   bottom: 0;
   color: #0074A6;
   cursor: pointer;
-  left: 160px;
+  left: 0;
   padding: 7px 7px 0;
   position: fixed;
   z-index: 1;
