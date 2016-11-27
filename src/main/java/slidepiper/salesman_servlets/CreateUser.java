@@ -74,6 +74,7 @@ public class CreateUser extends HttpServlet {
 	    	String lastName = null;
 	    	String password = null;
 	    	String telephone = null;
+	    	String promoCode = null;
 	    	String viewerToolbarBackground = null;
 	    	InputStream viewerToolbarLogoImage = null;
 	    	String viewerToolbarLogoLink = null;
@@ -81,10 +82,10 @@ public class CreateUser extends HttpServlet {
 	    	String viewerToolbarCta2IsEnabled = null;
 	    	String viewerToolbarCta3IsEnabled = null;
 	    	String viewerToolbarCta2Text = null;
-            String viewerToolbarCta2Link = null;
-            String viewerToolbarCta3Text = null;
-            String viewerToolbarCta3Link = null;
-            Boolean isClientLogo = false;
+        String viewerToolbarCta2Link = null;
+        String viewerToolbarCta3Text = null;
+        String viewerToolbarCta3Link = null;
+        Boolean isClientLogo = false;
             
 	    	for (FileItem file: items) {
 	    		if (file.getFieldName().equals("action")){
@@ -117,8 +118,12 @@ public class CreateUser extends HttpServlet {
 	    		}
 	    		else if (file.getFieldName().equals("telephone")){
 	    			telephone = file.getString();
-	    			System.out.print("Phone: " + telephone);
+	    			System.out.println("Phone: " + telephone);
 	    		}
+	    		else if (file.getFieldName().equals("promo-code")){
+            promoCode = file.getString();
+            System.out.println("Promo code: " + promoCode);
+          }
 	    		else if (file.getFieldName().equals("viewer_toolbar_background")){
 	    			viewerToolbarBackground = file.getString();
 	    			System.out.println("Viewer Toolbar Background: " + viewerToolbarBackground);
@@ -180,7 +185,7 @@ public class CreateUser extends HttpServlet {
 	    	
 	    	if (action.equals("setSalesman")) {
 	        	statusCode = DbLayer.setSalesman(company, email, emailClient, firstName, lastName, password, 
-	        		telephone, viewerToolbarBackground, viewerToolbarLogoImage, viewerToolbarLogoLink,
+	        		telephone, promoCode, viewerToolbarBackground, viewerToolbarLogoImage, viewerToolbarLogoLink,
 	        		viewerToolbarCTABackground, viewerToolbarCta2IsEnabled, viewerToolbarCta3IsEnabled,
 	        		viewerToolbarCta2Text, viewerToolbarCta2Link, viewerToolbarCta3Text, viewerToolbarCta3Link);
 	        	

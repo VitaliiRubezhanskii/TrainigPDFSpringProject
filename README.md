@@ -4,6 +4,15 @@ SlidePiper README File
 Change Log
 ----------
 
+### 0.14.5
+
+2016-11-27 Yaniv Friedensohn <yanivf@slidepiper.com>
+
+* Changed Terms & Privacy location.
+
+* Added promo code field to the sign up page.
+
+
 ### 0.14.4
 
 2016-11-27 Yaniv Friedensohn <yanivf@slidepiper.com>
