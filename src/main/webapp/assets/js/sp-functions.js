@@ -1910,11 +1910,11 @@ sp = {
         var date = moment.utc(value[4]).toDate();
         
         var obj = {
-            'checkbox' : '<input id= ' + 'checkbox' + index + ' type="checkbox" class="i-checks" name="input[]">',
-            'name' : value[0] + ' ' + value[1],
-            'company' : value[2],
-            'email' : '<span data-email=' + value[3] +' class="sp-email"> ' + value[3] + '</span>',
-            'date':  moment(date).format('DD-MM-YYYY HH:mm')
+          checkbox: index,
+          name: value[0] + ' ' + value[1],
+          company: value[2],
+          email: '<span data-email=' + value[3] +' class="sp-email"> ' + value[3] + '</span>',
+          date:  moment(date).format('DD-MM-YYYY HH:mm')
         };
         nameArr.push(obj);
       });
@@ -1922,13 +1922,34 @@ sp = {
       $.fn.dataTable.moment('DD-MM-YYYY HH:mm');
       if (!($.fn.dataTable.isDataTable('.sp-customer-table'))) {
         $('.sp-customer-table').DataTable({
+          select: {
+            style: 'multi',
+          },
           data: nameArr,
-          columns: [
-            {data: 'checkbox'},
-            {data: 'name'},
-            {data: 'company'},
-            {data: 'email'},
-            {data: 'date'}
+          columnDefs: [
+            {
+              targets: 0,
+              data: 'checkbox',
+              checkboxes: {
+                selectRow: true
+              }
+            },
+            {
+              targets: 1,
+              data: 'name'
+            },
+            {
+              targets: 2,
+              data: 'company'
+            },
+            {
+              targets: 3,
+              data: 'email'
+            },
+            {
+              targets: 4,
+              data: 'date'
+            }
           ],
           buttons: [
             {
@@ -1986,9 +2007,9 @@ sp = {
         var date = moment.utc(value[2]).toDate();
         
         var obj = {
-            'checkbox' : '<input id= ' + 'checkbox' + index + ' type="checkbox" class="i-checks" name="input[]">',
-            'name' : '<span class="sp-doc-name" data-file-name=' + value[1] +' data-file-hash=' + value[0] +'>' + value[1] + '</span>',
-            'date' : moment(date).format('DD-MM-YYYY HH:mm'),
+          checkbox: index,
+          name: '<span class="sp-doc-name" data-file-name=' + value[1] +' data-file-hash=' + value[0] +'>' + value[1] + '</span>',
+          date: moment(date).format('DD-MM-YYYY HH:mm'),
         };
         fileArr.push(obj);
       });
@@ -1996,11 +2017,26 @@ sp = {
       $.fn.dataTable.moment('DD-MM-YYYY HH:mm');
       if (!($.fn.dataTable.isDataTable('.sp-doc-table'))) {
         $('.sp-doc-table').DataTable({
+          select: {
+            style: 'multi',
+          },
           data: fileArr,
-          columns: [
-            {data: 'checkbox'},
-            {data: 'name'},
-            {data: 'date'},
+          columnDefs: [
+            {
+              targets: 0,
+              data: 'checkbox',
+              checkboxes: {
+                selectRow: true
+              }
+            },
+            {
+              targets: 1,
+              data: 'name'
+            },
+            {
+              targets: 2,
+              data: 'date'
+            }
           ],
           dom: '<"sp-datatables-search-left"f>ti',
           order: [[2, 'desc']],
