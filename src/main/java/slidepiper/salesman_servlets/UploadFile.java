@@ -96,7 +96,7 @@ public class UploadFile extends HttpServlet {
             // Set default customer for the salesman if not exist.
             if (false == isDefaultCustomerEmailExist) {
               if (false == DbLayer.isCustomerExist(salesmanEmail, defaultCustomerEmail)) {  
-                DbLayer.addNewCustomer(null, salesmanEmail, "Generic", "Link", null, defaultCustomerEmail);
+                DbLayer.addNewCustomer(null, salesmanEmail, "Generic", "Link", null, null, defaultCustomerEmail);
               }
               isDefaultCustomerEmailExist = true;
             }

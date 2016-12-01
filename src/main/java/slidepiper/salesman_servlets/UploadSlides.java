@@ -83,7 +83,7 @@ public class UploadSlides extends HttpServlet {
           // Set default customer for the salesman if not exist.
           if (false == isDefaultCustomerEmailExist) {
             if (false == DbLayer.isCustomerExist(salesmanEmail, defaultCustomerEmail)) {  
-              DbLayer.addNewCustomer(null, salesmanEmail, null, null, null, defaultCustomerEmail);
+              DbLayer.addNewCustomer(null, salesmanEmail, null, null, null, null, defaultCustomerEmail);
             }
             isDefaultCustomerEmailExist = true;
           }

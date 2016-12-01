@@ -293,6 +293,10 @@ sp = {
                   val($('[data-customer-email="' + $(this).attr('data-customer-email') + '"]')
                       .closest('tr').find('#sp-customer-company__td').text());
               
+              $('#sp-modal-add-update-customer input[name="customerGroup"]').
+              		val($('[data-customer-email="' + $(this).attr('data-customer-email') + '"]')
+                  		.closest('tr').find('#sp-customer-group__td').text());
+              
               $('#sp-modal-add-update-customer input[name="customerEmail"]')
                   .val($(this).attr('data-customer-email'))
                   .prop('readonly', true);
@@ -704,7 +708,8 @@ sp = {
             'name':  '<span id="sp-customer-first-name__td">' + row[0] + '</span> <span id="sp-customer-last-name__td">' + row[1] + '</span></span>' ,
             'company': '<span id="sp-customer-company__td">' + row[2] + '</span>',
             'email':  '<span class="contact-type"><i class="fa fa-envelope"> </i></span>' + '         '  + row[3] + '',
-            'options': '<td><a href="#"><span class="label label-primary sp-add-update-customer sp-customer-update" data-add-update="update" data-toggle="modal" data-target="#sp-modal-add-update-customer" data-customer-email="' + row[3] + '">Update</span></a><a href="#"><span class="label label-danger sp-customer-delete" data-customer-email="' + row[3] + '">Delete</span></a></td>'
+            'options': '<td><a href="#"><span class="label label-primary sp-add-update-customer sp-customer-update" data-add-update="update" data-toggle="modal" data-target="#sp-modal-add-update-customer" data-customer-email="' + row[3] + '">Update</span></a><a href="#"><span class="label label-danger sp-customer-delete" data-customer-email="' + row[3] + '">Delete</span></a></td>',
+            group: '<span id="sp-customer-group__td">' + row[5] + '</span>',
         };
         nameArr.push(obj);
       });
@@ -717,6 +722,7 @@ sp = {
             {data: 'date'},        
             {data: 'name'},
             {data: 'company'},
+            {data: 'group'},
             {data: 'email'},
             {data: 'options'}
           ],
@@ -778,7 +784,7 @@ sp = {
               swal(
                 'Error!',  
                 'You are missing some required information - your contacts must include First Name, Last Name,'
-              + ' Company, and Email Address',
+              + ' Company, Group, and Email Address',
                 'error'
               );
             }
@@ -1914,7 +1920,8 @@ sp = {
           name: value[0] + ' ' + value[1],
           company: value[2],
           email: '<span data-email=' + value[3] +' class="sp-email"> ' + value[3] + '</span>',
-          date:  moment(date).format('DD-MM-YYYY HH:mm')
+          date:  moment(date).format('DD-MM-YYYY HH:mm'),
+          group: value[5]
         };
         nameArr.push(obj);
       });
@@ -1944,10 +1951,14 @@ sp = {
             },
             {
               targets: 3,
-              data: 'email'
+              data: 'group'
             },
             {
               targets: 4,
+              data: 'email'
+            },
+            {
+              targets: 5,
               data: 'date'
             }
           ],
@@ -1973,7 +1984,7 @@ sp = {
             },
           ],
           dom: '<"sp-datatables-search-left"f><"sp-send-email__add-customer"B>ti',
-          order: [[4, 'desc']],
+          order: [[5, 'desc']],
           scrollY: '15vh',
           paging: false,
         });
