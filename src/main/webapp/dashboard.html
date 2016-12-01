@@ -15,6 +15,8 @@
 <link href="assets/css/plugins/jquerySteps/jquery.steps.css" rel="stylesheet">
 <!-- <link href="assets/css/plugins/metisMenu/metisMenu.min.css" rel="stylesheet">  -->
 <link href="assets/css/plugins/datatables/datatables.min.css" rel="stylesheet">
+<link href="assets/css/plugins/datatables/select.dataTables.min.css" rel="stylesheet">
+<link href="assets/css/plugins/datatables/dataTables.checkboxes.css" rel="stylesheet">
 <script src="https://www.google.com/jsapi?autoload=%7B%27modules%27:%5B%7B%27name%27:%27visualization%27,%27version%27:%271.1%27,%27packages%27:%5B%27geochart%27%5D%7D%5D%7D"></script>
 <link href="assets/css/plugins/toastr/toastr.css" rel="stylesheet">
 <link href="assets/css/plugins/sweetalerts/sweetalert.css" rel="stylesheet">
@@ -487,6 +489,7 @@ ga('send', 'pageview');
                                                                 <th>Date</th>
                                                                 <th>Name</th>
                                                                 <th>Company</th>
+                                                                <th>Group</th>
                                                                 <th style="margin-left: 30px;">Email</th>
                                                                 <th></th>
                                                             </tr>
@@ -523,6 +526,7 @@ ga('send', 'pageview');
                                                             <th></th>
                                                             <th>Name</th>
                                                             <th>Company</th>
+                                                            <th>Group</th>
                                                             <th>Email</th>
                                                             <th>Date</th>
                                                         </tr>
@@ -607,6 +611,8 @@ ga('send', 'pageview');
     <script src="assets/js/plugins/pace/pace.min.js"></script>
     <script src="assets/js/plugins/clipboard/clipboard.min.js"></script>
     <script src="assets/js/plugins/datatables/datatables.min.js"></script>
+    <script src="assets/js/plugins/datatables/dataTables.select.min.js"></script>
+    <script src="assets/js/plugins/datatables/dataTables.checkboxes.min.js"></script>
     <script src="assets/js/plugins/toastr/toastr.js"></script>
     <script src="assets/js/plugins/sweetalerts/sweetalert.min.js"></script>
     <script src="assets/js/plugins/momentjs/moment.min.js"></script>
@@ -801,6 +807,13 @@ ga('send', 'pageview');
                             <label class="col-lg-3 control-label">Company</label>
                             <div class="col-lg-8">
                                 <input type="text" name="customerCompany" placeholder="Company" class="form-control" autocomplete="off">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="col-lg-3 control-label">Group</label>
+                            <div class="col-lg-8">
+                                <input type="text" name="customerGroup" placeholder="Group" class="form-control" autocomplete="off">
                             </div>
                         </div>
                         
