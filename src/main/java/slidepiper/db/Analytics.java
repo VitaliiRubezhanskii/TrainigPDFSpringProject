@@ -105,7 +105,8 @@ public class Analytics {
       + "  last_name,\n"
       + "  company,\n"
       + "  email,\n"
-      + "  customers.timestamp AS 'date'"
+      + "  customers.timestamp AS 'date',\n"
+      + "  COALESCE(groupName, '')\n"
       + "FROM customers\n"
       + "WHERE sales_man = ? AND email NOT IN ('" + ConfigProperties.getProperty("default_customer_email") + "', '" + ConfigProperties.getProperty("test_customer_email") + "')\n"
       + "ORDER BY date";

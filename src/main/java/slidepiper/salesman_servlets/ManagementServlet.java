@@ -93,7 +93,7 @@ public class ManagementServlet extends HttpServlet {
           String salesmanEmail = request.getParameter("salesmanEmail");
           
           if (! DbLayer.isCustomerExist(salesmanEmail, customerEmail)) {  
-            DbLayer.addNewCustomer(null, salesmanEmail, "Test", "Viewer", null, customerEmail);
+            DbLayer.addNewCustomer(null, salesmanEmail, "Test", "Viewer", null, null, customerEmail);
           }
           
           String fileHash = request.getParameter("fileHash");
@@ -488,7 +488,7 @@ public class ManagementServlet extends HttpServlet {
           output.put("newCustomer", DbLayer.addNewCustomer(
               subAction, input.getString("salesmanEmail"),
               input.getString("customerFirstName"), input.getString("customerLastName"),
-              input.getString("customerCompany"), input.getString("customerEmail")));
+              input.getString("customerCompany"), input.getString("customerGroup"), input.getString("customerEmail")));
           break;
                             
         case "deleteCustomer":

@@ -109,13 +109,13 @@ public class DbLayer {
 	
 	
 	//add new customer.
-	public static int addNewCustomer(String subAction, String salesMan, String firstName, String lastName, String company, String email){
+	public static int addNewCustomer(String subAction, String salesMan, String firstName, String lastName, String company, String groupName, String email){
 		
 		// customer does not exist.
 		if (getCustomerName(email, salesMan) == null)
 		{
 		 
-				String query = "INSERT INTO customers(email, name, first_name, last_name, sales_man, company) VALUES (?, ?, ?, ?, ?, ?)";
+				String query = "INSERT INTO customers(email, name, first_name, last_name, sales_man, company, groupName) VALUES (?, ?, ?, ?, ?, ?, ?)";
 				String fullName = null;
 				try (Connection conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);) 
 					{			
@@ -139,6 +139,7 @@ public class DbLayer {
 							preparedStatement.setString(4, lastName);
 							preparedStatement.setString(5, salesMan.toLowerCase());
 							preparedStatement.setString(6, company);
+							preparedStatement.setString(7, groupName);
 							preparedStatement.executeUpdate();
 							preparedStatement.close();
 							conn.close();
@@ -157,7 +158,7 @@ public class DbLayer {
 			// customer already exists.
 		  Constants.updateConstants();
       Connection conn = null;
-		  String sql = "UPDATE customers SET first_name = ?, last_name = ?, name = ?, company = ? WHERE sales_man = ? AND email = ?";
+		  String sql = "UPDATE customers SET first_name = ?, last_name = ?, name = ?, company = ?, groupName = ? WHERE sales_man = ? AND email = ?";
 		  
 		  try {
         conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
@@ -166,8 +167,9 @@ public class DbLayer {
         stmt.setString(2, lastName);
         stmt.setString(3, firstName + " " + lastName);
         stmt.setString(4, company);
-        stmt.setString(5, salesMan);
-        stmt.setString(6, email);
+        stmt.setString(5, groupName);
+        stmt.setString(6, salesMan);
+        stmt.setString(7, email);
         stmt.executeUpdate();
       } catch (SQLException ex) {
         System.err.println("Error code: " + ex.getErrorCode() + " - " + ex.getMessage());

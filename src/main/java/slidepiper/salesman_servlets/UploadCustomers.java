@@ -1,16 +1,10 @@
 package slidepiper.salesman_servlets;
 
-import slidepiper.*;
-import slidepiper.constants.Constants;
 import slidepiper.db.DbLayer;
 
 import java.util.List;
-import java.util.Random;
 import java.io.*;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.nio.charset.Charset;
 
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
@@ -30,10 +24,11 @@ import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.input.BOMInputStream;
 import org.json.JSONObject;
 
-
 //upload CSV file of customers
+@SuppressWarnings("serial")
 @WebServlet("/uploadCustomers")
 @MultipartConfig(maxFileSize = 16177215)	// upload file's size up to 16MB
 public class UploadCustomers extends HttpServlet {
@@ -77,20 +72,29 @@ public class UploadCustomers extends HttpServlet {
 		System.out.println("uploadCustomers servlet Parameters - email " + salesman_email );
 		//" name of pres: " + name);
 		
+		BOMInputStream fileBomInputStream = new BOMInputStream(fileInputStram, false);
+		Charset charset = null;
+		if (fileBomInputStream.hasBOM()) {
+		  charset = Charset.forName("UTF-8");
+		} else {
+		  charset = Charset.forName("ISO-8859-8");
+		}
+    
 		CSVParser parser = CSVParser.parse(
-		    IOUtils.toString(fileInputStram, "UTF-8"),
+		    IOUtils.toString(fileBomInputStream, charset),
 		    CSVFormat.DEFAULT);
-		System.out.println("Parser: " + parser);
 		
 		int flag = -1;
 		int firstNameIndex = -1;
-    	int lastNameIndex = -1;
-    	int emailIndex = -1;
-    	int companyIndex = -1;
+  	int lastNameIndex = -1;
+  	int emailIndex = -1;
+  	int companyIndex = -1;
+  	int groupIndex = -1;
+  	
     for (CSVRecord csvRecord : parser) {
     	
-    	if (1 == csvRecord.getRecordNumber()){
-    		for (int i = 0; i < csvRecord.size(); i++){
+    	if (1 == csvRecord.getRecordNumber()) {
+    		for (int i = 0; i < csvRecord.size(); i++) {
     			if (csvRecord.get(i).equalsIgnoreCase("First Name") || csvRecord.get(i).equalsIgnoreCase("Given Name")){
     				firstNameIndex = i;
     			}
@@ -100,6 +104,9 @@ public class UploadCustomers extends HttpServlet {
     			if (csvRecord.get(i).equalsIgnoreCase("Company") || csvRecord.get(i).equalsIgnoreCase("Organization 1 - Name")){
     				companyIndex = i;
     			}
+    			if (csvRecord.get(i).equalsIgnoreCase("Group")){
+            groupIndex = i;
+          }
     			if (csvRecord.get(i).equalsIgnoreCase("E-mail Address") || csvRecord.get(i).equalsIgnoreCase("E-mail") || csvRecord.get(i).equalsIgnoreCase("Email") || csvRecord.get(i).equalsIgnoreCase("E-mail 1 - Value") ){
     				emailIndex = i;
     			}
@@ -107,10 +114,9 @@ public class UploadCustomers extends HttpServlet {
     	}
     	
     	
-    	System.out.print("First: " + firstNameIndex + ", Last: " + lastNameIndex  + ", Company: " + companyIndex
-    	+ ", Email: " + emailIndex);
+    	System.out.println("First: " + firstNameIndex + ", Last: " + lastNameIndex  + ", Company: " + companyIndex + ", Group: " + groupIndex + ", Email: " + emailIndex);
 
-    	if (-1 == firstNameIndex || -1 == lastNameIndex || -1 == emailIndex || -1 == companyIndex){
+    	if (-1 == firstNameIndex || -1 == lastNameIndex || -1 == emailIndex || -1 == companyIndex || -1 == groupIndex){
 			JSONObject dataErr = new JSONObject();
 			dataErr.put("err", true);
 		    
@@ -124,11 +130,12 @@ public class UploadCustomers extends HttpServlet {
     	      System.out.println("First Name: " + csvRecord.get(firstNameIndex));
     	      System.out.println("Last Name: " + csvRecord.get(lastNameIndex));
     	      System.out.println("Company: " + csvRecord.get(companyIndex));
+    	      System.out.println("Group: " + csvRecord.get(groupIndex));
     	      System.out.println("Email: " + csvRecord.get(emailIndex));
     	      if (0 <= flag && 1 < csvRecord.getRecordNumber()) {
     	        if (isValidEmailAddress(csvRecord.get(emailIndex).trim())) {
     	          DbLayer.addNewCustomer(null, salesman_email, csvRecord.get(firstNameIndex).trim(), csvRecord.get(lastNameIndex).trim(),
-    	              csvRecord.get(companyIndex).trim(), csvRecord.get(emailIndex).trim());
+    	              csvRecord.get(companyIndex).trim(), csvRecord.get(groupIndex).trim(), csvRecord.get(emailIndex).trim());
     	        } else {
     	          flag++;
     	        }
