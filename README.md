@@ -4,13 +4,20 @@ SlidePiper README File
 Change Log
 ----------
 
+### 0.14.7
+
+2016-12-01 Yaniv Friedensohn <yanivf@slidepiper.com>
+
+* Verify GA & FB pixel are installed on website pages.
+
+
 ### 0.14.6
 
-2016-11-27 Yaniv Friedensohn <yanivf@slidepiper.com>
+2016-12-01 Yaniv Friedensohn <yanivf@slidepiper.com>
 
-* Add multiple selection to the send documents wizard.
+* Added multiple selection to the send documents wizard.
 
-* Add group field to customers details.
+* Added group field to customers details.
 
 
 ### 0.14.5
