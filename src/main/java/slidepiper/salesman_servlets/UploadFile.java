@@ -3,37 +3,41 @@ package slidepiper.salesman_servlets;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+/*import java.net.URI;
+import java.net.URISyntaxException;*/
 import java.nio.file.Paths;
-
-import slidepiper.config.ConfigProperties;
-import slidepiper.db.DbLayer;
-
-import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.json.JSONObject;
+/*import org.apache.commons.io.FilenameUtils;*/
+
+import com.slidepiper.aws.s3.DocumentContainer;
+import com.slidepiper.aws.s3.ObjectLinkUtils;
+import com.slidepiper.document.DocumentStatus;
+
+import slidepiper.config.ConfigProperties;
+import slidepiper.db.DbLayer;
 
 @SuppressWarnings("serial")
-@WebServlet("/upload-file")
-@MultipartConfig(maxFileSize = 104857600)
+@WebServlet("/upload-files")
 public class UploadFile extends HttpServlet {
-    
+
   protected void doPost(HttpServletRequest request,
       HttpServletResponse response) throws ServletException, IOException {
+    
+    int resultCode = 0;
     
     /**
      * @see https://commons.apache.org/proper/commons-fileupload/using.html
@@ -52,107 +56,185 @@ public class UploadFile extends HttpServlet {
     // @see http://stackoverflow.com/questions/5021295/servlet-file-upload-filename-encoding
     upload.setHeaderEncoding("UTF-8");
     
-    // Parse the request
-    int flag = 0;
     try {
+      List<FileItem> files = new ArrayList<FileItem>();
       List<FileItem> items = upload.parseRequest(request);
-      String action = null;
-      String updateFileHash = null;
+      String fileHash = null;
+      /*String fileUrl = null;*/
       String salesmanEmail = null;
-      Timestamp localTimestamp = null;
+      String subAction = null;
       
-      /**
-       * The redundancy (by having this another for loop) is to ensure capturing the salesman email
-       * before calling setFileHash(), as we cannot control where the salesman email field would be
-       * set in the frontend form.
-       * 
-       * @author Yaniv Friedensohn <yanivf@slidepiper.com>
-       */
-      for (FileItem file: items) {
-        if (file.getFieldName().equals("action")) {
-          action = file.getString();
-        } else if (file.getFieldName().equals("updateFileHash")) {
-          updateFileHash = file.getString();
-        } else if (file.getFieldName().equals("salesmanEmail")) {
-          salesmanEmail = file.getString();
-        } else if (file.getFieldName().equals("localTimestamp")){
-          localTimestamp = new Timestamp(Long.parseLong(file.getString()));
-        	//localTimestamp = ;
-        }
-       
-      }
-      
-      Map<String, String> eventDataMap = new HashMap<String, String>();
-      
-      if (action.equals("uploadFiles")) {
-        String fileHash = null;
-        boolean isDefaultCustomerEmailExist = false;
-        String defaultCustomerEmail = ConfigProperties.getProperty("default_customer_email");
-        
-        for (FileItem file: items) {       
-          if (null != file.getContentType() && file.getContentType().equals("application/pdf")) {         
-            fileHash = DbLayer.setFileHash(file, salesmanEmail, localTimestamp);
-            
-            // Set default customer for the salesman if not exist.
-            if (false == isDefaultCustomerEmailExist) {
-              if (false == DbLayer.isCustomerExist(salesmanEmail, defaultCustomerEmail)) {  
-                DbLayer.addNewCustomer(null, salesmanEmail, "Generic", "Link", null, null, defaultCustomerEmail);
-              }
-              isDefaultCustomerEmailExist = true;
-            }
-            
-            // Set file link hash for the salesman default customer.
-            DbLayer.setFileLinkHash(defaultCustomerEmail, fileHash, salesmanEmail);
-            
-            // Record event.
-            if (null != fileHash) {
-              eventDataMap.put("email", salesmanEmail);
-              
-              eventDataMap.put("param_1_varchar", salesmanEmail);
-              eventDataMap.put("param_2_varchar", fileHash);
-              eventDataMap.put("param_3_varchar", Paths.get(file.getName()).getFileName().toString());
-              eventDataMap.put("param_4_varchar", Long.toString(file.getSize()));
-              
-              DbLayer.setEvent(DbLayer.SALESMAN_EVENT_TABLE,
-                  ConfigProperties.getProperty("event_uploaded_file"), eventDataMap);
-            }
-            
-            flag = 1;
-          }
-        }
-      } else if (action.equals("updateFile")) {
-        for (FileItem file: items) {       
-          if (null != file.getContentType() && file.getContentType().equals("application/pdf")) {  
-            
-            // Update file.
-            DbLayer.updateFile(file, updateFileHash,
-                Paths.get(file.getName()).getFileName().toString(), salesmanEmail, localTimestamp);
-            
-            // Record event.
-            eventDataMap.put("email", salesmanEmail);
-            
-            eventDataMap.put("param_1_varchar", salesmanEmail);
-            eventDataMap.put("param_2_varchar", updateFileHash);
-            eventDataMap.put("param_3_varchar", Paths.get(file.getName()).getFileName().toString());
-            eventDataMap.put("param_4_varchar", Long.toString(file.getSize()));
-            
-            DbLayer.setEvent(DbLayer.SALESMAN_EVENT_TABLE,
-                ConfigProperties.getProperty("event_updated_file"), eventDataMap);
-            
-            flag = 2;
-          }
+      for (FileItem fileItem: items) {
+        if (fileItem.getFieldName().equals("salesmanEmail")) {
+          salesmanEmail = fileItem.getString();
+        } else if (fileItem.getFieldName().equals("subAction")) {
+          subAction = fileItem.getString();
+        } else if (fileItem.getFieldName().equals("fileHash")) {
+          fileHash = fileItem.getString();
+        } /*else if (fileItem.getFieldName().equals("fileUrl")) {
+          fileUrl = fileItem.getString();
+        }*/ else if (fileItem.getContentType().equals("application/pdf")) {
+          files.add(fileItem);
         }
       }
-    } catch (FileUploadException e) {
+      
+      /*if (null != fileUrl) {
+        URI uri = new URI(fileUrl);
+        String fileExtension = FilenameUtils.getExtension(uri.getPath());
+        if (fileExtension.equalsIgnoreCase("pdf")) {
+          resultCode = prepareFileUrlUpload(uri, salesmanEmail, fileHash, subAction);
+        }
+      } else */if (files.size() > 0) {
+        resultCode = prepareFileUpload(files, salesmanEmail, fileHash, subAction);
+      }
+      
+      response.setContentType("application/json; charset=UTF-8");
+      PrintWriter output = response.getWriter();
+      output.print(resultCode);
+      output.close();
+    } catch(Exception e) {
       e.printStackTrace();
     }
+  }
+  
+  
+  /**
+   * Uploaded process for URL.
+   */
+  /*public static int prepareFileUrlUpload(URI uri, String salesmanEmail, String fileHash, String subAction) throws IOException {
+    int resultCode = 0;
+    URI newUri = null;
+    String fileName = null;
     
-    JSONObject data = new JSONObject();
-    data.put("flag", flag);
+    if ("www.dropbox.com" == uri.getHost()) {
+      try {
+        newUri = new URI(uri.getScheme(), "dl.dropboxusercontent.com", uri.getPath());
+      } catch (URISyntaxException e) {
+        e.printStackTrace();
+      }
+
+      fileName = FilenameUtils.getName(uri.getPath());
+      if (subAction.equals("upload")) {
+        fileHash = setFileHash(salesmanEmail, fileName);
+      }
+      
+      boolean isSet = DbLayer.setAlternativeUrl(newUri.toString(), fileHash, fileName);
+      
+      if (isSet) {
+        // Record event.
+        setEvent(salesmanEmail, fileHash, fileName, subAction);
+        resultCode = 1;
+      }
+    }
     
-    response.setContentType("application/json; charset=UTF-8");
-    PrintWriter output = response.getWriter();
-    output.print(data);
-    output.close();
+    return resultCode;
+  }*/
+  
+  /**
+   * Upload process for S3.
+   */
+  public static int prepareFileUpload(
+      List<FileItem> files, String salesmanEmail, String fileHash, String subAction) throws IOException {
+    
+    int resultCode = 0;
+    String fileName = null;
+        
+    for (FileItem fileItem: files) {
+      fileName = Paths.get(fileItem.getName()).getFileName().toString();
+      File file = new File(fileName);
+      try {
+        fileItem.write(file);
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+      
+      // Set document status.
+      DocumentStatus documentStatus;
+      if (subAction.equals("upload")) {
+        fileHash = setFileHash(salesmanEmail, fileName);
+        documentStatus = DocumentStatus.CREATED;
+      } else {
+        documentStatus = DocumentStatus.UPDATED;
+      }
+      
+      // Upload document to AWS S3.
+      DocumentContainer document = new DocumentContainer(fileHash, file, fileName);
+      String s3ObjectVersionId = document.upload(documentStatus);
+      file.delete();
+      
+      // Save reference to the object in the DB.
+      if (s3ObjectVersionId != null) {
+        boolean isSet = DbLayer.setS3FileData(
+            documentStatus.name(),
+            fileHash,
+            s3ObjectVersionId,
+            ObjectLinkUtils.getDomain(),
+            ObjectLinkUtils.getPrefix(),
+            fileName
+        );
+        
+        // Record event.
+        if (isSet) {
+          setEvent(salesmanEmail, fileHash, fileName, subAction);
+          resultCode = 1;
+        }
+      }
+    }
+    
+    return resultCode;
+  }
+  
+  /**
+   * Create a file hash for an uploaded file.
+   * 
+   * @param salesmanEmail - The salesman email
+   * @param fileName - The file name
+   * @return fileHash - The file hash
+   * @throws IOException
+   */
+  public static String setFileHash(String salesmanEmail, String fileName) throws IOException {
+    String fileHash = DbLayer.setFileHash(salesmanEmail, fileName);
+    String defaultCustomerEmail = ConfigProperties.getProperty("default_customer_email");
+    boolean isDefaultCustomerEmailExist = false;
+    
+    // Set default customer for the salesman if not exist.
+    if (false == isDefaultCustomerEmailExist) {
+      if (false == DbLayer.isCustomerExist(salesmanEmail, defaultCustomerEmail)) {  
+        DbLayer.addNewCustomer(null, salesmanEmail, "Generic", "Link", null, null, defaultCustomerEmail);
+      }
+      isDefaultCustomerEmailExist = true;
+    }
+
+    // Set file link hash for the salesman default customer.
+    DbLayer.setFileLinkHash(defaultCustomerEmail, fileHash, salesmanEmail);
+    
+    return fileHash;
+  }
+  
+  /**
+   * Set salesman event for upload or update file
+   * 
+   * @param salesmanEmail - The salesman email
+   * @param fileHash - The file hash
+   * @param fileName - The file name
+   * @param subAction - Whether it is an upload or update.
+   */
+  public static void setEvent(String salesmanEmail, String fileHash, String fileName, String subAction) {
+    Map<String, String> eventDataMap = new HashMap<String, String>();
+    
+    eventDataMap.put("email", salesmanEmail);
+    
+    eventDataMap.put("param_1_varchar", salesmanEmail);
+    eventDataMap.put("param_2_varchar", fileHash);
+    eventDataMap.put("param_3_varchar", fileName);
+    eventDataMap.put("param_4_varchar", "web_url");
+    
+    if (subAction.equals("upload")) {
+      DbLayer.setEvent(DbLayer.SALESMAN_EVENT_TABLE,
+          ConfigProperties.getProperty("event_uploaded_file"), eventDataMap);
+    } else {
+      DbLayer.setEvent(DbLayer.SALESMAN_EVENT_TABLE,
+          ConfigProperties.getProperty("event_updated_file"), eventDataMap);
+    }
   }
 }

@@ -496,9 +496,9 @@ public class ManagementServlet extends HttpServlet {
           DbLayer.deleteCustomer(input.getString("customer_email"),input.getString("salesman_email"));
           break;          
 
-        case "deletePresentation":
-          System.out.println("deleting pres " + input.getString("presentation") + " " + input.getString("salesman_email"));
-          DbLayer.deletePresentation(input.getString("presentation"), input.getString("salesman_email"));
+        case "deleteFile":
+          System.out.println("Deleting docuemnt, " + input.getString("fileHash") + ", of " + input.getString("salesmanEmail"));
+          DbLayer.deleteFile(input.getString("fileHash"), input.getString("salesmanEmail"));
           break;
         
         /**

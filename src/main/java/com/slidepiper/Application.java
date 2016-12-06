@@ -137,6 +137,6 @@ public class Application extends SpringBootServletInitializer {
   
   @Bean
   public ServletRegistrationBean SRBUploadFile() {
-    return new ServletRegistrationBean(new UploadFile(), "/upload-file");
+    return new ServletRegistrationBean(new UploadFile(), "/upload-files");
   }
 }

@@ -182,41 +182,33 @@ sp = {
             }
           });
           
-          $('input[type=file]').on('change', function(event) {
-            if(!event) {
-              event = window.event;
-            }
-            sp.file.files = event.target.files;
+          // Load Upload File modal.
+          $('[data-target="#sp-modal-upload-files"]').click(function() {
+            $('#sp-modal-upload-files').load('assets/modal/upload-files/main.html', function() {
+            	$('#sp-file__upload-form input').val('');
+              $.getScript('assets/modal/upload-files/functions.js');
+            });
           });
           
-          // Upload file.
-          $('#sp-upload-files__button').click(function(event) {
-            if ($('#sp-file-upload__form > input[type="file"]').val() !== '') {
-                sp.file.uploadFiles(event);
-                $('input[type="file"]').val(null);
-            }
-            else {
-              sp.error.handleError('You must select a document to upload');
-            }
+          // Load Update File modal.
+          $(document).on('click', '[data-target="#sp-modal-update-file"]', function() {          	
+          	sp.file.fileHash = $(this).attr('data-file-hash');
+
+            $('#sp-modal-update-file').load('assets/modal/upload-files/main.html', function() {
+              $('#sp-modal-update-file .modal-title').text('Update Document');
+              $('.sp-file__upload-update-file-button')
+                .text('Update Document')
+                .attr('data-upload-update', 'update');
+              $('#sp-modal-update-file .font-bold span').text('update');
+              
+              $('#sp-file__upload-form input').val('');
+              $('#sp-file__upload-form [type="file"]').removeAttr('multiple');
+              
+              $.getScript('assets/modal/upload-files/functions.js');
+            });
           });
           
-          // Update file.
-          $(document).on('click', '.sp-file-update', function() {
-            sp.file.fileHash = $(this).attr('data-file-hash');
-          });
-          
-          $('#sp-update-file__button').click(function(event) {
-            if ($('#sp-file-update__form > input[type="file"]').val() !== ''){
-              sp.file.updateFile(event, sp.file.fileHash);
-              $('input[type="file"]').val(null);
-            }
-            else {
-              sp.error.handleError('You must select a file to update');
-            }
-          });
-          
-          // Customize Toolbar
-          
+          // Customize Toolbar.
           $('[data-target="#sp-toolbar-settings__modal"]').on('click', function () {
             $('#sp-toolbar-settings__modal').load('assets/modal/navbar-customization/main.html');
           });
@@ -232,13 +224,11 @@ sp = {
               showCancelButton: true,
               closeOnConfirm: false,
               closeOnCancel: true
-          },
-          function(isConfirm){
-            if (isConfirm) {
-              sp.file.deleteFile(sp.file.fileHash);
-              swal("Deleted!", "Your file has been deleted.", "success");
-              
-              } 
+            },
+            function(isConfirm){
+	            if (isConfirm) {
+	              sp.file.deleteFile(sp.file.fileHash);
+	            } 
             });
           });
           
@@ -552,96 +542,15 @@ sp = {
       });
     },
     
-    uploadFiles: function(event) {
-      event.stopPropagation();
-      event.preventDefault();
-
-      $('#sp-file-upload__form').hide();
-      $('.sk-spinner').show();
-      $('#sp-upload-files__button').removeClass('btn-primary').addClass('btn-default').text('Uploading...');
-      
-      var data = new FormData();
-      $.each(sp.file.files, function(key, value) {
-        data.append(key, value);
-      });
-      data.append('action', 'uploadFiles');
-      data.append('salesmanEmail', Cookies.get('SalesmanEmail'));
-      data.append('localTimestamp', Math.round(new Date().getTime()));
-        
-      $.ajax({
-        url: 'upload-file',
-        type: 'POST',
-        data: data,
-        cache: false,
-        processData: false,
-        contentType: false,
-        success: function(data, textStatus, jqXHR) {
-          if(typeof data.error === 'undefined') {
-            sp.file.getFilesList('fileUploadDashboard');
-            $('button[data-dismiss="modal"]').click();
-            
-            sp.file.files = [];
-            $('#sp-upload-files__button').removeClass('btn-default').addClass('btn-primary').text('Upload Documents');
-            $('.sk-spinner').hide();
-            $('.file__input').show();
-            $('#sp-file-upload__form').css('display', 'block');
-            swal("Success!", "Your file was uploaded!", "success");
-          }
-        },
-        error: function () {
-          sp.error.handleError('ERROR: the file was too large, please upload a file less than 100MB');
-        }
-      
-      });
-    },
-    
-    updateFile: function(event, fileHash) {
-      event.stopPropagation();
-      event.preventDefault();
-
-      $('#sp-file-update__form').hide();
-      $('.sk-spinner').show();
-      $('#sp-update-file__button').removeClass('btn-primary').addClass('btn-default').text('Updating...');
-      
-      var data = new FormData();
-      data.append('updatedfile', sp.file.files[0]);
-      data.append('action', 'updateFile');
-      data.append('updateFileHash', fileHash);
-      data.append('salesmanEmail', Cookies.get('SalesmanEmail'));
-      data.append('localTimestamp', Math.round(new Date().getTime()));
-      
-      $.ajax({
-        url: 'upload-file',
-        type: 'POST',
-        data: data,
-        cache: false,
-        processData: false,
-        contentType: false,
-        success: function(data, textStatus, jqXHR) {
-          if(typeof data.error === 'undefined') {
-            sp.file.getFilesList('fileUploadDashboard');
-            $('button[data-dismiss="modal"]').click();
-            
-            sp.file.files = [];
-            $('#sp-update-file__button').removeClass('btn-default').addClass('btn-primary').text('Update Document');
-            $('#sp-upload-files__button').removeClass('btn-default').addClass('btn-primary').text('Upload Documents');
-            $('.sk-spinner').hide();
-            $('.file__input').show();
-            $('#sp-file-update__form').css('display', 'block');
-            swal("Success!", "Your file was updated!", "success");
-          }
-        }
-      });
-    },
-    
     deleteFile: function(fileHash) {
       $.post('ManagementServlet', JSON.stringify({
-        action: 'deletePresentation',
-        salesman_email: Cookies.get('SalesmanEmail'),
-        presentation: fileHash
+        action: 'deleteFile',
+        salesmanEmail: Cookies.get('SalesmanEmail'),
+        fileHash: fileHash
       }))
       .done(function() {
         sp.file.getFilesList('fileUploadDashboard');
+        swal("Deleted!", "Your file has been deleted.", "success");
       });
     },
     

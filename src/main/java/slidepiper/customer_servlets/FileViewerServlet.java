@@ -45,9 +45,12 @@ public class FileViewerServlet extends HttpServlet {
 			if (isUnsupportedBrowser(request.getHeader("User-Agent"))) {
 				String redirectLink = null;
 				String fileLink = DbLayer.getFileLinkFromFileLinkHash(fileLinkHash);
+				String documentUrl = DbLayer.getAlternativeUrlFromFileLinkHash(fileLinkHash);
 				
 				if (null != fileLink && ! fileLink.equals("")) {
 					redirectLink = fileLink;
+				} else if (null != documentUrl && ! documentUrl.equals("")) {
+				  redirectLink = documentUrl;
 				} else {
 					redirectLink = ConfigProperties.getProperty("app_url");
 				}
@@ -72,10 +75,13 @@ public class FileViewerServlet extends HttpServlet {
 				if (isUnsupportedBrowser(request.getHeader("User-Agent"))) {
 					String redirectLink = null;
 					String fileLink = DbLayer.getFileLinkFromFileLinkHash(fileLinkHash);
+					String documentUrl = DbLayer.getAlternativeUrlFromFileLinkHash(fileLinkHash);
 					
 					if (null != fileLink && ! fileLink.equals("")) {
 						redirectLink = fileLink;
-					} else {
+					} else if (null != documentUrl && ! documentUrl.equals("")) {
+	          redirectLink = documentUrl;
+	        } else {
 						redirectLink = ConfigProperties.getProperty("app_url");
 					}
 					
