@@ -79,6 +79,17 @@ src="https://www.facebook.com/tr?id=270854203317351&ev=PageView&noscript=1"
 
 <!-- WalkMe -->
 <script type="text/javascript">(function() {var walkme = document.createElement('script'); walkme.type = 'text/javascript'; walkme.async = true; walkme.src = 'https://cdn.walkme.com/users/e5889aeecf5c4f8ea5bd747f3bf2db64/test/walkme_e5889aeecf5c4f8ea5bd747f3bf2db64_https.js'; var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(walkme, s); window._walkmeConfig = {smartLoad:true}; })();</script>
+
+<!-- Google Analytics -->
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-64949615-2', 'auto');
+ga('send', 'pageview');
+</script>
 </head>
 
 <body>
@@ -657,78 +668,10 @@ src="https://www.facebook.com/tr?id=270854203317351&ev=PageView&noscript=1"
     <div id="sp-toolbar-settings__modal" class="modal inmodal" tabindex="-1" role="dialog" aria-hidden="true"></div>
     
     <!-- Upload files modal -->
-    <div class="modal inmodal" id="sp-modal-upload-files" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">
-                        <span aria-hidden="true">&times;</span>
-                        <span class="sr-only">Close</span>
-                    </button>
-                    <i class="fa fa-cloud-upload modal-icon"></i>
-                    <h4 class="modal-title">Upload Documents</h4>
-                    <small class="font-bold">Click on the choose
-                        documents button to add one or more documents.
-                        <br>
-                        Then just hit upload documents and you are done.
-                    </small>
-                </div>
-                <div class="modal-body">
-                    <form id="sp-file-upload__form">
-                        <input class="file__input" type="file" multiple accept=".pdf"/>
-                    </form>
-                    <div class="sk-spinner sk-spinner-wave">
-                        <div class="sk-rect1"></div>
-                        <div class="sk-rect2"></div>
-                        <div class="sk-rect3"></div>
-                        <div class="sk-rect4"></div>
-                        <div class="sk-rect5"></div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" id="sp-upload-files__button">Upload Documents</button>
-                </div>
-            </div>
-        </div>
-    </div>
+    <div class="modal inmodal" id="sp-modal-upload-files" tabindex="-1" role="dialog" aria-hidden="true"></div>
 
     <!-- Update files modal -->
-    <div class="modal inmodal" id="sp-modal-update-file" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">
-                        <span aria-hidden="true">&times;</span>
-                        <span class="sr-only">Close</span>
-                    </button>
-                    <i class="fa fa-cloud-upload modal-icon"></i>
-                    <h4 class="modal-title">Update Document</h4>
-                    <small class="font-bold">Click on the choose
-                        document button to add the file you want to
-                        update to.<br>Then just hit on the update
-                        document and you are done.
-                    </small>
-                </div>
-                <div class="modal-body">
-                    <form id="sp-file-update__form">
-                        <input class="file__input" type="file" accept=".pdf"/>
-                    </form>
-                    <div class="sk-spinner sk-spinner-wave">
-                        <div class="sk-rect1"></div>
-                        <div class="sk-rect2"></div>
-                        <div class="sk-rect3"></div>
-                        <div class="sk-rect4"></div>
-                        <div class="sk-rect5"></div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" id="sp-update-file__button">Update Document</button>
-                </div>
-            </div>
-        </div>
-    </div>
+    <div class="modal inmodal" id="sp-modal-update-file" tabindex="-1" role="dialog" aria-hidden="true"></div>
 
     <!-- Upload customers modal -->
     <div class="modal inmodal" id="sp-modal-upload-customers" tabindex="-1" role="dialog" aria-hidden="true">

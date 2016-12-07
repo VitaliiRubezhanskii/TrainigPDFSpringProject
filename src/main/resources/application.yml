@@ -1,0 +1,7 @@
+aws:
+  s3:
+    accessKeyId: AKIAJXQE3QZTYFLZRHNQ
+    secretKey: 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
+    bucket: slidepiper-documents-development
+    prefix: production/documents
+    domain: https://slidepiper-documents-development.s3.amazonaws.com
