@@ -4,6 +4,13 @@ SlidePiper README File
 Change Log
 ----------
 
+### 0.15.0
+
+2016-12-07 Yaniv Friedensohn <yanivf@slidepiper.com>, Max Prais <maxp@slidepiper.com>
+
+* Create AWS S3 document storage solution.
+
+
 ### 0.14.7
 
 2016-12-01 Yaniv Friedensohn <yanivf@slidepiper.com>
