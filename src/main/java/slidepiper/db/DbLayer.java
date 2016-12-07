@@ -458,7 +458,7 @@ public class DbLayer {
 				
 		String custsQuery = "SELECT name, sales_man_email, id "
 				+ " FROM slides " 
-				+ " WHERE sales_man_email=?;";
+				+ " WHERE sales_man_email=? AND slides.fk__document_status__status IN ('CREATED', 'UPDATED', 'BEFORE_AWS_S3_TRANSITION');";
 		
 		Connection conn =null;
 		try 
@@ -551,7 +551,7 @@ public class DbLayer {
 		String name = "";		
 						
 		String query =
-				"select name from slides where id=? LIMIT 1;";
+				"select name from slides where id=? AND slides.fk__document_status__status IN ('CREATED', 'UPDATED', 'BEFORE_AWS_S3_TRANSITION') LIMIT 1;";
 		
 		Connection conn=null;
 		try 
@@ -1362,7 +1362,7 @@ public class DbLayer {
 						+ "SELECT\n" 
 						+ "	whitelist_ip\n"
 						+ "FROM ip_whitelist\n"
-						+ "INNER JOIN slides ON ip_whitelist.FK_file_id_ai = slides.id_ai\n"
+						+ "INNER JOIN slides ON ip_whitelist.FK_file_id_ai = slides.id_ai AND slides.fk__document_status__status IN ('CREATED', 'UPDATED', 'BEFORE_AWS_S3_TRANSITION')\n"
 						+ "INNER JOIN msg_info ON msg_info.slides_id = slides.id\n"
 					    + "WHERE whitelist_ip = ?\n"
 					    + "AND msg_info.id = ?\n"
@@ -1742,7 +1742,7 @@ public class DbLayer {
         }
         Connection conn = null;
         
-        String sql = "SELECT id_ai FROM slides WHERE id = ?";
+        String sql = "SELECT id_ai FROM slides WHERE id = ? AND slides.fk__document_status__status IN ('CREATED', 'UPDATED', 'BEFORE_AWS_S3_TRANSITION')";
         
         int fileId = 0;
         
@@ -1784,7 +1784,7 @@ public class DbLayer {
               "SELECT slides.id_ai\n"
             + "FROM slides\n"
             + "JOIN msg_info ON msg_info.slides_id = slides.id\n"
-            + "WHERE msg_info.id = ?";
+            + "WHERE msg_info.id = ? AND slides.fk__document_status__status IN ('CREATED', 'UPDATED', 'BEFORE_AWS_S3_TRANSITION')";
         
         int fileId = 0;
 
@@ -1816,7 +1816,7 @@ public class DbLayer {
       public static List<String[]> getFileLinks(String customerEmail, String salesmanEmail) {
         Connection conn = null;
         String sql = "SELECT msg_info.id, slides.name FROM msg_info"
-            + " INNER JOIN slides ON msg_info.slides_id=slides.id"
+            + " INNER JOIN slides ON msg_info.slides_id=slides.id AND slides.fk__document_status__status IN ('CREATED', 'UPDATED', 'BEFORE_AWS_S3_TRANSITION')"
             + " WHERE msg_info.customer_email=? AND msg_info.sales_man_email=?";
         List<String[]> fileLinkList = new ArrayList<String[]>();
         
@@ -1932,7 +1932,7 @@ public class DbLayer {
         String sql = 
             "SELECT slides.id AS fileHash, slides.name AS fileName, slides.sales_man_email AS salesmanEmail FROM slides\n"
           + "INNER JOIN msg_info ON msg_info.slides_id = slides.id\n"
-          + "WHERE msg_info.id = ?";
+          + "WHERE msg_info.id = ? AND slides.fk__document_status__status IN ('CREATED', 'UPDATED', 'BEFORE_AWS_S3_TRANSITION')";
         
         try {
           conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
@@ -2031,7 +2031,7 @@ public class DbLayer {
     		  			+ "	is_ip_whitelist\n"
     		  			+ "FROM slides\n"
     		  			+ "JOIN msg_info ON msg_info.slides_id = slides.id\n"
-    		  			+ "WHERE msg_info.id = ?";
+    		  			+ "WHERE msg_info.id = ? AND slides.fk__document_status__status IN ('CREATED', 'UPDATED', 'BEFORE_AWS_S3_TRANSITION')";
     			
     		int flag = 1;
     		Connection conn = null;
@@ -2361,7 +2361,7 @@ public class DbLayer {
       }
       
       String salesmanEmail = null;
-      String sql = "SELECT sales_man_email AS salesman_email FROM slides WHERE id = ? LIMIT 1";
+      String sql = "SELECT sales_man_email AS salesman_email FROM slides WHERE id = ? AND slides.fk__document_status__status IN ('CREATED', 'UPDATED', 'BEFORE_AWS_S3_TRANSITION') LIMIT 1";
       
       Connection conn = null;
       try {
@@ -2706,7 +2706,7 @@ public class DbLayer {
         
         Connection conn = null;
         String sqlInsert = "INSERT INTO slides (sales_man_email, name) VALUES (?, ?)";
-        String sqlSelectAfterInsert = "SELECT id_ai, id FROM slides WHERE id_ai = ?";
+        String sqlSelectAfterInsert = "SELECT id_ai, id FROM slides WHERE id_ai = ? AND slides.fk__document_status__status IN ('CREATED', 'UPDATED', 'BEFORE_AWS_S3_TRANSITION')";
         String fileHash = null;
         
         try {

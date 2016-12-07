@@ -4,6 +4,13 @@ SlidePiper README File
 Change Log
 ----------
 
+### 0.15.1
+
+2016-12-07 Yaniv Friedensohn <yanivf@slidepiper.com>
+
+* Imitate deleted document behavior previous to AWS S3 transition.
+
+
 ### 0.15.0
 
 2016-12-07 Yaniv Friedensohn <yanivf@slidepiper.com>, Max Prais <maxp@slidepiper.com>
