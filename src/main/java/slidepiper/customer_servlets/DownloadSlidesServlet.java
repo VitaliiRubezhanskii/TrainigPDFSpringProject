@@ -93,7 +93,7 @@ public class DownloadSlidesServlet extends HttpServlet {
             			}
 
             // make another query for the slides blob
-            sql = "SELECT file FROM slides WHERE id = ?";
+            sql = "SELECT file FROM slides WHERE id = ? AND slides.fk__document_status__status IN ('CREATED', 'UPDATED', 'BEFORE_AWS_S3_TRANSITION')";
             statement = conn.prepareStatement(sql);
             //statement.setInt(1, uploadId);
             statement.setString(1, slides_id);
