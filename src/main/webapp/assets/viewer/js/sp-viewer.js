@@ -1434,9 +1434,11 @@ if ('' != sp.viewer.linkHash) {
         }
         
         $('.sp-right-side-widgets').append(
-            '<div id="sp-widget6">' +
+            '<div id="sp-widget6__button">' +
+              '<div id="sp-widget6__button-counter">1</div>' +
+              '<div id="sp-widget6__button-person-image"></div>' +
               '<i class="fa fa-user fa-inverse"></i>' +
-            '</div>'
+             '</div>'
         );
         
         sp.viewer.widgets.widget6.isReady = true;
@@ -1489,16 +1491,16 @@ if ('' != sp.viewer.linkHash) {
           
           if ('' !== personImage) {
             personImageDiv = '<div id="sp-widget6__person-image" style="background-image: url(' + personImage + ');"></div>';
-            $('#sp-widget6')
+            $('#sp-widget6__button-person-image')
                 .css({'background-image': 'url(' + personImage + ')', 'background-color': 'transparent'});
-            $('#sp-widget6 i').hide();
+            $('#sp-widget6__button i').hide();
           } else {
-            $('#sp-widget6')
+            $('#sp-widget6__button-person-image')
                 .css({'background-image': 'none', 'background-color': '#009688'});
-            $('#sp-widget6 i').show();
+            $('#sp-widget6__button i').show();
           }
           
-          $('#sp-widget6')
+          $('#sp-widget6__button')
               .off('click')
               .on('click', function() {
                 swal({
