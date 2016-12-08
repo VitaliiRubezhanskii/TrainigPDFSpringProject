@@ -4,6 +4,14 @@ SlidePiper README File
 Change Log
 ----------
 
+### 0.15.3
+
+2016-12-08 Yaniv Friedensohn <yanivf@slidepiper.com>
+
+* Add counter to testimonials widget.
+* Update website.
+
+
 ### 0.15.2
 
 2016-12-08 Yaniv Friedensohn <yanivf@slidepiper.com>
