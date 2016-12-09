@@ -4,6 +4,13 @@ SlidePiper README File
 Change Log
 ----------
 
+### 0.15.2
+
+2016-12-08 Yaniv Friedensohn <yanivf@slidepiper.com>
+
+* Add Google Tag Manager to HA.
+
+
 ### 0.15.1
 
 2016-12-07 Yaniv Friedensohn <yanivf@slidepiper.com>
