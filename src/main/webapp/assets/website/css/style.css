@@ -124,6 +124,20 @@ body {
   width: 100%;
 }
 
+.sp-carousel__sign-up-button {
+  align-content: center;
+  background-color: #150e4f;
+  border-radius: 4px;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  font-size: 1.6rem;
+  font-weight: 600;
+  height: 50px;
+  justify-content: center;
+  margin: 0 auto;
+  width: 250px;
+}
 
 /* Pricing */
 .landing-page li.pricing-title {
