@@ -2654,6 +2654,10 @@ $(document).ready(function() {
     sp.email.lastFocusedSubjectOrBody = $(this);
   });
   
+  // Load Help modal.
+  $('[data-target="#sp-help-salesmen__modal"]').click(function() {
+    $('#sp-help-salesmen__modal').load('assets/modal/help-button/main.html');
+  });
   
   /**
    * Add a file place holder to the email subject or body based upon
