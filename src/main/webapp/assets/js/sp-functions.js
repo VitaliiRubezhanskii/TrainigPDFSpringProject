@@ -12,6 +12,9 @@ sp = {
     $.getJSON('config', {salesmanEmail: Cookies.get('SalesmanEmail')}, function(data) {
       sp.config = data;
       
+      $.getScript('/assets/js/user-event.js');
+      UserEventType = data.UserEventType;
+     
       if (isDashboard) {
         if (typeof Cookies.get('SalesmanEmail') === 'undefined') {
           window.location.href = sp.config.appUrl;
@@ -211,6 +214,7 @@ sp = {
           // Customize Toolbar.
           $('[data-target="#sp-toolbar-settings__modal"]').on('click', function () {
             $('#sp-toolbar-settings__modal').load('assets/modal/navbar-customization/main.html');
+            new UserEvent(UserEventType.CLICKED_TOOLBAR_SETTINGS).send();
           });
           
           // Delete file.
@@ -236,13 +240,13 @@ sp = {
           
           // Upload customers.
           $('#sp-upload-customers__button').click(function(event) {
-          if ($('#sp-modal-upload-customers input[type="file"]').val() === ''){
-            sp.error.handleError('You must select a file to upload');
-          }
-          else {
-            sp.file.uploadCustomers(event);
-            $('input[type="file"]').val(null);
+            if ($('#sp-modal-upload-customers input[type="file"]').val() === ''){
+              sp.error.handleError('You must select a file to upload');
+            } else {
+              sp.file.uploadCustomers(event);
+              $('input[type="file"]').val(null);
             }
+            new UserEvent(UserEventType.UPLOADED_CUSTOMERS).send();
           });
           
           $('#sp-download-template__button').click(function() {
@@ -250,6 +254,11 @@ sp = {
           });
           
           // Add or update a customer.
+          
+          $(document).on('click', '#sp-modal-add-update-customer__button[value="Add Customer"]', function() {
+            new UserEvent(UserEventType.ADDED_CUSTOMER).send();
+          })
+          
           $(document).on('click', '.sp-add-update-customer', function() {
             if ('add' == $(this).attr('data-add-update')) {
               $('#sp-modal-add-update-customer .modal-title').text('Add Customer');
@@ -2058,6 +2067,7 @@ sp = {
         }),
         success: function (data) {
           sp.customerFileLinksGenerator.renderCustomerChoice(data, files);
+          new UserEvent(UserEventType.GENERATED_DOCUMENT_LINK).send();
         },
         error: function (err) {
           console.log(err);
@@ -2654,6 +2664,11 @@ $(document).ready(function() {
     sp.email.lastFocusedSubjectOrBody = $(this);
   });
   
+  // Load Help modal.
+  $('[data-target="#sp-help-salesmen__modal"]').click(function() {
+    $('#sp-help-salesmen__modal').load('assets/modal/help-button/main.html');
+    new UserEvent(UserEventType.CLICKED_HELP_BUTTON).send();
+  });
   
   /**
    * Add a file place holder to the email subject or body based upon
