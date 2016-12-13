@@ -2,6 +2,8 @@ package slidepiper.config;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -10,6 +12,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONObject;
+
+import com.slidepiper.data.model.userevent.UserEventType;
 
 import slidepiper.db.DbLayer;
 import slidepiper.email.EmailSender;
@@ -33,6 +37,13 @@ public class ConfigPropertiesServlt extends HttpServlet {
 		  JSONObject data = new JSONObject();
 		  JSONObject email = new JSONObject();
 		  JSONObject google = new JSONObject();
+		  
+		  Map<String, String> userEventTypeMap = new HashMap<String, String>();
+      for (UserEventType userEventType: UserEventType.values()) {
+        userEventTypeMap.put(userEventType.name(), userEventType.name());
+      }
+      data.put("UserEventType", userEventTypeMap);
+      
 		  String salesmanEmail = request.getParameter("salesmanEmail");
 			
 		  data.put("appUrl", ConfigProperties.getProperty("app_url"));
