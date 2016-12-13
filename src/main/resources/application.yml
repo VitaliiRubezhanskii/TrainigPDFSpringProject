@@ -1,3 +1,13 @@
+spring:
+  data:
+    rest:
+      basePath: /v1
+      
+  datasource:
+    url: jdbc:mysql://localhost:3306/picascrafxzhbcmd
+    username: adminFh4jYg3
+    password: yUGL^7GFBlo&97
+    
 aws:
   s3:
     accessKeyId: AKIAJXQE3QZTYFLZRHNQ
