@@ -4,6 +4,15 @@ SlidePiper README File
 Change Log
 ----------
 
+### 0.16.0
+
+2016-12-13 Yaniv Friedensohn <yanivf@slidepiper.com>
+
+* Created a mechanism for sending user events.
+* Removed Heap Analytics.
+* Installed Spring Data REST & Spring Security.
+
+
 ### 0.15.3
 
 2016-12-08 Yaniv Friedensohn <yanivf@slidepiper.com>
