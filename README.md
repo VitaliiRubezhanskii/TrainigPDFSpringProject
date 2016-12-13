@@ -4,6 +4,13 @@ SlidePiper README File
 Change Log
 ----------
 
+### 0.16.1
+
+2016-12-13 Max Prais <maxp@slidepiper.com>
+
+* Disabled X-Frame-Options header.
+
+
 ### 0.16.0
 
 2016-12-13 Yaniv Friedensohn <yanivf@slidepiper.com>
