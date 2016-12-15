@@ -4,6 +4,13 @@ SlidePiper README File
 Change Log
 ----------
 
+### 0.16.2
+
+2016-12-15 Max Prais <maxp@slidepiper.com>
+
+* Disabled load first document in Marketing Analytics.
+
+
 ### 0.16.1
 
 2016-12-13 Max Prais <maxp@slidepiper.com>
