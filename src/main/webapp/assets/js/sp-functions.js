@@ -59,7 +59,7 @@ sp = {
               var files = [];
               if (0 < $('.sp-search-list li').length && undefined === clickChoice) {
                 for (var i = 0; i < filesData.length; i++) {
-                  if (typeof fileHash === 'undefined' || filesData[i][0] == fileHash) {
+                  if (filesData[i][0] == fileHash) {
                     fileHash = filesData[i][0];
                     files[fileHash] = filesData[i];
                   }
@@ -96,12 +96,11 @@ sp = {
                   $('#sp-nav-files__li ul').append('<li class="sp-marketing-analytics__li"><a class="sp-word-wrap" data-file-hash="'
                       + filesData[i][0] + '">' + filesData[i][1] + '</a></li>');
 
-                  if (typeof fileHash === 'undefined' || filesData[i][0] == fileHash) {
+                  if (filesData[i][0] == fileHash) {
                     fileHash = filesData[i][0];
                     files[fileHash] = filesData[i];
                   }
                 }
-                $('.sp-marketing-analytics__li:first').addClass('active');
                 
                 // Init search and sort functions
                 sp.view.marketingAnalytics.search();
@@ -1045,19 +1044,28 @@ sp = {
       if (typeof customerEmail == 'undefined') {
         customerEmail = null;
       }
-      $.getJSON(
-          'ManagementServlet',
-          {
-            action: 'getFileBarChart',
-            fileHash: fileHash,
-            salesmanEmail: sp.config.salesman.email,
-            customerEmail: customerEmail
-          },
-          function(data) {
-       	    sp.chart.averageViewDurationData = data;
-       	    sp.chart.loadBarChart(data);
-          }
-       );
+      
+      if (typeof fileHash !== 'undefined') {
+      	$.getJSON(
+            'ManagementServlet',
+            {
+              action: 'getFileBarChart',
+              fileHash: fileHash,
+              salesmanEmail: sp.config.salesman.email,
+              customerEmail: customerEmail
+            },
+            function(data) {
+         	    sp.chart.averageViewDurationData = data;
+         	    sp.chart.loadBarChart(data);
+            }
+         );
+      } else {
+      	sp.chart.averageViewDurationData = {};
+      	
+      	if (typeof sp.chart.fileBar !== 'undefined') {
+          sp.chart.fileBar.destroy();
+        }
+      }
     },
       
     loadBarChart: function(data) {
@@ -1145,19 +1153,28 @@ sp = {
       if (typeof customerEmail == 'undefined') {
         customerEmail = null;
       }
-      $.getJSON(
-			  'ManagementServlet',
-			  {
-			  	action: 'getFileLineChart',
-			    fileHash: fileHash,
-			    salesmanEmail: sp.config.salesman.email,
-		  	  customerEmail: customerEmail,
-			  },
-			  function(data) {
-	    	  sp.chart.totalViewsData = data;
-	    	  sp.chart.loadFileLine(data);
-			  }
-      );
+      
+      if (typeof fileHash !== 'undefined') {
+	      $.getJSON(
+				  'ManagementServlet',
+				  {
+				  	action: 'getFileLineChart',
+				    fileHash: fileHash,
+				    salesmanEmail: sp.config.salesman.email,
+			  	  customerEmail: customerEmail,
+				  },
+				  function(data) {
+		    	  sp.chart.totalViewsData = data;
+		    	  sp.chart.loadFileLine(data);
+				  }
+	      );
+      } else {
+      	sp.chart.totalViewsData = {};
+      	
+      	if (typeof sp.chart.fileLine !== 'undefined') {
+          sp.chart.fileLine.destroy();
+        } 
+      }
     },
         
     loadFileLine: function(data) {
@@ -1312,18 +1329,27 @@ sp = {
      * Get the file performance chart.
      */
     getFilePerformance: function(fileHash) {
-      $.getJSON(
-		  'ManagementServlet',
-		  {
-			  action: 'getFilePerformanceChart',
-			  fileHash: fileHash,
-			  salesmanEmail: sp.config.salesman.email
-		  },
-		  function(data) {
-			  sp.chart.performanceBenchmarkData = data;
-			  sp.chart.loadFilePerformance(data);
-		  }
-	  );
+    	
+    	if (typeof fileHash !== 'undefined') {
+    		$.getJSON(
+    			  'ManagementServlet',
+    			  {
+    				  action: 'getFilePerformanceChart',
+    				  fileHash: fileHash,
+    				  salesmanEmail: sp.config.salesman.email
+    			  },
+    			  function(data) {
+    				  sp.chart.performanceBenchmarkData = data;
+    				  sp.chart.loadFilePerformance(data);
+    			  }
+    		  );
+    	} else {
+    		sp.chart.performanceBenchmarkData = {};
+      	
+      	if (typeof sp.chart.filePerformance !== 'undefined') {
+          sp.chart.filePerformance.destroy();
+        }
+    	}
     },
       
     loadFilePerformance: function(data) {
@@ -1556,46 +1582,49 @@ sp = {
       if (typeof customerEmail == 'undefined') {
         customerEmail = null;
       }
-      $.getJSON('ManagementServlet', {action: 'getFileVisitorsMap',
-          fileHash: fileHash, salesmanEmail: sp.config.salesman.email, customerEmail: customerEmail}, function(data) {
-       
-        var dataFormatted = [];
-        if (data.fileVisitorsMap.length > 0) {
-          dataFormatted.push(['Latitude', 'Longitude', 'City', 'Total views']);
-          $.each(data.fileVisitorsMap, function(index, row) {
-            var city = (null != row[2]) ? row[2] + ', ' + row[3] : 'Unknown city, ' + row[3];
-            dataFormatted.push([parseFloat(row[0]), parseFloat(row[1]), city, parseInt(row[4])]);
-          });
-        } else {
-          dataFormatted.push(['']);
-        }
-        
-        var mapData = google.visualization.arrayToDataTable(dataFormatted);
-
-        var options = {
-          colorAxis: {
-            colors: ['#00AC8A', '#00AC8A']
-          },
-          datalessRegionColor: '#dcdcdc',
-          displayMode: 'markers',
-          legend: 'none',
-          projection: 'kavrayskiy-vii',
-          sizeAxis: {
-            minValue: 0
-          },
-        };
-        
-        if (typeof sp.chart.visitorsMap == 'undefined') {
-          sp.chart.visitorsMap = new google.visualization.GeoChart(document.getElementById('sp-google-geochart'));
-        }
-        
-        sp.chart.visitorsMap.draw(mapData, options);
-        
-        $(window).on('resize', function() {
-          sp.chart.visitorsMap = new google.visualization.GeoChart(document.getElementById('sp-google-geochart'));
-          sp.chart.visitorsMap.draw(mapData, options);
-        });
-      });
+      
+      if (typeof fileHash !== 'undefined') {
+	      $.getJSON('ManagementServlet', {action: 'getFileVisitorsMap',
+	          fileHash: fileHash, salesmanEmail: sp.config.salesman.email, customerEmail: customerEmail}, function(data) {
+	       
+	        var dataFormatted = [];
+	        if (data.fileVisitorsMap.length > 0) {
+	          dataFormatted.push(['Latitude', 'Longitude', 'City', 'Total views']);
+	          $.each(data.fileVisitorsMap, function(index, row) {
+	            var city = (null != row[2]) ? row[2] + ', ' + row[3] : 'Unknown city, ' + row[3];
+	            dataFormatted.push([parseFloat(row[0]), parseFloat(row[1]), city, parseInt(row[4])]);
+	          });
+	        } else {
+	          dataFormatted.push(['']);
+	        }
+	        
+	        var mapData = google.visualization.arrayToDataTable(dataFormatted);
+	
+	        var options = {
+	          colorAxis: {
+	            colors: ['#00AC8A', '#00AC8A']
+	          },
+	          datalessRegionColor: '#dcdcdc',
+	          displayMode: 'markers',
+	          legend: 'none',
+	          projection: 'kavrayskiy-vii',
+	          sizeAxis: {
+	            minValue: 0
+	          },
+	        };
+	        
+	        if (typeof sp.chart.visitorsMap == 'undefined') {
+	          sp.chart.visitorsMap = new google.visualization.GeoChart(document.getElementById('sp-google-geochart'));
+	        }
+	        
+	        sp.chart.visitorsMap.draw(mapData, options);
+	        
+	        $(window).on('resize', function() {
+	          sp.chart.visitorsMap = new google.visualization.GeoChart(document.getElementById('sp-google-geochart'));
+	          sp.chart.visitorsMap.draw(mapData, options);
+	        });
+      	});
+      }
     }
   },
   
