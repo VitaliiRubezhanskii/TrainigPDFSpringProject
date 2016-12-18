@@ -2,7 +2,7 @@ var sp = sp || {};
 
 sp.uploadFiles = {
   files: [],
-  subAction: {
+  action: {
     update: 'update',
     upload: 'upload',
   },
@@ -17,9 +17,9 @@ sp.uploadFiles = {
     
     $(uploadUpdateButton).click(function() {
       if ($(this).attr('data-upload-update') === 'upload') {
-        sp.uploadFiles.upload(sp.uploadFiles.subAction.upload);
+        sp.uploadFiles.upload(sp.uploadFiles.action.upload);
       } else {
-        sp.uploadFiles.upload(sp.uploadFiles.subAction.update);
+        sp.uploadFiles.upload(sp.uploadFiles.action.update);
       }
     });
     
@@ -54,13 +54,13 @@ sp.uploadFiles = {
     });*/
   })(),
   
-  upload: function(subAction) {
+  upload: function(action) {
     var data = new FormData();
     data.append('salesmanEmail', Cookies.get('SalesmanEmail'));
-    data.append('subAction', subAction);
+    data.append('action', action);
     
-    if ('update' === subAction) {
-      data.append('fileHash', sp.file.fileHash);
+    if ('update' === action) {
+      data.append('updateFileHash', sp.file.fileHash);
     }
     
     // Send either files or dropbox URL.
@@ -79,7 +79,7 @@ sp.uploadFiles = {
     /*}*/
     
     var successVerb;
-    if ('upload' === subAction) {
+    if ('upload' === action) {
       $('#sp-modal-upload-files .container-fluid').hide();
       successVerb = 'uploaded';
     } else {
@@ -91,17 +91,17 @@ sp.uploadFiles = {
     $('.sp-file__upload-update-file-button').removeClass('btn-primary').addClass('btn-default').text('Uploading...');
     
     $.ajax({
-      url: 'upload-files',
+      url: 'upload-file',
       type: 'POST',
       data: data,
       cache: false,
       processData: false,
       contentType: false,
-      success: function(resultCode) {
+      success: function(result) {
         $('button[data-dismiss="modal"]').click();
         $('.sk-spinner').hide();
         
-        if (resultCode === 1) {
+        if (result.flag > 0) {
           sp.file.getFilesList('fileUploadDashboard');
           sp.uploadFiles.files = [];
           swal("Success!", "Your file was " + successVerb + "!", "success");

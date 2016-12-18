@@ -552,9 +552,9 @@ sp = {
     
     deleteFile: function(fileHash) {
       $.post('ManagementServlet', JSON.stringify({
-        action: 'deleteFile',
-        salesmanEmail: Cookies.get('SalesmanEmail'),
-        fileHash: fileHash
+        action: 'deletePresentation',
+        salesman_email: Cookies.get('SalesmanEmail'),
+        presentation: fileHash
       }))
       .done(function() {
         sp.file.getFilesList('fileUploadDashboard');

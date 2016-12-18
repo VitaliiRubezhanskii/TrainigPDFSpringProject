@@ -2,6 +2,7 @@ package slidepiper.db;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -20,6 +21,7 @@ import java.util.TimeZone;
 
 import javax.xml.bind.DatatypeConverter;
 
+import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.io.IOUtils;
 import org.hashids.Hashids;
 import org.json.JSONArray;
@@ -92,6 +94,32 @@ public class DbLayer {
 		
 	}
 
+	
+	 public static void deletePresentation(String pres, String salesman_email ){
+	    String query = "DELETE FROM slides "+
+	          " WHERE id =?" +
+	        " AND sales_man_email=?;";
+	    Connection conn=null;
+	    try 
+	    { 
+	      try {
+	          conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass); 
+	          PreparedStatement statement = conn.prepareStatement(query);       
+	          statement.setString(1, pres);               
+	          statement.setString(2,salesman_email);              
+	          statement.executeUpdate();
+	          statement.close();
+	          System.out.println("pres: " + pres + " was deleted! salesman " + salesman_email);
+	          conn.close();
+	      } finally{ if(conn!=null){ conn.close();} }
+	    }   
+	    catch (Exception ex) {
+	      System.out.println("err: " + ex.getMessage());
+	    }
+	    
+	  }
+	
+	
 	public static void deleteFile(String fileHash, String salesmanEmail) { 
 		String delete = "UPDATE slides SET fk__document_status__status = ? WHERE id = ? AND sales_man_email= ?";
 		Connection conn = null;
@@ -1970,41 +1998,51 @@ public class DbLayer {
      
       
       /**
-       * Get the S3 file origin from a file hash. 
+       * Get document URL from fileLinkHash.
        * 
-       * @param fileHash The file hash.
-       * @return The file origin.
+       * The document_url field is on the slides table. And the file is stored in Amazon S3.
+       * 
+       * @param fileLinkHash
+       * @return documentUrl
        */
       public static String getDocumentUrlFromFileLinkHash(String fileLinkHash) {
-        String documentUrl = null;
         
-        Constants.updateConstants();
-        try {
-          Class.forName("com.mysql.jdbc.Driver");
-        } catch (ClassNotFoundException e) {
-          e.printStackTrace();
-        }
-        Connection conn = null;
-        
-        String sql = 
-            "SELECT CONCAT_WS('/', TRIM(BOTH '/' FROM t1.domain), TRIM(BOTH '/' FROM t1.prefix), TRIM(BOTH '/' FROM t1.id), TRIM(BOTH '/' FROM t1.name)) AS documentUrl\n"
-          + "FROM slides AS t1\n"
-          + "JOIN msg_info AS t2 ON t1.id = t2.slides_id AND t2.id = ?\n"
-          + "WHERE t1.fk__document_status__status IN ('CREATED', 'UPDATED')";
-        
-        try {
-          conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
-          PreparedStatement ps = conn.prepareStatement(sql);
-          ps.setString(1, fileLinkHash);
-           
-          ResultSet rs = ps.executeQuery();
-          if (rs.next()) {
-            documentUrl = rs.getString(1);
-          }
-        } catch (SQLException e) {
-          e.printStackTrace();
-        }
+    Constants.updateConstants();
+      try {
+        Class.forName("com.mysql.jdbc.Driver");
+      } catch (ClassNotFoundException e) {
+        e.printStackTrace();
+      }
       
+      String documentUrl = null;
+      String sql = "SELECT document_url\n"
+          + "FROM slides\n"
+          + "JOIN msg_info ON msg_info.slides_id = slides.id\n"
+          + "WHERE msg_info.id = ?";
+      
+      Connection conn = null;
+      try {
+        conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
+        PreparedStatement ps = conn.prepareStatement(sql);
+        ps.setString(1, fileLinkHash);
+        ResultSet rs = ps.executeQuery();
+        
+        if (rs.next()) {
+        documentUrl = rs.getString("document_url");
+        }
+         
+      } catch (SQLException e) {
+        e.printStackTrace();
+      } finally {
+        if (null != conn) {
+          try {
+            conn.close();
+          } catch (SQLException ex) {
+            ex.printStackTrace();
+          }
+        }
+      }
+          
         return documentUrl;
       }
       
@@ -2696,17 +2734,17 @@ public class DbLayer {
       /**
        * Set the uploaded file and the file hash referring to it.
        * 
+       * @param file A file object received from uploading a file via the frontend.
        * @param salesmanEmail The salesman email address.
-       * @param fileName - The file name.
        * 
        * @return The file enumerated hash.
        * @throws IOException
        */
-      public static String setFileHash(String salesmanEmail, String fileName) {
+      public static String setFileHash(FileItem file, String salesmanEmail, Timestamp localTimestamp) throws IOException {
         
         Connection conn = null;
-        String sqlInsert = "INSERT INTO slides (sales_man_email, name) VALUES (?, ?)";
-        String sqlSelectAfterInsert = "SELECT id_ai, id FROM slides WHERE id_ai = ? AND slides.fk__document_status__status IN ('CREATED', 'UPDATED', 'BEFORE_AWS_S3_TRANSITION')";
+        String sqlInsert = "INSERT INTO slides (file, sales_man_email, name, local_timestamp) VALUES (?, ?, ?, ?)";
+        String sqlSelectAfterInsert = "SELECT id_ai, id FROM slides WHERE id_ai=?";
         String fileHash = null;
         
         try {
@@ -2714,8 +2752,10 @@ public class DbLayer {
           conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
           PreparedStatement ps = conn.prepareStatement(sqlInsert, Statement.RETURN_GENERATED_KEYS);                
           
-          ps.setString(1, salesmanEmail);
-          ps.setString(2, fileName);
+          ps.setBytes(1, IOUtils.toByteArray(file.getInputStream()));
+          ps.setString(2, salesmanEmail);
+          ps.setString(3, Paths.get(file.getName()).getFileName().toString());
+          ps.setTimestamp(4, localTimestamp);
           ps.executeUpdate();
           ResultSet rs = ps.getGeneratedKeys();
           
@@ -3178,6 +3218,53 @@ public class DbLayer {
 		}
     	  
 		return resultList;
+      }
+      
+      
+      /**
+       * Update (replace) a file with a different one.
+       * 
+       * @param file The file blob.
+       * @param fileHash The file hash.
+       * @param fileName The file name.
+       * @param salesmanEmail The salesman email address.
+       * 
+       * @throws IOException
+       */
+      public static void updateFile(FileItem file, String fileHash, String fileName,
+          String salesmanEmail, Timestamp localTimestamp) throws IOException {
+
+        Constants.updateConstants();
+        Connection conn = null;
+        String sql = "UPDATE slides SET file = ?, name = ?, timestamp = CURRENT_TIMESTAMP, local_timestamp = ? WHERE id = ? AND sales_man_email = ?";
+        
+        try {
+        try {
+      DriverManager.registerDriver(new com.mysql.jdbc.Driver());
+      } catch (SQLException e) {
+      e.printStackTrace();
+      } 
+          
+          conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
+          PreparedStatement stmt = conn.prepareStatement(sql);
+          stmt.setBytes(1, IOUtils.toByteArray(file.getInputStream()));
+          stmt.setString(2, fileName);
+          stmt.setTimestamp(3, localTimestamp);
+          stmt.setString(4, fileHash);
+          stmt.setString(5, salesmanEmail);
+          
+          stmt.executeUpdate();
+        } catch (SQLException ex) {
+          System.err.println("Error code: " + ex.getErrorCode() + " - " + ex.getMessage());
+        } finally {
+          if (null != conn) {
+            try {
+              conn.close();
+            } catch (SQLException ex) {
+              ex.printStackTrace();
+            }
+          }
+        }
       }
       
       
