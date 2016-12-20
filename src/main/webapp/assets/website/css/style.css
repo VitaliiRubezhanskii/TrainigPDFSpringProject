@@ -203,5 +203,11 @@ body {
 	margin-bottom: 30px;
 }
 
-  
+.color-gold {
+  color: ca8b07;
+}
 
+.font-emphasize {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
