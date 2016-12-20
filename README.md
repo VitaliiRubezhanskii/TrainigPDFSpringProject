@@ -4,6 +4,13 @@ SlidePiper README File
 Change Log
 ----------
 
+### 0.16.3
+
+2016-12-18 Yaniv Friedensohn <yanivf@slidepiper.com>
+
+* Temporary restored DB documents storage solution.
+
+
 ### 0.16.2
 
 2016-12-15 Max Prais <maxp@slidepiper.com>
