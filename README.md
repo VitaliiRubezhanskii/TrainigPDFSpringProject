@@ -4,6 +4,13 @@ SlidePiper README File
 Change Log
 ----------
 
+### 0.16.5
+
+2016-12-21 Yaniv Friedensohn <yanivf@slidepiper.com>
+
+* HA - Added operator codes & Send payloads to Zapier.
+
+
 ### 0.16.4
 
 2016-12-20 Yaniv Friedensohn <yanivf@slidepiper.com>
