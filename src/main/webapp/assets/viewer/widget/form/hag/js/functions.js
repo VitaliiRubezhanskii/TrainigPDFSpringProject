@@ -24,7 +24,7 @@ $(function() {
         $('#first-name').val($('#first-name-init').val());
         $('#last-name').val($('#last-name-init').val());
         
-        var mobileOperatorCode = ['050', '052', '054', '055', '057', '058'];
+        var mobileOperatorCode = ['050', '052', '053', '054', '055', '057', '058'];
         if (mobileOperatorCode.indexOf($('#phone-operator-code-init').val()) > -1) {
           $('#phone-mobile-operator-code').val($('#phone-operator-code-init').val());
           $('#phone-mobile-number')
@@ -633,6 +633,7 @@ $(function() {
           email: $('#email-init').val(),
           first_name: $('#first-name-init').val(),
           id_num: $('#id-init').val(),
+          key: 'sp15#jG8*t5',
           last_name: $('#last-name-init').val(),
           phoneInit: $('#phone-operator-code-init').val() + '-' + $('#phone-number-init').val()
         }
@@ -665,6 +666,7 @@ $(function() {
         transferFundPayload['first_name'] = $('#first-name').val();
         transferFundPayload['id_num'] = $('#id').val();
         transferFundPayload['last_name'] = $('#last-name').val();
+        transferFundPayload['key'] = payload['key'];
         
         if (null !== $('#family-status').val()) {
           payload['status'] = $('#family-status').val();
@@ -917,11 +919,17 @@ $(function() {
         payload['signatureBase64'] = signaturePad.toDataURL();
         sendWebMerge('https://www.webmerge.me/merge/78047/g33bvk', payload);
         
+        // Send to Zapier.
+        sendWebMerge('https://hooks.zapier.com/hooks/catch/674313/tzyyht/', payload);
+        
         if ($('#is-transfer-funds-yes').is(':checked')) {
           transferFundPayload['date'] = payload['date'];
           transferFundPayload['email'] = payload['email'];
           transferFundPayload['signatureBase64'] = payload['signatureBase64'];
           sendWebMerge('https://www.webmerge.me/merge/79990/1qdska', transferFundPayload);
+          
+          // Send to Zapier.
+          sendWebMerge('https://hooks.zapier.com/hooks/catch/674313/ta34dm/', transferFundPayload);
         }
         
         sendHA();
