@@ -3,7 +3,7 @@ var sp = sp || {};
 sp.widgets = {
 	widget3: {
 		init: (function() {
-			$('#sp-widget3__advanced').click(function() {
+			$('#sp-widget3__advanced').contents().click(function() {
 				$('.sp-widget3__advanced-container').slideToggle(function() {
 				  $('#sp-widget3__advanced').find('i').toggleClass('fa-caret-left fa-caret-down');
 				});
@@ -32,7 +32,7 @@ sp.widgets = {
 				}
 			});
 			
-			$('[name="spWidget3IsDefaultButtonColorEnabled"]').click(function() {
+			$('[name="spWidget3ButtonColorChooser"]').click(function() {
 				sp.widgets.widget3.colorPickerHandler();
 			});
 			
@@ -46,7 +46,7 @@ sp.widgets = {
 		})(),
 		
 		colorPickerHandler: function() {			
-			if ($('[name="spWidget3IsDefaultButtonColorEnabled"]').is(':checked')) {
+			if ($('.spWidget3IsDefaultButtonColorEnabled').is(':checked')) {
 				$('#sp-widget3__color-picker').spectrum('disable');
 			} else {
 				$('#sp-widget3__color-picker').spectrum('enable');
@@ -617,7 +617,11 @@ sp.viewerWidgetsModal = {
       }
       
       if (typeof widget.items[0].isDefaultButtonColorEnabled !== 'undefined') {
-      	$('[name="spWidget3IsDefaultButtonColorEnabled"]').prop('checked', widget.items[0].isDefaultButtonColorEnabled);
+      	$('.spWidget3IsDefaultButtonColorEnabled').prop('checked', widget.items[0].isDefaultButtonColorEnabled);
+      }
+      
+      if (typeof widget.items[0].isDefaultButtonColorEnabled !== 'undefined') {
+      	$('.spWidget3IsCustomButtonColorEnabled').prop('checked', widget.items[0].isCustomButtonColorEnabled);
       }
       
       if (typeof widget.items[0].buttonColor !== 'undefined') {
@@ -1010,7 +1014,8 @@ sp.viewerWidgetsModal = {
             	customEmailLabel: $('[name="spWidget3CustomEmailLabel"]').val(),
             	customEmailValidationErrorMessage: $('[name="spWidget3CustomEmailValidationErrorMessage"]').val(),
             	buttonColor: $('[name="spWidget3ButtonColor"]').val(),
-            	isDefaultButtonColorEnabled: $('[name="spWidget3IsDefaultButtonColorEnabled"]').prop('checked'),
+            	isDefaultButtonColorEnabled: $('.spWidget3IsDefaultButtonColorEnabled').prop('checked'),
+            	isCustomButtonColorEnabled: $('.spWidget3IsCustomButtonColorEnabled').prop('checked'),
             	location: {
             		right: $('[name="spWidget3IsLocationRight"]').prop('checked'),
             		bottom: $('[name="spWidget3IsLocationBottom"]').prop('checked'),
