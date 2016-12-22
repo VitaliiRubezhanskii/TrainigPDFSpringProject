@@ -4,6 +4,19 @@ SlidePiper README File
 Change Log
 ----------
 
+### 0.16.6
+
+2016-12-22 Max Prais <maxp@slidepiper.com>
+
+* Created splash page for the Viewer.
+
+* Added functionality to display the Question Widget at the bottom of the
+document. 
+
+* Set the right side widget default color to be the CTA button color, but
+the user can choose their own color in Dashboard settings.
+
+
 ### 0.16.5
 
 2016-12-21 Yaniv Friedensohn <yanivf@slidepiper.com>

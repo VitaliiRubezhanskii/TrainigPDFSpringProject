@@ -81,7 +81,6 @@
   margin: 8px 0 8px 10px;
   vertical-align: top;
 }
-*/
 
 #send_email_to_customers {
   visibility: hidden;
@@ -106,6 +105,8 @@
 
 
 /* Dashboard settings */
+
+/* Modal */
 
 button[data-target="#sp-modal-add-update-customer"] {
   margin-left: 10px;
