@@ -202,6 +202,7 @@
 }
 
 .sp-toolbar-logo img {
+	border: none;
   height: 45px;
   padding-top: 2px;
 }

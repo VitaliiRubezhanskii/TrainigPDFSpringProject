@@ -4,6 +4,18 @@ SlidePiper README File
 Change Log
 ----------
 
+### 0.16.8
+
+2016-12-22 Max Prais <maxp@slidepiper.com>
+
+* Fixed bug in IE10 Viewer where the logo had a blue border.
+
+* Changed button color picker solution for widget 3. User can now toggle
+between radio buttons to choose between default and custom color.
+
+* Updated the website iframe to the Xmas Holidays doc.
+
+
 ### 0.16.7
 
 2016-12-22 Max Prais <maxp@slidepiper.com>
