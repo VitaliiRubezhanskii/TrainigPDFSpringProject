@@ -103,6 +103,37 @@
 }
 
 
+/* Widget 3 - Question Widget */
+#sp-widget3__default-button-color {
+	float: right;
+}
+
+#sp-widget3__advanced {
+  margin: auto auto auto 15px !important;
+}
+
+#sp-widget3__advanced-hr {
+  margin-bottom: 10px;
+}
+
+#sp-widget3__advanced small {
+	cursor: pointer;
+}
+
+#sp-widget3__advanced-button-color-container {
+	margin-bottom: 5px;
+}
+
+#sp-widget3__title .text-info {
+	cursor: pointer;
+	float: right;
+}
+
+.sp-widget3__advanced-container {
+  display: none;
+}
+
+
 /* Widget 6 - Testimonials */
 #sp-tab-6 .sp-widget__delete-item {
   float: right;
@@ -166,4 +197,20 @@
 
 #sp-tab-9 .sp-widget__delete-item {
   float: right;
+}
+
+/* Spectrum Settings */
+#sp-viewer-widgets-modal .sp-replacer {
+  border-radius: 4px;
+  float: left;
+  padding: 3px;
+}
+
+#sp-viewer-widgets-modal .sp-preview {
+  border-radius: 2px;
+  margin-right: 0 !important;
+}
+
+#sp-viewer-widgets-modal .sp-dd {
+  display: none;
 }

@@ -1,6 +1,58 @@
 var sp = sp || {};
 
 sp.widgets = {
+	widget3: {
+		init: (function() {
+			$('#sp-widget3__advanced').click(function() {
+				$('.sp-widget3__advanced-container').slideToggle(function() {
+				  $('#sp-widget3__advanced').find('i').toggleClass('fa-caret-left fa-caret-down');
+				});
+			});
+			
+			var widgetLocationCheckboxes = $('#sp-widget3__widget-location [type="checkbox"]');
+			$(widgetLocationCheckboxes).click(function() {
+				var isBothUnchecked = true;
+				
+				$(widgetLocationCheckboxes).each(function() {
+					if ($(this).is(':checked')) {
+						isBothUnchecked = false;
+					}
+				});
+				
+				if (isBothUnchecked) {
+					$('[name="question-widget-is-enabled"]').prop('checked', false);
+				} else {
+					$('[name="question-widget-is-enabled"]').prop('checked', true);
+				}
+			});
+			
+			$('[name="question-widget-is-enabled"]').click(function() {
+				if ($(this).is(':checked')) {
+					$('[name="spWidget3LocationRightSide"]').prop('checked', true);
+				}
+			});
+			
+			$('[name="spWidget3IsDefaultButtonColorEnabled"]').click(function() {
+				sp.widgets.widget3.colorPickerHandler();
+			});
+			
+			$(document).on('spWidgetsReady', function() {
+				sp.widgets.widget3.colorPickerHandler();
+			});
+			
+			$('#sp-widget3__help-button').click(function() {
+				new UserEvent(UserEventType.CLICKED_HELP_BUTTON, {widgetId: 3}).send();
+			});
+		})(),
+		
+		colorPickerHandler: function() {			
+			if ($('[name="spWidget3IsDefaultButtonColorEnabled"]').is(':checked')) {
+				$('#sp-widget3__color-picker').spectrum('disable');
+			} else {
+				$('#sp-widget3__color-picker').spectrum('enable');
+			}
+		},
+ 	},
   widget6: {
     item: '<hr>' + $('#sp-tab-6 .sp-widget-item').html(),
     
@@ -395,7 +447,7 @@ sp.viewerWidgetsModal = {
     	if (widgetSettingsData && intervalCount >= 1000) {
     		 $('.sp-widgets-customisation__spinner').removeClass('sp-widgets-customisation__spinner-show');
          $('#sp-viewer-widgets-modal .tabs-container').removeClass('sp-hidden');
-         
+         $(document).trigger('spWidgetsReady');
          clearInterval(setIntervalToDisplayWidgetsSettings);
     	}
     }, interval);
@@ -524,11 +576,20 @@ sp.viewerWidgetsModal = {
       
       $('[name="question-widget-text"]').val(widget.items[0].buttonText);
       $('[name="spWidget3CancelButtonText"]').val(widget.items[0].cancelButtonText);
+      $('[name="spWidget3FormTitle"]').val(widget.items[0].formTitle);
       $('[name="spWidget3FormMessage"]').val(widget.items[0].formMessage);
       $('[name="spWidget3ConfirmButtonText"]').val(widget.items[0].confirmButtonText);
       $('[name="spWidget3CustomMessageLabel"]').val(widget.items[0].customMessageLabel);
       $('[name="spWidget3CustomEmailLabel"]').val(widget.items[0].customEmailLabel);
       $('[name="spWidget3CustomEmailValidationErrorMessage"]').val(widget.items[0].customEmailValidationErrorMessage);
+      $('[name="spWidget3IsLocationRight"]').prop('checked', widget.items[0].location.right);
+      $('[name="spWidget3IsLocationBottom"]').prop('checked', widget.items[0].location.bottom);
+      $('[name="spWidget3IsDefaultButtonColorEnabled"]').prop('checked', widget.items[0].isDefaultButtonColorEnabled);
+      $('[name="spWidget3ButtonColor"]')
+      	.val(widget.items[0].buttonColor)
+      	.spectrum('set', widget.items[0].buttonColor);
+      
+      sp.widgets.widget3.colorPickerHandler();
     }
     
     function displayLikeWidgetSettings(widget) {
@@ -907,9 +968,16 @@ sp.viewerWidgetsModal = {
             	formMessage: $('[name="spWidget3FormMessage"]').val(),
             	confirmButtonText: $('[name="spWidget3ConfirmButtonText"]').val(),
             	cancelButtonText: $('[name="spWidget3CancelButtonText"]').val(),
+            	formTitle: $('[name="spWidget3FormTitle"]').val(),
             	customMessageLabel: $('[name="spWidget3CustomMessageLabel"]').val(),
             	customEmailLabel: $('[name="spWidget3CustomEmailLabel"]').val(),
             	customEmailValidationErrorMessage: $('[name="spWidget3CustomEmailValidationErrorMessage"]').val(),
+            	buttonColor: $('[name="spWidget3ButtonColor"]').val(),
+            	isDefaultButtonColorEnabled: $('[name="spWidget3IsDefaultButtonColorEnabled"]').prop('checked'),
+            	location: {
+            		right: $('[name="spWidget3IsLocationRight"]').prop('checked'),
+            		bottom: $('[name="spWidget3IsLocationBottom"]').prop('checked'),
+            	},
             }
           ]
         }

@@ -560,6 +560,16 @@ public class ManagementServlet extends HttpServlet {
                   URLDecoder.decode(data.getString("param_8_varchar"), "UTF-8"));
           }
           
+          if (data.has("param_9_varchar")) {
+            eventDataMap.put("param_9_varchar",
+                  URLDecoder.decode(data.getString("param_9_varchar"), "UTF-8"));
+          }
+          
+          if (data.has("param_10_varchar")) {
+            eventDataMap.put("param_10_varchar",
+                  URLDecoder.decode(data.getString("param_10_varchar"), "UTF-8"));
+          }
+          
           // Set event and get event id.
           long notificationId = DbLayer.setEvent(DbLayer.CUSTOMER_EVENT_TABLE,
               URLDecoder.decode(data.getString("eventName"), "UTF-8"), eventDataMap);

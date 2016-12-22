@@ -21,7 +21,7 @@ sp.validate.controller = {
       $(element).closest('.form-group').addClass('has-success has-feedback');
 	  };
 	  
-	  // Widget 3.
+	  // Widget 3 - Right Side.
 		$('#widget3-form').validate({
 	    rules: {
 	    	widget3Email: {
@@ -31,6 +31,24 @@ sp.validate.controller = {
 	    },
 	    messages: {
 	    	widget3Email: sp.validate.errorMessage
+	    },
+	    highlight: highlight,
+	    errorElement: errorElement,
+	    errorClass: errorClass,
+	    errorPlacement: errorPlacement,
+	    success: success,
+		});
+		
+		// Widget 3 - Bottom.
+		$('#widget3-bottom-form').validate({
+	    rules: {
+	    	widget3EmailBottom: {
+	        email: true,
+	        required: true,
+	      },
+	    },
+	    messages: {
+	    	widget3EmailBottom: sp.validate.errorMessage
 	    },
 	    highlight: highlight,
 	    errorElement: errorElement,

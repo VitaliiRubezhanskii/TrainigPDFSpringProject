@@ -1,5 +1,6 @@
 <!-- CSS -->
 <link rel="stylesheet" href="assets/modal/viewer-widgets-wizard/style.css">
+<link rel="stylesheet" href="assets/css/plugins/spectrum/spectrum.css">
 
 <!-- Viewer Widgets Modal  -->
 <div class="modal-dialog">
@@ -106,64 +107,116 @@
                     <!-- Ask a Question Widget -->
                     <div id="sp-tab-3" class="tab-pane active">
                         <div class="panel-body">
-                            <strong>Ask a Question / Give Feedback Widget</strong>
+                        		<div id="sp-widget3__title">
+                        			<strong>Ask a Question / Give Feedback Widget</strong>
+	                        			<a id="sp-widget3__help-button" target="_blank" href="https://www.slidepiper.com/view?f=5pn1e9#page=12">
+	                        				<small class="text-info" >
+	                        					<i class="fa fa-info-circle"></i>  Help
+	                        				</small>
+	                        			</a>
+                        		</div>
+                        		
                             <div class="sp-customization-option__p">
-                                <input type="checkbox" name="question-widget-is-enabled"> Is Enabled?
+                            		<div class="checkbox">
+                                	<label><input type="checkbox" name="question-widget-is-enabled">Is Enabled?</label>
+                                </div>
                             </div>
+                            
                             <hr>
+                            
                             <div class="container-fluid">
-                            	<form class="form-horizontal">
-				                    <div class="form-group">
-			                          <label class="col-lg-4 control-label"><span class="sp-widgets__required-setting">* </span>Call to Action Button Text</label>
-			                          <div class="col-lg-8">
-			                            <input type="text" value="Any Questions? Click Here" name="question-widget-text" class="form-control" placeholder="e.g. Ask a Question / Give Feedback">
-			                            </div>
-				                    </div>
-		                            
-		                            <hr>
-		                            
-		                            <div class="form-group">
-		                              <label class="col-lg-4 control-label">Custom Message Label</label>
+	                            <form class="form-horizontal">
+						                    <div class="form-group">
+					                          <label class="col-lg-4 control-label"><span class="sp-widgets__required-setting">* </span>Call to Action Button Text</label>
+					                          <div class="col-lg-8">
+					                          	<input type="text" value="Any Questions? Click Here" name="question-widget-text" class="form-control" placeholder="e.g. Ask a Question / Give Feedback">
+					                          	<small>This text will also be the Form Title. If you prefer, you can set the Form Title separately below.</small>
+					                          </div>
+						                    </div>
+						                    
+						                    <div class="form-group">
+			                              <label class="col-lg-4 control-label">Form Title</label>
+			                              <div class="col-lg-8">
+			                                  <input type="text" placeholder="e.g. Any Questions?" class="form-control" name="spWidget3FormTitle" maxlength="100">
+			                              </div>
+				                        </div>
+				                        	
+						                    <div id="sp-widget3__widget-location" class="form-group">
+						                    	<label class="col-lg-4 control-label">Widget Location:</label>
+						                    	
 		                              <div class="col-lg-8">
-		                                  <input type="text" placeholder="e.g. Enter your message:" class="form-control" name="spWidget3CustomMessageLabel" maxlength="250">
+		                              	<div class="checkbox">
+		                              		<label><input type="checkbox" name="spWidget3IsLocationRight" checked>Right Side</label>
+		                              	</div>
+		                              	
+		                              	<div class="checkbox">
+		                              		<label><input type="checkbox" name="spWidget3IsLocationBottom">End of the document</label>
+		                              	</div>
+		                              	
 		                              </div>
-			                        </div>
-			                          
-			                        <div class="form-group">
-		                              <label class="col-lg-4 control-label">Custom Email Label</label>
-		                              <div class="col-lg-8">
-		                                  <input type="text" placeholder="e.g. Enter your email address:" class="form-control" name="spWidget3CustomEmailLabel" maxlength="250">
-		                              </div>
-			                        </div>
-		                            
-		                            <div class="form-group">
-		                              <label class="col-lg-4 control-label">Confirm Button Text</label>
-		                              <div class="col-lg-8">
-		                                  <input type="text" placeholder="e.g. Submit" class="form-control" name="spWidget3ConfirmButtonText" maxlength="50">
-		                              </div>
-			                        </div>
-			                          
-			                        <div class="form-group">
-		                              <label class="col-lg-4 control-label">Cancel Button Text</label>
-		                              <div class="col-lg-8">
-		                                  <input type="text" placeholder="e.g. Cancel" class="form-control" name="spWidget3CancelButtonText" maxlength="50">
-		                              </div>
-			                        </div>
-		                            
-			                        <div class="form-group">
-		                              <label class="col-lg-4 control-label">Custom Email Error Message</label>
-		                              <div class="col-lg-8">
-		                                  <input type="text" placeholder="e.g. Enter a valid email address." class="form-control" name="spWidget3CustomEmailValidationErrorMessage" maxlength="250">
-		                              </div>
-			                        </div>
-			                          
-			                        <div class="form-group">
-		                              <label class="col-lg-4 control-label">Custom Form Message</label>
-		                              <div class="col-lg-8">
-		                                  <input type="text" placeholder="e.g. We will reply in 3 business days." id="sp-widget3__message" class="form-control" name="spWidget3FormMessage" maxlength="250">
-		                              </div>
-			                        </div>
-                            	</form>
+						                    </div>
+						                    
+						                    <hr id="sp-widget3__advanced-hr">
+				                            
+						                    <div id="sp-widget3__advanced" class="form-group">
+						                    	<small>Advanced Settings <i class="fa fa-caret-left" aria-hidden="true"></i></small>
+						                    </div>
+						                    
+						                    <div class="sp-widget3__advanced-container">
+						                    	<div class="form-group">
+			                              <label id="sp-widget3__advanced-button-color-container" class="col-lg-4 control-label">Widget Button Color</label>
+			                              <div class="col-lg-8">
+		                                  <input id="sp-widget3__color-picker" name="spWidget3ButtonColor">
+		                                  <div id="sp-widget3__default-button-color" class="checkbox">
+		                                  	<label><input type="checkbox" checked name="spWidget3IsDefaultButtonColorEnabled">Use my default brand color</label>
+		                                  </div>
+			                              </div>
+			                              
+				                        	</div>
+				                        	
+			                            <div class="form-group">
+			                              <label class="col-lg-4 control-label">Custom Message Label</label>
+			                              <div class="col-lg-8">
+			                                  <input type="text" placeholder="e.g. Enter your message:" class="form-control" name="spWidget3CustomMessageLabel" maxlength="250">
+			                              </div>
+				                        	</div>
+				                          
+					                        <div class="form-group">
+			                              <label class="col-lg-4 control-label">Custom Email Label</label>
+			                              <div class="col-lg-8">
+			                                  <input type="text" placeholder="e.g. Enter your email address:" class="form-control" name="spWidget3CustomEmailLabel" maxlength="250">
+			                              </div>
+					                        </div>
+				                            
+				                          <div class="form-group">
+			                              <label class="col-lg-4 control-label">Confirm Button Text</label>
+			                              <div class="col-lg-8">
+			                                  <input type="text" placeholder="e.g. Submit" class="form-control" name="spWidget3ConfirmButtonText" maxlength="50">
+			                              </div>
+					                        </div>
+					                          
+					                        <div class="form-group">
+			                              <label class="col-lg-4 control-label">Cancel Button Text</label>
+			                              <div class="col-lg-8">
+			                                  <input type="text" placeholder="e.g. Cancel" class="form-control" name="spWidget3CancelButtonText" maxlength="50">
+			                              </div>
+					                        </div>
+				                            
+					                        <div class="form-group">
+			                              <label class="col-lg-4 control-label">Custom Email Error Message</label>
+			                              <div class="col-lg-8">
+			                                  <input type="text" placeholder="e.g. Enter a valid email address." class="form-control" name="spWidget3CustomEmailValidationErrorMessage" maxlength="250">
+			                              </div>
+					                        </div>
+					                          
+					                        <div class="form-group">
+			                              <label class="col-lg-4 control-label">Custom Form Message</label>
+			                              <div class="col-lg-8">
+			                                  <input type="text" placeholder="e.g. We will reply in 3 business days." id="sp-widget3__message" class="form-control" name="spWidget3FormMessage" maxlength="250">
+			                              </div>
+					                        </div>
+					                      </div>
+	                            </form>
                             </div>
                         </div>
                     </div>
