@@ -166,12 +166,14 @@
 						                    	<div class="form-group">
 			                              <label id="sp-widget3__advanced-button-color-container" class="col-lg-4 control-label">Widget Button Color</label>
 			                              <div class="col-lg-8">
-		                                  <input id="sp-widget3__color-picker" name="spWidget3ButtonColor">
-		                                  <div id="sp-widget3__default-button-color" class="checkbox">
-		                                  	<label><input type="checkbox" checked name="spWidget3IsDefaultButtonColorEnabled">Use my default brand color</label>
-		                                  </div>
-			                              </div>
-			                              
+                                  		<label class="radio-inline">
+                                  			<input type="radio" class="spWidget3IsDefaultButtonColorEnabled" checked="checked" name="spWidget3ButtonColorChooser">
+                                  			My default brand color
+                                  		</label>
+                                  		<label class="radio-inline"><input type="radio" class="spWidget3IsCustomButtonColorEnabled" name="spWidget3ButtonColorChooser">
+                                  			<input id="sp-widget3__color-picker" name="spWidget3ButtonColor">
+                                  		</label>
+	                                  </div>
 				                        	</div>
 				                        	
 			                            <div class="form-group">

@@ -104,10 +104,6 @@
 
 
 /* Widget 3 - Question Widget */
-#sp-widget3__default-button-color {
-	float: right;
-}
-
 #sp-widget3__advanced {
   margin: auto auto auto 15px !important;
 }
