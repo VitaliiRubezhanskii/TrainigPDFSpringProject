@@ -574,20 +574,57 @@ sp.viewerWidgetsModal = {
         .prop('checked', widget.isEnabled)
         .closest('div').removeClass('sp-hide-is-enabled');
       
-      $('[name="question-widget-text"]').val(widget.items[0].buttonText);
-      $('[name="spWidget3CancelButtonText"]').val(widget.items[0].cancelButtonText);
-      $('[name="spWidget3FormTitle"]').val(widget.items[0].formTitle);
-      $('[name="spWidget3FormMessage"]').val(widget.items[0].formMessage);
-      $('[name="spWidget3ConfirmButtonText"]').val(widget.items[0].confirmButtonText);
-      $('[name="spWidget3CustomMessageLabel"]').val(widget.items[0].customMessageLabel);
-      $('[name="spWidget3CustomEmailLabel"]').val(widget.items[0].customEmailLabel);
-      $('[name="spWidget3CustomEmailValidationErrorMessage"]').val(widget.items[0].customEmailValidationErrorMessage);
-      $('[name="spWidget3IsLocationRight"]').prop('checked', widget.items[0].location.right);
-      $('[name="spWidget3IsLocationBottom"]').prop('checked', widget.items[0].location.bottom);
-      $('[name="spWidget3IsDefaultButtonColorEnabled"]').prop('checked', widget.items[0].isDefaultButtonColorEnabled);
-      $('[name="spWidget3ButtonColor"]')
+      if (typeof widget.items[0].buttonText !== 'undefined') {
+      	$('[name="question-widget-text"]').val(widget.items[0].buttonText);
+      }
+      
+      if (typeof widget.items[0].cancelButtonText !== 'undefined') {
+      	$('[name="spWidget3CancelButtonText"]').val(widget.items[0].cancelButtonText);
+      }
+      
+      if (typeof widget.items[0].formTitle !== 'undefined') {
+      	$('[name="spWidget3FormTitle"]').val(widget.items[0].formTitle);
+      }
+      
+      if (typeof widget.items[0].formMessage !== 'undefined') {
+      	$('[name="spWidget3FormMessage"]').val(widget.items[0].formMessage);
+      }
+      
+      if (typeof widget.items[0].confirmButtonText !== 'undefined') {
+      	$('[name="spWidget3ConfirmButtonText"]').val(widget.items[0].confirmButtonText);
+      }
+      
+      if (typeof widget.items[0].customMessageLabel !== 'undefined') {
+      	$('[name="spWidget3CustomMessageLabel"]').val(widget.items[0].customMessageLabel);
+      }
+      
+      if (typeof widget.items[0].customEmailLabel !== 'undefined') {
+      	$('[name="spWidget3CustomEmailLabel"]').val(widget.items[0].customEmailLabel);
+      }
+      
+      if (typeof widget.items[0].customEmailValidationErrorMessage !== 'undefined') {
+      	$('[name="spWidget3CustomEmailValidationErrorMessage"]').val(widget.items[0].customEmailValidationErrorMessage);
+      }
+      
+    	if (typeof widget.items[0].location !== 'undefined' 
+    		&& typeof widget.items[0].location.right !== 'undefined') {
+    		$('[name="spWidget3IsLocationRight"]').prop('checked', widget.items[0].location.right);
+    	}
+      
+      if (typeof widget.items[0].location !== 'undefined' 
+      	&& typeof widget.items[0].location.bottom !== 'undefined') {
+      	$('[name="spWidget3IsLocationBottom"]').prop('checked', widget.items[0].location.bottom);
+      }
+      
+      if (typeof widget.items[0].isDefaultButtonColorEnabled !== 'undefined') {
+      	$('[name="spWidget3IsDefaultButtonColorEnabled"]').prop('checked', widget.items[0].isDefaultButtonColorEnabled);
+      }
+      
+      if (typeof widget.items[0].buttonColor !== 'undefined') {
+      	$('[name="spWidget3ButtonColor"]')
       	.val(widget.items[0].buttonColor)
       	.spectrum('set', widget.items[0].buttonColor);
+      }
       
       sp.widgets.widget3.colorPickerHandler();
     }
