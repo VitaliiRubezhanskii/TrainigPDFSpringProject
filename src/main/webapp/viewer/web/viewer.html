@@ -281,7 +281,16 @@ See https://github.com/adobe-type-tools/cmap-resources
         </menu>
 
         <div id="viewerContainer" tabindex="0">
-          <div id="viewer" class="pdfViewer"></div>
+          <div id="sp-splash-logo-container">
+	        	<img src="../../assets/img/splogo-transparentbackground.png">
+						<h4>Loading</h4>
+						<div class="sp-spinner">
+							<div class="sp-bounce1"></div>
+					    <div class="sp-bounce2"></div>
+					    <div class="sp-bounce3"></div>
+						</div>
+			    </div>
+           <div id="viewer" class="pdfViewer sp-opacity--0"></div>
         </div>
 
         <div id="errorWrapper" hidden='true'>

@@ -7,6 +7,16 @@ $.ajaxSetup({
 
 
 /**
+ * Splash page.
+ */
+$(document).on('pagesloaded', function() {
+	$('#sp-splash-logo-container').addClass('sp--fadeout');
+	$('#viewer').addClass('sp-viewer--fadein');
+	$(document).trigger('splashPageHidden');
+});
+
+
+/**
  * Set document links to open in a new tab.
  */
 $(document).on('textlayerrendered', function() {
@@ -94,7 +104,6 @@ sp.viewer = {
     viewerWidgetFormCancelClicked: 'VIEWER_WIDGET_FORM_CANCEL_CLICKED',
     viewerWidgetLinkClicked: 'VIEWER_WIDGET_LINK_CLICKED',
   },
-  isPagesLoaded: false,
   paramValue: {
     videoTabOpened: 'VIEWER_WIDGET_VIDEO_TAB_OPENED',
     videoTabClosed: 'VIEWER_WIDGET_VIDEO_TAB_CLOSED'
@@ -545,83 +554,88 @@ if ('' != sp.viewer.linkHash) {
       $('#secondaryDownload').addClass('hiddenMediumView');
     }
     
-    
     /* Widget Mechanism */
-    $.getJSON(
-        '../../ManagementServlet',
-        {
-          action: 'getWidgetsSettings',
-          fileLinkHash: sp.viewer.linkHash
-        },
-        function(data) {
-          
-          // Prepare the widgets data for implimentation.
-          var widgets = {};
-          
-          $.each(data.widgetsSettings, function(index, data) {
-            var widgetData = JSON.parse(data.widgetData).data;
+    $(document).on('splashPageHidden', function() {
+    	getWidgetsSettings();
+    });
+    
+    function getWidgetsSettings() {
+    	$.getJSON(
+          '../../ManagementServlet',
+          {
+            action: 'getWidgetsSettings',
+            fileLinkHash: sp.viewer.linkHash
+          },
+          function(data) {
             
-            if (typeof widgetData !== 'undefined' && widgetData.isEnabled) { 
-              var widgetId = widgetData.widgetId;
-              
-              switch(widgetId) {
-  	            case 1:
-  	            case 6:
-  	            case 9:
-  	              widgetData.items = OrderWidgetDataItemsByPage(widgetId, widgetData.items);
-  	              break;
-  	          }
-              
-              widgets['widget' + widgetId.toString()] = widgetData;
-            }
-          });
-          
-          implementWidgets(widgets);
-          
-          
-          /**
-           * Sort widget data by page.
-           * 
-           * @return Sorted widget data.
-           */
-          function OrderWidgetDataItemsByPage(widgetId, items) {
-            var itemsByPage = {};
-            var itemsPage = [];
+            // Prepare the widgets data for implimentation.
+            var widgets = {};
             
-            $.each(items, function(index, item) {
+            $.each(data.widgetsSettings, function(index, data) {
+              var widgetData = JSON.parse(data.widgetData).data;
               
-              switch (widgetId) {
-                case 1:
-                  var page = item.videoPageStart;
-                  break;
-                  
-                case 6:
-                  var page = item.page;
-                  break;
-                  
-                case 9:
-                  var page = item.pageFrom;
-                  break;
+              if (typeof widgetData !== 'undefined' && widgetData.isEnabled) { 
+                var widgetId = widgetData.widgetId;
+                
+                switch(widgetId) {
+    	            case 1:
+    	            case 6:
+    	            case 9:
+    	              widgetData.items = OrderWidgetDataItemsByPage(widgetId, widgetData.items);
+    	              break;
+    	          }
+                
+                widgets['widget' + widgetId.toString()] = widgetData;
               }
+            });
+            
+            implementWidgets(widgets);
+            
+            
+            /**
+             * Sort widget data by page.
+             * 
+             * @return Sorted widget data.
+             */
+            function OrderWidgetDataItemsByPage(widgetId, items) {
+              var itemsByPage = {};
+              var itemsPage = [];
               
-              itemsByPage['page' + page.toString()] = item;
-              itemsPage.push(page);
-            });
-            
-            // Order the items by page.
-            itemsPage.sort(function(a, b) {
-              return a - b;
-            });
-            
-            var orderedItemsByPage = [];
-            $.each(itemsPage, function(index, page) {
-              orderedItemsByPage.push(itemsByPage['page' + page.toString()]);
-            });
-            
-            return orderedItemsByPage;
+              $.each(items, function(index, item) {
+                
+                switch (widgetId) {
+                  case 1:
+                    var page = item.videoPageStart;
+                    break;
+                    
+                  case 6:
+                    var page = item.page;
+                    break;
+                    
+                  case 9:
+                    var page = item.pageFrom;
+                    break;
+                }
+                
+                itemsByPage['page' + page.toString()] = item;
+                itemsPage.push(page);
+              });
+              
+              // Order the items by page.
+              itemsPage.sort(function(a, b) {
+                return a - b;
+              });
+              
+              var orderedItemsByPage = [];
+              $.each(itemsPage, function(index, page) {
+                orderedItemsByPage.push(itemsByPage['page' + page.toString()]);
+              });
+              
+              return orderedItemsByPage;
+            }
           }
-        }
-    );
+      );
+    }
     
     
     /**
@@ -658,64 +672,58 @@ if ('' != sp.viewer.linkHash) {
        * The following is a mechanisem for setting a widget item (out of a set of items)
        * everytime the user changes a page. 
        */
-      $(document).on('pagesloaded pagechange spDefaultPlayerReady spYouTubePlayerReady spWidget6Ready spWidget9Ready', function(event) {
-        if ('pagesloaded' === event.type) {
-          sp.viewer.isPagesLoaded = true;
+      $(document).on('pagechange spDefaultPlayerReady spYouTubePlayerReady spWidget6Ready spWidget9Ready', function(event) {
+      	
+        /* Widget 1 */
+        if (sp.viewer.widgets.widget1.isValidated) {
+          
+          // Check if all applicable video players are ready.
+          if (! sp.viewer.widgets.widget1.isVideoPlayersReady) {
+            var isVideoPlayersReady = false;
+            
+            $.each(sp.viewer.widgets.widget1.videoPlayersIsReady, function(videoPlayer, isReady) {
+              if (isReady) {
+                isVideoPlayersReady = true;
+              } else {
+                isVideoPlayersReady = false;
+                return false;
+              }
+            });
+            
+            sp.viewer.widgets.widget1.isVideoPlayersReady = isVideoPlayersReady;
+          }
+          
+          // Verification before setting a video.
+          if (PDFViewerApplication.page !== sp.viewer.widgets.widget1.lastViewedPage
+              && sp.viewer.widgets.widget1.isVideoPlayersReady) {
+          
+            loadVideo(widgets.widget1.items);
+            sp.viewer.widgets.widget1.lastViewedPage = PDFViewerApplication.page;
+          }
         }
         
-        if (sp.viewer.isPagesLoaded) {
+        
+        /* Widget 6 */
+        if (sp.viewer.widgets.widget6.isValidated) {
           
-          /* Widget 1 */
-          if (sp.viewer.widgets.widget1.isValidated) {
+          // Verification before setting a testimonial.
+          if (PDFViewerApplication.page !== sp.viewer.widgets.widget6.lastViewedPage
+              && sp.viewer.widgets.widget6.isReady) {
             
-            // Check if all applicable video players are ready.
-            if (! sp.viewer.widgets.widget1.isVideoPlayersReady) {
-              var isVideoPlayersReady = false;
-              
-              $.each(sp.viewer.widgets.widget1.videoPlayersIsReady, function(videoPlayer, isReady) {
-                if (isReady) {
-                  isVideoPlayersReady = true;
-                } else {
-                  isVideoPlayersReady = false;
-                  return false;
-                }
-              });
-              
-              sp.viewer.widgets.widget1.isVideoPlayersReady = isVideoPlayersReady;
-            }
-            
-            // Verification before setting a video.
-            if (PDFViewerApplication.page !== sp.viewer.widgets.widget1.lastViewedPage
-                && sp.viewer.widgets.widget1.isVideoPlayersReady) {
-            
-              loadVideo(widgets.widget1.items);
-              sp.viewer.widgets.widget1.lastViewedPage = PDFViewerApplication.page;
-            }
+            loadTestimonial(widgets.widget6.items);
+            sp.viewer.widgets.widget6.lastViewedPage = PDFViewerApplication.page;
           }
+        }
+        
+        /* Widget 9 */
+        if (sp.viewer.widgets.widget9.isValidated) {
           
-          
-          /* Widget 6 */
-          if (sp.viewer.widgets.widget6.isValidated) {
+          // Verification before setting a link.
+          if (PDFViewerApplication.page !== sp.viewer.widgets.widget9.lastViewedPage
+              && sp.viewer.widgets.widget9.isReady) {
             
-            // Verification before setting a testimonial.
-            if (PDFViewerApplication.page !== sp.viewer.widgets.widget6.lastViewedPage
-                && sp.viewer.widgets.widget6.isReady) {
-              
-              loadTestimonial(widgets.widget6.items);
-              sp.viewer.widgets.widget6.lastViewedPage = PDFViewerApplication.page;
-            }
-          }
-          
-          /* Widget 9 */
-          if (sp.viewer.widgets.widget9.isValidated) {
-            
-            // Verification before setting a link.
-            if (PDFViewerApplication.page !== sp.viewer.widgets.widget9.lastViewedPage
-                && sp.viewer.widgets.widget9.isReady) {
-              
-              loadWidget9Link(widgets.widget9.items);
-              sp.viewer.widgets.widget6.lastViewedPage = PDFViewerApplication.page;
-            }
+            loadWidget9Link(widgets.widget9.items);
+            sp.viewer.widgets.widget6.lastViewedPage = PDFViewerApplication.page;
           }
         }
       });
@@ -1111,20 +1119,9 @@ if ('' != sp.viewer.linkHash) {
       
       
       function implementWidget3(widget) {
-        
-        // Widget 3 - Ask a question widget
-        if (0 == $('.sp-right-side-widgets').length) {
-          $('body').append('<div class="sp-right-side-widgets"></div>');
-        }
-        
-        $('.sp-right-side-widgets').append('<button class="sp-widget-button sp-widget-font-fmaily sp--direction-ltr" id="sp-widget3"></button>');
-
-        if ($('.sp-right-side-widgets button, .sp-right-side-widgets div').length > 1) {
-          $('#sp-widget3').css('margin-top', '20px');
-        }
-        
-        $('#sp-widget3').html('<i class="fa fa-comment"></i><div>' + widget.buttonText + '</div>');
-        
+      	
+      	// Widget 3 - Ask a question widget.
+      	// Custom settings.
         var confirmButtonText = 'Submit';
         if (typeof widget.confirmButtonText !== 'undefined' && widget.confirmButtonText !== '') {
         	confirmButtonText = widget.confirmButtonText;
@@ -1133,6 +1130,11 @@ if ('' != sp.viewer.linkHash) {
         var cancelButtonText = 'Cancel';
         if (typeof widget.cancelButtonText !== 'undefined' && widget.cancelButtonText !== '') {
         	cancelButtonText = widget.cancelButtonText;
+        }
+        
+        var formTitle = widget.buttonText;
+        if (typeof widget.formTitle !== 'undefined' &&  widget.formTitle !== '') {
+        	formTitle = widget.formTitle;
         }
         
         var formMessage = '';
@@ -1150,71 +1152,174 @@ if ('' != sp.viewer.linkHash) {
         	customEmailLabel = widget.customEmailLabel;
         }
         
+        var buttonColor = config.viewer.toolbarButtonBackground;
+        if (! widget.isDefaultButtonColorEnabled) {
+        	if (typeof widget.buttonColor !== 'undefined' && widget.buttonColor !== '') {
+        		buttonColor = widget.buttonColor;
+          }
+        }
+        
         sp.validate = sp.validate || {};
         sp.validate.errorMessage = 'You must provide a valid email address.';
         if (typeof widget.customEmailValidationErrorMessage !== 'undefined' && widget.customEmailValidationErrorMessage !== '') {
         	sp.validate.errorMessage = widget.customEmailValidationErrorMessage;
         }
-        
-        $('#sp-widget3').click(function() {
-        	$.getScript('../../assets/viewer/js/plugins/validationjs/jquery.validate.min.js', function() {
+      	
+      	if (widget.location.right) {
+      		loadRight();
+      	}
+      	
+      	if (widget.location.bottom) {
+      		loadBottom();
+      	}
+      	
+      	function loadRight() {
+      		if (0 == $('.sp-right-side-widgets').length) {
+            $('body').append('<div class="sp-right-side-widgets"></div>');
+          }
+          
+          $('.sp-right-side-widgets').append('<button class="sp-widget-button sp-widget-font-fmaily sp--direction-ltr" id="sp-widget3"></button>');
+          
+          if ($('.sp-right-side-widgets button, .sp-right-side-widgets div').length > 1) {
+            $('#sp-widget3').css('margin-top', '20px');
+          }
+          
+          $('#sp-widget3')
+          	.css({
+          		'background-color': buttonColor,
+        			'color': config.viewer.toolbarCta1Color,
+          	})
+          	.html('<i class="fa fa-comment"></i><div>' + widget.buttonText + '</div>');
+          
+      		$('#sp-widget3').click(function() {
+      			$.getScript('../../assets/viewer/js/plugins/validationjs/jquery.validate.min.js', function() {
+            	$.getScript('../../assets/viewer/js/sp-viewer-validation.js', function() {
+            		loadSwal();
+            	});
+            });
+      		});
+      	}
+      	
+      	function loadBottom() {
+      		$.getScript('../../assets/viewer/js/plugins/validationjs/jquery.validate.min.js', function() {
           	$.getScript('../../assets/viewer/js/sp-viewer-validation.js', function() {
-          		loadSwal();
+            	$('#sp-widget3__bottom-submit').click(function() {
+            		validateBottomOfDocumentForm();
+            	});
           	});
           });
-        	
-        	function loadSwal() {
-        		swal({
-              customClass: 'sp--direction-ltr',
-              confirmButtonText: confirmButtonText,
-              cancelButtonText: cancelButtonText,
-              showCancelButton: true,
-              showConfirmButton: true,
-              html: '<form id="widget3-form" class="sp-widget-font-fmaily">' + 
-              				'<div class="form-group">' +
-                				'<label for="sp-widget3-message" class="sp-widget3-label">' + customMessageLabel + '</label>' +
-                				'<textarea class="swal2-textarea" id="sp-widget3-message" rows="5" autofocus></textarea>' +
-              				'</div>' +
-              				'<div class="form-group">' +
-              					'<label for="sp-widget3-email" class="sp-widget3-label"><span>* </span>' + customEmailLabel + '</label>' + 
-              					'<input type="text" name="widget3Email" class="swal2-input" id="sp-widget3-email">' +
-              					'<span class="form-control-feedback fa"></span>' + 
-              				'</div>' + 
-              				formMessage +
-              			'</form>',
-              title: widget.buttonText,
-              preConfirm: function() {
-                return new Promise(function(resolve) {
-                  /**
-                   * Send Ask a Question event.
-                   * 
-                   * param_1_varchar - The text on the Ask a Question button.
-                   * param_2_varchar - The message in the widget form.
-                   * param_3_varchar - The email address to reply to in the widget form.
-                   */
-                	if ($('#widget3-form').valid()) {
-                		sp.viewer.setCustomerEvent({
-                      eventName: sp.viewer.eventName.viewerWidgetAskQuestion,
-                      linkHash: sp.viewer.linkHash,
-                      sessionId: sessionid,
-                      param_1_varchar: $('#sp-widget3').text(),
-                      param_2_varchar: $('#sp-widget3-message').val(),
-                      param_3_varchar: $('#sp-widget3-email').val(),
-                      param_4_varchar: confirmButtonText,
-                      param_5_varchar: cancelButtonText,
-                      param_6_varchar: customMessageLabel,
-                      param_7_varchar: customEmailLabel,
-                      param_8_varchar: sp.validate.errorMessage,
-                    });
-                    resolve();
-                	}
-                });
-              }
-            }).then(function() {
-              swal("Success!", "Your message has been sent.", "success");
-            }).done();
+      		
+      		var bottomOfDocumentHtml = 
+      			'<div class="sp-widget3__bottom-document-container">' +
+      				'<div>' +
+      				'<h4 id="sp-widget3__bottom-success-message">Thanks, your message has been submitted!</h4>' +
+	      			'<form id="widget3-bottom-form" class="sp-widget-font-fmaily">' +
+	      			'<h2 id="sp-widget-3-form-title">' + formTitle + '</h2>' +
+	    				'<div class="form-group">' +
+	      				'<label for="sp-widget3-bottom-message" class="sp-widget3-label">' + customMessageLabel + '</label>' +
+	      				'<textarea id="sp-widget3-bottom-message" rows="5"></textarea>' +
+	    				'</div>' +
+	    				'<div class="form-group">' +
+	    					'<label for="sp-widget3-bottom-email" class="sp-widget3-label"><span>* </span>' + customEmailLabel + '</label>' + 
+	    					'<input type="text" name="widget3EmailBottom" id="sp-widget3-bottom-email">' +
+	    					'<span class="form-control-feedback fa"></span>' + 
+	    				'</div>' + 
+	    				formMessage +
+	    				'<div id="sp-widget3__bottom-document-submit-container" class="form-group">' +
+	    					'<div id="sp-widget3__bottom-submit">' + confirmButtonText + '</div>' +
+	    				'<div>' +
+	    				'</form>' +
+	    				'</div>' +
+    				'</div>';
+	    				
+      		$('.page:last').after(bottomOfDocumentHtml);
+      		setWidgetWidthRelativeToPageWidth();
+      		
+      		$(window).on('scalechange', function() {
+      			setWidgetWidthRelativeToPageWidth();
+      		});
+      		
+      		function setWidgetWidthRelativeToPageWidth() {
+      			$('.sp-widget3__bottom-document-container').width($('.page').width());
+      		}
+      	}
+      	
+    		function validateBottomOfDocumentForm() {
+    			if ($('#widget3-bottom-form').valid()) {
+        		sp.viewer.setCustomerEvent({
+              eventName: sp.viewer.eventName.viewerWidgetAskQuestion,
+              linkHash: sp.viewer.linkHash,
+              sessionId: sessionid,
+              param_2_varchar: $('#sp-widget3-bottom-message').val(),
+              param_3_varchar: $('#sp-widget3-bottom-email').val(),
+              param_4_varchar: confirmButtonText,
+              param_5_varchar: cancelButtonText,
+              param_6_varchar: customMessageLabel,
+              param_7_varchar: customEmailLabel,
+              param_8_varchar: sp.validate.errorMessage,
+              param_9_varchar: 'bottom',
+              param_10_varchar: formTitle,
+            });
+        		
+        		$('.sp-widget3__bottom-document-container form').hide();
+        		$('#sp-widget3__bottom-success-message').show();
         	}
-        });
+    		}
+
+      	function loadSwal() {
+      		swal({
+            customClass: 'sp--direction-ltr',
+            confirmButtonText: confirmButtonText,
+            cancelButtonText: cancelButtonText,
+            showCancelButton: true,
+            showConfirmButton: true,
+            html: '<form id="widget3-form" class="sp-widget-font-fmaily">' + 
+            				'<div class="form-group">' +
+              				'<label for="sp-widget3-message" class="sp-widget3-label">' + customMessageLabel + '</label>' +
+              				'<textarea class="swal2-textarea" id="sp-widget3-message" rows="5" autofocus></textarea>' +
+            				'</div>' +
+            				'<div class="form-group">' +
+            					'<label for="sp-widget3-email" class="sp-widget3-label"><span>* </span>' + customEmailLabel + '</label>' + 
+            					'<input type="text" name="widget3Email" class="swal2-input" id="sp-widget3-email">' +
+            					'<span class="form-control-feedback fa"></span>' + 
+            				'</div>' + 
+            				formMessage +
+            			'</form>',
+            title: formTitle,
+            preConfirm: function() {
+              return new Promise(function(resolve) {
+                /**
+                 * Send Ask a Question event.
+                 * 
+                 * param_1_varchar - The text on the Ask a Question button.
+                 * param_2_varchar - The message in the widget form.
+                 * param_3_varchar - The email address to reply to in the widget form.
+                 */
+              	
+              	if ($('#widget3-form').valid()) {
+              		sp.viewer.setCustomerEvent({
+                    eventName: sp.viewer.eventName.viewerWidgetAskQuestion,
+                    linkHash: sp.viewer.linkHash,
+                    sessionId: sessionid,
+                    param_1_varchar: $('#sp-widget3').text(),
+                    param_2_varchar: $('#sp-widget3-message').val(),
+                    param_3_varchar: $('#sp-widget3-email').val(),
+                    param_4_varchar: confirmButtonText,
+                    param_5_varchar: cancelButtonText,
+                    param_6_varchar: customMessageLabel,
+                    param_7_varchar: customEmailLabel,
+                    param_8_varchar: sp.validate.errorMessage,
+                    param_9_varchar: 'right',
+                    param_10_varchar: formTitle,
+                  });
+                  resolve();
+              	}
+              });
+            }
+          }).then(function() {
+            swal("Success!", "Your message has been sent.", "success");
+          }).done();
+      	}
       }
       
       
