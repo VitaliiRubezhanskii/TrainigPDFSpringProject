@@ -4,6 +4,13 @@ SlidePiper README File
 Change Log
 ----------
 
+### 0.16.7
+
+2016-12-22 Max Prais <maxp@slidepiper.com>
+
+* Fixed bug on widget 3 dashboard settings.
+
+
 ### 0.16.6
 
 2016-12-22 Max Prais <maxp@slidepiper.com>
