@@ -4,6 +4,13 @@ SlidePiper README File
 Change Log
 ----------
 
+### 0.16.9
+
+2016-12-22 Yaniv Friedensohn <yanivf@slidepiper.com>
+
+* Fixed Font Awesome not loading in IE.
+
+
 ### 0.16.8
 
 2016-12-22 Max Prais <maxp@slidepiper.com>
