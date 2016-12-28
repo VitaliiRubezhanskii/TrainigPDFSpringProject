@@ -4,6 +4,13 @@ SlidePiper README File
 Change Log
 ----------
 
+### 0.16.11
+
+2016-12-28 Yaniv Friedensohn <yanivf@slidepiper.com>
+
+* Update sign up & index web pages.
+
+
 ### 0.16.10
 
 2016-12-28 Yaniv Friedensohn <yanivf@slidepiper.com>
