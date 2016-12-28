@@ -633,13 +633,9 @@ $(function() {
           email: $('#email-init').val(),
           first_name: $('#first-name-init').val(),
           id_num: $('#id-init').val(),
-          key: 'sp15#jG8*t5',
           last_name: $('#last-name-init').val(),
           phoneInit: $('#phone-operator-code-init').val() + '-' + $('#phone-number-init').val()
         }
-        
-        // SP WebMerge.
-        sendWebMerge('https://www.webmerge.me/merge/82067/921dra?test=1', payload);
         
         // HA WebMerge.
         sendWebMerge('https://www.webmerge.me/merge/82651/98sjf8', payload);
@@ -666,7 +662,6 @@ $(function() {
         transferFundPayload['first_name'] = $('#first-name').val();
         transferFundPayload['id_num'] = $('#id').val();
         transferFundPayload['last_name'] = $('#last-name').val();
-        transferFundPayload['key'] = payload['key'];
         
         if (null !== $('#family-status').val()) {
           payload['status'] = $('#family-status').val();
@@ -920,7 +915,7 @@ $(function() {
         sendWebMerge('https://www.webmerge.me/merge/78047/g33bvk', payload);
         
         // Send to Zapier.
-        sendWebMerge('https://hooks.zapier.com/hooks/catch/674313/tzyyht/', payload);
+        sendZapier('https://hooks.zapier.com/hooks/catch/674313/tzyyht/', payload);
         
         if ($('#is-transfer-funds-yes').is(':checked')) {
           transferFundPayload['date'] = payload['date'];
@@ -929,11 +924,16 @@ $(function() {
           sendWebMerge('https://www.webmerge.me/merge/79990/1qdska', transferFundPayload);
           
           // Send to Zapier.
-          sendWebMerge('https://hooks.zapier.com/hooks/catch/674313/ta34dm/', transferFundPayload);
+          sendZapier('https://hooks.zapier.com/hooks/catch/674313/ta34dm/', transferFundPayload);
         }
         
         sendHA();
         sendSlidePiper('HELMAN_ALDUBI_SENT_FORM');
+        
+        dataLayer.push({
+          'event': 'digital_join',
+          'stage': 'completed'
+        });
         break;
     }
   };
@@ -944,6 +944,15 @@ $(function() {
     // Send to WebMerge.
     $.ajax({
       contentType: 'application/json',
+      method: 'POST',
+      url: url,
+      data: JSON.stringify(payload)
+    });
+  };
+  
+  
+  function sendZapier(url, payload) {
+    $.ajax({
       method: 'POST',
       url: url,
       data: JSON.stringify(payload)
@@ -979,20 +988,13 @@ $(function() {
         };
         sendSlidePiper('HELMAN_ALDUBI_ATTACHMENT_PAYLOAD_NOT_SENT', JSON.stringify(data));
         
-        // Send error with more details to SlidePiper's WebMerge.
-        data['firstName'] = payload['first_name']; 
-        data['lastName'] = payload['last_name'], 
-        data['idNumber'] = payload['id_num'], 
-        data['phone'] = payload['phone'],  
-        data['email'] = payload['email'],
-        $.ajax({
-          contentType: 'application/json',
-          method: 'POST',
-          url: 'https://www.webmerge.me/merge/79448/1rqtm1',
-          data: JSON.stringify(data)
-        });
-        
         // Send error with more details to HA WebMerge.
+        data['firstName'] = payload['first_name']; 
+        data['lastName'] = payload['last_name'];
+        data['idNumber'] = payload['id_num'];
+        data['phone'] = payload['phone'];
+        data['email'] = payload['email'];
+        
         $.ajax({
           contentType: 'application/json',
           method: 'POST',

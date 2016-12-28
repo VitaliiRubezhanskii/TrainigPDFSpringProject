@@ -4,6 +4,14 @@ SlidePiper README File
 Change Log
 ----------
 
+### 0.16.10
+
+2016-12-28 Yaniv Friedensohn <yanivf@slidepiper.com>
+
+* Fix HA Zapier & GTM.
+* Update widget settings wording.
+
+
 ### 0.16.9
 
 2016-12-22 Yaniv Friedensohn <yanivf@slidepiper.com>
