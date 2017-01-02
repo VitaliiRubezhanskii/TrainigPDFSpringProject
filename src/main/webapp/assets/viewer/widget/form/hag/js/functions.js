@@ -312,7 +312,7 @@ $(function() {
     $(this).valid();
     
     var $option = $('#employer-name [value="' + $(this).val() + '"]'); 
-    if ('0' !== $option.val() && '1' === $option.attr('data-is-original')) {
+    if (parseInt($option.val()) > 0 && '1' === $option.attr('data-is-original')) {
       $('#employer-hp').val($(this).val());
     } else {
       $('#employer-hp').val('');
