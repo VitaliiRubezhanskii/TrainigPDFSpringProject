@@ -4,6 +4,13 @@ SlidePiper README File
 Change Log
 ----------
 
+### 0.16.12
+
+2017-01-01 Yaniv Friedensohn <yanivf@slidepiper.com>
+
+* Fix link widget & skip opening anchor links.
+
+
 ### 0.16.11
 
 2016-12-28 Yaniv Friedensohn <yanivf@slidepiper.com>

@@ -723,7 +723,7 @@ if ('' != sp.viewer.linkHash) {
               && sp.viewer.widgets.widget9.isReady) {
             
             loadWidget9Link(widgets.widget9.items);
-            sp.viewer.widgets.widget6.lastViewedPage = PDFViewerApplication.page;
+            sp.viewer.widgets.widget9.lastViewedPage = PDFViewerApplication.page;
           }
         }
       });
@@ -1873,18 +1873,20 @@ if ('' != sp.viewer.linkHash) {
       }
       
        $('#sp-widget9').off('click').on('click', function() {
-         window.open(link); 
-      	 
-          sp.viewer.setCustomerEvent({
-            eventName: sp.viewer.eventName.viewerWidgetLinkClicked,
-            linkHash: sp.viewer.linkHash,
-            sessionId: sessionid,
-            param_1_varchar: buttonText1,
-            param_2_varchar: buttonText2,
-            param_3_varchar: link,
-            param_4_varchar: pageFrom,
-            param_5_varchar: pageTo,
-          });
+         if (! link.match(/^#/)) {
+           window.open(link); 
+         }
+         
+         sp.viewer.setCustomerEvent({
+           eventName: sp.viewer.eventName.viewerWidgetLinkClicked,
+           linkHash: sp.viewer.linkHash,
+           sessionId: sessionid,
+           param_1_varchar: buttonText1,
+           param_2_varchar: buttonText2,
+           param_3_varchar: link,
+           param_4_varchar: pageFrom,
+           param_5_varchar: pageTo,
+         });
        });
     }
   });
