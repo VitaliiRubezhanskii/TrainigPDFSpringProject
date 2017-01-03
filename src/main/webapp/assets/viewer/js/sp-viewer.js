@@ -1165,11 +1165,11 @@ if ('' != sp.viewer.linkHash) {
         	sp.validate.errorMessage = widget.customEmailValidationErrorMessage;
         }
       	
-      	if (widget.location.right) {
+      	if (typeof widget.location === 'undefined' || widget.location.right) {
       		loadRight();
       	}
       	
-      	if (widget.location.bottom) {
+      	if (typeof widget.location !== 'undefined' && widget.location.bottom) {
       		loadBottom();
       	}
       	
