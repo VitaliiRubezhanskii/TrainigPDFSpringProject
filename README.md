@@ -4,6 +4,13 @@ SlidePiper README File
 Change Log
 ----------
 
+### 0.16.14
+
+2017-01-03 Yaniv Friedensohn <yanivf@slidepiper.com>
+
+* Fix showing password input field.
+
+
 ### 0.16.13
 
 2017-01-02 Yaniv Friedensohn <yanivf@slidepiper.com>
