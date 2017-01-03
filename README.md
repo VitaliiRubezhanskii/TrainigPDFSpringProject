@@ -4,6 +4,14 @@ SlidePiper README File
 Change Log
 ----------
 
+### 0.16.15
+
+2017-01-03 Yaniv Friedensohn <yanivf@slidepiper.com>
+
+* Fix question widget undefined position issue.
+* Set Facebook Open Graph tags.
+
+
 ### 0.16.14
 
 2017-01-03 Yaniv Friedensohn <yanivf@slidepiper.com>
