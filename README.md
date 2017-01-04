@@ -4,6 +4,13 @@ SlidePiper README File
 Change Log
 ----------
 
+### 0.16.13
+
+2017-01-02 Yaniv Friedensohn <yanivf@slidepiper.com>
+
+* Fix HA employer name issue if employer ID is 0.
+
+
 ### 0.16.12
 
 2017-01-01 Yaniv Friedensohn <yanivf@slidepiper.com>
