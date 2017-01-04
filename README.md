@@ -4,6 +4,13 @@ SlidePiper README File
 Change Log
 ----------
 
+### 0.17.1
+
+2017-01-04 Yaniv Friedensohn <yanivf@slidepiper.com>
+
+* Update account settings design.
+
+
 ### 0.17.0
 
 2017-01-04 Yaniv Friedensohn <yanivf@slidepiper.com>
