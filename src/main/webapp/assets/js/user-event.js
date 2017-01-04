@@ -17,7 +17,7 @@ UserEvent.prototype = {
     $.ajax({
       contentType: 'application/json',
       method: 'POST',
-      url: '//' + location.host + '/v1/user-events',
+      url: '//' + location.host + '/v1/events',
       data: JSON.stringify(data)
     });
   }

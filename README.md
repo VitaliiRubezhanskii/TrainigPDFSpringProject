@@ -4,6 +4,13 @@ SlidePiper README File
 Change Log
 ----------
 
+### 0.17.0
+
+2017-01-04 Yaniv Friedensohn <yanivf@slidepiper.com>
+
+* Enable setting the notification email.
+
+
 ### 0.16.15
 
 2017-01-03 Yaniv Friedensohn <yanivf@slidepiper.com>

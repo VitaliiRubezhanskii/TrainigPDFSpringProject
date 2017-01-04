@@ -1,6 +1,28 @@
 package slidepiper.salesman_servlets;
 
 import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.net.URLDecoder;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import com.slidepiper.component.UserComponent;
+import com.slidepiper.model.entity.User;
+import com.slidepiper.model.entity.User.ExtraData;
 
 import slidepiper.aws.AmazonSES;
 import slidepiper.config.ConfigProperties;
@@ -10,33 +32,6 @@ import slidepiper.db.Analytics;
 import slidepiper.db.DbLayer;
 import slidepiper.db.ViewerAnalytics;
 import slidepiper.email.EmailSender;
-
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.net.URLDecoder;
-import java.sql.Date;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TimeZone;
-
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.tomcat.jni.File;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 @WebServlet("/ManagementServlet")
 public class ManagementServlet extends HttpServlet {
@@ -600,6 +595,11 @@ public class ManagementServlet extends HttpServlet {
           break;
    
         case "setSalesmanDocumentSettings":
+          User user = UserComponent.findUser(input.getString("salesMan"));
+          ExtraData extraData = new ExtraData(input.getString("notificationEmail")); 
+          user.setExtraData(extraData);
+          UserComponent.updateUser(user);
+          
         	Boolean isAlertEmailEnabled = input.getBoolean("isAlertEmailEnabled");
         	Boolean isReportEmailEnabled = input.getBoolean("isReportEmailEnabled");
         	Boolean isNotificationEmailEnabled = input.getBoolean("isNotificationEmailEnabled");

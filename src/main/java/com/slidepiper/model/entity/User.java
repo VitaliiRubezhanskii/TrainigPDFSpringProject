@@ -1,38 +1,38 @@
-package com.slidepiper.data.model.userevent;
+package com.slidepiper.model.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.slidepiper.data.JsonNodeStringConverter;
+import com.slidepiper.model.converter.UserExtraDataStringConverter;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table(name = "salesman_events")
+@Table(name = "sales_men")
 @Getter
 @Setter
-public class UserEvent {
+public class User {
   
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long id;
   
-  @Column(name = "event_name")
-  @Enumerated(EnumType.STRING)
-  private UserEventType eventType;
-  
   private String email;
   
+  @AllArgsConstructor
+  @Getter
+  @Setter
+  public static class ExtraData {
+    private String notificationEmail;
+  }
   @Column(name = "extra_data")
-  @Convert(converter = JsonNodeStringConverter.class)
-  private JsonNode extraData;
+  @Convert(converter = UserExtraDataStringConverter.class)
+  private ExtraData extraData;
 }

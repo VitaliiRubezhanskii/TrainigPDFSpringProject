@@ -13,7 +13,7 @@ import slidepiper.db.DbLayer;
 public class ApiController {
   
   @CrossOrigin(origins = "*")
-  @PostMapping("/v1/events")
+  @PostMapping("/v1/viewer-events")
   public ResponseEntity<CustomerEvent> setCustomerEvent(@RequestBody CustomerEvent customerEvent) {
     
     long eventId = DbLayer.setCustomerEvent(customerEvent);
