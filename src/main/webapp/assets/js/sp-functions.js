@@ -2408,6 +2408,7 @@ sp = {
             'isAlertEmailEnabled': $('#sp-enable-alert-emails__checkbox').is(':checked'),
             'isReportEmailEnabled': $('#sp-enable-report-emails__checkbox').is(':checked'),
             'isNotificationEmailEnabled': $('#sp-enable-notification-emails__checkbox').prop('checked'),
+            'notificationEmail': $('#sp-document-settings__modal [name=notificationEmail]').val(),
             'salesMan': sp.config.salesman.email
         };
         
@@ -2440,6 +2441,16 @@ sp = {
     getSalesmanDocSettings: $(function () {
         
         $('[data-target="#sp-document-settings__modal"]').on('click', function () {
+          var notificationEmail = sp.config.salesman.email;
+          var extraData = sp.config.salesman.extra_data;
+          if (typeof extraData !== 'undefined') {
+            extraData = JSON.parse(sp.config.salesman.extra_data);
+            if (extraData.notificationEmail !== 'undefined') {
+              notificationEmail = extraData.notificationEmail;
+            }
+          }
+          $('#sp-document-settings__modal [name=notificationEmail]').val(notificationEmail);
+          
           $('#sp-enable-alert-emails__checkbox').prop('checked', sp.config.salesman.email_alert_enabled);
           $('#sp-enable-report-emails__checkbox').prop('checked', sp.config.salesman.email_report_enabled);
           $('#sp-enable-notification-emails__checkbox').prop('checked', sp.config.salesman.email_notifications_enabled);

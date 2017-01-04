@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Properties;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -24,6 +25,8 @@ import javax.mail.internet.MimeMessage;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.google.api.services.gmail.Gmail;
+import com.slidepiper.component.UserComponent;
+import com.slidepiper.model.entity.User;
 
 import slidepiper.aws.AmazonSES;
 import slidepiper.config.ConfigProperties;
@@ -120,7 +123,15 @@ public class EmailSender {
 		String msgtext = HtmlRenderer.getAlertHtml(mi, cs, currentviewslink, chatlink); 
 		
 		Map<String, String> emailParams = new HashMap<String, String>();
-		emailParams.put("salesmanEmail", mi.getSalesManEmail());
+		
+		String notificationEmail = mi.getSalesManEmail();
+		User user = UserComponent.findUser(mi.getSalesManEmail());
+    if (Objects.nonNull(user.getExtraData())
+        && Objects.nonNull(user.getExtraData().getNotificationEmail())) {
+      notificationEmail = user.getExtraData().getNotificationEmail();
+    }
+		emailParams.put("salesmanEmail", notificationEmail);
+		
 		emailParams.put("subject", subj);
 		emailParams.put("body", msgtext);
 		
@@ -159,7 +170,15 @@ public class EmailSender {
 		DbLayer.updateSessionReport(p.getSessionId(), "<table>"+msgtext+"</table>");
 		
 		Map<String, String> emailParams = new HashMap<String, String>();
-		emailParams.put("salesmanEmail", mi.getSalesManEmail());
+		
+		String notificationEmail = mi.getSalesManEmail();
+    User user = UserComponent.findUser(mi.getSalesManEmail());
+    if (Objects.nonNull(user.getExtraData())
+        && Objects.nonNull(user.getExtraData().getNotificationEmail())) {
+      notificationEmail = user.getExtraData().getNotificationEmail();
+    }
+		emailParams.put("salesmanEmail", notificationEmail);
+		
 		emailParams.put("subject", subj);
 		emailParams.put("body", msgtext);
 		

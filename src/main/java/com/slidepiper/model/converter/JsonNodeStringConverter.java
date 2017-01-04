@@ -1,4 +1,4 @@
-package com.slidepiper.data;
+package com.slidepiper.model.converter;
 
 import java.io.IOException;
 import java.util.Objects;
@@ -32,7 +32,11 @@ public class JsonNodeStringConverter implements AttributeConverter<JsonNode, Str
   @Override
   public JsonNode convertToEntityAttribute(String string) {
     try {
-      return (objectMapper.readValue(string, JsonNode.class));
+      if (Objects.nonNull(string)) {
+        return (objectMapper.readValue(string, JsonNode.class));
+      } else {
+        return null;
+      }
     } catch (IOException e) {
       e.printStackTrace();
       return null;

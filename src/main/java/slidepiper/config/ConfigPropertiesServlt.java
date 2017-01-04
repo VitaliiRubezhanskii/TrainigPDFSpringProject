@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONObject;
 
-import com.slidepiper.data.model.userevent.UserEventType;
+import com.slidepiper.model.entity.Event.EventType;
 
 import slidepiper.db.DbLayer;
 import slidepiper.email.EmailSender;
@@ -38,11 +38,11 @@ public class ConfigPropertiesServlt extends HttpServlet {
 		  JSONObject email = new JSONObject();
 		  JSONObject google = new JSONObject();
 		  
-		  Map<String, String> userEventTypeMap = new HashMap<String, String>();
-      for (UserEventType userEventType: UserEventType.values()) {
-        userEventTypeMap.put(userEventType.name(), userEventType.name());
+		  Map<String, String> eventTypeMap = new HashMap<String, String>();
+      for (EventType eventType: EventType.values()) {
+        eventTypeMap.put(eventType.name(), eventType.name());
       }
-      data.put("UserEventType", userEventTypeMap);
+      data.put("UserEventType", eventTypeMap);
       
 		  String salesmanEmail = request.getParameter("salesmanEmail");
 			

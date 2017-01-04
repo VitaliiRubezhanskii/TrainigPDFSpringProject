@@ -1,4 +1,4 @@
-package com.slidepiper.security;
+package com.slidepiper;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
@@ -6,8 +6,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-
-import com.slidepiper.Routes;
 
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true)
@@ -22,8 +20,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
       .headers()
         .frameOptions().disable().and()
       .authorizeRequests()
-        .antMatchers(HttpMethod.POST, basePath + Routes.USER_EVENTS).permitAll()
-        .antMatchers(basePath + Routes.USER_EVENTS + "/**").denyAll().and()
+        .antMatchers(HttpMethod.POST, basePath + Routes.EVENTS).permitAll()
+        .antMatchers(basePath + Routes.EVENTS + "/**").denyAll().and()
       .csrf().disable();
   }
 }

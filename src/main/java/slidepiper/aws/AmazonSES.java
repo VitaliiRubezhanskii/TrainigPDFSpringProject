@@ -6,10 +6,14 @@ import java.io.StringWriter;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Properties;
 
 import javax.mail.*;
 import javax.mail.internet.*;
+
+import com.slidepiper.component.UserComponent;
+import com.slidepiper.model.entity.User;
 
 import freemarker.template.Configuration;
 import freemarker.template.Template;
@@ -65,8 +69,15 @@ public class AmazonSES {
     		emailParams.put("customerEmail", notificationData[0]);
     	}
 		
+    
+  	String notificationEmail = notificationData[2];
+    User user = UserComponent.findUser(notificationData[2]);
+    if (Objects.nonNull(user.getExtraData())
+        && Objects.nonNull(user.getExtraData().getNotificationEmail())) {
+      notificationEmail = user.getExtraData().getNotificationEmail();
+    }
 		emailParams.put("documentName", notificationData[1]);
-		emailParams.put("salesmanEmail", notificationData[2]);
+		emailParams.put("salesmanEmail", notificationEmail);
 		emailParams.put("logoUrl", ConfigProperties.getProperty("app_url"));
 		
 		switch(eventDataMap.get("eventName")) {
