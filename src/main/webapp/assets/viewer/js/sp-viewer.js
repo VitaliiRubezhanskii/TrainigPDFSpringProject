@@ -1483,10 +1483,11 @@ if ('' != sp.viewer.linkHash) {
               '<div class="sp-widget5__extend-button">' +
                 '<i class="fa fa-chevron-right" aria-hidden="true"></i>' +
               '</div>' +
+              '<div id="sp-widget5__hopper-container"></div>' +
             '</div>');
        
         $.each(widget, function(index, value) {
-          $('.sp-widget5').append(
+          $('#sp-widget5__hopper-container').append(
             '<div class="sp-widget5__hop" id="sp-widget5__hop-' + index + '" data-page-hop="' + value.hopperPage + '">' + 
               '<p class="sp-widget5__hop-text sp-widget5__hop--hidden">' + value.hopperText + '</p>' + 
               '<p class="sp-widget5__hop-page sp-widget5__hop--visible">' + value.hopperPage + '</p>' +
