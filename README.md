@@ -4,6 +4,13 @@ SlidePiper README File
 Change Log
 ----------
 
+### 0.17.2
+
+2017-01-05 Yaniv Friedensohn <yanivf@slidepiper.com>
+
+* Enhance hopper widget.
+
+
 ### 0.17.1
 
 2017-01-04 Yaniv Friedensohn <yanivf@slidepiper.com>
