@@ -18,6 +18,7 @@
             <div class="tabs-container sp-hidden">
                 <ul class="nav nav-tabs">
                     <li class="active"><a class="sp-widgets-customization-window__tab" data-toggle="tab" href="#sp-tab-3"><i class="fa fa-comment"></i></a></li>
+                    <li><a class="sp-widgets-customization-window__tab" data-toggle="tab" href="#sp-tab-10"><i class="fa fa-shield"></i></a></li>
                     <li><a class="sp-widgets-customization-window__tab" data-toggle="tab" href="#sp-tab-1"><i class="fa fa-video-camera"></i></a></li>
                     <li><a class="sp-widgets-customization-window__tab" data-toggle="tab" href="#sp-tab-2"><i class="fa fa-calendar"></i></a></li>
                     <li><a class="sp-widgets-customization-window__tab" data-toggle="tab" href="#sp-tab-4"><i class="fa fa-thumbs-o-up"></i></a></li>
@@ -623,6 +624,35 @@
                             <a class="btn btn-white btn-sm sp-widget__add-item">
                                 <i class="fa fa-plus" aria-hidden="true"></i> Add Link
                             </a>
+                        </div>
+                    </div>
+                    
+                    <div id="sp-tab-10" class="tab-pane">
+                        <div class="panel-body">
+                            <div id="sp-widget10__title">
+                            	<strong>Email Required Widget</strong>
+                        			<a id="sp-widget10__help-button" target="_blank" href="https://www.slidepiper.com/view?f=5pn1e9">
+                        				<small class="text-info" >
+                        					<i class="fa fa-info-circle"></i>  Help
+                        				</small>
+                        			</a>
+                        		</div>
+                            
+                            <div class="sp-customization-option__p checkbox">
+                                <label><input type="checkbox" name="sp-widget10--is-enabled">Is Enabled?</label>
+                            </div>
+                            <small id="sp-widget10__description">Use this widget to prompt the reader with a form to enter their email address before they can open your document.</small>
+							<hr>
+                            <div class="container-fluid">                   
+                                <form class="form-horizontal">
+                                  <div class="form-group">
+                                      <label class="col-lg-4 control-label">Form Title</label>
+                                      <div class="col-lg-8">
+                                          <input class="form-control" value="Please enter your email to continue reading this document" name="spWidget10FormTitle" placeholder="e.g. Please enter your email">
+                                      </div>
+                                  </div>
+                              </form>
+                            </div>
                         </div>
                     </div>
                 </div>

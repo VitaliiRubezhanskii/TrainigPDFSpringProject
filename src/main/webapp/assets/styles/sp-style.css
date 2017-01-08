@@ -865,3 +865,10 @@ input:checked + .sp-doc-settings-slider:before {
 .sp-sort-options-toggle:hover {
   color: #C6C0C0;
 } 
+
+
+/* Notifications */
+
+.sp-notifications-table--display-none {
+	display: none;
+}

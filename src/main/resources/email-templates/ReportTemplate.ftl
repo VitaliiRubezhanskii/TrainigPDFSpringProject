@@ -674,7 +674,12 @@
                     <tbody><tr>
                         
                         <td valign="top" class="mcnTextContent" style="padding: 0px 18px 9px; font-weight: normal;"> 
+                            <#if widget10EnteredEmailAddress??>
+                            <p class="lead"><b>${widget10EnteredEmailAddress}</b> (via <b>${customerName!"Generic Link"})</b> viewed <b>${documentName!}</b></p>
+                            <#else>
                             <p class="lead"><b>${customerName!"Generic Link"}</b> ${customerEmail!} viewed <b>${documentName!}</b></p>
+                            </#if>
+                            
                             <p>Time opened: ${openTime!} GMT</p>
                             <p>${documentActions!}</p>
                             <br>

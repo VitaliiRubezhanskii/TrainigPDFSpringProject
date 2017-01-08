@@ -4,6 +4,13 @@ SlidePiper README File
 Change Log
 ----------
 
+### 0.17.3
+
+2016-01-10 Max Prais <maxp@slidepiper.com>
+
+* Created widget 10 - email required widget.
+
+
 ### 0.17.2
 
 2017-01-05 Yaniv Friedensohn <yanivf@slidepiper.com>

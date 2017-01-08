@@ -673,8 +673,13 @@
                 <table align="left" border="0" cellpadding="0" cellspacing="0" style="max-width:100%; min-width:100%;" width="100%" class="mcnTextContentContainer">
                     <tbody><tr>
                         
-                        <td valign="top" class="mcnTextContent" style="padding: 0px 18px 9px; font-weight: normal;">     
-                            <p class="lead"><b>${customerName!"Generic Link"}</b> ${customerEmail!} has just opened <b>${documentName!}</b></p>
+                        <td valign="top" class="mcnTextContent" style="padding: 0px 18px 9px; font-weight: normal;">
+                        	<#if widget10EnteredEmailAddress??>
+                        		<p class="lead"><b>${widget10EnteredEmailAddress}</b> (via <b>${customerName!"Generic Link"})</b> has just opened <b>${documentName!}</b></p>
+                        	<#else>
+                        		<p class="lead"><b>${customerName!"Generic Link"}</b> ${customerEmail!} has just opened <b>${documentName!}</b></p>
+                        	</#if>   
+
                             <br>
                             <p>To view more detailed analytics, go to the <a target="_blank" href="${logoUrl!}/dashboard.html">SlidePiper Dashboard</a></p>
 

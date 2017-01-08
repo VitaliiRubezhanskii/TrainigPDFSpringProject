@@ -319,22 +319,23 @@ public class ManagementServlet extends HttpServlet {
       		e.printStackTrace();
       	}
       	break;
-      
-      
-      case "isLikeButtonClicked":
-      	try {
-      		boolean isLikeClickedInCurrentSession = false;
-      		
-      		if (null != request.getParameter("sessionid") && ! request.getParameter("sessionid").equals("")) {
-      			isLikeClickedInCurrentSession = DbLayer.isLikeButtonClicked(request.getParameter("sessionid"));
-      			
-      			data.put("isLikeButtonClicked", isLikeClickedInCurrentSession);
-      		}
-      	} catch (Exception e) {
-      		e.printStackTrace();
-      	}
-      	break;
       	
+      	
+      case "isEventHappenedThisSession":
+        try {
+          boolean isEventHappenedThisSession = false;
+          
+          if ((null != request.getParameter("sessionid") && ! request.getParameter("sessionid").equals(""))
+              && (null != request.getParameter("eventName") && ! request.getParameter("eventName").equals(""))) {
+            isEventHappenedThisSession = DbLayer.isEventHappenedThisSession(request.getParameter("sessionid"), request.getParameter("eventName"));
+            
+            data.put("isEventHappenedThisSession", isEventHappenedThisSession);
+          }
+        } catch (Exception e) {
+          e.printStackTrace();
+        }
+        break;
+
       	
       case "getNotifications":
     	  try {

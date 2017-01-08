@@ -1428,55 +1428,56 @@ public class DbLayer {
 			
 			
 			/**
-	      * Check if the user has 'liked' (clicked the Like Button) for this viewing session.
+	      * Check if an event has occurred in a session.
 	      * 
 	      * @param sessionid - The session id.
-	      * @return isLikeClickedInCurrentSession - boolean determined by the outcome of the
+	      * @param eventName - The event name.
+	      * @return isEventHappenedThisSession - boolean determined by the outcome of the
 	      * SQL query.
 	      */
-	     public static boolean isLikeButtonClicked(String sessionid) {
-	    	
-	    	Constants.updateConstants();
-	      try {
-	        Class.forName("com.mysql.jdbc.Driver");
-	      } catch (ClassNotFoundException e) {
-	        e.printStackTrace();
-	      }
+	     public static boolean isEventHappenedThisSession(String sessionid, String eventName) {
+	       boolean isEventHappenedThisSession = false;
+	       
+	       Constants.updateConstants();
+	       try {
+	         Class.forName("com.mysql.jdbc.Driver");
+	       } catch (ClassNotFoundException e) {
+	         e.printStackTrace();
+	       }
 	      
-	      String sql = "SELECT\n"
+	       String sql = "SELECT\n"
 		      					+ "  EXISTS (\n"
 	      						+ "    SELECT event_name\n"
 	      						+ "    FROM customer_events\n"
-	      						+ "    WHERE event_name = 'VIEWER_WIDGET_LIKE_CLICKED'\n"
+	      						+ "    WHERE event_name = ?\n"
 	      						+ "    AND session_id = ?)";
 	      
-	      boolean isLikeClickedInCurrentSession = false;
+	       Connection conn = null;
+	       try {
+	         conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
+	   		   PreparedStatement ps = conn.prepareStatement(sql); 
+	   		  
+	   		   ps.setString(1, eventName);
+	   		   ps.setString(2, sessionid);
+	   		   ResultSet rs = ps.executeQuery();
+	   		  
+	   		   while(rs.next()) {
+	   		     isEventHappenedThisSession = rs.getBoolean(1);
+	   		   }
+	   		  
+	       } catch (SQLException e) {
+	   			 e.printStackTrace();
+	   		 } finally {
+	         if (null != conn) {
+	           try {
+	             conn.close();
+	           } catch (SQLException ex) {
+	             ex.printStackTrace();
+	           }
+	         }
+	   		 }
 	      
-	      Connection conn = null;
-	      try {
-	   		  conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
-	   		  PreparedStatement ps = conn.prepareStatement(sql); 
-	   		  
-	   		  ps.setString(1, sessionid);
-	   		  ResultSet rs = ps.executeQuery();
-	   		  
-	   		  while(rs.next()) {
-	   		  	isLikeClickedInCurrentSession = rs.getBoolean(1);
-	   		  }
-	   		  
-	      } catch (SQLException e) {
-	   			e.printStackTrace();
-	   		} finally {
-	          if (null != conn) {
-	            try {
-	              conn.close();
-	            } catch (SQLException ex) {
-	              ex.printStackTrace();
-	            }
-	          }
-	      }
-	      
-				return isLikeClickedInCurrentSession;
+	       return isEventHappenedThisSession;
 	     }
 			
 			
@@ -2481,6 +2482,47 @@ public class DbLayer {
 	   		return widgetsSettings;
 	   	}
 
+	   	
+	   	public static String getOpenSlidesEventEmailAddress(String sessionid) {
+	   	  String widget10GivenEmailAddress = null;
+	   	  
+	   	  Connection conn = null;
+	   	  Constants.updateConstants();
+	   	  try {
+	   	    Class.forName("com.mysql.jdbc.Driver");
+	   	  } catch (ClassNotFoundException e) {
+	   	    e.printStackTrace();
+	   	  }
+	   	  
+	   	  String sql = "SELECT\n"
+	   	             + " customer_events.param_11_varchar AS 'emailAddress'\n"
+	   	             + "FROM customer_events\n"
+	   	             + "WHERE customer_events.session_id = ? AND customer_events.event_name = 'OPEN_SLIDES'";
+	   	  
+	   	  try {
+	   	    conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
+	   	    PreparedStatement ps = conn.prepareStatement(sql);
+	   	    
+	   	    ps.setString(1, sessionid);
+	   	    ResultSet rs = ps.executeQuery();
+       
+	   	    while (rs.next()) {
+	   	      widget10GivenEmailAddress = rs.getString("emailAddress");
+	   	    }
+	   	  } catch (SQLException e) {
+	   	    e.printStackTrace();
+	   	  } finally {
+          if (null != conn) {
+            try {
+              conn.close();
+            } catch (SQLException ex) {
+              ex.printStackTrace();
+            }
+          }
+	   	  }
+	   	  
+	   	  return widget10GivenEmailAddress;
+	   	}
 	   	
 	   	/**
        * Get widget metrics for the Viewer from the DB.

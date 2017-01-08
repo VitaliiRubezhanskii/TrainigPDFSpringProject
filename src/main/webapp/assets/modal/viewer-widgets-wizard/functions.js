@@ -414,7 +414,14 @@ sp.widgets = {
     	
     	return isPageOrderCorrect;
     },
-  }
+  },
+  widget10: {
+  	init: (function() {
+  		$('#sp-widget10__help-button').click(function() {
+				new UserEvent(UserEventType.CLICKED_HELP_BUTTON, {widgetId: 10}).send();
+			});
+  	})(),
+  },
 };
 
 sp.viewerWidgetsModal = {
@@ -507,6 +514,12 @@ sp.viewerWidgetsModal = {
         case 9:
           if (widget.data.items.length > 0) {
           	displayWidget9(widget.data);
+          }
+          break;
+          
+        case 10:
+          if (widget.data.items.length > 0) {
+          	displayWidget10(widget.data);
           }
           break;
       }
@@ -749,6 +762,11 @@ sp.viewerWidgetsModal = {
         });
       });
     }
+    
+    function displayWidget10(widget) {
+    	$('[name="sp-widget10--is-enabled"]').prop('checked', widget.isEnabled);
+    	$('[name="spWidget10FormTitle"]').val(widget.items[0].formTitle);
+    }
   },
   
   /**
@@ -844,6 +862,8 @@ sp.viewerWidgetsModal = {
         || ! $('[name="sp-widget9--is-enabled"]').closest('div').hasClass('sp-hide-is-enabled')) {
       settings.push(sp.viewerWidgetsModal.saveWidget9(fileHash));
     }
+    
+    settings.push(sp.viewerWidgetsModal.saveWidget10(fileHash));
     
     var data = {
         action: 'setWidgetsSettings',
@@ -1301,6 +1321,26 @@ sp.viewerWidgetsModal = {
     } else {
       return undefined;
     }
+  },
+  
+  saveWidget10: function(fileHash) {
+  	
+  	var widget10 = {
+      apiVersion: '1.0',
+      data: {
+        fileHash: fileHash,
+        widgetId: 10,
+        isEnabled: $('[name="sp-widget10--is-enabled"]').prop('checked'),
+        items: []
+      }
+    };
+  	
+  	var item = {};
+  	item.formTitle = $('[name="spWidget10FormTitle"]').val();
+  	
+  	widget10.data.items.push(item);
+  	
+  	return widget10;
   },
   
   /**

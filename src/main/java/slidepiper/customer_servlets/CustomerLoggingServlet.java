@@ -45,13 +45,14 @@ public class CustomerLoggingServlet extends HttpServlet {
 //			   			System.out.println("custdataservlet dopost");
     		
     					DbLayer.init(); //make sure it's initialized (includes constants)
-			    		String id, event_name, param1, param2, param3, sessionId;
+			    		String id, event_name, param1, param2, param3, param11, sessionId;
 			    		
 			    		id = request.getParameter("id");
 			    		event_name = request.getParameter("event_name");
 			    		param1 = request.getParameter("param1");
 			    		param2 = request.getParameter("param2");
 			    		param3 = request.getParameter("param3");
+			    		param11 = request.getParameter("param11");
 			    		sessionId = request.getParameter("sessionId");
 			    		
 			    		int timezone_offset = Integer.parseInt(request.getParameter("timezone_offset_min")); 
@@ -65,10 +66,10 @@ public class CustomerLoggingServlet extends HttpServlet {
 			    		  
 			    		  CustomerLogger.LogEvent(id, event_name, param1, param2, param3, sessionId, timezone_offset,
 	                  ip, ipData.get(0), ipData.get(1), ipData.get(2), ipData.get(3), ipData.get(4), ipData.get(5),
-	                  ipData.get(6), ipData.get(7), ipData.get(8));
+	                  ipData.get(6), ipData.get(7), ipData.get(8), param11);
 			    		} else {
 			    		  CustomerLogger.LogEvent(id, event_name, param1, param2, param3, sessionId, timezone_offset,
-                    null, null, null, null, null, null, null, null, null, null);
+                    null, null, null, null, null, null, null, null, null, null, null);
 			    		}
 			    		
 							/// send email if opened presentation
