@@ -71,7 +71,7 @@ public class KeepAliveTask extends TimerTask {
 					CustomerLogger.LogEvent(p.getMsgId(), "VIEW_SLIDE", 
 							Integer.toString(p.getSlideNumber()), 
 							Double.toString(p.getEstimatedTimeViewed()+1.5), "LAST_SLIDE", 
-							p.getSessionId(), p.getTimezoneOffsetMin(), null, null, null, null, null, null, null, null, null, null);
+							p.getSessionId(), p.getTimezoneOffsetMin(), null, null, null, null, null, null, null, null, null, null, null);
 					
 					String salesmanEmail = DbLayer.getSalesmanEmailFromMsgId(p.msgId);
 					String customerEmail = DbLayer.getCustomerEmailFromFileLinkHash(p.msgId);

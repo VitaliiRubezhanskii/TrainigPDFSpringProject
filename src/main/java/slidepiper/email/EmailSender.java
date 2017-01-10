@@ -115,11 +115,19 @@ public class EmailSender {
 		
 		currentviewslink = urlprefix + "viewbarchart.jsp?session_id=" + sessionId;
 		chatlink = urlprefix + "pdfjs/chatwindow.html?" + getParams;
-		String subj = DbLayer.getCustomerName(mi.getCustomerEmail(),mi.getSalesManEmail()) +
-					  " opened " + DbLayer.getSlidesName(mi.getSlidesId());						
-				  			 			
 		CustomerSession cs = DbLayer.getSessionData(sessionId);
 		
+		String subj = null;
+		String givenEmailAddressAtOpenSlidesEvent = DbLayer.getOpenSlidesEventEmailAddress(cs.getSession_id());
+		if (null != givenEmailAddressAtOpenSlidesEvent
+		  && ! givenEmailAddressAtOpenSlidesEvent.equals(mi.getCustomerEmail())) {
+		  subj = DbLayer.getOpenSlidesEventEmailAddress(cs.getSession_id()) +
+          " opened " + DbLayer.getSlidesName(mi.getSlidesId());     
+		} else {
+		  subj = DbLayer.getCustomerName(mi.getCustomerEmail(),mi.getSalesManEmail()) +
+          " opened " + DbLayer.getSlidesName(mi.getSlidesId());
+		}
+								 			
 		String msgtext = HtmlRenderer.getAlertHtml(mi, cs, currentviewslink, chatlink); 
 		
 		Map<String, String> emailParams = new HashMap<String, String>();
@@ -160,9 +168,17 @@ public class EmailSender {
 			chatMessages = "No messages.";
 		}
 		
-		String subj = DbLayer.getCustomerName(mi.getCustomerEmail(),mi.getSalesManEmail()) +
-					  " viewed " +
-					  DbLayer.getSlidesName(mi.getSlidesId());
+		String subj = null;
+		String givenEmailAddressAtOpenSlidesEvent = DbLayer.getOpenSlidesEventEmailAddress(ai.getSession_id());
+		
+    if (null != givenEmailAddressAtOpenSlidesEvent
+      && ! givenEmailAddressAtOpenSlidesEvent.equals(mi.getCustomerEmail())) {
+      subj = DbLayer.getOpenSlidesEventEmailAddress(ai.getSession_id()) +
+          " viewed " + DbLayer.getSlidesName(mi.getSlidesId());     
+    } else {
+      subj = DbLayer.getCustomerName(mi.getCustomerEmail(),mi.getSalesManEmail()) +
+          " viewed " + DbLayer.getSlidesName(mi.getSlidesId());
+    }
 		
 		String msgtext = HtmlRenderer.getReportHtml(ai, chatMessages);
 		

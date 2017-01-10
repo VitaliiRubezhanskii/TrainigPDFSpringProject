@@ -128,6 +128,11 @@ public class HtmlRenderer {
 	            	data.put("customerEmail", customerEmail);
 	            }
 	            
+	            String widget10EnteredEmailAddress = DbLayer.getOpenSlidesEventEmailAddress(ai.getSession_id()); 
+              if (null != widget10EnteredEmailAddress && ! widget10EnteredEmailAddress.equals(ai.getCustomer_email())) {
+                data.put("widget10EnteredEmailAddress", widget10EnteredEmailAddress);
+              }
+              
 	            data.put("openTime", ai.getOpen_time().substring(0, 16));
 	            data.put("customerName", ai.getCustomer_name());
 	            data.put("mailReportData", mailReportData);
@@ -181,6 +186,11 @@ public class HtmlRenderer {
 	            if (! mi.getCustomerEmail().equals("default@example.com")) {
 	            	String customerEmail = "(" + mi.getCustomerEmail() + ")";
 	            	data.put("customerEmail", customerEmail);
+	            }
+	            
+	            String widget10EnteredEmailAddress = DbLayer.getOpenSlidesEventEmailAddress(cs.getSession_id()); 
+	            if (null != widget10EnteredEmailAddress && ! widget10EnteredEmailAddress.equals(mi.getCustomerEmail())) {
+	              data.put("widget10EnteredEmailAddress", widget10EnteredEmailAddress);
 	            }
 	            
 	            data.put("documentName", DbLayer.getSlidesName(mi.getSlidesId()));

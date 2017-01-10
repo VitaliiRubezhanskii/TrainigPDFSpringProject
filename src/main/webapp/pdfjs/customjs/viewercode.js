@@ -38,7 +38,7 @@ function keepalive_event(estimatedTimeViewed_param, slideNum_param) {
     setShortTimeCookie("mySessionId", thisSessionId);
 }
 
-function send_event(ename, eparam1, eparam2, eparam3) {
+function send_event(ename, eparam1, eparam2, eparam3, eparam11) {
     urlval = "../../CustomerDataServlet";
 
     $.ajax({
@@ -50,6 +50,7 @@ function send_event(ename, eparam1, eparam2, eparam3) {
             param1 : eparam1,
             param2 : eparam2,
             param3 : eparam3,
+            param11: eparam11,
             sessionId : thisSessionId,
             "timezone_offset_min" : tz_offset_min
         },
@@ -58,6 +59,9 @@ function send_event(ename, eparam1, eparam2, eparam3) {
             // nothing happens on success of logging.
             // in case of problems, remove the comment above
             // to check.
+        	if (ename === 'OPEN_SLIDES') {
+        		$(document).trigger('spOpenSlidesEventSent');
+        	}
         },
         fail : function() {
             // Commented this out.
@@ -230,8 +234,14 @@ function preInitView()
                     {
                             // send only if it's first init for this session.
                             if (send_open_slides_event==true)
-                                {                               
-                                        send_event("OPEN_SLIDES", prev_slide, "0", browser_data);
+                                {      
+                            						if (! sp.viewer.widgets.widget10.isEnabled) {
+                            						  send_event("OPEN_SLIDES", prev_slide, "0", browser_data);
+                          							} else {
+                          								$(document).on('spWidget10EmailAddressEntered', function() {
+                          									send_event("OPEN_SLIDES", prev_slide, "0", browser_data, sp.viewer.widgets.widget10.emailAddress);
+                          								});
+                          							}
                                 }
                     }
                 preInitDone = true;
@@ -266,7 +276,9 @@ function initView() {
             // customer only
             if (role==0)
                 {
-                        send_event("INIT_SLIDES", "0", "0", ipaddr);
+            						$(document).on('spOpenSlidesEventSent', function() {
+            							send_event("INIT_SLIDES", "0", "0", ipaddr);	
+            						}); 
                 }
                 
 //            console.log("binding sendmsg click");

@@ -210,3 +210,14 @@
 #sp-viewer-widgets-modal .sp-dd {
   display: none;
 }
+
+/* Widget 10 */
+
+#sp-widget10__description {
+  display: block;
+}
+
+#sp-widget10__title .text-info {
+  cursor: pointer;
+  float: right;
+}

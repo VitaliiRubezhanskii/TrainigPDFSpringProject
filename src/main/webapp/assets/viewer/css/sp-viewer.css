@@ -10,6 +10,10 @@
   visibility: hidden;
 }
 
+.sp-z-index--0 {
+  z-index: 0;
+}
+
 /**
  * Splash page
  */
@@ -728,6 +732,12 @@
 
 .sp-widget9__text p:nth-child(2) {
   margin-top: 20px;
+}
+
+/* Widget 10 */
+
+#sp-widget10__form-title {
+	margin-bottom: 20px;
 }
 
 /* Widget 7 - Form Widget */

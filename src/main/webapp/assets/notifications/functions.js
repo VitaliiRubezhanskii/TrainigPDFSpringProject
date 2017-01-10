@@ -66,9 +66,16 @@ sp.notifications = {
             '</li>'
         );  
         
-        // Display 'Generic Link' as customer if a generic link has been viewed.
-        if ('default@example.com' === value.customerEmail) {
-          $('[data-id=' + value.id + '] .sp-notifications__customer-email').text('Generic Link');
+        var notificationItem = $('[data-id=' + value.id + '] .sp-notifications__customer-email');
+        
+        if (typeof value.enteredEmailAddress !== 'undefined'
+        	&& value.customerEmail === 'default@example.com') {
+        	$(notificationItem).text(value.enteredEmailAddress + ' (via: Generic Link)');
+        } else if (typeof value.enteredEmailAddress === 'undefined'
+        	&& value.customerEmail === 'default@example.com') {
+        	$(notificationItem).text('Generic Link');
+        } else if (typeof value.enteredEmailAddress !== 'undefined') {
+        	$(notificationItem).text(value.enteredEmailAddress + ' (via: ' + value.customerEmail + ')');
         }
         
         // Display message reply email if it is a notification for Ask Question widget.
@@ -179,6 +186,7 @@ sp.notifications = {
     displayTableNotifications: function(notifications) {
       var tableData = [];
       var action = '';
+      var customer = '';
       
       $.each(notifications, function(index, notification) {
         
@@ -198,9 +206,19 @@ sp.notifications = {
             action = 
               '<span>' + replyEmail + " " + setActionValue(notification.event) + ': </span><br>' +
               '<span><em>' + notification.messageText + '</em></span><br>';
+            customer = notification.customerEmail;
           } 
+        } else if (notification.event = 'OPEN_SLIDES') {
+        	if (typeof notification.enteredEmailAddress !== 'undefined') {
+        		customer = notification.enteredEmailAddress + ' (via: ' + notification.customerEmail + ')';
+        	} else {
+        		customer = notification.customerEmail;
+        	}
+        	
+        	action = setActionValue(notification.event);
         } else {
-          action = setActionValue(notification.event);
+        	customer = notification.customerEmail;
+        	action = setActionValue(notification.event);
         }
         
         var date = moment.utc(notification.time).toDate();
@@ -209,7 +227,7 @@ sp.notifications = {
         
         var tableDataObj = {
           time: moment(date).format('DD-MM-YYYY HH:mm'),
-          customer: notification.customerEmail,
+          customer: customer,
           action: action,
           document: notification.documentName
         };
@@ -219,8 +237,13 @@ sp.notifications = {
         /**
          * If the message email address is empty and it is a generic link, set customer email to Generic Link.
          */
-        if (notification.customerEmail === 'default@example.com') {
-          tableDataObj.customer = 'Generic Link';
+        if (typeof notification.enteredEmailAddress !== 'undefined'
+        	&& notification.customerEmail === 'default@example.com') {
+          tableDataObj.customer = notification.enteredEmailAddress + ' (via: Generic Link)';
+          
+        } else if (typeof notification.enteredEmailAddress === 'undefined'
+        	&& notification.customerEmail === 'default@example.com') {
+        	tableDataObj.customer = 'Generic Link';
         }
         
         tableData.push(tableDataObj);

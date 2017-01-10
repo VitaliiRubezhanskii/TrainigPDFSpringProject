@@ -30,16 +30,6 @@ $(document).on('textlayerrendered', function() {
 });
 
 
-/* Initialize initView() in viewercode.js */
-$(document).on('pagesloaded pagechange', function(event) {
-  var isPagesLoaded = false;
-  if (! isPagesLoaded && 'pagesloaded' === event.type) {
-    initView();
-    isPagesLoaded = true;
-  }
-});
-
-
 /**
  * Create HTML elements.
  */
@@ -103,6 +93,8 @@ sp.viewer = {
     viewerWidgetFormConfirmClicked: 'VIEWER_WIDGET_FORM_CONFIRM_CLCKED',
     viewerWidgetFormCancelClicked: 'VIEWER_WIDGET_FORM_CANCEL_CLICKED',
     viewerWidgetLinkClicked: 'VIEWER_WIDGET_LINK_CLICKED',
+    viewerWidgetRequestEmailEntered: 'VIEWER_WIDGET_EMAIL_REQUEST_EMAIL_ENTERED',
+    viewerWidgetRequestFormShown: 'VIEWER_WIDGET_EMAIL_REQUEST_FORM_SHOWN',
   },
   paramValue: {
     videoTabOpened: 'VIEWER_WIDGET_VIDEO_TAB_OPENED',
@@ -130,7 +122,18 @@ sp.viewer = {
       isReady: false,
       isValidated: false,
       lastViewedPage: 0
-    }
+    },
+    widget10: {
+    	isEnabled: false,
+    	emailAddress: null,
+    },
+  },
+  loadViewerCodeJs: function() {
+  	$.getScript('../../../pdfjs/customjs/viewercode.js', function() {
+    	initView();
+    	
+    	$(document).trigger('spViewercodeJsLoaded');
+    });
   },
   
   
@@ -140,7 +143,7 @@ sp.viewer = {
    * @param {String} param_3_varchar = The CTA button destination URL
    */
   init: (function() {
-    $(document).ready(function() {
+    $(document).on('spViewercodeJsLoaded', function() {
       $('.sp-cta, .sp-secondary-cta').click(function() {
         var eventData = {
           eventName: sp.viewer.eventName.clickedCta,
@@ -163,21 +166,23 @@ sp.viewer = {
    * @param {Object} eventData The event data.
    */
   setCustomerEvent: function(eventData) {
-    if ("0" == role) {
-      var data = {
-        action: 'setCustomerEvent',
-        data: eventData
-      };
-      
-      // Send page number of event.
-      if (typeof PDFViewerApplication !== 'undefined') {
-        data.data.param1int = PDFViewerApplication.page;
-      } else {
-        data.data.param1int = 0;
-      }
-      
-      $.post('../../ManagementServlet', JSON.stringify(data));
+    var data = {
+      action: 'setCustomerEvent',
+      data: eventData
+    };
+    
+    // Send page number of event.
+    if (typeof PDFViewerApplication !== 'undefined') {
+      data.data.param1int = PDFViewerApplication.page;
+    } else {
+      data.data.param1int = 0;
     }
+    
+    $.post('../../ManagementServlet', JSON.stringify(data), function() {
+    	if (eventData.eventName === sp.viewer.eventName.viewerWidgetRequestEmailEntered) {
+    		$(document).trigger('spWidget10EmailAddressEntered');
+    	}
+    });
   }
 };
 
@@ -571,6 +576,7 @@ if ('' != sp.viewer.linkHash) {
             // Prepare the widgets data for implimentation.
             var widgets = {};
             
+            var numWidgets = data.widgetsSettings.length;
             $.each(data.widgetsSettings, function(index, data) {
               var widgetData = JSON.parse(data.widgetData).data;
               
@@ -588,6 +594,12 @@ if ('' != sp.viewer.linkHash) {
                 widgets['widget' + widgetId.toString()] = widgetData;
               }
             });
+            
+            if (typeof widgets.widget10 !== 'undefined') {
+              sp.viewer.widgets.widget10.isEnabled = true;
+            } else {
+              sp.viewer.loadViewerCodeJs();
+            }
             
             implementWidgets(widgets);
             
@@ -728,6 +740,34 @@ if ('' != sp.viewer.linkHash) {
         }
       });
       
+      /* Widget 10 */
+      if (sp.viewer.widgets.widget10.isEnabled) {
+      	var spWidgetsStorage = JSON.parse(localStorage.getItem('slidepiper'));
+      	var isEmailAddressEnteredForThisDocument = false;
+      	var enteredEmailAddress = '';
+      	
+      	if (null !== spWidgetsStorage
+      		&& null !== spWidgetsStorage.widgets
+      		&& null !== spWidgetsStorage.widgets.widget10) {
+      		$.each(spWidgetsStorage.widgets.widget10.items, function() {
+      			if (this.documentLinkHash === getParameterByName('f')) {
+      				isEmailAddressEnteredForThisDocument = true;
+      				enteredEmailAddress = this.email;
+      				return false;
+      			}
+        	});
+      	}
+      	
+    		if (! isEmailAddressEnteredForThisDocument) {
+    			implementWidget10(widgets.widget10.items[0]);
+    		} else {
+    			sp.viewer.loadViewerCodeJs();
+    			$(document).on('spViewercodeJsLoaded', function() {
+    				sp.viewer.widgets.widget10.emailAddress = enteredEmailAddress;
+    				$(document).trigger('spWidget10EmailAddressEntered');
+    			});
+    		}
+      } 
       
       /* Validate Widget 1 */
       var widget1RequiredSettings = ['videoPageStart', 'videoSource', 'videoTitle', 'isYouTubeVideo'];
@@ -1371,11 +1411,14 @@ if ('' != sp.viewer.linkHash) {
           $.getJSON(
               '../../ManagementServlet',
               {
-                action: 'isLikeButtonClicked',
-                sessionid: sessionid
+                action: 'isEventHappenedThisSession',
+                sessionid: getCookie('mySessionId'),
+                eventName: sp.viewer.eventName.viewerWidgetLikeClicked,
               },
               function(data) {
-                if (data.isLikeButtonClicked) {
+              	
+              	// Is like button clicked this session.
+                if (data.isEventHappenedThisSession) {
                   $('.sp-like-btn').addClass('sp-like-btn-clicked');
                   $('#sp-thumbs-up__i, #sp-count-likes__p').css('color', '#fff');
                 } else {
@@ -1890,6 +1933,75 @@ if ('' != sp.viewer.linkHash) {
          });
        });
     }
+    
+    function implementWidget10(widget) {
+    	$('.toolbar').addClass('sp-z-index--0');
+    	
+    	sp.viewer.setCustomerEvent({
+    		eventName: sp.viewer.eventName.viewerWidgetRequestFormShown,
+        linkHash: sp.viewer.linkHash,
+        sessionId: '-1',
+        param_1_varchar: widget.formTitle,
+    	});
+    	
+    	swal({
+    		allowEscapeKey: false,
+    		allowOutsideClick: false,
+    		html: '<h3 id="sp-widget10__form-title">' + widget.formTitle + '</h3>',
+    	  input: 'email',
+    	  showCancelButton: false,
+    	  confirmButtonText: 'Submit',
+    	  showLoaderOnConfirm: true,
+    	}).then(function(email) {
+    		sp.viewer.widgets.widget10.emailAddress = email;
+    		sp.viewer.loadViewerCodeJs();
+    	  
+    	  $(document).on('spViewercodeJsLoaded', function() {
+    	  	sp.viewer.setCustomerEvent({
+      	  	eventName: sp.viewer.eventName.viewerWidgetRequestEmailEntered,
+            linkHash: sp.viewer.linkHash,
+            sessionId: sessionid,
+            param_1_varchar: email,
+            param_2_varchar: widget.formTitle,
+      	  });
+    	  	
+    	  	// Add the email address & document link hash to local storage.
+  	  		var spWidgetsStorage = JSON.parse(localStorage.getItem('slidepiper'));
+  	  		if (null !== spWidgetsStorage && typeof spWidgetsStorage.widgets !== 'undefined') {
+  	  			if (typeof spWidgetsStorage.widgets.widget10 !== 'undefined') {
+  	  				spWidgetsStorage.widgets.widget10.items.push({email: email, documentLinkHash: getParameterByName('f')});
+  	  			} else {
+  	  				spWidgetsStorage.widgets.widget10 = {
+  							items: [
+									{
+										email: email,
+										documentLinkHash: getParameterByName('f'),
+									},
+  							]
+	  					};
+  	  			}
+  	  			
+  	  			localStorage.setItem('slidepiper', JSON.stringify(spWidgetsStorage));
+	  			} else {
+	  				var newWidgetsStorage = {
+  						widgets: {
+  							widget10: {
+  								items: [
+  									{
+  									email: email,
+  									documentLinkHash: getParameterByName('f') 
+  									}
+  								]
+  							}
+  						}
+	  				};
+	  				localStorage.setItem('slidepiper', JSON.stringify(newWidgetsStorage));
+	  			}
+  	  		
+    	  	$('.toolbar').removeClass('sp-z-index--0');
+    	  });
+    	});
+  	}
   });
 }
 
@@ -1947,13 +2059,15 @@ function onPlayerStateChange(event) {
     $('#sp-widget1-youtube-player').css('visibility', 'visible');
   }
   
-  var data = {
-    linkHash: sp.viewer.linkHash, 
-    sessionId: sessionid,
-    param_1_varchar: spYouTubePlayer.getVideoUrl(),
-    param_2_varchar: $('#sp-widget1-tab div').text(),
-  };
-
+  if (playerState === 1 || playerState === 2) {
+  	var data = {
+	    linkHash: sp.viewer.linkHash, 
+	    sessionId: sessionid,
+	    param_1_varchar: spYouTubePlayer.getVideoUrl(),
+	    param_2_varchar: $('#sp-widget1-tab div').text(),
+	  };
+  }
+  
   switch (playerState) {
     // YouTube video played.
     case 1:
