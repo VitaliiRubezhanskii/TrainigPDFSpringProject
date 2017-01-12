@@ -4,6 +4,13 @@ SlidePiper README File
 Change Log
 ----------
 
+### 0.17.4
+
+2016-01-12 Max Prais <maxp@slidepiper.com>
+
+* Added initial support for uploading files in the viewer.
+
+
 ### 0.17.3
 
 2016-01-10 Max Prais <maxp@slidepiper.com>
