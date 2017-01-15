@@ -8,10 +8,20 @@ spring:
     username: adminFh4jYg3
     password: yUGL^7GFBlo&97
     
-aws:
+amazon:
   s3:
     accessKeyId: AKIAJXQE3QZTYFLZRHNQ
     secretKey: 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
     bucket: slidepiper-documents-development
     prefix: production/documents
     domain: https://slidepiper-documents-development.s3.amazonaws.com
+
+  ses:
+    ses-customer-message:
+      accessKeyId: AKIAIFEJNRCXRGWCDTKQ
+      secretKey: 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
+      
+  sns:
+    sns-customer-message:
+      accessKeyId: AKIAIEJ23APCCYRBVASA
+      secretKey: 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

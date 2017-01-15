@@ -2,6 +2,8 @@ package com.slidepiper.aws.s3;
 
 import java.util.Objects;
 
+import com.slidepiper.model.component.ConfigurationPropertiesUtils;
+
 public class ObjectLinkUtils {
   
   /**
@@ -11,7 +13,7 @@ public class ObjectLinkUtils {
    * then bucket name is slidepiper-documents.
    */
   public static String getBucket() {
-    return S3PropertiesComponent.properties.getBucket()
+    return ConfigurationPropertiesUtils.amazonS3.getBucket()
         .replaceAll("/$", "");
   }
   
@@ -22,7 +24,7 @@ public class ObjectLinkUtils {
    * then predefined prefix name is production/documents.
    */
   public static String getPrefix() {
-    return S3PropertiesComponent.properties.getPrefix()
+    return ConfigurationPropertiesUtils.amazonS3.getPrefix()
         .replaceAll("/$", "");
   }
   
@@ -61,7 +63,7 @@ public class ObjectLinkUtils {
    * then domain name is https://slidepiper-documents.s3.amazonaws.com.
    */
   public static String getDomain() {
-    return S3PropertiesComponent.properties.getDomain()
+    return ConfigurationPropertiesUtils.amazonS3.getDomain()
         .replaceAll("/$", "");
   }
 }

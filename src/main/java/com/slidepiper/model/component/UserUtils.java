@@ -1,4 +1,4 @@
-package com.slidepiper.component;
+package com.slidepiper.model.component;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -7,13 +7,13 @@ import com.slidepiper.model.entity.User;
 import com.slidepiper.model.repository.UserRepository;
 
 @Component
-public class UserComponent {
+public class UserUtils {
   
   private static UserRepository userRepository;
   
   @Autowired
-  public UserComponent(UserRepository userRepository) {
-    UserComponent.userRepository = userRepository;
+  public UserUtils(UserRepository userRepository) {
+    UserUtils.userRepository = userRepository;
   }
   
   public static User findUser(String email) {

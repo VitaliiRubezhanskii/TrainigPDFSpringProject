@@ -12,7 +12,7 @@ import java.util.Properties;
 import javax.mail.*;
 import javax.mail.internet.*;
 
-import com.slidepiper.component.UserComponent;
+import com.slidepiper.model.component.UserUtils;
 import com.slidepiper.model.entity.User;
 
 import freemarker.template.Configuration;
@@ -71,7 +71,7 @@ public class AmazonSES {
 		
     
   	String notificationEmail = notificationData[2];
-    User user = UserComponent.findUser(notificationData[2]);
+    User user = UserUtils.findUser(notificationData[2]);
     if (Objects.nonNull(user.getExtraData())
         && Objects.nonNull(user.getExtraData().getNotificationEmail())) {
       notificationEmail = user.getExtraData().getNotificationEmail();

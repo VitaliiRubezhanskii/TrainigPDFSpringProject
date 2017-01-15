@@ -4,6 +4,13 @@ SlidePiper README File
 Change Log
 ----------
 
+### 0.17.5
+
+2017-01-15 Yaniv Friedensohn <yanivf@slidepiper.com>
+
+* Transform to a new branching model (use version for branch name, 
+and fast-forward branch merges).
+
 ### 0.17.4
 
 2016-01-12 Max Prais <maxp@slidepiper.com>
@@ -37,6 +44,7 @@ Change Log
 2017-01-04 Yaniv Friedensohn <yanivf@slidepiper.com>
 
 * Enable setting the notification email.
+* Transform to a new branching model (stop using develop & release branches).
 
 
 ### 0.16.15

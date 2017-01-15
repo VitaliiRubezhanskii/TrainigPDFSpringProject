@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import com.slidepiper.component.UserComponent;
+import com.slidepiper.model.component.UserUtils;
 import com.slidepiper.model.entity.User;
 import com.slidepiper.model.entity.User.ExtraData;
 
@@ -596,10 +596,10 @@ public class ManagementServlet extends HttpServlet {
           break;
    
         case "setSalesmanDocumentSettings":
-          User user = UserComponent.findUser(input.getString("salesMan"));
+          User user = UserUtils.findUser(input.getString("salesMan"));
           ExtraData extraData = new ExtraData(input.getString("notificationEmail")); 
           user.setExtraData(extraData);
-          UserComponent.updateUser(user);
+          UserUtils.updateUser(user);
           
         	Boolean isAlertEmailEnabled = input.getBoolean("isAlertEmailEnabled");
         	Boolean isReportEmailEnabled = input.getBoolean("isReportEmailEnabled");

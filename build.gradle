@@ -6,10 +6,12 @@ buildscript {
   dependencies {
     classpath 'org.springframework.boot:spring-boot-gradle-plugin:1.4.2.RELEASE'
     classpath 'org.springframework.build.gradle:propdeps-plugin:0.0.7'
+    classpath 'io.spring.gradle:dependency-management-plugin:0.5.4.RELEASE'
   }
 }
 
 apply plugin: 'eclipse'
+apply plugin: 'io.spring.dependency-management'
 apply plugin: 'java'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'propdeps'
@@ -24,32 +26,39 @@ repositories {
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
+dependencyManagement {
+  imports {
+    mavenBom 'com.amazonaws:aws-java-sdk-bom:1.11.76'
+  }
+}
+
 dependencies {
-  compile "com.amazonaws:aws-java-sdk-s3:1.11.63"
-  compile "com.amazonaws:aws-java-sdk-ses:1.11.29"
-  compile "com.google.api-client:google-api-client:1.20.0"
-  compile "com.google.oauth-client:google-oauth-client-jetty:1.20.0"
-  compile "com.google.apis:google-api-services-gmail:v1-rev29-1.20.0"
-  compile "com.maxmind.geoip2:geoip2:0.8.0"
-  compile "commons-fileupload:commons-fileupload:1.3.1"
-  compile "commons-io:commons-io:2.4"
-  compile "javax.mail:mail:1.4.7"
-  compile "javax.servlet:javax.servlet-api:3.1.0"
-  compile "mysql:mysql-connector-java:5.1.25"
-  compile "org.apache.commons:commons-csv:1.2"
-  compile "org.apache.commons:commons-lang3:3.4"
-  compile "org.apache.oltu.oauth2:org.apache.oltu.oauth2.client:1.0.2"
-  compile "org.freemarker:freemarker:2.3.20"
-  compile "org.hashids:hashids:1.0.1"
-  compile "org.json:json:20141113"
-  compileOnly "org.projectlombok:lombok:1.16.10"
-  compile "org.springframework.boot:spring-boot-starter-data-jpa"
-  compile "org.springframework.boot:spring-boot-starter-data-rest"
-  compile "org.springframework.boot:spring-boot-starter-security"
-  compile "org.springframework.boot:spring-boot-starter-web"
-  optional "org.springframework.boot:spring-boot-configuration-processor"
-  optional "org.springframework.boot:spring-boot-devtools"
-  providedRuntime "org.springframework.boot:spring-boot-starter-tomcat"
+  compile 'com.amazonaws:aws-java-sdk-s3'
+  compile 'com.amazonaws:aws-java-sdk-ses'
+  compile 'com.amazonaws:aws-java-sdk-sns'
+  compile 'com.google.api-client:google-api-client:1.20.0'
+  compile 'com.google.oauth-client:google-oauth-client-jetty:1.20.0'
+  compile 'com.google.apis:google-api-services-gmail:v1-rev29-1.20.0'
+  compile 'com.maxmind.geoip2:geoip2:0.8.0'
+  compile 'commons-fileupload:commons-fileupload:1.3.1'
+  compile 'commons-io:commons-io:2.4'
+  compile 'javax.mail:mail:1.4.7'
+  compile 'javax.servlet:javax.servlet-api:3.1.0'
+  compile 'mysql:mysql-connector-java:5.1.25'
+  compile 'org.apache.commons:commons-csv:1.2'
+  compile 'org.apache.commons:commons-lang3:3.4'
+  compile 'org.apache.oltu.oauth2:org.apache.oltu.oauth2.client:1.0.2'
+  compile 'org.freemarker:freemarker:2.3.20'
+  compile 'org.hashids:hashids:1.0.1'
+  compile 'org.json:json:20141113'
+  compileOnly 'org.projectlombok:lombok:1.16.10'
+  compile 'org.springframework.boot:spring-boot-starter-data-jpa'
+  compile 'org.springframework.boot:spring-boot-starter-data-rest'
+  compile 'org.springframework.boot:spring-boot-starter-security'
+  compile 'org.springframework.boot:spring-boot-starter-web'
+  optional 'org.springframework.boot:spring-boot-configuration-processor'
+  optional 'org.springframework.boot:spring-boot-devtools'
+  providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
 }
 
 compileJava.dependsOn(processResources)

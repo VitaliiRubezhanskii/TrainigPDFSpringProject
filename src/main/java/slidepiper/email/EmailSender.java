@@ -25,7 +25,7 @@ import javax.mail.internet.MimeMessage;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.google.api.services.gmail.Gmail;
-import com.slidepiper.component.UserComponent;
+import com.slidepiper.model.component.UserUtils;
 import com.slidepiper.model.entity.User;
 
 import slidepiper.aws.AmazonSES;
@@ -133,7 +133,7 @@ public class EmailSender {
 		Map<String, String> emailParams = new HashMap<String, String>();
 		
 		String notificationEmail = mi.getSalesManEmail();
-		User user = UserComponent.findUser(mi.getSalesManEmail());
+		User user = UserUtils.findUser(mi.getSalesManEmail());
     if (Objects.nonNull(user.getExtraData())
         && Objects.nonNull(user.getExtraData().getNotificationEmail())) {
       notificationEmail = user.getExtraData().getNotificationEmail();
@@ -188,7 +188,7 @@ public class EmailSender {
 		Map<String, String> emailParams = new HashMap<String, String>();
 		
 		String notificationEmail = mi.getSalesManEmail();
-    User user = UserComponent.findUser(mi.getSalesManEmail());
+    User user = UserUtils.findUser(mi.getSalesManEmail());
     if (Objects.nonNull(user.getExtraData())
         && Objects.nonNull(user.getExtraData().getNotificationEmail())) {
       notificationEmail = user.getExtraData().getNotificationEmail();

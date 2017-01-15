@@ -4,6 +4,7 @@ import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
+import com.slidepiper.model.component.ConfigurationPropertiesUtils;
 
 public class S3Client {
   
@@ -12,8 +13,8 @@ public class S3Client {
    */
   static AmazonS3 getS3Client() {
     AWSCredentials awsCredentials = new BasicAWSCredentials(
-      S3PropertiesComponent.properties.getAccessKeyId(),
-      S3PropertiesComponent.properties.getSecretKey()
+      ConfigurationPropertiesUtils.amazonS3.getAccessKeyId(),
+      ConfigurationPropertiesUtils.amazonS3.getSecretKey()
     );
     AmazonS3 s3Client = new AmazonS3Client(awsCredentials);
     
