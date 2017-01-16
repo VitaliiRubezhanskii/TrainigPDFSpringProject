@@ -137,7 +137,7 @@ $(function() {
   
   function setSectionView() {
     console.log('Currently on section: ' + sectionId);
-    sendSlidePiper('HELMAN_ALDUBI_CURRENT_SECTION', sectionId);
+    sendSlidePiper('HALMAN_ALDUBI_CURRENT_SECTION', sectionId);
     
     // Section settings.
     $('section').hide();
@@ -657,7 +657,7 @@ $(function() {
         
         sendZapier('https://hooks.zapier.com/hooks/catch/674313/h2y8on/', payload);
         
-        sendSlidePiper('HELMAN_ALDUBI_COMPLETED_INITIAL_SECTION');
+        sendSlidePiper('HALMAN_ALDUBI_COMPLETED_INITIAL_SECTION');
         break;
         
       case 1:
@@ -931,7 +931,7 @@ $(function() {
         }
         
         sendHA();
-        sendSlidePiper('HELMAN_ALDUBI_SENT_FORM');
+        sendSlidePiper('HALMAN_ALDUBI_SENT_FORM');
         
         dataLayer.push({
           'event': 'digital_join',
@@ -989,7 +989,7 @@ $(function() {
           textStatus: textStatus,
           errorThrown: errorThrown,
         };
-        sendSlidePiper('HELMAN_ALDUBI_ATTACHMENT_PAYLOAD_NOT_SENT', JSON.stringify(data));
+        sendSlidePiper('HALMAN_ALDUBI_ATTACHMENT_PAYLOAD_NOT_SENT', JSON.stringify(data));
         
         // Send error with more details to HA WebMerge.
         data['firstName'] = payload['first_name']; 
