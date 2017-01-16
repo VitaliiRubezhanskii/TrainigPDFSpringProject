@@ -637,8 +637,25 @@ $(function() {
           phoneInit: $('#phone-operator-code-init').val() + '-' + $('#phone-number-init').val()
         }
         
+        var date = new Date();
+        var day = date.getDate();
+        var month = date.getMonth() + 1;
+        var year = date.getFullYear();
+
+        if (day < 10) {
+          day = '0' + day;
+        } 
+
+        if (month < 10) {
+          month = '0' + month;
+        } 
+
+        payload['date'] = day + '/' + month + '/' + year;
+        
         // HA WebMerge.
         sendWebMerge('https://www.webmerge.me/merge/82651/98sjf8', payload);
+        
+        sendZapier('https://hooks.zapier.com/hooks/catch/674313/h2y8on/', payload);
         
         sendSlidePiper('HELMAN_ALDUBI_COMPLETED_INITIAL_SECTION');
         break;
@@ -897,20 +914,6 @@ $(function() {
         break;
         
       case 6:
-        var date = new Date();
-        var day = date.getDate();
-        var month = date.getMonth() + 1;
-        var year = date.getFullYear();
-
-        if (day < 10) {
-          day = '0' + day;
-        } 
-
-        if (month < 10) {
-          month = '0' + month;
-        } 
-
-        payload['date'] = day + '/' + month + '/' + year;
         payload['signatureBase64'] = signaturePad.toDataURL();
         sendWebMerge('https://www.webmerge.me/merge/78047/g33bvk', payload);
         
@@ -1016,6 +1019,11 @@ $(function() {
       arg1 = '';
     }
     
+    var sessionId = '';
+    if (typeof parent.sessionid !== 'undefined') {
+      sessionId = parent.sessionid;
+    }
+    
     var data = {
       action: 'setCustomerEvent',
       data: {
@@ -1024,7 +1032,7 @@ $(function() {
         param_1_varchar: document.location.href,
         param_2_varchar: document.referrer,
         param_3_varchar: arg1.toString(),
-        sessionId: ''
+        sessionId: sessionId
       }
     };
     
