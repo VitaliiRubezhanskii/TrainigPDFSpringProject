@@ -15,6 +15,7 @@ import slidepiper.config.ConfigViewerServlt;
 import slidepiper.customer_servlets.CustomerLoggingServlet;
 import slidepiper.customer_servlets.DownloadSlidesServlet;
 import slidepiper.customer_servlets.FileViewerServlet;
+import slidepiper.customer_servlets.DocumentShareServlet;
 import slidepiper.customer_servlets.GetMessageDataServlet;
 import slidepiper.integration.HubSpot;
 import slidepiper.keepalive.KeepAliveServlet;
@@ -138,5 +139,10 @@ public class Application extends SpringBootServletInitializer {
   @Bean
   public ServletRegistrationBean SRBUploadFile() {
     return new ServletRegistrationBean(new UploadFile(), "/upload-file");
+  }
+  
+  @Bean
+  public ServletRegistrationBean SRBGetDocumentSharingProperties() {
+    return new ServletRegistrationBean(new DocumentShareServlet(), "/share");
   }
 }

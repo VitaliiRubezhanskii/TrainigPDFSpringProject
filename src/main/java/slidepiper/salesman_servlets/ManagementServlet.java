@@ -26,6 +26,7 @@ import com.slidepiper.model.entity.User.ExtraData;
 
 import slidepiper.aws.AmazonSES;
 import slidepiper.config.ConfigProperties;
+import slidepiper.customer_servlets.DocumentShareServlet;
 import slidepiper.dataobjects.Customer;
 import slidepiper.dataobjects.Presentation;
 import slidepiper.db.Analytics;
@@ -653,6 +654,30 @@ public class ManagementServlet extends HttpServlet {
 
           for (int i = 0; i < widgetsSettings.length(); i++) {
         	  JSONObject widgetSetting = widgetsSettings.getJSONObject(i);
+        	  JSONArray items = widgetSetting.getJSONObject("data").getJSONArray("items");
+        	  JSONObject widgetData = widgetSetting.getJSONObject("data");
+
+        	  if (widgetData.getInt("widgetId") == 11) {
+        	    if (items.getJSONObject(0).has("imageBase64") 
+      	        && null != items.getJSONObject(0).getString("imageBase64") 
+                && ! items.getJSONObject(0).getString("imageBase64").equals("")) {
+                String imageUrl = DocumentShareServlet.getS3ImageUrl(
+                    widgetData.getString("fileHash"),
+                    items.getJSONObject(0).getString("imageBase64"),
+                    items.getJSONObject(0).getString("imageFileName")
+                );
+                  
+                if (null != imageUrl && ! imageUrl.equals("")) {
+                  items.getJSONObject(0).remove("imageBase64");
+                  items.getJSONObject(0).remove("imageFileName");
+                  items.getJSONObject(0).put("imageUrl", imageUrl);
+                }
+              } else {
+                if (items.getJSONObject(0).getString("imageUrl").equals("")) {
+                  items.getJSONObject(0).put("imageUrl", "https://s3-us-west-2.amazonaws.com/slidepiper-static/production/images/logo-slidepiper-wide-1200x630.png");
+                }
+              }
+        	  }
         	  resultCode = DbLayer.setWidgetSettings(widgetSetting);  
           }
           

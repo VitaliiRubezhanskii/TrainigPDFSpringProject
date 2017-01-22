@@ -2466,7 +2466,9 @@ public class DbLayer {
 						widget.put("widgetData", rs.getString("widget_setting"));
 						widgetsSettings.put(widget);
 				  }
-	
+				  
+				  System.out.println(widgetsSettings.length());
+				  
 	   		} catch (SQLException e) {
 	   			e.printStackTrace();
 	   		} finally {
@@ -2480,6 +2482,51 @@ public class DbLayer {
 	      }
 	        
 	   		return widgetsSettings;
+	   	}
+	   	
+	   	public static JSONObject getWidgetsSettingsByWidgetId(int fileId, int widgetId) {
+	   	  JSONObject widget = new JSONObject();
+	   	  
+  	   	Connection conn = null;
+        Constants.updateConstants();
+        try {
+          Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+          e.printStackTrace();
+        }
+       
+        String sql = 
+            "SELECT\n"
+            + "  setting AS widget_setting,\n"
+            + "  FK_widget_id AS widget_id\n"
+            + "FROM widget_setting\n"
+            + "WHERE FK_file_id_ai = ?\n"
+            + "AND FK_widget_id = ?";
+       
+        try {
+          conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
+          PreparedStatement ps = conn.prepareStatement(sql);
+          ps.setInt(1, fileId);
+          ps.setInt(2, widgetId);
+          ResultSet rs = ps.executeQuery();
+          
+          if (rs.next()) {
+            widget.put("widgetData", rs.getString("widget_setting"));
+          }
+          
+        } catch (SQLException e) {
+          e.printStackTrace();
+        } finally {
+            if (null != conn) {
+              try {
+                conn.close();
+              } catch (SQLException ex) {
+                ex.printStackTrace();
+              }
+            }
+        }
+	   	  
+	   	  return widget;
 	   	}
 
 	   	

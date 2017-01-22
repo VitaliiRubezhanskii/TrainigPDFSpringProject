@@ -95,6 +95,8 @@ sp.viewer = {
     viewerWidgetLinkClicked: 'VIEWER_WIDGET_LINK_CLICKED',
     viewerWidgetRequestEmailEntered: 'VIEWER_WIDGET_EMAIL_REQUEST_EMAIL_ENTERED',
     viewerWidgetRequestFormShown: 'VIEWER_WIDGET_EMAIL_REQUEST_FORM_SHOWN',
+    viewerWidgetShareButtonClicked: 'VIEWER_WIDGET_SHARE_BUTTON_CLICKED',
+    viewerWidgetShareServiceClicked: 'VIEWER_WIDGET_SHARE_SERVICE_CLICKED',
   },
   paramValue: {
     videoTabOpened: 'VIEWER_WIDGET_VIDEO_TAB_OPENED',
@@ -127,6 +129,9 @@ sp.viewer = {
     	isEnabled: false,
     	emailAddress: null,
     },
+    widget11: {
+    	spWidget11Share: null,
+    }
   },
   loadViewerCodeJs: function() {
   	$.getScript('../../../pdfjs/customjs/viewercode.js', function() {
@@ -945,6 +950,15 @@ if ('' != sp.viewer.linkHash) {
         if (isWidget9Validated) {
           sp.viewer.widgets.widget9.isValidated = true;
           implementWidget9(widgets.widget9);
+        }
+      }
+      
+      /* Validate Widget 11 */
+      var widget11RequiredSettings = ['buttonText'];
+      
+      if (typeof widgets.widget11 !== 'undefined' && widgets.widget11.isEnabled) {
+        if (isWidgetSettingsDefined(widgets.widget11.items[0], widget11RequiredSettings)) {
+          implementWidget11(widgets.widget11.items[0]);
         }
       }
       
@@ -2002,6 +2016,82 @@ if ('' != sp.viewer.linkHash) {
     	  });
     	});
   	}
+		
+    function implementWidget11(widget) {
+    	var buttonColor = config.viewer.toolbarButtonBackground;
+    	
+      if (widget.isButtonColorCustom) {
+      	if (typeof widget.buttonColor !== 'undefined' && widget.buttonColor !== '') {
+      		buttonColor = widget.buttonColor;
+        }
+      }
+      
+    	if (0 == $('.sp-right-side-widgets').length) {
+        $('body').append('<div class="sp-right-side-widgets"></div>');
+      }
+      
+      $('.sp-right-side-widgets').append(
+      	'<button class="sp-widget-button sp-widget-font-fmaily sp--direction-ltr" id="sp-widget11"></button>'
+      );
+      
+      if ($('.sp-right-side-widgets button, .sp-right-side-widgets div').length > 1) {
+        $('#sp-widget11').css('margin-top', '20px');
+      }
+      
+      $('#sp-widget11')
+      	.css({
+      		'background-color': buttonColor,
+    			'color': config.viewer.toolbarCta1Color,
+      	})
+      	.html('<i class="fa fa-share-alt"></i><div>' + widget.buttonText + '</div>')
+      	.click(function() {
+      		sp.viewer.setCustomerEvent({
+      			eventName: sp.viewer.eventName.viewerWidgetShareButtonClicked,
+      	    linkHash: sp.viewer.linkHash,
+      	    sessionId: sessionid,
+      		});
+      	});
+      
+      var linkUrl = location.origin + '/share?f=' + sp.viewer.linkHash;
+      
+      $('body').append(
+          '<a class="a2a_dd" style="display: none;" href="https://www.addtoany.com/share">Share</a>'
+        + '<script>'
+        + 'var a2a_config = a2a_config || {};'
+        + 'a2a_config.onclick = 1;'
+        + 'a2a_config.prioritize = ["facebook", "linkedin", "email", "whatsapp"];'
+        + 'a2a_config.num_services = 4;'
+        + 'a2a_config.target = "#sp-widget11";'
+        + 'a2a_config.linkurl = "' + linkUrl + '";'
+        + 'a2a_config.templates = {'
+            + 'twitter:' + JSON.stringify(widget.description + ' ' + window.location.href) + ','
+            + 'email: {'
+              + 'subject:' + JSON.stringify(widget.title) + ','
+              + 'body:' + JSON.stringify('Follow this link: ' + window.location.href) + ','
+            + '},'
+            + 'whatsapp:' + JSON.stringify(widget.description + ' ' + window.location.href) + ','
+            + 'linkedin:' + JSON.stringify(widget.description + ' ' + window.location.href) + ','
+        + '};'
+        + 'sp.viewer.widgets.widget11.spWidget11Share = function(data) {'
+          + 'sp.viewer.widgets.widget11.sharedService = data.service;'
+          + '$(document).trigger("spWidget11ServiceShared", [data.service]);'
+        + '};'
+        + 'a2a_config.callbacks = a2a_config.callbacks || [];'
+        + 'a2a_config.callbacks.push({share: sp.viewer.widgets.widget11.spWidget11Share});'
+        + '</script>'
+      );
+      
+      $(document).on('spWidget11ServiceShared', function(event, sharedService) {
+      	sp.viewer.setCustomerEvent({
+      		eventName: sp.viewer.eventName.viewerWidgetShareServiceClicked,
+    	    linkHash: sp.viewer.linkHash,
+    	    sessionId: sessionid,
+    	    param_1_varchar: sharedService,
+      	})
+      });
+      
+      $.getScript('../../assets/viewer/js/plugins/addtoany/addtoany.js');
+    }
   });
 }
 

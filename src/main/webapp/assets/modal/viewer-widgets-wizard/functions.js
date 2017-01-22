@@ -422,6 +422,58 @@ sp.widgets = {
 			});
   	})(),
   },
+  widget11: {
+  	imageFileName: null,
+  	init: (function() {
+  		
+  		$('[name="spWidget11ButtonColorChooser"]').click(function() {
+				sp.widgets.widget11.colorPickerHandler();
+			});
+			
+			$(document).on('spWidgetsReady', function() {
+				sp.widgets.widget11.colorPickerHandler();
+			});
+			
+			$(document).on('change', '.sp-widget11__input-share-image', function() {
+        var $file = $(this);
+        var file = this.files[0];
+        var reader = new FileReader();
+
+        reader.addEventListener('load', function() {
+          $file.closest('.sp-widget-item').find('.sp-widget11__share-image')
+              .removeClass('fa fa-picture-o fa-4x')
+              .css({
+              	'background-image': 'url(' + reader.result + ')',
+              	height: '100px',
+              });
+          
+          $('[name="spWidget11ShareImageBase64"]').val(reader.result);
+        }, false);
+        
+        if (file) {
+        	sp.widgets.widget11.imageFileName = file.name;
+          reader.readAsDataURL(file);
+        }
+      });
+  	})(),
+  	
+  	colorPickerHandler: function() {			
+			if ($('.spWidget11IsDefaultButtonColorEnabled').is(':checked')) {
+				$('#sp-widget11__color-picker').spectrum('disable');
+			} else {
+				$('#sp-widget11__color-picker').spectrum('enable');
+			}
+		},
+		
+		setDefaultTitle: function(fileHash) {
+			if ($('[name="spWidget11ShareTitle"]').val() === '') {
+      	var fileName = $('.sp-file-mgmt-file-name[data-file-hash=' + fileHash + ']').text();
+      	fileName = fileName.substring(0, fileName.lastIndexOf("."));
+      	
+      	$('[name="spWidget11ShareTitle"]').val(fileName);
+      }
+		}
+  }
 };
 
 sp.viewerWidgetsModal = {
@@ -445,6 +497,8 @@ sp.viewerWidgetsModal = {
           sp.viewerWidgetsModal.setSaveButtons(fileHash);
         }
     );
+    
+    sp.widgets.widget11.setDefaultTitle(fileHash);
     
     // Show widgets when loaded.
     var intervalCount = 0;
@@ -520,6 +574,12 @@ sp.viewerWidgetsModal = {
         case 10:
           if (widget.data.items.length > 0) {
           	displayWidget10(widget.data);
+          }
+          break;
+          	
+        case 11:
+          if (widget.data.items.length > 0) {
+          	displayWidget11(widget.data);
           }
           break;
       }
@@ -767,6 +827,57 @@ sp.viewerWidgetsModal = {
     	$('[name="sp-widget10--is-enabled"]').prop('checked', widget.isEnabled);
     	$('[name="spWidget10FormTitle"]').val(widget.items[0].formTitle);
     }
+    
+    function displayWidget11(widget) {
+    	$('[name="sp-widget11--is-enabled"]').prop('checked', widget.isEnabled);
+    	$('[name="spWidget11ButtonText"]').val(widget.items[0].buttonText);
+    	
+    	if (typeof widget.items[0].isButtonColorCustom !== 'undefined') {
+    		if (widget.items[0].isButtonColorCustom) {
+    			$('.spWidget11IsDefaultButtonColorEnabled').prop('checked', false);
+    			$('.spWidget11IsCustomButtonColorEnabled').prop('checked', true);
+    		} else {
+    			$('.spWidget11IsDefaultButtonColorEnabled').prop('checked', true);
+    			$('.spWidget11IsCustomButtonColorEnabled').prop('checked', false);
+    		}
+    	}
+      
+      if (typeof widget.items[0].buttonColor !== 'undefined') {
+      	$('[name="spWidget11ButtonColor"]')
+      		.val(widget.items[0].buttonColor)
+      		.spectrum('set', widget.items[0].buttonColor);
+      }
+      
+      if (typeof widget.items[0].title !== 'undefined' && widget.items[0].title !== '') {
+      	$('[name="spWidget11ShareTitle"]').val(widget.items[0].title);
+      } else {
+      	var fileName = $('.sp-file-mgmt-file-name[data-file-hash=' + widget.fileHash + ']').text();
+      	fileName = fileName.substring(0, fileName.lastIndexOf("."));
+      	
+      	$('[name="spWidget11ShareTitle"]').val(fileName);
+      }
+      
+      if (typeof widget.items[0].description !== 'undefined') {
+      	$('[name="spWidget11ShareDescription"]').val(widget.items[0].description);
+      }
+      
+      if (typeof widget.items[0].imageUrl !== 'undefined') {
+      	$('.sp-widget11__share-image')
+      		.removeClass('fa fa-picture-o fa-4x')
+      		.css({
+          	'background-image': 'url(' + widget.items[0].imageUrl + ')',
+          	height: '100px',
+          });
+      	
+      	$('[name="spWidget11ShareImageUrl"]').val(widget.items[0].imageUrl);
+      }
+      
+      if (typeof widget.items[0].imageFileName !== 'undefined') {
+      	sp.widgets.widget11.imageFileName = widget.items[0].imageFileName;
+      }
+      
+      sp.widgets.widget11.colorPickerHandler();
+    }
   },
   
   /**
@@ -864,6 +975,8 @@ sp.viewerWidgetsModal = {
     }
     
     settings.push(sp.viewerWidgetsModal.saveWidget10(fileHash));
+    
+    settings.push(sp.viewerWidgetsModal.saveWidget11(fileHash));
     
     var data = {
         action: 'setWidgetsSettings',
@@ -1341,6 +1454,44 @@ sp.viewerWidgetsModal = {
   	widget10.data.items.push(item);
   	
   	return widget10;
+  },
+
+  saveWidget11: function(fileHash) {
+  	
+  	var widget11 = {
+        apiVersion: '1.0',
+        data: {
+          fileHash: fileHash,
+          widgetId: 11,
+          isEnabled: $('[name="sp-widget11--is-enabled"]').prop('checked'),
+          items: []
+        }
+    };
+  	
+  	var item = {};
+  	
+  	item.buttonText = $('[name="spWidget11ButtonText"]').val();
+  	item.buttonColor = $('[name="spWidget11ButtonColor"]').val();
+  	item.title = $('[name="spWidget11ShareTitle"]').val();
+  	item.description = $('[name="spWidget11ShareDescription"]').val();
+  	
+  	if ($('.spWidget11IsCustomButtonColorEnabled').is(':checked')) {
+  		item.isButtonColorCustom = true;
+  	} else {
+  		item.isButtonColorCustom = false;
+  	}
+  	
+  	if (typeof $('[name="spWidget11ShareImageBase64"]').val() !== 'undefined'
+  		&& '' !== $('[name="spWidget11ShareImageBase64"]').val()) {
+  		item.imageBase64 = $('[name="spWidget11ShareImageBase64"]').val();
+  		item.imageFileName = sp.widgets.widget11.imageFileName;
+  	} else {
+  		item.imageUrl = $('[name="spWidget11ShareImageUrl"]').val();
+  	}
+  	
+  	widget11.data.items.push(item);
+  	
+  	return widget11;
   },
   
   /**

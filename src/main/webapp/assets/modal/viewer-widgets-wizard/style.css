@@ -83,7 +83,7 @@
 }
 
 .sp-widgets-customization-window__tab {
-  padding: 10px 12px 10px 17px !important;
+  padding: 10px 8px 10px 15px !important;
 }
 
 .sp-widgets__required-setting {
@@ -220,4 +220,17 @@
 #sp-widget10__title .text-info {
   cursor: pointer;
   float: right;
+}
+
+/* Widget 11 */
+.sp-widget11__input-share-image {
+  border: none;
+  padding-left: 0;
+}
+
+.sp-widget11__share-image {
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  width: auto;
 }

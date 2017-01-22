@@ -21,6 +21,7 @@
                     <li><a class="sp-widgets-customization-window__tab" data-toggle="tab" href="#sp-tab-10"><i class="fa fa-shield"></i></a></li>
                     <li><a class="sp-widgets-customization-window__tab" data-toggle="tab" href="#sp-tab-1"><i class="fa fa-video-camera"></i></a></li>
                     <li><a class="sp-widgets-customization-window__tab" data-toggle="tab" href="#sp-tab-2"><i class="fa fa-calendar"></i></a></li>
+                    <li><a class="sp-widgets-customization-window__tab" data-toggle="tab" href="#sp-tab-11"><i class="fa fa-share-alt"></i></a></li>
                     <li><a class="sp-widgets-customization-window__tab" data-toggle="tab" href="#sp-tab-4"><i class="fa fa-thumbs-o-up"></i></a></li>
                     <li><a class="sp-widgets-customization-window__tab" data-toggle="tab" href="#sp-tab-5"><i class="fa fa-bookmark"></i></a></li>
                     <li><a class="sp-widgets-customization-window__tab" data-toggle="tab" href="#sp-tab-6"><i class="fa fa-user"></i></a></li>
@@ -652,6 +653,77 @@
                                       </div>
                                   </div>
                               </form>
+                           </div>
+                       </div>
+										</div>
+                            
+                    <div id="sp-tab-11" class="tab-pane">
+                        <div class="panel-body">
+                            <strong>Share Widget</strong>
+                            <div class="sp-customization-option__p checkbox">
+                                <label><input type="checkbox" name="sp-widget11--is-enabled">Is Enabled?</label>
+                            </div>
+                            <small>Use this widget to allow people to share your document.</small>
+                            <hr>							
+                            <div class="container-fluid">                   
+                              <div class="sp-widget-item">
+                                  <form class="form-horizontal">
+                                    <div class="form-group">
+                                        <label class="col-lg-4 control-label">Button Text</label>
+                                        <div class="col-lg-8">
+                                            <input class="form-control" value="Share" name="spWidget11ButtonText" placeholder="e.g. Share" maxlength="40">
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-group">
+					                              <label id="sp-widget11__advanced-button-color-container" class="col-lg-4 control-label">Widget Button Color</label>
+					                              <div class="col-lg-8">
+			                                		<label class="radio-inline">
+			                                			<input type="radio" class="spWidget11IsDefaultButtonColorEnabled" checked="checked" name="spWidget11ButtonColorChooser">
+			                                			My default brand color
+			                                		</label>
+			                                		<label class="radio-inline"><input type="radio" class="spWidget11IsCustomButtonColorEnabled" name="spWidget11ButtonColorChooser">
+			                                			<input id="sp-widget11__color-picker" name="spWidget11ButtonColor">
+			                                		</label>
+			                                  </div>
+						                       	</div>
+						                       	
+		                       					<hr>
+		                       					<strong>Share Options</strong>
+		                       					<br>
+		                       					<small>Specify what will be included in a post if someone shares your document. (Currently only available for
+		                       					Facebook sharing).</small>
+		                       					
+		                       					<div class="form-group">
+                                        <label class="col-lg-4 control-label">Title</label>
+                                        <div class="col-lg-8">
+                                            <input class="form-control" name="spWidget11ShareTitle">
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label class="col-lg-4 control-label">Description</label>
+                                        <div class="col-lg-8">
+                                            <input class="form-control" placeholder="Enter a short description of your document" name="spWidget11ShareDescription">
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label class="col-lg-4 control-label">Image</label>
+                                        <div class="col-lg-8">
+                                            <div class="fa fa-picture-o fa-4x sp-widget11__share-image"></div>
+                                        </div>
+                                        <input type="hidden" name="spWidget11ShareImageBase64">
+                                        <input type="hidden" name="spWidget11ShareImageUrl">
+                                    </div>
+                                        
+                                    <div class="form-group">
+                                        <div class="col-lg-offset-4 col-lg-8">
+                                            <input type="file" class="form-control sp-widget11__input-share-image">
+                                        </div>
+                                    </div>
+                                  </form>
+                              </div>
                             </div>
                         </div>
                     </div>

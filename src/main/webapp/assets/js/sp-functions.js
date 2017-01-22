@@ -543,6 +543,15 @@ sp = {
               showInput: true,
     				});
     				
+    				$('#sp-widget11__color-picker').spectrum({
+    					appendTo: '#sp-viewer-widgets-modal',
+              chooseText: 'Choose',
+              cancelText: 'Cancel',
+              preferredFormat: 'hex',
+              showAlpha: true,
+              showInput: true,
+    				});
+    				
     				loadModal();
     			});
         	
