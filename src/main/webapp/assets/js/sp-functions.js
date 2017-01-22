@@ -1033,8 +1033,30 @@ sp = {
     				}
     		);
         
+        // Number of unique views.
+        $.getJSON(
+            'ManagementServlet',
+            {
+              action: 'getWidgetUniqueViewsCount',
+              customerEmail: customerEmail,
+              fileHash: fileData[0],
+              salesmanEmail: sp.config.salesman.email
+            },
+            function(data) {
+              var viewsCountFromFileData = parseInt(fileData[3]);
+              var uniqueViewsCount = parseInt(data.uniqueViewsCount[0][0]);
+              var viewsCount = parseInt(data.uniqueViewsCount[0][1]);
+              
+              if (uniqueViewsCount > 0 && viewsCount === viewsCountFromFileData) {
+                $('#sp-widget-count-unique-views').text(uniqueViewsCount + ' (' + (uniqueViewsCount / viewsCount * 100).toFixed(0) + '%)');
+              } else {
+                $('#sp-widget-count-unique-views').text('N/A');
+              }
+            }
+        );
+        
       } else {
-        $('#sp-widget-video-youtube-metric-total-number-plays, #sp-widget-total-count-likes').text('N/A');
+        $('#sp-widget-video-youtube-metric-total-number-plays, #sp-widget-total-count-likes, #sp-widget-count-unique-views').text('N/A');
         $('#sp-widget-ask-question-metric').hide();
       }
     }

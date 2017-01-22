@@ -314,6 +314,36 @@ public class Analytics {
   
   
   /**
+   * Get unique views count per file.
+   */
+  public static final String sqlFileCountUniqueViews = 
+      "SELECT\n"
+    + "  COUNT(DISTINCT viewer_id),\n"
+    + "  COUNT(DISTINCT session_id)\n"
+    + "FROM customer_events\n"
+    + "INNER JOIN msg_info ON msg_info.id = customer_events.msg_id\n"
+    + "WHERE viewer_id IS NOT NULL\n"
+    + "AND msg_info.sales_man_email = ?\n"
+    + "AND msg_info.slides_id = ?\n"
+    + "AND msg_info.customer_email <> '" + ConfigProperties.getProperty("test_customer_email") + "'";
+  
+  
+  /**
+   * Get unique views count per customer.
+   */
+  public static final String sqlCustomerCountUniqueViews = 
+      "SELECT\n"
+    + "  COUNT(DISTINCT viewer_id),\n"
+    + "  COUNT(DISTINCT session_id)\n"
+    + "FROM customer_events\n"
+    + "INNER JOIN msg_info ON msg_info.id = customer_events.msg_id\n"
+    + "WHERE viewer_id IS NOT NULL\n"
+    + "AND msg_info.sales_man_email = ?\n"
+    + "AND msg_info.slides_id = ?\n"
+    + "AND msg_info.customer_email = ?";
+  
+  
+  /**
    * Get notifications for notifications toolbar.
    * 
    * Get max 50 notifications.

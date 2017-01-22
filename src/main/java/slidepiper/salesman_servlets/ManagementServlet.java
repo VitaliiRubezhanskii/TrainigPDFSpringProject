@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URLDecoder;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,13 +14,17 @@ import java.util.Set;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import com.slidepiper.model.component.JwtUtils;
 import com.slidepiper.model.component.UserUtils;
 import com.slidepiper.model.entity.User;
 import com.slidepiper.model.entity.User.ExtraData;
@@ -36,7 +41,7 @@ import slidepiper.email.EmailSender;
 
 @WebServlet("/ManagementServlet")
 public class ManagementServlet extends HttpServlet {
-  
+  private static final Logger log = LoggerFactory.getLogger(ManagementServlet.class);
   private static final long serialVersionUID = 1L;
   //private final String MAIL_HOST = "smtp.gmail.com";
    // private final String MAIL_FROM = "slidepiper";
@@ -295,6 +300,32 @@ public class ManagementServlet extends HttpServlet {
       	}
       	break;
       
+      case "getWidgetUniqueViewsCount":
+        try {
+          if (null == request.getParameter("salesmanEmail") || request.getParameter("salesmanEmail").equals("")) {
+            break;
+          } else {
+            parameterList.add(request.getParameter("salesmanEmail"));
+          }
+          
+          if (null == request.getParameter("fileHash") || request.getParameter("fileHash").equals("")) {
+            break; 
+          } else {
+            parameterList.add(request.getParameter("fileHash"));
+          } 
+          
+          if (null == request.getParameter("customerEmail") || request.getParameter("customerEmail").equals("")) {
+            sqlData = DbLayer.getEventData(parameterList, Analytics.sqlFileCountUniqueViews);
+          } else {
+            parameterList.add(request.getParameter("customerEmail"));
+            sqlData = DbLayer.getEventData(parameterList, Analytics.sqlCustomerCountUniqueViews);
+          }
+          
+          data.put("uniqueViewsCount", sqlData);
+        } catch (Exception e) {
+          e.printStackTrace();
+        }
+        break;
       
       case "getViewerWidgetMetrics":
       	try {
@@ -509,6 +540,23 @@ public class ManagementServlet extends HttpServlet {
          * @param param-x-varchar will hold different data depending on which event is being logged
          */
         case "setCustomerEvent":
+          response.setHeader("Access-Control-Allow-Origin", request.getHeader("origin"));
+          response.setHeader("Access-Control-Allow-Credentials", "true");
+          
+          String viewerId = null;
+          try {
+            Cookie cookie = Arrays.stream(request.getCookies())
+                                .filter(c -> c.getName().equals("sp.viewer"))
+                                .findFirst()
+                                .orElseThrow(null);
+
+            viewerId = JwtUtils.verify(cookie.getValue())
+                           .getClaim("viewerId").asString();
+          } catch(NullPointerException e) {
+            log.error("viewerId is null");
+          }
+          
+          eventDataMap.put("viewer_id", viewerId);
           eventDataMap.put("msg_id", URLDecoder.decode(data.getString("linkHash"), "UTF-8"));
           eventDataMap.put("session_id", URLDecoder.decode(data.getString("sessionId"), "UTF-8"));
           

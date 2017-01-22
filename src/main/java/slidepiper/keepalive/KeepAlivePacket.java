@@ -6,6 +6,7 @@ public class KeepAlivePacket {
 	// it's only an estimation because the keepalive packet
 	// comes only every 2-3 seconds, not all the time.
 		int timezoneOffsetMin;
+		private final String viewerId;
 		public int getTimezoneOffsetMin() {
 			return timezoneOffsetMin;
 		}
@@ -14,7 +15,7 @@ public class KeepAlivePacket {
 		}
 
 		public KeepAlivePacket(int timezoneOffsetMin, int estimatedTimeViewed,
-				int slideNumber, String msgId, String sessionId) {
+				int slideNumber, String msgId, String sessionId, String viewerId) {
 			super();
 			this.timezoneOffsetMin = timezoneOffsetMin;
 			this.estimatedTimeViewed = estimatedTimeViewed;
@@ -22,6 +23,7 @@ public class KeepAlivePacket {
 			this.msgId = msgId;
 			this.sessionId = sessionId;
 			this.noKeepAliveSeconds = 0;
+			this.viewerId = viewerId;
 		}
 
 		int estimatedTimeViewed;
@@ -100,7 +102,7 @@ public class KeepAlivePacket {
 		public void setNoKeepAliveSeconds(int noKeepAliveSeconds) {
 			this.noKeepAliveSeconds = noKeepAliveSeconds;
 		}
-		
-		
-		
+    public String getViewerId() {
+      return viewerId;
+    }
 }

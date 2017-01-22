@@ -1037,10 +1037,12 @@ $(function() {
     };
     
     $.ajax({
-      contentType: 'application/json',
       method: 'POST',
-      url: location.protocol + '//' + location.host + '/ManagementServlet',
-      data: JSON.stringify(data)
+      url: parent.ViewerConfiguration.API_URL + '/ManagementServlet',
+      data: JSON.stringify(data),
+      xhrFields: {
+        withCredentials: true
+      }
     });
   };
 });

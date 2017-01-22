@@ -2,10 +2,13 @@ package slidepiper.config;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Arrays;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -13,17 +16,23 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.json.JSONObject;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.slidepiper.model.component.JwtUtils;
+
 import slidepiper.db.DbLayer;
 
 @SuppressWarnings("serial")
 @WebServlet("/config-viewer")
 public class ConfigViewerServlt extends HttpServlet {
-
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
   
     response.setContentType("application/json; charset=UTF-8");
+    response.setHeader("Access-Control-Allow-Origin", request.getHeader("origin"));
+    response.setHeader("Access-Control-Allow-Credentials", "true");
+        
     PrintWriter out = response.getWriter();
     
     if (null != request.getParameter("linkHash")
@@ -32,6 +41,29 @@ public class ConfigViewerServlt extends HttpServlet {
       String fileLinkHash = request.getParameter("linkHash");
       
       try {
+        
+        // Begin setting viewerId.        
+        Cookie cookie = null;
+        try {
+          cookie = Arrays.stream(request.getCookies())
+                       .filter(c -> c.getName().equals("sp.viewer"))
+                       .findFirst()
+                       .orElseThrow(null);
+        } catch(NullPointerException e) {
+          ObjectMapper mapper = new ObjectMapper();
+          ObjectNode privateClaims = mapper.createObjectNode();
+          privateClaims.put("viewerId", UUID.randomUUID().toString());
+          String jwt = JwtUtils.create(privateClaims);
+            
+          cookie = new Cookie("sp.viewer", jwt);
+        } finally {
+          cookie.setMaxAge(63072000); // 2 years.
+          cookie.setHttpOnly(true);
+          cookie.setSecure(true);
+          response.addCookie(cookie);  
+        }        
+        // End setting viewerId. 
+        
         JSONObject config = new JSONObject();
         config.put("appUrl", ConfigProperties.getProperty("app_url"));
         

@@ -6,7 +6,7 @@
 
 
 function keepalive_event(estimatedTimeViewed_param, slideNum_param) {
-    urlval = "../../KeepAliveServlet";
+    urlval = ViewerConfiguration.API_URL + "/KeepAliveServlet";
     // if (document.location.hostname == "localhost")
     // {
     // urlval = "/SlidePiper/CustomerDataServlet";
@@ -25,6 +25,9 @@ function keepalive_event(estimatedTimeViewed_param, slideNum_param) {
         type : "POST",
         url : urlval,
         data : JSON.stringify(paramJSON),
+        xhrFields: {
+          withCredentials: true
+        },
         success : function(res) {
             // alert(res); // display response as alert.
         },
@@ -39,7 +42,7 @@ function keepalive_event(estimatedTimeViewed_param, slideNum_param) {
 }
 
 function send_event(ename, eparam1, eparam2, eparam3, eparam11) {
-    urlval = "../../CustomerDataServlet";
+    urlval = ViewerConfiguration.API_URL + "/CustomerDataServlet";
 
     $.ajax({
         type : "POST",
@@ -53,6 +56,9 @@ function send_event(ename, eparam1, eparam2, eparam3, eparam11) {
             param11: eparam11,
             sessionId : thisSessionId,
             "timezone_offset_min" : tz_offset_min
+        },
+        xhrFields: {
+          withCredentials: true
         },
         success : function(res) {
             // alert(res); // display response as alert.

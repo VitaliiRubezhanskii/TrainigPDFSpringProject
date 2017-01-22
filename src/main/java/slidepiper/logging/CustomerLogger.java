@@ -16,7 +16,7 @@ import slidepiper.email.EmailSender;
 
 public class CustomerLogger {
 	
-	public static void LogEvent(String id, String event_name, String param1, String param2, String param3, String sessionId, int timezone_offset_min, String param1Varchar, String param2Varchar, String param3Varchar, String param4Varchar, String param5Varchar, String param6Varchar, String param7Varchar, String param8Varchar, String param9Varchar, String param10Varchar, String param11Varchar)
+	public static void LogEvent(String id, String event_name, String param1, String param2, String param3, String sessionId, int timezone_offset_min, String param1Varchar, String param2Varchar, String param3Varchar, String param4Varchar, String param5Varchar, String param6Varchar, String param7Varchar, String param8Varchar, String param9Varchar, String param10Varchar, String param11Varchar, String viewerId)
 	{
 				//System.out.println("CustLog: id " +id + "event " + event_name +  " prm1 " + param1  + " prm2 " + param2 + " prm3 " + param3 + " timezone offs: " + timezone_offset_min);
 				Constants.updateConstants();
@@ -27,8 +27,8 @@ public class CustomerLogger {
 				DriverManager.registerDriver(new com.mysql.jdbc.Driver());
 				conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
 								
-							String sql = "INSERT INTO customer_events (msg_id, event_name, param1int, param2float, param3str, notes, session_id, done, param_1_varchar, param_2_varchar, param_3_varchar, param_4_varchar, param_5_varchar, param_6_varchar, param_7_varchar, param_8_varchar, param_9_varchar, param_10_varchar, param_11_varchar) values "
-									+ "		(?, ?, ?, ?, ?, '', ?, 0, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+							String sql = "INSERT INTO customer_events (msg_id, event_name, param1int, param2float, param3str, notes, session_id, done, param_1_varchar, param_2_varchar, param_3_varchar, param_4_varchar, param_5_varchar, param_6_varchar, param_7_varchar, param_8_varchar, param_9_varchar, param_10_varchar, param_11_varchar, viewer_id) values "
+									+ "		(?, ?, ?, ?, ?, '', ?, 0, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 				//			System.out.println("sql for cust logger is " + sql);
 							PreparedStatement statement = conn.prepareStatement(sql);
 							statement.setString(1, id);						
@@ -49,6 +49,7 @@ public class CustomerLogger {
 							statement.setString(15, param9Varchar);
 							statement.setString(16, param10Varchar);
 							statement.setString(17, param11Varchar);
+							statement.setString(18, viewerId);
 							
 							// sends the statement to the database server
 							int row = statement.executeUpdate();

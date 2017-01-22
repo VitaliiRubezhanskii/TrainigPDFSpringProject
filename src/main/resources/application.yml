@@ -25,3 +25,10 @@ amazon:
     sns-customer-message:
       accessKeyId: AKIAIEJ23APCCYRBVASA
       secretKey: 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
+
+jwt:
+  issuer: slidepiper
+  secret: "YYeEkSZYKjdo4C$BMH$HQQOan0t@JgDz"
+
+viewer:
+  apiUrl: http://127.0.0.2:8080

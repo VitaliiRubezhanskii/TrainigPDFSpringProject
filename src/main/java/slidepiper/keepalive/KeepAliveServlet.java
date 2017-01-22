@@ -2,32 +2,27 @@ package slidepiper.keepalive;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Timer;
+// For ConcurrentHashMap
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-
-
-
-
-
-
-
-
-
+import com.slidepiper.model.component.JwtUtils;
 
 import slidepiper.constants.Constants;
 import slidepiper.db.DbLayer;
-
-import java.util.Timer;
-// For ConcurrentHashMap
-import java.util.concurrent.*;
 
 /**
  * Servlet implementation class KeepAliveServlet
@@ -52,6 +47,7 @@ import java.util.concurrent.*;
  */
 @WebServlet("/KeepAliveServlet")
 public class KeepAliveServlet extends HttpServlet {
+  private static final Logger log = LoggerFactory.getLogger(KeepAliveServlet.class);
 	private static final long serialVersionUID = 1L;
        
 	// like hashmap but newer ver. Hashmap is legacy in java.
@@ -126,12 +122,26 @@ public void init(ServletConfig config) throws ServletException {
 							case "keepAlive":					
 					//				System.out.println("keepalive req sessid" + input.getString("sessionId"));
 																
+  							  String viewerId = null;
+  							  try {
+  							    Cookie cookie = Arrays.stream(request.getCookies())
+                                        .filter(c -> c.getName().equals("sp.viewer"))
+                                        .findFirst()
+                                        .orElseThrow(null);
+    
+                    viewerId = JwtUtils.verify(cookie.getValue())
+                                   .getClaim("viewerId").asString();
+  							  } catch(NullPointerException e) {
+  							    log.error("viewerId is null");
+  							  }
+                  
 									KeepAlivePacket p = new KeepAlivePacket(
 											input.getInt("timezone_offset_min"),
 											input.getInt("estimatedTimeViewed"), 
 											input.getInt("slideNum"),
 											input.getString("msgId"),
-											input.getString("sessionId"));										
+											input.getString("sessionId"),
+											viewerId);										
 						//			System.out.println("packet " + p.toString());
 									// reset old keepalive packet if any, put the new one.
 									
@@ -152,6 +162,8 @@ public void init(ServletConfig config) throws ServletException {
 					String res = output.toString();
 					response.setCharacterEncoding("utf-8");
 			    response.setContentType("application/json");
+			    response.setHeader("Access-Control-Allow-Origin", request.getHeader("origin"));
+			    response.setHeader("Access-Control-Allow-Credentials", "true");
 			    response.getWriter().write(res);
 			    response.getWriter().flush();
 		  } catch(Exception e){
