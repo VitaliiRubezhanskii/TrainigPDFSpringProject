@@ -4,10 +4,10 @@ spring:
       basePath: /v1
       
   datasource:
-    url: jdbc:mysql://localhost:3306/picascrafxzhbcmd
+    url: jdbc:mysql://localhost:3306/picascrafxzhbcmd?useSSL=false
     username: adminFh4jYg3
     password: yUGL^7GFBlo&97
-    
+
 amazon:
   s3:
     accessKeyId: AKIAJXQE3QZTYFLZRHNQ
@@ -32,3 +32,9 @@ jwt:
 
 viewer:
   apiUrl: http://127.0.0.2:8080
+  
+  share:
+    data:
+      defaultTitle: "SlidePiper Document"
+      defaultDescription: "Check out this interactive document!"
+      defaultImageUrl: https://s3-us-west-2.amazonaws.com/slidepiper-static/production/images/logo-slidepiper-wide-1200x630.png

@@ -2073,7 +2073,7 @@ if ('' != sp.viewer.linkHash) {
       		});
       	});
       
-        var linkUrl = location.origin + '/share?f=' + sp.viewer.linkHash;
+        var linkUrl = location.origin + '/view?f=' + sp.viewer.linkHash;
         
         $('body').append(
             '<a class="a2a_dd" style="display: none;" href="https://www.addtoany.com/share">Share</a>'

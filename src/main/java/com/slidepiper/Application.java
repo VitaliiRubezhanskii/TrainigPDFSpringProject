@@ -7,6 +7,7 @@ import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.web.filter.HiddenHttpMethodFilter;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
@@ -14,8 +15,6 @@ import slidepiper.config.ConfigPropertiesServlt;
 import slidepiper.config.ConfigViewerServlt;
 import slidepiper.customer_servlets.CustomerLoggingServlet;
 import slidepiper.customer_servlets.DownloadSlidesServlet;
-import slidepiper.customer_servlets.FileViewerServlet;
-import slidepiper.customer_servlets.DocumentShareServlet;
 import slidepiper.customer_servlets.GetMessageDataServlet;
 import slidepiper.integration.HubSpot;
 import slidepiper.keepalive.KeepAliveServlet;
@@ -40,6 +39,10 @@ public class Application extends SpringBootServletInitializer {
     SpringApplication.run(Application.class, args);
   }
   
+  @Bean
+  public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
+    return new PropertySourcesPlaceholderConfigurer();
+  }
   
   /* Servlet Configuration */
   
@@ -102,11 +105,6 @@ public class Application extends SpringBootServletInitializer {
   }
   
   @Bean
-  public ServletRegistrationBean SRBFileViewerServlet() {
-    return new ServletRegistrationBean(new FileViewerServlet(), "/view");
-  }
-  
-  @Bean
   public ServletRegistrationBean SRBHubSpot() {
     return new ServletRegistrationBean(new HubSpot(), "/integration/hubspot");
   }
@@ -139,10 +137,5 @@ public class Application extends SpringBootServletInitializer {
   @Bean
   public ServletRegistrationBean SRBUploadFile() {
     return new ServletRegistrationBean(new UploadFile(), "/upload-file");
-  }
-  
-  @Bean
-  public ServletRegistrationBean SRBGetDocumentSharingProperties() {
-    return new ServletRegistrationBean(new DocumentShareServlet(), "/share");
   }
 }

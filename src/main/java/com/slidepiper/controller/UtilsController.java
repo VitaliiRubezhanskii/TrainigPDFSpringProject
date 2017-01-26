@@ -1,4 +1,4 @@
-package com.slidepiper;
+package com.slidepiper.controller;
 
 import javax.validation.Valid;
 
@@ -14,13 +14,13 @@ import com.slidepiper.model.resource.CustomerMessage;
 import com.slidepiper.model.service.CustomerMessageService;
 
 @RestController
-public class Controller {
+public class UtilsController {
   
   private final CustomerMessageService customerMessageService;
   private final ViewerConfiguration viewerConfiguration;
   
   @Autowired
-  public Controller(CustomerMessageService customerMessageService,
+  public UtilsController(CustomerMessageService customerMessageService,
       ViewerConfiguration viewerConfiguration) {
     
     this.customerMessageService = customerMessageService;

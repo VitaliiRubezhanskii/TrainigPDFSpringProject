@@ -17,7 +17,7 @@ public class Constants {
 				  "jdbc:mysql://" + MYSQL_DATABASE_HOST + ":" + 
 		  MYSQL_DATABASE_PORT + "/" + 
 						  MYSQL_DATABASE_NAME
-						  + "?user= " + MYSQL_USERNAME + "&password" + MYSQL_PASSWORD + "&useUnicode=true&characterEncoding=UTF-8";
+						  + "?user= " + MYSQL_USERNAME + "&password" + MYSQL_PASSWORD + "&useUnicode=true&characterEncoding=UTF-8&useSSL=false";
 		  
 		  public static void updateConstants()
 		  {	
@@ -42,7 +42,7 @@ public class Constants {
      					  dbPass = ConfigProperties.getProperty("mysql_password");
      					  String dbDatabase = ConfigProperties.getProperty("mysql_database");
 						 
-     					  dbURL = "jdbc:mysql://" + dbHost + ":" + dbPort + "/" + dbDatabase;
+     					  dbURL = "jdbc:mysql://" + dbHost + ":" + dbPort + "/" + dbDatabase + "?useSSL=false";
 					  }
 					 else // using openshift:
 					 {

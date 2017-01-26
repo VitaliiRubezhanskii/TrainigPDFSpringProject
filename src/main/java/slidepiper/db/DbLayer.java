@@ -56,7 +56,7 @@ public class DbLayer {
 	 	if (initialized==false)
 	  	{
 					try {
-						DriverManager.registerDriver(new com.mysql.jdbc.Driver());
+						DriverManager.registerDriver(new com.mysql.cj.jdbc.Driver());
 					} catch (SQLException e) {
 						e.printStackTrace();
 					}
@@ -123,7 +123,7 @@ public class DbLayer {
 		
 		Constants.updateConstants();
     try {
-      Class.forName("com.mysql.jdbc.Driver");
+      Class.forName("com.mysql.cj.jdbc.Driver");
     } catch (ClassNotFoundException e) {
       e.printStackTrace();
     }
@@ -254,7 +254,7 @@ public class DbLayer {
 			Constants.updateConstants();
 			
 			try {
-	          Class.forName("com.mysql.jdbc.Driver");
+	          Class.forName("com.mysql.cj.jdbc.Driver");
 	        } catch (ClassNotFoundException e) {
 	          e.printStackTrace();
 	        }
@@ -727,7 +727,7 @@ public class DbLayer {
 		
     Constants.updateConstants();
     try {
-      Class.forName("com.mysql.jdbc.Driver");
+      Class.forName("com.mysql.cj.jdbc.Driver");
     } catch (ClassNotFoundException e) {
       e.printStackTrace();
     }
@@ -1378,7 +1378,7 @@ public class DbLayer {
 		  
 		Constants.updateConstants();
 		try {
-		  Class.forName("com.mysql.jdbc.Driver");
+		  Class.forName("com.mysql.cj.jdbc.Driver");
 		} catch (ClassNotFoundException e) {
 		  e.printStackTrace();
 		}
@@ -1437,7 +1437,7 @@ public class DbLayer {
 	       
 	       Constants.updateConstants();
 	       try {
-	         Class.forName("com.mysql.jdbc.Driver");
+	         Class.forName("com.mysql.cj.jdbc.Driver");
 	       } catch (ClassNotFoundException e) {
 	         e.printStackTrace();
 	       }
@@ -1524,7 +1524,7 @@ public class DbLayer {
         
         Constants.updateConstants();
         try {
-          Class.forName("com.mysql.jdbc.Driver");
+          Class.forName("com.mysql.cj.jdbc.Driver");
         } catch (ClassNotFoundException e) {
           e.printStackTrace();
         }
@@ -1588,7 +1588,7 @@ public class DbLayer {
         
         Constants.updateConstants();
         try {
-          Class.forName("com.mysql.jdbc.Driver");
+          Class.forName("com.mysql.cj.jdbc.Driver");
         } catch (ClassNotFoundException e) {
           e.printStackTrace();
         }
@@ -1680,7 +1680,7 @@ public class DbLayer {
         
         Constants.updateConstants();
         try {
-          Class.forName("com.mysql.jdbc.Driver");
+          Class.forName("com.mysql.cj.jdbc.Driver");
         } catch (ClassNotFoundException e) {
           e.printStackTrace();
         }
@@ -1717,7 +1717,7 @@ public class DbLayer {
     		
         Constants.updateConstants();
         try {
-          Class.forName("com.mysql.jdbc.Driver");
+          Class.forName("com.mysql.cj.jdbc.Driver");
         } catch (ClassNotFoundException e) {
           e.printStackTrace();
         }
@@ -1762,7 +1762,7 @@ public class DbLayer {
         
         Constants.updateConstants();
         try {
-          Class.forName("com.mysql.jdbc.Driver");
+          Class.forName("com.mysql.cj.jdbc.Driver");
         } catch (ClassNotFoundException e) {
           e.printStackTrace();
         }
@@ -1801,7 +1801,7 @@ public class DbLayer {
         Connection conn = null;
         Constants.updateConstants();
         try {
-          Class.forName("com.mysql.jdbc.Driver");
+          Class.forName("com.mysql.cj.jdbc.Driver");
         } catch (ClassNotFoundException e) {
           e.printStackTrace();
         }
@@ -1850,7 +1850,7 @@ public class DbLayer {
           Constants.updateConstants();
           
           try {
-            Class.forName("com.mysql.jdbc.Driver");
+            Class.forName("com.mysql.cj.jdbc.Driver");
           } catch (ClassNotFoundException e) {
             e.printStackTrace();
           }
@@ -1898,7 +1898,7 @@ public class DbLayer {
       public static String getFileLinkFromFileLinkHash(String fileLinkHash) {
     	  Constants.updateConstants();
           try {
-            Class.forName("com.mysql.jdbc.Driver");
+            Class.forName("com.mysql.cj.jdbc.Driver");
           } catch (ClassNotFoundException e) {
             e.printStackTrace();
           }
@@ -1949,7 +1949,7 @@ public class DbLayer {
         
         Constants.updateConstants();
         try {
-          Class.forName("com.mysql.jdbc.Driver");
+          Class.forName("com.mysql.cj.jdbc.Driver");
         } catch (ClassNotFoundException e) {
           e.printStackTrace();
         }
@@ -2007,7 +2007,7 @@ public class DbLayer {
         
     Constants.updateConstants();
       try {
-        Class.forName("com.mysql.jdbc.Driver");
+        Class.forName("com.mysql.cj.jdbc.Driver");
       } catch (ClassNotFoundException e) {
         e.printStackTrace();
       }
@@ -2058,7 +2058,7 @@ public class DbLayer {
 			
     		Constants.updateConstants();
     		try {
-    		  Class.forName("com.mysql.jdbc.Driver");
+    		  Class.forName("com.mysql.cj.jdbc.Driver");
     		} catch (ClassNotFoundException e) {
     		  e.printStackTrace();
     		}
@@ -2178,7 +2178,7 @@ public class DbLayer {
   		  
   	    Constants.updateConstants();
   	    try {
-  	      Class.forName("com.mysql.jdbc.Driver");
+  	      Class.forName("com.mysql.cj.jdbc.Driver");
   	    } catch (ClassNotFoundException e) {
   	      e.printStackTrace();
   	    }
@@ -2317,7 +2317,7 @@ public class DbLayer {
 		
 		Constants.updateConstants();
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
+			Class.forName("com.mysql.cj.jdbc.Driver");
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
@@ -2391,7 +2391,7 @@ public class DbLayer {
   		
       Constants.updateConstants();
       try {
-        Class.forName("com.mysql.jdbc.Driver");
+        Class.forName("com.mysql.cj.jdbc.Driver");
       } catch (ClassNotFoundException e) {
         e.printStackTrace();
       }
@@ -2437,7 +2437,7 @@ public class DbLayer {
 	   		Connection conn = null;
 	      Constants.updateConstants();
 	      try {
-	        Class.forName("com.mysql.jdbc.Driver");
+	        Class.forName("com.mysql.cj.jdbc.Driver");
 	      } catch (ClassNotFoundException e) {
 	        e.printStackTrace();
 	      }
@@ -2487,7 +2487,7 @@ public class DbLayer {
   	   	Connection conn = null;
         Constants.updateConstants();
         try {
-          Class.forName("com.mysql.jdbc.Driver");
+          Class.forName("com.mysql.cj.jdbc.Driver");
         } catch (ClassNotFoundException e) {
           e.printStackTrace();
         }
@@ -2533,7 +2533,7 @@ public class DbLayer {
 	   	  Connection conn = null;
 	   	  Constants.updateConstants();
 	   	  try {
-	   	    Class.forName("com.mysql.jdbc.Driver");
+	   	    Class.forName("com.mysql.cj.jdbc.Driver");
 	   	  } catch (ClassNotFoundException e) {
 	   	    e.printStackTrace();
 	   	  }
@@ -2580,7 +2580,7 @@ public class DbLayer {
         
       	Constants.updateConstants();
         try {
-          Class.forName("com.mysql.jdbc.Driver");
+          Class.forName("com.mysql.cj.jdbc.Driver");
         } catch (ClassNotFoundException e) {
           e.printStackTrace();
         }
@@ -2630,7 +2630,7 @@ public class DbLayer {
         
         Constants.updateConstants();
         try {
-          Class.forName("com.mysql.jdbc.Driver");
+          Class.forName("com.mysql.cj.jdbc.Driver");
         } catch (ClassNotFoundException e) {
           e.printStackTrace();
         }
@@ -2675,7 +2675,7 @@ public class DbLayer {
         
     	  Constants.updateConstants();
         try {
-          Class.forName("com.mysql.jdbc.Driver");
+          Class.forName("com.mysql.cj.jdbc.Driver");
         } catch (ClassNotFoundException e) {
           e.printStackTrace();
         }
@@ -2966,7 +2966,7 @@ public class DbLayer {
         Constants.updateConstants();
 		
 		try {
-          Class.forName("com.mysql.jdbc.Driver");
+          Class.forName("com.mysql.cj.jdbc.Driver");
         } catch (ClassNotFoundException e) {
           e.printStackTrace();
         }
@@ -3080,7 +3080,7 @@ public class DbLayer {
         
         Constants.updateConstants();
         try {
-          Class.forName("com.mysql.jdbc.Driver");
+          Class.forName("com.mysql.cj.jdbc.Driver");
         } catch (ClassNotFoundException e) {
           e.printStackTrace();
         }
@@ -3123,7 +3123,7 @@ public class DbLayer {
   		  int statusCode = 0;	
     	  
   		  try {
-            Class.forName("com.mysql.jdbc.Driver");
+            Class.forName("com.mysql.cj.jdbc.Driver");
           } catch (ClassNotFoundException e) {
             e.printStackTrace();
           }
@@ -3156,7 +3156,7 @@ public class DbLayer {
     	  Constants.updateConstants();
   			
   		  try {
-            Class.forName("com.mysql.jdbc.Driver");
+            Class.forName("com.mysql.cj.jdbc.Driver");
           } catch (ClassNotFoundException e) {
             e.printStackTrace();
           }
@@ -3214,7 +3214,7 @@ public class DbLayer {
   		  ArrayList<Object> resultList = new ArrayList<Object>();
     	  
   		  try {
-            Class.forName("com.mysql.jdbc.Driver");
+            Class.forName("com.mysql.cj.jdbc.Driver");
           } catch (ClassNotFoundException e) {
             e.printStackTrace();
           }
@@ -3276,7 +3276,7 @@ public class DbLayer {
         
         try {
         try {
-      DriverManager.registerDriver(new com.mysql.jdbc.Driver());
+      DriverManager.registerDriver(new com.mysql.cj.jdbc.Driver());
       } catch (SQLException e) {
       e.printStackTrace();
       } 
@@ -3314,7 +3314,7 @@ public class DbLayer {
         
         Constants.updateConstants();
         try {
-          Class.forName("com.mysql.jdbc.Driver");
+          Class.forName("com.mysql.cj.jdbc.Driver");
         } catch (ClassNotFoundException e) {
           e.printStackTrace();
         }
@@ -3395,7 +3395,7 @@ public class DbLayer {
     	
         Constants.updateConstants();
         try {
-          Class.forName("com.mysql.jdbc.Driver");
+          Class.forName("com.mysql.cj.jdbc.Driver");
         } catch (ClassNotFoundException e) {
           e.printStackTrace();
         }

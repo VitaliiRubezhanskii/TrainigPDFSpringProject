@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <!--
 Copyright 2012 Mozilla Foundation
 
@@ -42,6 +42,17 @@ See https://github.com/adobe-type-tools/cmap-resources
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <meta name="google" content="notranslate">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <!-- Facebook Open Graph tags -->
+    <meta property="fb:app_id" content="1204067286354568">
+    <meta property="og:type" content="article">
+    {{#shareData}}
+    <meta property="og:url" content="{{url}}?f={{channelName}}">
+    <meta property="og:title" content="{{title}}">
+    <meta property="og:description" content="{{description}}">
+    <meta property="og:image" content="{{imageUrl}}">
+    {{/shareData}}
+    <!-- End Facebook Open Graph tags -->
 
     <link rel="stylesheet" href="viewer.css"/>
 

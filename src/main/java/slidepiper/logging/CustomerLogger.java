@@ -24,7 +24,7 @@ public class CustomerLogger {
 				
 				try {
 				// connects to the database
-				DriverManager.registerDriver(new com.mysql.jdbc.Driver());
+				DriverManager.registerDriver(new com.mysql.cj.jdbc.Driver());
 				conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
 								
 							String sql = "INSERT INTO customer_events (msg_id, event_name, param1int, param2float, param3str, notes, session_id, done, param_1_varchar, param_2_varchar, param_3_varchar, param_4_varchar, param_5_varchar, param_6_varchar, param_7_varchar, param_8_varchar, param_9_varchar, param_10_varchar, param_11_varchar, viewer_id) values "

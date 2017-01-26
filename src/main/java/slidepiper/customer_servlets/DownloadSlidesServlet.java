@@ -74,7 +74,7 @@ public class DownloadSlidesServlet extends HttpServlet {
         try {
         		Constants.updateConstants();
             // connects to the database
-            DriverManager.registerDriver(new com.mysql.jdbc.Driver());
+            DriverManager.registerDriver(new com.mysql.cj.jdbc.Driver());
             conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
  
             // queries the database
