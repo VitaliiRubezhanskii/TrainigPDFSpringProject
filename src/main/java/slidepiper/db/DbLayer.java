@@ -2444,8 +2444,7 @@ public class DbLayer {
 	 		
 	      String sql = 
 	      		"SELECT\n"
-	    		  + "  setting AS widget_setting,\n"
-	    		  + "  FK_widget_id AS widget_id\n"
+	    		  + "  setting AS widget_setting\n"
 	    		  + "FROM widget\n"
 	    		  + "WHERE FK_file_id_ai = ?";
 	 		
@@ -2481,7 +2480,7 @@ public class DbLayer {
 	   		return widgetsSettings;
 	   	}
 	   	
-	   	public static JSONObject getWidgetsSettingsByWidgetId(int fileId, int widgetId) {
+	   	public static JSONObject getWidgetsSettingsByWidgetType(int fileId, String type) {
 	   	  JSONObject widget = new JSONObject();
 	   	  
   	   	Connection conn = null;
@@ -2495,16 +2494,16 @@ public class DbLayer {
         String sql = 
             "SELECT\n"
             + "  setting AS widget_setting,\n"
-            + "  FK_widget_id AS widget_id\n"
+            + "  type\n"
             + "FROM widget\n"
             + "WHERE FK_file_id_ai = ?\n"
-            + "AND FK_widget_id = ?";
+            + "AND type = ?";
        
         try {
           conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
           PreparedStatement ps = conn.prepareStatement(sql);
           ps.setInt(1, fileId);
-          ps.setInt(2, widgetId);
+          ps.setString(2, type);
           ResultSet rs = ps.executeQuery();
           
           if (rs.next()) {
@@ -3401,20 +3400,20 @@ public class DbLayer {
         }
         Connection conn = null;
         
-        String sql = "INSERT INTO widget (FK_file_id_ai, FK_widget_id, setting) VALUES (?, ?, ?)\n"
+        String sql = "INSERT INTO widget (FK_file_id_ai, type, setting) VALUES (?, ?, ?)\n"
 		        		   + "ON DUPLICATE KEY UPDATE\n"
 		        		   + "setting = VALUES(setting)";
         
         JSONObject data = widgetSetting.getJSONObject("data");
         int fileId = DbLayer.getFileIdFromFileHash(data.getString("fileHash"));
-        int widgetId = data.getInt("widgetId");
+        String type = String.valueOf(data.getInt("widgetId"));
         
         try {
           conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);	
           PreparedStatement ps = conn.prepareStatement(sql);
           
           ps.setInt(1, fileId);
-          ps.setInt(2, widgetId);
+          ps.setString(2, type);
           ps.setString(3, widgetSetting.toString());
           ps.executeUpdate();
           

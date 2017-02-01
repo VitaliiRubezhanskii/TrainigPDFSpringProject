@@ -52,8 +52,8 @@ public class DocumentShareServlet extends HttpServlet {
       && ! request.getParameter("f").equals(""))) {
       String documentLinkHash = request.getParameter("f");
       int fileId = DbLayer.getFileIdFromFileLinkHash(documentLinkHash);
-      int widgetId = 11;
-      JSONObject widgetSettings = DbLayer.getWidgetsSettingsByWidgetId(fileId, widgetId);
+      String type = "11";
+      JSONObject widgetSettings = DbLayer.getWidgetsSettingsByWidgetType(fileId, type);
       String widgetDataStr = widgetSettings.getString("widgetData");
       
       JSONObject object = (JSONObject) new JSONTokener(widgetDataStr).nextValue();
