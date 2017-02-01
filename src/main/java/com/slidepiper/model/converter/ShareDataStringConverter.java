@@ -9,7 +9,7 @@ import javax.persistence.Converter;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.slidepiper.model.component.resource.ShareData;
+import com.slidepiper.model.entity.widget.ShareData;
 
 @Converter
 public class ShareDataStringConverter implements AttributeConverter<ShareData, String> {

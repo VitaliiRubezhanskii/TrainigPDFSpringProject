@@ -1,4 +1,4 @@
-package com.slidepiper.model.component.resource;
+package com.slidepiper.model.entity.widget;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.annotation.Transient;

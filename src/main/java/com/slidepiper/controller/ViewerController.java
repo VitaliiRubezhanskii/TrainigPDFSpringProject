@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.slidepiper.Routes;
-import com.slidepiper.model.component.resource.ShareData;
+import com.slidepiper.model.entity.widget.ShareData;
 import com.slidepiper.model.service.ShareDataService;
 import com.slidepiper.model.service.ViewerService;
 

@@ -5,7 +5,6 @@ import javax.persistence.Convert;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
-import com.slidepiper.model.component.resource.ShareData;
 import com.slidepiper.model.converter.ShareDataStringConverter;
 
 import lombok.Getter;
