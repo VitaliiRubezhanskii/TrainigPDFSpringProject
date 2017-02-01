@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Pensions Form</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="../../../../../font-awesome/css/font-awesome.min.css">
+  
+  <style>
+    body {
+      direction: ltr;
+    }
+    
+    canvas {
+      border-radius: 3px;
+      border: 1px solid #b7b7b7;
+    }
+    
+    h2 {
+      margin-bottom: 30px;
+    }
+    
+    section:not(#section-1) {
+      display: none;
+    }
+    
+    .container {
+      margin-top: 10px;
+    }
+    
+    .pagination-container {
+      text-align: center;
+    }
+    
+    .pagination {
+      padding: 0;
+    }
+    
+    .panel {
+      padding: 20px 20px 10px;
+      min-height: 260px;
+    }
+    
+    .progress-bar {
+      float: left;
+      width: 25%;
+    }
+    
+    .sp-form__complete-icon {
+		  color: #a5dc86;
+		}
+    
+    .sp-phone-number-container {
+    	position: relative;
+    }
+    
+    .sp-english-form__invalid {
+    	color: red;
+    }
+    
+    .sp--text-align-center {
+    	text-align: center;
+    }
+    
+    [name="investmentAmount"]:focus {
+    	box-shadow: none;
+    }
+    
+    [name="phoneNumber"] {
+    	display: inline-block;
+    	margin-left: -4px;
+    	width: 80%;
+    }
+    
+    [name="countryCode"] {
+    	display: inline-block;
+    	width: 20%;
+    	vertical-align: bottom;
+    }
+    
+    #sp-is-confirm-container {
+      margin-top: 10px;
+      font-size: 1.2em;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <label>Progress</label>
+  <div class="progress">
+    <div class="progress-bar" role="progressbar"></div>
+  </div>
+    
+  <section id="section-1">
+	    <div class="panel panel-default">
+	      <form id="form-1">
+		      <div class="form-group">
+		        <label for="first-name">First Name:</label>
+		        <input type="text" class="form-control" name="firstName" placeholder="First Name">
+		      </div>
+		      
+		      <div class="form-group">
+		        <label for="last-name">Last Name:</label>
+		        <input type="text" class="form-control" name="lastName" placeholder="Last Name">
+		      </div>
+		      
+		      <div class="form-group">
+		        <label for="phone-number">Phone Number:</label>
+		        <div style="width: 100%;">
+			        <select class="form-control" name="countryCode" id="">
+				      	<option data-countryCode="GB" data-value="44" Selected>UK (+44)</option>
+				      	<option data-countryCode="US" data-value="1">USA (+1)</option>
+				      	<option data-countryCode="IL" data-value="972">Israel (+972)</option>
+							</select>
+				      <input type="number" class="form-control" name="phoneNumber" placeholder="Phone Number">
+			      </div>
+		      </div>
+		      
+		      <div class="form-group">
+		        <label for="emailAddress">Email Address:</label>
+		        <input type="email" class="form-control" name="emailAddress" placeholder="Email Address">
+		      </div>
+	      </form>
+	    </div>
+  </section>
+  
+  <section id="section-2">
+    <div class="panel panel-default">
+    	<form id="form-2">
+	      <div class="form-group">
+	        <label for="sel1">Investment Plan:</label>
+	        <select class="form-control" id="hag-investment-plan">
+	          <option value="0" selected disabled>Select one</option>
+	          <option value="1">401k</option>
+	          <option value="2">403</option>
+	          <option value="3">Traditional IRA</option>
+	          <option value="4">Rollover IRA</option>
+	          <option value="5">Roth IRA</option>
+	        </select>
+	      </div>
+	      
+	      <div class="form-group">
+	        <label for="investmentAmount">Minimum amount willing to invest:</label>
+	        <input type="range" step="1000" min="5000" max="100000" value="5000" class="form-control" name="investmentAmount">
+	        <p>Value: $5000</p>
+	      </div>
+      </form>
+    </div>
+  </section>
+  
+  <section id="section-3">
+    <div class="panel panel-default">
+    	<form id="form-3">
+	    	<div class="form-group">
+	        <label for="city">City of Residence:</label>
+	        <input type="text" class="form-control" name="city" placeholder="City of Residence">
+	      </div>
+	      
+	      <div class="form-group">
+	        <label for="age">Age:</label>
+	        <input type="number" class="form-control" name="age" placeholder="Age">
+	      </div>
+	      
+	      <div class="form-group">
+	        <label for="passport-number">Passport Number:</label>
+	        <input type="text" class="form-control" name="passport-number" placeholder="Passport number">
+	      </div>
+      </form>
+    </div>
+  </section>
+  
+  <section id="section-4">
+    <div class="panel panel-default">
+    	<form id="form-4">
+	      <div class="form-group">
+	      <label for="email">Declaration:</label><br>
+	        <span>1. If I am accepted by the company I undertake to inform you about any changes in these details I have provided within 30 days of their change.</span><br>
+	        <span>2. I also know that in case of providing information that is false, incomplete or inaccurate that may affect my rights as a part of the Fund. Furthermore, the management company may deny and / or reduce payments and / or any rights, </span><strong> including rights with respect to insurance coverage</strong><br>
+	        <span>3. I am aware that obtaining benefit contributions by the Fund would not in itself for contractors insured in the fund agreement.</span><br>
+	        <div id="sp-is-confirm-container">
+	          <input type="checkbox" name="isConfirm"> I, the undersigned, certify that all the information I submitted are complete, correct and accurate.
+	        </div> 
+	      </div>
+	      
+	      <div class="form-group">
+	        <label>Signature:</label><br>
+	        <canvas></canvas><br>
+	        <button id="hag-signature--clear" type="button" class="btn btn-default">Clear</button>
+	      </div>
+	      
+	      <div class="form-group">
+	        <label for="email">Call for assistance: 03-6000100</label>
+	      </div>
+      </form>
+    </div>
+  </section>
+  
+  <section id="section-5">
+    <div class="panel panel-default">
+      <div class="form-group sp--text-align-center">
+            <h4>Congratulations!</h4>
+            <h5>Your information has been submitted to us and we will get back to you shortly</h5>
+            <div class="fa-stack fa-2x">
+                <i class="fa fa-circle-thin fa-stack-2x sp-form__complete-icon"></i>
+                <i class="fa fa-check fa-stack-1x sp-form__complete-icon"></i>
+            </div>
+            <h6>
+              You may close the window now
+            </h6>
+        </div>
+    </div>
+  </section>
+  
+  <div class="pagination-container">
+    <ul class="pagination">
+      <li class="previous" id="pagination-previous"><a href="#">Previous</a></li>
+      <li class="active" id="pagination-1"><a href="#">1</a></li>
+      <li id="pagination-2"><a href="#">2</a></li>
+      <li id="pagination-3"><a href="#">3</a></li>
+      <li id="pagination-4"><a href="#">4</a></li>
+      <li class="next" id="pagination-next"><a href="#">Next</a></li>
+    </ul>
+  </div>
+</div>
+</body>
+<script src="../../hag/js/signature_pad.min.js"></script>
+<script src="js/jquery.validate.min.js"></script>
+<script src="js/functions.js"></script>
+<script src="js/validation.js"></script>
+</html>
