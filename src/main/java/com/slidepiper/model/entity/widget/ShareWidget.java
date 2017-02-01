@@ -14,7 +14,7 @@ import lombok.Getter;
 @DiscriminatorValue("11")
 public class ShareWidget extends Widget {
   
-  @Column(name = "setting")
+  @Column(name = "data")
   @Getter
   @Convert(converter = ShareDataStringConverter.class)
   private ShareData data;

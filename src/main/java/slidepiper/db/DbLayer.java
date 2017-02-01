@@ -2444,7 +2444,7 @@ public class DbLayer {
 	 		
 	      String sql = 
 	      		"SELECT\n"
-	    		  + "  setting AS widget_setting\n"
+	    		  + "  data\n"
 	    		  + "FROM widget\n"
 	    		  + "WHERE FK_file_id_ai = ?";
 	 		
@@ -2459,7 +2459,7 @@ public class DbLayer {
 			  
 				  while (rs.next()) {
 						JSONObject widget = new JSONObject();
-						widget.put("widgetData", rs.getString("widget_setting"));
+						widget.put("widgetData", rs.getString("data"));
 						widgetsSettings.put(widget);
 				  }
 				  
@@ -2493,7 +2493,7 @@ public class DbLayer {
        
         String sql = 
             "SELECT\n"
-            + "  setting AS widget_setting,\n"
+            + "  data,\n"
             + "  type\n"
             + "FROM widget\n"
             + "WHERE FK_file_id_ai = ?\n"
@@ -2507,7 +2507,7 @@ public class DbLayer {
           ResultSet rs = ps.executeQuery();
           
           if (rs.next()) {
-            widget.put("widgetData", rs.getString("widget_setting"));
+            widget.put("widgetData", rs.getString("data"));
           }
           
         } catch (SQLException e) {
@@ -3400,9 +3400,9 @@ public class DbLayer {
         }
         Connection conn = null;
         
-        String sql = "INSERT INTO widget (FK_file_id_ai, type, setting) VALUES (?, ?, ?)\n"
+        String sql = "INSERT INTO widget (FK_file_id_ai, type, data) VALUES (?, ?, ?)\n"
 		        		   + "ON DUPLICATE KEY UPDATE\n"
-		        		   + "setting = VALUES(setting)";
+		        		   + "data = VALUES(data)";
         
         JSONObject data = widgetSetting.getJSONObject("data");
         int fileId = DbLayer.getFileIdFromFileHash(data.getString("fileHash"));
