@@ -8,10 +8,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
-import javax.persistence.Table;
 
 @Entity
-@Table(name = "widget_setting")
 @Inheritance
 @DiscriminatorColumn(name = "FK_widget_id", discriminatorType = DiscriminatorType.INTEGER)
 public abstract class Widget {

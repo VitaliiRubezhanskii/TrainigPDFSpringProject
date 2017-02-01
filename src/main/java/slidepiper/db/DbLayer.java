@@ -2446,7 +2446,7 @@ public class DbLayer {
 	      		"SELECT\n"
 	    		  + "  setting AS widget_setting,\n"
 	    		  + "  FK_widget_id AS widget_id\n"
-	    		  + "FROM widget_setting\n"
+	    		  + "FROM widget\n"
 	    		  + "WHERE FK_file_id_ai = ?";
 	 		
 	   		JSONArray widgetsSettings = new JSONArray();
@@ -2496,7 +2496,7 @@ public class DbLayer {
             "SELECT\n"
             + "  setting AS widget_setting,\n"
             + "  FK_widget_id AS widget_id\n"
-            + "FROM widget_setting\n"
+            + "FROM widget\n"
             + "WHERE FK_file_id_ai = ?\n"
             + "AND FK_widget_id = ?";
        
@@ -3401,7 +3401,7 @@ public class DbLayer {
         }
         Connection conn = null;
         
-        String sql = "INSERT INTO widget_setting (FK_file_id_ai, FK_widget_id, setting) VALUES (?, ?, ?)\n"
+        String sql = "INSERT INTO widget (FK_file_id_ai, FK_widget_id, setting) VALUES (?, ?, ?)\n"
 		        		   + "ON DUPLICATE KEY UPDATE\n"
 		        		   + "setting = VALUES(setting)";
         
