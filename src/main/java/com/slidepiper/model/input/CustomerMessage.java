@@ -1,4 +1,4 @@
-package com.slidepiper.model.resource;
+package com.slidepiper.model.input;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;

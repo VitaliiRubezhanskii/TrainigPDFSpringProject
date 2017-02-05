@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.slidepiper.model.component.resource.ViewerConfiguration;
-import com.slidepiper.model.resource.CustomerMessage;
+import com.slidepiper.model.input.CustomerMessage;
 import com.slidepiper.model.service.CustomerMessageService;
 
 @RestController

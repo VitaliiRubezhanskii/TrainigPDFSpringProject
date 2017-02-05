@@ -22,7 +22,7 @@ import com.amazonaws.services.sns.model.MessageAttributeValue;
 import com.amazonaws.services.sns.model.PublishRequest;
 import com.amazonaws.services.sns.model.PublishResult;
 import com.slidepiper.model.component.ConfigurationPropertiesUtils;
-import com.slidepiper.model.resource.CustomerMessage;
+import com.slidepiper.model.input.CustomerMessage;
 
 @Service
 public class CustomerMessageService {
