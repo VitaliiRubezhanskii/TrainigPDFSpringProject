@@ -1,5 +1,5 @@
 /* Hide Elements */
-section:not([data-section-id="0"]),
+section,
 .beneficiary,
 #account-number-container-1,
 #beneficiaries-container,
@@ -19,7 +19,11 @@ section:not([data-section-id="0"]),
 #transfer-funds-container,
 #transfer-fund-statement-6-container,
 #transfer-fund-statement-7-container,
-#transfer-funds-statements {
+#transfer-funds-statements,
+[data-section-name=add-attachemtns] .user-id,
+[data-type=debitpermission].form-group,
+[data-type=medicaldocument].form-group,
+[data-type=report].form-group {
   display: none;
 }
 

@@ -391,4 +391,20 @@ $(function() {
     errorPlacement: errorPlacement,
     success: success
   });
+  
+  $('#form-7').validate({
+    rules: {
+      id: {
+        exactLength: 9,
+        number: true,
+        required: true,
+        validId: true
+      }
+    },
+    highlight: highlight,
+    errorElement: errorElement,
+    errorClass: errorClass,
+    errorPlacement: errorPlacement,
+    success: success
+  });
 });

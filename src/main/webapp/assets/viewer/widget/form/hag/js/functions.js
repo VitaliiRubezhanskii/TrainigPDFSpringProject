@@ -5,10 +5,55 @@ $(function() {
   var transferFundPayload = {};
   var sectionId = 0;
   
+  var channelName = getParameterByName('f', document.referrer);
+  var a = getParameterByName('a', document.referrer);
+  var ci = getParameterByName('ci', document.referrer);
+  var mqy = getParameterByName('mqy', document.referrer);
+  var itfy = getParameterByName('itfy', document.referrer);
+  
+  if ('1' === a) {
+    sectionId = 7;
+    attachmentSectionView();
+    $('[data-section-id="7"]').show();
+  } else {
+    $('.sp-next-section').text('המשך')
+    $('[data-section-id="0"]').show();
+  }
+  
+  function getParameterByName(name, url) {
+    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)");
+    var results = regex.exec('?' + url.split('?')[1]);
+    if (null !== results) {
+      return results[1];
+    }
+    return undefined;
+  }
+  
+  function attachmentSectionView() {
+    $('.pagination-container').css('visibility', 'hidden');
+    $('.sp-back-section').hide();
+    $('.sp-next-section').text('שלח צרופות');
+    
+    if (typeof a !== 'undefined' && '1' === a) {
+      $('[data-section-name=add-attachemtns] .user-id').show();
+    }
+    
+    if ((typeof ci !== 'undefined' && '1' === ci) || (typeof ci === 'undefined' && $('#career-independent').is(':checked'))) {
+      $('[data-type=debitpermission].form-group').show();
+    }
+    
+    if ((typeof mqy !== 'undefined' && '1' === mqy) || (typeof mqy === 'undefined' && $('.medical-questionnaire-yes').is(':checked'))) {
+      $('[data-type=medicaldocument].form-group').show();
+    }
+    
+    if ((typeof itfy !== 'undefined' && '1' === itfy) || (typeof itfy === 'undefined' && $('#is-transfer-funds-yes').is(':checked'))) {
+      $('[data-type=report].form-group').show();
+    }
+  }
   
   $('.sp-next-section').click(function() {
     if (! isFormValid()) {
-      isFormValidBoolean = false
+      isFormValidBoolean = false;
       return false;
     } else {
       isFormValidBoolean = true;
@@ -68,13 +113,15 @@ $(function() {
       
       case 5:
         $('.sp-next-section').text('שלח טופס');
-        
         sendFormButton();
         break;
         
       case 6:
-        $('.pagination-container, .sp-next-section, .sp-back-section')
-            .css('visibility', 'hidden');
+        attachmentSectionView();
+        break;
+        
+      case 7:
+        $('.sp-next-section').hide();
         break;
     }
     
@@ -150,14 +197,18 @@ $(function() {
     if (6 === sectionId) {
       $('.sp-next-section').text('שלח טופס');
       sendFormButton();
+    } else if (7 === sectionId) {
+      $('.sp-next-section').text('שלח צרופות');
     } else {
       $('.sp-next-section')
         .prop('disabled', false)
         .text('המשך');
     }
     
-    if (sectionId <= 1) {
+    if (sectionId <= 1 || 7 === sectionId) {
       $('.sp-back-section').hide();
+    } else if (8 === sectionId) {
+      $('#hr__next-back-buttons').css('visibility', 'hidden');
     } else {
       $('.sp-back-section').show();
     }
@@ -637,20 +688,7 @@ $(function() {
           phoneInit: $('#phone-operator-code-init').val() + '-' + $('#phone-number-init').val()
         }
         
-        var date = new Date();
-        var day = date.getDate();
-        var month = date.getMonth() + 1;
-        var year = date.getFullYear();
-
-        if (day < 10) {
-          day = '0' + day;
-        } 
-
-        if (month < 10) {
-          month = '0' + month;
-        } 
-
-        payload['date'] = day + '/' + month + '/' + year;
+        payload['date'] = getCurrentDate(); 
         
         // HA WebMerge.
         sendWebMerge('https://www.webmerge.me/merge/82651/98sjf8', payload);
@@ -914,6 +952,27 @@ $(function() {
         break;
         
       case 6:
+        // Create attachmentLink.
+        var attachmentLink = document.referrer;
+        
+        if (typeof getParameterByName('a', document.referrer) === 'undefined') {
+          attachmentLink += '&a=1';
+        }
+        
+        if (typeof getParameterByName('ci', document.referrer) === 'undefined' && $('#career-independent').is(':checked')) {
+          attachmentLink += '&ci=1';
+        }
+        
+        if (typeof getParameterByName('mqy', document.referrer) === 'undefined' && $('.medical-questionnaire-yes').is(':checked')) {
+          attachmentLink += '&mqy=1';
+        }
+        
+        if (typeof getParameterByName('itfy', document.referrer) === 'undefined' && $('#is-transfer-funds-yes').is(':checked')) {
+          attachmentLink += '&itfy=1';
+        }
+        payload['attachmentLink'] = attachmentLink;
+        sendSms(attachmentLink);
+        
         payload['signatureBase64'] = signaturePad.toDataURL();
         sendWebMerge('https://www.webmerge.me/merge/78047/g33bvk', payload);
         
@@ -930,7 +989,6 @@ $(function() {
           sendZapier('https://hooks.zapier.com/hooks/catch/674313/ta34dm/', transferFundPayload);
         }
         
-        sendHA();
         sendSlidePiper('HALMAN_ALDUBI_SENT_FORM');
         
         dataLayer.push({
@@ -938,6 +996,63 @@ $(function() {
           'stage': 'completed'
         });
         break;
+        
+      case 7:
+        if (typeof payload['id_num'] === 'undefined') {
+          payload['id_num'] = $('[data-section-name=add-attachemtns] [name=id]').val(); 
+        }
+        payload['dateTime'] = getCurrentDateTime();
+        uploadFiles();
+        break;
+    }
+    
+    function getCurrentDate() {
+      var date = new Date();
+      var day = date.getDate();
+      var month = date.getMonth() + 1;
+      var year = date.getFullYear();
+
+      if (day < 10) {
+        day = '0' + day;
+      } 
+
+      if (month < 10) {
+        month = '0' + month;
+      } 
+      
+      return day + '/' + month + '/' + year;
+    }
+    
+    function getCurrentDateTime() {
+      var date = new Date();
+      var day = date.getDate();
+      var month = date.getMonth() + 1;
+      var year = date.getFullYear();
+      var hours = date.getHours();
+      var minutes = date.getMinutes();
+      var seconds = date.getSeconds();
+
+      if (day < 10) {
+        day = '0' + day;
+      }
+
+      if (month < 10) {
+        month = '0' + month;
+      }
+      
+      if (hours < 10) {
+        hours = '0' + hours;
+      }
+      
+      if (minutes < 10) {
+        minutes = '0' + minutes;
+      }
+      
+      if (seconds < 10) {
+        seconds = '0' + seconds;
+      }
+      
+      return day + '-' + month + '-' + year + '_' + hours + '-' + minutes + '-' + seconds;
     }
   };
   
@@ -962,53 +1077,6 @@ $(function() {
     });
   };
   
-  
-  function sendHA() {
-    
-    // Send to HA.
-    var attachmentPayload = {
-      firstName: payload['first_name'], 
-      lastName: payload['last_name'], 
-      idNumber: payload['id_num'], 
-      phone: payload['phone'], 
-      formType: 'minimal', 
-      email: payload['email'],
-      subject: 'פנסיה',
-      customMessage: 'שלום רב, בהמשך למילוי הטופס הדיגיטלי, מצ"ב קישור לצירוף מסמכים נדרשים. בברכה, הלמן אלדובי'
-    }
-    
-    $.ajax({
-      contentType: 'application/json',
-      method: 'POST',
-      url: 'https://halman-easysend.herokuapp.com/api/halman/sendform',
-      data: JSON.stringify(attachmentPayload),
-      error: function(jqXHR, textStatus, errorThrown) {
-        
-        // Send error to SlidePiper.
-        var data = {
-          textStatus: textStatus,
-          errorThrown: errorThrown,
-        };
-        sendSlidePiper('HALMAN_ALDUBI_ATTACHMENT_PAYLOAD_NOT_SENT', JSON.stringify(data));
-        
-        // Send error with more details to HA WebMerge.
-        data['firstName'] = payload['first_name']; 
-        data['lastName'] = payload['last_name'];
-        data['idNumber'] = payload['id_num'];
-        data['phone'] = payload['phone'];
-        data['email'] = payload['email'];
-        
-        $.ajax({
-          contentType: 'application/json',
-          method: 'POST',
-          url: 'https://www.webmerge.me/merge/82653/7m8af3',
-          data: JSON.stringify(data)
-        });
-      }
-    });
-  };
-  
-  
   /**
    * Send Data to SlidePiper.
    * 
@@ -1028,7 +1096,7 @@ $(function() {
       action: 'setCustomerEvent',
       data: {
         eventName: eventName,
-        linkHash: document.referrer.split('=').pop(),
+        linkHash: getParameterByName('f', document.referrer),
         param_1_varchar: document.location.href,
         param_2_varchar: document.referrer,
         param_3_varchar: arg1.toString(),
@@ -1045,4 +1113,45 @@ $(function() {
       }
     });
   };
+  
+  function sendSms(url) {
+    if (typeof payload['phone'] !== 'undefined') {
+      phoneNumber = '972' + payload['phone'].replace(/^0/, '').replace(/-/g, '');
+      
+      var request = new XMLHttpRequest();
+      request.open('POST', parent.ViewerConfiguration.API_URL + '/utils/widgets/sms');
+      request.setRequestHeader('Content-Type', 'application/json');
+      request.send(JSON.stringify({channelName: channelName, url: url, phoneNumber: phoneNumber}));
+    }
+  }
+  
+  function uploadFiles() {
+    $('[data-section-id="7"] input[type=file]').each(function(i, file) {
+      if (file.files.length > 0) {
+        var formData = new FormData();
+        
+        $.each(file.files, function(i) {
+          formData.append('files[]', file.files[i]);
+        });
+        
+        var dataFileType = file.getAttribute('data-file-type');
+        if (null !== dataFileType) {
+          var fileNamePrefix = payload['id_num'] + '_' + payload['dateTime'] + '_file-type-' + dataFileType;
+        } 
+        formData.append('data', new Blob(
+            [JSON.stringify({channelName: channelName, fileNamePrefix: fileNamePrefix})],
+            {type: 'application/json'}));
+        
+        var request = new XMLHttpRequest();
+        request.open("POST", parent.ViewerConfiguration.API_URL + '/utils/widgets/ftp');
+        request.addEventListener('load', function() {
+          sendSlidePiper('HALMAN_ALDUBI_SENT_FILES', dataFileType);
+        });
+        request.addEventListener('error', function() {
+          sendSlidePiper('HALMAN_ALDUBI_FAILED_SENDING_FILES', dataFileType);
+        });
+        request.send(formData);
+      }
+    });
+  }
 });
