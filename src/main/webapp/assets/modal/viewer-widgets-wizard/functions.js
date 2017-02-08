@@ -522,66 +522,68 @@ sp.viewerWidgetsModal = {
     $.each(widgetsSettings, function(index, value) {
       var widget = JSON.parse(value.widgetData);
       
-      switch(widget.data.widgetId) {
-        case 1:
-          if (widget.data.items.length > 0) {
-            displayVideoSettings(widget.data);
-          }
-          break;
-          
-        case 2:
-          displayCalendlySettings(widget.data);
-          break;
-          
-        case 3:
-          displayAskQuestionSettings(widget.data);
-          break;
-          
-        case 4:
-        	displayLikeWidgetSettings(widget.data);
-        	break;
-        	
-        case 5:
-          if (widget.data.items.length > 0) {
-            displayWidget5(widget.data);
-          }
-          break;
-          
-        case 6:
-          if (widget.data.items.length > 0) {
-            sp.widgets.widget6.displayItems(widget.data);
-          }
-          break;
-          
-        case 7:
-          if (widget.data.items.length > 0) {
-            displayWidget7(widget.data);
-          }
-          break;
-          
-        case 8:
-          if (widget.data.items.length > 0) {
-            displayWidget8(widget.data);
-          }
-          break;
-
-        case 9:
-          if (widget.data.items.length > 0) {
-          	displayWidget9(widget.data);
-          }
-          break;
-          
-        case 10:
-          if (widget.data.items.length > 0) {
-          	displayWidget10(widget.data);
-          }
-          break;
+      if (typeof widget.data !== 'undefined') {
+        switch(widget.data.widgetId) {
+          case 1:
+            if (widget.data.items.length > 0) {
+              displayVideoSettings(widget.data);
+            }
+            break;
+            
+          case 2:
+            displayCalendlySettings(widget.data);
+            break;
+            
+          case 3:
+            displayAskQuestionSettings(widget.data);
+            break;
+            
+          case 4:
+          	displayLikeWidgetSettings(widget.data);
+          	break;
           	
-        case 11:
-          if (widget.data.items.length > 0) {
-          	displayWidget11(widget.data);
-          }
-          break;
+          case 5:
+            if (widget.data.items.length > 0) {
+              displayWidget5(widget.data);
+            }
+            break;
+            
+          case 6:
+            if (widget.data.items.length > 0) {
+              sp.widgets.widget6.displayItems(widget.data);
+            }
+            break;
+            
+          case 7:
+            if (widget.data.items.length > 0) {
+              displayWidget7(widget.data);
+            }
+            break;
+            
+          case 8:
+            if (widget.data.items.length > 0) {
+              displayWidget8(widget.data);
+            }
+            break;
+  
+          case 9:
+            if (widget.data.items.length > 0) {
+            	displayWidget9(widget.data);
+            }
+            break;
+            
+          case 10:
+            if (widget.data.items.length > 0) {
+            	displayWidget10(widget.data);
+            }
+            break;
+            	
+          case 11:
+            if (widget.data.items.length > 0) {
+            	displayWidget11(widget.data);
+            }
+            break;
+        }
       }
     });
     
