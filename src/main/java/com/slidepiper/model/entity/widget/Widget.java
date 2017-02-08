@@ -6,10 +6,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Inheritance;
+
+import lombok.Getter;
 
 @Entity
-@Inheritance
 @DiscriminatorColumn(name = "type")
 public abstract class Widget {
   @Id
@@ -18,4 +18,7 @@ public abstract class Widget {
   
   @Column(name = "FK_file_id_ai")
   protected long documentId;
+  
+  @Getter
+  protected boolean enabled;
 }

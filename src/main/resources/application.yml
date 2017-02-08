@@ -7,6 +7,11 @@ spring:
     url: jdbc:mysql://localhost:3306/picascrafxzhbcmd?useSSL=false
     username: adminFh4jYg3
     password: yUGL^7GFBlo&97
+    
+  http:
+    multipart:
+      maxFileSize: 10MB
+      maxRequestSize: 50MB
 
 amazon:
   s3:
