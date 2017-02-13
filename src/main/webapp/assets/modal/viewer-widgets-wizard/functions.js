@@ -870,6 +870,10 @@ sp.viewerWidgetsModal = {
           });
       	
       	$('[name="spWidget11ShareImageUrl"]').val(widget.items[0].imageUrl);
+      	
+      	if (typeof widget.items[0].url !== 'undefined') {
+      	  $('[name="spWidget11ShareUrl"]').val(widget.items[0].url);
+      	}
       }
       
       if (typeof widget.items[0].imageFileName !== 'undefined') {
@@ -1487,6 +1491,10 @@ sp.viewerWidgetsModal = {
   		item.imageFileName = sp.widgets.widget11.imageFileName;
   	} else {
   		item.imageUrl = $('[name="spWidget11ShareImageUrl"]').val();
+  	}
+  	
+  	if ($('[name="spWidget11ShareUrl"]').val()) {
+  	  item.url = $('[name="spWidget11ShareUrl"]').val();
   	}
   	
   	widget11.data.items.push(item);

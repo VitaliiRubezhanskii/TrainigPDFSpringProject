@@ -23,8 +23,11 @@ public class ShareDataService {
                               .map(x -> x.getData())
                               .orElse(defaultShareData);
     
-    shareData.setUrl(request.getRequestURL().toString());
-    shareData.setChannelName(channelName);
+    String url = Optional
+                     .ofNullable(shareData.getUrl())
+                     .orElse(String.join("", request.getRequestURL().toString(), "?f=", channelName));
+    
+    shareData.setUrl(url);
     
     return shareData;
   }

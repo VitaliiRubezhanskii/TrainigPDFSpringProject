@@ -1,7 +1,6 @@
 package com.slidepiper.model.entity.widget;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.annotation.Transient;
 import org.springframework.stereotype.Component;
 
 import lombok.Getter;
@@ -11,8 +10,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ShareData {
-  @Transient private String url;
-  @Transient private String channelName;
+  private String url;
   @Value("${viewer.share.data.defaultTitle}") private String title;
   @Value("${viewer.share.data.defaultDescription}") private String description;
   @Value("${viewer.share.data.defaultImageUrl}") private String imageUrl;

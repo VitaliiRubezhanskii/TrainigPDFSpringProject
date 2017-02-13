@@ -2074,7 +2074,7 @@ if ('' != sp.viewer.linkHash) {
       		});
       	});
       
-        var linkUrl = location.origin + '/view?f=' + sp.viewer.linkHash;
+        var linkUrl = document.querySelectorAll('[property="og:url"]')[0].getAttribute('content');
         
         $('body').append(
             '<a class="a2a_dd" style="display: none;" href="https://www.addtoany.com/share">Share</a>'
