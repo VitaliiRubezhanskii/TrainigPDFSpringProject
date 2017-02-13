@@ -10,6 +10,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ShareData {
+  private boolean enabled;
   private String url;
   @Value("${viewer.share.data.defaultTitle}") private String title;
   @Value("${viewer.share.data.defaultDescription}") private String description;

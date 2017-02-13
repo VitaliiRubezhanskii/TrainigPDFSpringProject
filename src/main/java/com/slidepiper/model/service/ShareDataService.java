@@ -23,6 +23,10 @@ public class ShareDataService {
                               .map(x -> x.getData())
                               .orElse(defaultShareData);
     
+    if (!shareData.isEnabled()) {
+      shareData = defaultShareData;
+    }
+    
     String url = Optional
                      .ofNullable(shareData.getUrl())
                      .orElse(String.join("", request.getRequestURL().toString(), "?f=", channelName));

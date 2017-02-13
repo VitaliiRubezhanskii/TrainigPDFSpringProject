@@ -9,6 +9,7 @@ import javax.persistence.Converter;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.slidepiper.model.entity.widget.ShareData;
 
 @Converter
@@ -28,7 +29,10 @@ public class ShareDataStringConverter implements AttributeConverter<ShareData, S
       if (Objects.nonNull(string)) {
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         JsonNode jsonNode = objectMapper.readTree(string);
-        return objectMapper.treeToValue(jsonNode.get("data").get("items").get(0), ShareData.class);
+        ObjectNode objectNode = (ObjectNode) jsonNode.get("data").get("items").get(0);
+        objectNode.set("enabled", jsonNode.get("data").get("isEnabled"));
+        
+        return objectMapper.treeToValue(objectNode, ShareData.class);
       } else {
         return null;
       }
