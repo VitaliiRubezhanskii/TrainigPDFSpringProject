@@ -12,6 +12,7 @@ $.ajaxSetup({
 $(document).on('pagesloaded', function() {
 	$('#sp-splash-logo-container').addClass('sp--fadeout');
 	$('#viewer').addClass('sp-viewer--fadein');
+	$('#viewerContainer').css('background-color', '#f6f6f6');
 	$(document).trigger('splashPageHidden');
 });
 
