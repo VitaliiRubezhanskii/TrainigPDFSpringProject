@@ -362,7 +362,7 @@ $(function() {
   $('#employer-name').change(function() {
     $(this).valid();
     
-    var $option = $('#employer-name [value="' + $(this).val() + '"]'); 
+    var $option = $('#employer-name [value="' + $(this).val().replace('"', 'quot;') + '"]'); 
     if (parseInt($option.val()) > 0 && '1' === $option.attr('data-is-original')) {
       $('#employer-hp').val($(this).val());
     } else {
@@ -825,7 +825,14 @@ $(function() {
         
       case 3:
         if ($('#career-employment').is(':checked')) {
-          payload['name_m'] = $('#employer-name [value="' + $('#employer-name').val() + '"]').text();
+          if (isNaN($('#employer-name').val()))  {
+            payload['name_m'] = $('#employer-name').val();
+          } else if ('' === $('#employer-name [value="' + $('#employer-name').val() + '"]').text()) {
+            payload['name_m'] = $('#employer-name').val();
+          } else {
+            payload['name_m'] = $('#employer-name [value="' + $('#employer-name').val() + '"]').text();
+          }
+          
           payload['num_m'] = $('#employer-hp').val();
           payload['address_m'] = $('#employer-address').val();
           payload['phone_m'] = $('#employer-phone').val();
