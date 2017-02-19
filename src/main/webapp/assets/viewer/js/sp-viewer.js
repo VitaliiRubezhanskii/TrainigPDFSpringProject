@@ -32,6 +32,22 @@ $(document).on('textlayerrendered', function() {
 
 
 /**
+ * Hide Widgets for print.
+ */
+window.addEventListener('beforeprint', function() {
+  Array.prototype.forEach.call(document.querySelectorAll('.widget, #sp-terms-privacy'), function(el) {
+    el.style.display = 'none';
+  });
+});
+
+window.addEventListener('afterprint', function() {
+  Array.prototype.forEach.call(document.querySelectorAll('.widget, #sp-terms-privacy'), function(el) {
+    el.style.display = 'block';
+  });
+});
+
+
+/**
  * Create HTML elements.
  */
 (function() {
@@ -989,7 +1005,7 @@ if ('' != sp.viewer.linkHash) {
           
           // Create widget structure. 
           $('body').append(
-              '<div class="sp--direction-ltr" id="sp-widget1">' +
+              '<div class="widget sp--direction-ltr" id="sp-widget1">' +
                   '<div id="sp-widget1-tab"><i class="fa fa-video-camera"></i><div class="sp-widget-font-fmaily">Loading...</div></div><i id="sp-widget1-fa-chevron" class="fa fa-chevron-up"></i>' +
                   '<div id="sp-widget1-video-container"></div>' +
               '</div>');
@@ -1164,7 +1180,7 @@ if ('' != sp.viewer.linkHash) {
             $('body').append('<div class="sp-right-side-widgets"></div>');
           }
           
-          $('.sp-right-side-widgets').append('<button class="sp-widget-button sp-widget-font-fmaily sp--direction-ltr" id="sp-widget2"></button>');
+          $('.sp-right-side-widgets').append('<button class="widget sp-widget-button sp-widget-font-fmaily sp--direction-ltr" id="sp-widget2"></button>');
           
           if ($('.sp-right-side-widgets button, .sp-right-side-widgets div').length > 1) {
             $('#sp-widget2').css('margin-top', '20px');
@@ -1254,7 +1270,7 @@ if ('' != sp.viewer.linkHash) {
               $('body').append('<div class="sp-right-side-widgets"></div>');
             }
             
-            $('.sp-right-side-widgets').append('<button class="sp-widget-button sp-widget-font-fmaily sp--direction-ltr" id="sp-widget3"></button>');
+            $('.sp-right-side-widgets').append('<button class="widget sp-widget-button sp-widget-font-fmaily sp--direction-ltr" id="sp-widget3"></button>');
             
             if ($('.sp-right-side-widgets button, .sp-right-side-widgets div').length > 1) {
               $('#sp-widget3').css('margin-top', '20px');
@@ -1286,7 +1302,7 @@ if ('' != sp.viewer.linkHash) {
             });
         		
         		var bottomOfDocumentHtml = 
-        			'<div class="sp-widget3__bottom-document-container">' +
+        			'<div class="widget sp-widget3__bottom-document-container">' +
         				'<div>' +
         				'<h4 id="sp-widget3__bottom-success-message">Thanks, your message has been submitted!</h4>' +
   	      			'<form id="widget3-bottom-form" class="sp-widget-font-fmaily">' +
@@ -1402,7 +1418,7 @@ if ('' != sp.viewer.linkHash) {
         function implementWidget4(widget) {
             
           // Widget 4 - Like button widget.
-          $('body').append('<div class="sp-like-button-widget"></div>');
+          $('body').append('<div class="widget sp-like-button-widget"></div>');
                 
           $('.sp-like-button-widget').append(
             '<button class="sp-like-btn sp-hidden">' +  
@@ -1558,7 +1574,7 @@ if ('' != sp.viewer.linkHash) {
           
           // Widget 5 - Hopper Widget.
           $('body').append(
-              '<div class="sp-widget5 sp--direction-ltr">' +
+              '<div class="widget sp-widget5 sp--direction-ltr">' +
                 '<div class="sp-widget5__extend-button">' +
                   '<i class="fa fa-chevron-right" aria-hidden="true"></i>' +
                 '</div>' +
@@ -1614,7 +1630,7 @@ if ('' != sp.viewer.linkHash) {
           }
           
           $('.sp-right-side-widgets').append(
-              '<div id="sp-widget6__button">' +
+              '<div class="widget" id="sp-widget6__button">' +
                 '<div id="sp-widget6__button-counter">1</div>' +
                 '<div id="sp-widget6__button-person-image"></div>' +
                 '<i class="fa fa-user fa-inverse"></i>' +
@@ -1720,7 +1736,7 @@ if ('' != sp.viewer.linkHash) {
           $('body').append('<div class="sp-right-side-widgets"></div>');
         }
         
-        $('.sp-right-side-widgets').append('<button class="sp-widget-button sp-widget-font-fmaily sp--direction-ltr" id="sp-widget7"></button>');
+        $('.sp-right-side-widgets').append('<button class="widget sp-widget-button sp-widget-font-fmaily sp--direction-ltr" id="sp-widget7"></button>');
         
         if ($('.sp-right-side-widgets button, .sp-right-side-widgets div').length > 1) {
           $('#sp-widget7').css('margin-top', '20px');
@@ -1736,7 +1752,7 @@ if ('' != sp.viewer.linkHash) {
         // Widget location - below toolbar.
         if ('belowToolbar' === widget.formWidgetPlacement) {
           $('body').append(
-              '<div id="sp-widget7__toolbar-button-container">' +
+              '<div class="widget" id="sp-widget7__toolbar-button-container">' +
                 '<button id="sp-widget7__toolbar-button"></button>' +
               '</div>'
           );
@@ -1883,7 +1899,7 @@ if ('' != sp.viewer.linkHash) {
         }
         
         $('.sp-right-side-widgets').append(
-            '<button class="sp-widget-button sp-widget-font-fmaily sp--direction-ltr sp-hidden" id="sp-widget9">' +
+            '<button class="widget sp-widget-button sp-widget-font-fmaily sp--direction-ltr sp-hidden" id="sp-widget9">' +
               '<i class="fa fa-external-link"></i><div class="sp-widget9__text"></div>' +
             '</button>'
         );
@@ -2053,7 +2069,7 @@ if ('' != sp.viewer.linkHash) {
         }
         
         $('.sp-right-side-widgets').append(
-        	'<button class="sp-widget-button sp-widget-font-fmaily sp--direction-ltr" id="sp-widget11"></button>'
+        	'<button class="widget sp-widget-button sp-widget-font-fmaily sp--direction-ltr" id="sp-widget11"></button>'
         );
         
         if ($('.sp-right-side-widgets button, .sp-right-side-widgets div').length > 1) {
