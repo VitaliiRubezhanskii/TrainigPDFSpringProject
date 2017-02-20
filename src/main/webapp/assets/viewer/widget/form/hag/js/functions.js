@@ -681,6 +681,7 @@ $(function() {
     switch (sectionId) {
       case 0:
         payload = {
+          join_key: $('#join-key').val(),
           email: $('#email-init').val(),
           first_name: $('#first-name-init').val(),
           id_num: $('#id-init').val(),
@@ -924,13 +925,20 @@ $(function() {
         if ($('#is-transfer-funds-yes').is(':checked')) {
           var fundCode = '';
           if (parseInt($('#fund-name-1').val()) > 0) {
-            fundCode = ' - ' + $('#fund-name-1').val();
+            fundCode = $('#fund-name-1').val();
             transferFundPayload['account'] = '';
           } else {
             fundCode = '';
             transferFundPayload['account'] = $('#account-number-1').val();
           }
-          transferFundPayload['kupa_otzar_m'] = $('#fund-name-1 [value="' + $('#fund-name-1').val() + '"]').text() + fundCode;
+          var fundName = $('#fund-name-1 [value="' + $('#fund-name-1').val() + '"]').text();
+          transferFundPayload['kupa_m'] = fundName;
+          transferFundPayload['otzar_m'] = fundCode;
+          
+          transferFundPayload['kupa_otzar_m'] = fundName;
+          if ('' !== fundCode) {
+          	transferFundPayload['kupa_otzar_m'] += ' - ' + fundCode;
+          }
           
           if ($('#active-member-1').is(':checked')) {
             transferFundPayload['active'] = 'X';
