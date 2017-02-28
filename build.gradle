@@ -10,7 +10,6 @@ buildscript {
   }
 }
 
-apply plugin: 'eclipse'
 apply plugin: 'io.spring.dependency-management'
 apply plugin: 'java'
 apply plugin: 'org.springframework.boot'
@@ -24,7 +23,10 @@ repositories {
 }
 
 sourceCompatibility = 1.8
-targetCompatibility = 1.8
+
+configurations {
+  customProvidedRuntime
+}
 
 dependencyManagement {
   imports {
@@ -62,27 +64,30 @@ dependencies {
   compile 'org.springframework.boot:spring-boot-starter-web'
   optional 'org.springframework.boot:spring-boot-configuration-processor'
   optional 'org.springframework.boot:spring-boot-devtools'
-  providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
+  customProvidedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
 }
 
 compileJava.dependsOn(processResources)
 
 springBoot {
-  mainClass = 'com.slidepiper.spring.Application'
+  mainClass = 'com.slidepiper.Application'
+  providedConfiguration = 'customProvidedRuntime'
 }
 
 war {
+  classpath = sourceSets.main.output + configurations.runtime - configurations.customProvidedRuntime
+
   def tag = new ByteArrayOutputStream()
   exec {
     commandLine 'git', 'describe', '--tags', '--abbrev=0'
     standardOutput = tag
   }
-  
+
   def commitId = new ByteArrayOutputStream()
   exec {
     commandLine 'git', 'rev-parse', '--short', 'HEAD'
     standardOutput = commitId
   }
-  
+
   archiveName = tag.toString().trim() + '-' + commitId.toString().trim() + '.war'
 }

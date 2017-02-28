@@ -2,9 +2,12 @@
 .classpath
 .project
 .settings/
+gradle.properties
+bin/
 
 # Gradle
-gradle.properties
-.gradle/
-bin/
-build/
+/.gradle/
+/build/
+
+# IDEA
+/.idea/
