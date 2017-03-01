@@ -22,10 +22,18 @@ amazon:
     domain: https://slidepiper-documents-development.s3.amazonaws.com
 
   ses:
+    credentials:
+      user:
+        accessKey: AKIAJA7XHSGRV3TSLCWA
+        secretKey: 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
+
+    doNotReplyEmailAddress: SlidePiper <do-not-reply@slidepiper.com>
+
+    # credentials viewer
     ses-customer-message:
       accessKeyId: AKIAIFEJNRCXRGWCDTKQ
       secretKey: 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
-      
+
   sns:
     sns-customer-message:
       accessKeyId: AKIAIEJ23APCCYRBVASA
@@ -37,7 +45,7 @@ jwt:
 
 viewer:
   apiUrl: http://127.0.0.2:8080
-  
+
   share:
     data:
       defaultTitle: "SlidePiper Document"
