@@ -1,7 +1,9 @@
 package com.slidepiper.controller;
 
-import javax.servlet.http.HttpServletRequest;
-
+import com.slidepiper.Routes;
+import com.slidepiper.model.entity.widget.ShareData;
+import com.slidepiper.service.ShareDataService;
+import com.slidepiper.service.ViewerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,13 +11,9 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import com.slidepiper.Routes;
-import com.slidepiper.model.entity.widget.ShareData;
-import com.slidepiper.model.service.ShareDataService;
-import com.slidepiper.model.service.ViewerService;
-
 import slidepiper.db.DbLayer;
+
+import javax.servlet.http.HttpServletRequest;
 
 @Controller
 public class ViewerController {

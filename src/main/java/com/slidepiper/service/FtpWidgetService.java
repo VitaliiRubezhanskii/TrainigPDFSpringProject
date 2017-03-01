@@ -1,4 +1,4 @@
-package com.slidepiper.model.service;
+package com.slidepiper.service;
 
 import com.amazonaws.AmazonClientException;
 import com.amazonaws.AmazonServiceException;
