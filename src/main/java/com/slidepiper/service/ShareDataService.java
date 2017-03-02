@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.slidepiper.model.entity.widget.ShareData;
-import com.slidepiper.model.repository.widget.ShareWidgetRepository;
+import com.slidepiper.repository.widget.ShareWidgetRepository;
 
 @Service
 public class ShareDataService {

@@ -3,7 +3,7 @@ package com.slidepiper.service;
 import com.samskivert.mustache.Mustache;
 import com.slidepiper.model.entity.viewer.ViewerEventType;
 import com.slidepiper.model.input.ViewerEventInput;
-import com.slidepiper.model.repository.UserRepository;
+import com.slidepiper.repository.UserRepository;
 import com.slidepiper.service.amazon.AmazonSesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

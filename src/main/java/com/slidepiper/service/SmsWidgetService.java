@@ -21,7 +21,7 @@ import com.slidepiper.model.entity.widget.SmsWidgetData;
 import com.slidepiper.model.exception.WidgetDisabledException;
 import com.slidepiper.model.exception.WidgetNotFoundException;
 import com.slidepiper.model.input.SmsWidgetInput;
-import com.slidepiper.model.repository.widget.SmsWidgetRepository;
+import com.slidepiper.repository.widget.SmsWidgetRepository;
 
 import slidepiper.db.DbLayer;
 

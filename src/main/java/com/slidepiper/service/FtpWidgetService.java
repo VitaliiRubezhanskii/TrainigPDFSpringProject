@@ -14,7 +14,7 @@ import com.slidepiper.model.exception.FileNotUploadedException;
 import com.slidepiper.model.exception.WidgetDisabledException;
 import com.slidepiper.model.exception.WidgetNotFoundException;
 import com.slidepiper.model.input.FtpWidgetDataInput;
-import com.slidepiper.model.repository.widget.FtpWidgetRepository;
+import com.slidepiper.repository.widget.FtpWidgetRepository;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.vfs2.FileObject;
 import org.apache.commons.vfs2.FileSystemException;

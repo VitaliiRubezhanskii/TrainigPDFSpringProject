@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.slidepiper.model.entity.User;
-import com.slidepiper.model.repository.UserRepository;
+import com.slidepiper.repository.UserRepository;
 
 @Component
 public class UserUtils {
