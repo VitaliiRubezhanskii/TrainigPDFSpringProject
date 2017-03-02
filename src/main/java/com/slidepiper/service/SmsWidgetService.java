@@ -18,8 +18,8 @@ import com.amazonaws.services.sns.model.PublishResult;
 import com.slidepiper.model.component.ConfigurationPropertiesUtils;
 import com.slidepiper.model.entity.widget.SmsWidget;
 import com.slidepiper.model.entity.widget.SmsWidgetData;
-import com.slidepiper.model.exception.WidgetDisabledException;
-import com.slidepiper.model.exception.WidgetNotFoundException;
+import com.slidepiper.exception.WidgetDisabledException;
+import com.slidepiper.exception.WidgetNotFoundException;
 import com.slidepiper.model.input.SmsWidgetInput;
 import com.slidepiper.repository.widget.SmsWidgetRepository;
 

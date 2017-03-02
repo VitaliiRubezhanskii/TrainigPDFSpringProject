@@ -1,9 +1,8 @@
 package com.slidepiper.controller;
 
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-
+import com.slidepiper.exception.WidgetDisabledException;
+import com.slidepiper.exception.WidgetNotFoundException;
+import com.slidepiper.model.output.ExceptionResponseOutput;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -11,9 +10,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import com.slidepiper.model.exception.WidgetDisabledException;
-import com.slidepiper.model.exception.WidgetNotFoundException;
-import com.slidepiper.model.output.ExceptionResponseOutput;
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @RestControllerAdvice
 public class ExceptionHandlerController {

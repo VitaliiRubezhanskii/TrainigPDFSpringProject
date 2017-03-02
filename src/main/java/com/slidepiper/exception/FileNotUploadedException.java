@@ -1,4 +1,4 @@
-package com.slidepiper.model.exception;
+package com.slidepiper.exception;
 
 @SuppressWarnings("serial")
 public class FileNotUploadedException extends RuntimeException {
