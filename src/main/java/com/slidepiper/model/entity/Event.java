@@ -11,7 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.slidepiper.model.converter.JsonNodeStringConverter;
+import com.slidepiper.converter.JsonNodeStringConverter;
 
 import lombok.Getter;
 import lombok.Setter;

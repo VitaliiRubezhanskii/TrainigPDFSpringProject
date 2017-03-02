@@ -8,7 +8,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import com.slidepiper.model.converter.UserExtraDataStringConverter;
+import com.slidepiper.converter.UserExtraDataStringConverter;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
