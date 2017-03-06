@@ -1,44 +1,27 @@
 package slidepiper.customer_servlets;
  
-import java.io.ByteArrayOutputStream;
-
-import slidepiper.*;
+import com.slidepiper.model.component.JwtUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import slidepiper.config.ConfigProperties;
-import slidepiper.dataobjects.AlertData;
-import slidepiper.dataobjects.MessageInfo;
 import slidepiper.db.DbLayer;
 import slidepiper.email.EmailSender;
 import slidepiper.integration.HubSpot;
 import slidepiper.logging.CustomerLogger;
 import slidepiper.salesman_servlets.Geolocation;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.sql.Blob;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.slidepiper.model.component.JwtUtils;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
   
 // write tracking info on customer viewing the presentation.
 @WebServlet("/CustomerDataServlet")
@@ -107,8 +90,12 @@ public class CustomerLoggingServlet extends HttpServlet {
   			    		if ((Boolean)docSettings.get("email_alert_enabled")
   			    		    && ! customerEmail.equals(ConfigProperties.getProperty("test_customer_email"))) {
     							System.out.println("open slides event - sending email alert");
-    							EmailSender.sendAlertEmail(id, sessionId);
-    						}	else {
+							try {
+								EmailSender.sendAlertEmail(id, sessionId);
+							} catch (URISyntaxException e) {
+								e.printStackTrace();
+							}
+						}	else {
   			    			System.out.println("SP: Didn't send alert email");
   			    		}
   			    		

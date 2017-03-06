@@ -1,22 +1,18 @@
 package slidepiper.keepalive;
 
-import slidepiper.config.ConfigProperties;
-import slidepiper.dataobjects.*;
-
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
 import org.json.JSONObject;
-
-import java.util.TimerTask;
-
+import slidepiper.config.ConfigProperties;
 import slidepiper.db.DbLayer;
 import slidepiper.email.EmailSender;
 import slidepiper.integration.HubSpot;
 import slidepiper.logging.CustomerLogger;
-import slidepiper.ui_rendering.HtmlRenderer;
+
+import java.net.URISyntaxException;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.TimerTask;
+import java.util.concurrent.ConcurrentHashMap;
 
 
 // -- this is the class for the keepalive thread
@@ -80,8 +76,12 @@ public class KeepAliveTask extends TimerTask {
 		    		docSettings = DbLayer.getSalesman(salesmanEmail);
 		    		if ((Boolean)docSettings.get("email_report_enabled")
 		    		    && ! customerEmail.equals(ConfigProperties.getProperty("test_customer_email"))){
-		    			EmailSender.sendReportEmail(p);
-		    		}
+						try {
+							EmailSender.sendReportEmail(p);
+						} catch (URISyntaxException e) {
+							e.printStackTrace();
+						}
+					}
 		    		else {
 		    			System.out.println("SP: Didn't send report email");
 		    		}

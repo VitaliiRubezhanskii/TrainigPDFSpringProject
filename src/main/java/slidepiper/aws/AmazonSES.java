@@ -3,6 +3,7 @@ package slidepiper.aws;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
@@ -59,7 +60,8 @@ public class AmazonSES {
      * @param notificationData - The notification data from SQL query: customerEmail, documentName, salesmanEmail.
      * @param eventDataMap - The event data from the Viewer.
      */
-    public static void setEventEmailParams(String[] notificationData, Map<String, String> eventDataMap) {
+    public static void setEventEmailParams(String[] notificationData, Map<String, String> eventDataMap)
+			throws URISyntaxException {
     	Map<String, String> emailParams = new HashMap<String, String>();
     	int mailTypeId = 0;
     	
@@ -107,7 +109,8 @@ public class AmazonSES {
      * @param emailParams - The parameters for the email, as set in @function setEmailParams().
      * @throws IOException
      */
-    public static void setEmailFields(int mailTypeId, Map<String, String> emailParams) throws IOException {
+    public static void setEmailFields(int mailTypeId, Map<String, String> emailParams)
+			throws IOException, URISyntaxException {
     	
     	switch(mailTypeId) {
     		case 1:
@@ -151,13 +154,14 @@ public class AmazonSES {
      * @return body - the stringified email body template.
      * @throws IOException
      */
-    public static String getEmailNotificationsTemplate(Map<String, String> emailParams) throws IOException {
+    public static String getEmailNotificationsTemplate(Map<String, String> emailParams)
+			throws IOException, URISyntaxException {
     	String body = null;
     	Configuration cfg = new Configuration();
     	
     	URL url = AmazonSES.class.getResource("/email-templates");
-    	cfg.setDirectoryForTemplateLoading(new File(url.getPath()));
-		
+    	cfg.setDirectoryForTemplateLoading(new File(url.toURI()));
+
     	Template template = cfg.getTemplate("EmailNotification.ftl");
     	StringWriter stringwriter = new StringWriter();
     	

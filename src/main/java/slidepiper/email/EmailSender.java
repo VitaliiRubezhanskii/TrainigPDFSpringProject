@@ -1,6 +1,7 @@
 package slidepiper.email;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -104,7 +105,7 @@ public class EmailSender {
 	
 	
 	// send alert email
-	public static void sendAlertEmail(String id, String sessionId) {
+	public static void sendAlertEmail(String id, String sessionId) throws URISyntaxException {
 		MessageInfo mi = DbLayer.getMessageInfo(id);		  		  
 		String currentviewslink;
 		String chatlink;
@@ -155,7 +156,7 @@ public class EmailSender {
 	
 	// report email after customer stops viewing presentation
 	// called from KeepAliveTask
-	public static void sendReportEmail(KeepAlivePacket p) {					
+	public static void sendReportEmail(KeepAlivePacket p) throws URISyntaxException {
 		MessageInfo mi = DbLayer.getMessageInfo(p.getMsgId());													
 		AlertData ai = DbLayer.getAlert(p.getSessionId(),mi.getSalesManEmail());			
 		String chatMessages = "";

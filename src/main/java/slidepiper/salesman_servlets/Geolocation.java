@@ -1,13 +1,5 @@
 package slidepiper.salesman_servlets;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.InetAddress;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-
 import com.maxmind.geoip2.DatabaseReader;
 import com.maxmind.geoip2.exception.GeoIp2Exception;
 import com.maxmind.geoip2.model.CityResponse;
@@ -16,6 +8,15 @@ import com.maxmind.geoip2.record.Country;
 import com.maxmind.geoip2.record.Location;
 import com.maxmind.geoip2.record.Postal;
 import com.maxmind.geoip2.record.Subdivision;
+
+import javax.servlet.http.HttpServletRequest;
+import java.io.File;
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Geolocation {
 
@@ -37,10 +38,15 @@ public class Geolocation {
    * @return Various data points regarding an IP address physical location.
    * @throws IOException
    */
-  public static List<String> ipData(String ip) throws IOException{
-    String filePathname = Geolocation.class.getClassLoader().getResource("GeoLite2-City.mmdb").getFile();
-    
-    File database = new File(filePathname);
+  public static List<String> ipData(String ip) throws IOException {
+    URL fileUrl = Geolocation.class.getClassLoader().getResource("GeoLite2-City.mmdb");
+    File database = null;
+    try {
+      database = new File(fileUrl.toURI());
+    } catch (URISyntaxException e) {
+      e.printStackTrace();
+    }
+
     DatabaseReader reader = new DatabaseReader.Builder(database).build();
 
     InetAddress ipAddress = InetAddress.getByName(ip);
