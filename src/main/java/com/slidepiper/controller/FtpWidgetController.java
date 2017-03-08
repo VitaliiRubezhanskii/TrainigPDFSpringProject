@@ -1,11 +1,9 @@
 package com.slidepiper.controller;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
-
+import com.slidepiper.model.input.FtpWidgetDataInput;
+import com.slidepiper.model.output.ExceptionResponseOutput;
+import com.slidepiper.model.service.FtpWidgetService;
+import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,11 +15,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.slidepiper.model.input.FtpWidgetDataInput;
-import com.slidepiper.model.output.ExceptionResponseOutput;
-import com.slidepiper.model.service.FtpWidgetService;
-
-import lombok.AllArgsConstructor;
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 @RestController
 @AllArgsConstructor(onConstructor = @__(@Autowired))
@@ -32,8 +27,7 @@ public class FtpWidgetController {
   @PostMapping(value = "/utils/widgets/ftp")
   public void handleFileUpload(
       @RequestPart("files[]") MultipartFile[] files,
-      @Valid @RequestPart("data") FtpWidgetDataInput ftpWidgetDataInput)
-          throws IOException, URISyntaxException {
+      @Valid @RequestPart("data") FtpWidgetDataInput ftpWidgetDataInput) {
     
     // TODO: create FtpWidgetFileInput class to enable Hibernate annotations validation.
     if (ArrayUtils.isEmpty(files)) {

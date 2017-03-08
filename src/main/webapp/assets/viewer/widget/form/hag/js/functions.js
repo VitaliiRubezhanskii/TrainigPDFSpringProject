@@ -119,17 +119,10 @@ $(function() {
       case 6:
         attachmentSectionView();
         break;
-        
-      case 7:
-        $('.sp-next-section').hide();
-        break;
     }
     
     // Save current entries into the payload object.
-    saveEntries(sectionId);
-    
-    sectionId++;
-    setSectionView();
+    saveEntries();
   });
   
   
@@ -674,10 +667,14 @@ $(function() {
       $('.sp-next-section').prop('disabled', true);
     }
   };
-  
-  
+
+  function moveNextSection() {
+    sectionId++;
+    setSectionView();
+  }
+
   /* Save Entries */
-  function saveEntries(sectionId) {
+  function saveEntries() {
     switch (sectionId) {
       case 0:
         payload = {
@@ -697,6 +694,8 @@ $(function() {
         sendZapier('https://hooks.zapier.com/hooks/catch/674313/h2y8on/', payload);
         
         sendSlidePiper('HALMAN_ALDUBI_COMPLETED_INITIAL_SECTION');
+
+        moveNextSection();
         break;
         
       case 1:
@@ -794,6 +793,8 @@ $(function() {
           payload['first_name_zug'] = $('#first-name-partner').val();
           payload['id_num_zug'] = $('#id-partner').val();
         }
+
+        moveNextSection();
         break;
         
       case 2:
@@ -822,6 +823,8 @@ $(function() {
         } else if ('female' === $('[name="gender"]:checked').val()) {
           payload[$('[name="retirementAgeFemale"]:checked').val()] = 'X';
         }
+
+        moveNextSection();
         break;
         
       case 3:
@@ -856,6 +859,8 @@ $(function() {
           transferFundPayload['employee'] = '';
           transferFundPayload['independent'] = 'X';
         }
+
+        moveNextSection();
         break;
         
       case 4:
@@ -919,6 +924,8 @@ $(function() {
             payload['details' + i] = $('#medical-questionnaire-' + i + '-yes-details').val();
           }
         }
+
+        moveNextSection();
         break;
         
       case 5:
@@ -964,6 +971,8 @@ $(function() {
             transferFundPayload['active2'] = 'X';
           }
         }
+
+        moveNextSection();
         break;
         
       case 6:
@@ -1010,17 +1019,21 @@ $(function() {
           'event': 'digital_join',
           'stage': 'completed'
         });
+
+        moveNextSection();
         break;
         
-      case 7:
+        case 7:
         if (typeof payload['id_num'] === 'undefined') {
           payload['id_num'] = $('[data-section-name=add-attachemtns] [name=id]').val(); 
         }
         payload['dateTime'] = getCurrentDateTime();
         uploadFiles();
+
+        // moveNextSection() is inside uploadFiles().
         break;
     }
-    
+
     function getCurrentDate() {
       var date = new Date();
       var day = date.getDate();
@@ -1141,32 +1154,65 @@ $(function() {
   }
   
   function uploadFiles() {
-    $('[data-section-id="7"] input[type=file]').each(function(i, file) {
-      if (file.files.length > 0) {
-        var formData = new FormData();
-        
-        $.each(file.files, function(i) {
-          formData.append('files[]', file.files[i]);
-        });
-        
-        var dataFileType = file.getAttribute('data-file-type');
-        if (null !== dataFileType) {
-          var fileNamePrefix = payload['id_num'] + '_' + payload['dateTime'] + '_file-type-' + dataFileType;
-        } 
-        formData.append('data', new Blob(
-            [JSON.stringify({channelName: channelName, fileNamePrefix: fileNamePrefix})],
-            {type: 'application/json'}));
-        
-        var request = new XMLHttpRequest();
-        request.open("POST", parent.ViewerConfiguration.API_URL + '/utils/widgets/ftp');
-        request.addEventListener('load', function() {
-          sendSlidePiper('HALMAN_ALDUBI_SENT_FILES', dataFileType);
-        });
-        request.addEventListener('error', function() {
-          sendSlidePiper('HALMAN_ALDUBI_FAILED_SENDING_FILES', dataFileType);
-        });
-        request.send(formData);
-      }
+    var $fileTypes = $('[data-section-id="7"] input[type=file]:visible');
+    var beforeUploadFileCounter = 0;
+    $fileTypes.each(function(i, file) {
+        beforeUploadFileCounter += file.files.length;
     });
+
+    if (beforeUploadFileCounter > 0) {
+        var afterUploadFileCounter = 0;
+        var isFileUploadFailed = false;
+        $fileTypes.each(function(i, file) {
+            if (file.files.length > 0) {
+
+                $('.sp-next-section').text('שולח צרופות... נא לא לסגור את החלון').prop('disabled', true);
+
+                var formData = new FormData();
+                $.each(file.files, function (i) {
+                    formData.append('files[]', file.files[i]);
+                });
+
+                var dataFileType = file.getAttribute('data-file-type');
+                if (null !== dataFileType) {
+                    var fileNamePrefix = payload['id_num'] + '_' + payload['dateTime'] + '_file-type-' + dataFileType;
+                }
+                formData.append('data', new Blob(
+                    [JSON.stringify({channelName: channelName, fileNamePrefix: fileNamePrefix})],
+                    {type: 'application/json'}));
+
+                // Create XMLHttpRequest.
+                var request = new XMLHttpRequest();
+
+                request.onload = function() {
+                    if (request.status === 200) {
+                        afterUploadFileCounter += file.files.length;
+                        if (beforeUploadFileCounter === afterUploadFileCounter
+                                && !isFileUploadFailed) {
+                            sendSlidePiper('HALMAN_ALDUBI_SENT_FILES', dataFileType);
+                            $('.sp-next-section').hide();
+                            moveNextSection();
+                        }
+                    } else {
+                        isFileUploadFailed = true;
+                        sendSlidePiper('HALMAN_ALDUBI_FAILED_SENDING_FILES', dataFileType);
+                        $('.sp-next-section').text('חלה שגיאה בהעלאת צרופות');
+                    }
+                }
+
+                request.onerror = function() {
+                    isFileUploadFailed = true;
+                    sendSlidePiper('HALMAN_ALDUBI_FAILED_SENDING_FILES', dataFileType);
+                    $('.sp-next-section').text('חלה שגיאה בהעלאת צרופות');
+                }
+
+                request.open("POST", parent.ViewerConfiguration.API_URL + '/utils/widgets/ftp');
+                request.send(formData);
+            }
+        });
+    } else {
+        $('.sp-next-section').hide();
+        moveNextSection();
+    }
   }
 });
