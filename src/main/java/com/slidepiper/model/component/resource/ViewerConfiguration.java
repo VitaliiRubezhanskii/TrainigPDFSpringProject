@@ -8,5 +8,5 @@ import lombok.Getter;
 @Component
 @Getter
 public class ViewerConfiguration {
-  @Value("${viewer.apiUrl}") private String apiUrl;
+  @Value("${slidepiper.apiUrl}") private String apiUrl;
 }

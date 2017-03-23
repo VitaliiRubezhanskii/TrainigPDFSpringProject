@@ -1,5 +1,30 @@
 package slidepiper.salesman_servlets;
 
+import com.slidepiper.model.component.JwtUtils;
+import com.slidepiper.model.component.UserUtils;
+import com.slidepiper.model.entity.User;
+import com.slidepiper.model.entity.User.ExtraData;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import slidepiper.aws.AmazonSES;
+import slidepiper.config.ConfigProperties;
+import slidepiper.customer_servlets.DocumentShareServlet;
+import slidepiper.dataobjects.Customer;
+import slidepiper.dataobjects.Presentation;
+import slidepiper.db.Analytics;
+import slidepiper.db.DbLayer;
+import slidepiper.db.ViewerAnalytics;
+import slidepiper.email.EmailSender;
+
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -10,34 +35,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.slidepiper.model.component.JwtUtils;
-import com.slidepiper.model.component.UserUtils;
-import com.slidepiper.model.entity.User;
-import com.slidepiper.model.entity.User.ExtraData;
-
-import slidepiper.aws.AmazonSES;
-import slidepiper.config.ConfigProperties;
-import slidepiper.customer_servlets.DocumentShareServlet;
-import slidepiper.dataobjects.Customer;
-import slidepiper.dataobjects.Presentation;
-import slidepiper.db.Analytics;
-import slidepiper.db.DbLayer;
-import slidepiper.db.ViewerAnalytics;
-import slidepiper.email.EmailSender;
 
 @WebServlet("/ManagementServlet")
 public class ManagementServlet extends HttpServlet {
@@ -528,11 +525,6 @@ public class ManagementServlet extends HttpServlet {
             System.out.println("deleting pres " + input.getString("presentation") + " " + input.getString("salesman_email"));
             DbLayer.deletePresentation(input.getString("presentation"), input.getString("salesman_email"));
             break;
-        
-        case "deleteFile":
-          System.out.println("Deleting docuemnt, " + input.getString("fileHash") + ", of " + input.getString("salesmanEmail"));
-          DbLayer.deleteFile(input.getString("fileHash"), input.getString("salesmanEmail"));
-          break;
         
         /**
          * JSONObject.has(String) to find if JSON object has certain key

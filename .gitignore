@@ -11,3 +11,8 @@ bin/
 
 # IDEA
 /.idea/
+
+# Gulp
+/node_modules/
+/src/main/resources/templates/build/
+/src/main/webapp/static/build/

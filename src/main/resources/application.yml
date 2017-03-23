@@ -1,53 +1,97 @@
+server:
+    compression:
+        enabled: true
+        mimeTypes: application/javascript,application/json,application/x-javascript,application/xml,application/xml+rss,text/css,text/html,text/javascript,text/plain,text/xml
+
 spring:
-  data:
-    rest:
-      basePath: /v1
-      
-  datasource:
-    url: jdbc:mysql://localhost:3306/picascrafxzhbcmd?useSSL=false
-    username: adminFh4jYg3
-    password: yUGL^7GFBlo&97
-    
-  http:
-    multipart:
-      maxFileSize: 10MB
-      maxRequestSize: 50MB
+    data:
+        rest:
+            basePath: /v1
+
+    datasource:
+        url: jdbc:mysql://localhost:3306/picascrafxzhbcmd?useSSL=false&characterEncoding=UTF-8
+        username: adminFh4jYg3
+        password: yUGL^7GFBlo&97
+
+    devtools:
+        restart:
+            exclude: META-INF/maven/**,META-INF/resources/**,resources/**,static/**,public/**,**/*Test.class,**/*Tests.class,git.properties,META-INF/build-info.properties
+
+    http:
+        multipart:
+            maxFileSize: 50MB
+            maxRequestSize: 100MB
+
+    mustache:
+        cache: false
+
+    profiles:
+        active: development
+
+documents:
+    amazon:
+        s3:
+            bucket: slidepiper-documents-development
+            keyPrefix: static/documents
+
+    hashids:
+        salt: "wm948t3948thRMHP(#RH*#(*Cr983r2"
+        minHashLength: 8
+        alphabet: abcdefghijklmnopqrstuvwxyz0123456789
+
+    urlPrefix: https://dev1.slidepiper.com/static/documents
 
 amazon:
-  s3:
-    accessKeyId: AKIAJXQE3QZTYFLZRHNQ
-    secretKey: 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
-    bucket: slidepiper-documents-development
-    prefix: production/documents
-    domain: https://slidepiper-documents-development.s3.amazonaws.com
+    s3:
+        credentials:
+            accessKey: AKIAJXQE3QZTYFLZRHNQ
+            secretKey: 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
 
-  ses:
-    credentials:
-      user:
-        accessKey: AKIAJA7XHSGRV3TSLCWA
-        secretKey: 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
+        url: https://s3.amazonaws.com
 
-    doNotReplyEmailAddress: SlidePiper <do-not-reply@slidepiper.com>
+    ses:
+        credentials:
+            user:
+                accessKey: AKIAJA7XHSGRV3TSLCWA
+                secretKey: 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
 
-    # credentials viewer
-    ses-customer-message:
-      accessKeyId: AKIAIFEJNRCXRGWCDTKQ
-      secretKey: 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
+        doNotReplyEmailAddress: SlidePiper <do-not-reply@slidepiper.com>
 
-  sns:
-    sns-customer-message:
-      accessKeyId: AKIAIEJ23APCCYRBVASA
-      secretKey: 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
+        # credentials viewer
+        ses-customer-message:
+            accessKeyId: AKIAIFEJNRCXRGWCDTKQ
+            secretKey: 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
+
+    sns:
+        sns-customer-message:
+            accessKeyId: AKIAIEJ23APCCYRBVASA
+            secretKey: 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
 
 jwt:
-  issuer: slidepiper
-  secret: "YYeEkSZYKjdo4C$BMH$HQQOan0t@JgDz"
+    issuer: slidepiper
+    secret: "YYeEkSZYKjdo4C$BMH$HQQOan0t@JgDz"
+
+slidepiper:
+    url: http://localhost:8080
+    apiUrl: http://127.0.0.2:8080
 
 viewer:
-  apiUrl: http://127.0.0.2:8080
+    share:
+        data:
+            defaultTitle: "SlidePiper Document"
+            defaultDescription: "Check out this interactive document!"
+            defaultImageUrl: https://s3-us-west-2.amazonaws.com/slidepiper-static/production/images/logo-slidepiper-wide-1200x630.png
+---
+spring:
+    profiles: development
 
-  share:
-    data:
-      defaultTitle: "SlidePiper Document"
-      defaultDescription: "Check out this interactive document!"
-      defaultImageUrl: https://s3-us-west-2.amazonaws.com/slidepiper-static/production/images/logo-slidepiper-wide-1200x630.png
+slidepiper:
+    templates:
+        prefix: src
+---
+spring:
+    profiles: production
+
+slidepiper:
+    templates:
+        prefix: build

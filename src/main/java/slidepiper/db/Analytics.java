@@ -14,7 +14,7 @@ public class Analytics {
       + "  name AS file_name,\n"
       + "  timestamp AS date_added_or_modified\n"
       + "FROM slides\n"
-      + "WHERE sales_man_email = ? AND slides.fk__document_status__status IN ('CREATED', 'UPDATED', 'BEFORE_AWS_S3_TRANSITION')\n"
+      + "WHERE sales_man_email = ? AND slides.status IN ('CREATED', 'UPDATED', 'BEFORE_AWS_S3_TRANSITION')\n"
       + "ORDER BY date_added_or_modified";
   
   
@@ -39,7 +39,7 @@ public class Analytics {
       + "  SUM(IF(event_name = 'CLICKED_CTA', 1, 0)) AS users_cta,\n"
       + "  0.5 * SUM(IF(event_name = 'VIEW_SLIDE' AND count_distinct_pages_viewed>1,1,0)) / SUM(IF(event_name = 'OPEN_SLIDES',1,0)) + 0.5 * SUM(IF(event_name = 'CLICKED_CTA', 1, 0)) / SUM(IF(event_name = 'OPEN_SLIDES',1,0)) AS file_performance\n"
       + "FROM view_file_agg_by_session_event_name\n"
-      + "RIGHT JOIN slides ON slides.id = file_hash AND slides.fk__document_status__status IN ('CREATED', 'UPDATED', 'BEFORE_AWS_S3_TRANSITION')\n"
+      + "RIGHT JOIN slides ON slides.id = file_hash AND slides.status IN ('CREATED', 'UPDATED', 'BEFORE_AWS_S3_TRANSITION')\n"
       + "INNER JOIN msg_info ON msg_info.slides_id = slides.id\n"
       + "WHERE msg_info.sales_man_email=? AND msg_info.sales_man_email != '' AND msg_info.customer_email='" + ConfigProperties.getProperty("default_customer_email") + "'\n"
       + "GROUP BY slides.id\n"
@@ -58,7 +58,7 @@ public class Analytics {
 	      + "  SUM(IF(event_name = 'CLICKED_CTA', 1, 0)) AS users_cta,\n"
 	      + "  0.5 * SUM(IF(event_name = 'VIEW_SLIDE' AND count_distinct_pages_viewed>1,1,0)) / SUM(IF(event_name = 'OPEN_SLIDES',1,0)) + 0.5 * SUM(IF(event_name = 'CLICKED_CTA', 1, 0)) / SUM(IF(event_name = 'OPEN_SLIDES',1,0)) AS file_performance\n"
 	      + "FROM view_file_agg_by_session_event_name\n"
-	      + "RIGHT JOIN slides ON slides.id = file_hash AND slides.fk__document_status__status IN ('CREATED', 'UPDATED', 'BEFORE_AWS_S3_TRANSITION')\n"
+	      + "RIGHT JOIN slides ON slides.id = file_hash AND slides.status IN ('CREATED', 'UPDATED', 'BEFORE_AWS_S3_TRANSITION')\n"
 	      + "INNER JOIN msg_info ON msg_info.slides_id = slides.id\n"
 	      + "WHERE msg_info.sales_man_email=? AND msg_info.sales_man_email != '' AND msg_info.customer_email='" + ConfigProperties.getProperty("default_customer_email") + "'\n"
 	      + "GROUP BY slides.id\n"
@@ -82,7 +82,7 @@ public class Analytics {
       + "  #customers.name AS customer_name,\n"
       + "  #customer_email\n"
       + "FROM view_file_agg_by_session_event_name\n"
-      + "INNER JOIN slides ON slides.id = file_hash AND slides.fk__document_status__status IN ('CREATED', 'UPDATED', 'BEFORE_AWS_S3_TRANSITION')\n"
+      + "INNER JOIN slides ON slides.id = file_hash AND slides.status IN ('CREATED', 'UPDATED', 'BEFORE_AWS_S3_TRANSITION')\n"
       + "INNER JOIN customers ON customers.sales_man = salesman_email AND customers.email = customer_email\n"
       + "WHERE salesman_email=? AND customer_email=?\n"
       + "GROUP BY file_hash, customer_email\n"
@@ -120,7 +120,7 @@ public class Analytics {
       + "  slides.name AS file_name\n"
       + "FROM msg_info\n"
       + "JOIN customers ON msg_info.sales_man_email = customers.sales_man AND msg_info.customer_email = customers.email\n"
-      + "JOIN slides ON msg_info.slides_id = slides.id AND slides.fk__document_status__status IN ('CREATED', 'UPDATED', 'BEFORE_AWS_S3_TRANSITION')\n"
+      + "JOIN slides ON msg_info.slides_id = slides.id AND slides.status IN ('CREATED', 'UPDATED', 'BEFORE_AWS_S3_TRANSITION')\n"
       + "WHERE msg_info.sales_man_email=? AND msg_info.customer_email NOT IN ('" + ConfigProperties.getProperty("default_customer_email") + "', '" + ConfigProperties.getProperty("test_customer_email") + "')\n"
       + "GROUP BY msg_info.customer_email, msg_info.slides_id\n"
       + "ORDER BY customer_full_name_or_email";
@@ -185,9 +185,9 @@ public class Analytics {
 	  + "  COALESCE(s2.name, 'File Not Found') AS file_performance_name\n"
       + "FROM view_file_performance_agg_by_date_file_hash as t1\n"
 	  + "INNER JOIN (SELECT date, salesman_email, max(file_performance) AS max_file_performance FROM picascrafxzhbcmd.view_file_performance_agg_by_date_file_hash GROUP BY date, salesman_email) AS t2 ON t1.date = t2.date AND t1.salesman_email = t2.salesman_email AND t1.file_performance = t2.max_file_performance\n"
-	  + "LEFT JOIN picascrafxzhbcmd.slides AS s1 ON t1.file_hash = s1.id AND s1.fk__document_status__status IN ('CREATED', 'UPDATED', 'BEFORE_AWS_S3_TRANSITION')\n"
+	  + "LEFT JOIN picascrafxzhbcmd.slides AS s1 ON t1.file_hash = s1.id AND s1.status IN ('CREATED', 'UPDATED', 'BEFORE_AWS_S3_TRANSITION')\n"
 	  + "INNER JOIN (SELECT date, file_hash, file_performance AS individual_file_performance FROM picascrafxzhbcmd.view_file_performance_agg_by_date_file_hash WHERE file_hash = ?) AS t3 ON t1.date = t3.date\n"
-	  + "LEFT JOIN picascrafxzhbcmd.slides AS s2 ON t3.file_hash = s2.id AND s2.fk__document_status__status IN ('CREATED', 'UPDATED', 'BEFORE_AWS_S3_TRANSITION')\n"
+	  + "LEFT JOIN picascrafxzhbcmd.slides AS s2 ON t3.file_hash = s2.id AND s2.status IN ('CREATED', 'UPDATED', 'BEFORE_AWS_S3_TRANSITION')\n"
 	  + "INNER JOIN (SELECT date, salesman_email, AVG(file_performance) AS avg_file_performance FROM picascrafxzhbcmd.view_file_performance_agg_by_date_file_hash GROUP BY date, salesman_email) AS t4 ON t1.date = t4.date AND t1.salesman_email = t4.salesman_email\n"
 	  + "WHERE t1.salesman_email = ?\n"
       + "GROUP BY t1.date, t1.salesman_email\n"
@@ -363,7 +363,7 @@ public class Analytics {
 	+ "  param_11_varchar AS 'enteredEmailAddress'\n"
 	+ "FROM customer_events\n"
 	+ "INNER JOIN msg_info ON msg_info.id = customer_events.msg_id\n"
-	+ "INNER JOIN slides ON msg_info.slides_id = slides.id AND slides.fk__document_status__status IN ('CREATED', 'UPDATED', 'BEFORE_AWS_S3_TRANSITION')\n"
+	+ "INNER JOIN slides ON msg_info.slides_id = slides.id AND slides.status IN ('CREATED', 'UPDATED', 'BEFORE_AWS_S3_TRANSITION')\n"
 	+ "WHERE event_name IN ('OPEN_SLIDES', 'VIEWER_WIDGET_ASK_QUESTION')\n"
 	+ "AND msg_info.sales_man_email = ?\n"
 	+ "AND customer_events.timestamp > '2016-01-01'\n"
@@ -388,7 +388,7 @@ public class Analytics {
 	+ "  param_11_varchar AS 'enteredEmailAddress'\n"
 	+ "FROM customer_events\n"
 	+ "INNER JOIN msg_info ON msg_info.id = customer_events.msg_id\n"
-	+ "INNER JOIN slides ON msg_info.slides_id = slides.id AND slides.fk__document_status__status IN ('CREATED', 'UPDATED', 'BEFORE_AWS_S3_TRANSITION')\n"
+	+ "INNER JOIN slides ON msg_info.slides_id = slides.id AND slides.status IN ('CREATED', 'UPDATED', 'BEFORE_AWS_S3_TRANSITION')\n"
 	+ "WHERE event_name IN ('OPEN_SLIDES', 'VIEWER_WIDGET_ASK_QUESTION')\n"
 	+ "AND msg_info.sales_man_email = ?\n"
 	+ "AND msg_info.customer_email <> '" + ConfigProperties.getProperty("test_customer_email") + "'"
@@ -406,7 +406,7 @@ public class Analytics {
     + "  msg_info.sales_man_email AS 'salesmanEmail'\n"
     + "FROM picascrafxzhbcmd.customer_events\n"
     + "INNER JOIN msg_info ON msg_info.id = customer_events.msg_id\n"
-    + "INNER JOIN slides ON msg_info.slides_id = slides.id AND slides.fk__document_status__status IN ('CREATED', 'UPDATED', 'BEFORE_AWS_S3_TRANSITION')\n"
+    + "INNER JOIN slides ON msg_info.slides_id = slides.id AND slides.status IN ('CREATED', 'UPDATED', 'BEFORE_AWS_S3_TRANSITION')\n"
     + "WHERE customer_events.id = ?";
 
   

@@ -1,7 +1,9 @@
 package slidepiper.customer_servlets;
 
-import java.io.BufferedReader;
-import java.io.IOException;
+import org.json.JSONObject;
+import slidepiper.constants.Constants;
+import slidepiper.dataobjects.MessageInfo;
+import slidepiper.db.DbLayer;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -9,15 +11,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.json.JSONObject;
-
-import slidepiper.*;
-import slidepiper.constants.Constants;
-import slidepiper.dataobjects.AlertData;
-import slidepiper.dataobjects.MessageInfo;
-import slidepiper.dataobjects.SlideView;
-import slidepiper.db.DbLayer;
+import java.io.BufferedReader;
+import java.io.IOException;
 
 /**
  * Servlet implementation class ReportsServlet
@@ -88,6 +83,7 @@ public class GetMessageDataServlet extends HttpServlet {
 					//System.out.println("GetMessageDataServlet returns " + customername + " " + salesman + " for msgid " + msgid);
 									
 					String res = output.toString();
+			  	response.setHeader("Access-Control-Allow-Origin", request.getHeader("origin"));
 					response.setCharacterEncoding("utf-8");
 			    response.setContentType("application/json");
 			    response.getWriter().write(res);

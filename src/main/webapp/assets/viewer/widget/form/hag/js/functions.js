@@ -1134,7 +1134,7 @@ $(function() {
     
     $.ajax({
       method: 'POST',
-      url: parent.ViewerConfiguration.API_URL + '/ManagementServlet',
+      url: parent.SP.API_URL + '/ManagementServlet',
       data: JSON.stringify(data),
       xhrFields: {
         withCredentials: true
@@ -1147,7 +1147,7 @@ $(function() {
       phoneNumber = '972' + payload['phone'].replace(/^0/, '').replace(/-/g, '');
       
       var request = new XMLHttpRequest();
-      request.open('POST', parent.ViewerConfiguration.API_URL + '/utils/widgets/sms');
+      request.open('POST', parent.SP.API_URL + '/utils/widgets/sms');
       request.setRequestHeader('Content-Type', 'application/json');
       request.send(JSON.stringify({channelName: channelName, url: url, phoneNumber: phoneNumber}));
     }
@@ -1206,7 +1206,7 @@ $(function() {
                     $('.sp-next-section').text('חלה שגיאה בהעלאת צרופות');
                 }
 
-                request.open("POST", parent.ViewerConfiguration.API_URL + '/utils/widgets/ftp');
+                request.open("POST", parent.SP.API_URL + '/utils/widgets/ftp');
                 request.send(formData);
             }
         });

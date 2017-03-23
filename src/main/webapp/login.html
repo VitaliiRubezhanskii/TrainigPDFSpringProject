@@ -49,7 +49,7 @@
     <div class="middle-box text-center loginscreen animated fadeInDown">
         <div style="margin-top: 200px;">
             <div>
-                <a id="sp-logo" href="#"><img src="assets/images/logo_wide_2000x433.png" width="250" /></a>
+                <a id="sp-logo" href="#"><img src="assets/img/logo_wide_1060x229.png" width="250" /></a>
             </div>
             
             <p style="margin-top: 20px;">Login to start making your documents smarter!</p>
@@ -74,7 +74,7 @@
     <!-- Mainly scripts -->
     <script src="assets/js/jquery-2.1.1.js"></script>
     <script src="assets/js/bootstrap.min.js"></script>
-    <script src="assets/js/plugins/sweetalerts/sweetalert.min.js"></script>    
+    <script src="assets/js/plugins/sweetalerts/sweetalert.min.js"></script>
     
     <!-- SlidePiper scripts -->
     <script src="assets/js/js.cookie.js"></script>
@@ -104,7 +104,7 @@
       	     $.post('ManagementServlet', JSON.stringify(data));
       	     Cookies.set('SalesmanEmail', $('input[type=email]').val(), { expires: 90 });
       	     Cookies.set('SalesmanEmailBase64', window.btoa($('input[type=email]').val()), { expires: 90 });
-      	     location.href = 'dashboard.html';
+      	     location.href = '/dashboard';
       	   } else {
       	     swal(
       	       'Error',

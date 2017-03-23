@@ -20,12 +20,13 @@ import java.util.Objects;
 
 @Service
 public class ViewerEventService {
-    private final AmazonSesService amazonSesService;
-    private final UserRepository userRepository;
-
     @Value("${amazon.ses.credentials.user.accessKey}") private String accessKey;
     @Value("${amazon.ses.credentials.user.secretKey}") private String secretKey;
     @Value("${amazon.ses.doNotReplyEmailAddress}") private String from;
+    @Value("${slidepiper.templates.prefix}") private String templatesPrefix;
+
+    private final AmazonSesService amazonSesService;
+    private final UserRepository userRepository;
 
     @Autowired
     public ViewerEventService(AmazonSesService amazonSesService, UserRepository userRepository) {
@@ -43,7 +44,9 @@ public class ViewerEventService {
 
         String subject = createTitle(viewerEventInput.getViewerEventType());
 
-        URL fileUrl = getClass().getClassLoader().getResource("templates/viewer-event-email.html");
+        URL fileUrl = getClass()
+                .getClassLoader()
+                .getResource(String.join("/", "templates", templatesPrefix, "viewer-event-email.html"));
         Reader viewerEventEmail = new FileReader(new File(fileUrl.toURI()));
         String body = Mustache.compiler().compile(viewerEventEmail).execute(new Object() {
             String title = subject;

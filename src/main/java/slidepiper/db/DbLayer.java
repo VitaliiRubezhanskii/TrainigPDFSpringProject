@@ -1,5 +1,22 @@
 package slidepiper.db;
 
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.io.IOUtils;
+import org.hashids.Hashids;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import slidepiper.config.ConfigProperties;
+import slidepiper.constants.Constants;
+import slidepiper.dataobjects.AlertData;
+import slidepiper.dataobjects.Customer;
+import slidepiper.dataobjects.CustomerSession;
+import slidepiper.dataobjects.HistoryItem;
+import slidepiper.dataobjects.MessageInfo;
+import slidepiper.dataobjects.Presentation;
+import slidepiper.dataobjects.SlideView;
+import slidepiper.integration.HubSpot;
+
+import javax.xml.bind.DatatypeConverter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Paths;
@@ -18,28 +35,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
-
-import javax.xml.bind.DatatypeConverter;
-
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.io.IOUtils;
-import org.hashids.Hashids;
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import com.slidepiper.aws.s3.DocumentContainer;
-import com.slidepiper.document.DocumentStatus;
-
-import slidepiper.config.ConfigProperties;
-import slidepiper.constants.Constants;
-import slidepiper.dataobjects.AlertData;
-import slidepiper.dataobjects.Customer;
-import slidepiper.dataobjects.CustomerSession;
-import slidepiper.dataobjects.HistoryItem;
-import slidepiper.dataobjects.MessageInfo;
-import slidepiper.dataobjects.Presentation;
-import slidepiper.dataobjects.SlideView;
-import slidepiper.integration.HubSpot;
 
 public class DbLayer {
   
@@ -115,50 +110,8 @@ public class DbLayer {
 	    }
 	    
 	  }
-	
-	
-	public static void deleteFile(String fileHash, String salesmanEmail) { 
-		String delete = "UPDATE slides SET fk__document_status__status = ? WHERE id = ? AND sales_man_email= ?";
-		Connection conn = null;
-		
-		Constants.updateConstants();
-    try {
-      Class.forName("com.mysql.cj.jdbc.Driver");
-    } catch (ClassNotFoundException e) {
-      e.printStackTrace();
-    }
-    
-    DocumentContainer document = new DocumentContainer(fileHash);
-    document.delete();
-    
-    try {
-      conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
-      PreparedStatement statement = conn.prepareStatement(delete);        
-      statement.setString(1, DocumentStatus.DELETED.name());
-      statement.setString(2, fileHash);               
-      statement.setString(3, salesmanEmail);              
-      statement.executeUpdate();
-      statement.close();
-      System.out.println("document: " + fileHash + " was deleted from the DB! salesman: " + salesmanEmail);
-      conn.close();
-      
-      // Log event.
-      Map<String, String> eventDataMap = new HashMap<String, String>();
-      eventDataMap.put("email", salesmanEmail);
-      
-      eventDataMap.put("param_1_varchar", salesmanEmail);
-      eventDataMap.put("param_2_varchar", fileHash);
-      
-      DbLayer.setEvent(DbLayer.SALESMAN_EVENT_TABLE,
-          ConfigProperties.getProperty("event_deleted_file"), eventDataMap);
-    } catch (Exception ex) {
-      System.out.println("err: " + ex.getMessage());
-    }
-	}
-	
 
-	
-	
+
 	//add new customer.
 	public static int addNewCustomer(String subAction, String salesMan, String firstName, String lastName, String company, String groupName, String email){
 		
@@ -483,7 +436,7 @@ public class DbLayer {
 				
 		String custsQuery = "SELECT name, sales_man_email, id "
 				+ " FROM slides " 
-				+ " WHERE sales_man_email=? AND slides.fk__document_status__status IN ('CREATED', 'UPDATED', 'BEFORE_AWS_S3_TRANSITION');";
+				+ " WHERE sales_man_email=? AND slides.status IN ('CREATED', 'UPDATED', 'BEFORE_AWS_S3_TRANSITION');";
 		
 		Connection conn =null;
 		try 
@@ -576,7 +529,7 @@ public class DbLayer {
 		String name = "";		
 						
 		String query =
-				"select name from slides where id=? AND slides.fk__document_status__status IN ('CREATED', 'UPDATED', 'BEFORE_AWS_S3_TRANSITION') LIMIT 1;";
+				"select name from slides where id=? AND slides.status IN ('CREATED', 'UPDATED', 'BEFORE_AWS_S3_TRANSITION') LIMIT 1;";
 		
 		Connection conn=null;
 		try 
@@ -1166,87 +1119,6 @@ public class DbLayer {
 			 return resultStr;
 			}
 
-			public static String getAdminReport()
-			{
-					String HTML="Some reports <BR><BR>";								
-					ArrayList<String> SQLs = new ArrayList<String>();
-					//last to view pres
-					SQLs.add("	SELECT " + 
-							" msg_info.id, msg_info.sales_man_email,msg_info.customer_email,slides.name, " +
-							" customer_events.timestamp " +
-							" FROM " +
-							" msg_info, customer_events, slides " +
-							" WHERE " +
-							" slides.id=msg_info.slides_id AND msg_info.id=customer_events.msg_id AND " +
-							" customer_events.event_name='OPEN_SLIDES' " + 
-							" ORDER BY customer_events.timestamp DESC LIMIT 40;");
-
-					// last to open mgmt console
-					SQLs.add(
-					" SELECT email, timestamp " +
-					" FROM salesman_events "+
-					" WHERE event_name='OPEN_MANAGE' "+
-					" ORDER BY timestamp DESC "+
-					" LIMIT 30; ");
-
-
-					// last msgs sent
-					SQLs.add(
-							" SELECT * FROM msg_info ORDER BY timestamp DESC LIMIT 20;");
-					
-					
-					SQLs.add("SELECT * FROM `customer_events` WHERE event_name='SUBSCRIBE'  ORDER BY timestamp DESC LIMIT 30;");
-					
-					SQLs.add("SELECT * FROM `customer_events` WHERE event_name='CONTACT_US'  ORDER BY timestamp DESC LIMIT 30;");
-					
-					SQLs.add("SELECT * FROM `customer_events` ORDER BY timestamp DESC LIMIT 200;");
-					
-					SQLs.add("SELECT * FROM `salesman_events` ORDER BY timestamp DESC LIMIT 200;");
-					// last events of customers
-					//SQLs.add(
-							//" SELECT * FROM customer_events ORDER BY timestamp DESC LIMIT 150;");
-
-									int cntr=0;
-					for(String curSQL : SQLs)
-					{
-							try (Connection conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
-								Statement statement = conn.createStatement();
-													ResultSet resultset = statement.executeQuery(curSQL);) {
-									switch (cntr)
-									{
-									case 0:
-										HTML+= "<BR>recent presentation views<BR>";
-										break;
-									case 1:
-										HTML+= "<BR>recent online salesmen<BR>";
-										break;
-									case 2:
-										HTML+= "<BR>recent msgs sent<BR>";
-										break;
-									case 3:
-										HTML+= "<BR>mailing list subscribers<BR>";
-										break;
-									case 4:
-										HTML+= "<BR>contact us messages<BR>";
-										break;
-									case 5:
-										HTML+= "<BR>recent customer events<BR>";
-										break;
-									case 6:
-										HTML+= "<BR>recent salesman events<BR>";
-										break;										
-									}
-									cntr++;
-								  HTML += getResultSetHTML(resultset);
-									conn.close();
-							} catch (Exception ex) {
-									System.out.println("exception in SQL query" + ex.getStackTrace().toString());
-									ex.printStackTrace();
-							}
-					}
-					return HTML;
-			}
-			
 			public static Boolean isSessionDead(String sessid){		
 
 				// if one line is returned, session dead.
@@ -1387,7 +1259,7 @@ public class DbLayer {
 						+ "SELECT\n" 
 						+ "	whitelist_ip\n"
 						+ "FROM ip_whitelist\n"
-						+ "INNER JOIN slides ON ip_whitelist.FK_file_id_ai = slides.id_ai AND slides.fk__document_status__status IN ('CREATED', 'UPDATED', 'BEFORE_AWS_S3_TRANSITION')\n"
+						+ "INNER JOIN slides ON ip_whitelist.FK_file_id_ai = slides.id_ai AND slides.status IN ('CREATED', 'UPDATED', 'BEFORE_AWS_S3_TRANSITION')\n"
 						+ "INNER JOIN msg_info ON msg_info.slides_id = slides.id\n"
 					    + "WHERE whitelist_ip = ?\n"
 					    + "AND msg_info.id = ?\n"
@@ -1573,57 +1445,8 @@ public class DbLayer {
         
         return accessToken;
       }
-      
-      
-      /**
-       * Get Alternative Document URL from fileLinkHash.
-       *
-       * This would be a URL for a file that is not stored on AWS S3.
-       * 
-       * @param fileLinkHash
-       * @return documentUrl
-       */
-      public static String getAlternativeUrlFromFileLinkHash(String fileLinkHash) {
-        String alternativeUrl = null;
-        
-        Constants.updateConstants();
-        try {
-          Class.forName("com.mysql.cj.jdbc.Driver");
-        } catch (ClassNotFoundException e) {
-          e.printStackTrace();
-        }
-        
-        String sql = "SELECT t1.alternative_url\n"
-                   + "FROM slides AS t1\n"
-                   + "JOIN msg_info AS t2 ON t1.id = t2.slides_id AND t2.id = ?\n"
-                   + "WHERE t1.fk__document_status__status IN ('CREATED', 'UPDATED', 'BEFORE_AWS_S3_TRANSITION')";
-        
-        Connection conn = null;
-        try {
-          conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
-          PreparedStatement ps = conn.prepareStatement(sql);
-          ps.setString(1, fileLinkHash);
-          ResultSet rs = ps.executeQuery();
-          
-          if (rs.next()) {
-            alternativeUrl = rs.getString(1);
-          }
-        } catch (SQLException e) {
-          e.printStackTrace();
-        } finally {
-          if (null != conn) {
-            try {
-              conn.close();
-            } catch (SQLException ex) {
-              ex.printStackTrace();
-            }
-          }
-        }
-          
-        return alternativeUrl;
-      }
-      
-      
+
+
       /**
        * Get data about a specific customer such as his first name. 
        * 
@@ -1768,7 +1591,7 @@ public class DbLayer {
         }
         Connection conn = null;
         
-        String sql = "SELECT id_ai FROM slides WHERE id = ? AND slides.fk__document_status__status IN ('CREATED', 'UPDATED', 'BEFORE_AWS_S3_TRANSITION')";
+        String sql = "SELECT id_ai FROM slides WHERE id = ? AND slides.status IN ('CREATED', 'UPDATED', 'BEFORE_AWS_S3_TRANSITION')";
         
         int fileId = 0;
         
@@ -1810,7 +1633,7 @@ public class DbLayer {
               "SELECT slides.id_ai\n"
             + "FROM slides\n"
             + "JOIN msg_info ON msg_info.slides_id = slides.id\n"
-            + "WHERE msg_info.id = ? AND slides.fk__document_status__status IN ('CREATED', 'UPDATED', 'BEFORE_AWS_S3_TRANSITION')";
+            + "WHERE msg_info.id = ? AND slides.status IN ('CREATED', 'UPDATED', 'BEFORE_AWS_S3_TRANSITION')";
         
         int fileId = 0;
 
@@ -1842,7 +1665,7 @@ public class DbLayer {
       public static List<String[]> getFileLinks(String customerEmail, String salesmanEmail) {
         Connection conn = null;
         String sql = "SELECT msg_info.id, slides.name FROM msg_info"
-            + " INNER JOIN slides ON msg_info.slides_id=slides.id AND slides.fk__document_status__status IN ('CREATED', 'UPDATED', 'BEFORE_AWS_S3_TRANSITION')"
+            + " INNER JOIN slides ON msg_info.slides_id=slides.id AND slides.status IN ('CREATED', 'UPDATED', 'BEFORE_AWS_S3_TRANSITION')"
             + " WHERE msg_info.customer_email=? AND msg_info.sales_man_email=?";
         List<String[]> fileLinkList = new ArrayList<String[]>();
         
@@ -1909,7 +1732,7 @@ public class DbLayer {
 		  			+ "	file_link\n"
 		  			+ "FROM slides\n"
 		  			+ "JOIN msg_info ON msg_info.slides_id = slides.id\n"
-		  			+ "WHERE msg_info.id = ? AND slides.fk__document_status__status IN ('CREATED', 'UPDATED', 'BEFORE_AWS_S3_TRANSITION')";
+		  			+ "WHERE msg_info.id = ? AND slides.status IN ('CREATED', 'UPDATED', 'BEFORE_AWS_S3_TRANSITION')";
           
           try {
             conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
@@ -1958,7 +1781,7 @@ public class DbLayer {
         String sql = 
             "SELECT slides.id AS fileHash, slides.name AS fileName, slides.sales_man_email AS salesmanEmail FROM slides\n"
           + "INNER JOIN msg_info ON msg_info.slides_id = slides.id\n"
-          + "WHERE msg_info.id = ? AND slides.fk__document_status__status IN ('CREATED', 'UPDATED', 'BEFORE_AWS_S3_TRANSITION')";
+          + "WHERE msg_info.id = ? AND slides.status IN ('CREATED', 'UPDATED', 'BEFORE_AWS_S3_TRANSITION')";
         
         try {
           conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
@@ -1993,116 +1816,7 @@ public class DbLayer {
         
         return fileMetaData;
       }
-     
-      
-      /**
-       * Get document URL from fileLinkHash.
-       * 
-       * The document_url field is on the slides table. And the file is stored in Amazon S3.
-       * 
-       * @param fileLinkHash
-       * @return documentUrl
-       */
-      public static String getDocumentUrlFromFileLinkHash(String fileLinkHash) {
-        
-    Constants.updateConstants();
-      try {
-        Class.forName("com.mysql.cj.jdbc.Driver");
-      } catch (ClassNotFoundException e) {
-        e.printStackTrace();
-      }
-      
-      String documentUrl = null;
-      String sql = "SELECT document_url\n"
-          + "FROM slides\n"
-          + "JOIN msg_info ON msg_info.slides_id = slides.id\n"
-          + "WHERE msg_info.id = ?";
-      
-      Connection conn = null;
-      try {
-        conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
-        PreparedStatement ps = conn.prepareStatement(sql);
-        ps.setString(1, fileLinkHash);
-        ResultSet rs = ps.executeQuery();
-        
-        if (rs.next()) {
-        documentUrl = rs.getString("document_url");
-        }
-         
-      } catch (SQLException e) {
-        e.printStackTrace();
-      } finally {
-        if (null != conn) {
-          try {
-            conn.close();
-          } catch (SQLException ex) {
-            ex.printStackTrace();
-          }
-        }
-      }
-          
-        return documentUrl;
-      }
-      
-      
-     /**
-  		* Check whether a file is whitelisted.
-  		* 
-  		* @param fileLinkHash - The file link hash.
-  		* @return flag -
-  		* 				1 - file does not exist.
-  		* 				2 - file is not whitelisted.
-  		* 				3 - file is whitelisted.
-  		*/
-      public static int getFileWhiteListFlag(String fileLinkHash) {
-			
-    		Constants.updateConstants();
-    		try {
-    		  Class.forName("com.mysql.cj.jdbc.Driver");
-    		} catch (ClassNotFoundException e) {
-    		  e.printStackTrace();
-    		}
-    			
-    		String sql = "SELECT\n"
-    		  			+ "	is_ip_whitelist\n"
-    		  			+ "FROM slides\n"
-    		  			+ "JOIN msg_info ON msg_info.slides_id = slides.id\n"
-    		  			+ "WHERE msg_info.id = ? AND slides.fk__document_status__status IN ('CREATED', 'UPDATED', 'BEFORE_AWS_S3_TRANSITION')";
-    			
-    		int flag = 1;
-    		Connection conn = null;
-    			
-    	    try {
-    		  conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
-    		  PreparedStatement ps = conn.prepareStatement(sql); 
-    			  
-    		  ps.setString(1, fileLinkHash);
-    		  ResultSet rs = ps.executeQuery();
-    		  
-    		  // If query returns a field, the file exists, otherwise it does not, and flag = 1.
-    		  if (rs.next()) {
-    			  if (rs.getBoolean("is_ip_whitelist")) {
-    				  flag = 3;
-    			  } else {
-    				  flag = 2;
-    			  }
-    		  }
-    		} catch (SQLException e) {
-    		 	  e.printStackTrace();
-    		} finally {
-    		  if (null != conn) {
-    			  try {
-    			      conn.close();
-    			  } catch (SQLException ex) {
-    			    ex.printStackTrace();
-    			  }
-    		  }
-    		}
-    		    
-	    return flag;
-    }
-	
-      
+
       /**
        * Get event related tabular data from the DB.
        * 
@@ -2397,7 +2111,7 @@ public class DbLayer {
       }
       
       String salesmanEmail = null;
-      String sql = "SELECT sales_man_email AS salesman_email FROM slides WHERE id = ? AND slides.fk__document_status__status IN ('CREATED', 'UPDATED', 'BEFORE_AWS_S3_TRANSITION') LIMIT 1";
+      String sql = "SELECT sales_man_email AS salesman_email FROM slides WHERE id = ? AND slides.status IN ('CREATED', 'UPDATED', 'BEFORE_AWS_S3_TRANSITION') LIMIT 1";
       
       Connection conn = null;
       try {
@@ -2663,51 +2377,7 @@ public class DbLayer {
         
         return timestamp;
       }
-      
-      /**
-       * Set document URL for non-S3 documents e.g. Dropbox.
-       */
-      /*public static boolean setAlternativeUrl(String alternativeUrl,
-          String documentHash, String documentName) {
-        
-        boolean isSet = false;
-        
-    	  Constants.updateConstants();
-        try {
-          Class.forName("com.mysql.cj.jdbc.Driver");
-        } catch (ClassNotFoundException e) {
-          e.printStackTrace();
-        }
-        
-        String sql = "UPDATE slides SET s3ObjectVersionId = NULL, domain = NULL, prefix = NULL, alternative_url = ?, name = ? WHERE id = ?";
 
-        Connection conn = null;
-        try {
-          conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
-          PreparedStatement ps = conn.prepareStatement(sql);
-          ps.setString(1, alternativeUrl);
-          ps.setString(2, documentName);
-          ps.setString(3, documentHash);
-          ps.executeUpdate();
-          
-          isSet = true;
-        } catch (SQLException ex) {
-          System.err.println("Error code: " + ex.getErrorCode() + " - " + ex.getMessage());
-          ex.printStackTrace();
-        } finally {
-          if (null != conn) {
-            try {
-              conn.close();
-            } catch (SQLException ex) {
-              ex.printStackTrace();
-            }
-          }
-        }
-        
-        return isSet;
-      }*/
-      
-      
      /**
        * Add a customer or salesman event to the DB.
        * 
@@ -2764,69 +2434,6 @@ public class DbLayer {
         
         return id;
       }
-      
-      
-      /**
-       * Set the uploaded file and the file hash referring to it.
-       * 
-       * @param file A file object received from uploading a file via the frontend.
-       * @param salesmanEmail The salesman email address.
-       * 
-       * @return The file enumerated hash.
-       * @throws IOException
-       */
-      public static String setFileHash(FileItem file, String salesmanEmail, Timestamp localTimestamp) throws IOException {
-        
-        Connection conn = null;
-        String sqlInsert = "INSERT INTO slides (file, sales_man_email, name, local_timestamp) VALUES (?, ?, ?, ?)";
-        String sqlSelectAfterInsert = "SELECT id_ai, id FROM slides WHERE id_ai=?";
-        String fileHash = null;
-        
-        try {
-          Constants.updateConstants();
-          conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
-          PreparedStatement ps = conn.prepareStatement(sqlInsert, Statement.RETURN_GENERATED_KEYS);                
-          
-          ps.setBytes(1, IOUtils.toByteArray(file.getInputStream()));
-          ps.setString(2, salesmanEmail);
-          ps.setString(3, Paths.get(file.getName()).getFileName().toString());
-          ps.setTimestamp(4, localTimestamp);
-          ps.executeUpdate();
-          ResultSet rs = ps.getGeneratedKeys();
-          
-          if (rs.next()) {
-            Hashids hashids = new Hashids(ConfigProperties.getProperty("hashids_salt"), 
-                Integer.parseInt(ConfigProperties.getProperty("hashids_minimum_file_hash_length")),
-                ConfigProperties.getProperty("hashids_custom_hash_alphabet"));
-            long generatedKey = rs.getLong(1);
-            fileHash = hashids.encode(generatedKey);
-            
-            ps = conn.prepareStatement(sqlSelectAfterInsert, ResultSet.TYPE_FORWARD_ONLY,
-                ResultSet.CONCUR_UPDATABLE);
-            ps.setLong(1, generatedKey);
-            rs = ps.executeQuery();
-            
-            if (rs.next()) {
-              rs.updateString("id", fileHash);
-              rs.updateRow();
-            }
-          }
-        } catch (SQLException ex) {
-          System.err.println("Error code: " + ex.getErrorCode() + " - " + ex.getMessage());
-          ex.printStackTrace();
-        } finally {
-          if (null != conn) {
-            try {
-              conn.close();
-            } catch (SQLException ex) {
-              ex.printStackTrace();
-            }
-          }
-        }
-        
-        return fileHash;
-      }
-      
       
 			/**
        * Set the file link hash used for the file viewer,
@@ -3067,54 +2674,8 @@ public class DbLayer {
             }
         	return statusCode;
          }
-      
-      
-      /**
-       * Set file data in DB for S3 files.
-       */
-      public static boolean setS3FileData(String documentStatus, String documentHash, String s3ObjectVersionId,
-          String domain, String prefix, String documentName) {
-        
-        boolean isSet = false;
-        
-        Constants.updateConstants();
-        try {
-          Class.forName("com.mysql.cj.jdbc.Driver");
-        } catch (ClassNotFoundException e) {
-          e.printStackTrace();
-        }
-        
-        String sql = "UPDATE slides SET fk__document_status__status = ?, s3_object_version_id = ?, domain = ?, prefix = ?, name = ?, alternative_url = NULL WHERE id = ?";
 
-        Connection conn = null;
-        try {
-          conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
-          PreparedStatement ps = conn.prepareStatement(sql);
-          ps.setString(1, documentStatus);
-          ps.setString(2, s3ObjectVersionId);
-          ps.setString(3, domain);
-          ps.setString(4, prefix);
-          ps.setString(5, documentName);
-          ps.setString(6, documentHash);
-          ps.executeUpdate();
-          
-          isSet = true;
-        } catch (SQLException ex) {
-          System.err.println("Error code: " + ex.getErrorCode() + " - " + ex.getMessage());
-          ex.printStackTrace();
-        } finally {
-          if (null != conn) {
-            try {
-              conn.close();
-            } catch (SQLException ex) {
-              ex.printStackTrace();
-            }
-          }
-        }
-        
-        return isSet;
-      }
-      
+
       public static int updateNavbarLogo (InputStream logo, String salesman) throws IOException {
     	  
     	  Connection conn = null;
@@ -3254,54 +2815,6 @@ public class DbLayer {
     	  
 		return resultList;
       }
-      
-      
-      /**
-       * Update (replace) a file with a different one.
-       * 
-       * @param file The file blob.
-       * @param fileHash The file hash.
-       * @param fileName The file name.
-       * @param salesmanEmail The salesman email address.
-       * 
-       * @throws IOException
-       */
-      public static void updateFile(FileItem file, String fileHash, String fileName,
-          String salesmanEmail, Timestamp localTimestamp) throws IOException {
-
-        Constants.updateConstants();
-        Connection conn = null;
-        String sql = "UPDATE slides SET file = ?, name = ?, timestamp = CURRENT_TIMESTAMP, local_timestamp = ? WHERE id = ? AND sales_man_email = ?";
-        
-        try {
-        try {
-      DriverManager.registerDriver(new com.mysql.cj.jdbc.Driver());
-      } catch (SQLException e) {
-      e.printStackTrace();
-      } 
-          
-          conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
-          PreparedStatement stmt = conn.prepareStatement(sql);
-          stmt.setBytes(1, IOUtils.toByteArray(file.getInputStream()));
-          stmt.setString(2, fileName);
-          stmt.setTimestamp(3, localTimestamp);
-          stmt.setString(4, fileHash);
-          stmt.setString(5, salesmanEmail);
-          
-          stmt.executeUpdate();
-        } catch (SQLException ex) {
-          System.err.println("Error code: " + ex.getErrorCode() + " - " + ex.getMessage());
-        } finally {
-          if (null != conn) {
-            try {
-              conn.close();
-            } catch (SQLException ex) {
-              ex.printStackTrace();
-            }
-          }
-        }
-      }
-      
       
       /**
        * Set a provider access token.

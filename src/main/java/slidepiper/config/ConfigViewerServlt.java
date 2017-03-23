@@ -1,10 +1,10 @@
 package slidepiper.config;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.Arrays;
-import java.util.Map;
-import java.util.UUID;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.slidepiper.model.component.JwtUtils;
+import org.json.JSONObject;
+import slidepiper.db.DbLayer;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -12,15 +12,11 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.apache.commons.lang3.StringEscapeUtils;
-import org.json.JSONObject;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.slidepiper.model.component.JwtUtils;
-
-import slidepiper.db.DbLayer;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Arrays;
+import java.util.Map;
+import java.util.UUID;
 
 @SuppressWarnings("serial")
 @WebServlet("/config-viewer")
@@ -227,20 +223,6 @@ public class ConfigViewerServlt extends HttpServlet {
               salesman.get("viewer_widget2_page_number"));
         }
         viewer.put("widget2", widget2);
-        
-        // File meta data.
-        JSONObject file = new JSONObject();
-        file.put("fileName", 
-            StringEscapeUtils.escapeHtml4(
-                DbLayer.getFileMetaData(fileLinkHash).get("fileName")));
-        
-        file.put("alternativeUrl", 
-        		DbLayer.getAlternativeUrlFromFileLinkHash(fileLinkHash));
-        
-        file.put("documentUrl", 
-            DbLayer.getDocumentUrlFromFileLinkHash(fileLinkHash));
-        
-        viewer.put("file", file);
         
         config.put("viewer", viewer);
         out.println(config);

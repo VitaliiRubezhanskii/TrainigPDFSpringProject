@@ -55,12 +55,25 @@ sp.uploadFiles = {
   })(),
   
   upload: function(action) {
-    var data = new FormData();
-    data.append('salesmanEmail', Cookies.get('SalesmanEmail'));
-    data.append('action', action);
-    
-    if ('update' === action) {
-      data.append('updateFileHash', sp.file.fileHash);
+    var formData = new FormData();
+    formData.append('data',
+        new Blob(
+            [JSON.stringify({'salesmanEmail': Cookies.get('SalesmanEmail')})],
+            {type: 'application/json'}
+        )
+    );
+
+    var url = SP.API_URL + '/v1/documents';
+    var type = 'POST';
+
+    if ('upload' === action) {
+        $.each(sp.uploadFiles.files, function(i) {
+            formData.append('files[]', sp.uploadFiles.files[i]);
+        });
+    } else if ('update' === action) {
+        formData.append('file', sp.uploadFiles.files[0]);
+        url += '/' + sp.file.fileHash;
+        type = 'PUT';
     }
     
     // Send either files or dropbox URL.
@@ -71,11 +84,6 @@ sp.uploadFiles = {
         }
       });
     } else {*/
-      if (sp.uploadFiles.files.length > 0) {
-        $.each(sp.uploadFiles.files, function(key, value) {
-          data.append(key, value);
-        });
-      }
     /*}*/
     
     var successVerb;
@@ -91,23 +99,19 @@ sp.uploadFiles = {
     $('.sp-file__upload-update-file-button').removeClass('btn-primary').addClass('btn-default').text('Uploading...');
     
     $.ajax({
-      url: 'upload-file',
-      type: 'POST',
-      data: data,
+      url: url,
+      type: type,
+      data: formData,
       cache: false,
       processData: false,
       contentType: false,
-      success: function(result) {
-        $('button[data-dismiss="modal"]').click();
-        $('.sk-spinner').hide();
-        
-        if (result.flag > 0) {
+      success: function() {
+          $('button[data-dismiss="modal"]').click();
+          $('.sk-spinner').hide();
+
           sp.file.getFilesList('fileUploadDashboard');
           sp.uploadFiles.files = [];
           swal("Success!", "Your file was " + successVerb + "!", "success");
-        } else if (resultCode === 0) {
-          swal("Error!", "Your file was not " + successVerb + "!", "error");
-        }
       },
       error: function () {
         swal("Error!", "Your file was not " + successVerb + "!", "error");
