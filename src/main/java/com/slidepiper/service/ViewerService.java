@@ -54,9 +54,11 @@ public class ViewerService {
     public String getView(HttpServletRequest request, Document document, String channelFriendlyId) {
         Map<String, String> requestData = getRequestData(request, channelFriendlyId);
 
-        if (document.getFriendlyId().equals("e5mmjr54")) {
+        if (document.getFriendlyId().equals("e5mmjr54")
+                && !channelFriendlyId.equals("2zdxd9")) {
             return "redirect:" + ConfigProperties.getProperty("file_viewer_broken_link");
-        } else if (document.getFriendlyId().equals("v9xmgm21")) {
+        } else if (document.getFriendlyId().equals("v9xmgm21")
+                && !channelFriendlyId.equals("27nm85")) {
             return "redirect:" + ConfigProperties.getProperty("file_viewer_ip_restricted");
         }
 
