@@ -134,21 +134,6 @@ public class DocumentService {
         eventRepository.save(new Event(email, Event.EventType.UPDATED_DOCUMENT, data));
     }
 
-    // TODO: Post 0.21.0 deployment - Delete method.
-    public String migrate(MultipartFile file, String friendlyId, String email) throws IOException {
-        Document document = documentRepository.findByFriendlyIdAndEmail(friendlyId, email);
-
-        String name = file.getOriginalFilename();
-        String key = String.join("/", keyPrefix, friendlyId, name);
-        String versionId = amazonS3Service.upload(file, bucket, key);
-
-        document.setStatus(Document.Status.CREATED);
-        document.setVersionId(versionId);
-        documentRepository.save(document);
-
-        return versionId;
-    }
-
     public void delete(String friendlyId, String email) {
         Document document = documentRepository.findByFriendlyIdAndEmail(friendlyId, email);
 
