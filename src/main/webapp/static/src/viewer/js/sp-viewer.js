@@ -1787,7 +1787,8 @@ $.ajax({
                 eventName: sp.viewer.eventName.viewerWidgetFormButtonClicked,
                 linkHash: sp.viewer.linkHash,
                 sessionId: sessionid,
-                param_1_varchar: $(this).text()
+                param_1_varchar: $(this).text(),
+                param_2_varchar: location.href
             });
 
             function formSwal() {

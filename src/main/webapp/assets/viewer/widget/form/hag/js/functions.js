@@ -19,6 +19,7 @@ $(function() {
     $('.sp-next-section').text('המשך')
     $('[data-section-id="0"]').show();
   }
+  sendSlidePiper('HALMAN_ALDUBI_CURRENT_SECTION', sectionId);
   
   function getParameterByName(name, url) {
     var regex = new RegExp("[\\?&]" + name + "=([^&#]*)");
