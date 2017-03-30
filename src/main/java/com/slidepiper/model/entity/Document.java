@@ -44,6 +44,9 @@ public class Document implements Serializable {
     @Column(name = "version_id")
     private String versionId;
 
+    @Column(name = "file_link")
+    private String alternativeUrl;
+
     @Column(name = "is_ip_whitelist")
     private boolean ipRestricted;
 

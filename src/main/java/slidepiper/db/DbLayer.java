@@ -1713,54 +1713,6 @@ public class DbLayer {
       }
       
       /**
-       * Get file_link field from slides table.
-       * 
-       * @param fileLinkHash
-       * @return fileLink
-       */
-      public static String getFileLinkFromFileLinkHash(String fileLinkHash) {
-    	  Constants.updateConstants();
-          try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-          } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-          }
-          Connection conn = null;
-          
-          String fileLink = null;
-          String sql = "SELECT\n"
-		  			+ "	file_link\n"
-		  			+ "FROM slides\n"
-		  			+ "JOIN msg_info ON msg_info.slides_id = slides.id\n"
-		  			+ "WHERE msg_info.id = ? AND slides.status IN ('CREATED', 'UPDATED', 'BEFORE_AWS_S3_TRANSITION')";
-          
-          try {
-            conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
-            PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setString(1, fileLinkHash);
-            
-            ResultSet rs = ps.executeQuery();
-          
-            if (rs.next()) {
-              fileLink = rs.getString("file_link");
-            }
-          } catch (SQLException ex) {
-            System.err.println("Error code: " + ex.getErrorCode() + " - " + ex.getMessage());
-            ex.printStackTrace();
-          } finally {
-            if (null != conn) {
-             try {
-               conn.close();
-             } catch (SQLException ex) {
-               ex.printStackTrace();
-             }
-            }
-          }
-    	  
-    	  return fileLink;
-      }
-      
-      /**
        * Get a file's meta data.
        * 
        * @param fileLinkHash A document file link hash.

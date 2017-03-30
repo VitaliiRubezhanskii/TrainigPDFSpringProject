@@ -15,13 +15,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.util.UriUtils;
 import slidepiper.config.ConfigProperties;
 import slidepiper.db.DbLayer;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Objects;
 
@@ -66,7 +69,14 @@ public class DocumentService {
             baseUrl = String.join("/", amazonS3Url, bucket);
         }
 
-        return String.join("/", baseUrl, keyPrefix, document.getFriendlyId(), document.getName());
+        String documentName = document.getName();
+        try {
+            documentName = UriUtils.encodePathSegment(document.getName(), StandardCharsets.UTF_8.name());
+        } catch (UnsupportedEncodingException e) {
+            e.getStackTrace();
+        }
+
+        return String.join("/", baseUrl, keyPrefix, document.getFriendlyId(), documentName);
     }
 
     public String getUrlWithVersionId(Document document, HttpServletRequest request) {

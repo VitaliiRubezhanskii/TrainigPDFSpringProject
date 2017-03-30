@@ -63,7 +63,7 @@ public class ViewerService {
         }
 
         if (isBrowserUnsupported(request.getHeader("User-Agent"))) {
-            String unsupportedBrowserDocumentUrl = getUnsupportedBrowserDocumentUrl(document, channelFriendlyId, request);
+            String unsupportedBrowserDocumentUrl = getUnsupportedBrowserDocumentUrl(document, request);
 
             requestData.put("param_4_varchar", unsupportedBrowserDocumentUrl);
             DbLayer.setEvent("customer_events", ConfigProperties.getProperty("init_unsupported_browser"), requestData);
@@ -107,16 +107,8 @@ public class ViewerService {
         return false;
     }
 
-    private String getUnsupportedBrowserDocumentUrl(Document document, String channelFriendlyId, HttpServletRequest request) {
-        String redirectLink;
-        String fileLink = DbLayer.getFileLinkFromFileLinkHash(channelFriendlyId);
-
-        if (null != fileLink && !fileLink.equals("")) {
-            redirectLink = fileLink;
-        } else {
-            redirectLink = documentService.getUrlWithVersionId(document, request);
-        }
-
-        return redirectLink;
+    private String getUnsupportedBrowserDocumentUrl(Document document, HttpServletRequest request) {
+        return Optional.ofNullable(document.getAlternativeUrl())
+                .orElse(documentService.getUrlWithVersionId(document, request));
     }
 }
