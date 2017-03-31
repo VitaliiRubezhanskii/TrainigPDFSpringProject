@@ -10,7 +10,7 @@ $(function() {
   var ci = getParameterByName('ci', document.referrer);
   var mqy = getParameterByName('mqy', document.referrer);
   var itfy = getParameterByName('itfy', document.referrer);
-  
+
   if ('1' === a) {
     sectionId = 7;
     attachmentSectionView();
@@ -979,6 +979,7 @@ $(function() {
       case 6:
         // Create attachmentLink.
         var attachmentLink = document.referrer;
+        var key = 'a';
         
         if (typeof getParameterByName('a', document.referrer) === 'undefined') {
           attachmentLink += '&a=1';
@@ -986,17 +987,20 @@ $(function() {
         
         if (typeof getParameterByName('ci', document.referrer) === 'undefined' && $('#career-independent').is(':checked')) {
           attachmentLink += '&ci=1';
+          key += '-ci';
         }
         
         if (typeof getParameterByName('mqy', document.referrer) === 'undefined' && $('.medical-questionnaire-yes').is(':checked')) {
           attachmentLink += '&mqy=1';
+          key += '-mqy';
         }
         
         if (typeof getParameterByName('itfy', document.referrer) === 'undefined' && $('#is-transfer-funds-yes').is(':checked')) {
           attachmentLink += '&itfy=1';
+          key += '-itfy';
         }
         payload['attachmentLink'] = attachmentLink;
-        sendSms(attachmentLink);
+        sendSms(key);
         
         payload['signatureBase64'] = signaturePad.toDataURL();
         sendWebMerge('https://www.webmerge.me/merge/78047/g33bvk', payload);
@@ -1143,14 +1147,14 @@ $(function() {
     });
   };
   
-  function sendSms(url) {
+  function sendSms(key) {
     if (typeof payload['phone'] !== 'undefined') {
       phoneNumber = '972' + payload['phone'].replace(/^0/, '').replace(/-/g, '');
       
       var request = new XMLHttpRequest();
       request.open('POST', parent.SP.API_URL + '/utils/widgets/sms');
       request.setRequestHeader('Content-Type', 'application/json');
-      request.send(JSON.stringify({channelName: channelName, url: url, phoneNumber: phoneNumber}));
+      request.send(JSON.stringify({channelName: channelName, key: key, phoneNumber: phoneNumber}));
     }
   }
   

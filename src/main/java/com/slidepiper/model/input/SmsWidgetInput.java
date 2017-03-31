@@ -1,15 +1,11 @@
 package com.slidepiper.model.input;
 
-import org.hibernate.validator.constraints.NotBlank;
-import org.hibernate.validator.constraints.URL;
-
 import lombok.Getter;
+import org.hibernate.validator.constraints.NotBlank;
 
 @Getter
 public class SmsWidgetInput {
   @NotBlank private String channelName;
   @NotBlank private String phoneNumber;
-  
-  // Temporary solution.
-  @URL private String url;
+  @NotBlank private String key;
 }
