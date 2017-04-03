@@ -109,6 +109,6 @@ public class ViewerService {
 
     private String getUnsupportedBrowserDocumentUrl(Document document, HttpServletRequest request) {
         return Optional.ofNullable(document.getAlternativeUrl())
-                .orElse(documentService.getUrlWithVersionId(document, request));
+                .orElse(documentService.getUrl(document, request));
     }
 }

@@ -15,16 +15,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.util.UriUtils;
+import org.springframework.web.util.UriComponentsBuilder;
 import slidepiper.config.ConfigProperties;
 import slidepiper.db.DbLayer;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Objects;
 
@@ -57,30 +53,19 @@ public class DocumentService {
     }
 
     public String getUrl(Document document, HttpServletRequest request) {
-        String baseUrl;
-        try {
-            baseUrl = new URL(request.getScheme(), request.getServerName(), request.getServerPort(), "").toString();
-        } catch (MalformedURLException e) {
-            baseUrl = slidepiperUrl;
-            log.error("MalformedURLException for: " + request.getRequestURL().toString());
+        UriComponentsBuilder baseUrl;
+        if (Objects.nonNull(request.getHeader("X-Amz-Cf-Id"))) {
+            baseUrl = UriComponentsBuilder.newInstance().scheme(request.getScheme()).host(request.getServerName());
+        } else {
+            baseUrl = UriComponentsBuilder.fromHttpUrl(amazonS3Url).pathSegment(bucket);
         }
 
-        if (Objects.isNull(request.getHeader("X-Amz-Cf-Id"))) {
-            baseUrl = String.join("/", amazonS3Url, bucket);
-        }
-
-        String documentName = document.getName();
-        try {
-            documentName = UriUtils.encodePathSegment(document.getName(), StandardCharsets.UTF_8.name());
-        } catch (UnsupportedEncodingException e) {
-            e.getStackTrace();
-        }
-
-        return String.join("/", baseUrl, keyPrefix, document.getFriendlyId(), documentName);
-    }
-
-    public String getUrlWithVersionId(Document document, HttpServletRequest request) {
-        return String.join("", getUrl(document, request), "?versionId=", document.getVersionId());
+        return baseUrl
+                .path("/{keyPrefix}/{documentFriendlyId}/{documentName}")
+                .queryParam("versionId", document.getVersionId())
+                .buildAndExpand(keyPrefix, document.getFriendlyId(), document.getName())
+                .encode()
+                .toString();
     }
 
     public String getDocumentPrefix(Document document) {

@@ -46,12 +46,8 @@ public class ViewerController {
 
         if (view.equals("viewer")) {
             view = String.join("/",templatesPrefix , "viewer", "viewer");
-            model.addAttribute("document",
-                    new Object() {
-                        String url = documentService.getUrl(document, request);
-                        String versionId = document.getVersionId();
-                    }
-            );
+
+            model.addAttribute("documentUrl", documentService.getUrl(document, request));
             model.addAttribute("apiUrl", apiUrl);
 
             long documentId = DbLayer.getFileIdFromFileLinkHash(channelFriendlyId);
