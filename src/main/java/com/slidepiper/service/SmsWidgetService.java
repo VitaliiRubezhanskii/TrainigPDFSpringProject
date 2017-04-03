@@ -45,15 +45,10 @@ public class SmsWidgetService {
         try {
             String message = smsWidgetData.getBodies().get(key).asText();
 
-            Map<String, MessageAttributeValue> smsAttributes =
-                    new HashMap<String, MessageAttributeValue>();
-
+            Map<String, MessageAttributeValue> smsAttributes = new HashMap<String, MessageAttributeValue>();
             smsAttributes.put("AWS.SNS.SMS.SenderID", new MessageAttributeValue()
                     .withStringValue(smsWidgetData.getSenderId())
                     .withDataType("String"));
-            smsAttributes.put("AWS.SNS.SMS.MaxPrice", new MessageAttributeValue()
-                    .withStringValue("0.5")
-                    .withDataType("Number"));
             smsAttributes.put("AWS.SNS.SMS.SMSType", new MessageAttributeValue()
                     .withStringValue("Transactional")
                     .withDataType("String"));
