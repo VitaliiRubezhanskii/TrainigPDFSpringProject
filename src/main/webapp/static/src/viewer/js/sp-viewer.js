@@ -126,11 +126,6 @@ sp.viewer = {
             isValidated: false,
             lastViewedPage: 0
         },
-        widget9: {
-            isReady: false,
-            isValidated: false,
-            lastViewedPage: 0
-        },
         widget10: {
             isEnabled: false,
             emailAddress: null,
@@ -602,7 +597,6 @@ $.ajax({
                         switch(widgetId) {
                             case 1:
                             case 6:
-                            case 9:
                                 widgetData.items = OrderWidgetDataItemsByPage(widgetId, widgetData.items);
                                 break;
                         }
@@ -700,7 +694,7 @@ $.ajax({
          * The following is a mechanisem for setting a widget item (out of a set of items)
          * everytime the user changes a page.
          */
-        $(document).on('pagechange spDefaultPlayerReady spYouTubePlayerReady spWidget6Ready spWidget9Ready', function(event) {
+        $(document).on('pagechange spDefaultPlayerReady spYouTubePlayerReady spWidget6Ready', function(event) {
 
             /* Widget 1 */
             if (sp.viewer.widgets.widget1.isValidated) {
@@ -740,18 +734,6 @@ $.ajax({
 
                     loadTestimonial(widgets.widget6.items);
                     sp.viewer.widgets.widget6.lastViewedPage = PDFViewerApplication.page;
-                }
-            }
-
-            /* Widget 9 */
-            if (sp.viewer.widgets.widget9.isValidated) {
-
-                // Verification before setting a link.
-                if (PDFViewerApplication.page !== sp.viewer.widgets.widget9.lastViewedPage
-                    && sp.viewer.widgets.widget9.isReady) {
-
-                    loadWidget9Link(widgets.widget9.items);
-                    sp.viewer.widgets.widget9.lastViewedPage = PDFViewerApplication.page;
                 }
             }
         });
@@ -941,28 +923,99 @@ $.ajax({
             }
         }
 
-        /* Validate Widget 9 */
-        var widget9RequiredSettings = ['buttonText1', 'link', 'pageFrom', 'pageTo'];
+        /* Link Widget */
+        if (typeof widgets.widget9 !== 'undefined') {
 
-        if (typeof widgets.widget9 !== 'undefined'
-            && typeof widgets.widget9.items !== 'undefined'
-            && widgets.widget9.items.length > 0) {
-            var isWidget9Validated = false;
-
-            $.each(widgets.widget9.items, function(index, item) {
-                if (isWidgetSettingsDefined(item, widget9RequiredSettings)) {
-                    isWidget9Validated = true;
-                } else {
-                    isWidget9Validated = false;
-                    return false;
+            var links = {};
+            widgets.widget9.items.forEach(function (link) {
+                for (i = parseInt(link.pageFrom); i <= parseInt(link.pageTo); i++) {
+                    (links[i] || (links[i] = [])).push(link);
                 }
             });
 
-            if (isWidget9Validated) {
-                sp.viewer.widgets.widget9.isValidated = true;
-                implementWidget9(widgets.widget9);
+            ['slidePiperViewerLoaded', 'pagechange'].forEach(function (event) {
+                document.addEventListener(event, function () {
+                    $('.sp-widget9').remove();
+
+                    if (links.hasOwnProperty(PDFViewerApplication.page)) {
+                        linkWidget(links[PDFViewerApplication.page]);
+                    }
+                });
+            });
+
+            function linkWidget(links) {
+                if (0 == $('.sp-right-side-widgets').length) {
+                    $('body').append('<div class="sp-right-side-widgets"></div>');
+                }
+
+                links.forEach(function (link) {
+                    var p = document.createElement('p');
+                    p.appendChild(document.createTextNode(link.buttonText1));
+
+                    var div = document.createElement('div');
+                    div.classList.add('sp-widget9__text');
+                    div.appendChild(p);
+
+                    if ('' !== link.buttonText2) {
+                        var p2 = document.createElement('p');
+                        p2.appendChild(document.createTextNode(link.buttonText2));
+                        div.appendChild(p2);
+                    }
+
+                    var i = document.createElement('i');
+                    i.classList.add('fa')
+                    if (typeof link.icon === 'undefined') {
+                        i.classList.add('fa-external-link');
+                    } else {
+                        i.classList.add(link.icon);
+                    }
+
+                    var button = document.createElement('button');
+                    button.classList.add('widget');
+                    button.classList.add('sp-widget-button');
+                    button.classList.add('sp-widget-font-fmaily');
+                    button.classList.add('sp--direction-ltr');
+                    button.classList.add('sp-widget9');
+                    button.style.backgroundColor = config.viewer.toolbarButtonBackground;
+                    button.style.color = config.viewer.toolbarCta1Color;
+
+                    button.onclick = function () {
+                        if (typeof link.layout === 'undefined' || 'external-link' === link.layout) {
+                            if (!link.link.match(/^#/)) {
+                                window.open(link.link);
+                            }
+                        } else if ('inside-window' === link.layout) {
+                            swal({
+                                html: '<iframe style="height: 75vh" frameborder="0" src="' + link.link + '"></iframe>',
+                                width: '100'
+                            });
+                        }
+
+                        sp.viewer.setCustomerEvent({
+                            eventName: sp.viewer.eventName.viewerWidgetLinkClicked,
+                            linkHash: sp.viewer.linkHash,
+                            sessionId: sessionid,
+                            param_1_varchar: link.buttonText1,
+                            param_2_varchar: link.buttonText2,
+                            param_3_varchar: link.link,
+                            param_4_varchar: link.pageFrom,
+                            param_5_varchar: link.pageTo,
+                        });
+                    };
+
+                    button.appendChild(i);
+                    button.appendChild(div);
+                    $('.sp-right-side-widgets')[0].appendChild(button);
+
+                    if ($('.sp-right-side-widgets button, .sp-right-side-widgets div').length > 1) {
+                        $('.sp-widget9').css({
+                            'margin-top': '20px'
+                        });
+                    }
+                });
             }
         }
+
 
         /* Validate Widget 11 */
         var widget11RequiredSettings = ['buttonText'];
@@ -1699,6 +1752,8 @@ $.ajax({
                     });
             };
         };
+
+        document.dispatchEvent(new CustomEvent('slidePiperViewerLoaded'));
     };
 
     function implementWidget7(widget) {
@@ -1862,101 +1917,6 @@ $.ajax({
                     $('body').append(item.codeContent);
                     break;
             }
-        });
-    }
-
-    function implementWidget9(widget) {
-
-        // Widget 9 - Link Widget.
-        if (0 == $('.sp-right-side-widgets').length) {
-            $('body').append('<div class="sp-right-side-widgets"></div>');
-        }
-
-        $('.sp-right-side-widgets').append(
-            '<button class="widget sp-widget-button sp-widget-font-fmaily sp--direction-ltr sp-hidden" id="sp-widget9">' +
-            '<i class="fa fa-external-link"></i><div class="sp-widget9__text"></div>' +
-            '</button>'
-        );
-
-        $('#sp-widget9').css({
-            'background-color': config.viewer.toolbarButtonBackground,
-            'color': config.viewer.toolbarCta1Color,
-        });
-
-        if ($('.sp-right-side-widgets button, .sp-right-side-widgets div').length > 1) {
-            $('#sp-widget9').css({
-                'margin-top': '20px'
-            });
-        }
-
-        sp.viewer.widgets.widget9.isReady = true;
-        $(document).trigger('spWidget9Ready');
-    }
-
-    function loadWidget9Link(links) {
-
-        // Format links array to an object for ease of access.
-        var linksByPageFrom = {};
-        var linksByPageTo = {};
-
-        // +1 to the linkPageStop, so that the button is visible on the page the user has selected
-        // the button to be visible until. The button is hidden on this page.
-        $.each(links, function(index, link) {
-            linksByPageFrom['page' + link.pageFrom.toString()] = link;
-            linksByPageTo['page' + (parseInt(link.pageTo) + 1).toString()] = link;
-        });
-
-        for (var page = PDFViewerApplication.page; page > -1; page--) {
-
-            if (typeof linksByPageFrom['page' + page] !== 'undefined') {
-                $('#sp-widget9').removeClass('sp-widget9__transition sp-hidden');
-
-                setWidget9Link(
-                    linksByPageFrom['page' + page].buttonText1,
-                    linksByPageFrom['page' + page].buttonText2,
-                    linksByPageFrom['page' + page].link,
-                    linksByPageFrom['page' + page].pageFrom,
-                    linksByPageFrom['page' + page].pageTo
-                );
-
-                // If a page with a link is found, break the loop.
-                break;
-            } else if (typeof linksByPageTo['page' + page] !== 'undefined') {
-                $('#sp-widget9').addClass('sp-widget9__transition');
-
-                break;
-            }
-
-            if (0 === page) {
-                $('#sp-widget9').addClass('sp-widget9__transition');
-            }
-        }
-    }
-
-    function setWidget9Link(buttonText1, buttonText2, link, pageFrom, pageTo) {
-        $('.sp-widget9__text')
-            .empty()
-            .append('<p>' + buttonText1 + '</p>');
-
-        if ('' !== buttonText2) {
-            $('.sp-widget9__text p').after('<p>' + buttonText2 + '</p>');
-        }
-
-        $('#sp-widget9').off('click').on('click', function() {
-            if (! link.match(/^#/)) {
-                window.open(link);
-            }
-
-            sp.viewer.setCustomerEvent({
-                eventName: sp.viewer.eventName.viewerWidgetLinkClicked,
-                linkHash: sp.viewer.linkHash,
-                sessionId: sessionid,
-                param_1_varchar: buttonText1,
-                param_2_varchar: buttonText2,
-                param_3_varchar: link,
-                param_4_varchar: pageFrom,
-                param_5_varchar: pageTo,
-            });
         });
     }
 
@@ -2198,3 +2158,19 @@ function getParameterByName(name) {
     var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"), results = regex.exec(location.search);
     return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
 }
+
+// CustomEvent polyfill.
+(function() {
+    if (typeof window.CustomEvent === 'function') return false;
+
+    function CustomEvent(type, customEventInit) {
+        customEventInit = customEventInit || {bubbles: false, cancelable: false, detail: undefined};
+        var customEvent = document.createEvent('CustomEvent');
+        customEvent.initCustomEvent(type, customEventInit.bubbles, customEventInit.cancelable, customEventInit.detail);
+        return customEvent;
+    }
+
+    CustomEvent.prototype = window.Event.prototype;
+
+    window.CustomEvent = CustomEvent;
+})();

@@ -37,7 +37,8 @@ See https://github.com/adobe-type-tools/cmap-resources
         'pagesloaded',
         'updateviewarea',
         'pagemode',
-        'outlineloaded'
+        'outlineloaded',
+        'slidePiperViewerLoaded'
     ].forEach(function(eventName) {
         document.addEventListener(eventName, function(event) {
             console.log(event.type);
@@ -523,6 +524,7 @@ See https://github.com/adobe-type-tools/cmap-resources
             loadScript('/static/src/viewer/js/sp.js', function() {
                 loadScript('/static/src/viewer/js/sp-viewer.js', function() {
                     loadScript('/static/src/viewer/lib/sweetalert2/4.1.9/sweetalert2.min.js');
+
                 });
             });
         });
