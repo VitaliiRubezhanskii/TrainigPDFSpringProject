@@ -1,18 +1,13 @@
 package slidepiper.salesman_servlets;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.PrintWriter;
-import java.net.URL;
-
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.json.JSONObject;
 import slidepiper.config.ConfigProperties;
 import slidepiper.db.DbLayer;
 import slidepiper.email.Mailchimp;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -21,12 +16,14 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.FileUploadException;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.json.JSONObject;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.PrintWriter;
+import java.net.URL;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @SuppressWarnings("serial")
 @WebServlet("/create-user")
@@ -73,6 +70,7 @@ public class CreateUser extends HttpServlet {
 	    	String firstName = null;
 	    	String lastName = null;
 	    	String password = null;
+			String signupCode = null;
 	    	String telephone = null;
 	    	String promoCode = null;
 	    	String viewerToolbarBackground = null;
@@ -114,8 +112,10 @@ public class CreateUser extends HttpServlet {
 	    		}
 	    		else if (file.getFieldName().equals("password")){
 	    			password = file.getString();
-	    			System.out.println(password);
 	    		}
+				else if (file.getFieldName().equals("signupCode")){
+					signupCode = file.getString();
+				}
 	    		else if (file.getFieldName().equals("telephone")){
 	    			telephone = file.getString();
 	    			System.out.println("Phone: " + telephone);
@@ -184,7 +184,7 @@ public class CreateUser extends HttpServlet {
 	    	}
 	    	
 	    	if (action.equals("setSalesman")) {
-	        	statusCode = DbLayer.setSalesman(company, email, emailClient, firstName, lastName, password, 
+	        	statusCode = DbLayer.setSalesman(company, email, emailClient, firstName, lastName, password, signupCode,
 	        		telephone, promoCode, viewerToolbarBackground, viewerToolbarLogoImage, viewerToolbarLogoLink,
 	        		viewerToolbarCTABackground, viewerToolbarCta2IsEnabled, viewerToolbarCta3IsEnabled,
 	        		viewerToolbarCta2Text, viewerToolbarCta2Link, viewerToolbarCta3Text, viewerToolbarCta3Link);

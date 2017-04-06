@@ -27,6 +27,7 @@ sp = {
         formData.append('last-name', lastName);
         formData.append('email', $('[name=email]').val());
         formData.append('password', $('[name=password]').val());
+        formData.append('signupCode', $('[name=signup-code]').val());
         formData.append('email-client', 'not-set');
         
         $.ajax({
@@ -46,10 +47,11 @@ sp = {
                   eventAction: 'signup'
                 });
                 setTimeout(function() {
-                  location.href = 'dashboard.html';
+                  location.href = '/dashboard';
                 }, 2000);
                 break;
-              case 100:
+
+              default:
                 swal('There was an error with the signup');
                 break;
             }

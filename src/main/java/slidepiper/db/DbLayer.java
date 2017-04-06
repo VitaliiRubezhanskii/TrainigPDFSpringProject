@@ -2514,7 +2514,7 @@ public class DbLayer {
        *        and addition success.  
      * @throws IOException 
        */
-      public static int setSalesman(String company, String email, String emailClient, String firstName, String lastName, String password,
+      public static int setSalesman(String company, String email, String emailClient, String firstName, String lastName, String password, String signupCode,
     		  String telephone, String promoCode, String viewerToolbarBackground, InputStream viewerToolbarLogoImage, String viewerToolbarLogoLink, String viewerToolbarCTABackground,
     		  String viewerToolbarCta2IsEnabled, String viewerToolbarCta3IsEnabled,
     		  String viewerToolbarCta2Text, String viewerToolbarCta2Link, String viewerToolbarCta1Text, String viewerToolbarCta1Link) throws IOException {
@@ -2531,7 +2531,9 @@ public class DbLayer {
 		
         if (isSalesmanExist(email)) {
           statusCode = 100;
-        } else {
+        } else if (! signupCode.equals("piperroi")) {
+		  statusCode = 101;
+		} else {
           Connection conn=null;
           String fullName = firstName + " " + lastName;
           if (null == viewerToolbarCTABackground) {
