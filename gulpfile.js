@@ -27,9 +27,9 @@ gulp.task('templates-clean', function() {
     return del(templates.build);
 });
 
-gulp.task('static-viewer-lib-copy', function() {
-    return gulp.src(static.src + '/viewer/lib/**/*', {base: static.src + '/viewer'})
-        .pipe(gulp.dest(static.build + '/viewer'));
+gulp.task('static-copy', function() {
+    return gulp.src(static.src + '/*/lib/**/*', {base: static.src})
+        .pipe(gulp.dest(static.build));
 });
 
 gulp.task('templates-copy', function() {
@@ -37,41 +37,41 @@ gulp.task('templates-copy', function() {
         .pipe(gulp.dest(templates.build));
 });
 
-gulp.task('static-viewer-revision', function() {
+gulp.task('static-revision', function() {
     return gulp.src([
-            static.src + '/viewer/css/*.css',
-            static.src + '/viewer/js/*.js',
-            static.src + '/viewer/images/*.+(gif|jpg|png|svg)',
-        ], {base: static.src + '/viewer'})
+            static.src + '/*/css/*.css',
+            static.src + '/*/js/*.js',
+            static.src + '/*/images/*.+(gif|jpg|png|svg)',
+        ], {base: static.src})
         .pipe(gulpIf('*.css', cssnano()))
         .pipe(gulpIf('*.js', uglify()))
         .pipe(gulpIf('*.+(gif|jpg|png|svg)', imagemin()))
         .pipe(rev())
         .pipe(revFormat({suffix: '.min'}))
-        .pipe(gulp.dest(static.build + '/viewer'))
+        .pipe(gulp.dest(static.build))
         .pipe(rev.manifest())
-        .pipe(gulp.dest(static.build + '/viewer'));
+        .pipe(gulp.dest(static.build));
 });
 
-gulp.task('templates-viewer-replace', function() {
-    var manifest = gulp.src(static.build + '/viewer/rev-manifest.json');
+gulp.task('templates-replace', function() {
+    var manifest = gulp.src(static.build + '/rev-manifest.json');
 
-    return gulp.src(templates.src + '/viewer/viewer.html')
-        .pipe(replace('src/viewer', 'build/viewer'))
+    return gulp.src(templates.src + '/*/*.html', {base: templates.src})
+        .pipe(replace('static/src', 'static/build'))
         .pipe(revReplace({manifest: manifest}))
-        .pipe(gulp.dest(templates.build + '/viewer'));
+        .pipe(gulp.dest(templates.build));
 });
 
-gulp.task('static-viewer-revision-clean', function() {
-    return del(static.build + '/viewer/rev-manifest.json');
+gulp.task('static-revision-clean', function() {
+    return del(static.build + '/rev-manifest.json');
 });
 
 gulp.task('build', gulp.series(
     'static-clean',
     'templates-clean',
-    'static-viewer-lib-copy',
+    'static-copy',
     'templates-copy',
-    'static-viewer-revision',
-    'templates-viewer-replace',
-    'static-viewer-revision-clean'
+    'static-revision',
+    'templates-replace',
+    'static-revision-clean'
 ));

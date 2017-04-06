@@ -13,6 +13,6 @@ public class DashboardController {
     @GetMapping("/dashboard")
     public String dashboard(Model model) {
         model.addAttribute("apiUrl", apiUrl);
-        return String.join("/", templatesPrefix, "dashboard");
+        return String.join("/", templatesPrefix, "dashboard", "dashboard");
     }
 }

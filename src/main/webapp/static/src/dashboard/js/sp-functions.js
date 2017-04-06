@@ -251,7 +251,7 @@ sp = {
                     });
 
                     $('#sp-download-template__button').click(function() {
-                        location.href = 'assets/files/customers_template.csv';
+                        location.href = '../../../../assets/files/customers_template.csv';
                     });
 
                     // Add or update a customer.
