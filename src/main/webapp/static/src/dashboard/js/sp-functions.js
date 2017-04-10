@@ -2092,7 +2092,7 @@ sp = {
 
                 // This checks If wizard-step is document selector tab in order to start saving the
                 // chosen sections.
-                if ($('li.current').text() === 'current step: 3. Send Documents'){
+                if ($('li.current').text() === 'current step: 3. Generated Links'){
                     var customerArr = [];
                     var fileArr = [];
                     var files = [];
