@@ -1,5 +1,9 @@
 package slidepiper.email;
 
+import org.apache.commons.codec.binary.Base64;
+import org.apache.http.client.ClientProtocolException;
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -8,10 +12,6 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import org.apache.commons.codec.binary.Base64;
-import org.apache.http.client.ClientProtocolException;
-import org.json.JSONObject;
-
 public class Mailchimp {
 
     /**
@@ -19,12 +19,11 @@ public class Mailchimp {
      * @param email     The user email.
      * @param firstName The user first name.
      * @param lastName  The user last name.
-     * @param password  The user password.
      * @return          The subscribing process response code.
      * @throws ClientProtocolException
      * @throws IOException
      */
-    public static int SubscribeUser(String email, String firstName, String lastName, String password)
+    public static int SubscribeUser(String email, String firstName, String lastName)
         throws ClientProtocolException, IOException {
 
       String endPoint = "https://us13.api.mailchimp.com/3.0/lists/fd9674d4d4/members/";
@@ -40,7 +39,6 @@ public class Mailchimp {
       
       merge_fields.put("FNAME", firstName);
       merge_fields.put("LNAME", lastName);
-      merge_fields.put("PASSWORD", password);
       data.put("email_address", email);
       data.put("status", "subscribed");
       data.put("merge_fields", merge_fields);

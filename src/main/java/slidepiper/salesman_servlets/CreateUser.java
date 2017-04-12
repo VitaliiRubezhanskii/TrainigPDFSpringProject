@@ -203,7 +203,7 @@ public class CreateUser extends HttpServlet {
 	        	  
 	        	  // Subscribe user to Mailchimp
 	        	  int mailchimpResponseCode =
-	        	      Mailchimp.SubscribeUser(email, firstName, lastName, password);
+	        	      Mailchimp.SubscribeUser(email, firstName, lastName);
 	        	  
 	        	  // Log event of subscribing a user to Mailchimp
 	        	  if (200 == mailchimpResponseCode) {
