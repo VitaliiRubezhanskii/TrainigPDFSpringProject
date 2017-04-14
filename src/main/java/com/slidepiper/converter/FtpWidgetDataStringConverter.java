@@ -1,7 +1,9 @@
 package com.slidepiper.converter;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.slidepiper.model.entity.widget.FtpWidgetData;
+import com.slidepiper.model.entity.widget.FtpWidget.FtpWidgetData;
 
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
@@ -14,9 +16,13 @@ public class FtpWidgetDataStringConverter implements AttributeConverter<FtpWidge
   private final ObjectMapper objectMapper = new ObjectMapper();
 
   @Override
-  public String convertToDatabaseColumn(FtpWidgetData data) {
-    // TODO: Add converter.
-    return null;
+  public String convertToDatabaseColumn(FtpWidgetData ftpWidgetData) {
+    try {
+      return objectMapper.writeValueAsString(objectMapper.convertValue(ftpWidgetData, JsonNode.class));
+    } catch (JsonProcessingException e) {
+      e.printStackTrace();
+      return null;
+    }
   }
 
   @Override

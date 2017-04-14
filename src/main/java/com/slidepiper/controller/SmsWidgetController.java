@@ -1,7 +1,7 @@
 package com.slidepiper.controller;
 
 import com.slidepiper.model.input.SmsWidgetInput;
-import com.slidepiper.service.SmsWidgetService;
+import com.slidepiper.service.widget.SmsWidgetService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;

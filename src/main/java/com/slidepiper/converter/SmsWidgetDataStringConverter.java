@@ -1,13 +1,14 @@
 package com.slidepiper.converter;
 
-import java.io.IOException;
-import java.util.Objects;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.slidepiper.model.entity.widget.SmsWidget.SmsWidgetData;
 
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.slidepiper.model.entity.widget.SmsWidgetData;
+import java.io.IOException;
+import java.util.Objects;
 
 @Converter
 public class SmsWidgetDataStringConverter implements AttributeConverter<SmsWidgetData, String> {
@@ -15,9 +16,13 @@ public class SmsWidgetDataStringConverter implements AttributeConverter<SmsWidge
   private final ObjectMapper objectMapper = new ObjectMapper();
 
   @Override
-  public String convertToDatabaseColumn(SmsWidgetData data) {
-    // TODO: Add converter.
-    return null;
+  public String convertToDatabaseColumn(SmsWidgetData smsWidgetData) {
+    try {
+      return objectMapper.writeValueAsString(objectMapper.convertValue(smsWidgetData, JsonNode.class));
+    } catch (JsonProcessingException e) {
+      e.printStackTrace();
+      return null;
+    }
   }
 
   @Override

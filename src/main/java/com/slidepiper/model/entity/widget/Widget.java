@@ -1,24 +1,29 @@
 package com.slidepiper.model.entity.widget;
 
-import javax.persistence.Column;
+import com.slidepiper.model.entity.Document;
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-
-import lombok.Getter;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 @Entity
 @DiscriminatorColumn(name = "type")
+@Getter
+@Setter
 public abstract class Widget {
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  protected long id;
-  
-  @Column(name = "FK_file_id_ai")
-  protected long documentId;
-  
-  @Getter
-  protected boolean enabled;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    Long id;
+
+    boolean enabled;
+
+    @ManyToOne
+    @JoinColumn(name = "FK_file_id_ai", referencedColumnName = "id_ai")
+    Document document;
 }

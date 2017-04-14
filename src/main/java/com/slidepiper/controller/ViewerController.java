@@ -1,9 +1,9 @@
 package com.slidepiper.controller;
 
 import com.slidepiper.model.entity.Document;
-import com.slidepiper.model.entity.widget.ShareData;
+import com.slidepiper.model.entity.widget.ShareWidget.ShareWidgetData;
 import com.slidepiper.service.DocumentService;
-import com.slidepiper.service.ShareDataService;
+import com.slidepiper.service.widget.ShareWidgetService;
 import com.slidepiper.service.ViewerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,17 +23,16 @@ public class ViewerController {
     @Value("${slidepiper.templates.prefix}") private String templatesPrefix;
 
     private final DocumentService documentService;
+    private final ShareWidgetService shareWidgetService;
     private final ViewerService viewerService;
-    private final ShareDataService shareDataService;
 
     @Autowired
-    public ViewerController(ViewerService viewerService,
-                            ShareDataService shareDataService,
-                            DocumentService documentService) {
-
+    public ViewerController(DocumentService documentService,
+                            ShareWidgetService shareWidgetService,
+                            ViewerService viewerService) {
         this.documentService = documentService;
+        this.shareWidgetService = shareWidgetService;
         this.viewerService = viewerService;
-        this.shareDataService = shareDataService;
     }
 
     @GetMapping("/view")
@@ -51,8 +50,8 @@ public class ViewerController {
             model.addAttribute("apiUrl", apiUrl);
 
             long documentId = DbLayer.getFileIdFromFileLinkHash(channelFriendlyId);
-            ShareData shareData = shareDataService.getShareData(documentId, request, channelFriendlyId);
-            model.addAttribute("shareData", shareData);
+            ShareWidgetData shareWidgetData = shareWidgetService.getShareWidgetData(request, channelFriendlyId);
+            model.addAttribute("shareWidgetData", shareWidgetData);
         }
 
         return view;

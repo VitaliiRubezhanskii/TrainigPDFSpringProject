@@ -152,9 +152,7 @@ sp.widgets = {
          */
         saveItems: function(fileHash) {
             var widgetSetting = {
-                apiVersion: '1.0',
                 data: {
-                    fileHash: fileHash,
                     widgetId: 6,
                     isEnabled: $('#sp-widget6--is-enabled').prop('checked'),
                     items: []
@@ -469,7 +467,7 @@ sp.viewerWidgetsModal = {
             function(data) {
                 widgetSettingsData = data.widgetsSettings;
 
-                sp.viewerWidgetsModal.displayWidgetsSettings(widgetSettingsData);
+                sp.viewerWidgetsModal.displayWidgetsSettings(widgetSettingsData, fileHash);
                 sp.viewerWidgetsModal.setSaveButtons(fileHash);
             }
         );
@@ -494,71 +492,78 @@ sp.viewerWidgetsModal = {
      * @param {object} widgetData - The widget settings for this file, received from
      * the ManagementServlet.
      */
-    displayWidgetsSettings: function(widgetsSettings) {
+    displayWidgetsSettings: function(widgetsSettings, fileHash) {
         $.each(widgetsSettings, function(index, value) {
             var widget = JSON.parse(value.widgetData);
 
             if (typeof widget.data !== 'undefined') {
-                switch(widget.data.widgetId) {
-                    case 1:
-                        if (widget.data.items.length > 0) {
-                            displayVideoSettings(widget.data);
-                        }
-                        break;
+                if (typeof widget.data.items !== 'undefined'
+                        && typeof widget.data.items[0] !== 'undefined'
+                        && typeof widget.data.items[0].widgetId !== 'undefined'
+                        && 11 === widget.data.items[0].widgetId) {
+                    displayWidget11(widget.data, fileHash);
+                } else {
+                    switch (widget.data.widgetId) {
+                        case 1:
+                            if (widget.data.items.length > 0) {
+                                displayVideoSettings(widget.data);
+                            }
+                            break;
 
-                    case 2:
-                        displayCalendlySettings(widget.data);
-                        break;
+                        case 2:
+                            displayCalendlySettings(widget.data);
+                            break;
 
-                    case 3:
-                        displayAskQuestionSettings(widget.data);
-                        break;
+                        case 3:
+                            displayAskQuestionSettings(widget.data);
+                            break;
 
-                    case 4:
-                        displayLikeWidgetSettings(widget.data);
-                        break;
+                        case 4:
+                            displayLikeWidgetSettings(widget.data);
+                            break;
 
-                    case 5:
-                        if (widget.data.items.length > 0) {
-                            displayWidget5(widget.data);
-                        }
-                        break;
+                        case 5:
+                            if (widget.data.items.length > 0) {
+                                displayWidget5(widget.data);
+                            }
+                            break;
 
-                    case 6:
-                        if (widget.data.items.length > 0) {
-                            sp.widgets.widget6.displayItems(widget.data);
-                        }
-                        break;
+                        case 6:
+                            if (widget.data.items.length > 0) {
+                                sp.widgets.widget6.displayItems(widget.data);
+                            }
+                            break;
 
-                    case 7:
-                        if (widget.data.items.length > 0) {
-                            displayWidget7(widget.data);
-                        }
-                        break;
+                        case 7:
+                            if (widget.data.items.length > 0) {
+                                displayWidget7(widget.data);
+                            }
+                            break;
 
-                    case 8:
-                        if (widget.data.items.length > 0) {
-                            displayWidget8(widget.data);
-                        }
-                        break;
+                        case 8:
+                            if (widget.data.items.length > 0) {
+                                displayWidget8(widget.data);
+                            }
+                            break;
 
-                    case 9:
-                        if (widget.data.items.length > 0) {
-                            displayWidget9(widget.data);
-                        }
-                        break;
+                        case 9:
+                            if (widget.data.items.length > 0) {
+                                displayWidget9(widget.data);
+                            }
+                            break;
 
-                    case 10:
-                        if (widget.data.items.length > 0) {
-                            displayWidget10(widget.data);
-                        }
-                        break;
+                        case 10:
+                            if (widget.data.items.length > 0) {
+                                displayWidget10(widget.data);
+                            }
+                            break;
 
-                    case 11:
-                        if (widget.data.items.length > 0) {
-                            displayWidget11(widget.data);
-                        }
-                        break;
+                        case 11:
+                            if (widget.data.items.length > 0) {
+                                displayWidget11(widget.data, fileHash);
+                            }
+                            break;
+                    }
                 }
             }
         });
@@ -819,8 +824,14 @@ sp.viewerWidgetsModal = {
             $('[name="spWidget10FormTitle"]').val(widget.items[0].formTitle);
         }
 
-        function displayWidget11(widget) {
-            $('[name="sp-widget11--is-enabled"]').prop('checked', widget.isEnabled);
+        function displayWidget11(widget, fileHash) {
+
+            if (typeof widget.isEnabled !== 'undefined') {
+                $('[name="sp-widget11--is-enabled"]').prop('checked', widget.isEnabled);
+            } else {
+                $('[name="sp-widget11--is-enabled"]').prop('checked', widget.items[0].enabled);
+            }
+
             $('[name="spWidget11ButtonText"]').val(widget.items[0].buttonText);
 
             if (typeof widget.items[0].isButtonColorCustom !== 'undefined') {
@@ -839,10 +850,10 @@ sp.viewerWidgetsModal = {
                     .spectrum('set', widget.items[0].buttonColor);
             }
 
-            if (typeof widget.items[0].title !== 'undefined' && widget.items[0].title !== '') {
+            if (typeof widget.items[0].title !== 'undefined') {
                 $('[name="spWidget11ShareTitle"]').val(widget.items[0].title);
             } else {
-                var fileName = $('.sp-file-mgmt-file-name[data-file-hash=' + widget.fileHash + ']').text();
+                var fileName = $('.sp-file-mgmt-file-name[data-file-hash=' + fileHash + ']').text();
                 fileName = fileName.substring(0, fileName.lastIndexOf("."));
 
                 $('[name="spWidget11ShareTitle"]').val(fileName);
@@ -975,7 +986,8 @@ sp.viewerWidgetsModal = {
 
         var data = {
             action: 'setWidgetsSettings',
-            widgetsSettings: settings
+            widgetsSettings: settings,
+            fileHash: fileHash
         };
 
         /**
@@ -1086,9 +1098,7 @@ sp.viewerWidgetsModal = {
         }
 
         var calendlyWidgetData = {
-            apiVersion: '1.0',
             data: {
-                fileHash: fileHash,
                 widgetId: 2,
                 isEnabled: $('[name="calendly-widget-is-enabled"]').prop('checked'),
                 items: [
@@ -1126,9 +1136,7 @@ sp.viewerWidgetsModal = {
         }
 
         var askQuestionWidgetData = {
-            apiVersion: '1.1',
             data: {
-                fileHash: fileHash,
                 widgetId: 3,
                 isEnabled: $('[name="question-widget-is-enabled"]').prop('checked'),
                 items: [
@@ -1158,9 +1166,7 @@ sp.viewerWidgetsModal = {
 
     saveLikeWidgetSettings: function(fileHash) {
         var likeWidgetData = {
-            apiVersion: '1.0',
             data: {
-                fileHash: fileHash,
                 widgetId: 4,
                 isEnabled: $('[name="like-widget-is-enabled"]').prop('checked'),
                 items: [
@@ -1191,9 +1197,7 @@ sp.viewerWidgetsModal = {
         }
 
         var widget5 = {
-            apiVersion: '1.0',
             data: {
-                fileHash: fileHash,
                 widgetId: 5,
                 isEnabled: $('[name="hopper-widget-is-enabled"]').prop('checked')
             }
@@ -1249,9 +1253,7 @@ sp.viewerWidgetsModal = {
         }
 
         var widget7 = {
-            apiVersion: '1.0',
             data: {
-                fileHash: fileHash,
                 widgetId: 7,
                 isEnabled: $('[name="widget7-is-enabled"]').prop('checked'),
                 items: []
@@ -1322,9 +1324,7 @@ sp.viewerWidgetsModal = {
         }
 
         var widget8 = {
-            apiVersion: '1.0',
             data: {
-                fileHash: fileHash,
                 widgetId: 8,
                 isEnabled: $('[name="sp-widget8__is-enabled"]').prop('checked'),
                 items: []
@@ -1385,9 +1385,7 @@ sp.viewerWidgetsModal = {
         }
 
         var widget9 = {
-            apiVersion: '1.0',
             data: {
-                fileHash: fileHash,
                 widgetId: 9,
                 isEnabled: $('[name="sp-widget9--is-enabled"]').prop('checked'),
                 items: []
@@ -1445,9 +1443,7 @@ sp.viewerWidgetsModal = {
     saveWidget10: function(fileHash) {
 
         var widget10 = {
-            apiVersion: '1.0',
             data: {
-                fileHash: fileHash,
                 widgetId: 10,
                 isEnabled: $('[name="sp-widget10--is-enabled"]').prop('checked'),
                 items: []
@@ -1465,9 +1461,7 @@ sp.viewerWidgetsModal = {
     saveWidget11: function(fileHash) {
 
         var widget11 = {
-            apiVersion: '1.0',
             data: {
-                fileHash: fileHash,
                 widgetId: 11,
                 isEnabled: $('[name="sp-widget11--is-enabled"]').prop('checked'),
                 items: []
@@ -1527,9 +1521,7 @@ sp.viewerWidgetsModal = {
         }
 
         var videoWidgetData = {
-            apiVersion: '1.0',
             data: {
-                fileHash: fileHash,
                 widgetId: 1,
                 isEnabled: $('[name="video-widget-is-enabled"]').prop('checked')
             }

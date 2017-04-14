@@ -1,4 +1,4 @@
-package com.slidepiper.service;
+package com.slidepiper.service.widget;
 
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.BasicAWSCredentials;
@@ -9,15 +9,16 @@ import com.amazonaws.services.sns.model.PublishResult;
 import com.slidepiper.exception.WidgetDisabledException;
 import com.slidepiper.exception.WidgetNotFoundException;
 import com.slidepiper.model.component.ConfigurationPropertiesUtils;
+import com.slidepiper.model.entity.Document;
 import com.slidepiper.model.entity.widget.SmsWidget;
-import com.slidepiper.model.entity.widget.SmsWidgetData;
+import com.slidepiper.model.entity.widget.SmsWidget.SmsWidgetData;
 import com.slidepiper.model.input.SmsWidgetInput;
+import com.slidepiper.repository.ChannelRepository;
 import com.slidepiper.repository.widget.SmsWidgetRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import slidepiper.db.DbLayer;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,7 +28,14 @@ import java.util.Optional;
 public class SmsWidgetService {
     private static final Logger log = LoggerFactory.getLogger(SmsWidgetService.class);
 
-    @Autowired private SmsWidgetRepository smsWidgetRepository;
+    private final ChannelRepository channelRepository;
+    private final SmsWidgetRepository smsWidgetRepository;
+
+    @Autowired
+    public SmsWidgetService(ChannelRepository channelRepository, SmsWidgetRepository smsWidgetRepository) {
+        this.channelRepository = channelRepository;
+        this.smsWidgetRepository = smsWidgetRepository;
+    }
 
     public void sendSms(SmsWidgetInput smsWidgetInput) {
         String channelFriendlyId = smsWidgetInput.getChannelName();
@@ -69,9 +77,9 @@ public class SmsWidgetService {
     private SmsWidgetData getSmsWidgetDataByChannelName(String channelName)
             throws WidgetDisabledException {
 
-        long documentId = DbLayer.getFileIdFromFileLinkHash(channelName);
+        Document document = channelRepository.findByFriendlyId(channelName).getDocument();
         SmsWidget smsWidget =
-                Optional.ofNullable(smsWidgetRepository.findByDocumentId(documentId))
+                Optional.ofNullable(smsWidgetRepository.findByDocument(document))
                         .orElseThrow(() -> new WidgetNotFoundException());
 
         if (smsWidget.isEnabled()) {

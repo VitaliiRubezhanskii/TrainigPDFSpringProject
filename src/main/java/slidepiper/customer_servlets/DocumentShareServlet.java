@@ -1,5 +1,29 @@
 package slidepiper.customer_servlets;
 
+import com.amazonaws.AmazonClientException;
+import com.amazonaws.AmazonServiceException;
+import com.amazonaws.auth.AWSCredentials;
+import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.slidepiper.model.component.ConfigurationPropertiesUtils;
+import freemarker.template.Configuration;
+import freemarker.template.Template;
+import freemarker.template.TemplateException;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.json.JSONTokener;
+import slidepiper.config.ConfigProperties;
+import slidepiper.db.DbLayer;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.sql.rowset.serial.SerialException;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -11,32 +35,6 @@ import java.sql.Blob;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
-
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.sql.rowset.serial.SerialException;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-import org.json.JSONTokener;
-
-import com.amazonaws.AmazonClientException;
-import com.amazonaws.AmazonServiceException;
-import com.amazonaws.auth.AWSCredentials;
-import com.amazonaws.auth.BasicAWSCredentials;
-import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.AmazonS3Client;
-import com.amazonaws.services.s3.model.CannedAccessControlList;
-import com.amazonaws.services.s3.model.PutObjectRequest;
-
-import freemarker.template.Configuration;
-import freemarker.template.Template;
-import freemarker.template.TemplateException;
-import slidepiper.config.ConfigProperties;
-import slidepiper.db.DbLayer;
 
 @SuppressWarnings("serial")
 @WebServlet("/share")
@@ -132,7 +130,7 @@ public class DocumentShareServlet extends HttpServlet {
   
   public static String getS3ImageUrl(String documentHash, String imageBase64String, String imageFileName) throws IOException {
     String imageUrl = null;
-    String bucketName = "slidepiper-widgets/production";
+    String bucketName = "slidepiper-widgets/" + ConfigurationPropertiesUtils.springProfiles.getActive();
     String key = documentHash + "/widget11/facebook/image/" + imageFileName;
 
     AWSCredentials awsCredentials = new BasicAWSCredentials(
@@ -156,7 +154,7 @@ public class DocumentShareServlet extends HttpServlet {
       );
       
       file.delete();
-      System.out.println("SP: An image was uploaded to document container");
+      System.out.println("SP: An image was uploaded");
       System.out.println("SP: bucket, " + bucketName);
       System.out.println("SP: key, " + documentHash);
       

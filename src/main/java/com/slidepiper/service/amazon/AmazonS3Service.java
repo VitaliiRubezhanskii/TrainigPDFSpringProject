@@ -10,6 +10,7 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.S3ClientOptions;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.CopyObjectRequest;
 import com.amazonaws.services.s3.model.DeleteObjectsRequest;
 import com.amazonaws.services.s3.model.ListVersionsRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
@@ -57,6 +58,19 @@ public class AmazonS3Service {
         }
 
         return s3Client.getObjectMetadata(bucket, key).getVersionId();
+    }
+
+    public String clone(String bucket, String sourceKey, String destinationKey) {
+        AmazonS3 s3Client = getAmazonS3Client();
+
+        CopyObjectRequest copyObjectRequest =
+                new CopyObjectRequest(bucket, sourceKey, bucket, destinationKey)
+                        .withCannedAccessControlList(CannedAccessControlList.PublicRead);
+        s3Client.copyObject(copyObjectRequest);
+
+        log.info("Cloned object from: {}/{}, to: {}/{}", bucket, sourceKey, bucket, destinationKey);
+
+        return s3Client.getObjectMetadata(bucket, destinationKey).getVersionId();
     }
 
     private AmazonS3 getAmazonS3Client() {

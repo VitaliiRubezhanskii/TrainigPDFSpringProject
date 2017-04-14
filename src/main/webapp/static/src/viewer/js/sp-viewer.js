@@ -591,8 +591,15 @@ $.ajax({
                 $.each(data.widgetsSettings, function(index, data) {
                     var widgetData = JSON.parse(data.widgetData).data;
 
-                    if (typeof widgetData !== 'undefined' && widgetData.isEnabled) {
-                        var widgetId = widgetData.widgetId;
+                    if (typeof widgetData !== 'undefined'
+                        && (widgetData.isEnabled || widgetData.items[0].enabled)) {
+
+                        var widgetId;
+                        if (typeof widgetData.widgetId !== 'undefined') {
+                            widgetId = widgetData.widgetId;
+                        } else {
+                            widgetId = widgetData.items[0].widgetId;
+                        }
 
                         switch(widgetId) {
                             case 1:
@@ -1020,7 +1027,8 @@ $.ajax({
         /* Validate Widget 11 */
         var widget11RequiredSettings = ['buttonText'];
 
-        if (typeof widgets.widget11 !== 'undefined' && widgets.widget11.isEnabled) {
+        if (typeof widgets.widget11 !== 'undefined'
+                && (widgets.widget11.isEnabled || widgets.widget11.items[0].enabled)) {
             if (isWidgetSettingsDefined(widgets.widget11.items[0], widget11RequiredSettings)) {
                 implementWidget11(widgets.widget11.items[0]);
             }

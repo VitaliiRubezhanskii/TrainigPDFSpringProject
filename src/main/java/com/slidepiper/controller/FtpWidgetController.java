@@ -2,7 +2,7 @@ package com.slidepiper.controller;
 
 import com.slidepiper.model.input.FtpWidgetDataInput;
 import com.slidepiper.model.output.ExceptionResponseOutput;
-import com.slidepiper.service.FtpWidgetService;
+import com.slidepiper.service.widget.FtpWidgetService;
 import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -2856,7 +2856,7 @@ public class DbLayer {
        * 
        * @returns resultCode - A number representing the status of the operation.
        */
-      public static int setWidgetSettings(JSONObject widgetSetting) {
+      public static int setWidgetSettings(JSONObject widgetSetting, String fileHash) {
       	int resultCode = 0;
     	
         Constants.updateConstants();
@@ -2872,7 +2872,7 @@ public class DbLayer {
 		        		   + "data = VALUES(data)";
         
         JSONObject data = widgetSetting.getJSONObject("data");
-        int fileId = DbLayer.getFileIdFromFileHash(data.getString("fileHash"));
+        int fileId = DbLayer.getFileIdFromFileHash(fileHash);
         String type = String.valueOf(data.getInt("widgetId"));
         
         try {

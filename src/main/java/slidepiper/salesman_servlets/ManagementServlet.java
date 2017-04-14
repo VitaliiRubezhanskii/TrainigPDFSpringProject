@@ -702,7 +702,7 @@ public class ManagementServlet extends HttpServlet {
       	        && null != items.getJSONObject(0).getString("imageBase64") 
                 && ! items.getJSONObject(0).getString("imageBase64").equals("")) {
                 String imageUrl = DocumentShareServlet.getS3ImageUrl(
-                    widgetData.getString("fileHash"),
+                    input.getString("fileHash"),
                     items.getJSONObject(0).getString("imageBase64"),
                     items.getJSONObject(0).getString("imageFileName")
                 );
@@ -718,7 +718,7 @@ public class ManagementServlet extends HttpServlet {
                 }
               }
         	  }
-        	  resultCode = DbLayer.setWidgetSettings(widgetSetting);  
+        	  resultCode = DbLayer.setWidgetSettings(widgetSetting, input.getString("fileHash"));
           }
           
           output.put("resultCode", resultCode);

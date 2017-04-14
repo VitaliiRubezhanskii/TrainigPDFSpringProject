@@ -39,8 +39,6 @@ documents:
         minHashLength: 8
         alphabet: abcdefghijklmnopqrstuvwxyz0123456789
 
-    urlPrefix: https://dev1.slidepiper.com/static/documents
-
 amazon:
     s3:
         credentials:
@@ -75,12 +73,19 @@ slidepiper:
     url: http://localhost:8080
     apiUrl: http://127.0.0.2:8080
 
-viewer:
-    share:
-        data:
-            defaultTitle: "SlidePiper Document"
-            defaultDescription: "Check out this interactive document!"
-            defaultImageUrl: https://s3-us-west-2.amazonaws.com/slidepiper-static/production/images/logo-slidepiper-wide-1200x630.png
+    widget:
+        amazon:
+            s3:
+                bucket: slidepiper-widgets
+                shareWidgetImageUrlPrefix: widget11/facebook/image
+        shareWidget:
+            data:
+                defaultTitle: "SlidePiper Document"
+                defaultDescription: "Check out this interactive document!"
+                defaultImageUrl: https://s3-us-west-2.amazonaws.com/slidepiper-static/production/images/logo-slidepiper-wide-1200x630.png
+                defaultButtonColor: ""
+                defaultButtonText: Share
+                defaultIsButtonColorCustom: false
 ---
 spring:
     profiles: development
