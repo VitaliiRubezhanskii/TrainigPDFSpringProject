@@ -402,6 +402,47 @@ sp = {
                                 break;
                         }
                     }
+
+                    // Clone document.
+                    document.addEventListener('click', function(event) {
+                        if (event.target.classList.contains('sp-document__clone')) {
+                            var sourceDocumentFriendlyId = event.target.getAttribute('data-document-friendly-id');
+                            var sourceDocumentName = event.target.getAttribute('data-document-name');
+                            swal({
+                                title: 'Set the cloned document name:',
+                                type: 'input',
+                                inputValue: sourceDocumentName,
+                                showCancelButton: true,
+                                closeOnConfirm: false,
+                                showLoaderOnConfirm: true
+                            }, function (destinationDocumentName) {
+                                if (false === destinationDocumentName) {
+                                    return false;
+                                } else if ('' === destinationDocumentName) {
+                                    swal.showInputError("Please enter a document name");
+                                } else {
+                                    var data = {
+                                        salesmanEmail: sp.config.salesman.email,
+                                        sourceDocumentFriendlyId: sourceDocumentFriendlyId,
+                                        destinationDocumentName: destinationDocumentName
+                                    };
+
+                                    var xhr = new XMLHttpRequest();
+                                    xhr.open('POST', SP.API_URL + '/api/v1/document-utils/clone/');
+                                    xhr.setRequestHeader('Content-type', 'application/json');
+                                    xhr.onload = function() {
+                                        if (xhr.status === 200) {
+                                            sp.file.getFilesList('fileUploadDashboard');
+                                            swal("Success!", "You successfully cloned a document", "success");
+                                        } else {
+                                            swal("Error!", "Clone operation failed. Please contact support@slidepiper.com for assistance", "error");
+                                        }
+                                    };
+                                    xhr.send(JSON.stringify(data));
+                                }
+                            });
+                        }
+                    });
                 });
             }
         });
@@ -473,7 +514,6 @@ sp = {
         sortDocsInDocsMgmtPanel: function (data) {
             var filesArr = [];
             $.each(data['filesList'], function (index, value) {
-
                 var date = moment.utc(value[2]).toDate();
                 var obj = {
                     'date': moment(date).format('DD-MM-YYYY HH:mm'),
@@ -481,6 +521,7 @@ sp = {
                     'options': '<span>'
                     + '<a><span class="label label-primary sp-file-update" data-toggle="modal" data-target="#sp-modal-update-file" data-file-hash="' + value[0] + '">Update</span></a>'
                     + '<a href="#"><span class="label label-danger sp-file-delete" data-file-hash="' + value[0] + '">Delete</span></a></span>'
+                    + '<a><span style="margin-left: 10px;" class="sp-document__clone label label-info" data-document-friendly-id="' + value[0] + '" data-document-name="' + value[1] + '">Clone</span></a>'
                     + '<a><span data-toggle="modal" data-target="#sp-viewer-widgets-modal" style="margin-left: 10px;" class="label label-success sp-file-customize" data-file-hash="' + value[0] + '">Customize</span></a>'
                     + '<a class="sp-preview-file-link"><span id="sp-preview-file-' + index + '" style="margin-left: 10px;" class="label label-warning">Preview</span></a></span>'
                 };
