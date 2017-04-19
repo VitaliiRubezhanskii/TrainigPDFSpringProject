@@ -592,7 +592,7 @@ $.ajax({
                     var widgetData = JSON.parse(data.widgetData).data;
 
                     if (typeof widgetData !== 'undefined'
-                        && (widgetData.isEnabled || widgetData.items[0].enabled)) {
+                        && (widgetData.isEnabled || (typeof widgetData.items[0] !== 'undefined' && widgetData.items[0].enabled))) {
 
                         var widgetId;
                         if (typeof widgetData.widgetId !== 'undefined') {
