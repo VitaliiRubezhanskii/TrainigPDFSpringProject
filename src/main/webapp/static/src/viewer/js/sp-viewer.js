@@ -993,7 +993,10 @@ $.ajax({
                             }
                         } else if ('inside-window' === link.layout) {
                             swal({
+                                cancelButtonText: 'Close',
                                 html: '<iframe style="height: 75vh" frameborder="0" src="' + link.link + '"></iframe>',
+                                showConfirmButton: false,
+                                showCancelButton: true,
                                 width: '100'
                             });
                         }
