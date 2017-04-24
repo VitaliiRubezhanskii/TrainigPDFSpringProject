@@ -12,6 +12,7 @@ import com.slidepiper.model.component.ConfigurationPropertiesUtils;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
+import org.apache.commons.io.FileUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -143,7 +144,7 @@ public class DocumentShareServlet extends HttpServlet {
     try {
       String base64Image = imageBase64String.split(",")[1];
       byte[] imageBytes = javax.xml.bind.DatatypeConverter.parseBase64Binary(base64Image);
-      File file = new File(imageFileName);
+      File file = new File(FileUtils.getTempDirectoryPath(), imageFileName);
       FileOutputStream fos = new FileOutputStream(file);
       fos.write(imageBytes);
       fos.close();
