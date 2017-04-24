@@ -9,7 +9,6 @@ import com.maxmind.geoip2.record.Location;
 import com.maxmind.geoip2.record.Postal;
 import com.maxmind.geoip2.record.Subdivision;
 
-import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
@@ -19,17 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Geolocation {
-
-  /**
-   * Return the client IP from an HTTP request.
-   * 
-   * @param request An HttpServletRequest object.
-   * @return An IP address.
-   */
-  public static String getIpFromRequest(HttpServletRequest request) {
-    return request.getRemoteAddr();
-  }
-  
   
   /**
    * Get data about an IP address.

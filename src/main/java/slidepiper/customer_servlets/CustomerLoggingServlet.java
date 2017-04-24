@@ -1,5 +1,5 @@
 package slidepiper.customer_servlets;
- 
+
 import com.slidepiper.model.component.JwtUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,7 +22,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-  
+import java.util.Optional;
+
 // write tracking info on customer viewing the presentation.
 @WebServlet("/CustomerDataServlet")
 public class CustomerLoggingServlet extends HttpServlet {
@@ -62,12 +63,15 @@ public class CustomerLoggingServlet extends HttpServlet {
               }
 			    		
 			    		int timezone_offset = Integer.parseInt(request.getParameter("timezone_offset_min")); 
-			    		
+
 			    		String ip = null;
 			    		List<String> ipData = null;
 			    		
 			    		if (event_name.equals("OPEN_SLIDES")) {
-			    		  ip = Geolocation.getIpFromRequest(request);
+			    		  ip = Optional.ofNullable(request.getHeader("X-Forwarded-For"))
+								    .map(x -> x.split(",")[0])
+								    .orElse(request.getRemoteAddr());
+
 			    		  ipData = Geolocation.ipData(ip);
 			    		  
 			    		  CustomerLogger.LogEvent(id, event_name, param1, param2, param3, sessionId, timezone_offset,
