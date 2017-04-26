@@ -55,6 +55,9 @@ public class ConfigPropertiesServlt extends HttpServlet {
 			salesman.put("email", salesmanMap.get("email"));
 			salesman.put("name", salesmanMap.get("name"));
 			salesman.put("extra_data", salesmanMap.get("extra_data"));
+			salesman.put("email_alert_enabled", salesmanMap.get("email_alert_enabled"));
+			salesman.put("email_report_enabled", salesmanMap.get("email_report_enabled"));
+			salesman.put("email_notifications_enabled", salesmanMap.get("email_notifications_enabled"));
 			data.put("salesman", salesman);
 
 			google.put("clientId", ConfigProperties.getProperty("google_client_id"));
