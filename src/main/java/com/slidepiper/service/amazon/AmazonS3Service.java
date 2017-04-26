@@ -23,6 +23,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +34,16 @@ public class AmazonS3Service {
 
     @Value("${amazon.s3.credentials.accessKey}") private String accessKey;
     @Value("${amazon.s3.credentials.secretKey}") private String secretKey;
+
+    public void upload(File file, String bucket, String key, CannedAccessControlList cannedAccessControlList) {
+        AmazonS3 s3Client = getAmazonS3Client();
+
+        PutObjectRequest putObjectRequest =
+                new PutObjectRequest(bucket, key, file).withCannedAcl(cannedAccessControlList);
+        s3Client.putObject(putObjectRequest);
+
+        log.info("Uploaded object to bucket: {}", bucket);
+    }
 
     public String upload(MultipartFile multipartFile, String bucket, String key) throws IOException {
         AmazonS3 s3Client = getAmazonS3Client();

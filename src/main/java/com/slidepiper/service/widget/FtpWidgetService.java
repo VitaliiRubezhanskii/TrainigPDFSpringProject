@@ -1,13 +1,6 @@
 package com.slidepiper.service.widget;
 
-import com.amazonaws.AmazonClientException;
-import com.amazonaws.AmazonServiceException;
-import com.amazonaws.auth.AWSCredentials;
-import com.amazonaws.auth.BasicAWSCredentials;
-import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.AmazonS3Client;
-import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.slidepiper.exception.FileNotUploadedException;
+import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.slidepiper.exception.WidgetDisabledException;
 import com.slidepiper.exception.WidgetNotFoundException;
 import com.slidepiper.model.entity.Document;
@@ -17,6 +10,7 @@ import com.slidepiper.model.entity.widget.FtpWidget.FtpWidgetData.Scheme;
 import com.slidepiper.model.input.FtpWidgetDataInput;
 import com.slidepiper.repository.ChannelRepository;
 import com.slidepiper.repository.widget.FtpWidgetRepository;
+import com.slidepiper.service.amazon.AmazonS3Service;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.vfs2.FileObject;
 import org.apache.commons.vfs2.FileSystemException;
@@ -27,8 +21,10 @@ import org.apache.commons.vfs2.provider.sftp.SftpFileSystemConfigBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.File;
 import java.io.IOException;
@@ -43,80 +39,57 @@ import java.util.UUID;
 public class FtpWidgetService {
     private static final Logger log = LoggerFactory.getLogger(FtpWidgetService.class);
 
+    @Value("${spring.profiles.active}") private String activeProfile;
+
     private final ChannelRepository channelRepository;
     private final FtpWidgetRepository ftpWidgetRepository;
+    private final AmazonS3Service amazonS3Service;
 
     @Autowired
-    public FtpWidgetService(ChannelRepository channelRepository, FtpWidgetRepository ftpWidgetRepository) {
+    public FtpWidgetService(ChannelRepository channelRepository,
+                            FtpWidgetRepository ftpWidgetRepository,
+                            AmazonS3Service amazonS3Service) {
         this.channelRepository = channelRepository;
         this.ftpWidgetRepository = ftpWidgetRepository;
+        this.amazonS3Service = amazonS3Service;
     }
 
-    public void uploadManager(MultipartFile[] files, FtpWidgetDataInput ftpWidgetDataInput) {
+    public void uploadManager(MultipartFile[] files, FtpWidgetDataInput ftpWidgetDataInput)
+            throws IOException, URISyntaxException {
 
         StandardFileSystemManager manager = new StandardFileSystemManager();
+        manager.init();
+
         File localFile = null;
 
-        try {
-            FtpWidgetData ftpWidgetData = getFtpWidgetDataByChannelName(ftpWidgetDataInput.getChannelName());
-            String connectionUrl = createConnecitonUrl(ftpWidgetData);
+        FtpWidgetData ftpWidgetData = getFtpWidgetDataByChannelName(ftpWidgetDataInput.getChannelName());
+        String connectionUrl = createConnecitonUrl(ftpWidgetData);
+        FileSystemOptions fileSystemOptions = createFileSystemOptions(ftpWidgetData.getScheme());
 
-            manager.init();
-            FileSystemOptions fileSystemOptions = createFileSystemOptions(ftpWidgetData.getScheme());
-
-            for (MultipartFile file: files) {
+        for (MultipartFile file: files) {
+            try {
                 localFile = createLocalFile(file, ftpWidgetDataInput.getFileNamePrefix());
                 FileUtils.copyInputStreamToFile(file.getInputStream(), localFile);
 
-                uploadFileToAmazonS3(localFile, localFile.getName());
-
                 String remoteFileUri = String.join("/", connectionUrl, localFile.getName());
                 FileObject remoteFile = manager.resolveFile(remoteFileUri, fileSystemOptions);
-                remoteFile.copyFrom(manager.resolveFile(localFile.getAbsolutePath()),
-                        Selectors.SELECT_SELF);
+                remoteFile.copyFrom(manager.resolveFile(localFile.getAbsolutePath()), Selectors.SELECT_SELF);
 
-                log.info("File uploaded successfully: " + localFile.getName());
+                log.info("File uploaded successfully");
+            } catch (IOException e) {
+                e.printStackTrace();
+                // TODO: Send message to SlidePiper Administrators regarding file failed to upload through FTP Widget.
+
+                String bucket = "slidepiper-files";
+                String key = UriComponentsBuilder.fromPath(activeProfile)
+                        .pathSegment("ftp-widget", "failure", localFile.getName()).build().toString();
+                amazonS3Service.upload(localFile, bucket, key, CannedAccessControlList.Private);
+            } finally {
+                localFile.delete();
             }
-        } catch(IOException | URISyntaxException e) {
-            throw new FileNotUploadedException();
-        } finally {
-            manager.close();
         }
-    }
 
-    private void uploadFileToAmazonS3(File file, String fileName) {
-        String bucketName = "slidepiper-files/ftp-widget";
-        String keyName = fileName;
-
-        // s3-viewer credentials.
-        AWSCredentials awsCredentials = new BasicAWSCredentials(
-                "AKIAJQO4ZQXYRO2T5GXA",
-                "X6c1Hu18c3Zl+41EwIyrsw0EaRPd09x4quix8UsS"
-        );
-        AmazonS3 s3client = new AmazonS3Client(awsCredentials);
-
-        try {
-            System.out.println("Uploading a new object to S3: " + fileName);
-            s3client.putObject(new PutObjectRequest(bucketName, keyName, file));
-
-        } catch (AmazonServiceException ase) {
-            System.out.println("Caught an AmazonServiceException, which " +
-                    "means your request made it " +
-                    "to Amazon S3, but was rejected with an error response" +
-                    " for some reason.");
-            System.out.println("Error Message:    " + ase.getMessage());
-            System.out.println("HTTP Status Code: " + ase.getStatusCode());
-            System.out.println("AWS Error Code:   " + ase.getErrorCode());
-            System.out.println("Error Type:       " + ase.getErrorType());
-            System.out.println("Request ID:       " + ase.getRequestId());
-        } catch (AmazonClientException ace) {
-            System.out.println("Caught an AmazonClientException, which " +
-                    "means the client encountered " +
-                    "an internal error while trying to " +
-                    "communicate with S3, " +
-                    "such as not being able to access the network.");
-            System.out.println("Error Message: " + ace.getMessage());
-        }
+        manager.close();
     }
 
     private String createConnecitonUrl(FtpWidgetData ftpWidgetData) throws URISyntaxException {

@@ -17,6 +17,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.io.IOException;
+import java.net.URISyntaxException;
 
 @RestController
 @AllArgsConstructor(onConstructor = @__(@Autowired))
@@ -27,7 +29,7 @@ public class FtpWidgetController {
   @PostMapping(value = "/utils/widgets/ftp")
   public void handleFileUpload(
       @RequestPart("files[]") MultipartFile[] files,
-      @Valid @RequestPart("data") FtpWidgetDataInput ftpWidgetDataInput) {
+      @Valid @RequestPart("data") FtpWidgetDataInput ftpWidgetDataInput) throws IOException, URISyntaxException {
     
     // TODO: create FtpWidgetFileInput class to enable Hibernate annotations validation.
     if (ArrayUtils.isEmpty(files)) {
