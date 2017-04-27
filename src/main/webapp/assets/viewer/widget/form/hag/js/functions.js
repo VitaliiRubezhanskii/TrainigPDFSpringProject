@@ -1003,7 +1003,7 @@ $(function() {
         sendSms(key);
         
         payload['signatureBase64'] = signaturePad.toDataURL();
-        sendWebMerge('https://www.webmerge.me/merge/78047/g33bvk', payload);
+        sendWebMerge('https://www.webmerge.me/route/11179/u87hni', payload);
         
         // Send to Zapier.
         sendZapier('https://hooks.zapier.com/hooks/catch/674313/tzyyht/', payload);
