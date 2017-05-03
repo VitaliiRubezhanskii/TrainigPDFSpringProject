@@ -82,7 +82,7 @@ slidepiper:
             data:
                 defaultTitle: "SlidePiper Document"
                 defaultDescription: "Check out this interactive document!"
-                defaultImageUrl: https://s3-us-west-2.amazonaws.com/slidepiper-static/production/images/logo-slidepiper-wide-1200x630.png
+                defaultImageUrl: https://static.slidepiper.com/images/slidepiper/logo-1200x630.png
                 defaultButtonColor: ""
                 defaultButtonText: Share
                 defaultIsButtonColorCustom: false

@@ -714,7 +714,7 @@ public class ManagementServlet extends HttpServlet {
                 }
               } else {
                 if (items.getJSONObject(0).getString("imageUrl").equals("")) {
-                  items.getJSONObject(0).put("imageUrl", "https://s3-us-west-2.amazonaws.com/slidepiper-static/production/images/logo-slidepiper-wide-1200x630.png");
+                  items.getJSONObject(0).put("imageUrl", "https://static.slidepiper.com/images/slidepiper/logo-1200x630.png");
                 }
               }
         	  }
