@@ -11,10 +11,12 @@ import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.S3ClientOptions;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.CopyObjectRequest;
+import com.amazonaws.services.s3.model.CopyObjectResult;
 import com.amazonaws.services.s3.model.DeleteObjectsRequest;
 import com.amazonaws.services.s3.model.ListVersionsRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.model.PutObjectResult;
 import com.amazonaws.services.s3.model.S3VersionSummary;
 import com.amazonaws.services.s3.model.VersionListing;
 import org.slf4j.Logger;
@@ -51,24 +53,17 @@ public class AmazonS3Service {
         s3Client.setRegion(Region.getRegion(Regions.US_EAST_1));
         s3Client.setS3ClientOptions(S3ClientOptions.builder().setAccelerateModeEnabled(true).build());
 
-        try {
-            ObjectMetadata objectMetaData = new ObjectMetadata();
-            objectMetaData.setContentType(multipartFile.getContentType());
-            objectMetaData.setContentLength(multipartFile.getSize());
+        ObjectMetadata objectMetaData = new ObjectMetadata();
+        objectMetaData.setContentType(multipartFile.getContentType());
+        objectMetaData.setContentLength(multipartFile.getSize());
 
-            s3Client.putObject(
-                    new PutObjectRequest(bucket, key, multipartFile.getInputStream(), objectMetaData)
-                            .withCannedAcl(CannedAccessControlList.PublicRead)
-            );
+        PutObjectRequest putObjectRequest =
+                new PutObjectRequest(bucket, key, multipartFile.getInputStream(), objectMetaData)
+                        .withCannedAcl(CannedAccessControlList.PublicRead);
+        PutObjectResult putObjectResult = s3Client.putObject(putObjectRequest);
 
-            log.info("Uploaded object to: " + String.join("/", bucket, key));
-        } catch (AmazonServiceException ase) {
-            System.out.println(ase.getErrorMessage());
-        } catch (AmazonClientException ace) {
-            System.out.println(ace.getMessage());
-        }
-
-        return s3Client.getObjectMetadata(bucket, key).getVersionId();
+        log.info("Uploaded object to: " + String.join("/", bucket, key));
+        return putObjectResult.getVersionId();
     }
 
     public String clone(String bucket, String sourceKey, String destinationKey) {
@@ -77,11 +72,10 @@ public class AmazonS3Service {
         CopyObjectRequest copyObjectRequest =
                 new CopyObjectRequest(bucket, sourceKey, bucket, destinationKey)
                         .withCannedAccessControlList(CannedAccessControlList.PublicRead);
-        s3Client.copyObject(copyObjectRequest);
+        CopyObjectResult copyObjectResult = s3Client.copyObject(copyObjectRequest);
 
         log.info("Cloned object from: {}/{}, to: {}/{}", bucket, sourceKey, bucket, destinationKey);
-
-        return s3Client.getObjectMetadata(bucket, destinationKey).getVersionId();
+        return copyObjectResult.getVersionId();
     }
 
     private AmazonS3 getAmazonS3Client() {
