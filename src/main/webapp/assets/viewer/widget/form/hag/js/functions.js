@@ -693,6 +693,8 @@ $(function() {
         sendWebMerge('https://www.webmerge.me/merge/82651/98sjf8', payload);
         
         sendZapier('https://hooks.zapier.com/hooks/catch/674313/h2y8on/', payload);
+
+        FS.identify(payload['id_num']);
         
         sendSlidePiper('HALMAN_ALDUBI_COMPLETED_INITIAL_SECTION');
 
