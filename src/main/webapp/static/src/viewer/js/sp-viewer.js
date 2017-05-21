@@ -998,7 +998,7 @@ $.ajax({
                                 showConfirmButton: false,
                                 showCancelButton: true,
                                 width: '100'
-                            });
+                            }).done();
                         }
 
                         sp.viewer.setCustomerEvent({
