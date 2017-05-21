@@ -349,7 +349,7 @@ sp.widgets = {
          */
         urlHttpConfig: function(url) {
 
-            if (! url.match(/^https?:\/\/|^#/)) {
+            if (! url.match(/^.+?:|^#/)) {
                 url = 'http://' + url;
             }
 
