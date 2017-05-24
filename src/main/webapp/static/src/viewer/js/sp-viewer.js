@@ -1613,16 +1613,16 @@ $.ajax({
             $('body').append(
                 '<div class="widget sp-widget5 sp--direction-ltr">' +
                 '<div class="sp-widget5__extend-button">' +
-                '<i class="fa fa-chevron-right" aria-hidden="true"></i>' +
+                '<i class="fa fa-chevron-left"></i>' +
                 '</div>' +
                 '<div id="sp-widget5__hopper-container"></div>' +
                 '</div>');
 
             $.each(widget, function(index, value) {
                 $('#sp-widget5__hopper-container').append(
-                    '<div class="sp-widget5__hop" id="sp-widget5__hop-' + index + '" data-page-hop="' + value.hopperPage + '">' +
-                    '<p class="sp-widget5__hop-text sp-widget5__hop--hidden">' + value.hopperText + '</p>' +
-                    '<p class="sp-widget5__hop-page sp-widget5__hop--visible">' + value.hopperPage + '</p>' +
+                    '<div class="sp-widget5__hop sp-widget5__hop-extended" id="sp-widget5__hop-' + index + '" data-page-hop="' + value.hopperPage + '">' +
+                    '<p class="sp-widget5__hop-text sp-widget5__hop--visible">' + value.hopperText + '</p>' +
+                    '<p class="sp-widget5__hop-page sp-widget5__hop--hidden">' + value.hopperPage + '</p>' +
                     '</div>'
                 );
 
@@ -1652,12 +1652,16 @@ $.ajax({
              * The '.sp-widget5__extend-button' button can only be seen under 600px width.
              */
             $('.sp-widget5__extend-button').on('click', function() {
+                hopperWidgetToggleButton();
+            });
+
+            function hopperWidgetToggleButton() {
                 $('.sp-widget5__hop').toggleClass('sp-widget5__hop-extended');
                 $('.sp-widget5__extend-button i').toggleClass('fa-chevron-right fa-chevron-left');
 
                 // Toggle visibility of hopper page / hopper text.
                 $('.sp-widget5__hop p').toggleClass('sp-widget5__hop--hidden sp-widget5__hop--visible');
-            });
+            }
         }
 
 
