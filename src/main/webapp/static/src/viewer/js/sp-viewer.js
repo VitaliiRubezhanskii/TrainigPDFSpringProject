@@ -13,7 +13,7 @@ $(document).on('textlayerrendered', function() {
     var aArray = document.getElementsByTagName('a');
     for (var i = 0; i < aArray.length; i++) {
         var a = aArray[i];
-        if (null === a.getAttribute('target')) {
+        if (!a.getAttribute('target')) {
             a.setAttribute('target', '_blank');
         }
     };
