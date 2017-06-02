@@ -1790,3 +1790,41 @@ sp.viewerWidgetsModal = {
 
 
 $('.sp-video-link-tooltip').tooltip({delay: {show: 100, hide: 200}, placement: 'top'});
+
+$(document).on('click', '.link-widget__url-upload-button', function() {
+    var that = this;
+
+    swal({
+        customClass: 'link-widget__file',
+        title: 'Upload a File',
+        text: 'This will upload a file to our file storage, and populate the Link URL field with the file link',
+        type: 'input',
+        inputType: 'file',
+        showCancelButton: true,
+        closeOnConfirm: false,
+        showLoaderOnConfirm: true
+    }, function(file) {
+        if (!file) {
+            swal.showInputError("Please choose a file to upload");
+        } else {
+            var formData = new FormData();
+            formData.append('file', $('.link-widget__file input')[0].files[0]);
+            formData.append('salesmanEmail', sp.config.salesman.email);
+            formData.append('documentFriendlyId', $('#sp-save-widgets-settings__button').attr('data-file-hash'));
+
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', SP.API_URL + '/api/v1/widget/link');
+            xhr.onload = function(event) {
+                if (xhr.status === 200) {
+                    $($(that).parent().children()[0])
+                        .val(JSON.parse(event.target.responseText).url)
+                        .prop('readonly', true);
+                    swal("Success!", "You successfully uploaded a file", "success");
+                } else {
+                    swal("Error!", "Clone operation failed. Please contact support@slidepiper.com for assistance", "error");
+                }
+            };
+            xhr.send(formData);
+        }
+    });
+});

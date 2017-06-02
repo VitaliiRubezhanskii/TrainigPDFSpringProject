@@ -97,7 +97,7 @@ public class DocumentService {
             String friendlyId = hashids.encode(document.getId());
 
             String key = String.join("/", keyPrefix, friendlyId, name);
-            String versionId = amazonS3Service.upload(file, bucket, key);
+            String versionId = amazonS3Service.upload(file, bucket, key, file.getContentType());
 
             document.setFriendlyId(friendlyId);
             document.setVersionId(versionId);
@@ -128,7 +128,7 @@ public class DocumentService {
 
         String name = file.getOriginalFilename();
         String key = String.join("/", keyPrefix, friendlyId, name);
-        String versionId = amazonS3Service.upload(file, bucket, key);
+        String versionId = amazonS3Service.upload(file, bucket, key, file.getContentType());
 
         document.setStatus(Status.UPDATED);
         document.setName(name);

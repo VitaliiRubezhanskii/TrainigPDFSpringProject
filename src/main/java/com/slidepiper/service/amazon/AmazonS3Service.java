@@ -4,11 +4,8 @@ import com.amazonaws.AmazonClientException;
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.BasicAWSCredentials;
-import com.amazonaws.regions.Region;
-import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
-import com.amazonaws.services.s3.S3ClientOptions;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.CopyObjectRequest;
 import com.amazonaws.services.s3.model.CopyObjectResult;
@@ -47,14 +44,11 @@ public class AmazonS3Service {
         log.info("Uploaded object to bucket: {}", bucket);
     }
 
-    public String upload(MultipartFile multipartFile, String bucket, String key) throws IOException {
+    public String upload(MultipartFile multipartFile, String bucket, String key, String contentType) throws IOException {
         AmazonS3 s3Client = getAmazonS3Client();
 
-        s3Client.setRegion(Region.getRegion(Regions.US_EAST_1));
-        s3Client.setS3ClientOptions(S3ClientOptions.builder().setAccelerateModeEnabled(true).build());
-
         ObjectMetadata objectMetaData = new ObjectMetadata();
-        objectMetaData.setContentType(multipartFile.getContentType());
+        objectMetaData.setContentType(contentType);
         objectMetaData.setContentLength(multipartFile.getSize());
 
         PutObjectRequest putObjectRequest =

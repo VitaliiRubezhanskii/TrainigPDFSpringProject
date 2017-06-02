@@ -135,10 +135,6 @@
   float: right;
 }
 
-.#sp-tab-6 .sp-widget-item:first-child hr {
-  display: none;
-}
-
 .sp-widget6__person-image {
   background-position: center center;
   background-repeat: no-repeat;
@@ -233,4 +229,8 @@
   background-repeat: no-repeat;
   background-size: contain;
   width: auto;
+}
+
+.link-widget__url-upload-button {
+  margin-top: 10px;
 }
