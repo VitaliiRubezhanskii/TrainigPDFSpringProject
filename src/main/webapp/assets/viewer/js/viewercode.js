@@ -138,35 +138,6 @@ if (/* @cc_on!@ */false) { // check for Internet Explorer
     window.onblur = onBlur;
 }
 
-// data for this msg id - 
-// cust name, salesman name, role. 
-function getSalesmanData() {
-
-    jsondata = '{"msgid":"' + msgid + '" }';
-
-    // alert("json msg " + jsondata);
-    console.log("get salesman email ajax");
-    $.ajax({
-        type : "POST",
-        url : SP.API_URL + '/GetMessageDataServlet',
-        data : jsondata,
-        processData : false,
-        error : function(XmlHttpRequest, status, error) {
-            // Commented this out, as it was showing errors to customers in the view.
-            // alert('get sm email from msgid error from returned json' + error);
-        },
-        success : function(msg) {
-            salesman_email = msg.salesman_email;
-            customername = msg.customername;
-            salesman = msg.salesman;
-            console.log("rcvd salesman data: smemail " + salesman_email + " custname: "+ customername +" sm name:"+ salesman);
-        }
-    }); // end of ajax call
-}
-
-
-
-
 // runs BEFORE everything is loaded.
 function preInitView()
 {
@@ -273,10 +244,6 @@ function initView() {
             // first slide in its view time.
         
             // alert("file: "+ getURLParameter("file"));
-            
-            // load salesman data, and afterwards in callback,
-            // load the chat window.
-            getSalesmanData();
             
             // customer only
             if (role==0)

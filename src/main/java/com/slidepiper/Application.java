@@ -13,7 +13,6 @@ import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import slidepiper.config.ConfigPropertiesServlt;
 import slidepiper.config.ConfigViewerServlt;
 import slidepiper.customer_servlets.CustomerLoggingServlet;
-import slidepiper.customer_servlets.GetMessageDataServlet;
 import slidepiper.integration.HubSpot;
 import slidepiper.keepalive.KeepAliveServlet;
 import slidepiper.salesman_servlets.CreateUser;
@@ -89,11 +88,6 @@ public class Application extends SpringBootServletInitializer {
     @Bean
     public ServletRegistrationBean SRBDownloadFileLinksServlt() {
         return new ServletRegistrationBean(new DownloadFileLinksServlt(), "/download-file-links");
-    }
-
-    @Bean
-    public ServletRegistrationBean SRBGetMessageDataServlet() {
-        return new ServletRegistrationBean(new GetMessageDataServlet(), "/GetMessageDataServlet");
     }
 
     @Bean
