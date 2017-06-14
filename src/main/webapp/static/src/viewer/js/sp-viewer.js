@@ -1619,8 +1619,9 @@ $.ajax({
                 '</div>');
 
             $.each(widget, function(index, value) {
+                var id = 'sp-widget5__hop-' + index;
                 $('#sp-widget5__hopper-container').append(
-                    '<div class="sp-widget5__hop sp-widget5__hop-extended" id="sp-widget5__hop-' + index + '" data-page-hop="' + value.hopperPage + '">' +
+                    '<div class="sp-widget5__hop sp-widget5__hop-extended" id="' + id + '" data-page-hop="' + value.hopperPage + '">' +
                     '<p class="sp-widget5__hop-text sp-widget5__hop--visible">' + value.hopperText + '</p>' +
                     '<p class="sp-widget5__hop-page sp-widget5__hop--hidden">' + value.hopperPage + '</p>' +
                     '</div>'
@@ -1631,6 +1632,9 @@ $.ajax({
                     'background-color': config.viewer.toolbarButtonBackground,
                     'color': config.viewer.toolbarCta1Color
                 });
+                if (typeof value.status !== 'undefined' && 'finished' === value.status) {
+                    $('#' + id).css({'opacity': '0.5', 'text-decoration': 'line-through'});
+                }
 
                 // Send event.
                 $('#sp-widget5__hop-' + index).on('click', function() {

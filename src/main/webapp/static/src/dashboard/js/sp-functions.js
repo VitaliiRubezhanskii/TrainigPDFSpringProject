@@ -116,12 +116,7 @@ sp = {
                                 });
 
                                 // Build dashboard.
-                                sp.metric.getFileMetrics(files[fileHash]);
                                 sp.metric.getViewerWidgetMetrics(files[fileHash]);
-                                sp.chart.getFileLine(fileHash);
-                                sp.chart.getFileBar(fileHash);
-                                sp.chart.getFilePerformance(fileHash);
-                                sp.chart.getFileVisitorsMap(fileHash);
                                 sp.table.getFilesTable(filesData);
 
 
@@ -1027,6 +1022,56 @@ sp = {
         getViewerWidgetMetrics: function(fileData, customerEmail) {
             if (typeof fileData != 'undefined' && typeof fileData[3] != 'undefined' && parseInt(fileData[3]) > 0) {
 
+                // Hopper data.
+                var items = document.querySelector('.hopper__items');
+                while (items.hasChildNodes()) {
+                    items.removeChild(items.lastChild);
+                }
+                var title = document.querySelector('.hopper__title');
+                title.textContent = 'N/A';
+                title.style.display = 'block';
+
+                $.getJSON(
+                    'ManagementServlet',
+                    {
+                        action: 'getHopperData',
+                        documentFriendlyId: fileData[0],
+                        salesmanEmail: sp.config.salesman.email
+                    },
+                    function(data) {
+                        if (typeof data['hopperData'][0] !== 'undefined') {
+                            var hops = JSON.parse(data['hopperData'][0][0]).data.items;
+                            var ul = document.createElement('ul');
+                            ul.className = 'todo-list small-list m-t';
+                            hops.forEach(function(hop) {
+                                var li = document.createElement('li');
+                                var i = document.createElement('i');
+                                i.classList = 'fa hopper__item-checkbox'
+                                switch (hop.status) {
+                                    case 'finished':
+                                        i.classList += ' fa-check-square';
+                                        break;
+                                    default:
+                                        i.classList += ' fa-square-o';
+                                        break;
+                                }
+                                li.appendChild(i);
+
+                                var span = document.createElement('span');
+                                span.classList = 'm-l-xs';
+                                if ('finished' === hop.status) {
+                                    span.classList += ' todo-completed';
+                                }
+                                span.textContent = hop.hopperText;
+                                li.appendChild(span);
+                                ul.appendChild(li);
+                            });
+                            items.appendChild(ul);
+                            title.style.display = 'none';
+                        }
+                    }
+                );
+
                 // Total number of YouTube plays.
                 $.getJSON(
                     'ManagementServlet',
@@ -1108,6 +1153,11 @@ sp = {
                     }
                 );
 
+                sp.metric.getFileMetrics(fileData);
+                sp.chart.getFileLine(fileData[0]);
+                sp.chart.getFileBar(fileData[0]);
+                sp.chart.getFilePerformance(fileData[0]);
+                sp.chart.getFileVisitorsMap(fileData[0]);
             } else {
                 $('#sp-widget-video-youtube-metric-total-number-plays, #sp-widget-total-count-likes, #sp-widget-count-unique-views').text('N/A');
                 $('#sp-widget-ask-question-metric').hide();
@@ -2643,11 +2693,7 @@ sp = {
                         });
 
                         // Build dashboard.
-                        sp.metric.getFileMetrics(files[fileHash]);
                         sp.metric.getViewerWidgetMetrics(files[fileHash], customerEmail);
-                        sp.chart.getFileLine(fileHash, customerEmail);
-                        sp.chart.getFileBar(fileHash, customerEmail);
-                        sp.chart.getFileVisitorsMap(fileHash, customerEmail);
                         var filesArray = [files[fileHash]];
                         if (typeof filesArray[0] != 'undefined') {
                             filesArray[0][8] = null;

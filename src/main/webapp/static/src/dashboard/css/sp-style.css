@@ -877,3 +877,23 @@ input:checked + .sp-doc-settings-slider:before {
 .sp-notifications-table--display-none {
 	display: none;
 }
+
+.hopper__item-checkbox {
+  color: #337ab7;
+  font-size: 16px;
+  vertical-align: bottom;
+}
+
+.metric__icon {
+  vertical-align: middle;
+}
+
+.metric__title {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.metric__sub-title {
+  font-size: 30px;
+  font-weight: 100;
+}

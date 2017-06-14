@@ -387,6 +387,13 @@ public class ManagementServlet extends HttpServlet {
     		  e.printStackTrace();
     	  }
     	  break;
+
+      case "getHopperData":
+          parameterList.add(request.getParameter("documentFriendlyId"));
+          parameterList.add(request.getParameter("salesmanEmail"));
+          sqlData = DbLayer.getEventData(parameterList, Analytics.sqlHopperData);
+          data.put("hopperData", sqlData);
+          break;
     	  
 	  }
 	  

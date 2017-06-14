@@ -424,4 +424,10 @@ public class Analytics {
 	+ "WHERE t1.session_id = ?\n"
 	+ "GROUP BY t1.param1int, t1.event_name\n"
 	+ "ORDER BY t1.param1int";
+
+	public static final String sqlHopperData =
+		"SELECT\n"
+	  + "  t1.data FROM widget AS t1\n"
+	  +	"  JOIN slides as t2 ON t2.id_ai = t1.FK_file_id_ai AND t2.id = ? AND t2.sales_man_email = ?\n"
+	  + "  WHERE t1.type = '5'";
 }

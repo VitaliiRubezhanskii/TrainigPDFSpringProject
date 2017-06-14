@@ -719,7 +719,13 @@ sp.viewerWidgetsModal = {
 
             $('.sp-hopper-widget__row').each(function(index) {
                 $(this).find('[data-item-setting]').each(function() {
-                    $(this).val(widget.items[index][$(this).attr('data-item-setting')]);
+                    if ('hopperText' === $(this).attr('data-item-setting') || 'hopperPage' === $(this).attr('data-item-setting')) {
+                        $(this).val(widget.items[index][$(this).attr('data-item-setting')]);
+                    }
+
+                    if ('status' === $(this).attr('data-item-setting') && 'finished' === widget.items[index][$(this).attr('data-item-setting')]) {
+                        $(this).prop('checked', true);
+                    }
                 });
             });
         }
@@ -1221,6 +1227,13 @@ sp.viewerWidgetsModal = {
                             return false;
                         } else {
                             item[$(this).attr('data-item-setting')] = $(this).val();
+                        }
+                        break;
+                    case 'status':
+                        if ($(this).prop('checked')) {
+                            item['status'] = 'finished';
+                        } else {
+                            item['status'] = 'unfinished';
                         }
                         break;
                 }
