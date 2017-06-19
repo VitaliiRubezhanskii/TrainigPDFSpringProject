@@ -4,7 +4,22 @@ $(function() {
   var payload = {};
   var transferFundPayload = {};
   var sectionId = 0;
-  
+  var viewerId;
+
+  $.ajax({
+      url: parent.SP.API_URL + '/viewer/viewer-data',
+      method: 'GET',
+      cache: false,
+      dataType: 'json',
+      xhrFields: {
+          withCredentials: true
+      }
+  }).done(function(data) {
+      viewerId = data.viewerId;
+  }).fail(function() {
+      viewerId = '';
+  });
+
   var channelName = getParameterByName('f', document.referrer);
   var a = getParameterByName('a', document.referrer);
   var ci = getParameterByName('ci', document.referrer);
@@ -684,7 +699,8 @@ $(function() {
           first_name: $('#first-name-init').val(),
           id_num: $('#id-init').val(),
           last_name: $('#last-name-init').val(),
-          phoneInit: $('#phone-operator-code-init').val() + '-' + $('#phone-number-init').val()
+          phoneInit: $('#phone-operator-code-init').val() + '-' + $('#phone-number-init').val(),
+          viewerId: viewerId
         }
         
         payload['date'] = getCurrentDate(); 
