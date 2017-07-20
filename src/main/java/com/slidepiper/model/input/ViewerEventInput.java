@@ -1,7 +1,7 @@
 package com.slidepiper.model.input;
 
 import com.slidepiper.annotation.Enumeration;
-import com.slidepiper.model.entity.viewer.ViewerEventType;
+import com.slidepiper.model.entity.viewer.ViewerEvent.ViewerEventType;
 import lombok.Getter;
 import org.hibernate.validator.constraints.Email;
 

@@ -1,25 +1,18 @@
 package slidepiper.db;
 
-import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.io.IOUtils;
 import org.hashids.Hashids;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import slidepiper.config.ConfigProperties;
 import slidepiper.constants.Constants;
-import slidepiper.dataobjects.AlertData;
 import slidepiper.dataobjects.Customer;
-import slidepiper.dataobjects.CustomerSession;
-import slidepiper.dataobjects.HistoryItem;
 import slidepiper.dataobjects.MessageInfo;
 import slidepiper.dataobjects.Presentation;
-import slidepiper.dataobjects.SlideView;
-import slidepiper.integration.HubSpot;
 
 import javax.xml.bind.DatatypeConverter;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -27,8 +20,6 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Timestamp;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -121,7 +112,7 @@ public class DbLayer {
 		 
 				String query = "INSERT INTO customers(email, name, first_name, last_name, sales_man, company, groupName) VALUES (?, ?, ?, ?, ?, ?, ?)";
 				String fullName = null;
-				try (Connection conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);) 
+				try (Connection conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);)
 					{			
 					try{
 							PreparedStatement preparedStatement = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
@@ -254,63 +245,7 @@ public class DbLayer {
 				MessageInfo mi = getMessageInfo(msgid);			
 				return mi.getSalesManEmail();
 	}
-	
-	
-	// set rows for this sessionId as done. 
-	// will not appear in recommendations. 
-	public static void setDone(String sessionId)
-	{
-		System.out.println("setting done for session " + sessionId);
-		Constants.updateConstants();
-		Connection conn = null; // connection to the database	
-		
-		try {
-		// connects to the database
-					conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
-						
-					String sql = "UPDATE customer_events " + 
-					" SET done = 1 " + 
-				  " WHERE session_id = ?";
-					PreparedStatement statement = conn.prepareStatement(sql);
-					statement.setString(1, sessionId);						
-					
-					// sends the statement to the database server
-					int row = statement.executeUpdate();
-					if (row > 0) {
-						System.out.println("setDone in customer_events (obsolete in v1) - rows updated: " + row);
-						//String message = "updated done.";
-					}
-					
-					sql = "UPDATE customer_sessions " + 
-					" SET done = 1 " + 
-				  " WHERE session_id = ?";									
-					statement = conn.prepareStatement(sql);
-					statement.setString(1, sessionId);						
-					
-					// sends the statement to the database server
-					row = statement.executeUpdate();
-					if (row > 0) {
-						System.out.println("setDone in customer_sessions - rows updated: " + row);
-						//String message = "updated done.";
-					}
-					
-		}            
-		catch (SQLException ex) {
-		ex.printStackTrace();
-		System.out.println("SQL ERROR" + ex.getMessage());
-			} 
-		finally {
-				if (conn != null) {
-				    // closes the database connection
-				    try {
-				        conn.close();
-				    } catch (SQLException ex) {
-				        ex.printStackTrace();
-				        }
-				}
-	    }
-	}
-	
+
 	public static void setPassword(String salesman_email, String newpassword)
 	{
 		System.out.println("setting new pw for " + salesman_email);
@@ -321,8 +256,8 @@ public class DbLayer {
 		// connects to the database
 					conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
 						
-					String sql = "UPDATE sales_men " + 
-					" SET password = ? " + 
+					String sql = "UPDATE sales_men " +
+					" SET password = ? " +
 				  " WHERE email = ?";
 					PreparedStatement statement = conn.prepareStatement(sql);
 					statement.setString(1, newpassword);						
@@ -350,51 +285,6 @@ public class DbLayer {
 				}
 	    }
 	}
-	
-
-	
-	
-	public static ArrayList<SlideView> getSlideViews(String sessionId){
-		//System.out.println("start get slide views");
-		
-		ArrayList<SlideView> views = new ArrayList<SlideView>();
-				
-		String viewsQuery = "SELECT param1int as 'slide_num', param2float as 'view_time' " + 
-		" FROM customer_events " + 
-		" WHERE event_name='VIEW_SLIDE' "+ 
-		" AND session_id=? AND done IS FALSE;";
-
-		//System.out.println("slideviews connect db");
-		Connection conn =null;
-		try 
-		{ 
-			try{							
-					conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
-		 			PreparedStatement statement = conn.prepareStatement(viewsQuery);				
-				  statement.setString(1, sessionId);								
-		 			ResultSet resultset = statement.executeQuery();
-					//System.out.println("query slide views sessionId " + sessionId + " sql: " + viewsQuery);
-					SlideView slideview;
-					int slide_num;
-					double time_viewed;
-						while (resultset.next()) {
-							slide_num = resultset.getInt(1);
-						 	time_viewed = resultset.getDouble(2);
-						 	slideview = new SlideView(slide_num, time_viewed, 0);				 
-						  //System.out.println("slideviews query done, values set slidenum" + 
-								//  	slide_num + " "
-								  //			+ "view time " + time_viewed);
-							views.add(slideview);   			    
-							
-					}
-			}finally{ if(conn!=null){ conn.close();}	}
-		} catch (Exception ex) {
-				System.out.println("exception in getSlideViews");
-				ex.printStackTrace();
-		}
-		return views;
-	}
-	
 
 	public static ArrayList<Customer> getMyCustomers(String smemail){			
 		ArrayList<Customer> custs = new ArrayList<Customer>();
@@ -464,93 +354,6 @@ public class DbLayer {
 		return presentations;
 	}
 
-
-	/*public static ArrayList<String> getQuestions(String sessionId){		
-		ArrayList<String> qs = new ArrayList<String>();		
-						
-		String qsQuery = "SELECT param3str as 'question' " +   
-		" FROM customer_events " + 
-		" WHERE event_name='CUSTOMER_QUESTION' "+ 
-		" AND session_id=?";
-		
-		Connection conn =null;
-		try 
-		{ 
-			try
-			{
-						conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
-						PreparedStatement statement = conn.prepareStatement(qsQuery);				
-						statement.setString(1, sessionId);								
-				 		ResultSet resultset = statement.executeQuery();					
-						String q;
-							while (resultset.next()) {
-								q = resultset.getString(1);
-								qs.add(q);   			    
-							}
-			} finally{ if(conn!=null){ conn.close();}	}
-		} catch (Exception ex) {
-				System.out.println("exception in getqs");
-				ex.printStackTrace();
-		}
-		return qs;
-	}
-	*/
-	public static ArrayList<String> getChatMessages(String sessionId){		
-		ArrayList<String> msgs = new ArrayList<String>();		
-						
-		String msgsQuery = "SELECT param3str as 'message' " +   
-		" FROM customer_events " + 
-		" WHERE event_name='CHAT_MESSAGE' "+ 
-		" AND session_id=?";
-		
-		Connection conn =null;
-		try 
-		{ 
-			try
-			{
-						conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
-						PreparedStatement statement = conn.prepareStatement(msgsQuery);				
-						statement.setString(1, sessionId);								
-				 		ResultSet resultset = statement.executeQuery();					
-						String msg;
-							while (resultset.next()) {
-								msg = resultset.getString(1);
-								msgs.add(msg);   			    
-							}
-			} finally{ if(conn!=null){ conn.close();}	}
-		} catch (Exception ex) {
-				System.out.println("exception in getqs");
-				ex.printStackTrace();
-		}
-		return msgs;
-	}
-	
-	public static String getSlidesName(String slidesId){		
-		String name = "";		
-						
-		String query =
-				"select name from slides where id=? AND slides.status IN ('CREATED', 'UPDATED', 'BEFORE_AWS_S3_TRANSITION') LIMIT 1;";
-		
-		Connection conn=null;
-		try 
-		{
-			try{			
-						conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
-						PreparedStatement statement = conn.prepareStatement(query);				
-						statement.setString(1, slidesId);								
-				 		ResultSet resultset = statement.executeQuery();								
-						// should run only once, limit 1 above.
-						while (resultset.next()) {
-							name = resultset.getString(1);					   			   
-						}
-			}	 finally{ if(conn!=null){ conn.close();}	}
-		} catch (Exception ex) {
-				System.out.println("exception in getslidesname");
-				ex.printStackTrace();
-		}
-		return name;
-	}
-	
 	public static String getSalesmanMailType(String smemail){		
 		String mailtype = "";		
 						
@@ -577,73 +380,7 @@ public class DbLayer {
 		}
 		return mailtype;
 	}
-	
-	public static CustomerSession getSessionData(String session_id){												
-		String query =
-				"select * from customer_sessions where session_id=? LIMIT 1;";
-		CustomerSession s =null;
-		Connection conn=null;
-		try 
-		{ 
-			try
-			{
-					  conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
-						PreparedStatement statement = conn.prepareStatement(query);				
-						statement.setString(1, session_id);								
-				 		ResultSet resultset = statement.executeQuery();								
-						// should run only once, limit 1 above.
-							while (resultset.next()) {
-								String msg_id = resultset.getString(1);					   			   
-								String ipaddr= resultset.getString(2);
-								String found_session_id = resultset.getString(3);
-								String browser= resultset.getString(4);
-								String os= resultset.getString(5);
-								String all_browser_data= resultset.getString(6);
-								int done= resultset.getInt(7);
-								String timestamp= resultset.getString(8);								
-								s = new CustomerSession(msg_id, ipaddr, found_session_id, browser, os, all_browser_data, done, timestamp);
-							}
-			} finally{ if(conn!=null){ conn.close();}	}
-		} catch (Exception ex) {
-				System.out.println("exception in getsm mailtype");
-				ex.printStackTrace();
-		}
-		if (s==null)
-		{		
-			System.out.println("ERROR! cannot find customersession " + session_id);
-		}		
-		return s;
-	}
 
-	
-	public static String getSalesmanName(String smemail){		
-		String name="";		
-						
-		String query =
-				"select name from sales_men where email=? LIMIT 1;";
-		
-		Connection conn=null;
-		try 
-		{ 
-			try
-			{
-					  conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
-						PreparedStatement statement = conn.prepareStatement(query);				
-						statement.setString(1, smemail);								
-				 		ResultSet resultset = statement.executeQuery();								
-						// should run only once, limit 1 above.
-							while (resultset.next()) {
-								name = resultset.getString(1);					   			   
-							}
-			} finally{ if(conn!=null){ conn.close();}	}
-		} catch (Exception ex) {
-				System.out.println("exception in getsm mailtype");
-				ex.printStackTrace();
-		}
-		//System.out.println("GetSalesmanName found name " + name + " for email " + smemail);
-		return name;
-	}
-	
 	public static String getSalesmanPassword(String salesman_email){		
 		String pwd = "";		
 						
@@ -710,228 +447,7 @@ public class DbLayer {
 			
 		return name;
 	}
-	
 
-	
-	
-	// get actions - downloaded, printed etc
-	public static ArrayList<String> getActions(String sessionId){		
-		ArrayList<String> qs = new ArrayList<String>();		
-						
-		String qsQuery = "SELECT event_name as 'action' " +   
-		" FROM customer_events " + 
-		" WHERE (event_name='PRINT' OR event_name='DOWNLOAD') "+ 
-		" AND session_id=?";
-		Connection conn=null;
-		try 
-		{ 
-			try{
-						conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
-						PreparedStatement statement = conn.prepareStatement(qsQuery);				
-						statement.setString(1, sessionId);								
-				 		ResultSet resultset = statement.executeQuery();					
-						String q;
-							while (resultset.next()) {
-								q = resultset.getString(1);
-								qs.add(q);   			    
-							}
-			} finally{ if(conn!=null){ conn.close();}	}
-		} catch (Exception ex) {
-				System.out.println("exception in getActions");
-				ex.printStackTrace();
-		}
-		return qs;
-	}
-
-
-
-	
-	/////*********************************************************
-	// GET ALERTS	 FOR SALESMAN
-		public static ArrayList<AlertData> getAlerts(String salesman_email){
-				
-			System.out.println("start get alerts for email " + salesman_email);
-			ArrayList<AlertData> alerts = new ArrayList<AlertData>();
-			
-			String reportSQL =
-					" SELECT cs.session_id AS 'session_id', cs.browser AS 'browser', "
-					+" cs.operating_system AS 'os', cs.all_browser_data AS 'all_browser_data', cs.timestamp AS 'open_time', "
-					+" mi.msg_text as 'message_text', mi.customer_email as 'customer_email', " 
-					+" mi.timestamp as 'send_time', mi.slides_id as 'slides_id' "
-					+" FROM customer_sessions cs, msg_info mi " 
-					+" WHERE cs.done=0 AND cs.msg_id=mi.id AND mi.sales_man_email=? "
-					+" ORDER BY cs.timestamp DESC;";
-						 									
-			Connection conn=null;
-			try 
-			{
-				try{
-				//System.out.println("alerts connect db");
-				conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
-				PreparedStatement statement = conn.prepareStatement(reportSQL);				
-				statement.setString(1, salesman_email);								
-			 	ResultSet resultset = statement.executeQuery();
-				System.out.println("alerts exec query DONE.");
-					while (resultset.next()) {
-						String session_id = resultset.getString(1);
-								String browser = resultset.getString(2);
-								String os = resultset.getString(3);
-								String all_browser_data = resultset.getString(4);
-								String open_time = resultset.getString(5);
-								String message_text =resultset.getString(6);
-								String customer_email = resultset.getString(7);
-								String send_time =resultset.getString(8);
-								String slides_id =resultset.getString(9);
-								String slides_name = getSlidesName(slides_id);
-								
-					//			System.out.println("alerts data received");
-						//		System.out.println("alerts ");								
-																
-								// without customer_name, actions, questions 
-								// these need to be pulled out in many concurrent threads.
-								AlertData alert = new AlertData(session_id, browser, os, all_browser_data, open_time, 
-								message_text, customer_email, null, send_time, slides_id, 
-								slides_name, null, null);
-								
-				//				System.out.println("Alert obj: " + alert.toString());
-								
-								alerts.add(alert);
-   			    //System.out.println("Found alert: cust " + cust_email + " sl name " + slides_name + "msgtext" + msgtext + " msgid " + msg_id + " open " + open_time + " send " + send_time + " sess id " + sessId);
-					}
-				} finally{ if(conn!=null){ conn.close();}	}
-			} catch (Exception ex) {
-					System.out.println("exception in getAlerts");
-					ex.printStackTrace();
-			}
-			
-			System.out.println("starting load alertdata threads. number of alerts " + alerts.size());
-			// arraylist of threads
-			ArrayList<LoadAlertDataThread> threads = new ArrayList<LoadAlertDataThread>();
-						
-			// loop on new threads and start them
-			int threadidx = 1;
-			for(AlertData alert : alerts)
-			{
-					LoadAlertDataThread alertThread = new LoadAlertDataThread(alert, salesman_email);
-					alertThread.threadidx = threadidx;
-					alertThread.start();					
-					threads.add(alertThread);
-					
-					// This is VERY important - run threads in batches of 20.
-					// otherwise there's an exception of too many threads.
-					// this SOLVES IT completely.
-					if ((threadidx%20) ==0) 
-					{						
-							// wait for it to finish before continuing.
-							try{
-									alertThread.join();
-							}
-							catch (InterruptedException ie)
-							{
-									System.out.println("Error - interrupted exception in thread in 20 batch. " + ie.getStackTrace().toString());
-							}
-							System.out.println("finished batch of 20 threads, idx is " + threadidx);
-					}
-
-					threadidx++;
-			}
-			
-			System.out.println("waiting for last threads to finish.");
-			// wait for all threads to finish
-			for (LoadAlertDataThread thread : threads)
-			{
-				try
-				{
-					//wait for this thread to finish
-				  thread.join();
-				}
-				catch (InterruptedException ie)
-				{
-					System.out.println("Error - interrupted exception in threads " + ie.getStackTrace().toString());
-				}
-			}
-	
-			System.out.println("threads complete. Alerts loaded.");
-			
-			//System.out.println("returning alerts found.");
-			return alerts;
-		}
-		///*********************************************************
-		
-		// GET ALERT	 FOR SALESMAN. one alert
-		public static AlertData getAlert(String sessionId, String salesman_email){
-				
-			//System.out.println("start get ALERT (one)");
-			AlertData ad = null;
-			
-			String alertSQL =
-					" SELECT cs.session_id AS 'session_id', cs.browser AS 'browser', "
-					+" cs.operating_system AS 'os', cs.all_browser_data AS 'all_browser_data', cs.timestamp AS 'open_time', " 
-			   	+"	mi.msg_text as 'message_text', mi.customer_email as 'customer_email', " 
-					+" mi.timestamp as 'send_time', mi.slides_id as 'slides_id' " 
-					+" FROM customer_sessions cs, msg_info mi "
-					+" WHERE cs.msg_id=mi.id AND cs.session_id=? LIMIT 1; ";					
-						 						
-			
-			Connection conn=null;
-			try 
-			{
-				try{
-				//System.out.println("alerts connect db");
-				conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
-				PreparedStatement statement = conn.prepareStatement(alertSQL);				
-				statement.setString(1, sessionId);								
-			 	ResultSet resultset = statement.executeQuery();
-				//System.out.println("one alert exec done");
-					while (resultset.next()) {
-						String session_id = resultset.getString(1);
-								String browser = resultset.getString(2);
-								String os = resultset.getString(3);
-								String all_browser_data = resultset.getString(4);
-								String open_time = resultset.getString(5);
-								String message_text =resultset.getString(6);
-								String customer_email = resultset.getString(7);
-								String send_time =resultset.getString(8);
-								String slides_id =resultset.getString(9);
-								String slides_name = getSlidesName(slides_id);
-								
-					//			System.out.println("alerts data received");
-						//		System.out.println("alerts ");								
-																
-								// without customer_name, actions, questions 
-								// these need to be pulled out in many concurrent threads.
-							  ad = new AlertData(session_id, browser, os, all_browser_data, open_time, 
-								message_text, customer_email, null, send_time, slides_id, 
-								slides_name, null, null);
-								
-				//				System.out.println("ONE Alert obj: " + ad.toString());
-															
-   			    //System.out.println("Found alert: cust " + cust_email + " sl name " + slides_name + "msgtext" + msgtext + " msgid " + msg_id + " open " + open_time + " send " + send_time + " sess id " + sessId);
-					}
-				} finally{ if(conn!=null){ conn.close();}	}
-			} catch (Exception ex) {
-					System.out.println("exception in getAlert (one)");
-					ex.printStackTrace();
-			}
-			
-			LoadAlertDataThread alertThread = new LoadAlertDataThread(ad, salesman_email);
-			alertThread.start();
-			try
-			{
-					alertThread.join(); // wait to finish.
-			}
-			catch (InterruptedException ie)
-			{
-				System.out.println("Error - interrupted exception in threads " + ie.getStackTrace().toString());
-			}
-			//System.out.println("returning alert (one)");
-			return ad;
-		}
-		///*********************************************************
-
-		
-
-		
 		// insert into database presentation share with customer. 
 		public static int sendMessage(String id, String salesmanEmail, String salesmanEmailpassword, String customer_email, String slides_ids, String message, String linktext, String subj, int timezone_offset_min){
 			String salesMan = null;
@@ -967,239 +483,7 @@ public class DbLayer {
 		
 			return 1;
 		}
-		
 
-		// GET history for salesman
-		public static ArrayList<HistoryItem> getHistory(String salesman_email){
-				
-			System.out.println("start get history for email " + salesman_email);
-			ArrayList<HistoryItem> his = new ArrayList<HistoryItem>();						
-			String historySQL=					
-					" SELECT DISTINCT customers.name AS 'customer_name', customers.email AS 'customer_email', " 
-					  + " msg_info.msg_text AS 'message_text', msg_info.id AS 'msgid',  "
-						+ " slides.name AS 'slides_name', msg_info.timestamp  "
-						+ " FROM msg_info, customers, slides "
-						+ " WHERE "
-						+ " customers.email=msg_info.customer_email "
-						+ "	AND	customers.sales_man = ? "
-						+ " AND msg_info.slides_id = slides.id " 
-						+ " AND msg_info.sales_man_email=? " 
-						+" ORDER BY timestamp DESC;";
-			
-			Connection conn=null;
-			try 
-			{
-				try
-				{
-						conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
-						PreparedStatement statement = conn.prepareStatement(historySQL);				
-						statement.setString(1, salesman_email);								
-						statement.setString(2, salesman_email);
-						ResultSet resultset = statement.executeQuery();
-		//				System.out.println("query done");
-						HistoryItem hi;
-						String cust_name, cust_email, msgtext, msg_id, slides_name, send_time;
-			//			System.out.println("LOOPING ON QUERY RESULTS");
-							while (resultset.next()) {
-								cust_name = resultset.getString(1);
-							 	cust_email = resultset.getString(2);
-							 	msgtext = resultset.getString(3);
-							 	msg_id = resultset.getString(4);
-							 	slides_name = resultset.getString(5);					 						 						 	
-							 	send_time = resultset.getString(6);
-							 	
-							  hi = new HistoryItem(cust_name, cust_email,	msgtext, msg_id, slides_name, send_time);			
-				//			  System.out.println("query done, values set");
-							  // I don't save msg_id and sessId but maybe USE THEM LATER.					    
-							  his.add(hi);
-		//   			    System.out.println("Found hist item: " + hi.toString());
-							}
-				} finally{ if(conn!=null){ conn.close();}	}
-			} catch (Exception ex) {
-					System.out.println("exception in getHistory");
-					ex.printStackTrace();
-			}
-//			System.out.println("returning history items: " + his.toString());
-			return his;
-		}
-		///*********************************************************
-	
-		// GET history for salesman
-		public static ArrayList<String> getSessionsByMsgId(String msgid)
-		{		
-			//System.out.println("start get sess for msgid " + msgid);
-			ArrayList<String> sessArr = new ArrayList<String>();
-						
-			String sessSQL=
-					"SELECT session_id FROM customer_sessions WHERE msg_id=?";
-			try 
-			{ 
-				Connection conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
-				PreparedStatement statement = conn.prepareStatement(sessSQL);				
-				statement.setString(1, msgid);								
-		 		ResultSet resultset = statement.executeQuery();				
-				String sessid;
-		//			System.out.println("LOOPING ON QUERY RESULTS");
-					while (resultset.next()) {
-						sessid = resultset.getString(1);
-					 	
-					 sessArr.add(sessid);		
-				//    System.out.println("Found sessid for history. sessid " + sessid + " msgid " + msgid);
-					}
-					conn.close();
-			} catch (Exception ex) {
-					System.out.println("exception in getHistory");
-					ex.printStackTrace();
-			}
-			//System.out.println("returning alerts found.");
-			return sessArr;
-		}
-		///*********************************************************
-		
-		// Get session report htmls for msgid
-		public static ArrayList<String> getSessionReportsByMsgId(String msgid)
-		{		
-			//System.out.println("start get sess for msgid " + msgid);
-			ArrayList<String> reportsArr = new ArrayList<String>();
-						
-			String sessSQL=
-					"SELECT report_html FROM customer_sessions WHERE msg_id=?";
-			try 
-			{ 
-				Connection conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
-				PreparedStatement statement = conn.prepareStatement(sessSQL);				
-				statement.setString(1, msgid);								
-		 		ResultSet resultset = statement.executeQuery();				
-				String reporthtml;
-		//			System.out.println("LOOPING ON QUERY RESULTS");
-					while (resultset.next()) {
-						reporthtml = resultset.getString(1);
-					 	
-					 reportsArr.add(reporthtml);		
-				//    System.out.println("Found sessid for history. sessid " + sessid + " msgid " + msgid);
-					}
-					conn.close();
-			} catch (Exception ex) {
-					System.out.println("exception in getHistory");
-					ex.printStackTrace();
-			}
-			//System.out.println("returning alerts found.");
-			return reportsArr;
-		}
-		///*********************************************************
-
-		
-		// helper function to convert resultset to html
-		// used in AdminReportsServlet 
-		private static String getResultSetHTML(java.sql.ResultSet rs)
-			    throws Exception {
-			 int rowCount = 0;
-			 String resultStr="";
-
-			 resultStr = "<P ALIGN='center'><TABLE BORDER=1>";
-			 ResultSetMetaData rsmd = rs.getMetaData();
-			 int columnCount = rsmd.getColumnCount();
-			 // table header
-			 resultStr += "<TR>";
-			 for (int i = 0; i < columnCount; i++) {
-				 resultStr += ("<TH>" + rsmd.getColumnLabel(i + 1) + "</TH>");
-			   }
-			 resultStr +="</TR>";
-			 // the data
-			 while (rs.next()) {
-			  rowCount++;
-			  resultStr +="<TR>";
-			  for (int i = 0; i < columnCount; i++) {
-				  resultStr +="<TD>" + rs.getString(i + 1) + "</TD>";
-			    }
-			  resultStr +="</TR>";
-			  }
-			 resultStr +="</TABLE></P>";
-			 //return rowCount;
-			 return resultStr;
-			}
-
-			public static Boolean isSessionDead(String sessid){		
-
-				// if one line is returned, session dead.
-				// only zero --> alive.
-				String query =
-						"select param3str from customer_events where session_id=? AND param3str='LAST_SLIDE';";
-								
-				Boolean is_dead = false;
-				
-				System.out.println("Checking Session " + sessid + ". Is it dead or alive?");
-				
-				Connection conn=null;
-				try 
-				{ 
-					try
-					{
-							  conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
-								PreparedStatement statement = conn.prepareStatement(query);				
-								statement.setString(1, sessid);								
-						 		ResultSet resultset = statement.executeQuery();								
-
-									while (resultset.next()) {
-										// got into here--> session is dead!!
-										is_dead = true;
-									}
-					} finally{ if(conn!=null){ conn.close();}	}
-				} catch (Exception ex) {
-						System.out.println("exception in getsm mailtype");
-						ex.printStackTrace();
-				}
-
-				System.out.println("Session " + sessid + " dead? " + is_dead);
-				return is_dead;
-			}
-			
-			
-			
-			// set rows for this sessionId as done. 
-			// will not appear in recommendations. 
-			public static void updateSessionReport(String sessionId, String reportHtml)
-			{
-				//System.out.println("setting report for session " + sessionId);
-				Constants.updateConstants();
-				Connection conn = null; // connection to the database	
-				
-				try {
-				// connects to the database
-							conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
-															
-							String sql = "UPDATE customer_sessions " + 
-							" SET report_html = ? " + 
-						  " WHERE session_id = ?";									
-							PreparedStatement statement = conn.prepareStatement(sql);
-							statement.setString(1, reportHtml);
-							statement.setString(2, sessionId);						
-							
-							// sends the statement to the database server
-							int row = statement.executeUpdate();
-							if (row > 0) {
-					//			System.out.println("set reporthtml in cust sess - rows updated: " + row);
-								//String message = "updated done.";
-							}
-							
-				}            
-				catch (SQLException ex) {
-				ex.printStackTrace();
-				System.out.println("SQL ERROR in updateSessionReport" + ex.getMessage());
-					} 
-				finally {
-						if (conn != null) {
-						    // closes the database connection
-						    try {
-						        conn.close();
-						    } catch (SQLException ex) {
-						        ex.printStackTrace();
-						        }
-						}
-			    }
-			}
-			
-			 
 			/**
        * Check if a customer record exists in the DB.
        * 
@@ -1294,62 +578,7 @@ public class DbLayer {
 	    
 		return isIPMatchClientIP;
 	  }
-			
-			
-			/**
-	      * Check if an event has occurred in a session.
-	      * 
-	      * @param sessionid - The session id.
-	      * @param eventName - The event name.
-	      * @return isEventHappenedThisSession - boolean determined by the outcome of the
-	      * SQL query.
-	      */
-	     public static boolean isEventHappenedThisSession(String sessionid, String eventName) {
-	       boolean isEventHappenedThisSession = false;
-	       
-	       Constants.updateConstants();
-	       try {
-	         Class.forName("com.mysql.cj.jdbc.Driver");
-	       } catch (ClassNotFoundException e) {
-	         e.printStackTrace();
-	       }
-	      
-	       String sql = "SELECT\n"
-		      					+ "  EXISTS (\n"
-	      						+ "    SELECT event_name\n"
-	      						+ "    FROM customer_events\n"
-	      						+ "    WHERE event_name = ?\n"
-	      						+ "    AND session_id = ?)";
-	      
-	       Connection conn = null;
-	       try {
-	         conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
-	   		   PreparedStatement ps = conn.prepareStatement(sql); 
-	   		  
-	   		   ps.setString(1, eventName);
-	   		   ps.setString(2, sessionid);
-	   		   ResultSet rs = ps.executeQuery();
-	   		  
-	   		   while(rs.next()) {
-	   		     isEventHappenedThisSession = rs.getBoolean(1);
-	   		   }
-	   		  
-	       } catch (SQLException e) {
-	   			 e.printStackTrace();
-	   		 } finally {
-	         if (null != conn) {
-	           try {
-	             conn.close();
-	           } catch (SQLException ex) {
-	             ex.printStackTrace();
-	           }
-	         }
-	   		 }
-	      
-	       return isEventHappenedThisSession;
-	     }
-			
-			
+
 			/**
        * Check if a salesman record exists in the DB.
        * 
@@ -1386,150 +615,7 @@ public class DbLayer {
         
         return isEmailExist;
       }
-			
-			
-      /**
-       * Get a provider access token.
-       */
-      public static String getAccessToken(int userId, String provider) {
-        String accessToken = null;
-        
-        Constants.updateConstants();
-        try {
-          Class.forName("com.mysql.cj.jdbc.Driver");
-        } catch (ClassNotFoundException e) {
-          e.printStackTrace();
-        }
-          
-        String sql = "SELECT * FROM integration WHERE isEnabled = 1 AND fk_user_id = ? AND provider = ?";
 
-        Connection conn = null;
-        try {
-          conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
-          PreparedStatement ps = conn.prepareStatement(sql); 
-            
-          ps.setInt(1, userId);
-          ps.setString(2, provider);
-          ResultSet rs = ps.executeQuery();
-          
-          if (rs.next()) {
-            String refreshToken = rs.getString("refreshToken");
-            String redirectUri = rs.getString("redirectUri");
-            
-            long expiresIn = rs.getLong("expiresIn");
-            long updatedAt = rs.getTimestamp("updatedAt").getTime() / 1000;
-            long currentTime = Instant.now().getEpochSecond();
-            int buffer = 1800; // Half an hour.
-            
-            if (updatedAt + expiresIn - currentTime > buffer) {
-              accessToken = rs.getString("accessToken");
-            } else {
-              
-              // If provider is HubSpot.
-              if (rs.getString("provider").equals(provider)) {
-                accessToken = HubSpot.getNewAccessToken(userId, refreshToken, redirectUri);
-              }
-            }
-          }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-          if (conn != null) {
-            try {
-              conn.close();
-            } catch (SQLException ex) {
-              ex.printStackTrace();
-            }
-          }
-        }
-        
-        return accessToken;
-      }
-
-
-      /**
-       * Get data about a specific customer such as his first name. 
-       * 
-       * @param customerEmail The customer email address.
-       * @param salesmanEmail The salesman email address.
-       * 
-       * @return A map containing data about a specific customer. 
-       */
-      public static Map<String, String> getCustomer(String customerEmail, String salesmanEmail) {
-        
-        Connection conn = null;
-        Map<String, String> salesmanMap = new HashMap<String, String>();
-        String sql = "SELECT * FROM customers WHERE sales_man=? AND email=?";
-        
-        try {
-          conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
-          PreparedStatement ps = conn.prepareStatement(sql);
-          ps.setString(1, salesmanEmail);
-          ps.setString(2, customerEmail);
-          
-          ResultSet rs = ps.executeQuery();
-          ResultSetMetaData md = rs.getMetaData();
-          int columnCount = md.getColumnCount();
-          
-          if (rs.next()) {
-            for (int i = 1; i <= columnCount; i++) {
-              salesmanMap.put(md.getColumnLabel(i), rs.getString(i));
-            }
-          }
-        } catch (SQLException ex) {
-          System.err.println("Error code: " + ex.getErrorCode() + " - " + ex.getMessage());
-          ex.printStackTrace();
-        } finally {
-          if (null != conn) {
-            try {
-              conn.close();
-            } catch (SQLException ex) {
-              ex.printStackTrace();
-            }
-          }
-        }
-        
-        return salesmanMap;
-      }
-      
-      
-      /**
-       * Get the customer email associated with a file link hash.
-       * 
-       * @param fileLinkHash The file link hash.
-       * @return The customer email.
-       */
-      public static String getCustomerEmailFromFileLinkHash(String fileLinkHash) {
-        
-        Constants.updateConstants();
-        try {
-          Class.forName("com.mysql.cj.jdbc.Driver");
-        } catch (ClassNotFoundException e) {
-          e.printStackTrace();
-        }
-        Connection conn = null;
-        
-        String sql = "SELECT customer_email FROM msg_info WHERE id = ?";
-        
-        String customerEmail = null;
-        
-        try {
-          conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
-          PreparedStatement stmt = conn.prepareStatement(sql);
-          stmt.setString(1, fileLinkHash);
-          
-          ResultSet rs = stmt.executeQuery();
-          if (rs.next()) {
-            customerEmail = rs.getString(1);
-          }
-        } catch (SQLException e) {
-          e.printStackTrace();
-        }
-      
-        return customerEmail;
-      }
-      
-    	
     	/**
     	 * Get the fileHash from a file link hash.
     	 * 
@@ -1711,63 +797,6 @@ public class DbLayer {
         
         return fileLinkList;
       }
-      
-      /**
-       * Get a file's meta data.
-       * 
-       * @param fileLinkHash A document file link hash.
-       * 
-       * @return a file's meta data such as its name, and owner (salesman) email.
-       */
-      public static Map<String, String> getFileMetaData(String fileLinkHash) {
-        Map<String, String> fileMetaData = new HashMap<String, String>();
-        
-        Constants.updateConstants();
-        try {
-          Class.forName("com.mysql.cj.jdbc.Driver");
-        } catch (ClassNotFoundException e) {
-          e.printStackTrace();
-        }
-        Connection conn = null;
-        
-        String sql = 
-            "SELECT slides.id AS fileHash, slides.name AS fileName, slides.sales_man_email AS salesmanEmail FROM slides\n"
-          + "INNER JOIN msg_info ON msg_info.slides_id = slides.id\n"
-          + "WHERE msg_info.id = ? AND slides.status IN ('CREATED', 'UPDATED', 'BEFORE_AWS_S3_TRANSITION')";
-        
-        try {
-          conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
-          PreparedStatement ps = conn.prepareStatement(sql);
-          ps.setString(1, fileLinkHash);
-          
-          ResultSet rs = ps.executeQuery();
-          ResultSetMetaData md = rs.getMetaData();
-          int columnCount = md.getColumnCount();
-        
-          if (rs.next()) {
-            for (int i = 1; i <= columnCount; i++) {
-              if (null != rs.getString(i)
-                  && md.getColumnClassName(i).equals("java.lang.String")) {
-                
-                fileMetaData.put(md.getColumnLabel(i), rs.getString(i));
-              }
-            }
-          }
-        } catch (SQLException ex) {
-          System.err.println("Error code: " + ex.getErrorCode() + " - " + ex.getMessage());
-          ex.printStackTrace();
-        } finally {
-          if (null != conn) {
-           try {
-             conn.close();
-           } catch (SQLException ex) {
-             ex.printStackTrace();
-           }
-          }
-        }
-        
-        return fileMetaData;
-      }
 
       /**
        * Get event related tabular data from the DB.
@@ -1813,91 +842,7 @@ public class DbLayer {
         
         return dataEventList;
       }
-      
-      /**
-       * Get session data for HubSpot Timeline integration.
-       * 
-       * @param sessionId - The session id
-       * @return hubspotData - The session data to be sent to HubSpot.
-       */
-      public static JSONObject getSessionDataForHubspot(String sessionId) {
-        JSONObject hubspotData = new JSONObject();
-        
-        Connection conn = null;
-  	    Map<String, String> engagementAliasMap = new HashMap<String, String>();
-  		  
-  	    engagementAliasMap.put("VIEWER_WIDGET_CALENDLY_CLICKED", ":calendar: Clicked on Calendly");
-  	    engagementAliasMap.put("VIEWER_WIDGET_VIDEO_TAB_CLICKED", ":presentation: Clicked on video tab");
-  	    engagementAliasMap.put("VIEWER_WIDGET_VIDEO_YOUTUBE_PLAYED", ":play: Played YouTube video");
-  	    engagementAliasMap.put("VIEWER_WIDGET_VIDEO_YOUTUBE_PAUSED", ":pause: Paused YouTube video");
-  	    engagementAliasMap.put("VIEWER_WIDGET_ASK_QUESTION", ":comments-o: Sent feedback");
-  	    engagementAliasMap.put("VIEWER_WIDGET_LIKE_CLICKED", ":task-check: Liked the document");
-  	    engagementAliasMap.put("VIEWER_WIDGET_HOPPER_CLICKED", ":price-tag: Hopped to a page");
-  	    engagementAliasMap.put("VIEWER_WIDGET_TESTIMONIALS_CLICKED", ":contacts: Viewed testimonial");
-  	    engagementAliasMap.put("VIEWER_WIDGET_FORM__BUTTON_CLICKED", ":file-text: Opened form");
-  	    engagementAliasMap.put("VIEWER_WIDGET_FORM_CONFIRM_CLCKED", ":handshake: Submitted form");
-  	    engagementAliasMap.put("VIEWER_WIDGET_FORM_CANCEL_CLICKED", ":close: Closed form");
-  	    engagementAliasMap.put("VIEWER_WIDGET_LINK_CLICKED", ":external-link: Clicked on a link button");
-  	    engagementAliasMap.put("PRINT", ":sequences: Printed document");
-  	    engagementAliasMap.put("DOWNLOAD", ":download: Downloaded document");
-  	    engagementAliasMap.put("CLICKED_CTA", ":cta-click: Clicked on a CTA button");
-  		  
-  	    Constants.updateConstants();
-  	    try {
-  	      Class.forName("com.mysql.cj.jdbc.Driver");
-  	    } catch (ClassNotFoundException e) {
-  	      e.printStackTrace();
-  	    }
-  	    
-  	    try {
-      		conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
-    		  PreparedStatement ps = conn.prepareStatement(Analytics.sqlSessionData);
-    		  ps.setString(1, sessionId);
-    		  ResultSet rs = ps.executeQuery();
-    		 
-    		  JSONArray pagesData = new JSONArray();
-    		  List<Integer> pageNumbers = new ArrayList<Integer>();
-    		  while (rs.next()) {
-    		    if (! pageNumbers.contains(rs.getInt("page_number"))) {
-    		      pageNumbers.add(rs.getInt("page_number"));
-    				  
-    		      JSONObject page = new JSONObject();
-    		      JSONArray pageEngagements = new JSONArray();
-    		      
-    		      page.put("pageNumber", rs.getInt("page_number"));
-    		      page.put("pageDuration", rs.getInt("view_duration"));
-    		      page.put("pageEngagements", pageEngagements);
-    				 
-    		      pagesData.put(page);
-    		    }
-      		  
-    		    String eventName = rs.getString("event");
-    		    if (null != engagementAliasMap.get(eventName)) {
-    		      JSONObject engagement = new JSONObject();
-    				 
-    		      engagement.put("engagementName", engagementAliasMap.get(eventName));
-    				 
-    		      int countEvent = rs.getInt("count_event");
-    		      if (countEvent > 1) {
-    		        engagement.put("engagementCount", countEvent + " times");
-    		      } else {
-    		        engagement.put("engagementCount", countEvent + " time");
-    		      }
-    				 
-    		      JSONObject latestPageData = pagesData.getJSONObject(pagesData.length() - 1);
-    		      latestPageData.getJSONArray("pageEngagements").put(engagement);
-    		    }
-    		  }
-		 
-  		    hubspotData.put("pages", pagesData);
-  	    } catch (SQLException e) {
-  	      e.printStackTrace();
-  	    }
-  	    
-  	    return hubspotData;
-      }
-      
-      
+
       /**
        * Get salesman's notifications from DB.
        * 
@@ -2191,48 +1136,6 @@ public class DbLayer {
 	   	  return widget;
 	   	}
 
-	   	
-	   	public static String getOpenSlidesEventEmailAddress(String sessionid) {
-	   	  String widget10GivenEmailAddress = null;
-	   	  
-	   	  Connection conn = null;
-	   	  Constants.updateConstants();
-	   	  try {
-	   	    Class.forName("com.mysql.cj.jdbc.Driver");
-	   	  } catch (ClassNotFoundException e) {
-	   	    e.printStackTrace();
-	   	  }
-	   	  
-	   	  String sql = "SELECT\n"
-	   	             + " customer_events.param_11_varchar AS 'emailAddress'\n"
-	   	             + "FROM customer_events\n"
-	   	             + "WHERE customer_events.session_id = ? AND customer_events.event_name = 'OPEN_SLIDES'";
-	   	  
-	   	  try {
-	   	    conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
-	   	    PreparedStatement ps = conn.prepareStatement(sql);
-	   	    
-	   	    ps.setString(1, sessionid);
-	   	    ResultSet rs = ps.executeQuery();
-       
-	   	    while (rs.next()) {
-	   	      widget10GivenEmailAddress = rs.getString("emailAddress");
-	   	    }
-	   	  } catch (SQLException e) {
-	   	    e.printStackTrace();
-	   	  } finally {
-          if (null != conn) {
-            try {
-              conn.close();
-            } catch (SQLException ex) {
-              ex.printStackTrace();
-            }
-          }
-	   	  }
-	   	  
-	   	  return widget10GivenEmailAddress;
-	   	}
-	   	
 	   	/**
        * Get widget metrics for the Viewer from the DB.
        * 
@@ -2284,50 +1187,6 @@ public class DbLayer {
         }
         
         return widgetMetrics;
-      }
-	   
-      
-      /**
-       * Get the time stamp of a customer event.
-       */
-      public static Timestamp getCustomerEventTimstamp(String sessionId, String eventName, String documentLinkHash) {
-        Timestamp timestamp = null;
-        
-        Constants.updateConstants();
-        try {
-          Class.forName("com.mysql.cj.jdbc.Driver");
-        } catch (ClassNotFoundException e) {
-          e.printStackTrace();
-        }
-        Connection conn = null;
-        
-        String sql = "SELECT timestamp FROM customer_events WHERE session_id = ? AND event_name = ? AND msg_id = ?";
-        try {
-          conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
-          PreparedStatement ps = conn.prepareStatement(sql);
-          ps.setString(1, sessionId);
-          ps.setString(2, eventName);
-          ps.setString(3, documentLinkHash);
-          
-          ResultSet rs = ps.executeQuery();
-          if (rs.next()) {
-            timestamp = rs.getTimestamp(1);
-          }
-          
-        } catch (SQLException ex) {
-          System.err.println("Error code: " + ex.getErrorCode() + " - " + ex.getMessage());
-          ex.printStackTrace();
-        } finally {
-          if (null != conn) {
-            try {
-              conn.close();
-            } catch (SQLException ex) {
-              ex.printStackTrace();
-            }
-          }
-        }
-        
-        return timestamp;
       }
 
      /**

@@ -12,15 +12,10 @@ import org.springframework.web.filter.HiddenHttpMethodFilter;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import slidepiper.config.ConfigPropertiesServlt;
 import slidepiper.config.ConfigViewerServlt;
-import slidepiper.customer_servlets.CustomerLoggingServlet;
-import slidepiper.integration.HubSpot;
-import slidepiper.keepalive.KeepAliveServlet;
 import slidepiper.salesman_servlets.CreateUser;
 import slidepiper.salesman_servlets.CustomizeToolbar;
 import slidepiper.salesman_servlets.DownloadFileLinksServlt;
 import slidepiper.salesman_servlets.ManagementServlet;
-import slidepiper.salesman_servlets.ReportsServlet;
-import slidepiper.salesman_servlets.SalesmanLoggingServlet;
 import slidepiper.salesman_servlets.UploadCustomers;
 
 @SpringBootApplication
@@ -76,11 +71,6 @@ public class Application extends SpringBootServletInitializer {
     }
 
     @Bean
-    public ServletRegistrationBean SRBCustomerLoggingServlet() {
-        return new ServletRegistrationBean(new CustomerLoggingServlet(), "/CustomerDataServlet");
-    }
-
-    @Bean
     public ServletRegistrationBean SRBCustomizeToolbar() {
         return new ServletRegistrationBean(new CustomizeToolbar(), "/customize-navbar");
     }
@@ -91,28 +81,8 @@ public class Application extends SpringBootServletInitializer {
     }
 
     @Bean
-    public ServletRegistrationBean SRBHubSpot() {
-        return new ServletRegistrationBean(new HubSpot(), "/integration/hubspot");
-    }
-
-    @Bean
-    public ServletRegistrationBean SRBKeepAliveServlet() {
-        return new ServletRegistrationBean(new KeepAliveServlet(), "/KeepAliveServlet");
-    }
-
-    @Bean
     public ServletRegistrationBean SRBManagementServlet() {
         return new ServletRegistrationBean(new ManagementServlet(), "/ManagementServlet");
-    }
-
-    @Bean
-    public ServletRegistrationBean SRBReportsServlet() {
-        return new ServletRegistrationBean(new ReportsServlet(), "/ReportsServlet");
-    }
-
-    @Bean
-    public ServletRegistrationBean SRBSalesmanLoggingServlet() {
-        return new ServletRegistrationBean(new SalesmanLoggingServlet(), "/SalesmanDataServlet");
     }
 
     @Bean

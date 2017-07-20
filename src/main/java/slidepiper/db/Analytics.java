@@ -90,14 +90,14 @@ public class Analytics {
   
   
   public static final String sqlTopExitPage =
-        "SELECT param1int AS top_exit_page\n"
-      + "FROM customer_events\n"
-      + "INNER JOIN msg_info ON msg_info.id = customer_events.msg_id\n"
-      + "WHERE msg_info.slides_id=? AND msg_info.sales_man_email=? AND param3str = 'LAST_SLIDE' AND param1int >= 1 AND param2float >= 1\n"
-      + "GROUP by param1int\n"
-      + "ORDER BY COUNT(param1int) DESC, SUM(param2float), param1int DESC\n"
+        "SELECT t1.param1int AS top_exit_page\n"
+      + "FROM customer_events AS t1\n"
+      + "INNER JOIN (SELECT MAX(id) AS max_id FROM customer_events WHERE (param3str = 'LAST_SLIDE' OR (event_name = 'VIEW_SLIDE' AND LENGTH(session_id) = 36)) AND param1int >= 1 AND param2float >= 1 GROUP BY session_id) AS t2 ON t2.max_id = t1.id\n"
+      + "INNER JOIN (SELECT id, slides_id, sales_man_email FROM msg_info WHERE slides_id=? AND sales_man_email=?) AS t3 ON t3.id = t1.msg_id\n"
+      + "GROUP by t1.param1int\n"
+      + "ORDER BY COUNT(t1.param1int) DESC, SUM(t1.param2float), t1.param1int DESC\n"
       + "LIMIT 1";
-  
+
   
   public static final String sqlCustomersList =
       "SELECT\n"
@@ -399,31 +399,17 @@ public class Analytics {
   /**
    * Get customer email, salesman email, and document name for email notifications. 
    */
-  public static final String sqlEmailNotifications = 
+  public static final String sqlEmailNotifications =
 	  "SELECT\n"
 	+ "  msg_info.customer_email AS 'customerEmail',\n"
     + "  slides.name AS 'documentName',\n"
-    + "  msg_info.sales_man_email AS 'salesmanEmail'\n"
+    + "  msg_info.sales_man_email AS 'salesmanEmail',\n"
+	+ "  customer_events.param_11_varchar\n"
     + "FROM picascrafxzhbcmd.customer_events\n"
     + "INNER JOIN msg_info ON msg_info.id = customer_events.msg_id\n"
     + "INNER JOIN slides ON msg_info.slides_id = slides.id AND slides.status IN ('CREATED', 'UPDATED', 'BEFORE_AWS_S3_TRANSITION')\n"
     + "WHERE customer_events.id = ?";
 
-  
-  /**
-   * Get viewer data for SlidePiper Integrations.
-   */
-  public static final String sqlSessionData = 
-	  "SELECT\n"
-	+ "  t1.param1int AS page_number,\n"
-	+ "  t1.event_name AS event,\n"
-	+ "  COUNT(t1.event_name) AS count_event,\n"
-	+ "  FLOOR(t2.view_duration) AS view_duration\n"
-	+ "FROM customer_events AS t1\n"
-	+ "INNER JOIN view_file_page_duration_agg_by_session_page_number AS t2 ON t1.param1int = t2.page_number AND t1.session_id = t2.session_id\n"
-	+ "WHERE t1.session_id = ?\n"
-	+ "GROUP BY t1.param1int, t1.event_name\n"
-	+ "ORDER BY t1.param1int";
 
 	public static final String sqlHopperData =
 		"SELECT\n"

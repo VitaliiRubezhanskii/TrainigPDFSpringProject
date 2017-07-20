@@ -31,7 +31,7 @@ $(function() {
     attachmentSectionView();
     $('[data-section-id="7"]').show();
   } else {
-    $('.sp-next-section').text('המשך')
+    $('.sp-next-section').text('המשך');
     $('[data-section-id="0"]').show();
   }
   sendSlidePiper('HALMAN_ALDUBI_CURRENT_SECTION', sectionId);
@@ -188,10 +188,8 @@ $(function() {
       $('#form-not-valid').remove();
       return true;
     }
-  };
-  
-  
-  function setSectionView() {
+  }
+    function setSectionView() {
     console.log('Currently on section: ' + sectionId);
     sendSlidePiper('HALMAN_ALDUBI_CURRENT_SECTION', sectionId);
     
@@ -221,9 +219,7 @@ $(function() {
     } else {
       $('.sp-back-section').show();
     }
-  };
-  
-  
+  }
   /* Form 1 Settings */
   $('#city').select2({
     dir: 'rtl',
@@ -313,7 +309,7 @@ $(function() {
       
       $('#partner-kids-waiver-statement').show();
     } else if ($('#is-has-partner-yes').is(':checked')) {
-      $('#partner-no-kids-no-container, #partner-no-kids-yes-container, #partner-kids-waiver-statement').hide()
+      $('#partner-no-kids-no-container, #partner-no-kids-yes-container, #partner-kids-waiver-statement').hide();
       $('#partner').show();
     }
   });
@@ -377,7 +373,7 @@ $(function() {
     } else {
       $('#employer-hp').val('');
     }
-  })
+  });
   
   /* Form 4 Settings */
   $('[name="smoking"]').change(function() {
@@ -582,10 +578,8 @@ $(function() {
     }
     
     return isIdValid;
-  };
-  
-  
-  /**
+  }
+    /**
    * Validate opposite percentageBenficiary field if value of the other is empty.
    */
   $('[name^="percentageBeneficiary"]').keyup(function() {
@@ -640,9 +634,7 @@ $(function() {
     }
              
     return isTotalPercentage100;
-  };
-  
-  
+  }
   /* Date Picker */
   $('#datetimepicker1, #datetimepicker2').datetimepicker({
     allowInputToggle: true,
@@ -682,9 +674,8 @@ $(function() {
     } else {
       $('.sp-next-section').prop('disabled', true);
     }
-  };
-
-  function moveNextSection() {
+  }
+    function moveNextSection() {
     sectionId++;
     setSectionView();
   }
@@ -701,7 +692,7 @@ $(function() {
           last_name: $('#last-name-init').val(),
           phoneInit: $('#phone-operator-code-init').val() + '-' + $('#phone-number-init').val(),
           viewerId: viewerId
-        }
+        };
         
         payload['date'] = getCurrentDate(); 
         
@@ -1105,10 +1096,8 @@ $(function() {
       
       return day + '-' + month + '-' + year + '_' + hours + '-' + minutes + '-' + seconds;
     }
-  };
-  
-  
-  function sendWebMerge(url, payload) {
+  }
+    function sendWebMerge(url, payload) {
 
     // Send to WebMerge.
     $.ajax({
@@ -1117,18 +1106,15 @@ $(function() {
       url: url,
       data: JSON.stringify(payload)
     });
-  };
-  
-  
-  function sendZapier(url, payload) {
+  }
+    function sendZapier(url, payload) {
     $.ajax({
       method: 'POST',
       url: url,
       data: JSON.stringify(payload)
     });
-  };
-  
-  /**
+  }
+    /**
    * Send Data to SlidePiper.
    * 
    * @param eventName The event name.
@@ -1137,35 +1123,31 @@ $(function() {
     if (typeof arg1 === 'undefined') {
       arg1 = '';
     }
-    
+
     var sessionId = '';
-    if (typeof parent.sessionid !== 'undefined') {
-      sessionId = parent.sessionid;
+    if (typeof parent.SP.SESSION_ID !== 'undefined') {
+        sessionId = parent.SP.SESSION_ID;
     }
-    
-    var data = {
-      action: 'setCustomerEvent',
-      data: {
-        eventName: eventName,
-        linkHash: getParameterByName('f', document.referrer),
+
+    var event = {
+        type: eventName,
+        channelFriendlyId: getParameterByName('f', document.referrer),
         param_1_varchar: document.location.href,
         param_2_varchar: document.referrer,
         param_3_varchar: arg1.toString(),
         sessionId: sessionId
-      }
     };
     
     $.ajax({
       method: 'POST',
-      url: parent.SP.API_URL + '/ManagementServlet',
-      data: JSON.stringify(data),
+      url: parent.SP.API_URL + '/viewer/event',
+      data: JSON.stringify(event),
       xhrFields: {
         withCredentials: true
       }
     });
-  };
-  
-  function sendSms(key) {
+  }
+    function sendSms(key) {
     if (typeof payload['phone'] !== 'undefined') {
       phoneNumber = '972' + payload['phone'].replace(/^0/, '').replace(/-/g, '');
       
@@ -1221,13 +1203,13 @@ $(function() {
                         sendSlidePiper('HALMAN_ALDUBI_FAILED_SENDING_FILES', dataFileType);
                         $('.sp-next-section').text('חלה שגיאה בהעלאת צרופות');
                     }
-                }
+                };
 
                 request.onerror = function() {
                     isFileUploadFailed = true;
                     sendSlidePiper('HALMAN_ALDUBI_FAILED_SENDING_FILES', dataFileType);
                     $('.sp-next-section').text('חלה שגיאה בהעלאת צרופות');
-                }
+                };
 
                 request.open("POST", parent.SP.API_URL + '/utils/widgets/ftp');
                 request.send(formData);

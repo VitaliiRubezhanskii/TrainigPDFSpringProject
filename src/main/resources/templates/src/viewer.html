@@ -22,28 +22,9 @@ See https://github.com/adobe-type-tools/cmap-resources
 -->
 <html dir="ltr" mozdisallowselectionprint moznomarginboxes>
 <head>
-    <base href="/static/src/viewer/lib/pdfjs/1.7.310-811a2db/web/">
+    <base href="/static/src/viewer/js/pdfjs/1.7.310-811a2db/web/">
     <script>
     'use strict';
-
-    [
-        'DOMContentLoaded',
-        'load',
-        'documentload',
-        'pagerendered',
-        'textlayerrendered',
-        'pagechange',
-        'pagesinit',
-        'pagesloaded',
-        'updateviewarea',
-        'pagemode',
-        'outlineloaded',
-        'slidePiperViewerLoaded'
-    ].forEach(function(eventName) {
-        document.addEventListener(eventName, function(event) {
-            console.log(event.type);
-        });
-    });
 
     var SP = {};
     Object.defineProperties(SP, {
@@ -53,6 +34,10 @@ See https://github.com/adobe-type-tools/cmap-resources
         },
         API_URL: {
             value: '{{{apiUrl}}}',
+            enumerable: true
+        },
+        SESSION_ID: {
+            value: '{{{sessionId}}}',
             enumerable: true
         }
     });
@@ -192,7 +177,7 @@ See https://github.com/adobe-type-tools/cmap-resources
         <div class="sp-bounce3 sp--background-color-sp-purple"></div>
     </div>
     <div class="sp--color-sp-purple sp--direction-ltr sp--font-size-1em sp--font-weight-bold sp--margin-bottom-45px">Loading the show...</div>
-    <img src="/static/src/viewer/images/logo-wide-150x32.png">
+    <img src="/static/src/viewer/images/logo-150x35.png">
 </div>
 <div id="outerContainer">
     <div id="sidebarContainer">
@@ -516,16 +501,13 @@ See https://github.com/adobe-type-tools/cmap-resources
     }
 
     function loadSlidePiper() {
-        loadCss('/static/src/viewer/css/sp-viewer.css');
-        loadCss('https://static.slidepiper.com/lib/font-awesome/4.7.0/css/font-awesome.min.css');
-        loadCss('/static/src/viewer/lib/sweetalert2/4.1.9/sweetalert2.min.css');
+        loadCss('/static/src/viewer/css/style.css');
+        loadCss('https://static.slidepiper.com/libs/font-awesome/4.7.0/css/font-awesome.min.css');
+        loadCss('https://static.slidepiper.com/libs/sweetalert2/4.1.9/sweetalert2.min.css');
 
-        loadScript('/static/src/viewer/lib/jquery/3.1.0/jquery.min.js', function() {
-            loadScript('/static/src/viewer/js/sp.js', function() {
-                loadScript('/static/src/viewer/js/sp-viewer.js', function() {
-                    loadScript('/static/src/viewer/lib/sweetalert2/4.1.9/sweetalert2.min.js');
-
-                });
+        loadScript('https://static.slidepiper.com/libs/jquery/3.1.0/jquery.min.js', function() {
+            loadScript('/static/src/viewer/js/main.js', function() {
+                loadScript('https://static.slidepiper.com/libs/sweetalert2/4.1.9/sweetalert2.min.js');
             });
         });
 

@@ -6,15 +6,15 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.slidepiper.model.entity.Document;
 import com.slidepiper.model.entity.Document.Status;
 import com.slidepiper.model.entity.Event;
+import com.slidepiper.model.entity.User;
 import com.slidepiper.model.entity.widget.ShareWidget;
 import com.slidepiper.model.entity.widget.Widget;
 import com.slidepiper.repository.DocumentRepository;
 import com.slidepiper.repository.EventRepository;
+import com.slidepiper.repository.UserRepository;
 import com.slidepiper.service.amazon.AmazonS3Service;
 import com.slidepiper.service.widget.ShareWidgetService;
 import org.hashids.Hashids;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -34,15 +34,12 @@ import java.util.Set;
 
 @Service
 public class DocumentService {
-    private static final Logger log = LoggerFactory.getLogger(DocumentService.class);
-
-    @Value("${documents.amazon.s3.bucket}") private String bucket;
-    @Value("${documents.amazon.s3.keyPrefix}") private String keyPrefix;
-    @Value("${documents.hashids.salt}") private String salt;
-    @Value("${documents.hashids.minHashLength}") private int minHashLength;
-    @Value("${documents.hashids.alphabet}") private String alphabet;
-    @Value("${slidepiper.url}") private String slidepiperUrl;
-    @Value("${amazon.s3.url}") private String amazonS3Url;
+    private final String alphabet;
+    private final String amazonS3Url;
+    private final String bucket;
+    private final String keyPrefix;
+    private final int minHashLength;
+    private final String salt;
 
     private final AmazonS3Service amazonS3Service;
     private final DocumentRepository documentRepository;
@@ -50,20 +47,35 @@ public class DocumentService {
     private final EventRepository eventRepository;
     private final ObjectMapper objectMapper;
     private final ShareWidgetService shareWidgetService;
+    private final UserRepository userRepository;
 
     @Autowired
-    public DocumentService(AmazonS3Service amazonS3Service,
+    public DocumentService(@Value("${documents.amazon.s3.bucket}") String bucket,
+                           @Value("${documents.amazon.s3.keyPrefix}") String keyPrefix,
+                           @Value("${documents.hashids.salt}") String salt,
+                           @Value("${documents.hashids.minHashLength}") int minHashLength,
+                           @Value("${documents.hashids.alphabet}") String alphabet,
+                           @Value("${amazon.s3.url}") String amazonS3Url,
+                           AmazonS3Service amazonS3Service,
                            DocumentRepository documentRepository,
                            EntityManager entityManager,
                            EventRepository eventRepository,
                            ObjectMapper objectMapper,
-                           ShareWidgetService shareWidgetService) {
+                           ShareWidgetService shareWidgetService,
+                           UserRepository userRepository) {
+        this.bucket = bucket;
+        this.keyPrefix = keyPrefix;
+        this.salt = salt;
+        this.minHashLength = minHashLength;
+        this.alphabet = alphabet;
+        this.amazonS3Url = amazonS3Url;
         this.amazonS3Service = amazonS3Service;
         this.documentRepository = documentRepository;
         this.entityManager = entityManager;
         this.eventRepository = eventRepository;
         this.objectMapper = objectMapper;
         this.shareWidgetService = shareWidgetService;
+        this.userRepository = userRepository;
     }
 
     public String getUrl(Document document, HttpServletRequest request) {
@@ -90,7 +102,8 @@ public class DocumentService {
         for (MultipartFile file: files) {
             String name = file.getOriginalFilename();
 
-            Document document = new Document(email, Status.CREATED, name);
+            User user = userRepository.findByEmail(email);
+            Document document = new Document(user, Status.CREATED, name);
             documentRepository.save(document);
 
             Hashids hashids = new Hashids(salt, minHashLength, alphabet);
@@ -120,7 +133,7 @@ public class DocumentService {
     }
 
     public void update(MultipartFile file, String friendlyId, String email) throws IOException {
-        Document document = documentRepository.findByFriendlyIdAndEmail(friendlyId, email);
+        Document document = documentRepository.findByFriendlyId(friendlyId);
 
         List<DeleteObjectsRequest.KeyVersion> keysLatestVersion =
                 amazonS3Service.getKeysLatestVersion(bucket, getDocumentPrefix(document));
@@ -144,7 +157,7 @@ public class DocumentService {
     }
 
     public void delete(String friendlyId, String email) {
-        Document document = documentRepository.findByFriendlyIdAndEmail(friendlyId, email);
+        Document document = documentRepository.findByFriendlyId(friendlyId);
 
         List<DeleteObjectsRequest.KeyVersion> keysLatestVersion =
                 amazonS3Service.getKeysLatestVersion(bucket, getDocumentPrefix(document));
@@ -161,11 +174,12 @@ public class DocumentService {
 
 
     public void clone(String sourceDocumentFriendlyId, String destinationDocumentName, String email) {
-        Document sourceDocument = documentRepository.findByFriendlyIdAndEmail(sourceDocumentFriendlyId, email);
+        Document sourceDocument = documentRepository.findByFriendlyId(sourceDocumentFriendlyId);
         Iterator<Widget> iterator = sourceDocument.getWidgets().iterator();
         entityManager.detach(sourceDocument);
 
-        Document destinationDocument = new Document(email, Status.DISABLED, destinationDocumentName);
+        User user = userRepository.findByEmail(email);
+        Document destinationDocument = new Document(user, Status.DISABLED, destinationDocumentName);
         documentRepository.save(destinationDocument);
 
         // Set friendlyId.

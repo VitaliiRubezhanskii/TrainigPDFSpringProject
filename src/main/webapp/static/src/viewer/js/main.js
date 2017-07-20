@@ -16,7 +16,7 @@ $(document).on('textlayerrendered', function() {
         if (!a.getAttribute('target')) {
             a.setAttribute('target', '_blank');
         }
-    };
+    }
 });
 
 
@@ -62,22 +62,6 @@ window.addEventListener('afterprint', function() {
         '<div class="horizontalToolbarSeparator"></div>' +
         '<div id="sp-terms-privacy-secondary-toolbar">' + poweredBySlidePiper + '<br>' + termsAndPrivacy + '</div>');
 })();
-
-
-/**
- * Set actions on events.
- */
-$('#secondaryPresentationMode').on('click', function() {
-    send_event("REQUEST_FULLSCREEN", "0", "0", ipaddr);
-});
-
-$('#secondaryPrint').on('click', function() {
-    send_event("PRINT", "0", "0", ipaddr);
-});
-
-$('#secondaryDownload').on('click', function() {
-    send_event("DOWNLOAD", "0", "0", ipaddr);
-});
 
 
 /**
@@ -133,71 +117,174 @@ sp.viewer = {
         widget11: {
             spWidget11Share: null,
         }
-    },
-    loadViewerCodeJs: function() {
-        $.getScript('/assets/viewer/js/viewercode.js', function() {
-            initView();
-
-            $(document).trigger('spViewercodeJsLoaded');
-        });
-    },
-
-
-    /**
-     * @param {String} param_1_varchar - The CTA button id attribute.
-     * @param {String} param_2_varchar - The CTA button text
-     * @param {String} param_3_varchar = The CTA button destination URL
-     */
-    init: (function() {
-        $(document).on('spViewercodeJsLoaded', function() {
-            $('.sp-cta, .sp-secondary-cta').click(function() {
-                var eventData = {
-                    eventName: sp.viewer.eventName.clickedCta,
-                    param_1_varchar: $(this).attr('id'),
-                    param_2_varchar: $(this).text(),
-                    param_3_varchar: $(this).attr('href'),
-                    linkHash: sp.viewer.linkHash,
-                    sessionId: sessionid
-                };
-
-                sp.viewer.setCustomerEvent(eventData);
-            });
-        });
-    })(),
-
-    /**
-     * Set a customer event in the DB.
-     *
-     * @param {String} eventName The event name.
-     * @param {Object} eventData The event data.
-     */
-    setCustomerEvent: function(eventData) {
-        var data = {
-            action: 'setCustomerEvent',
-            data: eventData
-        };
-
-        // Send page number of event.
-        if (typeof PDFViewerApplication !== 'undefined') {
-            data.data.param1int = PDFViewerApplication.page;
-        } else {
-            data.data.param1int = 0;
-        }
-
-        $.ajax({
-            url: SP.API_URL + '/ManagementServlet',
-            method: 'POST',
-            data: JSON.stringify(data),
-            xhrFields: {
-                withCredentials: true
-            }
-        }).done(function() {
-            if (eventData.eventName === sp.viewer.eventName.viewerWidgetRequestEmailEntered) {
-                $(document).trigger('spWidget10EmailAddressEntered');
-            }
-        });
     }
 };
+
+
+/**
+ * Tracking and sending event mechanism.
+ */
+(function() {
+    var startTime;
+    document.addEventListener('spsessionstart', function(dispatchedEvent) {
+        startTime = new Date().getTime();
+
+        var event = {
+            type: 'OPEN_SLIDES',
+            channelFriendlyId: getParameterByName('f'),
+            sessionId: SP.SESSION_ID,
+            param1int: PDFViewerApplication.page,
+            param3str: navigator.userAgent,
+            data: {
+                dispatchedEventType: dispatchedEvent.type
+            }
+        };
+        if (typeof sp.viewer.widgets.widget10.emailAddress !== 'undefined') {
+            event['param_11_varchar'] = sp.viewer.widgets.widget10.emailAddress;
+        }
+        sp.sendEvent(event);
+
+        // Set event listeners.
+        document.addEventListener('pagechange', handlePageChangeEvent);
+        document.addEventListener('visibilitychange', function(dispatchedEvent) {
+            if ('unloaded' !== document.visibilityState) {
+                handlePageChangeEvent(dispatchedEvent);
+            }
+        });
+        window.addEventListener('beforeunload', handlePageChangeEvent);
+        window.addEventListener('pagehide', handlePageChangeEvent);
+        window.addEventListener('unload', handlePageChangeEvent);
+    });
+
+    var isPageChangeEventEnabled = true;
+    function handlePageChangeEvent(dispatchedEvent) {
+        if (isPageChangeEventEnabled) {
+            if (['beforeunload', 'pagehide', 'unload'].indexOf(dispatchedEvent.type) !== -1) {
+                isPageChangeEventEnabled = false;
+                $.ajaxSetup({async: false});
+            }
+
+            sendPageChangeEvent(dispatchedEvent.type);
+        }
+    }
+
+    var viewPage = PDFViewerApplication.page;
+    var MAX_VIEW_DURATION = 1000 * 60 * 60 * 24 * 365; // A year.
+    function sendPageChangeEvent(dispatchedEventType) {
+        var eventType;
+        if ('visibilitychange' === dispatchedEventType) {
+            eventType = document.hidden ? 'VIEW_SLIDE' : 'VIEWER_HIDDEN';
+        } else {
+            eventType = document.hidden ? 'VIEWER_HIDDEN' : 'VIEW_SLIDE';
+        }
+
+        var endTime = new Date().getTime();
+        var viewDuration = endTime - startTime < MAX_VIEW_DURATION ? endTime - startTime : MAX_VIEW_DURATION;
+        sp.sendEvent({
+            type: eventType,
+            channelFriendlyId: sp.viewer.linkHash,
+            sessionId: SP.SESSION_ID,
+            param1int: viewPage,
+            param2float: (viewDuration / 1000),
+            data: {
+                dispatchedEventType: dispatchedEventType
+            }
+        });
+
+        viewPage = document.hidden ? undefined : PDFViewerApplication.page;
+        startTime = endTime;
+    }
+
+    var eventQueue = [];
+    sp.sendEvent = function(event) {
+        if (typeof event === 'string') {
+            event = {type: event};
+        }
+
+        if (typeof event.sessionId === 'undefined') {
+            event.sessionId = SP.SESSION_ID;
+        }
+
+        if (typeof event.channelFriendlyId === 'undefined') {
+            event.channelFriendlyId = sp.viewer.linkHash;
+        }
+
+        if (typeof event.param1int === 'undefined' && PDFViewerApplication) {
+            event.param1int = PDFViewerApplication.page;
+        }
+
+        eventQueue.push(event);
+        processEventQueue();
+    };
+
+    var isEventQueueProcessing = false;
+    function processEventQueue() {
+        if (!isEventQueueProcessing) {
+            isEventQueueProcessing = true;
+
+            if (eventQueue.length > 0) {
+                var event = eventQueue[0];
+
+                $.ajax({
+                    url: SP.API_URL + '/viewer/event',
+                    method: 'POST',
+                    data: JSON.stringify(event),
+                    xhrFields: {
+                        withCredentials: true
+                    }
+                }).always(function() {
+                    eventQueue.shift();
+                    isEventQueueProcessing = false;
+                    processEventQueue();
+                });
+            } else {
+                isEventQueueProcessing = false;
+            }
+        }
+    }
+
+    /**
+     * @deprecated use sp.sendEvent() instead.
+     */
+    window.sessionid = SP.SESSION_ID;
+    sp.viewer.setCustomerEvent = function(event) {
+        event.type = event.eventName;
+        delete event.eventName;
+        event.channelFriendlyId = event.linkHash;
+        delete event.linkHash;
+        event.sessionId = SP.SESSION_ID;
+        sp.sendEvent(event);
+    }
+})();
+
+
+/**
+ * Set actions on events.
+ */
+$('#secondaryPresentationMode').on('click', function() {
+    sp.sendEvent('REQUEST_FULLSCREEN');
+});
+
+$('#secondaryPrint').on('click', function() {
+    sp.sendEvent('PRINT');
+});
+
+$('#secondaryDownload').on('click', function() {
+    sp.sendEvent('DOWNLOAD');
+});
+
+$('.sp-cta, .sp-secondary-cta').click(function() {
+    var eventData = {
+        type: sp.viewer.eventName.clickedCta,
+        param_1_varchar: $(this).attr('id'),
+        param_2_varchar: $(this).text(),
+        param_3_varchar: $(this).attr('href'),
+        channelFriendlyId: sp.viewer.linkHash,
+        sessionId: SP.SESSION_ID
+    };
+
+    sp.sendEvent(eventData);
+});
 
 $.ajax({
     url: SP.API_URL + '/config-viewer',
@@ -614,8 +701,6 @@ $.ajax({
 
                 if (typeof widgets.widget10 !== 'undefined') {
                     sp.viewer.widgets.widget10.isEnabled = true;
-                } else {
-                    sp.viewer.loadViewerCodeJs();
                 }
 
                 implementWidgets(widgets);
@@ -766,12 +851,11 @@ $.ajax({
             if (! isEmailAddressEnteredForThisDocument) {
                 implementWidget10(widgets.widget10.items[0]);
             } else {
-                sp.viewer.loadViewerCodeJs();
-                $(document).on('spViewercodeJsLoaded', function() {
-                    sp.viewer.widgets.widget10.emailAddress = enteredEmailAddress;
-                    $(document).trigger('spWidget10EmailAddressEntered');
-                });
+                sp.viewer.widgets.widget10.emailAddress = enteredEmailAddress;
+                document.dispatchEvent(new CustomEvent('spsessionstart'));
             }
+        } else {
+            document.dispatchEvent(new CustomEvent('spsessionstart'));
         }
 
         /* Validate Widget 1 */
@@ -940,15 +1024,19 @@ $.ajax({
                 }
             });
 
-            ['slidePiperViewerLoaded', 'pagechange'].forEach(function (event) {
-                document.addEventListener(event, function () {
-                    $('.sp-widget9').remove();
+            updateLinkWidget();
 
-                    if (links.hasOwnProperty(PDFViewerApplication.page)) {
-                        linkWidget(links[PDFViewerApplication.page]);
-                    }
-                });
+            document.addEventListener('pagechange', function() {
+                $('.sp-widget9').remove();
+
+                updateLinkWidget();
             });
+
+            function updateLinkWidget() {
+                if (links.hasOwnProperty(PDFViewerApplication.page)) {
+                    linkWidget(links[PDFViewerApplication.page]);
+                }
+            }
 
             function linkWidget(links) {
                 if (0 == $('.sp-right-side-widgets').length) {
@@ -970,7 +1058,7 @@ $.ajax({
                     }
 
                     var i = document.createElement('i');
-                    i.classList.add('fa')
+                    i.classList.add('fa');
                     if (typeof link.icon === 'undefined') {
                         i.classList.add('fa-external-link');
                     } else {
@@ -1001,10 +1089,10 @@ $.ajax({
                             }).done();
                         }
 
-                        sp.viewer.setCustomerEvent({
-                            eventName: sp.viewer.eventName.viewerWidgetLinkClicked,
-                            linkHash: sp.viewer.linkHash,
-                            sessionId: sessionid,
+                        sp.sendEvent({
+                            type: sp.viewer.eventName.viewerWidgetLinkClicked,
+                            channelFriendlyId: sp.viewer.linkHash,
+                            sessionId: SP.SESSION_ID,
                             param_1_varchar: link.buttonText1,
                             param_2_varchar: link.buttonText2,
                             param_3_varchar: link.link,
@@ -1031,7 +1119,7 @@ $.ajax({
         var widget11RequiredSettings = ['buttonText'];
 
         if (typeof widgets.widget11 !== 'undefined'
-                && (widgets.widget11.isEnabled || widgets.widget11.items[0].enabled)) {
+            && (widgets.widget11.isEnabled || widgets.widget11.items[0].enabled)) {
             if (isWidgetSettingsDefined(widgets.widget11.items[0], widget11RequiredSettings)) {
                 implementWidget11(widgets.widget11.items[0]);
             }
@@ -1206,10 +1294,8 @@ $.ajax({
                 } else {
                     $('#sp-widget1-fa-chevron').addClass('fa-chevron-up').removeClass('fa-chevron-down');
                 }
-            };
-        };
-
-
+            }
+        }
         function implementWidget2(widget) {
 
             // Widget 2 - Calendly widget
@@ -1237,10 +1323,10 @@ $.ajax({
                  *
                  * param_1_varchar - The text on the Calendly button.
                  */
-                sp.viewer.setCustomerEvent({
-                    eventName: sp.viewer.eventName.viewerWidgetCalendlyClicked,
-                    linkHash: sp.viewer.linkHash,
-                    sessionId: sessionid,
+                sp.sendEvent({
+                    type: sp.viewer.eventName.viewerWidgetCalendlyClicked,
+                    channelFriendlyId: sp.viewer.linkHash,
+                    sessionId: SP.SESSION_ID,
                     param_1_varchar: $(this).text()
                 });
             });
@@ -1375,10 +1461,10 @@ $.ajax({
 
             function validateBottomOfDocumentForm() {
                 if ($('#widget3-bottom-form').valid()) {
-                    sp.viewer.setCustomerEvent({
-                        eventName: sp.viewer.eventName.viewerWidgetAskQuestion,
-                        linkHash: sp.viewer.linkHash,
-                        sessionId: sessionid,
+                    sp.sendEvent({
+                        type: sp.viewer.eventName.viewerWidgetAskQuestion,
+                        channelFriendlyId: sp.viewer.linkHash,
+                        sessionId: SP.SESSION_ID,
                         param_2_varchar: $('#sp-widget3-bottom-message').val(),
                         param_3_varchar: $('#sp-widget3-bottom-email').val(),
                         param_4_varchar: confirmButtonText,
@@ -1426,10 +1512,10 @@ $.ajax({
                              */
 
                             if ($('#widget3-form').valid()) {
-                                sp.viewer.setCustomerEvent({
-                                    eventName: sp.viewer.eventName.viewerWidgetAskQuestion,
-                                    linkHash: sp.viewer.linkHash,
-                                    sessionId: sessionid,
+                                sp.sendEvent({
+                                    type: sp.viewer.eventName.viewerWidgetAskQuestion,
+                                    channelFriendlyId: sp.viewer.linkHash,
+                                    sessionId: SP.SESSION_ID,
                                     param_1_varchar: $('#sp-widget3').text(),
                                     param_2_varchar: $('#sp-widget3-message').val(),
                                     param_3_varchar: $('#sp-widget3-email').val(),
@@ -1466,7 +1552,6 @@ $.ajax({
 
             getLikeCount();
 
-
             /**
              * Get the number of likes a document has received.
              */
@@ -1478,47 +1563,16 @@ $.ajax({
                         fileLinkHash: sp.viewer.linkHash,
                         wigdetId: 4
                     },
-                    function(data) {
+                    function (data) {
                         sp.viewer.widgets.widget4.likeCount = parseInt(data.widgetMetrics.metrics[0]);
                         if (widget.isCounterEnabled) {
                             formatDisplayLikeCount(sp.viewer.widgets.widget4.likeCount);
                         }
 
-                        isLikeButtonClickedSession();
+                        likeButtonClickEventListener();
                     }
                 );
             }
-
-
-            /**
-             * Check if the Like Button has been clicked this session.
-             *
-             * If it has been clicked, add the class 'sp-like-btn-clicked', and remove
-             * the 'click' event listener.
-             */
-            function isLikeButtonClickedSession() {
-                $.getJSON(
-                    '/ManagementServlet',
-                    {
-                        action: 'isEventHappenedThisSession',
-                        sessionid: getCookie('mySessionId'),
-                        eventName: sp.viewer.eventName.viewerWidgetLikeClicked,
-                    },
-                    function(data) {
-
-                        // Is like button clicked this session.
-                        if (data.isEventHappenedThisSession) {
-                            $('.sp-like-btn').addClass('sp-like-btn-clicked');
-                            $('#sp-thumbs-up__i, #sp-count-likes__p').css('color', '#fff');
-                        } else {
-                            likeButtonClickEventListener();
-                        }
-
-                        $('.sp-like-btn').removeClass('sp-hidden');
-                    }
-                );
-            }
-
 
             /**
              * Send an event to customer_events table when the customer clicks the
@@ -1530,10 +1584,10 @@ $.ajax({
              */
             function likeButtonClickEventListener() {
                 $('.sp-like-btn').one('click', function() {
-                    sp.viewer.setCustomerEvent({
-                        eventName: sp.viewer.eventName.viewerWidgetLikeClicked,
-                        linkHash: sp.viewer.linkHash,
-                        sessionId: sessionid
+                    sp.sendEvent({
+                        type: sp.viewer.eventName.viewerWidgetLikeClicked,
+                        channelFriendlyId: sp.viewer.linkHash,
+                        sessionId: SP.SESSION_ID
                     });
 
                     if (widget.isCounterEnabled) {
@@ -1638,10 +1692,10 @@ $.ajax({
 
                 // Send event.
                 $('#sp-widget5__hop-' + index).on('click', function() {
-                    sp.viewer.setCustomerEvent({
-                        eventName: sp.viewer.eventName.viewerWidgetHopperClicked,
-                        linkHash: sp.viewer.linkHash,
-                        sessionId: sessionid,
+                    sp.sendEvent({
+                        type: sp.viewer.eventName.viewerWidgetHopperClicked,
+                        channelFriendlyId: sp.viewer.linkHash,
+                        sessionId: SP.SESSION_ID,
                         param_1_varchar: $('#sp-widget5__hop-' + index + ' .sp-widget5__hop-text').text(),
                         param_2_varchar: $('#sp-widget5__hop-' + index).attr('data-page-hop')
                     });
@@ -1759,22 +1813,19 @@ $.ajax({
                          * param_2_varchar - The message in the widget form.
                          * param_3_varchar - The email address to reply to in the widget form.
                          */
-                        sp.viewer.setCustomerEvent({
-                            eventName: sp.viewer.eventName.viewerWidgetTestimonialsClicked,
-                            linkHash: sp.viewer.linkHash,
-                            sessionId: sessionid,
+                        sp.sendEvent({
+                            type: sp.viewer.eventName.viewerWidgetTestimonialsClicked,
+                            channelFriendlyId: sp.viewer.linkHash,
+                            sessionId: SP.SESSION_ID,
                             param_1_varchar: buttonText,
                             param_2_varchar: personName,
                             param_3_varchar: personTitle,
                             param_4_varchar: testimonial,
                         });
                     });
-            };
-        };
-
-        document.dispatchEvent(new CustomEvent('slidePiperViewerLoaded'));
-    };
-
+            }
+        }
+    }
     function implementWidget7(widget) {
 
         // Widget 7 - Form widget.
@@ -1857,10 +1908,10 @@ $.ajax({
              *
              * param_1_varchar - The text on the button.
              */
-            sp.viewer.setCustomerEvent({
-                eventName: sp.viewer.eventName.viewerWidgetFormButtonClicked,
-                linkHash: sp.viewer.linkHash,
-                sessionId: sessionid,
+            sp.sendEvent({
+                type: sp.viewer.eventName.viewerWidgetFormButtonClicked,
+                channelFriendlyId: sp.viewer.linkHash,
+                sessionId: SP.SESSION_ID,
                 param_1_varchar: $(this).text(),
                 param_2_varchar: location.href
             });
@@ -1882,10 +1933,10 @@ $.ajax({
                     },
                     function(dismiss) {
                         if (dismiss === 'cancel') {
-                            sp.viewer.setCustomerEvent({
-                                eventName: sp.viewer.eventName.viewerWidgetFormCancelClicked,
-                                linkHash: sp.viewer.linkHash,
-                                sessionId: sessionid,
+                            sp.sendEvent({
+                                type: sp.viewer.eventName.viewerWidgetFormCancelClicked,
+                                channelFriendlyId: sp.viewer.linkHash,
+                                sessionId: SP.SESSION_ID,
                                 param_1_varchar: $('.swal2-cancel').text()
                             });
                         }
@@ -1906,10 +1957,10 @@ $.ajax({
              * param_1_varchar - The text on the button.
              */
             $('.swal2-confirm').off('click').on('click', function() {
-                sp.viewer.setCustomerEvent({
-                    eventName: sp.viewer.eventName.viewerWidgetFormConfirmClicked,
-                    linkHash: sp.viewer.linkHash,
-                    sessionId: sessionid,
+                sp.sendEvent({
+                    type: sp.viewer.eventName.viewerWidgetFormConfirmClicked,
+                    channelFriendlyId: sp.viewer.linkHash,
+                    sessionId: SP.SESSION_ID,
                     param_1_varchar: $(this).text()
                 });
             });
@@ -1942,10 +1993,10 @@ $.ajax({
     function implementWidget10(widget) {
         $('.toolbar').addClass('sp-z-index--0');
 
-        sp.viewer.setCustomerEvent({
-            eventName: sp.viewer.eventName.viewerWidgetRequestFormShown,
-            linkHash: sp.viewer.linkHash,
-            sessionId: '-1',
+        sp.sendEvent({
+            type: sp.viewer.eventName.viewerWidgetRequestFormShown,
+            channelFriendlyId: sp.viewer.linkHash,
+            sessionId: SP.SESSION_ID,
             param_1_varchar: widget.formTitle,
         });
 
@@ -1959,52 +2010,51 @@ $.ajax({
             showLoaderOnConfirm: true,
         }).then(function(email) {
             sp.viewer.widgets.widget10.emailAddress = email;
-            sp.viewer.loadViewerCodeJs();
 
-            $(document).on('spViewercodeJsLoaded', function() {
-                sp.viewer.setCustomerEvent({
-                    eventName: sp.viewer.eventName.viewerWidgetRequestEmailEntered,
-                    linkHash: sp.viewer.linkHash,
-                    sessionId: sessionid,
-                    param_1_varchar: email,
-                    param_2_varchar: widget.formTitle,
-                });
+            sp.sendEvent({
+                type: sp.viewer.eventName.viewerWidgetRequestEmailEntered,
+                channelFriendlyId: sp.viewer.linkHash,
+                sessionId: SP.SESSION_ID,
+                param_1_varchar: email,
+                param_2_varchar: widget.formTitle,
+            });
 
-                // Add the email address & document link hash to local storage.
-                var spWidgetsStorage = JSON.parse(localStorage.getItem('slidepiper'));
-                if (null !== spWidgetsStorage && typeof spWidgetsStorage.widgets !== 'undefined') {
-                    if (typeof spWidgetsStorage.widgets.widget10 !== 'undefined') {
-                        spWidgetsStorage.widgets.widget10.items.push({email: email, documentLinkHash: getParameterByName('f')});
-                    } else {
-                        spWidgetsStorage.widgets.widget10 = {
+            // Add the email address & document link hash to local storage.
+            var spWidgetsStorage = JSON.parse(localStorage.getItem('slidepiper'));
+            if (null !== spWidgetsStorage && typeof spWidgetsStorage.widgets !== 'undefined') {
+                if (typeof spWidgetsStorage.widgets.widget10 !== 'undefined') {
+                    spWidgetsStorage.widgets.widget10.items.push({email: email, documentLinkHash: getParameterByName('f')});
+                } else {
+                    spWidgetsStorage.widgets.widget10 = {
+                        items: [
+                            {
+                                email: email,
+                                documentLinkHash: getParameterByName('f'),
+                            },
+                        ]
+                    };
+                }
+
+                localStorage.setItem('slidepiper', JSON.stringify(spWidgetsStorage));
+            } else {
+                var newWidgetsStorage = {
+                    widgets: {
+                        widget10: {
                             items: [
                                 {
                                     email: email,
-                                    documentLinkHash: getParameterByName('f'),
-                                },
+                                    documentLinkHash: getParameterByName('f')
+                                }
                             ]
-                        };
-                    }
-
-                    localStorage.setItem('slidepiper', JSON.stringify(spWidgetsStorage));
-                } else {
-                    var newWidgetsStorage = {
-                        widgets: {
-                            widget10: {
-                                items: [
-                                    {
-                                        email: email,
-                                        documentLinkHash: getParameterByName('f')
-                                    }
-                                ]
-                            }
                         }
-                    };
-                    localStorage.setItem('slidepiper', JSON.stringify(newWidgetsStorage));
-                }
+                    }
+                };
+                localStorage.setItem('slidepiper', JSON.stringify(newWidgetsStorage));
+            }
 
-                $('.toolbar').removeClass('sp-z-index--0');
-            });
+            $('.toolbar').removeClass('sp-z-index--0');
+
+            document.dispatchEvent(new CustomEvent('spsessionstart'));
         });
     }
 
@@ -2036,10 +2086,10 @@ $.ajax({
             })
             .html('<i class="fa fa-share-alt"></i><div>' + widget.buttonText + '</div>')
             .click(function() {
-                sp.viewer.setCustomerEvent({
-                    eventName: sp.viewer.eventName.viewerWidgetShareButtonClicked,
-                    linkHash: sp.viewer.linkHash,
-                    sessionId: sessionid,
+                sp.sendEvent({
+                    type: sp.viewer.eventName.viewerWidgetShareButtonClicked,
+                    channelFriendlyId: sp.viewer.linkHash,
+                    sessionId: SP.SESSION_ID,
                 });
             });
 
@@ -2073,10 +2123,10 @@ $.ajax({
         );
 
         $(document).on('spWidget11ServiceShared', function(event, sharedService) {
-            sp.viewer.setCustomerEvent({
-                eventName: sp.viewer.eventName.viewerWidgetShareServiceClicked,
-                linkHash: sp.viewer.linkHash,
-                sessionId: sessionid,
+            sp.sendEvent({
+                type: sp.viewer.eventName.viewerWidgetShareServiceClicked,
+                channelFriendlyId: sp.viewer.linkHash,
+                sessionId: SP.SESSION_ID,
                 param_1_varchar: sharedService,
             })
         });
@@ -2093,10 +2143,10 @@ $.ajax({
  * widget container is opened or closed.
  */
 function sendVideoTabClickedEvent(videoTabState) {
-    sp.viewer.setCustomerEvent({
-        eventName: sp.viewer.eventName.viewerWidgetVideoTabClicked,
-        linkHash: sp.viewer.linkHash,
-        sessionId: sessionid,
+    sp.sendEvent({
+        type: sp.viewer.eventName.viewerWidgetVideoTabClicked,
+        channelFriendlyId: sp.viewer.linkHash,
+        sessionId: SP.SESSION_ID,
         param_1_varchar: $(sp.viewer.widgets.widget1.currentVideoPlayerCssSelector).attr('src'),
         param_2_varchar: $('#sp-widget1-tab div').text(),
         param_3_varchar: videoTabState
@@ -2141,8 +2191,8 @@ function onPlayerStateChange(event) {
 
     if (playerState === 1 || playerState === 2) {
         var data = {
-            linkHash: sp.viewer.linkHash,
-            sessionId: sessionid,
+            channelFriendlyId: sp.viewer.linkHash,
+            sessionId: SP.SESSION_ID,
             param_1_varchar: spYouTubePlayer.getVideoUrl(),
             param_2_varchar: $('#sp-widget1-tab div').text(),
         };
@@ -2151,16 +2201,16 @@ function onPlayerStateChange(event) {
     switch (playerState) {
         // YouTube video played.
         case 1:
-            data.eventName = sp.viewer.eventName.viewerWidgetVideoYouTubePlayed;
-            sp.viewer.setCustomerEvent(data);
+            data.type = sp.viewer.eventName.viewerWidgetVideoYouTubePlayed;
+            sp.sendEvent(data);
             break;
 
         // YouTube video paused.
         case 2:
-            data.eventName = sp.viewer.eventName.viewerWidgetVideoYouTubePaused;
-            sp.viewer.setCustomerEvent(data);
+            data.type = sp.viewer.eventName.viewerWidgetVideoYouTubePaused;
+            sp.sendEvent(data);
             break;
-    };
+    }
 }
 
 

@@ -1,14 +1,16 @@
-package com.slidepiper.service;
+package com.slidepiper.service.viewer;
 
 import com.samskivert.mustache.Mustache;
-import com.slidepiper.model.entity.viewer.ViewerEventType;
-import com.slidepiper.model.input.ViewerEventInput;
+import com.slidepiper.model.entity.Channel;
+import com.slidepiper.model.entity.viewer.ViewerEvent;
+import com.slidepiper.model.entity.viewer.ViewerEvent.ViewerEventType;
+import com.slidepiper.repository.ChannelRepository;
 import com.slidepiper.repository.UserRepository;
+import com.slidepiper.repository.ViewerEventRepository;
 import com.slidepiper.service.amazon.AmazonSesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import slidepiper.db.DbLayer;
 
 import java.io.File;
 import java.io.FileReader;
@@ -26,23 +28,34 @@ public class ViewerEventService {
     @Value("${slidepiper.templates.prefix}") private String templatesPrefix;
 
     private final AmazonSesService amazonSesService;
+    private final ChannelRepository channelRepository;
     private final UserRepository userRepository;
+    private final ViewerEventRepository viewerEventRepository;
 
     @Autowired
-    public ViewerEventService(AmazonSesService amazonSesService, UserRepository userRepository) {
+    public ViewerEventService(AmazonSesService amazonSesService,
+                              ChannelRepository channelRepository,
+                              UserRepository userRepository,
+                              ViewerEventRepository viewerEventRepository) {
         this.amazonSesService = amazonSesService;
+        this.channelRepository = channelRepository;
         this.userRepository = userRepository;
+        this.viewerEventRepository = viewerEventRepository;
     }
 
-    public void sendUserEmail(ViewerEventInput viewerEventInput) throws IOException, URISyntaxException {
-        String to = DbLayer.getSalesmanEmailFromMsgId(viewerEventInput.getChannelName());
+    public void saveEvent(ViewerEvent viewerEvent) {
+        viewerEventRepository.save(viewerEvent);
+    }
+
+    public void sendUserEmail(Channel channel, String viewerNameInput, String viewerEmailInput, String viewerEventTypeInput, String viewerMessageInput) throws IOException, URISyntaxException {
+        String to = channel.getDocument().getUser().getEmail();
         if (Objects.nonNull(userRepository.findByEmail(to))
                 && Objects.nonNull(userRepository.findByEmail(to).getExtraData())
                 && Objects.nonNull(userRepository.findByEmail(to).getExtraData().getNotificationEmail())) {
             to = userRepository.findByEmail(to).getExtraData().getNotificationEmail();
         }
 
-        String subject = createTitle(viewerEventInput.getViewerEventType());
+        String subject = createTitle(viewerEventTypeInput);
 
         URL fileUrl = getClass()
                 .getClassLoader()
@@ -50,10 +63,11 @@ public class ViewerEventService {
         Reader viewerEventEmail = new FileReader(new File(fileUrl.toURI()));
         String body = Mustache.compiler().compile(viewerEventEmail).execute(new Object() {
             String title = subject;
-            String viewerEmail = viewerEventInput.getViewerEmail();
-            String viewerName = viewerEventInput.getViewerName();
-            String eventName = createEventName(viewerEventInput.getViewerEventType());
-            String documentName = DbLayer.getFileMetaData(viewerEventInput.getChannelName()).get("fileName");
+            Object viewerNameSection = Objects.nonNull(viewerNameInput) ? new Object() {String viewerName = viewerNameInput;} : false;
+            String viewerEmail = viewerEmailInput;
+            String viewerEventType = createEventName(viewerEventTypeInput);
+            String documentName = channel.getDocument().getName();
+            Object viewerMessageSection = Objects.nonNull(viewerMessageInput) ? new Object() {String viewerMessage = viewerMessageInput;} : false;
         });
 
         amazonSesService.sendEmail(accessKey, secretKey, from, to, subject, body);
@@ -62,20 +76,32 @@ public class ViewerEventService {
     private String createEventName(String viewerEventTypeString) {
         ViewerEventType viewerEventType = ViewerEventType.valueOf(viewerEventTypeString);
         switch (viewerEventType) {
+            case OPEN_SLIDES:
+                return "has just opened";
+
+            case VIEWER_WIDGET_ASK_QUESTION:
+                return "has sent a message on";
+
             case DOWNLOAD:
-                return "downloaded";
+                return "has downloaded";
 
             case PRINT:
-                return "printed";
+                return "has printed";
 
             default:
-                return viewerEventType.name();
+                return "has made an action on";
         }
     }
 
     private String createTitle(String viewerEventTypeString) {
         ViewerEventType viewerEventType = ViewerEventType.valueOf(viewerEventTypeString);
         switch (viewerEventType) {
+            case OPEN_SLIDES:
+                return "Open Notification";
+
+            case VIEWER_WIDGET_ASK_QUESTION:
+                return "Message Notification";
+
             case DOWNLOAD:
                 return "Download Notification";
 
@@ -83,7 +109,7 @@ public class ViewerEventService {
                 return "Print Notification";
 
             default:
-                return "Notification";
+                return "Event Notification";
         }
     }
 }

@@ -8,7 +8,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import slidepiper.aws.AmazonSES;
 import slidepiper.config.ConfigProperties;
 import slidepiper.customer_servlets.DocumentShareServlet;
 import slidepiper.dataobjects.Customer;
@@ -16,7 +15,6 @@ import slidepiper.dataobjects.Presentation;
 import slidepiper.db.Analytics;
 import slidepiper.db.DbLayer;
 import slidepiper.db.ViewerAnalytics;
-import slidepiper.email.EmailSender;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -34,7 +32,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 @WebServlet("/ManagementServlet")
 public class ManagementServlet extends HttpServlet {
@@ -349,23 +346,6 @@ public class ManagementServlet extends HttpServlet {
       	}
       	break;
       	
-      	
-      case "isEventHappenedThisSession":
-        try {
-          boolean isEventHappenedThisSession = false;
-          
-          if ((null != request.getParameter("sessionid") && ! request.getParameter("sessionid").equals(""))
-              && (null != request.getParameter("eventName") && ! request.getParameter("eventName").equals(""))) {
-            isEventHappenedThisSession = DbLayer.isEventHappenedThisSession(request.getParameter("sessionid"), request.getParameter("eventName"));
-            
-            data.put("isEventHappenedThisSession", isEventHappenedThisSession);
-          }
-        } catch (Exception e) {
-          e.printStackTrace();
-        }
-        break;
-
-      	
       case "getNotifications":
     	  try {
     		JSONArray notifications = new JSONArray();
@@ -429,7 +409,7 @@ public class ManagementServlet extends HttpServlet {
       
       int salesman_found = 0;
       
-      JSONObject data = input.has("data") ? input.getJSONObject("data") : null; 
+      JSONObject data = input.has("data") ? input.getJSONObject("data") : null;
       Map<String, String> eventDataMap = new HashMap<String, String>();
       switch(action){     
       case "changeSalesmanPassword":
@@ -532,116 +512,118 @@ public class ManagementServlet extends HttpServlet {
             System.out.println("deleting pres " + input.getString("presentation") + " " + input.getString("salesman_email"));
             DbLayer.deletePresentation(input.getString("presentation"), input.getString("salesman_email"));
             break;
-        
-        /**
-         * JSONObject.has(String) to find if JSON object has certain key
-         * @see https://developer.android.com/reference/org/json/JSONObject.html#has(java.lang.String)
-         * @param param-x-varchar will hold different data depending on which event is being logged
-         */
-        case "setCustomerEvent":
-          response.setHeader("Access-Control-Allow-Origin", request.getHeader("origin"));
-          response.setHeader("Access-Control-Allow-Credentials", "true");
-          
-          String viewerId = null;
-          try {
-            Cookie cookie = Arrays.stream(request.getCookies())
-                                .filter(c -> c.getName().equals("sp.viewer"))
-                                .findFirst()
-                                .orElseThrow(null);
 
-            viewerId = JwtUtils.verify(cookie.getValue())
-                           .getClaim("viewerId").asString();
-          } catch(NullPointerException e) {
-            log.error("viewerId is null");
-          }
-          
-          eventDataMap.put("viewer_id", viewerId);
-          eventDataMap.put("msg_id", URLDecoder.decode(data.getString("linkHash"), "UTF-8"));
-          eventDataMap.put("session_id", URLDecoder.decode(data.getString("sessionId"), "UTF-8"));
-          
-          if (data.has("param1int")) {
-          	eventDataMap.put("param1int",
-          			Integer.toString(data.getInt("param1int")));
-          }
-          
-          if (data.has("param_1_varchar")) {
-        	  eventDataMap.put("param_1_varchar",
-                  URLDecoder.decode(data.getString("param_1_varchar"), "UTF-8"));
-          }
-          
-          if (data.has("param_2_varchar")) {
-        	  eventDataMap.put("param_2_varchar",
-                  URLDecoder.decode(data.getString("param_2_varchar"), "UTF-8"));
-          }
-          
-          if (data.has("param_3_varchar")) {
-        	  eventDataMap.put("param_3_varchar",
-                  URLDecoder.decode(data.getString("param_3_varchar"), "UTF-8"));
-          }
-          
-          if (data.has("param_4_varchar")) {
-        	  eventDataMap.put("param_4_varchar",
-                  URLDecoder.decode(data.getString("param_4_varchar"), "UTF-8"));
-          }
-          
-          if (data.has("param_5_varchar")) {
-        	  eventDataMap.put("param_5_varchar",
-                  URLDecoder.decode(data.getString("param_5_varchar"), "UTF-8"));
-          }
-          
-          if (data.has("param_6_varchar")) {
-            eventDataMap.put("param_6_varchar",
-                  URLDecoder.decode(data.getString("param_6_varchar"), "UTF-8"));
-          }
-          
-          if (data.has("param_7_varchar")) {
-            eventDataMap.put("param_7_varchar",
-                  URLDecoder.decode(data.getString("param_7_varchar"), "UTF-8"));
-          }
-          
-          if (data.has("param_8_varchar")) {
-            eventDataMap.put("param_8_varchar",
-                  URLDecoder.decode(data.getString("param_8_varchar"), "UTF-8"));
-          }
-          
-          if (data.has("param_9_varchar")) {
-            eventDataMap.put("param_9_varchar",
-                  URLDecoder.decode(data.getString("param_9_varchar"), "UTF-8"));
-          }
-          
-          if (data.has("param_10_varchar")) {
-            eventDataMap.put("param_10_varchar",
-                  URLDecoder.decode(data.getString("param_10_varchar"), "UTF-8"));
-          }
-          
-          // Set event and get event id.
-          long notificationId = DbLayer.setEvent(DbLayer.CUSTOMER_EVENT_TABLE,
-              URLDecoder.decode(data.getString("eventName"), "UTF-8"), eventDataMap);
+          /**
+           * @deprecated
+           *
+           * JSONObject.has(String) to find if JSON object has certain key
+           * @see https://developer.android.com/reference/org/json/JSONObject.html#has(java.lang.String)
+           * @param param-x-varchar will hold different data depending on which event is being logged
+           */
+          case "setCustomerEvent":
+              response.setHeader("Access-Control-Allow-Origin", request.getHeader("origin"));
+              response.setHeader("Access-Control-Allow-Credentials", "true");
 
-          // Send Email Notification.
-          eventDataMap.put("eventName", data.getString("eventName"));
-          
-          ArrayList<String> emailParamList = new ArrayList<String>();
-          List<String[]> eventList = new ArrayList<String[]>();
-          
-          emailParamList.add(Long.toString(notificationId));
-      	  
-      	  eventList = DbLayer.getEventData(emailParamList, Analytics.sqlEmailNotifications);
-      	  
-      	  // Query will only return one row.
-      	  String[] notificationData = eventList.get(0);
-      	  
-      	  // notificationData[2] - the salesman email.
-          if (AmazonSES.isSalesmanEmailNotificationsEnabled(notificationData[2])) {
-        	  
-        	  // Only send email notifications for 'Ask Question Widget'
-        	  if (data.getString("eventName").equals("VIEWER_WIDGET_ASK_QUESTION")) {
-        		  AmazonSES.setEventEmailParams(notificationData, eventDataMap);
-        	  }
-          } else {
-        	  System.out.println("SP: Email Notifications not enabled for salesman");
-          }
-          break;
+              String viewerId = null;
+              try {
+                  Cookie cookie = Arrays.stream(request.getCookies())
+                          .filter(c -> c.getName().equals("sp.viewer"))
+                          .findFirst()
+                          .orElseThrow(null);
+
+                  viewerId = JwtUtils.verify(cookie.getValue())
+                          .getClaim("viewerId").asString();
+              } catch(NullPointerException e) {
+                  log.error("viewerId is null");
+              }
+
+              eventDataMap.put("viewer_id", viewerId);
+              eventDataMap.put("msg_id", URLDecoder.decode(data.getString("linkHash"), "UTF-8"));
+              eventDataMap.put("session_id", URLDecoder.decode(data.getString("sessionId"), "UTF-8"));
+
+              if (data.has("param1int")) {
+                  eventDataMap.put("param1int",
+                          Integer.toString(data.getInt("param1int")));
+              }
+
+              if (data.has("param_1_varchar")) {
+                  eventDataMap.put("param_1_varchar",
+                          URLDecoder.decode(data.getString("param_1_varchar"), "UTF-8"));
+              }
+
+              if (data.has("param_2_varchar")) {
+                  eventDataMap.put("param_2_varchar",
+                          URLDecoder.decode(data.getString("param_2_varchar"), "UTF-8"));
+              }
+
+              if (data.has("param_3_varchar")) {
+                  eventDataMap.put("param_3_varchar",
+                          URLDecoder.decode(data.getString("param_3_varchar"), "UTF-8"));
+              }
+
+              if (data.has("param_4_varchar")) {
+                  eventDataMap.put("param_4_varchar",
+                          URLDecoder.decode(data.getString("param_4_varchar"), "UTF-8"));
+              }
+
+              if (data.has("param_5_varchar")) {
+                  eventDataMap.put("param_5_varchar",
+                          URLDecoder.decode(data.getString("param_5_varchar"), "UTF-8"));
+              }
+
+              if (data.has("param_6_varchar")) {
+                  eventDataMap.put("param_6_varchar",
+                          URLDecoder.decode(data.getString("param_6_varchar"), "UTF-8"));
+              }
+
+              if (data.has("param_7_varchar")) {
+                  eventDataMap.put("param_7_varchar",
+                          URLDecoder.decode(data.getString("param_7_varchar"), "UTF-8"));
+              }
+
+              if (data.has("param_8_varchar")) {
+                  eventDataMap.put("param_8_varchar",
+                          URLDecoder.decode(data.getString("param_8_varchar"), "UTF-8"));
+              }
+
+              if (data.has("param_9_varchar")) {
+                  eventDataMap.put("param_9_varchar",
+                          URLDecoder.decode(data.getString("param_9_varchar"), "UTF-8"));
+              }
+
+              if (data.has("param_10_varchar")) {
+                  eventDataMap.put("param_10_varchar",
+                          URLDecoder.decode(data.getString("param_10_varchar"), "UTF-8"));
+              }
+
+              // Set event and get event id.
+              long notificationId = DbLayer.setEvent(DbLayer.CUSTOMER_EVENT_TABLE,
+                      URLDecoder.decode(data.getString("eventName"), "UTF-8"), eventDataMap);
+
+              // Send Email Notification.
+              eventDataMap.put("eventName", data.getString("eventName"));
+
+              ArrayList<String> emailParamList = new ArrayList<String>();
+              List<String[]> eventList = new ArrayList<String[]>();
+
+              emailParamList.add(Long.toString(notificationId));
+
+              eventList = DbLayer.getEventData(emailParamList, Analytics.sqlEmailNotifications);
+
+              // Query will only return one row.
+              String[] notificationData = eventList.get(0);
+
+              // notificationData[2] - the salesman email.
+              if (slidepiper.aws.AmazonSES.isSalesmanEmailNotificationsEnabled(notificationData[2])) {
+
+                  // Only send email notifications for 'Ask Question Widget'
+                  if (data.getString("eventName").equals("VIEWER_WIDGET_ASK_QUESTION")) {
+                      slidepiper.aws.AmazonSES.setEventEmailParams(notificationData, eventDataMap);
+                  }
+              } else {
+                  System.out.println("SP: Email Notifications not enabled for salesman");
+              }
+              break;
    
         case "setSalesmanDocumentSettings":
           User user = UserUtils.findUser(input.getString("salesMan"));
@@ -742,74 +724,6 @@ public class ManagementServlet extends HttpServlet {
         	}
         	
         	break;
-          
-        	
-        case "sendEmail":
-          String emailBody = URLDecoder.decode(data.getString("emailBody"), "UTF-8");
-          String emailSubject = URLDecoder.decode(data.getString("emailSubject"), "UTF-8");
-          String[] emailMessageArray = {emailSubject, emailBody};
-          
-          // Create a merge tag set.
-          Set<String> mergeTagSet = EmailSender.createMergeTagSet(emailMessageArray);
-          
-          // Iterate through customers for replacing merge tags (if any) and sending emails.
-          JSONArray customerEmailArray = data.getJSONArray("customerEmailArray");
-          String salesmanEmail = URLDecoder.decode(data.getString("salesmanEmail"), "UTF-8");
-          int emailSent = 0;
-          
-          for (int i = 0; i < customerEmailArray.length(); i++) {
-            if (0 < mergeTagSet.size()) {
-              Map<String, String> mergeTagMap = EmailSender.createMergeTagMap(mergeTagSet,
-                customerEmailArray.getString(i), salesmanEmail);
-            
-              emailSubject = EmailSender.searchReplaceMergeTag(mergeTagMap, emailSubject);
-              emailBody = EmailSender.searchReplaceMergeTag(mergeTagMap, emailBody);
-            }
-            
-            // Send emails. If an API is not existent, then use below mailto workaround.
-            boolean isEmailSent = false;
-            switch(data.getString("salesmanEmailClient")) {
-              case "gmail":
-                isEmailSent = EmailSender.sendGmailEmail(customerEmailArray.getString(i),
-                    salesmanEmail, emailSubject, emailBody, data.getString("accessToken"));
-                break;    
-            }
-            
-            // Record event.
-            if (isEmailSent) {
-              eventDataMap.put("email", salesmanEmail);
-              
-              eventDataMap.put("param_1_varchar", data.getString("accessToken"));
-              eventDataMap.put("param_2_varchar", data.getString("salesmanEmailClient"));
-              eventDataMap.put("param_3_varchar", salesmanEmail);
-              eventDataMap.put("param_4_varchar", customerEmailArray.getString(i));
-              eventDataMap.put("param_5_varchar", emailSubject);
-              eventDataMap.put("param_1_mediumtext", emailBody);
-              
-              DbLayer.setEvent(DbLayer.SALESMAN_EVENT_TABLE,
-                  ConfigProperties.getProperty("event_sent_email"), eventDataMap);
-              
-              emailSent++;
-              emailSubject = emailMessageArray[0];
-              emailBody = emailMessageArray[1];
-            }
-          }
-          
-          // Return response to frontend.
-          switch(data.getString("salesmanEmailClient")) {
-            case "gmail":
-              output.put("isApi", true);
-              output.put("emailSent", emailSent);
-              break;
-            
-            // mailto sending emails mechanism.
-            default:
-              output.put("isApi", false);
-              output.put("customerEmail", customerEmailArray.getString(0));
-              output.put("emailSubject", emailSubject);
-              output.put("emailBody", emailBody);
-          }
-          break;
       }
       
         String res = output.toString();

@@ -27,22 +27,18 @@ gulp.task('templates-clean', function() {
     return del(templates.build);
 });
 
-gulp.task('static-copy', function() {
-    return gulp.src(static.src + '/*/lib/**/*', {base: static.src})
+gulp.task('pdfjs-copy', function() {
+    return gulp.src('viewer/js/pdfjs/**/*', {cwd: static.src, base: static.src})
         .pipe(gulp.dest(static.build));
 });
 
 gulp.task('templates-copy', function() {
-    return gulp.src(templates.src + '/*.html', {base: templates.src})
+    return gulp.src(['*.html', '!(dashboard.html|viewer.html)'], {cwd: templates.src})
         .pipe(gulp.dest(templates.build));
 });
 
 gulp.task('static-revision', function() {
-    return gulp.src([
-            static.src + '/*/css/*.css',
-            static.src + '/*/js/*.js',
-            static.src + '/*/images/*.+(gif|jpg|png|svg)',
-        ], {base: static.src})
+    return gulp.src(['*/css/*.css', '*/js/*.js', '*/images/*.+(gif|jpg|png|svg)'], {cwd: static.src})
         .pipe(gulpIf('*.css', cssnano()))
         .pipe(gulpIf('*.js', uglify()))
         .pipe(gulpIf('*.+(gif|jpg|png|svg)', imagemin()))
@@ -56,7 +52,7 @@ gulp.task('static-revision', function() {
 gulp.task('templates-replace', function() {
     var manifest = gulp.src(static.build + '/rev-manifest.json');
 
-    return gulp.src(templates.src + '/*/*.html', {base: templates.src})
+    return gulp.src(['dashboard.html', 'viewer.html'], {cwd: templates.src})
         .pipe(replace('static/src', 'static/build'))
         .pipe(revReplace({manifest: manifest}))
         .pipe(gulp.dest(templates.build));
@@ -69,7 +65,7 @@ gulp.task('static-revision-clean', function() {
 gulp.task('build', gulp.series(
     'static-clean',
     'templates-clean',
-    'static-copy',
+    'pdfjs-copy',
     'templates-copy',
     'static-revision',
     'templates-replace',

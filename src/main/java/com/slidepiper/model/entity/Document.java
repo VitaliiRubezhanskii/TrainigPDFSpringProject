@@ -12,6 +12,8 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.io.Serializable;
@@ -41,9 +43,6 @@ public class Document implements Serializable {
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    @Column(name = "sales_man_email")
-    private String email;
-
     private String name;
 
     @Column(name = "version_id")
@@ -58,10 +57,14 @@ public class Document implements Serializable {
     @OneToMany(mappedBy = "document", cascade = CascadeType.ALL)
     private Set<Widget> widgets;
 
+    @ManyToOne
+    @JoinColumn(name = "sales_man_email", referencedColumnName = "email")
+    private User user;
+
     public Document() {}
 
-    public Document(String email, Status status, String name) {
-        this.email = email;
+    public Document(User user, Status status, String name) {
+        this.user = user;
         this.status = status;
         this.name = name;
     }

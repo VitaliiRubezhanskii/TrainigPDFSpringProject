@@ -1154,10 +1154,10 @@ sp = {
                 );
 
                 sp.metric.getFileMetrics(fileData);
-                sp.chart.getFileLine(fileData[0]);
-                sp.chart.getFileBar(fileData[0]);
+                sp.chart.getFileLine(fileData[0], customerEmail);
+                sp.chart.getFileBar(fileData[0], customerEmail);
                 sp.chart.getFilePerformance(fileData[0]);
-                sp.chart.getFileVisitorsMap(fileData[0]);
+                sp.chart.getFileVisitorsMap(fileData[0], customerEmail);
             } else {
                 $('#sp-widget-video-youtube-metric-total-number-plays, #sp-widget-total-count-likes, #sp-widget-count-unique-views').text('N/A');
                 $('#sp-widget-ask-question-metric').hide();
