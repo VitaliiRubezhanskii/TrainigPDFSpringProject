@@ -55,7 +55,6 @@ public class ConfigViewerServlt extends HttpServlet {
         } finally {
           cookie.setMaxAge(63072000); // 2 years.
           cookie.setHttpOnly(true);
-          cookie.setSecure(true);
           response.addCookie(cookie);  
         }        
         // End setting viewerId. 
