@@ -88,6 +88,9 @@ public class ViewerEventService {
             case PRINT:
                 return "has printed";
 
+            case FILE_WIDGET_UPLOADED_FILE:
+                return "has upload a file via";
+
             default:
                 return "has made an action on";
         }
@@ -107,6 +110,9 @@ public class ViewerEventService {
 
             case PRINT:
                 return "Print Notification";
+
+            case FILE_WIDGET_UPLOADED_FILE:
+                return "Upload File Notification";
 
             default:
                 return "Event Notification";
