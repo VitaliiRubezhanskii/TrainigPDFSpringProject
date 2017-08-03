@@ -1057,7 +1057,7 @@ public class DbLayer {
 	      		"SELECT\n"
 	    		  + "  data\n"
 	    		  + "FROM widget\n"
-	    		  + "WHERE FK_file_id_ai = ?";
+	    		  + "WHERE FK_file_id_ai = ? AND type IN ('1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11')";
 	 		
 	   		JSONArray widgetsSettings = new JSONArray();
 	   		
