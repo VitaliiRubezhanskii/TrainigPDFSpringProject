@@ -47,20 +47,6 @@ public class Constants {
 					 else // using openshift:
 					 {
 						 	System.out.println("Initializing constants on OpenShift");
-						  System.out.println("Constants: mysql user " + dbUser + " pw " + dbPass + " url " + dbURL);
-						  System.out.println("Env variable: OPENSHIFT_APP_NAME" + System.getProperty("OPENSHIFT_APP_NAME"));
-						  System.out.println("Env variable: OPENSHIFT_APP_DNS" + System.getProperty("OPENSHIFT_APP_DNS"));
-						  System.out.println("Env variable: OPENSHIFT_SECRET_TOKEN" + System.getProperty("OPENSHIFT_SECRET_TOKEN"));
-						  System.out.println("Env variable: OPENSHIFT_MYSQL_PORT" + System.getProperty("OPENSHIFT_MYSQL_PORT"));
-						  System.out.println("Env variable: OPENSHIFT_MYSQL_IP" + System.getProperty("OPENSHIFT_MYSQL_IP"));
-						  System.out.println("Env variable: OPENSHIFT_JBOSSEWS_PORT" + System.getProperty("OPENSHIFT_JBOSSEWS_PORT"));
-						  System.out.println("Env variable: OPENSHIFT_JBOSSEWS_IP" + System.getProperty("OPENSHIFT_JBOSSEWS_IP"));
-						  
-						  System.out.println("Env variable: OPENSHIFT_HOMEDIR" + System.getProperty("OPENSHIFT_HOMEDIR"));
-						  System.out.println("Env variable: OPENSHIFT_DATA_DIR" + System.getProperty("OPENSHIFT_DATA_DIR"));
-						  System.out.println("Env variable: OPENSHIFT_MAX_SESSIONS_PER_GEAR" + System.getProperty("OPENSHIFT_MAX_SESSIONS_PER_GEAR"));
-						  System.out.println("Env variable: OPENSHIFT_GEAR_NAME" + System.getProperty("OPENSHIFT_GEAR_NAME"));
-						  System.out.println("Env variable: OPENSHIFT_GEAR_DNS" + System.getProperty("OPENSHIFT_GEAR_DNS"));						  						 						  
 					 }
 			  }
 			  //System.out.println("Some constants:\n mysql user " + dbUser + " pw " + dbPass + " url " + dbURL);

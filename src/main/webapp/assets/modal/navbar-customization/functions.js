@@ -10,36 +10,39 @@ sp.viewerToolbar = {
     
     getSettings: function () {
       $.ajax({
-        url: 'customize-navbar',
-        type: 'get',
+        url: '/api/v1/viewer',
         cache: false,
-        data: {salesman: sp.config.salesman.email},
         success: function (data) {
-          $.each(data['data'][0], function (key, value) {
-            if (value.slice(0, 1) === '#' || value.slice(0, 3) === 'rgb' || value === 'transparent') {
-              if (value === 'transparent') {
-                $('[name="viewer_toolbar_cta_is_transparent"]').prop('checked', true);
-              }
-              $('[name="'+ key +'"]')
-                .spectrum({
-                  appendTo: '#sp-toolbar-settings__modal',
-                  chooseText: 'Choose',
-                  cancelText: 'Cancel',
-                  preferredFormat: 'hex',
-                  showAlpha: true,
-                  showInput: true,
-                })
-                .val(value)
-                .attr('data-color', value)
-                .spectrum('set', value);
-            } else if (value === 'true') {
-                $('[name="'+ key +'"]').prop('checked', true);
-                $('#sp-cta' + key.split('_')[2].slice(-1) + '-settings').show();
-            } else {
-              $('[name="'+ key +'"]').val(value);
-            }
-          });
-          sp.viewerToolbar.styleDemoBox();
+          if (typeof data === 'string' && '<!DOCTYPE html>' === data.substring(0, 15)) {
+              window.location = '/login';
+          } else {
+              data = {data: [data]};
+              $.each(data['data'][0], function (key, value) {
+                  if (value.slice(0, 1) === '#' || value.slice(0, 3) === 'rgb' || value === 'transparent') {
+                      if (value === 'transparent') {
+                          $('[name="viewer_toolbar_cta_is_transparent"]').prop('checked', true);
+                      }
+                      $('[name="' + key + '"]')
+                          .spectrum({
+                              appendTo: '#sp-toolbar-settings__modal',
+                              chooseText: 'Choose',
+                              cancelText: 'Cancel',
+                              preferredFormat: 'hex',
+                              showAlpha: true,
+                              showInput: true,
+                          })
+                          .val(value)
+                          .attr('data-color', value)
+                          .spectrum('set', value);
+                  } else if (value === 'true') {
+                      $('[name="' + key + '"]').prop('checked', true);
+                      $('#sp-cta' + key.split('_')[2].slice(-1) + '-settings').show();
+                  } else {
+                      $('[name="' + key + '"]').val(value);
+                  }
+              });
+              sp.viewerToolbar.styleDemoBox();
+          }
         }
       });
     },
@@ -52,9 +55,6 @@ sp.viewerToolbar = {
       event.preventDefault();
       
       var formData = new FormData();
-      formData.append('action', 'setToolbarSettings');
-      formData.append('salesman', sp.config.salesman.email);
-       
        $('.sp-color-picker').each(function (ind, val){
          formData.append($(val).attr('name'), $(val).attr('data-color'));
        });
@@ -71,23 +71,23 @@ sp.viewerToolbar = {
        
       $.ajax({
         type: 'POST',
-        url: 'customize-navbar',
+        url: '/api/v1/viewer',
         contentType : false,
         processData: false,
         cache: false,
         data: formData,
-      }).done(function(data) {
-        switch (data.statusCode) {
-          case 200:
-            swal('Success!', 'Your settings have been udpated', 'success');
-            break;
-
-          case 0:
-            swal('Error', 'Something went wrong. Your settings weren\'t saved.', 'error');
+        beforeSend: function(xhr) {
+            xhr.setRequestHeader(SP.CSRF_HEADER, SP.CSRF_TOKEN);
         }
-        $('.close').click();
-      }).fail(function(jqXHR, textStatus, errorThrown) {
-        console.log(textStatus + ': ' + errorThrown);
+      }).done(function(data) {
+          if (typeof data === 'string' && '<!DOCTYPE html>' === data.substring(0, 15)) {
+              window.location = '/login';
+          } else {
+              swal('Success!', 'Your settings have been updated', 'success');
+              $('.close').click();
+          }
+      }).fail(function() {
+          swal('Error', 'Something went wrong. Your settings weren\'t saved.', 'error');
       });
       event.preventDefault();
     },

@@ -59,12 +59,12 @@ public class Document implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "sales_man_email", referencedColumnName = "email")
-    private User user;
+    private Viewer viewer;
 
     public Document() {}
 
-    public Document(User user, Status status, String name) {
-        this.user = user;
+    public Document(Viewer viewer, Status status, String name) {
+        this.viewer = viewer;
         this.status = status;
         this.name = name;
     }

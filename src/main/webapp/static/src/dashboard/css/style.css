@@ -1,0 +1,954 @@
+/* Dashboard settings */
+
+/* Modal */
+
+.sp--margin-left-0 {
+    margin-left: 0;
+}
+
+button[data-target="#sp-modal-add-update-customer"] {
+    margin-left: 10px;
+}
+
+form[role="search"], .text-muted, .arrow {
+    visibility: hidden;
+}
+
+.sp-copy__button {
+    float: right;
+}
+
+.sp-dashboard-progress {
+    margin-bottom: 3px;
+}
+
+.sp-chart-title-fa {
+    float: left;
+    margin-right: 10px;
+}
+
+.sp-file-delete, .sp-customer-delete {
+    margin-left: 10px;
+}
+
+.sp-file-mgmt-file-name {
+    font-weight: bold;
+}
+
+.sp-inline {
+    display: inline !important;
+}
+
+.sp-top-section {
+    display: none;
+}
+
+.sp-file-clock {
+    margin-right: 5px;
+}
+
+td.sp-file-hash {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.sk-spinner {
+    display: none;
+}
+
+#sp-file-upload {
+    display: none;
+}
+
+#sp-customers-mgmt-top-part {
+    display: none;
+}
+
+#sp-customers-upload__form {
+    text-align: center;
+}
+
+#sp-download-template__button {
+    color: initial;
+    font-family: sans-serif;
+    margin-right: 40px;
+}
+
+.sp-data-widget {
+    min-height: 100px;
+}
+
+.sp-data-widget i {
+    font-size: 2.5em;
+}
+
+.sp-metric-title {
+    min-height: 36px;
+}
+
+#sp-wizard-action-btns-container {
+    vertical-align: middle;
+}
+
+.sp-widget-text {
+    font-size: 23px !important;
+}
+
+
+/* Metrics - Widgets */
+
+/* Bar, Line & Map Charts */
+.sp-chart__container {
+    min-height: 300px;
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+.sp-chart__container canvas {
+    min-height: 290px;
+}
+
+.sp-chart__chartjs-tooltip-color-key {
+    border-width: 2px;
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    margin-right: 5px;
+}
+
+#sp-total-views--tooltip {
+    min-width: 120px;
+    max-width: 300px;
+}
+
+#sp-performance-benchmark--tooltip {
+    min-width: 200px;
+    max-width: 350px;
+}
+
+#sp-total-views--tooltip,
+#sp-performance-benchmark--tooltip {
+    background: rgb(38, 38, 38);
+    color: white;
+    border-radius: 3px;
+    opacity: 1;
+    pointer-events: none;
+    position: absolute;
+    -webkit-transform: translate(-50%, 0);
+    -webkit-transition: all .1s ease;
+    transition: all .1s ease;
+    transform: translate(-50%, 0);
+    z-index: 2;
+}
+
+#sp-file-dashboard canvas {
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+}
+
+/**
+ * Styling of charts scrollbar. 
+ */
+.sp-chart__container::-webkit-scrollbar {
+    -webkit-appearance: none;
+    height: 7px;
+}
+
+.sp-chart__container::-webkit-scrollbar-thumb {
+    background-color: #808080;
+    border-radius: 4px;
+}
+
+/**
+ * Set map height to 294 in order to be in line with chart.js 
+ * charts (which have a height of 290). 
+ */
+#sp-google-geochart {
+    height: 290px;
+}
+
+/* Video & Like Widget */
+.sp-widget-like-metric__i,
+.sp-widget-video-youtube-metric-title__i,
+.sp__metric-extended {
+    margin-right: 10px;
+}
+
+/* Ask a Question Widget */
+#sp-widget-ask-question-metric {
+    display: none;
+}
+
+.sp-widget-ask-question-metric-email,
+.sp-widget-ask-question-metric-message {
+    margin-bottom: 5px;
+}
+
+
+/* Scrollbar */
+
+/* Chrome and Safari */
+
+.sp-analytics-container__div {
+    max-height: 300px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+
+.sp-analytics-container__div::-webkit-scrollbar{
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    background-color: rgb(47, 64, 80);
+    border-radius: 3px;
+    min-height: 0;
+    width: 7px;
+}
+
+.sp-analytics-container__div::-webkit-scrollbar-thumb {
+    background-color: rgba(241,241,241,.6);
+    border-radius: 3px;
+    -webkit-box-shadow: 0 0 1px rgb(167, 177 194);
+}
+
+.content::-webkit-scrollbar {
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    background-color: #fff;
+    border-radius: 3px;
+    height: 0;
+    width: 7px;
+}
+.content::-webkit-scrollbar-thumb {
+    background-color: #808080;
+    border-radius: 3px;
+    -webkit-box-shadow: 0 0 1px rgba(255,255,255,.5);
+}
+
+.tab-content::-webkit-scrollbar {
+    -webkit-appearance: none;
+    background-color: #fff;
+    border-radius: 3px;
+    height: 0;
+    width: 7px;
+}
+.tab-content::-webkit-scrollbar-thumb {
+    -webkit-box-shadow: 0 0 1px rgba(255,255,255,.5);
+    background-color: #808080;
+    border-radius: 3px;
+}
+
+#sp-sales-analytics-scroll {
+    max-height: 300px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+
+#sp-sales-analytics-scroll::-webkit-scrollbar {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-color: rgb(47, 64, 80);
+    border-radius: 3px;
+    height: 0;
+    width: 7px;
+}
+
+#sp-sales-analytics-scroll::-webkit-scrollbar-thumb {
+    -webkit-box-shadow: 0 0 1px rgb(167, 177 194);
+    background-color:rgba(241,241,241,.6);
+    border-radius: 3px;
+    position: relative;
+    z-index: 2;
+}
+
+.tab-content::-webkit-scrollbar-thumb, #sp-sales-analytics-scroll::-webkit-scrollbar-thumb, .sp-analytics-container__div::-webkit-scrollbar-thumb,
+.content::-webkit-scrollbar-thumb {
+    min-height: 100px;
+}
+
+/* SCROLLBAR */
+
+/* Chrome and Safari */
+
+.sp-analytics-container__div {
+    max-height: 300px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    scrollbar-base-color: grey;
+    scrollbar-base-color: grey;
+    scrollbar-3dlight-color: grey;
+    scrollbar-highlight-color: grey;
+    scrollbar-track-color: grey;
+    scrollbar-arrow-color: grey;
+    scrollbar-shadow-color: grey;
+    scrollbar-dark-shadow-color: grey;
+}
+
+.sp-analytics-container__div::-webkit-scrollbar{
+    -moz-appearance: none;
+    background-color: rgb(47, 64, 80);
+    border-radius: 3px;
+    min-height: 0;
+    -webkit-appearance: none;
+    width: 7px;
+}
+
+.sp-analytics-container__div::-webkit-scrollbar-thumb {
+    background-color: rgba(241,241,241,.6);
+    border-radius: 3px;
+    -webkit-box-shadow: 0 0 1px rgb(167, 177 194);
+}
+
+.content {
+    scrollbar-base-color: grey;
+    scrollbar-base-color: grey;
+    scrollbar-3dlight-color: grey;
+    scrollbar-highlight-color: grey;
+    scrollbar-track-color: grey;
+    scrollbar-arrow-color: grey;
+    scrollbar-shadow-color: grey;
+    scrollbar-dark-shadow-color: grey;
+}
+
+.content::-webkit-scrollbar {
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    width: 7px;
+    height: 0;
+    border-radius: 3px;
+    background-color: white;
+}
+.content::-webkit-scrollbar-thumb {
+    border-radius: 3px;
+    background-color: grey;
+    -webkit-box-shadow: 0 0 1px rgba(255,255,255,.5);
+}
+
+.tab-content {
+    scrollbar-base-color: grey;
+    scrollbar-base-color: grey;
+    scrollbar-3dlight-color: grey;
+    scrollbar-highlight-color: grey;
+    scrollbar-track-color: grey;
+    scrollbar-arrow-color: grey;
+    scrollbar-shadow-color: grey;
+    scrollbar-dark-shadow-color: grey;
+}
+
+.tab-content::-webkit-scrollbar {
+    -webkit-appearance: none;
+    width: 7px;
+    height: 0;
+    border-radius: 3px;
+    background-color: white;
+}
+.tab-content::-webkit-scrollbar-thumb {
+    border-radius: 3px;
+    background-color: grey;
+    -webkit-box-shadow: 0 0 1px rgba(255,255,255,.5);
+}
+
+#sp-sales-analytics-scroll {
+    max-height: 300px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    scrollbar-base-color: grey;
+    scrollbar-base-color: grey;
+    scrollbar-3dlight-color: grey;
+    scrollbar-highlight-color: grey;
+    scrollbar-track-color: grey;
+    scrollbar-arrow-color: grey;
+    scrollbar-shadow-color: grey;
+    scrollbar-dark-shadow-color: grey;
+}
+
+#sp-sales-analytics-scroll::-webkit-scrollbar {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    width: 7px;
+    height: 0;
+    border-radius: 3px;
+    background-color: rgb(47, 64, 80);
+}
+#sp-sales-analytics-scroll::-webkit-scrollbar-thumb {
+    position: relative;
+    z-index: 2;
+    border-radius: 3px;
+    background-color:rgba(241,241,241,.6);
+    -webkit-box-shadow: 0 0 1px rgb(167, 177 194);
+}
+
+.tab-content::-webkit-scrollbar-thumb, #sp-sales-analytics-scroll::-webkit-scrollbar-thumb, .sp-analytics-container__div::-webkit-scrollbar-thumb,
+.content::-webkit-scrollbar-thumb {
+    min-height: 100px;
+}
+
+/* Send Email Wizard */
+
+/**
+ * Make height responsive: @see https://github.com/rstaib/jquery-steps/issues/10
+ * Solution: Remove 'position: absolute'
+ *			 Set 'height: auto'	
+ *
+ * Previously : 'position: absolute'
+ *				'height: '95%'
+ */
+
+.wizard > .content > .body {
+    position: static;
+    height: auto;
+    width: 100%;
+}
+
+.wizard [aria-label="Pagination"] {
+    float: left;
+}
+
+.sp-clickable {
+    cursor: pointer;
+}
+
+.sp-file-link {
+    font-size: 12px;
+    color: inherit;
+}
+
+.content {
+    background-color: #fff !important;
+}
+
+.sp-datatables-search-left{
+    float: left;
+}
+
+.sp-hidden {
+    display: none;
+}
+
+.sp-mail-all__button {
+    color: #1ab394;
+    margin-left: -10px;
+}
+
+.sp-mail-all__button span {
+    font-size: 13px;
+}
+
+.sp-mail-all__button:hover {
+    color: #1ab394;
+}
+
+.sp-email-container-hidden {
+    display: none;
+}
+
+.sp-mail__icon {
+    color: #1ab394;
+}
+
+.sp-send-to-all__button {
+    margin-left: -20px;
+}
+
+.sp-send-email__export-info {
+    color: #1ab394;
+}
+
+.sp-send-email__add-customer {
+    border-color: #1ab394;
+    box-shadow: none;
+    clear: left;
+    color: #1ab394;
+    display: inline-block;
+    padding: 6px 8px;
+    font-size: 12px;
+}
+
+.sp-send-email__add-customer div {
+    margin-left: 20px;
+    margin-top: 11px;
+}
+
+.sp-send-email__add-customer:hover,
+.sp-send-email__add-customer:focus:active {
+    background-color: #fff;
+    border-color: #d2d2d2;
+    color: #1ab394;
+}
+
+#sp-send-email {
+    margin-bottom: 30px;
+}
+
+/* Settings */
+
+.dropdown-toggle.btn-default, .btn-default.active:hover {
+    border: none !important;
+}
+
+.form-group {
+    margin: 10px !important;
+}
+
+#sp-change-pwd__button {
+    float: right;
+}
+
+.sp-settings-dropdown__button {
+    border: none;
+    color: #999c9e;
+    font-weight: 600;
+    margin-bottom: 2px;
+}
+
+.sp-settings-dropdown__button:hover {
+    border: none;
+}
+
+.sp-settings-dropdown__button:active {
+    border: none;
+}
+
+.sp-dropdown-settings__li {
+    color: #999c9e;
+}
+
+.sp-doc-settings-info__icon {
+    color: #1ab394;
+}
+
+
+/* Help Modal */
+
+.sp-help-modal__button-container {
+    display: inline-block;
+    padding: 0 10px;
+}
+
+#sp-help-salesmen__modal iframe {
+    border: 1px solid #e5e5e5;
+    height: 75vh;
+    width: 100%;
+}
+
+#sp-help-salesmen__modal .modal-body {
+    padding: 8px;
+}
+
+#sp-help-salesmen__modal .modal-header {
+    padding: 6px 10px 4px;
+}
+
+#sp-help-salesmen__modal .modal-footer {
+    text-align: center;
+    padding: 10px;
+}
+
+
+/* Documents and Customers */
+
+#sp-send-email .html5buttons a {
+    border-color: #1ab394;
+    color: #1ab394;
+    right: 25px;
+}
+
+#sp-send-email .html5buttons a:hover {
+    background-color: #fff;
+    border-color: #d2d2d2;
+    color: #1ab394;
+}
+
+.sp-create-csv-help {
+    margin-top: 10px;
+}
+
+.sp-download-contacts-help {
+    margin-top: 10px;
+}
+
+.sp-doc-and-file-tab__ul {
+    margin-bottom: 10px;
+}
+
+.sp-file-update {
+    margin-left: 30px;
+}
+
+.sp-customers-management-table__date-th {
+    white-space: nowrap;
+}
+
+[data-target="#sp-modal-upload-files"],
+[data-target="#sp-modal-upload-customers"],
+[data-target="#sp-modal-add-update-customer"] {
+    margin-top: 20px;
+    margin-bottom: -20px;
+}
+
+/* Error Handler */
+.sp-error-box {
+    position: absolute;
+    right: 4%;
+    top: -0.5%;
+    width: 400px;
+    z-index: 2;
+}
+
+/* These two toast rules are for the toastr, which is dynamically created, and there is no
+   code written for it in our files  */
+.toast-error {
+    background: #ed5565;
+    border: 0px solid #000000;
+    border-radius: 10px 10px 10px 10px;
+    -moz-border-radius: 10px 10px 10px 10px;
+    -webkit-border-radius: 10px 10px 10px 10px;
+}
+
+.toast-message {
+    background: #ed5565;
+}
+
+/* Side Navbar */
+
+.sp-nav-search__input {
+    background-color: #293846;
+    border-radius: 13px 13px 13px 13px;
+    -moz-border-radius: 13px 13px 13px 13px;
+    -webkit-border-radius: 13px 13px 13px 13px;
+    border: 1px solid #FFFFFF;
+    color: #FFFFFF;
+    margin-bottom: 8px;
+    margin-left: 31px;
+    padding: 5px;
+    outline: none;
+    width: 128px;
+}
+
+/* SLIDER */
+.sp-switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+}
+
+/* Hide default HTML checkbox */
+.sp-switch input {display:none;}
+
+/* The slider */
+
+input:checked + .sp-doc-settings-slider {
+    background-color: #1ab394;
+}
+
+input:focus + .sp-doc-settings-slider {
+    box-shadow: 0 0 1px #1ab394;
+}
+
+input:checked + .sp-doc-settings-slider:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
+}
+
+.sp-doc-settings-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+.sp-doc-settings-slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+/* Rounded sliders */
+.sp-doc-settings-slider.sp-round {
+    border-radius: 34px;
+}
+
+.sp-doc-settings-slider.sp-round:before {
+    border-radius: 50%;
+}
+
+.sp-switch-container {
+    margin-top: 20px;
+    margin-left: 10px;
+}
+
+.sp-switch-title__label {
+    margin-top: 6px;
+}
+
+.sp-settings-modal-header {
+    margin-top: -2px;
+    margin-bottom: 5px;
+    text-align: center;
+}
+
+.sp-word-wrap {
+    word-wrap: break-word;
+}
+
+/* Sorting */
+
+.sp-sort-list {
+    display: inline-block;
+}
+
+.sp-sort-option__a {
+    background-color: #273441;
+    border: 1px solid #587490;
+    border-top-left-radius: 50px;
+    border-top-right-radius: 50px;
+    border-bottom-right-radius: 50px;
+    border-bottom-left-radius: 50px;
+    color: white;
+    cursor: pointer;
+    font-size: 10px;
+    padding-right: 16px !important;
+    padding-left: 13px !important;
+    margin-left: 34px !important;
+    padding-top: 6px;
+    padding-bottom: 6px;
+}
+
+.sp-sort-option__a:hover {
+    background-color: #1E2933;
+}
+
+.sp-sort-option__li {
+    display: none;
+    margin-top: 17px;
+}
+
+.sp-sort-option__li:first-child {
+    margin-top: 1px;
+}
+
+.sp-sort-option__li:last-child {
+    margin-bottom: 12px;
+}
+
+.sp-search-container {
+    display: inline-block;
+}
+
+.sp-sort-search-cont {
+    display: inline-block;
+}
+
+.sp-sort-toggle__icon {
+    margin-left: 3px;
+}
+
+.sp-sort-options-toggle {
+    color: #ffffff;
+    margin-left: 7px;
+}
+
+.sp-sort-options-toggle:hover {
+    color: #C6C0C0;
+}
+
+
+/* Notifications */
+
+.sp-notifications-table--display-none {
+    display: none;
+}
+
+.user-change-password__submit {
+    margin-top: 25px !important;
+    text-align: center;
+}
+
+.logout__button {
+    color: #999c9e;
+    font-weight: 600;
+}
+
+.hopper__item-checkbox {
+  color: #337ab7;
+  font-size: 16px;
+  vertical-align: bottom;
+}
+
+.metric__icon {
+  vertical-align: middle;
+}
+
+.metric__title {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.metric__sub-title {
+  font-size: 30px;
+  font-weight: 100;
+}
+
+/** Notification*/
+
+.dropdown-messages {
+    padding: 10px 0 10px 0;
+}
+
+.media-body {
+    height: 55px;
+    max-height: 55px;
+}
+
+.sp-notifications__button-hidden {
+    visibility: hidden;
+}
+
+.sp-notifications {
+    border-bottom: 1px solid rgba(27, 39, 53, .2);
+    max-height: 65px;
+    min-height: 65px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.sp-notifications:last-child {
+    border-bottom: none;
+}
+
+.sp-notifications:hover {
+    background-color: #f6f7f9;
+}
+
+.sp-notifications__date-container {
+    height: 55px;
+}
+
+.sp-notifications__read-button {
+    background-color: #1ab394;
+    border: 1px solid #1ab394;
+    border-radius: 100px;
+    bottom: 10px;
+    height: 8px;
+    position: absolute;
+    right: 20px;
+    width: 8px;
+}
+
+.sp-notifications__read-button:hover {
+    background-color: transparent;
+    cursor: pointer;
+}
+
+.sp-notifications__unread {
+    background-color: rgba(237,239,245,.98);
+}
+
+.sp-notifications__text-container {
+    height: 50px;
+    font-size: 11px;
+}
+
+.sp-notifications__time-elapsed {
+    margin-right: 5px;
+    white-space: nowrap;
+}
+
+#sp-notifications__container {
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+    padding: 0;
+}
+
+#sp-notifications__header {
+    border-bottom: 2px solid rgba(27, 39, 53, 0.1);
+}
+
+#sp-notifications__header span {
+    padding-bottom: 8px;
+    padding-top: 8px;
+}
+
+#sp-notifications__header-title {
+    display: inline-block;
+    color: #424242;
+    font-weight: 600;
+    padding-left: 6px;
+    position: relative;
+    left: 2px;
+}
+
+#sp-notifications__header-mark-all-read {
+    display: inline-block;
+    color: #1ab394;
+    padding-right: 6px;
+    position: relative;
+    left: 42%;
+}
+
+#sp-notifications__header-mark-all-read:hover {
+    cursor: pointer;
+}
+
+#sp-notifications__list-container {
+    max-height: 425px;
+    padding-bottom: 0;
+    padding-top: 0;
+    padding-left: 0;
+    overflow-y: scroll;
+}
+
+#sp-notifications__list-container ::-webkit-scrollbar {
+    -moz-appearance: none;
+    background-color: #fff;
+    border-radius: 3px;
+    min-height: 0;
+    -webkit-appearance: none;
+    width: 7px;
+}
+
+#sp-notifications__list-container ::-webkit-scrollbar-thumb {
+    background-color: rgb(135, 138, 141);
+    border-radius: 3px;
+    -webkit-box-shadow: 0 0 1px rgb(167, 177 194);
+    min-height: 70px;
+}
+
+#sp-notifications__see-all {
+    background-color: #fff;
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+    border-top: 2px solid rgba(27, 39, 53, 0.1);
+    color: #1ab394;
+    margin-bottom: 0px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    text-align: center;
+}
+
+#sp-notifications__see-all:hover {
+    cursor: pointer;
+}
+
+#sp-notifications-table .html5buttons a {
+    right: 25px;
+}
+
+#sp-notifications-table .html5buttons a:hover {
+    background-color: #fff;
+    border-color: #d2d2d2;
+    color: #1ab394;
+}

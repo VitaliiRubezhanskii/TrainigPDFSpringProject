@@ -5,10 +5,18 @@
     <script>
     'use strict';
 
-    var SP = {};
+    window.SP = {};
     Object.defineProperties(SP, {
-        API_URL: {
-            value: '{{apiUrl}}',
+        CSRF_HEADER: {
+            value: '{{{_csrf.headerName}}}',
+            enumerable: true
+        },
+        CSRF_TOKEN: {
+            value: '{{{_csrf.token}}}',
+            enumerable: true
+        },
+        VIEWER_URL_WITHOUT_FILELINK: {
+            value: '{{{viewerUrlWithoutFileLink}}}',
             enumerable: true
         }
     });
@@ -17,14 +25,13 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>SlidePiper Dashboard</title>
+    <title>SlidePiper - Dashboard</title>
 
     <link href="/assets/css/bootstrap.min.css" rel="stylesheet">
     <link href="/assets/font-awesome/css/font-awesome.min.css" rel="stylesheet">
     <link href="/assets/css/animate.css" rel="stylesheet">
     <link href="/assets/css/style.css" rel="stylesheet">
     <link href="/assets/css/plugins/jquerySteps/jquery.steps.css" rel="stylesheet">
-    <!-- <link href="assets/css/plugins/metisMenu/metisMenu.min.css" rel="stylesheet">  -->
     <link href="/assets/css/plugins/datatables/datatables.min.css" rel="stylesheet">
     <link href="/assets/css/plugins/datatables/select.dataTables.min.css" rel="stylesheet">
     <link href="/assets/css/plugins/datatables/dataTables.checkboxes.css" rel="stylesheet">
@@ -33,49 +40,7 @@
     <link href="/assets/css/plugins/sweetalerts/sweetalert.css" rel="stylesheet">
 
     <!--SlidePiper scripts-->
-    <link href="/static/src/dashboard/css/sp-style.css" rel="stylesheet">
-
-    <!-- Dashboard Notifications -->
-    <link rel="stylesheet" href="/static/src/dashboard/css/notifications.css">
-
-    <!-- Google Analytics Code -->
-    <script>
-    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-    ga('create', 'UA-64949615-2', 'auto');
-    ga('send', 'pageview');
-    </script>
-    <!-- End Google Analytics Code -->
-
-    <!-- Facebook Pixel Code -->
-    <script>
-    !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-    n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
-    n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
-    t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
-    document,'script','https://connect.facebook.net/en_US/fbevents.js');
-    fbq('init', '270854203317351');
-    fbq('track', 'PageView');
-    </script>
-    <noscript><img height="1" width="1" style="display:none"
-    src="https://www.facebook.com/tr?id=270854203317351&ev=PageView&noscript=1"
-    /></noscript>
-    <!-- DO NOT MODIFY -->
-    <!-- End Facebook Pixel Code -->
-
-    <!-- Google Analytics -->
-    <script>
-    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-    ga('create', 'UA-64949615-2', 'auto');
-    ga('send', 'pageview');
-    </script>
+    <link href="/static/src/dashboard/css/style.css" rel="stylesheet">
 </head>
 
 <body>
@@ -151,23 +116,6 @@
                      </div>
 
                     <ul class="nav navbar-top-links navbar-right">
-                        <li id="sp-notifications__nav" class="dropdown">
-                            <a class="count-info dropdown" href="#">
-                                <i class="fa fa-bell"></i>
-                                <span id="sp-notifications__count" class="label label-primary"></span>
-                            </a>
-                            <div id="sp-notifications__container" class="dropdown-menu dropdown-messages">
-                                <div id="sp-notifications__header">
-                                    <span id="sp-notifications__header-title">Notifications</span>
-                                    <span id="sp-notifications__header-mark-all-read">Mark all as read</span>
-                                </div>
-                                <ul id="sp-notifications__list-container">
-                                    <!-- Notifications added in notifications.js -->
-                                </ul>
-                                <p id="sp-notifications__see-all">See all</p>
-                            </div>
-                        </li>
-
                         <li data-toggle="modal" data-target="#sp-help-salesmen__modal" class="sp-help-salesmen__icon">
                             <a href="#">
                                 <i class="fa fa-info-circle" aria-hidden="true"></i>Help
@@ -182,13 +130,16 @@
                               <ul class="dropdown-menu">
                                     <li class="sp-dropdown-settings__li" data-toggle="modal" data-target="#sp-document-settings__modal"><a href="#">Account Settings</a></li>
                                     <li class="sp-dropdown-settings__li" data-toggle="modal" data-target="#sp-toolbar-settings__modal"><a href="#">Toolbar Settings</a></li>
+                                    <li data-toggle="modal" data-target="#sp-change-password__modal" class="sp-change-pwd__li sp-dropdown-settings__li"><a href="#">Change Password</a></li>
                               </ul>
                             </div>
                         </li>
-                        <li class="sp-logout">
-                            <a href="#">
-                                <i class="fa fa-sign-out"></i> Log Out
-                            </a>
+
+                        <li>
+                            <form class="logout" action="/logout" method="post">
+                                <input type="hidden" name="{{{_csrf.parameterName}}}" value="{{{_csrf.token}}}">
+                                <button class="btn btn-outline btn-link logout__button">Log Out</button>
+                            </form>
                         </li>
                     </ul>
                 </nav>
@@ -340,7 +291,7 @@
                             <div class="ibox float-e-margins">
                                 <div class="ibox-title">
                                     <i class="fa fa-signal sp-chart-title-fa fa-2x"></i>
-                                    <h4>Performance benchmark</h4>
+                                    <h4>Performance benchmark (coming soon)</h4>
                                 </div>
                                 <div class="ibox-content">
                                     <div class="sp-chart__container" id="sp-line-chart-2-container">
@@ -515,9 +466,6 @@
 
                                             <!-- Users mgmt -->
                                             <div id="tab-2" class="tab-pane">
-                                                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#sp-modal-upload-customers">
-                                                    Upload Customers
-                                                </button>
                                                 <button type="button" class="btn btn-primary sp-add-update-customer" data-add-update="add" data-toggle="modal" data-target="#sp-modal-add-update-customer">
                                                     Add a Customer
                                                 </button>
@@ -593,7 +541,6 @@
 
                                         <h3>Generated Links</h3>
                                         <section id="sp-section3">
-                                            <!-- This table is created in sp-functions.js -->
                                         </section>
                                     </div>
                                 </div>
@@ -634,37 +581,10 @@
 
             <div class="footer">
                 <div class="pull-right"></div>
-                <div>SlidePiper &copy; 2017</div>
+                <div>SlidePiper &copy; {{currentYear}}</div>
             </div>
         </div>
     </div>
-
-    <!-- Mainly scripts -->
-    <script src="/assets/js/jquery-2.1.1.js"></script>
-    <script src="/assets/js/bootstrap.min.js"></script>
-    <!-- <script src="assets/js/plugins/metisMenu/metisMenu.min.js"></script> -->
-
-    <!-- Custom and plugin javascript -->
-    <script src="/assets/js/inspinia.js"></script>
-    <script src="/assets/js/plugins/jquerySteps/jquery.steps.min.js"></script>
-    <script src="/assets/js/plugins/pace/pace.min.js"></script>
-    <script src="/assets/js/plugins/clipboard/clipboard.min.js"></script>
-    <script src="/assets/js/plugins/datatables/datatables.min.js"></script>
-    <script src="/assets/js/plugins/datatables/dataTables.select.min.js"></script>
-    <script src="/assets/js/plugins/datatables/dataTables.checkboxes.min.js"></script>
-    <script src="/assets/js/plugins/toastr/toastr.js"></script>
-    <script src="/assets/js/plugins/sweetalerts/sweetalert.min.js"></script>
-    <script src="/assets/js/plugins/momentjs/moment.min.js"></script>
-    <script src="/assets/js/plugins/datetime-moment.js"></script>
-    <script src="/assets/js/plugins/chartjs/chart.min.js"></script>
-    <script src="/assets/js/plugins/dotdotdot/jquery.dotdotdot.min.js"></script>
-
-    <!-- SlidePiper scripts -->
-    <script src="/assets/js/js.cookie.js"></script>
-    <script src="/static/src/dashboard/js/sp-functions.js"></script>
-
-    <!-- Dashboard Notifications -->
-    <script src="/static/src/dashboard/js/notifications.js"></script>
 
     <!-- Viewer Widgets Modal -->
     <div class="modal inmodal" id="sp-viewer-widgets-modal" tabindex="-1" role="dialog" aria-hidden="true"></div>
@@ -686,66 +606,6 @@
 
     <!-- Help Salesman Modal -->
     <div id="sp-help-salesmen__modal" class="modal inmodal" tabindex="-1" role="dialog" aria-hidden="true"></div>
-
-    <!-- Upload customers modal -->
-    <div class="modal inmodal" id="sp-modal-upload-customers" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">
-                        <span aria-hidden="true">&times;</span>
-                        <span class="sr-only">Close</span>
-                    </button>
-                    <i class="fa fa-cloud-upload modal-icon"></i>
-                    <h4 class="modal-title">Upload Customers</h4>
-
-                    <div class="sp-create-csv-help">
-                        <small class="font-bold"> To upload
-                            customers to SlidePiper, follow these
-                            instructions:
-                            <br><br>
-                            1. Create a CSV file of your customers by one of these options:
-                            <br><br>
-                            Export a CSV file from Outlook:
-                            (<a target="_blank" href="https://support.office.com/en-us/article/Export-contacts-from-Outlook-10f09abd-643c-4495-bb80-543714eca73f">How?</a>)
-                            <br> -OR- <br>
-                            Export a CSV file from Gmail (Outlook CSV Format):
-                            (<a target="_blank" href="https://support.google.com/mail/answer/24911?hl=en">How?</a>)
-                            <br> -OR- <br>
-                            Add your data using our template:
-                            (<a href="/assets/files/customers_template.csv">Download</a>)
-                            <br><br>
-                        </small>
-                    </div>
-                    <div class="sp-download-contacts-help">
-                        <small class="font-bold"> Once you have saved the CSV in an appropriate folder: 
-                            <br>
-                            2. Click on the 'Choose File / Browse' button and select your CSV file.
-                            <br>
-                            3. Click on the 'Upload Customers' button to upload the CSV file to the system.
-                        </small>
-                    </div>
-
-                </div>
-                <div class="modal-body">
-                    <form id="sp-customers-upload__form">
-                        <input class="file__input sp-inline" type="file" accept=".csv"/>
-                    </form>
-                    <div class="sk-spinner sk-spinner-wave">
-                        <div class="sk-rect1"></div>
-                        <div class="sk-rect2"></div>
-                        <div class="sk-rect3"></div>
-                        <div class="sk-rect4"></div>
-                        <div class="sk-rect5"></div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" id="sp-upload-customers__button">Upload Customers</button>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <!-- Add / update a customer modal -->
     <div class="modal inmodal" id="sp-modal-add-update-customer" tabindex="-1" role="dialog" aria-hidden="true">
@@ -817,7 +677,54 @@
             </div>
         </div>
     </div>
-    
+
+    <!-- Change Password Modal -->
+    <div id="sp-change-password__modal" class="modal inmodal user-change-password" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">&times;</span>
+                        <span class="sr-only">Close</span>
+                    </button>
+                    <h4 class="modal-title">Change Password</h4>
+                    <small class="font-bold modal-sub-title"></small>
+                </div>
+
+                <form class="user-change-password form-horizontal">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label class="col-sm-5 control-label">Current password</label>
+                            <div class="col-sm-7">
+                                <input name="password" class="form-control" placeholder="Current password" type="password" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-5 control-label">New password</label>
+                            <div class="col-sm-7">
+                                <input name="newPassword" class="form-control" placeholder="New password" type="password" required>
+                                <small class="form-text">Password must be at least 8 characters long</small>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-5 control-label">Confirm new password</label>
+                            <div class="col-sm-7">
+                                <input name="newPasswordConfirm" class="form-control" placeholder="Confirm new password" type="password" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <div class="form-group user-change-password__submit">
+                            <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
+                            <button class="btn btn-primary user-change-password__submit-button">Change Password</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <!-- Document Settings Modal  -->
     <div id="sp-document-settings__modal" class="modal inmodal" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog">
@@ -880,7 +787,28 @@
             </div>
         </div>
     </div>
-  
+
+    <!-- Mainly scripts -->
+    <script src="/assets/js/jquery-2.1.1.js"></script>
+    <script src="/assets/js/bootstrap.min.js"></script>
+
+    <!-- Custom and plugin javascript -->
+    <script src="/assets/js/inspinia.js"></script>
+    <script src="/assets/js/plugins/jquerySteps/jquery.steps.min.js"></script>
+    <script src="/assets/js/plugins/pace/pace.min.js"></script>
+    <script src="/assets/js/plugins/clipboard/clipboard.min.js"></script>
+    <script src="/assets/js/plugins/datatables/datatables.min.js"></script>
+    <script src="/assets/js/plugins/datatables/dataTables.select.min.js"></script>
+    <script src="/assets/js/plugins/datatables/dataTables.checkboxes.min.js"></script>
+    <script src="/assets/js/plugins/toastr/toastr.js"></script>
+    <script src="/assets/js/plugins/sweetalerts/sweetalert.min.js"></script>
+    <script src="/assets/js/plugins/momentjs/moment.min.js"></script>
+    <script src="/assets/js/plugins/datetime-moment.js"></script>
+    <script src="/assets/js/plugins/chartjs/chart.min.js"></script>
+
+    <!-- SlidePiper scripts -->
+    <script src="/static/src/dashboard/js/main.js"></script>
+
     <!-- Start of HubSpot Embed Code -->
     <script type="text/javascript" id="hs-script-loader" async defer src="//js.hs-scripts.com/2462657.js"></script>
     <!-- End of HubSpot Embed Code -->

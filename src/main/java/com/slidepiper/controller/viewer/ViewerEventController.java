@@ -1,10 +1,10 @@
 package com.slidepiper.controller.viewer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.slidepiper.model.component.JwtUtils;
 import com.slidepiper.model.entity.Channel;
-import com.slidepiper.model.entity.viewer.ViewerEvent;
-import com.slidepiper.model.entity.viewer.ViewerEvent.ViewerEventType;
+import com.slidepiper.model.entity.Viewer;
+import com.slidepiper.model.entity.ViewerEvent;
+import com.slidepiper.model.entity.ViewerEvent.ViewerEventType;
 import com.slidepiper.model.input.ViewerEventInput;
 import com.slidepiper.repository.ChannelRepository;
 import com.slidepiper.service.viewer.ViewerEventService;
@@ -18,7 +18,9 @@ import slidepiper.db.Analytics;
 import slidepiper.db.DbLayer;
 import slidepiper.salesman_servlets.Geolocation;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -28,54 +30,42 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.UUID;
 
 @RestController
-@CrossOrigin(origins = "*")
 public class ViewerEventController {
+    private final ObjectMapper objectMapper = new ObjectMapper();
+
     private final ChannelRepository channelRepository;
-    private final ObjectMapper objectMapper;
     private final ViewerEventService viewerEventService;
 
     @Autowired
     public ViewerEventController(ChannelRepository channelRepository,
-                                 ObjectMapper objectMapper,
                                  ViewerEventService viewerEventService) {
         this.channelRepository = channelRepository;
-        this.objectMapper = objectMapper;
         this.viewerEventService = viewerEventService;
     }
 
-    @PostMapping(value = "/utils/viewer-event-email")
-    public void viewerEventEmail(@Valid @RequestBody ViewerEventInput viewerEventInput)
-            throws IOException, URISyntaxException {
-
-        Channel channel = channelRepository.findByFriendlyId(viewerEventInput.getChannelName());
-
-        viewerEventService.sendUserEmail(channel,
-                viewerEventInput.getViewerName(),
-                viewerEventInput.getViewerEmail(),
-                viewerEventInput.getViewerEventType(),
-                null);
-    }
-
+    @CrossOrigin("*")
     @PostMapping(value = "/viewer/event")
     public void viewerEvent(@RequestBody String event,
-                            @CookieValue(value = "sp.viewer", required = false) String viewerCookie,
-                            HttpServletRequest request) throws IOException, URISyntaxException {
+                            @CookieValue(value = "sp.viewer", required = false) String viewerCookieValue,
+                            HttpServletRequest request,
+                            HttpServletResponse response) throws IOException, URISyntaxException {
 
         ViewerEvent viewerEvent  = objectMapper.readValue(URLDecoder.decode(event, StandardCharsets.UTF_8.name()), ViewerEvent.class);
 
-        // Set Channel.
-        Channel channel = channelRepository.findByFriendlyId(viewerEvent.getChannelFriendlyId());
-        viewerEvent.setChannel(channel);
-
         // Set viewer ID.
-        if (Objects.nonNull(viewerCookie)) {
-            String viewerId = JwtUtils.verify(viewerCookie).getClaim("viewerId").asString();
-            viewerEvent.setViewerId(viewerId);
+        String viewerId;
+        if (Objects.nonNull(viewerCookieValue)) {
+            viewerId = viewerEventService.getViewerId(viewerCookieValue);
+            Cookie viewerCookie = viewerEventService.getViewerCookie(request);
+            viewerEventService.updateViewerCookie(viewerCookie, response);
         } else {
-            System.err.println("viewerId is null");
+            viewerId = UUID.randomUUID().toString();
+            viewerEventService.createViewerCookie(viewerId, response);
         }
+        viewerEvent.setViewerId(viewerId);
 
         // Set IP.
         if (viewerEvent.getType().equals(ViewerEventType.OPEN_SLIDES)) {
@@ -105,10 +95,13 @@ public class ViewerEventController {
         viewerEventService.saveEvent(viewerEvent);
 
         // Send user email.
+        Channel channel = channelRepository.findByFriendlyId(viewerEvent.getChannelFriendlyId());
+        Viewer viewer = channel.getDocument().getViewer();
+
         if ((viewerEvent.getType().equals(ViewerEventType.OPEN_SLIDES)
-                && viewerEvent.getChannel().getDocument().getUser().isViewerOpenDocumentEmailEnabled())
+                    && viewer.isViewerOpenDocumentEmailEnabled())
                 || (viewerEvent.getType().equals(ViewerEventType.VIEWER_WIDGET_ASK_QUESTION)
-                && viewerEvent.getChannel().getDocument().getUser().isViewerEventEmailEnabled())) {
+                    && viewer.isViewerEventEmailEnabled())) {
 
             // TODO: Replace obsolete code and create a service method.
             ArrayList<String> emailParamList = new ArrayList<>();
@@ -137,5 +130,20 @@ public class ViewerEventController {
                     viewerEvent.getType().name(),
                     viewerMessage);
         }
+    }
+
+    /** @deprecated */
+    @CrossOrigin("*")
+    @PostMapping(value = "/utils/viewer-event-email")
+    public void viewerEventEmail(@Valid @RequestBody ViewerEventInput viewerEventInput)
+            throws IOException, URISyntaxException {
+
+        Channel channel = channelRepository.findByFriendlyId(viewerEventInput.getChannelName());
+
+        viewerEventService.sendUserEmail(channel,
+                viewerEventInput.getViewerName(),
+                viewerEventInput.getViewerEmail(),
+                viewerEventInput.getViewerEventType(),
+                null);
     }
 }

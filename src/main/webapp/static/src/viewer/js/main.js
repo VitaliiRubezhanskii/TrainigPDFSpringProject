@@ -287,19 +287,22 @@ $('.sp-cta, .sp-secondary-cta').click(function() {
 });
 
 $.ajax({
-    url: SP.API_URL + '/config-viewer',
-    data: {linkHash: sp.viewer.linkHash},
+    url: SP.API_URL + '/viewer/configuration',
+    data: {channelFriendlyId: sp.viewer.linkHash},
     dataType: 'json',
     xhrFields: {
         withCredentials: true
     }
-}).done(function(config) {
+}).done(function(data) {
+    var config = {
+        viewer: data
+    }
 
     // Set document title.
     if (typeof config.viewer.documentTitle !== 'undefined'
         && null !== config.viewer.documentTitle
         && '' !== config.viewer.documentTitle) {
-        document.title =  config.viewer.documentTitle;
+        document.title = config.viewer.documentTitle;
     } else {
         document.title = 'SlidePiper';
     }
@@ -316,9 +319,9 @@ $.ajax({
 
         if (typeof config.viewer.toolbarButtonHoverBackground !== 'undefined') {
             $('.toolbarButton, .secondaryToolbarButton').hover(
-                function() {
+                function () {
                     $(this).css('background', config.viewer.toolbarButtonHoverBackground);
-                },function() {
+                }, function () {
                     $(this).css('background', config.viewer.toolbarButtonBackground);
                 }
             );
@@ -331,9 +334,9 @@ $.ajax({
 
         if (typeof config.viewer.toolbarButtonHoverBorder !== 'undefined') {
             $('.toolbarButton, .secondaryToolbarButton').hover(
-                function() {
+                function () {
                     $(this).css('border', config.viewer.toolbarButtonHoverBorder);
-                },function() {
+                }, function () {
                     $(this).css('border', config.viewer.toolbarButtonBorder);
                 }
             );
@@ -346,9 +349,9 @@ $.ajax({
 
         if (typeof config.viewer.toolbarButtonHoverBoxShadow !== 'undefined') {
             $('.toolbarButton, .secondaryToolbarButton').hover(
-                function() {
+                function () {
                     $(this).css('box-shadow', config.viewer.toolbarButtonHoverBoxShadow);
-                },function() {
+                }, function () {
                     $(this).css('box-shadow', config.viewer.toolbarButtonBoxShadow);
                 }
             );
@@ -373,12 +376,13 @@ $.ajax({
     }
 
     // Logo.
-    if (typeof config.viewer.toolbarLogoImage !== 'undefined') {
+    if (config.viewer.logoImage || typeof config.viewer.toolbarLogoImage !== 'undefined') {
+        var logoImage = config.viewer.logoImage || 'data:image/png;base64,' + config.viewer.toolbarLogoImage;
         $('.sp-toolbar-logo a')
-            .append('<img src="data:image/png;base64,' + config.viewer.toolbarLogoImage + '" alt="Company Logo">');
+            .append('<img src="' + logoImage + '">');
 
         if (typeof config.viewer.toolbarLogoLink !== 'undefined') {
-            if (config.viewer.toolbarLogoLink === 'no-logo-link'){
+            if (config.viewer.toolbarLogoLink === 'no-logo-link') {
                 $('.sp-toolbar-logo a').attr('href', location.href);
             } else {
                 $('.sp-toolbar-logo a').attr('href', config.viewer.toolbarLogoLink);
@@ -404,7 +408,7 @@ $.ajax({
     }
 
     // CTA1.
-    if (true == config.viewer.isCta1Enabled) {
+    if ('true' === config.viewer.isCta1Enabled) {
         $('#sp-cta-secondary-toolbar-separator').show();
 
         if (typeof config.viewer.cta1CollapseMaxWidth !== 'undefined') {
@@ -418,14 +422,14 @@ $.ajax({
 
             if (typeof config.viewer.toolbarCta1HoverBackground !== 'undefined') {
                 $('#sp-cta1').hover(
-                    function() {
+                    function () {
                         $(this).css('background', config.viewer.toolbarCta1HoverBackground);
-                    },function() {
+                    }, function () {
                         $(this).css('background', config.viewer.toolbarCta1Background);
                     }
                 );
 
-                $('#sp-cta1').click(function() {
+                $('#sp-cta1').click(function () {
                     $(this).css('background', config.viewer.toolbarCta1Background);
                 });
             }
@@ -436,14 +440,14 @@ $.ajax({
 
             if (typeof config.viewer.toolbarCta1HoverBorder !== 'undefined') {
                 $('#sp-cta1').hover(
-                    function() {
+                    function () {
                         $(this).css('border', config.viewer.toolbarCta1HoverBorder);
-                    },function() {
+                    }, function () {
                         $(this).css('border', config.viewer.toolbarCta1Border);
                     }
                 );
 
-                $('#sp-cta1').click(function() {
+                $('#sp-cta1').click(function () {
                     $(this).css('border', config.viewer.toolbarCta1Border);
                 });
             }
@@ -454,14 +458,14 @@ $.ajax({
 
             if (typeof config.viewer.toolbarCta1HoverColor !== 'undefined') {
                 $('#sp-cta1').hover(
-                    function() {
+                    function () {
                         $(this).css('color', config.viewer.toolbarCta1HoverColor);
-                    },function() {
+                    }, function () {
                         $(this).css('color', config.viewer.toolbarCta1Color);
                     }
                 );
 
-                $('#sp-cta1').click(function() {
+                $('#sp-cta1').click(function () {
                     $(this).css('color', config.viewer.toolbarCta1Color);
                 });
             }
@@ -479,7 +483,7 @@ $.ajax({
     }
 
     // CTA2.
-    if (true == config.viewer.isCta2Enabled) {
+    if ('true' === config.viewer.isCta2Enabled) {
         $('#sp-cta-secondary-toolbar-separator').show();
 
         if (typeof config.viewer.cta2CollapseMaxWidth !== 'undefined') {
@@ -493,14 +497,14 @@ $.ajax({
 
             if (typeof config.viewer.toolbarCta2HoverBackground !== 'undefined') {
                 $('#sp-cta2').hover(
-                    function() {
+                    function () {
                         $(this).css('background', config.viewer.toolbarCta2HoverBackground);
-                    },function() {
+                    }, function () {
                         $(this).css('background', config.viewer.toolbarCta2Background);
                     }
                 );
 
-                $('#sp-cta2').click(function() {
+                $('#sp-cta2').click(function () {
                     $(this).css('background', config.viewer.toolbarCta2Background);
                 });
             }
@@ -511,14 +515,14 @@ $.ajax({
 
             if (typeof config.viewer.toolbarCta2HoverBorder !== 'undefined') {
                 $('#sp-cta2').hover(
-                    function() {
+                    function () {
                         $(this).css('border', config.viewer.toolbarCta2HoverBorder);
-                    },function() {
+                    }, function () {
                         $(this).css('border', config.viewer.toolbarCta2Border);
                     }
                 );
 
-                $('#sp-cta2').click(function() {
+                $('#sp-cta2').click(function () {
                     $(this).css('border', config.viewer.toolbarCta2Border);
                 });
             }
@@ -529,14 +533,14 @@ $.ajax({
 
             if (typeof config.viewer.toolbarCta2HoverColor !== 'undefined') {
                 $('#sp-cta2').hover(
-                    function() {
+                    function () {
                         $(this).css('color', config.viewer.toolbarCta2HoverColor);
-                    },function() {
+                    }, function () {
                         $(this).css('color', config.viewer.toolbarCta2Color);
                     }
                 );
 
-                $('#sp-cta2').click(function() {
+                $('#sp-cta2').click(function () {
                     $(this).css('color', config.viewer.toolbarCta2Color);
                 });
             }
@@ -554,7 +558,7 @@ $.ajax({
     }
 
     // CTA3.
-    if (true == config.viewer.isCta3Enabled) {
+    if ('true' === config.viewer.isCta3Enabled) {
         $('#sp-cta-secondary-toolbar-separator').show();
 
         if (typeof config.viewer.cta3CollapseMaxWidth !== 'undefined') {
@@ -568,14 +572,14 @@ $.ajax({
 
             if (typeof config.viewer.toolbarCta3HoverBackground !== 'undefined') {
                 $('#sp-cta3').hover(
-                    function() {
+                    function () {
                         $(this).css('background', config.viewer.toolbarCta3HoverBackground);
-                    },function() {
+                    }, function () {
                         $(this).css('background', config.viewer.toolbarCta3Background);
                     }
                 );
 
-                $('#sp-cta3').click(function() {
+                $('#sp-cta3').click(function () {
                     $(this).css('background', config.viewer.toolbarCta3Background);
                 });
             }
@@ -586,14 +590,14 @@ $.ajax({
 
             if (typeof config.viewer.toolbarCta3HoverBorder !== 'undefined') {
                 $('#sp-cta3').hover(
-                    function() {
+                    function () {
                         $(this).css('border', config.viewer.toolbarCta3HoverBorder);
-                    },function() {
+                    }, function () {
                         $(this).css('border', config.viewer.toolbarCta3Border);
                     }
                 );
 
-                $('#sp-cta3').click(function() {
+                $('#sp-cta3').click(function () {
                     $(this).css('border', config.viewer.toolbarCta3Border);
                 });
             }
@@ -604,14 +608,14 @@ $.ajax({
 
             if (typeof config.viewer.toolbarCta3HoverColor !== 'undefined') {
                 $('#sp-cta3').hover(
-                    function() {
+                    function () {
                         $(this).css('color', config.viewer.toolbarCta3HoverColor);
-                    },function() {
+                    }, function () {
                         $(this).css('color', config.viewer.toolbarCta3Color);
                     }
                 );
 
-                $('#sp-cta3').click(function() {
+                $('#sp-cta3').click(function () {
                     $(this).css('color', config.viewer.toolbarCta3Color);
                 });
             }
@@ -664,18 +668,17 @@ $.ajax({
     getWidgetsSettings();
     function getWidgetsSettings() {
         $.getJSON(
-            '/ManagementServlet',
+            SP.API_URL + '/viewer/widgets',
             {
-                action: 'getWidgetsSettings',
                 fileLinkHash: sp.viewer.linkHash
             },
-            function(data) {
+            function (data) {
 
                 // Prepare the widgets data for implimentation.
                 var widgets = {};
 
-                var numWidgets = data.widgetsSettings.length;
-                $.each(data.widgetsSettings, function(index, data) {
+                var numWidgets = data.length;
+                $.each(data, function (index, data) {
                     var widgetData = JSON.parse(data.widgetData).data;
 
                     if (typeof widgetData !== 'undefined'
@@ -688,7 +691,7 @@ $.ajax({
                             widgetId = widgetData.items[0].widgetId;
                         }
 
-                        switch(widgetId) {
+                        switch (widgetId) {
                             case 1:
                             case 6:
                                 widgetData.items = OrderWidgetDataItemsByPage(widgetId, widgetData.items);
@@ -715,7 +718,7 @@ $.ajax({
                     var itemsByPage = {};
                     var itemsPage = [];
 
-                    $.each(items, function(index, item) {
+                    $.each(items, function (index, item) {
 
                         switch (widgetId) {
                             case 1:
@@ -736,12 +739,12 @@ $.ajax({
                     });
 
                     // Order the items by page.
-                    itemsPage.sort(function(a, b) {
+                    itemsPage.sort(function (a, b) {
                         return a - b;
                     });
 
                     var orderedItemsByPage = [];
-                    $.each(itemsPage, function(index, page) {
+                    $.each(itemsPage, function (index, page) {
                         orderedItemsByPage.push(itemsByPage['page' + page.toString()]);
                     });
 
@@ -764,7 +767,7 @@ $.ajax({
     function isWidgetSettingsDefined(widgetSettings, requiredSettings) {
         var isWidgetSettingsDefined = true;
 
-        $.each(requiredSettings, function(index, requiredSetting) {
+        $.each(requiredSettings, function (index, requiredSetting) {
             if (typeof widgetSettings[requiredSetting] == 'undefined') {
                 isWidgetSettingsDefined = false;
                 return false;
@@ -786,16 +789,16 @@ $.ajax({
          * The following is a mechanisem for setting a widget item (out of a set of items)
          * everytime the user changes a page.
          */
-        $(document).on('pagechange spDefaultPlayerReady spYouTubePlayerReady spWidget6Ready', function(event) {
+        $(document).on('pagechange spDefaultPlayerReady spYouTubePlayerReady spWidget6Ready', function (event) {
 
             /* Widget 1 */
             if (sp.viewer.widgets.widget1.isValidated) {
 
                 // Check if all applicable video players are ready.
-                if (! sp.viewer.widgets.widget1.isVideoPlayersReady) {
+                if (!sp.viewer.widgets.widget1.isVideoPlayersReady) {
                     var isVideoPlayersReady = false;
 
-                    $.each(sp.viewer.widgets.widget1.videoPlayersIsReady, function(videoPlayer, isReady) {
+                    $.each(sp.viewer.widgets.widget1.videoPlayersIsReady, function (videoPlayer, isReady) {
                         if (isReady) {
                             isVideoPlayersReady = true;
                         } else {
@@ -839,7 +842,7 @@ $.ajax({
             if (null !== spWidgetsStorage
                 && null !== spWidgetsStorage.widgets
                 && null !== spWidgetsStorage.widgets.widget10) {
-                $.each(spWidgetsStorage.widgets.widget10.items, function() {
+                $.each(spWidgetsStorage.widgets.widget10.items, function () {
                     if (this.documentLinkHash === getParameterByName('f')) {
                         isEmailAddressEnteredForThisDocument = true;
                         enteredEmailAddress = this.email;
@@ -848,7 +851,7 @@ $.ajax({
                 });
             }
 
-            if (! isEmailAddressEnteredForThisDocument) {
+            if (!isEmailAddressEnteredForThisDocument) {
                 implementWidget10(widgets.widget10.items[0]);
             } else {
                 sp.viewer.widgets.widget10.emailAddress = enteredEmailAddress;
@@ -866,7 +869,7 @@ $.ajax({
             && widgets.widget1.items.length > 0) {
             var isWidget1Valid = false;
 
-            $.each(widgets.widget1.items, function(index, item) {
+            $.each(widgets.widget1.items, function (index, item) {
                 if (isWidgetSettingsDefined(item, widget1RequiredSettings)) {
                     isWidget1Valid = true;
                 } else {
@@ -879,7 +882,7 @@ $.ajax({
 
                 // Create a unique array of video players to load.
                 var videoPlayers = [];
-                $.each(widgets.widget1.items, function(index, video) {
+                $.each(widgets.widget1.items, function (index, video) {
                     if (video.isYouTubeVideo && -1 === videoPlayers.indexOf('youTube')) {
                         videoPlayers.push('youTube');
                     } else if (-1 === videoPlayers.indexOf('defaultPlayer')) {
@@ -887,7 +890,7 @@ $.ajax({
                     }
                 });
 
-                $.each(videoPlayers, function(index, videoPlayer) {
+                $.each(videoPlayers, function (index, videoPlayer) {
                     sp.viewer.widgets.widget1.videoPlayersIsReady[videoPlayer] = false;
                 });
 
@@ -905,7 +908,7 @@ $.ajax({
             && widgets.widget6.items.length > 0) {
             var isWidget6Validated = false;
 
-            $.each(widgets.widget6.items, function(index, item) {
+            $.each(widgets.widget6.items, function (index, item) {
                 if (isWidgetSettingsDefined(item, widget6RequiredSettings)) {
                     isWidget6Validated = true;
                 } else {
@@ -956,7 +959,7 @@ $.ajax({
             && widgets.widget5.items.length > 0) {
 
             var isWidget5Valid = false;
-            $.each(widgets.widget5.items, function(index, item) {
+            $.each(widgets.widget5.items, function (index, item) {
                 if (isWidgetSettingsDefined(item, widget5RequiredSettings)) {
                     isWidget5Valid = true;
                 } else {
@@ -978,7 +981,7 @@ $.ajax({
             && widgets.widget7.items.length > 0) {
             var isWidget7Validated = false;
 
-            $.each(widgets.widget7.items, function(index, item) {
+            $.each(widgets.widget7.items, function (index, item) {
                 if (isWidgetSettingsDefined(item, widget7RequiredSettings)) {
                     isWidget7Validated = true;
                 } else {
@@ -1000,7 +1003,7 @@ $.ajax({
             && widgets.widget8.items.length > 0) {
 
             var isWidget8Validated = false;
-            $.each(widgets.widget8.items, function(index, item) {
+            $.each(widgets.widget8.items, function (index, item) {
                 if (isWidgetSettingsDefined(item, widget8RequiredSettings)) {
                     isWidget8Validated = true;
                 } else {
@@ -1026,7 +1029,7 @@ $.ajax({
 
             updateLinkWidget();
 
-            document.addEventListener('pagechange', function() {
+            document.addEventListener('pagechange', function () {
                 $('.sp-widget9').remove();
 
                 updateLinkWidget();
@@ -1137,7 +1140,7 @@ $.ajax({
 
 
             /* Load Video Players */
-            $.each(sp.viewer.widgets.widget1.videoPlayersIsReady, function(videoPlayer, isReady) {
+            $.each(sp.viewer.widgets.widget1.videoPlayersIsReady, function (videoPlayer, isReady) {
                 switch (videoPlayer) {
                     case 'defaultPlayer':
                         loadDefaultPlayer();
@@ -1172,7 +1175,7 @@ $.ajax({
 
             // Format videos array to an object for ease of access.
             var videosByPage = {};
-            $.each(videos, function(index, video) {
+            $.each(videos, function (index, video) {
                 videosByPage['page' + video.videoPageStart.toString()] = video;
             });
 
@@ -1211,7 +1214,7 @@ $.ajax({
             }
 
             // Video widget tab click mechanism.
-            $('#sp-widget1').off('click').on('click', function(event) {
+            $('#sp-widget1').off('click').on('click', function (event) {
                 $('#sp-widget1-video-container').toggle();
                 $('#sp-widget1-fa-chevron').toggleClass('fa-chevron-up fa-chevron-down');
                 sp.viewer.widgets.widget1.isVideoCollapseOverride = true;
@@ -1281,7 +1284,7 @@ $.ajax({
                 $('#sp-widget1-tab div').text(videoTitle);
 
                 // Collapse video algorithm.
-                if (! sp.viewer.widgets.widget1.isVideoCollapseOverride) {
+                if (!sp.viewer.widgets.widget1.isVideoCollapseOverride) {
                     if (isVideoCollapsed) {
                         $('#sp-widget1-video-container').hide();
                     } else {
@@ -1309,8 +1312,8 @@ $.ajax({
                 $('#sp-widget2').css('margin-top', '20px');
             }
 
-            $('#sp-widget2').html('<i class="fa fa-calendar"></i><div>' + widget.buttonText +'</div>');
-            $('#sp-widget2').click(function() {
+            $('#sp-widget2').html('<i class="fa fa-calendar"></i><div>' + widget.buttonText + '</div>');
+            $('#sp-widget2').click(function () {
                 swal({
                     showCancelButton: true,
                     showConfirmButton: false,
@@ -1348,12 +1351,12 @@ $.ajax({
             }
 
             var formTitle = widget.buttonText;
-            if (typeof widget.formTitle !== 'undefined' &&  widget.formTitle !== '') {
+            if (typeof widget.formTitle !== 'undefined' && widget.formTitle !== '') {
                 formTitle = widget.formTitle;
             }
 
             var formMessage = '';
-            if (typeof widget.formMessage !== 'undefined' &&  widget.formMessage !== '') {
+            if (typeof widget.formMessage !== 'undefined' && widget.formMessage !== '') {
                 formMessage = '<div id="sp-widget-3-form-message">' + widget.formMessage + '</div>';
             }
 
@@ -1368,7 +1371,7 @@ $.ajax({
             }
 
             var buttonColor = config.viewer.toolbarButtonBackground;
-            if (! widget.isDefaultButtonColorEnabled) {
+            if (!widget.isDefaultButtonColorEnabled) {
                 if (typeof widget.buttonColor !== 'undefined' && widget.buttonColor !== '') {
                     buttonColor = widget.buttonColor;
                 }
@@ -1406,9 +1409,9 @@ $.ajax({
                     })
                     .html('<i class="fa fa-comment"></i><div>' + widget.buttonText + '</div>');
 
-                $('#sp-widget3').click(function() {
-                    $.getScript('/assets/viewer/js/jquery.validate.min.js', function() {
-                        $.getScript('/assets/viewer/js/sp-viewer-validation.js', function() {
+                $('#sp-widget3').click(function () {
+                    $.getScript('/assets/viewer/js/jquery.validate.min.js', function () {
+                        $.getScript('/assets/viewer/js/sp-viewer-validation.js', function () {
                             loadSwal();
                         });
                     });
@@ -1416,9 +1419,9 @@ $.ajax({
             }
 
             function loadBottom() {
-                $.getScript('/assets/viewer/js/jquery.validate.min.js', function() {
-                    $.getScript('/assets/viewer/js/sp-viewer-validation.js', function() {
-                        $('#sp-widget3__bottom-submit').click(function() {
+                $.getScript('/assets/viewer/js/jquery.validate.min.js', function () {
+                    $.getScript('/assets/viewer/js/sp-viewer-validation.js', function () {
+                        $('#sp-widget3__bottom-submit').click(function () {
                             validateBottomOfDocumentForm();
                         });
                     });
@@ -1450,7 +1453,7 @@ $.ajax({
                 $('.page:last').after(bottomOfDocumentHtml);
                 setWidgetWidthRelativeToPageWidth();
 
-                $(window).on('scalechange', function() {
+                $(window).on('scalechange', function () {
                     setWidgetWidthRelativeToPageWidth();
                 });
 
@@ -1501,8 +1504,8 @@ $.ajax({
                     formMessage +
                     '</form>',
                     title: formTitle,
-                    preConfirm: function() {
-                        return new Promise(function(resolve) {
+                    preConfirm: function () {
+                        return new Promise(function (resolve) {
                             /**
                              * Send Ask a Question event.
                              *
@@ -1531,7 +1534,7 @@ $.ajax({
                             }
                         });
                     }
-                }).then(function() {
+                }).then(function () {
                     swal("Success!", "Your message has been sent.", "success");
                 }).done();
             }
@@ -1550,114 +1553,17 @@ $.ajax({
                 '</button>'
             );
 
-            getLikeCount();
-
-            /**
-             * Get the number of likes a document has received.
-             */
-            function getLikeCount() {
-                $.getJSON(
-                    '/ManagementServlet',
-                    {
-                        action: 'getViewerWidgetMetrics',
-                        fileLinkHash: sp.viewer.linkHash,
-                        wigdetId: 4
-                    },
-                    function (data) {
-                        sp.viewer.widgets.widget4.likeCount = parseInt(data.widgetMetrics.metrics[0]);
-                        if (widget.isCounterEnabled) {
-                            formatDisplayLikeCount(sp.viewer.widgets.widget4.likeCount);
-                        }
-
-                        likeButtonClickEventListener();
-                    }
-                );
-            }
-
-            /**
-             * Send an event to customer_events table when the customer clicks the
-             * Like Button.
-             *
-             * The 'one' click allows them to click only once.
-             *
-             * Update the like counter if it is enabled.
-             */
-            function likeButtonClickEventListener() {
-                $('.sp-like-btn').one('click', function() {
-                    sp.sendEvent({
-                        type: sp.viewer.eventName.viewerWidgetLikeClicked,
-                        channelFriendlyId: sp.viewer.linkHash,
-                        sessionId: SP.SESSION_ID
-                    });
-
-                    if (widget.isCounterEnabled) {
-                        sp.viewer.widgets.widget4.likeCount++;
-                        formatDisplayLikeCount(sp.viewer.widgets.widget4.likeCount);
-                    }
-
-                    // Change the colour of the button.
-                    $('.sp-like-btn').addClass('sp-like-btn-clicked');
-                    $('#sp-thumbs-up__i, #sp-count-likes__p').css('color', '#fff');
+            $('.sp-like-btn').one('click', function() {
+                sp.sendEvent({
+                    type: sp.viewer.eventName.viewerWidgetLikeClicked,
+                    channelFriendlyId: sp.viewer.linkHash,
+                    sessionId: SP.SESSION_ID
                 });
-            }
 
-
-            /**
-             * Format the like count.
-             *
-             * In the switch case, format the result before it appears in the Viewer.
-             * e.g. 1,200 likes will appear as 1.2k.
-             *      15,700 likes will appear as 15k.
-             *      More than 99,999 likes will appear as 99k+.
-             *
-             * @param likeCount - The like count.
-             */
-            function formatDisplayLikeCount(likeCount) {
-                var likeCountString = likeCount.toString();
-                var likeCountLength = likeCountString.length;
-                var likeCountToDisplay = '';
-
-                switch(likeCountLength) {
-                    case 1:
-                    case 2:
-                    case 3:
-                        if (0 === likeCount) {
-                            likeCountToDisplay = '';
-                        } else {
-                            likeCountToDisplay = likeCountString;
-                        }
-
-                        if (3 === likeCountLength) {
-                            $('#sp-count-likes__p').addClass('sp-widget4-count-likes-4-digit');
-                        }
-                        break;
-
-                    case 4:
-                        if (likeCountString.charAt(1) === '0') {
-                            likeCountToDisplay = likeCountString.slice(0, 1) + 'k';
-                        } else {
-                            likeCountToDisplay = likeCountString.slice(0, 1) + '.' + likeCountString.slice(1, 2) + 'k';
-                            $('#sp-count-likes__p').addClass('sp-widget4-count-likes-4-digit');
-                        }
-                        break;
-
-                    case 5:
-                        likeCountToDisplay = likeCountString.slice(0, 2) + 'k';
-                        $('#sp-count-likes__p')
-                            .removeClass('sp-widget4-count-likes-4-digit')
-                            .addClass('sp-widget4-count-likes-5-digit');
-                        break;
-
-                    default:
-                        likeCountToDisplay = '99k+';
-                        $('#sp-count-likes__p')
-                            .removeClass('sp-widget4-count-likes-5-digit')
-                            .addClass('sp-widget4-count-likes-6-digit');
-                        break;
-                }
-
-                $('#sp-count-likes__p').text(likeCountToDisplay);
-            }
+                // Change the colour of the button.
+                $('.sp-like-btn').addClass('sp-like-btn-clicked');
+                $('#sp-thumbs-up__i, #sp-count-likes__p').css('color', '#fff');
+            });
         }
 
 
@@ -1672,7 +1578,7 @@ $.ajax({
                 '<div id="sp-widget5__hopper-container"></div>' +
                 '</div>');
 
-            $.each(widget, function(index, value) {
+            $.each(widget, function (index, value) {
                 var id = 'sp-widget5__hop-' + index;
                 $('#sp-widget5__hopper-container').append(
                     '<div class="sp-widget5__hop sp-widget5__hop-extended" id="' + id + '" data-page-hop="' + value.hopperPage + '">' +
@@ -1691,7 +1597,7 @@ $.ajax({
                 }
 
                 // Send event.
-                $('#sp-widget5__hop-' + index).on('click', function() {
+                $('#sp-widget5__hop-' + index).on('click', function () {
                     sp.sendEvent({
                         type: sp.viewer.eventName.viewerWidgetHopperClicked,
                         channelFriendlyId: sp.viewer.linkHash,
@@ -1709,7 +1615,7 @@ $.ajax({
              *
              * The '.sp-widget5__extend-button' button can only be seen under 600px width.
              */
-            $('.sp-widget5__extend-button').on('click', function() {
+            $('.sp-widget5__extend-button').on('click', function () {
                 hopperWidgetToggleButton();
             });
 
@@ -1748,7 +1654,7 @@ $.ajax({
 
             // Format testimonials array to an object for ease of access.
             var testimonialsByPage = {};
-            $.each(testimonials, function(index, testimonial) {
+            $.each(testimonials, function (index, testimonial) {
                 testimonialsByPage['page' + testimonial.page.toString()] = testimonial;
             });
 
@@ -1797,13 +1703,13 @@ $.ajax({
 
                 $('#sp-widget6__button')
                     .off('click')
-                    .on('click', function() {
+                    .on('click', function () {
                         swal({
                             customClass: 'sp--direction-ltr',
                             html: personImageDiv +
                             '<div><i class="fa fa-quote-left"></i> ' + testimonial.replace(/\r\n|\r|\n/g, '<br>') + ' <i class="fa fa-quote-right"></i></div>' +
-                            '<div id="sp-widget6__person-name">' + personName +'</div>' +
-                            '<div id="sp-widget6__person-title">' + personTitle +'</div>'
+                            '<div id="sp-widget6__person-name">' + personName + '</div>' +
+                            '<div id="sp-widget6__person-title">' + personTitle + '</div>'
                         }).done();
 
                         /**
@@ -1880,7 +1786,7 @@ $.ajax({
         var formAutoLoadTimeout = parseInt(widget.formAutoLoadTimeout);
         if (formAutoLoadTimeout > -1) {
             setTimeout(
-                function() {
+                function () {
 
                     // Open form.
                     $('#sp-widget7').click();
@@ -1891,9 +1797,9 @@ $.ajax({
             );
         }
 
-        $('#sp-widget7, #sp-widget7__toolbar-button').click(function() {
+        $('#sp-widget7, #sp-widget7__toolbar-button').click(function () {
 
-            switch(widget.formSelectType) {
+            switch (widget.formSelectType) {
                 case 'image':
                     imageSwal();
                     break;
@@ -1929,9 +1835,9 @@ $.ajax({
                     html: '<iframe id="sp-widget7-form" style="width: 100%" src="' + widget.formUrl + '" frameborder="0"></iframe>',
                     title: widget.formTitle,
                     width: 950,
-                }).then(function() {
+                }).then(function () {
                     },
-                    function(dismiss) {
+                    function (dismiss) {
                         if (dismiss === 'cancel') {
                             sp.sendEvent({
                                 type: sp.viewer.eventName.viewerWidgetFormCancelClicked,
@@ -1956,7 +1862,7 @@ $.ajax({
              *
              * param_1_varchar - The text on the button.
              */
-            $('.swal2-confirm').off('click').on('click', function() {
+            $('.swal2-confirm').off('click').on('click', function () {
                 sp.sendEvent({
                     type: sp.viewer.eventName.viewerWidgetFormConfirmClicked,
                     channelFriendlyId: sp.viewer.linkHash,
@@ -1973,8 +1879,8 @@ $.ajax({
      * @params {array} items - The codes to be inserted into the viewer.
      */
     function implementWidget8(items) {
-        $.each(items, function(index, item) {
-            switch(item.codeLocation) {
+        $.each(items, function (index, item) {
+            switch (item.codeLocation) {
                 case 'beforeClosingHead':
                     $('head').append(item.codeContent);
                     break;
@@ -2008,7 +1914,7 @@ $.ajax({
             showCancelButton: false,
             confirmButtonText: 'Submit',
             showLoaderOnConfirm: true,
-        }).then(function(email) {
+        }).then(function (email) {
             sp.viewer.widgets.widget10.emailAddress = email;
 
             sp.sendEvent({
@@ -2085,7 +1991,7 @@ $.ajax({
                 'color': config.viewer.toolbarCta1Color,
             })
             .html('<i class="fa fa-share-alt"></i><div>' + widget.buttonText + '</div>')
-            .click(function() {
+            .click(function () {
                 sp.sendEvent({
                     type: sp.viewer.eventName.viewerWidgetShareButtonClicked,
                     channelFriendlyId: sp.viewer.linkHash,
@@ -2122,7 +2028,7 @@ $.ajax({
             + '</script>'
         );
 
-        $(document).on('spWidget11ServiceShared', function(event, sharedService) {
+        $(document).on('spWidget11ServiceShared', function (event, sharedService) {
             sp.sendEvent({
                 type: sp.viewer.eventName.viewerWidgetShareServiceClicked,
                 channelFriendlyId: sp.viewer.linkHash,

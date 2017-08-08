@@ -20,12 +20,13 @@ import javax.persistence.Table;
 @Getter
 @Setter
 public class Event {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     public enum EventType {
+        SIGNUP_USER,
+        LOGIN_USER,
         ADDED_CUSTOMER,
         CLICKED_HELP_BUTTON,
         CLICKED_TOOLBAR_SETTINGS,
@@ -38,7 +39,7 @@ public class Event {
     }
     @Column(name = "event_name")
     @Enumerated(EnumType.STRING)
-    private EventType eventType;
+    private EventType type;
 
     private String email;
 
@@ -48,9 +49,14 @@ public class Event {
 
     public Event() {}
 
-    public Event(String email, EventType eventType, JsonNode data) {
+    public Event(String email, EventType type) {
         this.email = email;
-        this.eventType = eventType;
+        this.type = type;
+    }
+
+    public Event(String email, EventType type, JsonNode data) {
+        this.email = email;
+        this.type = type;
         this.data = data;
     }
 }

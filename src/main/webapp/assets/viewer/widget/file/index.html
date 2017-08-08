@@ -21,7 +21,7 @@
                 formData.append('sessionId', parent.SP.SESSION_ID);
 
                 var xhr = new XMLHttpRequest();
-                xhr.open('POST', parent.SP.API_URL + '/viewer/widget/file');
+                xhr.open('POST', parent.SP.API_URL + '/viewer/widgets/file');
                 xhr.withCredentials = true;
                 xhr.onload = function() {
                     if (xhr.status === 200) {
@@ -33,6 +33,8 @@
                         }).then(function () {
                             parent.swal.close();
                         });
+                    } else if (xhr.status === 403 || xhr.status === 500) {
+                        window.location = '/login';
                     } else {
                         swal("Error!", "Clone operation failed. Please contact support@slidepiper.com for assistance", "error");
                     }

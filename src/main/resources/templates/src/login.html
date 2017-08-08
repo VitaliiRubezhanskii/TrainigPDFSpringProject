@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>SlidePiper - Login</title>
+
+    <link rel="stylesheet" href="https://static.slidepiper.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://static.slidepiper.com/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <link href="/assets/css/animate.css" rel="stylesheet">
+    <link href="/assets/css/style.css" rel="stylesheet">
+</head>
+
+<body class="gray-bg">
+    <div class="middle-box text-center loginscreen animated fadeInDown">
+        <div style="margin-top: 200px;">
+            <div>
+                <a id="sp-logo" href="#"><img src="/assets/img/logo_wide_1060x229.png" width="250" /></a>
+            </div>
+
+            <form class="m-t" method="post">
+                <div class="form-group">
+                    <input name="username" type="email" class="form-control" placeholder="Email" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" name="password" class="form-control" placeholder="Password" required>
+                </div>
+                <input type="hidden" name="{{{_csrf.parameterName}}}" value="{{{_csrf.token}}}">
+                <p class="form-text text-danger">{{#error}}{{errorMessage}}{{/error}}</p>
+                <button class="btn btn-primary block full-width m-b">Login</button>
+            </form>
+
+            <a target="_blank" href="mailto:support@slidepiper.com"><small>Forgot password?</small></a>
+            <p class="m-t"><small>SlidePiper &copy; {{currentYear}}</small></p>
+        </div>
+    </div>
+</body>
+</html>

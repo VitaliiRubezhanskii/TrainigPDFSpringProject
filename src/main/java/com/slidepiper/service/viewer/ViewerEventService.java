@@ -1,45 +1,52 @@
 package com.slidepiper.service.viewer;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.samskivert.mustache.Mustache;
+import com.slidepiper.model.component.JwtUtils;
 import com.slidepiper.model.entity.Channel;
-import com.slidepiper.model.entity.viewer.ViewerEvent;
-import com.slidepiper.model.entity.viewer.ViewerEvent.ViewerEventType;
-import com.slidepiper.repository.ChannelRepository;
-import com.slidepiper.repository.UserRepository;
+import com.slidepiper.model.entity.Viewer;
+import com.slidepiper.model.entity.ViewerEvent;
+import com.slidepiper.model.entity.ViewerEvent.ViewerEventType;
 import com.slidepiper.repository.ViewerEventRepository;
 import com.slidepiper.service.amazon.AmazonSesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.Objects;
 
 @Service
 public class ViewerEventService {
-    @Value("${amazon.ses.credentials.user.accessKey}") private String accessKey;
-    @Value("${amazon.ses.credentials.user.secretKey}") private String secretKey;
-    @Value("${amazon.ses.doNotReplyEmailAddress}") private String from;
-    @Value("${slidepiper.templates.prefix}") private String templatesPrefix;
-
+    private final String accessKey;
+    private final String secretKey;
+    private final String from;
+    private final String templatesPrefix;
     private final AmazonSesService amazonSesService;
-    private final ChannelRepository channelRepository;
-    private final UserRepository userRepository;
     private final ViewerEventRepository viewerEventRepository;
 
     @Autowired
-    public ViewerEventService(AmazonSesService amazonSesService,
-                              ChannelRepository channelRepository,
-                              UserRepository userRepository,
+    public ViewerEventService(@Value("${amazon.ses.credentials.user.accessKey}") String accessKey,
+                              @Value("${amazon.ses.credentials.user.secretKey}") String secretKey,
+                              @Value("${amazon.ses.doNotReplyEmailAddress}") String from,
+                              @Value("${slidepiper.templates.prefix}") String templatesPrefix,
+                              AmazonSesService amazonSesService,
                               ViewerEventRepository viewerEventRepository) {
+        this.accessKey = accessKey;
+        this.secretKey = secretKey;
+        this.from = from;
+        this.templatesPrefix = templatesPrefix;
         this.amazonSesService = amazonSesService;
-        this.channelRepository = channelRepository;
-        this.userRepository = userRepository;
         this.viewerEventRepository = viewerEventRepository;
     }
 
@@ -48,11 +55,10 @@ public class ViewerEventService {
     }
 
     public void sendUserEmail(Channel channel, String viewerNameInput, String viewerEmailInput, String viewerEventTypeInput, String viewerMessageInput) throws IOException, URISyntaxException {
-        String to = channel.getDocument().getUser().getEmail();
-        if (Objects.nonNull(userRepository.findByEmail(to))
-                && Objects.nonNull(userRepository.findByEmail(to).getExtraData())
-                && Objects.nonNull(userRepository.findByEmail(to).getExtraData().getNotificationEmail())) {
-            to = userRepository.findByEmail(to).getExtraData().getNotificationEmail();
+        Viewer viewer = channel.getDocument().getViewer();
+        String to = viewer.getEmail();
+        if (Objects.nonNull(viewer.getData()) && Objects.nonNull(viewer.getData().getNotificationEmail())) {
+            to = viewer.getData().getNotificationEmail();
         }
 
         String subject = createTitle(viewerEventTypeInput);
@@ -117,5 +123,34 @@ public class ViewerEventService {
             default:
                 return "Event Notification";
         }
+    }
+
+    public String getViewerId(String viewerCookieValue) {
+        return JwtUtils.verify(viewerCookieValue).getClaim("viewerId").asString();
+    }
+
+    public Cookie getViewerCookie(HttpServletRequest request) {
+        return Arrays.stream(request.getCookies())
+                .filter(c -> c.getName().equals("sp.viewer"))
+                .findFirst()
+                .get();
+    }
+
+    public Cookie createViewerCookie(String viewerId, HttpServletResponse response) {
+        ObjectMapper mapper = new ObjectMapper();
+        ObjectNode privateClaims = mapper.createObjectNode();
+        privateClaims.put("viewerId", viewerId);
+        String jwt = JwtUtils.create(privateClaims);
+
+        Cookie viewerCookie = new Cookie("sp.viewer", jwt);
+        updateViewerCookie(viewerCookie, response);
+
+        return viewerCookie;
+    }
+
+    public void updateViewerCookie(Cookie viewerCookie, HttpServletResponse response) {
+        viewerCookie.setMaxAge(63072000); // 2 years.
+        viewerCookie.setHttpOnly(true);
+        response.addCookie(viewerCookie);
     }
 }

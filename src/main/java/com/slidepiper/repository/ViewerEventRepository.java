@@ -1,8 +1,8 @@
 package com.slidepiper.repository;
 
-import com.slidepiper.model.entity.viewer.ViewerEvent;
+import com.slidepiper.model.entity.ViewerEvent;
 import org.springframework.data.repository.Repository;
 
 public interface ViewerEventRepository extends Repository<ViewerEvent, Long> {
-  ViewerEvent save(ViewerEvent entity);
+    ViewerEvent save(ViewerEvent entity);
 }

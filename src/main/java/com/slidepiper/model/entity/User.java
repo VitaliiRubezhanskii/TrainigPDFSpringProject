@@ -1,43 +1,31 @@
 package com.slidepiper.model.entity;
 
-import com.slidepiper.converter.UserExtraDataStringConverter;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Data;
 
-import javax.persistence.Column;
-import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import java.io.Serializable;
+import java.util.Set;
 
 @Entity
-@Table(name = "sales_men")
-@Getter
-@Setter
+@Data
 public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    private String email;
+    private String username;
 
-    @Column(name = "email_alert_enabled")
-    private boolean viewerOpenDocumentEmailEnabled;
+    @JsonIgnore
+    private String password;
 
-    @Column(name = "email_notifications_enabled")
-    private boolean viewerEventEmailEnabled;
-
-    @AllArgsConstructor
-    @Getter
-    @Setter
-    public static class ExtraData {
-        private String notificationEmail;
-    }
-    @Column(name = "extra_data")
-    @Convert(converter = UserExtraDataStringConverter.class)
-    private ExtraData extraData;
+    @ManyToMany
+    @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles;
 }

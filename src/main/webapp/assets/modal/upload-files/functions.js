@@ -8,13 +8,7 @@ sp.uploadFiles = {
   },
   init: (function() {
     var uploadUpdateButton = $('.sp-file__upload-update-file-button');
-    
-    /*// Toggle file upload type.
-    $('#sp-file__upload-choice input').click(function() {
-      $('#sp-file__upload-form input').addClass('sp-file--input-hidden');
-      $('[name="' + $(this).attr('data-upload-type') + '"]').removeClass('sp-file--input-hidden');
-    });*/
-    
+
     $(uploadUpdateButton).click(function() {
       if ($(this).attr('data-upload-update') === 'upload') {
         sp.uploadFiles.upload(sp.uploadFiles.action.upload);
@@ -41,29 +35,12 @@ sp.uploadFiles = {
         /*}*/
       }
     });
-    
-    /*// Validate Dropbox text input.
-    $('.sp-file__dropbox-url').keyup(function() {
-      if ('' !== $(this).val()) {
-        $(uploadUpdateButton).removeAttr('disabled');
-      } else {
-        if (sp.uploadFiles.files.length === 0 && '' === $(this).val()) {
-          $(uploadUpdateButton).attr('disabled', true);
-        }
-      }
-    });*/
+
   })(),
   
   upload: function(action) {
     var formData = new FormData();
-    formData.append('data',
-        new Blob(
-            [JSON.stringify({'salesmanEmail': Cookies.get('SalesmanEmail')})],
-            {type: 'application/json'}
-        )
-    );
-
-    var url = SP.API_URL + '/v1/documents';
+    var url = '/api/v1/documents';
     var type = 'POST';
 
     if ('upload' === action) {
@@ -75,16 +52,6 @@ sp.uploadFiles = {
         url += '/' + sp.file.fileHash;
         type = 'PUT';
     }
-    
-    // Send either files or dropbox URL.
-    /*if ($('.sp-file__dropbox-url').is(':visible')) {
-      $('.sp-file__dropbox-url').each(function() {
-        if ('' !== $(this).val()) {
-          data.append('fileUrl', $(this).val());
-        }
-      });
-    } else {*/
-    /*}*/
     
     var successVerb;
     if ('upload' === action) {
@@ -105,13 +72,20 @@ sp.uploadFiles = {
       cache: false,
       processData: false,
       contentType: false,
-      success: function() {
-          $('button[data-dismiss="modal"]').click();
-          $('.sk-spinner').hide();
+      beforeSend: function(xhr) {
+          xhr.setRequestHeader(SP.CSRF_HEADER, SP.CSRF_TOKEN);
+      },
+      success: function(data) {
+          if (typeof data === 'string' && '<!DOCTYPE html>' === data.substring(0, 15)) {
+              window.location = '/login';
+          } else {
+              $('button[data-dismiss="modal"]').click();
+              $('.sk-spinner').hide();
 
-          sp.file.getFilesList('fileUploadDashboard');
-          sp.uploadFiles.files = [];
-          swal("Success!", "Your file was " + successVerb + "!", "success");
+              sp.file.getFilesList('fileUploadDashboard');
+              sp.uploadFiles.files = [];
+              swal("Success!", "Your file was " + successVerb + "!", "success");
+          }
       },
       error: function () {
         swal("Error!", "Your file was not " + successVerb + "!", "error");

@@ -4,10 +4,6 @@ server:
         mimeTypes: application/javascript,application/json,application/x-javascript,application/xml,application/xml+rss,text/css,text/html,text/javascript,text/plain,text/xml
 
 spring:
-    data:
-        rest:
-            basePath: /v1
-
     datasource:
         url: jdbc:mysql://localhost:3306/picascrafxzhbcmd?useSSL=false&characterEncoding=UTF-8
         username: adminFh4jYg3
@@ -24,6 +20,7 @@ spring:
 
     mustache:
         cache: false
+        expose-request-attributes: true
 
     profiles:
         active: development
@@ -72,6 +69,12 @@ jwt:
 slidepiper:
     url: http://localhost:8080
     apiUrl: http://127.0.0.2:8080
+    staticUrl: https://static.slidepiper.com
+
+    viewer:
+        amazon:
+            s3:
+                bucket: slidepiper-viewers
 
     widget:
         amazon:
@@ -93,6 +96,13 @@ spring:
 slidepiper:
     templates:
         prefix: src
+---
+spring:
+    profiles: staging
+
+slidepiper:
+    templates:
+        prefix: build
 ---
 spring:
     profiles: production

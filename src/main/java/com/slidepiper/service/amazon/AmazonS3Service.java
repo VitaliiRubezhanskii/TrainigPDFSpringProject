@@ -26,13 +26,25 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class AmazonS3Service {
     private static final Logger log = LoggerFactory.getLogger(AmazonS3Service.class);
 
-    @Value("${amazon.s3.credentials.accessKey}") private String accessKey;
-    @Value("${amazon.s3.credentials.secretKey}") private String secretKey;
+    private final String accessKey;
+    private final String secretKey;
+
+    public AmazonS3Service(@Value("${amazon.s3.credentials.accessKey}") String accessKey,
+                           @Value("${amazon.s3.credentials.secretKey}") String secretKey) {
+        this.accessKey = accessKey;
+        this.secretKey = secretKey;
+    }
+
+    public enum ObjectMetaData {
+        VERSION_ID,
+        E_TAG
+    }
 
     public void upload(File file, String bucket, String key, CannedAccessControlList cannedAccessControlList) {
         AmazonS3 s3Client = getAmazonS3Client();
@@ -44,7 +56,25 @@ public class AmazonS3Service {
         log.info("Uploaded object to bucket: {}", bucket);
     }
 
-    public String upload(MultipartFile multipartFile, String bucket, String key, String contentType) throws IOException {
+    public String upload(MultipartFile multipartFile, String contentType, String bucket, String key, ObjectMetaData objectMetaData)
+            throws IOException {
+        PutObjectResult putObjectResult = upload(multipartFile, contentType, bucket, key);
+
+        if (Objects.nonNull(objectMetaData)) {
+            switch (objectMetaData) {
+                case E_TAG:
+                    return putObjectResult.getETag();
+                case VERSION_ID:
+                    return putObjectResult.getVersionId();
+                default:
+                    return putObjectResult.getETag();
+            }
+        } else {
+            return putObjectResult.getETag();
+        }
+    }
+
+    private PutObjectResult upload(MultipartFile multipartFile, String contentType, String bucket, String key) throws IOException {
         AmazonS3 s3Client = getAmazonS3Client();
 
         ObjectMetadata objectMetaData = new ObjectMetadata();
@@ -55,9 +85,9 @@ public class AmazonS3Service {
                 new PutObjectRequest(bucket, key, multipartFile.getInputStream(), objectMetaData)
                         .withCannedAcl(CannedAccessControlList.PublicRead);
         PutObjectResult putObjectResult = s3Client.putObject(putObjectRequest);
-
         log.info("Uploaded object to: " + String.join("/", bucket, key));
-        return putObjectResult.getVersionId();
+
+        return putObjectResult;
     }
 
     public String clone(String bucket, String sourceKey, String destinationKey) {

@@ -459,17 +459,15 @@ sp.viewerWidgetsModal = {
     getWidgetsSettings: function(fileHash) {
         var widgetSettingsData = null;
         $.getJSON(
-            'ManagementServlet',
+            '/api/v1/widgets',
             {
-                action: 'getWidgetsSettings',
                 fileHash: fileHash
             },
             function(data) {
-                widgetSettingsData = data.widgetsSettings;
-
-                sp.viewerWidgetsModal.displayWidgetsSettings(widgetSettingsData, fileHash);
-                sp.viewerWidgetsModal.setSaveButtons(fileHash);
-            }
+                    widgetSettingsData = data;
+                    sp.viewerWidgetsModal.displayWidgetsSettings(widgetSettingsData, fileHash);
+                    sp.viewerWidgetsModal.setSaveButtons(fileHash);
+                }
         );
 
         sp.widgets.widget11.setDefaultTitle(fileHash);
@@ -907,7 +905,6 @@ sp.viewerWidgetsModal = {
         sp.file.setFileLinkAttribute(
             fileHash,
             'test@example.com',
-            sp.config.salesman.email,
             'sp-save-test-widgets-settings__button'
         );
 
@@ -1032,35 +1029,47 @@ sp.viewerWidgetsModal = {
      * @param {number} targetId - The ID of the 'Save' button clicked on.
      */
     postWidgetSettings: function(data, fileHash, targetId) {
-        $.post('ManagementServlet', JSON.stringify(data), function(data) {
-            $('button[data-dismiss="modal"]').click();
-
-            // Return modal content to pre-saving state.
-            $('.tabs-container').contents().show();
-            $('#sp-save-widgets-settings__button, #sp-save-test-widgets-settings__button')
-                .attr('disabled', 'false');
-
-            if (targetId === 'sp-save-widgets-settings__button') {
-                $('#' + targetId).text('Save');
+        $.ajax({
+            url:'/api/v1/widgets',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(data),
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader(SP.CSRF_HEADER, SP.CSRF_TOKEN);
+            },
+        }).done(function(data) {
+            if (typeof data === 'string' && '<!DOCTYPE html>' === data.substring(0, 15)) {
+                window.location = '/login';
             } else {
-                $('#' + targetId).text('Save & Preview');
-            }
-            $('.sp-widgets-customisation__spinner').removeClass('sp-widgets-customisation__spinner-show');
+                $('button[data-dismiss="modal"]').click();
 
-            var resultCode = data.resultCode;
-            if (0 == resultCode) {
-                errorCallback();
-            } else if (1 == resultCode) {
-                if ('sp-save-widgets-settings__button' == targetId) {
-                    swal("Success!", "Your widgets settings have been saved!", "success");
-                } else if ('sp-save-test-widgets-settings__button' == targetId) {
-                    window.open($('#' + targetId).attr('data-file-link'));
+                // Return modal content to pre-saving state.
+                $('.tabs-container').contents().show();
+                $('#sp-save-widgets-settings__button, #sp-save-test-widgets-settings__button')
+                    .attr('disabled', 'false');
+
+                if (targetId === 'sp-save-widgets-settings__button') {
+                    $('#' + targetId).text('Save');
+                } else {
+                    $('#' + targetId).text('Save & Preview');
+                }
+                $('.sp-widgets-customisation__spinner').removeClass('sp-widgets-customisation__spinner-show');
+
+                var resultCode = data;
+
+                if (0 == resultCode) {
+                    errorCallback();
+                } else if (1 == resultCode) {
+                    if ('sp-save-widgets-settings__button' == targetId) {
+                        swal("Success!", "Your widgets settings have been saved!", "success");
+                    } else if ('sp-save-test-widgets-settings__button' == targetId) {
+                        window.open($('#' + targetId).attr('data-file-link'));
+                    }
                 }
             }
-        })
-            .fail(function() {
-                errorCallback();
-            });
+        }).fail(function() {
+            errorCallback();
+        });
 
         function errorCallback() {
             swal('Error', 'Something went wrong. Your settings weren\'t saved.', 'error');
@@ -1822,17 +1831,21 @@ $(document).on('click', '.link-widget__url-upload-button', function() {
         } else {
             var formData = new FormData();
             formData.append('file', $('.link-widget__file input')[0].files[0]);
-            formData.append('salesmanEmail', sp.config.salesman.email);
             formData.append('documentFriendlyId', $('#sp-save-widgets-settings__button').attr('data-file-hash'));
 
             var xhr = new XMLHttpRequest();
-            xhr.open('POST', SP.API_URL + '/api/v1/widget/link');
+            xhr.open('POST', '/api/v1/widgets/link');
+            xhr.setRequestHeader(SP.CSRF_HEADER, SP.CSRF_TOKEN);
             xhr.onload = function(event) {
-                if (xhr.status === 200) {
+                if (typeof xhr.response === 'string' && '<!DOCTYPE html>' === xhr.response.substring(0, 15)) {
+                    window.location = '/login';
+                } else if (xhr.status === 200) {
                     $($(that).parent().children()[0])
                         .val(JSON.parse(event.target.responseText).url)
                         .prop('readonly', true);
                     swal("Success!", "You successfully uploaded a file", "success");
+                } else if (xhr.status === 403 || xhr.status === 500) {
+                    window.location = '/login';
                 } else {
                     swal("Error!", "Clone operation failed. Please contact support@slidepiper.com for assistance", "error");
                 }
