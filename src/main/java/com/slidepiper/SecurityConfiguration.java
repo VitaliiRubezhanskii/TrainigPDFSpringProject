@@ -23,7 +23,7 @@ public class SecurityConfiguration {
         protected void configure(HttpSecurity http) throws Exception {
             http
                 .requestMatchers()
-                    .antMatchers("/view", "/viewer/**", "/utils/**")
+                    .antMatchers("/view", "/viewer/**", "/utils/**", "/assets/**")
                     .and()
                 .headers()
                     .frameOptions()
@@ -59,7 +59,7 @@ public class SecurityConfiguration {
         protected void configure(HttpSecurity http) throws Exception {
             http
                 .authorizeRequests()
-                    .antMatchers("/favicon.ico", "/health", "/signup", "/", "/tou.html", "/privacy.html", "/robots.txt", "/static/**", "/assets/**")
+                    .antMatchers("/favicon.ico", "/health", "/signup", "/", "/tou.html", "/privacy.html", "/robots.txt", "/static/**")
                     .permitAll()
                     .anyRequest()
                     .authenticated()
