@@ -59,7 +59,7 @@ public class SecurityConfiguration {
         protected void configure(HttpSecurity http) throws Exception {
             http
                 .authorizeRequests()
-                    .antMatchers("/favicon.ico", "/health", "/signup", "/", "/tou.html", "/privacy.html", "/robots.txt", "/static/**")
+                    .antMatchers("/favicon.ico", "/health", "/signup", "/", "/index.html", "/tou.html", "/privacy.html", "/robots.txt", "/static/**")
                     .permitAll()
                     .anyRequest()
                     .authenticated()
