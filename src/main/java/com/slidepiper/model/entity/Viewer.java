@@ -25,10 +25,6 @@ public class Viewer implements Serializable {
 
     private String friendlyId;
 
-    // TODO: Remove after migration.
-    private String password;
-    // TODO: End Remove after migration.
-
     // TODO: Remove user data.
     private String email;
     private String name;

@@ -96,20 +96,4 @@ public class UserService {
             throw new BadCredentialsException("Incorrect current password");
         }
     }
-
-    /** @deprecated */
-    public void migrate(Viewer viewer) {
-        User user  = new User();
-        user.setUsername(viewer.getEmail());
-        user.setPassword(bCryptPasswordEncoder.encode(viewer.getPassword()));
-
-        Set<Role> roles = new HashSet<>();
-        roles.add(roleRepository.findByName("ROLE_USER"));
-        user.setRoles(roles);
-        userRepository.save(user);
-
-        viewer.setUserId(user.getId());
-        viewer.setFriendlyId(UUID.randomUUID().toString());
-        viewerRepository.save(viewer);
-    }
 }

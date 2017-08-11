@@ -59,8 +59,7 @@ public class SecurityConfiguration {
         protected void configure(HttpSecurity http) throws Exception {
             http
                 .authorizeRequests()
-                    // TODO: Delete migration.
-                    .antMatchers("/favicon.ico", "/health", "/signup", "/", "/tou.html", "/privacy.html", "/robots.txt", "/static/**", "/assets/**", "/user/migrate-cefe2f2b-2916-11e7-83d5-54ee756204da")
+                    .antMatchers("/favicon.ico", "/health", "/signup", "/", "/tou.html", "/privacy.html", "/robots.txt", "/static/**", "/assets/**")
                     .permitAll()
                     .anyRequest()
                     .authenticated()
