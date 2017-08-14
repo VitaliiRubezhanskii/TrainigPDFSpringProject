@@ -512,53 +512,6 @@ public class DbLayer {
 		return salesmanMap;
 		}
 
-	  
-  	/**
-  	 * Get the salesman email from a fileHash.
-  	 * 
-  	 * @param fileHash - The fileHash.
-  	 * @return salesmanEmail - The salesman's email resulting from the SQL query based on
-  	 * the fileHash.
-  	 */
-  	public static String getSalesmanEmailFromFileHash(String fileHash) {
-  		
-      Constants.updateConstants();
-      try {
-        Class.forName("com.mysql.cj.jdbc.Driver");
-      } catch (ClassNotFoundException e) {
-        e.printStackTrace();
-      }
-      
-      String salesmanEmail = null;
-      String sql = "SELECT sales_man_email AS salesman_email FROM slides WHERE id = ? AND slides.status IN ('CREATED', 'UPDATED', 'BEFORE_AWS_S3_TRANSITION') LIMIT 1";
-      
-      Connection conn = null;
-      try {
-      	conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
-      	PreparedStatement ps = conn.prepareStatement(sql);
-      	ps.setString(1, fileHash);
-      	ResultSet rs = ps.executeQuery();
-      	
-      	while (rs.next()) {
-      		salesmanEmail = rs.getString("salesman_email");
-      	}
-      	
-      } catch (SQLException e) {
-  			e.printStackTrace();
-  		} finally {
-        if (null != conn) {
-          try {
-            conn.close();
-          } catch (SQLException ex) {
-            ex.printStackTrace();
-          }
-        }
-  		}
-  		
-  		return salesmanEmail;
-  	}
-  	
-  	
 	    /**
 	     * Get a file link widget settings.
 	     * 

@@ -4,11 +4,6 @@ server:
         mimeTypes: application/javascript,application/json,application/x-javascript,application/xml,application/xml+rss,text/css,text/html,text/javascript,text/plain,text/xml
 
 spring:
-    datasource:
-        url: jdbc:mysql://localhost:3306/picascrafxzhbcmd?useSSL=false&characterEncoding=UTF-8
-        username: adminFh4jYg3
-        password: yUGL^7GFBlo&97
-
     devtools:
         restart:
             exclude: META-INF/maven/**,META-INF/resources/**,resources/**,static/**,public/**,**/*Test.class,**/*Tests.class,git.properties,META-INF/build-info.properties
