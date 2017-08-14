@@ -1,8 +1,7 @@
-package com.slidepiper.repository;
+package com.slidepiper.health;
 
-import com.slidepiper.model.entity.Health;
 import org.springframework.data.repository.Repository;
 
 public interface HealthRepository extends Repository<Health, Integer> {
-    Health findById(Integer id);
+    Health findById(int id);
 }

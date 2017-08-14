@@ -1,6 +1,7 @@
-package com.slidepiper.model.entity;
+package com.slidepiper.health;
 
-import lombok.Data;
+import lombok.AccessLevel;
+import lombok.Getter;
 
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -10,15 +11,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-@Data
+@Getter(AccessLevel.PACKAGE)
 public class Health {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    public enum Status {
-        GREEN
-    }
     @Enumerated(EnumType.STRING)
-    private Status status;
+    private HealthStatus status;
 }
