@@ -75,6 +75,9 @@ public class DashboardUserController {
         } else {
             viewer.getData().setNotificationEmail(userEmailConfigurationInput.getNotificationEmail());
         }
+        // TODO: Remove dependency on the above code.
+        viewer.getData().setReceiveCustomerEmailEnabled(userEmailConfigurationInput.isReceiveCustomerEmailEnabled());
+
         viewer.setViewerOpenDocumentEmailEnabled(userEmailConfigurationInput.isViewerOpenDocumentEmailEnabled());
         viewer.setViewerEventEmailEnabled(userEmailConfigurationInput.isViewerEventEmailEnabled());
         viewerRepository.save(viewer);
@@ -91,6 +94,7 @@ public class DashboardUserController {
         userConfiguration.put("notificationEmail", Optional.ofNullable(viewer.getData()).map(data -> data.getNotificationEmail()).orElse(null));
         userConfiguration.put("email_alert_enabled", viewer.isViewerOpenDocumentEmailEnabled());
         userConfiguration.put("email_notifications_enabled", viewer.isViewerEventEmailEnabled());
+        userConfiguration.put("receiveCustomerEmailEnabled", Optional.ofNullable(viewer.getData()).map(data -> data.isReceiveCustomerEmailEnabled()).orElse(null));
 
         return userConfiguration;
     }

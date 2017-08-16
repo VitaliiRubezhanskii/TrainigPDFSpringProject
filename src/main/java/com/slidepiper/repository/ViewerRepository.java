@@ -8,5 +8,7 @@ public interface ViewerRepository extends Repository<Viewer, Long> {
     @PreAuthorize("hasRole('ROLE_USER')")
     Viewer findByEmail(String email);
 
+    Viewer findByUserId(long userId);
+
     Viewer save(Viewer entity);
 }

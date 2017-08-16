@@ -34,6 +34,7 @@ public class Viewer implements Serializable {
     @Data
     public static class UserData implements Serializable {
         private String notificationEmail;
+        private boolean receiveCustomerEmailEnabled = false;
 
         public UserData() {}
         public UserData(String notificationEmail) {
@@ -43,6 +44,8 @@ public class Viewer implements Serializable {
     @Convert(converter = UserDataConverter.class)
     @Column(name = "extra_data")
     private UserData data;
+
+    private String company;
     // TODO: End remove user data.
 
     private String viewer_document_title = "SlidePiper";

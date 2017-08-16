@@ -76,7 +76,7 @@ public class ViewerEventService {
             Object viewerMessageSection = Objects.nonNull(viewerMessageInput) ? new Object() {String viewerMessage = viewerMessageInput;} : false;
         });
 
-        amazonSesService.sendEmail(accessKey, secretKey, from, to, subject, body);
+        amazonSesService.sendEmail(accessKey, secretKey, from, to, subject, body, viewer.getEmail(), null);
     }
 
     private String createEventName(String viewerEventTypeString) {

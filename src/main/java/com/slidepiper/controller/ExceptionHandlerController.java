@@ -2,6 +2,7 @@ package com.slidepiper.controller;
 
 import com.slidepiper.exception.WidgetDisabledException;
 import com.slidepiper.exception.WidgetNotFoundException;
+import com.slidepiper.task.TaskNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -22,6 +23,6 @@ public class ExceptionHandlerController {
     public void handleBadRequest() {}
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ExceptionHandler({WidgetDisabledException.class, WidgetNotFoundException.class})
+    @ExceptionHandler({WidgetDisabledException.class, WidgetNotFoundException.class, TaskNotFoundException.class})
     public void handleNotFound() {}
 }

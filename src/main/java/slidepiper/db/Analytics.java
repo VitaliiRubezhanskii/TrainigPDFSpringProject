@@ -12,7 +12,8 @@ public class Analytics {
 		"SELECT\n"
       + "  id AS file_hash,\n"
       + "  name AS file_name,\n"
-      + "  timestamp AS date_added_or_modified\n"
+      + "  timestamp AS date_added_or_modified,\n"
+	  + "  id_ai AS id\n"
       + "FROM slides\n"
       + "WHERE sales_man_email = ? AND slides.status IN ('CREATED', 'UPDATED', 'BEFORE_AWS_S3_TRANSITION')\n"
       + "ORDER BY date_added_or_modified";
@@ -106,7 +107,8 @@ public class Analytics {
       + "  company,\n"
       + "  email,\n"
       + "  customers.timestamp AS 'date',\n"
-      + "  COALESCE(groupName, '')\n"
+      + "  COALESCE(groupName, ''),\n"
+	  + "  id\n"
       + "FROM customers\n"
       + "WHERE sales_man = ? AND email NOT IN ('" + ConfigProperties.getProperty("default_customer_email") + "', '" + ConfigProperties.getProperty("test_customer_email") + "')\n"
       + "ORDER BY date";

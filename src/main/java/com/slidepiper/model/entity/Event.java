@@ -35,7 +35,15 @@ public class Event {
         CLONED_DOCUMENT,
         CREATED_DOCUMENT,
         UPDATED_DOCUMENT,
-        DELETED_DOCUMENT
+        DELETED_DOCUMENT,
+        CREATED_TASK,
+        UPDATED_TASK,
+        DELETED_TASK,
+        INITIALIZED_TASK,
+        ABORTED_TASK,
+        EXECUTED_TASK,
+        COMPLETED_TASK,
+        SENT_EMAIL
     }
     @Column(name = "event_name")
     @Enumerated(EnumType.STRING)

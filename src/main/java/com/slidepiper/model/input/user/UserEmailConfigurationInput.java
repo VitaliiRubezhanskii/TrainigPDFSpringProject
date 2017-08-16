@@ -7,4 +7,5 @@ public class UserEmailConfigurationInput {
     private String notificationEmail;
     private boolean viewerOpenDocumentEmailEnabled;
     private boolean viewerEventEmailEnabled;
+    private boolean isReceiveCustomerEmailEnabled;
 }

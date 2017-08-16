@@ -96,4 +96,9 @@ public class UserService {
             throw new BadCredentialsException("Incorrect current password");
         }
     }
+
+    @PreAuthorize("hasRole('ROLE_USER')")
+    public long getUserId() {
+        return userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName()).getId();
+    }
 }

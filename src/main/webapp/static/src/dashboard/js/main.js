@@ -21,6 +21,12 @@ sp = {
             } else {
                 $('#sp-enable-notification-emails__checkbox').prop('checked', false);
             }
+
+            if (data.receiveCustomerEmailEnabled) {
+                $('.user__receive-customer-email').prop('checked', true);
+            } else {
+                $('.user__receive-customer-email').prop('checked', false);
+            }
             // End email configuration.
             // End user configuration.
         });
@@ -393,6 +399,11 @@ sp = {
                     case 'sp-notifications-table':
                         sp.notifications.getNotifications(sp.notifications.tableNotifications);
                         break;
+
+                    case 'navigation__tasks':
+                        $('.tasks').show();
+                        window.sp.tasks.getAll();
+                        break;
                 }
             }
 
@@ -438,6 +449,283 @@ sp = {
                             xhr.send(JSON.stringify(data));
                         }
                     });
+                }
+            });
+
+            // Tasks.
+            // Get all tasks.
+            window.sp.tasks = {
+                getAll: function() {
+                    $.getJSON('/api/v1/tasks', function(data) {
+                        if (!($.fn.dataTable.isDataTable('.tasks__table'))) {
+                            $('.tasks__table').DataTable({
+                                data: data,
+                                buttons: [
+                                    {
+                                        extend: 'csv',
+                                        filename: 'SlidePiper Tasks',
+                                        text: 'Export to CSV'
+                                    }
+                                ],
+                                columns: [
+                                    {data: 'dueAt'},
+                                    {data: 'completedAt'},
+                                    {
+                                        data: 'customer.firstName',
+                                        defaultContent: 'Not set'
+                                    },
+                                    {
+                                        data: 'customer.lastName',
+                                        defaultContent: 'Not set'
+                                    },
+                                    {
+                                        data: 'customer.email',
+                                        defaultContent: 'Not set'
+                                    },
+                                    {
+                                        data: 'document.name',
+                                        defaultContent: 'Not set'
+                                    },
+                                    {
+                                        data: 'data.pageNumber',
+                                        defaultContent: 'Not set'
+                                    },
+                                    {
+                                        data: 'data.taskMessage',
+                                        defaultContent: 'Not set'
+                                    },
+                                    {data: 'link'}
+                                ],
+                                columnDefs: [
+                                    {
+                                        render: function(data) {
+                                            return moment(data).zone(new Date().getTimezoneOffset()).format('D/M/Y HH:mm (Z)');
+                                        },
+                                        targets: 0
+                                    },
+                                    {
+                                        render: function(data, type, row) {
+                                            var abortedAt = row.abortedAt;
+                                            var executedAt = row.executedAt;
+                                            var completedAt = data;
+
+                                            if (abortedAt > -1) {
+                                                return 'Aborted';
+                                            } else if (executedAt > -1 && completedAt > -1) {
+                                                return 'Completed';
+                                            } else if (executedAt > -1 && completedAt === -1) {
+                                                return 'In progress';
+                                            } else if (!row.enabled) {
+                                                return 'Not enabled';
+                                            } else {
+                                                return 'Scheduled';
+                                            }
+                                        },
+                                        targets: 1
+                                    },
+                                    {
+                                        render: function(data, type, row) {
+                                            if (typeof data === 'undefined') {
+                                                return 'Not set';
+                                            } else {
+                                                return data + ' ' + row.customer.lastName + ' (' + row.customer.email + ')';
+                                            }
+                                        },
+                                        targets: 2
+                                    },
+                                    {
+                                        visible: false,
+                                        targets: [3,4]
+                                    },
+                                    {
+                                        render: function(data, type, row) {
+                                            var disabled = '';
+                                            if (row.executedAt > -1 || row.completedAt > -1) {
+                                                disabled = 'disabled';
+                                            }
+                                            return '<button class="tasks__task-update btn btn-primary btn-xs" data-toggle="modal" data-target=".tasks__task-modal" data-link="' + data + '" ' + disabled + '>Update</button> <button class="tasks__task-delete btn btn-danger btn-xs" data-link="' + data + '" ' + disabled + '>Delete</button>'
+                                        },
+                                        targets: 8
+                                    }
+                                ],
+                                dom: '<"sp-datatables-search-left"f><"html5buttons"B>ti',
+                                paging: false,
+                                order: [[0, 'desc']],
+                                scrollY: '50vh'
+                            });
+                        } else {
+                            $('.tasks__table').DataTable()
+                                .clear()
+                                .rows.add(data)
+                                .draw();
+                        }
+                    });
+                },
+                get: function(link, callback) {
+                    $.getJSON(link, function (data) {
+                        callback(data);
+                    });
+                }
+            };
+
+            // Create / Update task.
+            document.addEventListener('click', function(event) {
+                $('.tasks__task-form-due-date').datetimepicker({
+                    allowInputToggle: true,
+                    format: 'D/M/Y HH:mm (Z)',
+                    sideBySide: true
+                });
+
+                if (event.target.classList.contains('tasks__task-create')) {
+                    clearTask();
+                    $('.tasks__task-form [name=requestLink]').val('/api/v1/tasks');
+                    $('.tasks__task-form [name=requestType]').val('POST');
+                    $('.tasks__task-form [name=successMessage]').val('created');
+                }
+
+                if (event.target.classList.contains('tasks__task-update')) {
+                    window.sp.tasks.get(event.target.getAttribute('data-link'), populateTask);
+                    $('.tasks__task-form [name=requestLink]').val(event.target.getAttribute('data-link'));
+                    $('.tasks__task-form [name=requestType]').val('PUT');
+                    $('.tasks__task-form [name=successMessage]').val('updated');
+                }
+            });
+
+            function populateTask(task) {
+                // Enabled.
+                $('.tasks__task-form [name=enabled]').prop('checked', task.enabled);
+
+                // Due date.
+                $('.tasks__task-form-due-date').data("DateTimePicker").date(moment(task.dueAt).zone(new Date().getTimezoneOffset()));
+
+                // Customer.
+                $.getJSON('/api/v1/analytics?action=getCustomersList', function(data) {
+                    $('.tasks__task-form-customer').empty();
+                    $.each(data.customersList, function() {
+                        $('.tasks__task-form-customer').append($('<option>').val(this[6]).text(this[0] + ' ' + this[1] + ' (' + this[3] + ')'));
+                    });
+                    $('.tasks__task-form-customer').val(task.customer.id);
+                });
+
+                // Document.
+                $.getJSON('/api/v1/analytics?action=getFilesList', function(data) {
+                    $('.tasks__task-form-document').empty();
+                    $.each(data.filesList, function() {
+                        $('.tasks__task-form-document').append($('<option>').val(this[3]).text(this[1]));
+                    });
+                    $('.tasks__task-form-document').val(task.document.id);
+                });
+
+                // Page number.
+                $('.tasks__task-form [name=pageNumber]').val(task.data.pageNumber);
+
+                // Task message.
+                $('.tasks__task-form [name=taskMessage]').val(task.data.taskMessage);
+            }
+
+            function clearTask() {
+                // Enabled.
+                $('.tasks__task-form [name=enabled]').prop('checked', true);
+
+                // Due at.
+                $('.tasks__task-form-due-date').data("DateTimePicker").date(new Date());
+
+                // Customer.
+                $.getJSON('/api/v1/analytics?action=getCustomersList', function(data) {
+                    $('.tasks__task-form-customer').empty();
+                    $.each(data.customersList, function() {
+                        $('.tasks__task-form-customer').append($('<option>').val(this[6]).text(this[0] + ' ' + this[1] + ' (' + this[3] + ')'));
+                    });
+                });
+
+                // Document.
+                $.getJSON('/api/v1/analytics?action=getFilesList', function(data) {
+                    $('.tasks__task-form-document').empty();
+                    $.each(data.filesList, function() {
+                        $('.tasks__task-form-document').append($('<option>').val(this[3]).text(this[1]));
+                    });
+                });
+
+                // Page number.
+                $('.tasks__task-form [name=pageNumber]').val('1');
+
+                // Task message.
+                $('.tasks__task-form [name=taskMessage]').val('');
+            }
+
+            // Save task.
+            document.addEventListener('submit', function(event) {
+                if (event.target.classList.contains('tasks__task-form')) {
+                    event.preventDefault();
+
+                    var data = {
+                        enabled: $('.tasks__task-form [name=enabled]').prop('checked'),
+                        dueAt: $('.tasks__task-form-due-date').data("DateTimePicker").date().valueOf(),
+                        type: 'DOCUMENT',
+                        action: 'EMAIL',
+                        customerId: parseInt($('.tasks__task-form-customer').val()),
+                        documentId: parseInt($('.tasks__task-form-document').val()),
+                        data: {
+                            pageNumber: parseInt($('.tasks__task-form [name=pageNumber]').val()),
+                            taskMessage: $('.tasks__task-form [name=taskMessage]').val()
+                        }
+                    };
+
+                    $.ajax({
+                        url: $('.tasks__task-form [name=requestLink]').val(),
+                        type: $('.tasks__task-form [name=requestType]').val(),
+                        data: JSON.stringify(data),
+                        contentType : 'application/json',
+                        beforeSend: function(xhr) {
+                            xhr.setRequestHeader(SP.CSRF_HEADER, SP.CSRF_TOKEN);
+                        }
+                    }).done(function () {
+                        if (typeof data === 'string' && '<!DOCTYPE html>' === data.substring(0, 15)) {
+                            window.location = '/login';
+                        } else {
+                            swal('Success!', 'You have successfully ' + $('.tasks__task-form [name=successMessage]').val() + ' a task', 'success');
+                            window.sp.tasks.getAll();
+                            $('button[data-dismiss="modal"]').click();
+                        }
+                    }).fail(function () {
+                        swal('Error!', 'Please contact support@slidepiper.com for assistance', 'error');
+                    });
+                }
+            });
+
+            // Delete task.
+            document.addEventListener('click', function(event) {
+                if (event.target.classList.contains('tasks__task-delete')) {
+                    swal({
+                            title: "Are you sure you want to delete this task?",
+                            type: "warning",
+                            confirmButtonText: "Yes",
+                            cancelButtonText: "No",
+                            showCancelButton: true,
+                            closeOnConfirm: false,
+                            closeOnCancel: true
+                        },
+                        function(isConfirm) {
+                            if (isConfirm) {
+                                $.ajax({
+                                    url: event.target.getAttribute('data-link'),
+                                    type: 'DELETE',
+                                    beforeSend: function (xhr) {
+                                        xhr.setRequestHeader(SP.CSRF_HEADER, SP.CSRF_TOKEN);
+                                    }
+                                }).done(function () {
+                                    if (typeof data === 'string' && '<!DOCTYPE html>' === data.substring(0, 15)) {
+                                        window.location = '/login';
+                                    } else {
+                                        swal('Success!', 'You have successfully deleted a task', 'success');
+                                        window.sp.tasks.getAll();
+                                    }
+                                }).fail(function () {
+                                    swal('Error!', 'Please contact support@slidepiper.com for assistance', 'error');
+                                });
+                            }
+                        }
+                    );
                 }
             });
         });
@@ -2344,6 +2632,7 @@ sp = {
                     viewerOpenDocumentEmailEnabled: $('#sp-enable-alert-emails__checkbox').prop('checked'),
                     viewerEventEmailEnabled: $('#sp-enable-notification-emails__checkbox').prop('checked'),
                     'notificationEmail': $('#sp-document-settings__modal [name=notificationEmail]').val(),
+                    receiveCustomerEmailEnabled: $('.user__receive-customer-email').prop('checked')
                 };
 
                 $.ajax({

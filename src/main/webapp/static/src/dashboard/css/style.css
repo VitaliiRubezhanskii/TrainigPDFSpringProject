@@ -952,3 +952,11 @@ input:checked + .sp-doc-settings-slider:before {
     border-color: #d2d2d2;
     color: #1ab394;
 }
+
+.tasks {
+    display: none;
+}
+
+.tasks__task-create {
+    margin-bottom: 20px !important;
+}
