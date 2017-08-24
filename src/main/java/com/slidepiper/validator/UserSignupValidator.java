@@ -3,6 +3,7 @@ package com.slidepiper.validator;
 import com.slidepiper.model.input.user.UserSignupInput;
 import com.slidepiper.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
@@ -12,10 +13,13 @@ import java.util.Objects;
 
 @Component
 public class UserSignupValidator implements Validator {
+    private final String signupCode;
     private final UserRepository userRepository;
 
     @Autowired
-    public UserSignupValidator(UserRepository userRepository) {
+    public UserSignupValidator(@Value("${slidepiper.user.signupCode}") String signupCode,
+                               UserRepository userRepository) {
+        this.signupCode = signupCode;
         this.userRepository = userRepository;
     }
 
@@ -48,7 +52,7 @@ public class UserSignupValidator implements Validator {
         }
 
         // Sign up code.
-        if (!userSignupInput.getSignupCode().equals("piperroi")) {
+        if (!userSignupInput.getSignupCode().equals(signupCode)) {
             errors.rejectValue("signupCode", null, "Incorrect sign up code");
         }
     }
