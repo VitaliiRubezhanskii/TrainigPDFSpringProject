@@ -47,11 +47,6 @@ amazon:
 
         doNotReplyEmailAddress: SlidePiper <do-not-reply@slidepiper.com>
 
-        # credentials viewer
-        ses-customer-message:
-            accessKeyId: AKIAIFEJNRCXRGWCDTKQ
-            secretKey: 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
-
     sns:
         sns-customer-message:
             accessKeyId: AKIAIEJ23APCCYRBVASA
