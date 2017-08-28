@@ -960,3 +960,14 @@ input:checked + .sp-doc-settings-slider:before {
 .tasks__task-create {
     margin-bottom: 20px !important;
 }
+
+/**
+ * @see http://webapplayers.com/inspinia_admin-v2.5/modal_select2.html
+ */
+.select2-container {
+    z-index: 2050;
+}
+
+.tasks__task-form-due-date {
+    z-index: 2051;
+}

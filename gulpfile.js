@@ -39,7 +39,7 @@ gulp.task('templates-copy', function() {
 
 gulp.task('static-revision', function() {
     return gulp.src(['*/css/*.css', '*/js/*.js', '*/images/*.+(gif|jpg|png|svg)'], {cwd: static.src})
-        .pipe(gulpIf('*.css', cssnano()))
+        .pipe(gulpIf('*.css', cssnano({zindex: false})))
         .pipe(gulpIf('*.js', uglify()))
         .pipe(gulpIf('*.+(gif|jpg|png|svg)', imagemin()))
         .pipe(rev())

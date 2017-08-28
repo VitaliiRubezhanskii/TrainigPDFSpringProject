@@ -570,12 +570,6 @@ sp = {
 
             // Create / Update task.
             document.addEventListener('click', function(event) {
-                $('.tasks__task-form-due-date').datetimepicker({
-                    allowInputToggle: true,
-                    format: 'D/M/Y HH:mm (Z)',
-                    sideBySide: true
-                });
-
                 if (event.target.classList.contains('tasks__task-create')) {
                     clearTask();
                     $('.tasks__task-form [name=requestLink]').val('/api/v1/tasks');
@@ -591,6 +585,23 @@ sp = {
                 }
             });
 
+            // Initialize task from.
+            $('.tasks__task-form-due-date').datetimepicker({
+                allowInputToggle: true,
+                format: 'D/M/Y HH:mm (Z)',
+                sideBySide: true
+            });
+
+            $('.tasks__task-form-customer').select2({
+                theme: 'bootstrap',
+                width: '100%'
+            });
+
+            $('.tasks__task-form-document').select2({
+                theme: 'bootstrap',
+                width: '100%'
+            });
+
             function populateTask(task) {
                 // Enabled.
                 $('.tasks__task-form [name=enabled]').prop('checked', task.enabled);
@@ -600,6 +611,7 @@ sp = {
 
                 // Customer.
                 $.getJSON('/api/v1/analytics?action=getCustomersList', function(data) {
+                    data.customersList.sort(compareCustomer);
                     $('.tasks__task-form-customer').empty();
                     $.each(data.customersList, function() {
                         $('.tasks__task-form-customer').append($('<option>').val(this[6]).text(this[0] + ' ' + this[1] + ' (' + this[3] + ')'));
@@ -609,6 +621,7 @@ sp = {
 
                 // Document.
                 $.getJSON('/api/v1/analytics?action=getFilesList', function(data) {
+                    data.filesList.sort(compareDocument);
                     $('.tasks__task-form-document').empty();
                     $.each(data.filesList, function() {
                         $('.tasks__task-form-document').append($('<option>').val(this[3]).text(this[1]));
@@ -632,6 +645,7 @@ sp = {
 
                 // Customer.
                 $.getJSON('/api/v1/analytics?action=getCustomersList', function(data) {
+                    data.customersList.sort(compareCustomer);
                     $('.tasks__task-form-customer').empty();
                     $.each(data.customersList, function() {
                         $('.tasks__task-form-customer').append($('<option>').val(this[6]).text(this[0] + ' ' + this[1] + ' (' + this[3] + ')'));
@@ -640,6 +654,7 @@ sp = {
 
                 // Document.
                 $.getJSON('/api/v1/analytics?action=getFilesList', function(data) {
+                    data.filesList.sort(compareDocument);
                     $('.tasks__task-form-document').empty();
                     $.each(data.filesList, function() {
                         $('.tasks__task-form-document').append($('<option>').val(this[3]).text(this[1]));
@@ -651,6 +666,26 @@ sp = {
 
                 // Task message.
                 $('.tasks__task-form [name=taskMessage]').val('');
+            }
+
+            function compareCustomer(a, b) {
+                if (a[0] < b[0]) {
+                    return -1;
+                }
+                if (a[0] > b[0]) {
+                    return 1;
+                }
+                return 0;
+            }
+
+            function compareDocument(a, b) {
+                if (a[1] < b[1]) {
+                    return -1;
+                }
+                if (a[1] > b[1]) {
+                    return 1;
+                }
+                return 0;
             }
 
             // Save task.
