@@ -483,6 +483,10 @@ sp = {
                                         defaultContent: 'Not set'
                                     },
                                     {
+                                        data: 'customer.company',
+                                        defaultContent: 'Not set'
+                                    },
+                                    {
                                         data: 'document.name',
                                         defaultContent: 'Not set'
                                     },
@@ -505,15 +509,13 @@ sp = {
                                     },
                                     {
                                         render: function(data, type, row) {
-                                            var abortedAt = row.abortedAt;
-                                            var executedAt = row.executedAt;
-                                            var completedAt = data;
-
-                                            if (abortedAt > -1) {
-                                                return 'Aborted';
-                                            } else if (executedAt > -1 && completedAt > -1) {
+                                            if (row.completedAt > -1) {
                                                 return 'Completed';
-                                            } else if (executedAt > -1 && completedAt === -1) {
+                                            } else if (row.failedAt > -1) {
+                                                return 'Failed';
+                                            } else if (row.abortedAt > -1) {
+                                                return 'Aborted';
+                                            } else if (row.initializedAt > -1) {
                                                 return 'In progress';
                                             } else if (!row.enabled) {
                                                 return 'Not enabled';
@@ -540,12 +542,12 @@ sp = {
                                     {
                                         render: function(data, type, row) {
                                             var disabled = '';
-                                            if (row.executedAt > -1 || row.completedAt > -1) {
+                                            if (row.initializedAt > -1) {
                                                 disabled = 'disabled';
                                             }
                                             return '<button class="tasks__task-update btn btn-primary btn-xs" data-toggle="modal" data-target=".tasks__task-modal" data-link="' + data + '" ' + disabled + '>Update</button> <button class="tasks__task-delete btn btn-danger btn-xs" data-link="' + data + '" ' + disabled + '>Delete</button>'
                                         },
-                                        targets: 8
+                                        targets: 9
                                     }
                                 ],
                                 dom: '<"sp-datatables-search-left"f><"html5buttons"B>ti',

@@ -36,7 +36,7 @@ public abstract class Task {
 
     private Timestamp abortedAt;
 
-    private Timestamp executedAt;
+    private Timestamp failedAt;
 
     private Timestamp completedAt;
 

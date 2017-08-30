@@ -41,7 +41,7 @@ public class Event {
         DELETED_TASK,
         INITIALIZED_TASK,
         ABORTED_TASK,
-        EXECUTED_TASK,
+        FAILED_TASK,
         COMPLETED_TASK,
         SENT_EMAIL
     }

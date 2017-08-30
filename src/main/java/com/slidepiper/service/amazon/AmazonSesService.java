@@ -54,30 +54,24 @@ public class AmazonSesService {
         SendEmailRequest request =
                 new SendEmailRequest().withSource(from).withDestination(destination).withMessage(message);
 
-        try {
-            AWSCredentials awsCredentials = new BasicAWSCredentials(accessKey, secretKey);
-            AmazonSimpleEmailServiceClient client = new AmazonSimpleEmailServiceClient(awsCredentials);
+        AWSCredentials awsCredentials = new BasicAWSCredentials(accessKey, secretKey);
+        AmazonSimpleEmailServiceClient client = new AmazonSimpleEmailServiceClient(awsCredentials);
 
-            Region REGION = Region.getRegion(Regions.US_EAST_1);
-            client.setRegion(REGION);
+        Region REGION = Region.getRegion(Regions.US_EAST_1);
+        client.setRegion(REGION);
 
-            // Send the email.
-            SendEmailResult result = client.sendEmail(request);
+        // Send the email.
+        SendEmailResult result = client.sendEmail(request);
 
-            ObjectNode data = objectMapper.createObjectNode();
-            data.put("messageId", result.getMessageId());
-            data.put("to", to);
-            if (Objects.nonNull(bcc)) {
-                data.put("bcc", bcc);
-                log.info("Email sent to: {} (bcc: {})", to, bcc);
-            } else {
-                log.info("Email sent to: {}", to);
-            }
-            eventRepository.save(new Event(username, Event.EventType.SENT_EMAIL, data));
-
-        } catch (Exception ex) {
-            System.out.println("The email was not sent.");
-            System.out.println("Error message: " + ex.getMessage());
+        ObjectNode data = objectMapper.createObjectNode();
+        data.put("messageId", result.getMessageId());
+        data.put("to", to);
+        if (Objects.nonNull(bcc)) {
+            data.put("bcc", bcc);
+            log.info("Email sent to: {} (bcc: {})", to, bcc);
+        } else {
+            log.info("Email sent to: {}", to);
         }
+        eventRepository.save(new Event(username, Event.EventType.SENT_EMAIL, data));
     }
 }

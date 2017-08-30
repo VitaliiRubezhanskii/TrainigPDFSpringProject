@@ -51,8 +51,9 @@ class TaskSerializer extends JsonSerializer<Task> {
                         .buildAndExpand(task.getId())
                         .toUriString());
         gen.writeNumberField("dueAt", task.getDueAt().getTime());
+        gen.writeNumberField("initializedAt", Optional.ofNullable(task.getInitializedAt()).map(Timestamp::getTime).orElse((long) -1));
         gen.writeNumberField("abortedAt", Optional.ofNullable(task.getAbortedAt()).map(Timestamp::getTime).orElse((long) -1));
-        gen.writeNumberField("executedAt", Optional.ofNullable(task.getExecutedAt()).map(Timestamp::getTime).orElse((long) -1));
+        gen.writeNumberField("failedAt", Optional.ofNullable(task.getFailedAt()).map(Timestamp::getTime).orElse((long) -1));
         gen.writeNumberField("completedAt", Optional.ofNullable(task.getCompletedAt()).map(Timestamp::getTime).orElse((long) -1));
         gen.writeBooleanField("enabled", task.isEnabled());
         gen.writeStringField("type", task.getType().name());
@@ -66,6 +67,7 @@ class TaskSerializer extends JsonSerializer<Task> {
             gen.writeStringField("firstName", customer.getFirstName());
             gen.writeStringField("lastName", customer.getLastName());
             gen.writeStringField("email", customer.getEmail());
+            gen.writeStringField("company", customer.getCompany());
             gen.writeEndObject();
         }
 

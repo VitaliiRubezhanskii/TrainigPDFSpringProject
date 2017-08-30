@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.util.List;
-import java.util.Objects;
 
 @Service
 class TaskSchedulerService {
@@ -31,15 +30,9 @@ class TaskSchedulerService {
 
         try {
             for (Task task : tasks) {
-                task = documentScheduledTaskService.initialize(task);
-
                 switch (task.getType()) {
                     case DOCUMENT:
-                        if (Objects.isNull(((DocumentTask) task).getDocumentId())) {
-                            documentScheduledTaskService.abort(task);
-                        } else {
-                            documentScheduledTaskService.start(task);
-                        }
+                        documentScheduledTaskService.execute(task);
                         break;
                 }
             }

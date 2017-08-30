@@ -1,8 +1,10 @@
 package com.slidepiper.model.entity;
 
+import com.slidepiper.converter.CustomerDataConverter;
 import lombok.Data;
 
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -23,6 +25,11 @@ public class Customer implements Serializable {
     private String firstName;
 
     private String lastName;
+
+    private String company;
+
+    @Convert(converter = CustomerDataConverter.class)
+    private CustomerData data;
 
     // TODO: Replace with user.
     @Column(name = "sales_man")

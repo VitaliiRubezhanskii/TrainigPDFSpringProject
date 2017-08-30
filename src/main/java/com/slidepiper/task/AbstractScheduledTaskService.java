@@ -15,7 +15,7 @@ abstract class AbstractScheduledTaskService implements ScheduledTaskService {
 
     private final EventRepository eventRepository;
     private final TaskRepository taskRepository;
-    private final ViewerRepository viewerRepository;
+    final ViewerRepository viewerRepository;
 
     AbstractScheduledTaskService(EventRepository eventRepository,
                                  TaskRepository taskRepository,
@@ -41,7 +41,9 @@ abstract class AbstractScheduledTaskService implements ScheduledTaskService {
     }
 
     @Override
-    public void abort(Task task) {
+    public void abort(Task task, TaskInvalidException e) {
+        e.printStackTrace();
+
         task.setAbortedAt(new Timestamp(System.currentTimeMillis()));
         taskRepository.saveAndFlush(task);
 
@@ -54,18 +56,18 @@ abstract class AbstractScheduledTaskService implements ScheduledTaskService {
     }
 
     @Override
-    public Task execute(Task task) {
-        task.setExecutedAt(new Timestamp(System.currentTimeMillis()));
-        task = taskRepository.saveAndFlush(task);
+    public void fail(Task task, RuntimeException e) {
+        e.printStackTrace();
+
+        task.setFailedAt(new Timestamp(System.currentTimeMillis()));
+        taskRepository.saveAndFlush(task);
 
         // Save event.
         String username = viewerRepository.findByUserId(task.getUserId()).getEmail();
         ObjectNode data = objectMapper.createObjectNode();
         data.put("taskId", task.getId());
-        data.put("executedAt", task.getExecutedAt().getTime());
-        eventRepository.save(new Event(username, Event.EventType.EXECUTED_TASK, data));
-
-        return task;
+        data.put("failedAt", task.getFailedAt().getTime());
+        eventRepository.save(new Event(username, Event.EventType.FAILED_TASK, data));
     }
 
     @Override
