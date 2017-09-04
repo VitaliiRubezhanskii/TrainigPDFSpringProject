@@ -452,6 +452,13 @@ sp = {
                 }
             });
 
+            // Widgets.
+            window.sp.widgetsResource = {
+                findByDocumentFriendlyId: function(documentFriendlyId) {
+                    return $.getJSON('/api/v1/widgets?fileHash=' + documentFriendlyId);
+                }
+            };
+
             // Tasks.
             // Get all tasks.
             window.sp.tasks = {
@@ -604,6 +611,11 @@ sp = {
                 width: '100%'
             });
 
+            $('.tasks__task-form-milestone').select2({
+                theme: 'bootstrap',
+                width: '100%'
+            });
+
             function populateTask(task) {
                 // Enabled.
                 $('.tasks__task-form [name=enabled]').prop('checked', task.enabled);
@@ -626,9 +638,12 @@ sp = {
                     data.filesList.sort(compareDocument);
                     $('.tasks__task-form-document').empty();
                     $.each(data.filesList, function() {
-                        $('.tasks__task-form-document').append($('<option>').val(this[3]).text(this[1]));
+                        $('.tasks__task-form-document').append($('<option>').val(this[3]).text(this[1]).attr('data-friendly-id', this[0]));
                     });
                     $('.tasks__task-form-document').val(task.document.id);
+
+                    var friendlyId = task.document.friendlyId;
+                    window.sp.widgetsResource.findByDocumentFriendlyId(friendlyId).then(function(data) {getHopperWidget(data, createMilestone)});
                 });
 
                 // Page number.
@@ -659,15 +674,52 @@ sp = {
                     data.filesList.sort(compareDocument);
                     $('.tasks__task-form-document').empty();
                     $.each(data.filesList, function() {
-                        $('.tasks__task-form-document').append($('<option>').val(this[3]).text(this[1]));
+                        $('.tasks__task-form-document').append($('<option>').val(this[3]).text(this[1]).attr('data-friendly-id', this[0]));
                     });
+
+                    var friendlyId = $('.tasks__task-form-document option:first-child').attr('data-friendly-id');
+                    window.sp.widgetsResource.findByDocumentFriendlyId(friendlyId).then(function(data) {getHopperWidget(data, createMilestone)});
                 });
 
                 // Page number.
-                $('.tasks__task-form [name=pageNumber]').val('1');
+                $('.tasks__task-form [name=pageNumber]').val('');
 
                 // Task message.
                 $('.tasks__task-form [name=taskMessage]').val('');
+            }
+
+            document.querySelector('.tasks__task-form-document').onchange = function() {
+                $('.tasks__task-form [name=pageNumber]').val('');
+
+                var friendlyId = this.options[this.selectedIndex].getAttribute('data-friendly-id');
+                window.sp.widgetsResource.findByDocumentFriendlyId(friendlyId).then(function(data) {getHopperWidget(data, createMilestone)});
+            };
+
+            document.querySelector('.tasks__task-form-milestone').onchange = function() {
+                $('.tasks__task-form [name=pageNumber]').val(this.value);
+            };
+
+            function getHopperWidget(data, callback) {
+                var hopperWidget = null;
+                data.forEach(function(widget) {
+                    var widgetData = JSON.parse(widget.widgetData);
+                    if (5 === widgetData.data.widgetId) {
+                        hopperWidget = widgetData.data;
+                    }
+                });
+
+                callback(hopperWidget);
+            }
+
+            function createMilestone(hopperWidget) {
+                $('.tasks__task-form-milestone').empty();
+
+                if (hopperWidget) {
+                    $('.tasks__task-form-milestone').append($('<option>').text('Choose...').prop({disabled: true, selected: true}));
+                    hopperWidget.items.forEach(function(item) {
+                        $('.tasks__task-form-milestone').append($('<option>').val(item.hopperPage).text(item.hopperText));
+                    });
+                }
             }
 
             function compareCustomer(a, b) {

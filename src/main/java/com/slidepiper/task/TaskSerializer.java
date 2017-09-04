@@ -79,6 +79,7 @@ class TaskSerializer extends JsonSerializer<Task> {
                     gen.writeObjectFieldStart("document");
                     gen.writeNumberField("id", document.getId());
                     gen.writeStringField("name", document.getName());
+                    gen.writeStringField("friendlyId", document.getFriendlyId());
                     gen.writeEndObject();
 
                     gen.writeObjectFieldStart("data");
