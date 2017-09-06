@@ -12,7 +12,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{title}}</title>
+    <title>Action required: {{userCompany}} - Task reminder</title>
 
     <style type="text/css">
         p{
@@ -550,30 +550,6 @@
                 <![endif]-->
                 <table border="0" cellpadding="0" cellspacing="0" width="100%" class="templateContainer">
                     <tr>
-                        <td valign="top" id="templatePreheader"></td>
-                    </tr>
-                    <tr>
-                        <td valign="top" id="templateHeader"><table border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnImageBlock" style="min-width:100%;">
-                            <tbody class="mcnImageBlockOuter">
-                            <tr>
-                                <td valign="top" style="padding:9px" class="mcnImageBlockInner">
-                                    <table align="left" width="100%" border="0" cellpadding="0" cellspacing="0" class="mcnImageContentContainer" style="min-width:100%;">
-                                        <tbody><tr>
-                                            <td class="mcnImageContent" valign="top" style="padding-right: 9px; padding-left: 9px; padding-top: 0; padding-bottom: 0; text-align:center;">
-
-
-                                                <img align="center" alt="" src="https://gallery.mailchimp.com/d5ac21ef6c11a557486abcf03/images/33f12a01-5e67-4262-bc9f-96d79ad59c14.png" width="564" style="max-width:1060px; padding-bottom: 0; display: inline !important; vertical-align: bottom;" class="mcnImage">
-
-
-                                            </td>
-                                        </tr>
-                                        </tbody></table>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table></td>
-                    </tr>
-                    <tr>
                         <td valign="top" id="templateBody"><table border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnDividerBlock" style="min-width:100%;">
                             <tbody class="mcnDividerBlockOuter">
                             <tr>
@@ -608,7 +584,7 @@
                                         <tbody><tr>
 
                                             <td valign="top" class="mcnTextContent" style="padding: 0 18px; text-align: center;">
-                                                <span style="font-size: 1.4em;">{{title}}</span>
+                                                <span style="font-size: 1.4em;">Action required: {{userCompany}} - Task reminder</span>
                                             </td>
                                         </tr>
                                         </tbody></table>
@@ -658,8 +634,14 @@
                                             <tbody><tr>
                                                 <td valign="top" class="mcnTextContent" style="padding: 0 18px;">
                                                     <p>Hi {{customerFirstName}},</p>
-                                                    <p>This is a reminder to complete {{taskMessage}} on your portal set up for you by {{userCompany}}.<br>
-                                                       Please follow this link to view the task: <a href={{link}} target="_blank">{{link}}</a></p>
+                                                    <p>
+                                                        This is a reminder to {{taskMessage}}.<br>
+                                                        For more information, please visit your portal <a href="{{link}}" target="_blank">here</a>.
+                                                    </p>
+                                                    <p>
+                                                        Thank you,<br>
+                                                        {{userCompany}}
+                                                    </p>
                                                 </td>
                                             </tr>
                                             </tbody></table>
@@ -677,138 +659,7 @@
                             </table></td>
                     </tr>
                     <tr>
-                        <td valign="top" id="templateFooter"><table border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnFollowBlock" style="min-width:100%;">
-                            <tbody class="mcnFollowBlockOuter">
-                            <tr>
-                                <td align="center" valign="top" style="padding:9px" class="mcnFollowBlockInner">
-                                    <table border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnFollowContentContainer" style="min-width:100%;">
-                                        <tbody><tr>
-                                            <td align="center" style="padding-left:9px;padding-right:9px;">
-                                                <table border="0" cellpadding="0" cellspacing="0" width="100%" style="min-width:100%;" class="mcnFollowContent">
-                                                    <tbody><tr>
-                                                        <td align="center" valign="top" style="padding-top:9px; padding-right:9px; padding-left:9px;">
-                                                            <table align="center" border="0" cellpadding="0" cellspacing="0">
-                                                                <tbody><tr>
-                                                                    <td align="center" valign="top">
-                                                                        <!--[if mso]>
-                                                                        <table align="center" border="0" cellspacing="0" cellpadding="0">
-                                                                            <tr>
-                                                                        <![endif]-->
-
-                                                                        <!--[if mso]>
-                                                                        <td align="center" valign="top">
-                                                                        <![endif]-->
-
-
-                                                                        <table align="left" border="0" cellpadding="0" cellspacing="0" style="display:inline;">
-                                                                            <tbody><tr>
-                                                                                <td valign="top" style="padding-right:10px; padding-bottom:9px;" class="mcnFollowContentItemContainer">
-                                                                                    <table border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnFollowContentItem">
-                                                                                        <tbody><tr>
-                                                                                            <td align="left" valign="middle" style="padding-top:5px; padding-right:10px; padding-bottom:5px; padding-left:9px;">
-                                                                                                <table align="left" border="0" cellpadding="0" cellspacing="0" width="">
-                                                                                                    <tbody><tr>
-
-                                                                                                        <td align="center" valign="middle" width="24" class="mcnFollowIconContent">
-                                                                                                            <a href="https://www.facebook.com/slidepiper" target="_blank"><img src="https://cdn-images.mailchimp.com/icons/social-block-v2/color-facebook-48.png" style="display:block;" height="24" width="24" class=""></a>
-                                                                                                        </td>
-
-
-                                                                                                    </tr>
-                                                                                                    </tbody></table>
-                                                                                            </td>
-                                                                                        </tr>
-                                                                                        </tbody></table>
-                                                                                </td>
-                                                                            </tr>
-                                                                            </tbody></table>
-
-                                                                        <!--[if mso]>
-                                                                        </td>
-                                                                        <![endif]-->
-
-                                                                        <!--[if mso]>
-                                                                        <td align="center" valign="top">
-                                                                        <![endif]-->
-
-
-                                                                        <table align="left" border="0" cellpadding="0" cellspacing="0" style="display:inline;">
-                                                                            <tbody><tr>
-                                                                                <td valign="top" style="padding-right:10px; padding-bottom:9px;" class="mcnFollowContentItemContainer">
-                                                                                    <table border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnFollowContentItem">
-                                                                                        <tbody><tr>
-                                                                                            <td align="left" valign="middle" style="padding-top:5px; padding-right:10px; padding-bottom:5px; padding-left:9px;">
-                                                                                                <table align="left" border="0" cellpadding="0" cellspacing="0" width="">
-                                                                                                    <tbody><tr>
-
-                                                                                                        <td align="center" valign="middle" width="24" class="mcnFollowIconContent">
-                                                                                                            <a href="https://www.linkedin.com/company/slidepiper" target="_blank"><img src="https://cdn-images.mailchimp.com/icons/social-block-v2/color-linkedin-48.png" style="display:block;" height="24" width="24" class=""></a>
-                                                                                                        </td>
-
-
-                                                                                                    </tr>
-                                                                                                    </tbody></table>
-                                                                                            </td>
-                                                                                        </tr>
-                                                                                        </tbody></table>
-                                                                                </td>
-                                                                            </tr>
-                                                                            </tbody></table>
-
-                                                                        <!--[if mso]>
-                                                                        </td>
-                                                                        <![endif]-->
-
-                                                                        <!--[if mso]>
-                                                                        <td align="center" valign="top">
-                                                                        <![endif]-->
-
-
-                                                                        <table align="left" border="0" cellpadding="0" cellspacing="0" style="display:inline;">
-                                                                            <tbody><tr>
-                                                                                <td valign="top" style="padding-right:0; padding-bottom:9px;" class="mcnFollowContentItemContainer">
-                                                                                    <table border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnFollowContentItem">
-                                                                                        <tbody><tr>
-                                                                                            <td align="left" valign="middle" style="padding-top:5px; padding-right:10px; padding-bottom:5px; padding-left:9px;">
-                                                                                                <table align="left" border="0" cellpadding="0" cellspacing="0" width="">
-                                                                                                    <tbody><tr>
-
-                                                                                                        <td align="center" valign="middle" width="24" class="mcnFollowIconContent">
-                                                                                                            <a href="https://www.slidepiper.com" target="_blank"><img src="https://cdn-images.mailchimp.com/icons/social-block-v2/color-link-48.png" style="display:block;" height="24" width="24" class=""></a>
-                                                                                                        </td>
-
-
-                                                                                                    </tr>
-                                                                                                    </tbody></table>
-                                                                                            </td>
-                                                                                        </tr>
-                                                                                        </tbody></table>
-                                                                                </td>
-                                                                            </tr>
-                                                                            </tbody></table>
-
-                                                                        <!--[if mso]>
-                                                                        </td>
-                                                                        <![endif]-->
-
-                                                                        <!--[if mso]>
-                                                                        </tr>
-                                                                        </table>
-                                                                        <![endif]-->
-                                                                    </td>
-                                                                </tr>
-                                                                </tbody></table>
-                                                        </td>
-                                                    </tr>
-                                                    </tbody></table>
-                                            </td>
-                                        </tr>
-                                        </tbody></table>
-
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table><table border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnTextBlock" style="min-width:100%;">
+                        <td valign="top" id="templateFooter"><table border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnTextBlock" style="min-width:100%;">
                             <tbody class="mcnTextBlockOuter">
                             <tr>
                                 <td valign="top" class="mcnTextBlockInner" style="padding-top:9px;">
@@ -824,7 +675,7 @@
                                         <tbody><tr>
 
                                             <td valign="top" class="mcnTextContent" style="padding-top:0; padding-right:18px; padding-bottom:9px; padding-left:18px; font-size: 0.7em;">
-                                                This is an automated email generated by SlidePiper. <a href="mailto:info@slidepiper.com?subject=Unsubscribe&body=Please%20send%20this%20email%20to%20be%20unsubscribed">Unsubscribe</a>
+                                                This is an automated email. <a href="mailto:info@slidepiper.com?subject=Unsubscribe&body=Please%20send%20this%20email%20to%20be%20unsubscribed">Unsubscribe</a>
                                             </td>
                                         </tr>
                                         </tbody></table>

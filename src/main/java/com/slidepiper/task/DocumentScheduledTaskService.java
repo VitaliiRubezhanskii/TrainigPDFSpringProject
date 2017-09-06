@@ -28,7 +28,6 @@ class DocumentScheduledTaskService extends AbstractScheduledTaskService {
     private final String url;
     private final String accessKey;
     private final String secretKey;
-    private final String from;
     private final String templatesPrefix;
     private final AmazonSesService amazonSesService;
     private final CustomerRepository customerRepository;
@@ -40,7 +39,6 @@ class DocumentScheduledTaskService extends AbstractScheduledTaskService {
                                  @Value("${slidepiper.url}") String url,
                                  @Value("${amazon.ses.credentials.user.accessKey}") String accessKey,
                                  @Value("${amazon.ses.credentials.user.secretKey}")String secretKey,
-                                 @Value("${amazon.ses.doNotReplyEmailAddress}") String from,
                                  @Value("${slidepiper.templates.prefix}") String templatesPrefix,
                                  AmazonSesService amazonSesService,
                                  CustomerRepository customerRepository,
@@ -49,7 +47,6 @@ class DocumentScheduledTaskService extends AbstractScheduledTaskService {
         this.url = url;
         this.accessKey = accessKey;
         this.secretKey = secretKey;
-        this.from = from;
         this.templatesPrefix = templatesPrefix;
         this.amazonSesService = amazonSesService;
         this.customerRepository = customerRepository;
@@ -70,12 +67,20 @@ class DocumentScheduledTaskService extends AbstractScheduledTaskService {
                     Customer customer = customerRepository.findById(documentTask.getCustomerId());
                     Viewer viewer = document.getViewer();
 
+                    // Set from.
+                    String fromTemplate = "{{userCompany}} <do-not-reply@slidepiper.com>";
+                    Map<String, String> fromVariables = new HashMap<>();
+                    fromVariables.put("userCompany", viewer.getCompany());
+                    String from = Mustache.compiler().compile(fromTemplate).execute(fromVariables);
+
                     // Set subject.
-                    String subject = "SlidePiper - Task Reminder";
+                    String subjectTemplate = "Action required: {{userCompany}} - Task reminder";
+                    Map<String, String> subjectVariables = new HashMap<>();
+                    subjectVariables.put("userCompany", viewer.getCompany());
+                    String subject = Mustache.compiler().compile(subjectTemplate).execute(subjectVariables);
 
                     // Set body.
                     Map<String, String> bodyVariables = new HashMap<>();
-                    bodyVariables.put("title", subject);
                     bodyVariables.put("customerFirstName", customer.getFirstName());
                     bodyVariables.put("taskMessage", documentTask.getData().getTaskMessage());
                     bodyVariables.put("userCompany", viewer.getCompany());
