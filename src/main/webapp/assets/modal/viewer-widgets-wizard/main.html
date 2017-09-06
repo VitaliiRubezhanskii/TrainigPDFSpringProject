@@ -576,93 +576,113 @@
                                 <input type="checkbox" name="sp-widget9--is-enabled"> Is Enabled?
                             </div>
 
-                            <div class="container-fluid">                   
-                                <div class="sp-widget-item">
-                                    <form class="form-horizontal">
-                                    
-                                    <hr>
-                                    
-                                        <div class="form-group">
-                                            <label class="col-lg-4 control-label">Link Text<br>(Line 1)</label>
-                                            <div class="col-lg-8">
-                                                <input class="form-control" data-item-setting="buttonText1" placeholder="e.g. My Website" maxlength="50">
-                                            </div>
-                                        </div>
-                                        
-                                        <div class="form-group">
-                                            <label class="col-lg-4 control-label">Link Text<br>(Line 2)</label>
-                                            <div class="col-lg-8">
-                                                <input class="form-control" data-item-setting="buttonText2" placeholder="e.g. Is through this link..." maxlength="50">
-                                            </div>
-                                        </div>
-                                            
-                                        <div class="form-group">
-                                            <label class="col-lg-4 control-label">Link URL</label>
-                                            <div class="col-lg-8">
-                                                <input type="text" class="form-control" data-item-setting="link" placeholder="e.g. https://www.slidepiper.com">
-                                                <button type="button" class="btn btn-primary btn-sm link-widget__url-upload-button"><i class="fa fa-upload"></i> Upload File</button>
-                                            </div>
-                                        </div>
-                                        
-                                        <div class="form-group">
-                                            <label class="col-lg-4 control-label">From Page</label>
-                                            <div class="col-lg-8">
-                                                <input type="number" class="form-control" data-item-setting="pageFrom" placeholder="e.g. 1" min="1">
-                                                <small>On this page, the widget will appear from the right side of the page.</small>
-                                            </div>
-                                        </div>
-                                        
-                                        <div class="form-group">
-                                            <label class="col-lg-4 control-label">To Page</label>
-                                            <div class="col-lg-8">
-                                                <input type="number" class="form-control" data-item-setting="pageTo" placeholder="e.g. 3" min="1">
-                                                <small>After this page, the widget will hide on the right side of the page.</small>
-                                            </div>
-                                        </div>
+                            <hr>
 
-                                        <div class="form-group">
-                                            <label class="col-lg-4 control-label">Icon</label>
-                                            <div class="col-lg-8">
-                                                <div class="radio sp--margin-left-0">
-                                                    <label><input type="radio" name="icon" data-item-setting="icon" data-icon="fa-external-link" checked><i class="fa fa-external-link"></i> External link</label>
-                                                </div>
-                                                <div class="radio sp--margin-left-0">
-                                                    <label><input type="radio" name="icon" data-item-setting="icon" data-icon="fa-file-text"><i class="fa fa-file-text"></i> Document</label>
-                                                </div>
-                                                <div class="radio sp--margin-left-0">
-                                                    <label><input type="radio" name="icon" data-item-setting="icon" data-icon="fa-download"><i class="fa fa-download"></i> Download</label>
-                                                </div>
-                                                <div class="radio sp--margin-left-0">
-                                                    <label><input type="radio" name="icon" data-item-setting="icon" data-icon="fa-upload"><i class="fa fa-upload"></i> Upload</label>
-                                                </div>
-                                                <div class="radio sp--margin-left-0">
-                                                    <label><input type="radio" name="icon" data-item-setting="icon" data-icon="fa-calendar"><i class="fa fa-calendar"></i> Calendar</label>
-                                                </div>
-                                            </div>
-                                        </div>
+                            <div class="sp-widget-item">
+                                <div class="sp-link-widget__item m-xs p-xs">
+                                    <div class="sp-link-widget__item-header container-fluid">
+                                        <div class="row">
+                                            <div class="col-sm-6 sp-link-widget__item-title">&lt;Link Text 1&gt;</div>
 
-                                        <div class="form-group">
-                                            <label class="col-lg-4 control-label">Layout</label>
-                                            <div class="col-lg-8">
-                                                <div class="radio sp--margin-left-0">
-                                                    <label><input type="radio" name="layout" data-item-setting="layout" data-layout="external-link" checked> External Link</label>
-                                                </div>
-                                                <div class="radio sp--margin-left-0">
-                                                    <label><input type="radio" name="layout" data-item-setting="layout" data-layout="inside-window"> Inside window</label>
-                                                </div>
+                                            <div class="col-sm-3">
+                                                <select class="sp-link-widget__item-status" data-item-setting="status">
+                                                    <option>Status...</option>
+                                                    <option value="completed">Completed</option>
+                                                </select>
+                                            </div>
+
+                                            <div class="col-sm-3 sp-link-widget__item-configuration text-right">
+                                                <i class="sp-link-widget__item-configuration-icon fa fa-plus"></i>
+                                                <span class="sp-link-widget__item-configuration-title"> Settings</span>
                                             </div>
                                         </div>
-                                        
-                                        <div class="form-group">
-                                            <div class="col-lg-12">
-                                                <a class="btn btn-white btn-sm sp-widget__delete-item">
-                                                    <i class="fa fa-times" aria-hidden="true"></i>
-                                                </a>
+                                    </div>
+
+                                    <div class="sp-link-widget__item-body container-fluid">
+                                        <form class="form-horizontal">
+                                            <div class="form-group">
+                                                <label class="col-lg-4 control-label">Link Text<br>(Line 1)</label>
+                                                <div class="col-lg-8">
+                                                    <input class="form-control" data-item-setting="buttonText1" placeholder="e.g. My Website" maxlength="50">
+                                                </div>
                                             </div>
-                                        </div>
-                                    </form>
+
+                                            <div class="form-group">
+                                                <label class="col-lg-4 control-label">Link Text<br>(Line 2)</label>
+                                                <div class="col-lg-8">
+                                                    <input class="form-control" data-item-setting="buttonText2" placeholder="e.g. Is through this link..." maxlength="50">
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="col-lg-4 control-label">Link URL</label>
+                                                <div class="col-lg-8">
+                                                    <input type="text" class="form-control" data-item-setting="link" placeholder="e.g. https://www.slidepiper.com">
+                                                    <button type="button" class="btn btn-primary btn-sm link-widget__url-upload-button"><i class="fa fa-upload"></i> Upload File</button>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="col-lg-4 control-label">From Page</label>
+                                                <div class="col-lg-8">
+                                                    <input type="number" class="form-control" data-item-setting="pageFrom" placeholder="e.g. 1" min="1">
+                                                    <small>On this page, the widget will appear from the right side of the page.</small>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="col-lg-4 control-label">To Page</label>
+                                                <div class="col-lg-8">
+                                                    <input type="number" class="form-control" data-item-setting="pageTo" placeholder="e.g. 3" min="1">
+                                                    <small>After this page, the widget will hide on the right side of the page.</small>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="col-lg-4 control-label">Icon</label>
+                                                <div class="col-lg-8">
+                                                    <div class="radio sp--margin-left-0">
+                                                        <label><input type="radio" name="icon" data-item-setting="icon" data-icon="fa-external-link" checked><i class="fa fa-external-link"></i> External link</label>
+                                                    </div>
+                                                    <div class="radio sp--margin-left-0">
+                                                        <label><input type="radio" name="icon" data-item-setting="icon" data-icon="fa-file-text"><i class="fa fa-file-text"></i> Document</label>
+                                                    </div>
+                                                    <div class="radio sp--margin-left-0">
+                                                        <label><input type="radio" name="icon" data-item-setting="icon" data-icon="fa-download"><i class="fa fa-download"></i> Download</label>
+                                                    </div>
+                                                    <div class="radio sp--margin-left-0">
+                                                        <label><input type="radio" name="icon" data-item-setting="icon" data-icon="fa-upload"><i class="fa fa-upload"></i> Upload</label>
+                                                    </div>
+                                                    <div class="radio sp--margin-left-0">
+                                                        <label><input type="radio" name="icon" data-item-setting="icon" data-icon="fa-calendar"><i class="fa fa-calendar"></i> Calendar</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="col-lg-4 control-label">Layout</label>
+                                                <div class="col-lg-8">
+                                                    <div class="radio sp--margin-left-0">
+                                                        <label><input type="radio" name="layout" data-item-setting="layout" data-layout="external-link" checked> External Link</label>
+                                                    </div>
+                                                    <div class="radio sp--margin-left-0">
+                                                        <label><input type="radio" name="layout" data-item-setting="layout" data-layout="inside-window"> Inside window</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <div class="col-lg-12">
+                                                    <a class="btn btn-white btn-sm sp-widget__delete-item">
+                                                        <i class="fa fa-times" aria-hidden="true"></i>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
+
                             <a class="btn btn-white btn-sm sp-widget__add-item">
                                 <i class="fa fa-plus" aria-hidden="true"></i> Add Link
                             </a>

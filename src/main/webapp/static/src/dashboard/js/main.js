@@ -817,6 +817,14 @@ sp = {
                     );
                 }
             });
+
+            // Link Widget.
+            document.addEventListener('click', function(event) {
+                if (1 === $(event.target).parents('.sp-link-widget__item-configuration').length) {
+                    $(event.target).parents('.sp-link-widget__item-configuration').find('i').toggleClass('fa-plus fa-minus');
+                    $(event.target).parents('.sp-link-widget__item').find('.sp-link-widget__item-body').slideToggle();
+                }
+            });
         });
     })(),
 

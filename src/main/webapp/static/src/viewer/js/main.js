@@ -1074,6 +1074,10 @@ $.ajax({
                     button.classList.add('sp-widget-font-fmaily');
                     button.classList.add('sp--direction-ltr');
                     button.classList.add('sp-widget9');
+                    if (link.status && 'completed' === link.status) {
+                        button.classList.add('sp--completed');
+                    }
+
                     button.style.backgroundColor = config.viewer.toolbarButtonBackground;
                     button.style.color = config.viewer.toolbarCta1Color;
 

@@ -336,7 +336,7 @@ sp.widgets = {
 
             // Delete item.
             $(document).on('click', '#sp-tab-9 .sp-widget__delete-item', function() {
-                $(this).closest('form').remove();
+                $(this).closest('.sp-link-widget__item').remove();
             });
         })(),
 
@@ -803,10 +803,19 @@ sp.viewerWidgetsModal = {
             }
 
             // Link data.
-            $('#sp-tab-9 form').each(function(index) {
+            $('#sp-tab-9 .sp-link-widget__item').each(function(index) {
                 $(this).find('[data-item-setting]').each(function() {
 
-                    if ('icon' === $(this).attr('data-item-setting')) {
+                    if ('buttonText1' === $(this).attr('data-item-setting')) {
+                        $(this).parents('.sp-link-widget__item').find('.sp-link-widget__item-title')
+                            .text(widget.items[index]['buttonText1']);
+                    }
+
+                    if ('status' === $(this).attr('data-item-setting')) {
+                        if ('completed' === widget.items[index]['status']) {
+                            $(this).parents('.sp-link-widget__item').find('.sp-link-widget__item-status').val('completed');
+                        }
+                    } else if ('icon' === $(this).attr('data-item-setting')) {
                         if (typeof widget.items[index][$(this).attr('data-item-setting')] !== 'undefined'
                                 && $(this).attr('data-icon') === widget.items[index][$(this).attr('data-item-setting')]) {
                             $(this).prop('checked', true);
@@ -1416,14 +1425,15 @@ sp.viewerWidgetsModal = {
 
         var isWidget9SettingEmpty = false;
 
-        $('#sp-tab-9 form').each(function() {
+        $('#sp-tab-9 .sp-link-widget__item').each(function() {
             var item = {};
 
             $(this).find('[data-item-setting]').each(function() {
 
                 if ('' === $(this).val() && $(this).attr('data-item-setting') !== 'buttonText2'
                         && $(this).attr('data-item-setting') !== 'icon'
-                        && $(this).attr('data-item-setting') !== 'layout') {
+                        && $(this).attr('data-item-setting') !== 'layout'
+                        && $(this).attr('data-item-setting') !== 'status') {
 
                     sp.error.handleError('You must fill the field.');
                     $(this).addClass('sp-widget-form-error');
@@ -1441,6 +1451,10 @@ sp.viewerWidgetsModal = {
                 } else if ('layout' === $(this).attr('data-item-setting')) {
                     if ($(this).prop('checked')) {
                         item['layout'] = $(this).attr('data-layout');
+                    }
+                } else if ('status' === $(this).attr('data-item-setting')) {
+                    if ('completed' === $(this).val()) {
+                        item['status'] = 'completed';
                     }
                 } else {
                     item[$(this).attr('data-item-setting')] = $(this).val();

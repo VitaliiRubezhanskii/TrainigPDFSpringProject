@@ -234,3 +234,22 @@
 .link-widget__url-upload-button {
   margin-top: 10px;
 }
+
+.sp-link-widget__item {
+  border: 1px solid #e5e6e7;
+}
+
+.sp-link-widget__item-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sp-link-widget__item-configuration-icon,
+.sp-link-widget__item-configuration-title {
+  cursor: pointer;
+}
+
+.sp-link-widget__item-body {
+  display: none;
+}

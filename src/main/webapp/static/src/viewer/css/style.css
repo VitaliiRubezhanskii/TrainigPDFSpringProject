@@ -1238,3 +1238,7 @@
     margin-left: 1px;
   }
 }
+
+.sp--completed {
+  opacity: 0.5;
+}
