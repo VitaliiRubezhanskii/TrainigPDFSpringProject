@@ -84,6 +84,7 @@ class DocumentScheduledTaskService extends AbstractScheduledTaskService {
                     bodyVariables.put("customerFirstName", customer.getFirstName());
                     bodyVariables.put("taskMessage", documentTask.getData().getTaskMessage());
                     bodyVariables.put("userCompany", viewer.getCompany());
+
                     String link = UriComponentsBuilder.fromHttpUrl(url)
                             .pathSegment("view")
                             .queryParam("f", DbLayer.setFileLinkHash(customer.getEmail(), document.getFriendlyId(), customer.getUsername()))
@@ -91,6 +92,12 @@ class DocumentScheduledTaskService extends AbstractScheduledTaskService {
                             .build()
                             .toUriString();
                     bodyVariables.put("link", link);
+
+                    String userEmail = viewer.getEmail();
+                    if (Objects.nonNull(viewer.getData()) && Objects.nonNull(viewer.getData().getNotificationEmail())) {
+                        userEmail = viewer.getData().getNotificationEmail();
+                    }
+                    bodyVariables.put("userEmail", userEmail);
 
                     InputStreamReader inputStreamReader = new InputStreamReader(
                             getClass().getClassLoader().getResourceAsStream(String.join("/", "templates", templatesPrefix, "task-email.html")));

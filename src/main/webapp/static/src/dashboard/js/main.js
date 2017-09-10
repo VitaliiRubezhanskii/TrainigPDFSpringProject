@@ -464,6 +464,7 @@ sp = {
             window.sp.tasks = {
                 getAll: function() {
                     $.getJSON('/api/v1/tasks', function(data) {
+                        $.fn.dataTable.moment('D/M/Y HH:mm (Z)');
                         if (!($.fn.dataTable.isDataTable('.tasks__table'))) {
                             $('.tasks__table').DataTable({
                                 data: data,
@@ -517,7 +518,11 @@ sp = {
                                     {
                                         render: function(data, type, row) {
                                             if (row.completedAt > -1) {
-                                                return 'Completed';
+                                                if ('EMAIL' === row.action) {
+                                                    return 'Email sent';
+                                                } else {
+                                                    return 'Completed';
+                                                }
                                             } else if (row.failedAt > -1) {
                                                 return 'Failed';
                                             } else if (row.abortedAt > -1) {
