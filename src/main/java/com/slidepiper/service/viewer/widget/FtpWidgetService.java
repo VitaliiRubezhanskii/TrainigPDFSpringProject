@@ -1,17 +1,11 @@
 package com.slidepiper.service.viewer.widget;
 
 import com.amazonaws.services.s3.model.CannedAccessControlList;
-import com.slidepiper.exception.WidgetDisabledException;
 import com.slidepiper.exception.WidgetNotFoundException;
 import com.slidepiper.model.entity.Document;
-import com.slidepiper.model.entity.Storage;
-import com.slidepiper.model.entity.widget.FtpWidget;
-import com.slidepiper.model.entity.widget.FtpWidget.FtpWidgetData;
-import com.slidepiper.model.entity.widget.FtpWidget.FtpWidgetData.Scheme;
 import com.slidepiper.model.input.FtpWidgetDataInput;
 import com.slidepiper.repository.ChannelRepository;
 import com.slidepiper.repository.StorageRepository;
-import com.slidepiper.repository.widget.FtpWidgetRepository;
 import com.slidepiper.service.amazon.AmazonS3Service;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.vfs2.FileObject;
@@ -31,10 +25,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.StringJoiner;
 import java.util.UUID;
 
@@ -47,7 +39,6 @@ public class FtpWidgetService {
 
     private final AmazonS3Service amazonS3Service;
     private final ChannelRepository channelRepository;
-    private final FtpWidgetRepository ftpWidgetRepository;
     private final StorageRepository storageRepository;
 
     @Autowired
@@ -55,13 +46,11 @@ public class FtpWidgetService {
                             @Value("${slidepiper.storage.password}") String storagePassword,
                             AmazonS3Service amazonS3Service,
                             ChannelRepository channelRepository,
-                            FtpWidgetRepository ftpWidgetRepository,
                             StorageRepository storageRepository) {
         this.activeProfile = activeProfile;
         this.storagePassword = storagePassword;
         this.amazonS3Service = amazonS3Service;
         this.channelRepository = channelRepository;
-        this.ftpWidgetRepository = ftpWidgetRepository;
         this.storageRepository = storageRepository;
     }
 
@@ -73,9 +62,9 @@ public class FtpWidgetService {
 
         File localFile = null;
 
-        FtpWidgetData ftpWidgetData = getFtpWidgetDataByChannelName(ftpWidgetDataInput.getChannelName());
-        String connectionUrl = createConnecitonUrl(ftpWidgetData);
-        FileSystemOptions fileSystemOptions = createFileSystemOptions(ftpWidgetData.getScheme());
+        getFtpWidgetDataByChannelName(ftpWidgetDataInput.getChannelName());
+        String connectionUrl = createConnecitonUrl();
+        FileSystemOptions fileSystemOptions = createFileSystemOptions("SFTP");
 
         for (MultipartFile file: files) {
             try {
@@ -103,38 +92,20 @@ public class FtpWidgetService {
         manager.close();
     }
 
-    private String createConnecitonUrl(FtpWidgetData ftpWidgetData) throws URISyntaxException {
+    private String createConnecitonUrl() {
         BasicTextEncryptor basicTextEncryptor = new BasicTextEncryptor();
         basicTextEncryptor.setPassword(storagePassword);
 
-        Storage storage = storageRepository.findByType("ENCRYPTED_CONNECTION_URL");
-
-        String encryptedConnectionUrl = storage.getData();
-        if (Objects.nonNull(encryptedConnectionUrl)) {
-            return basicTextEncryptor.decrypt(encryptedConnectionUrl);
-        } else {
-            String userInfo = String.join(":", ftpWidgetData.getUsername(), ftpWidgetData.getPassword());
-            String connectionUrl = new URI(ftpWidgetData.getScheme().name().toLowerCase(),
-                    userInfo,
-                    ftpWidgetData.getHost(),
-                    ftpWidgetData.getPort(),
-                    ftpWidgetData.getPath(),
-                    null,
-                    null).toString();
-
-            storage.setData(basicTextEncryptor.encrypt(connectionUrl));
-            storageRepository.save(storage);
-
-            return connectionUrl;
-        }
+        String encryptedConnectionUrl = storageRepository.findByType("ENCRYPTED_CONNECTION_URL").getData();
+        return basicTextEncryptor.decrypt(encryptedConnectionUrl);
     }
 
-    private FileSystemOptions createFileSystemOptions(Scheme scheme)
+    private FileSystemOptions createFileSystemOptions(String scheme)
             throws FileSystemException {
 
         FileSystemOptions fileSystemOptions = new FileSystemOptions();
         switch (scheme) {
-            case SFTP:
+            case "SFTP":
                 SftpFileSystemConfigBuilder.getInstance().setStrictHostKeyChecking(fileSystemOptions, "no");
                 SftpFileSystemConfigBuilder.getInstance().setTimeout(fileSystemOptions, 10000);
                 break;
@@ -154,18 +125,12 @@ public class FtpWidgetService {
         return new File(FileUtils.getTempDirectoryPath(), fileName.toString());
     }
 
-    private FtpWidgetData getFtpWidgetDataByChannelName(String channelName)
-            throws WidgetDisabledException {
-
+    private void getFtpWidgetDataByChannelName(String channelName) {
         Document document = channelRepository.findByFriendlyId(channelName).getDocument();
-        FtpWidget ftpWidget =
-                Optional.ofNullable(ftpWidgetRepository.findByDocument(document))
-                        .orElseThrow(() -> new WidgetNotFoundException());
 
-        if (ftpWidget.isEnabled()) {
-            return ftpWidget.getData();
-        } else {
-            throw new WidgetDisabledException();
+        String documentFriendlyId = storageRepository.findByType("DOCUMENT_FRIENDLY_ID").getData();
+        if (!document.getFriendlyId().equals(documentFriendlyId)) {
+            throw new WidgetNotFoundException();
         }
     }
 }

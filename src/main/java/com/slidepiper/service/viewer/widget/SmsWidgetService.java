@@ -6,43 +6,44 @@ import com.amazonaws.services.sns.AmazonSNSClient;
 import com.amazonaws.services.sns.model.MessageAttributeValue;
 import com.amazonaws.services.sns.model.PublishRequest;
 import com.amazonaws.services.sns.model.PublishResult;
-import com.slidepiper.exception.WidgetDisabledException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.slidepiper.exception.WidgetNotFoundException;
 import com.slidepiper.model.component.ConfigurationPropertiesUtils;
 import com.slidepiper.model.entity.Document;
-import com.slidepiper.model.entity.widget.SmsWidget;
-import com.slidepiper.model.entity.widget.SmsWidget.SmsWidgetData;
 import com.slidepiper.model.input.SmsWidgetInput;
 import com.slidepiper.repository.ChannelRepository;
-import com.slidepiper.repository.widget.SmsWidgetRepository;
+import com.slidepiper.repository.StorageRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 @Service
 public class SmsWidgetService {
     private static final Logger log = LoggerFactory.getLogger(SmsWidgetService.class);
+    private static final ObjectMapper objectMapper = new ObjectMapper();
 
     private final ChannelRepository channelRepository;
-    private final SmsWidgetRepository smsWidgetRepository;
+    private final StorageRepository storageRepository;
 
     @Autowired
-    public SmsWidgetService(ChannelRepository channelRepository, SmsWidgetRepository smsWidgetRepository) {
+    public SmsWidgetService(ChannelRepository channelRepository,
+                            StorageRepository storageRepository) {
         this.channelRepository = channelRepository;
-        this.smsWidgetRepository = smsWidgetRepository;
+        this.storageRepository = storageRepository;
     }
 
-    public void sendSms(SmsWidgetInput smsWidgetInput) {
+    public void sendSms(SmsWidgetInput smsWidgetInput) throws IOException {
         String channelFriendlyId = smsWidgetInput.getChannelName();
         String key = smsWidgetInput.getKey();
         String phoneNumber = "+" + smsWidgetInput.getPhoneNumber();
 
-        SmsWidgetData smsWidgetData = getSmsWidgetDataByChannelName(channelFriendlyId);
+        getSmsWidgetDataByChannelName(channelFriendlyId);
 
         AWSCredentials awsCredentials = new BasicAWSCredentials(
                 ConfigurationPropertiesUtils.amazonSNSCustomerMessage.getAccessKeyId(),
@@ -51,11 +52,13 @@ public class SmsWidgetService {
         AmazonSNSClient snsClient = new AmazonSNSClient(awsCredentials);
 
         try {
-            String message = smsWidgetData.getBodies().get(key).asText();
+            JsonNode smsConfiguration = objectMapper.readTree(storageRepository.findByType("SMS_CONFIGURATION").getData());
+
+            String message = smsConfiguration.get("bodies").get(key).asText();
 
             Map<String, MessageAttributeValue> smsAttributes = new HashMap<String, MessageAttributeValue>();
             smsAttributes.put("AWS.SNS.SMS.SenderID", new MessageAttributeValue()
-                    .withStringValue(smsWidgetData.getSenderId())
+                    .withStringValue(smsConfiguration.get("senderId").asText())
                     .withDataType("String"));
             smsAttributes.put("AWS.SNS.SMS.SMSType", new MessageAttributeValue()
                     .withStringValue("Transactional")
@@ -74,18 +77,12 @@ public class SmsWidgetService {
 
     }
 
-    private SmsWidgetData getSmsWidgetDataByChannelName(String channelName)
-            throws WidgetDisabledException {
-
+    private void getSmsWidgetDataByChannelName(String channelName) {
         Document document = channelRepository.findByFriendlyId(channelName).getDocument();
-        SmsWidget smsWidget =
-                Optional.ofNullable(smsWidgetRepository.findByDocument(document))
-                        .orElseThrow(() -> new WidgetNotFoundException());
 
-        if (smsWidget.isEnabled()) {
-            return smsWidget.getData();
-        } else {
-            throw new WidgetDisabledException();
+        String documentFriendlyId = storageRepository.findByType("DOCUMENT_FRIENDLY_ID").getData();
+        if (!document.getFriendlyId().equals(documentFriendlyId)) {
+            throw new WidgetNotFoundException();
         }
     }
 }
