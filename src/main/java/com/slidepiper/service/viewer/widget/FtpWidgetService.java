@@ -4,11 +4,13 @@ import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.slidepiper.exception.WidgetDisabledException;
 import com.slidepiper.exception.WidgetNotFoundException;
 import com.slidepiper.model.entity.Document;
+import com.slidepiper.model.entity.Storage;
 import com.slidepiper.model.entity.widget.FtpWidget;
 import com.slidepiper.model.entity.widget.FtpWidget.FtpWidgetData;
 import com.slidepiper.model.entity.widget.FtpWidget.FtpWidgetData.Scheme;
 import com.slidepiper.model.input.FtpWidgetDataInput;
 import com.slidepiper.repository.ChannelRepository;
+import com.slidepiper.repository.StorageRepository;
 import com.slidepiper.repository.widget.FtpWidgetRepository;
 import com.slidepiper.service.amazon.AmazonS3Service;
 import org.apache.commons.io.FileUtils;
@@ -18,6 +20,7 @@ import org.apache.commons.vfs2.FileSystemOptions;
 import org.apache.commons.vfs2.Selectors;
 import org.apache.commons.vfs2.impl.StandardFileSystemManager;
 import org.apache.commons.vfs2.provider.sftp.SftpFileSystemConfigBuilder;
+import org.jasypt.util.text.BasicTextEncryptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,19 +42,27 @@ import java.util.UUID;
 public class FtpWidgetService {
     private static final Logger log = LoggerFactory.getLogger(FtpWidgetService.class);
 
-    @Value("${spring.profiles.active}") private String activeProfile;
+    private final String activeProfile;
+    private final String storagePassword;
 
+    private final AmazonS3Service amazonS3Service;
     private final ChannelRepository channelRepository;
     private final FtpWidgetRepository ftpWidgetRepository;
-    private final AmazonS3Service amazonS3Service;
+    private final StorageRepository storageRepository;
 
     @Autowired
-    public FtpWidgetService(ChannelRepository channelRepository,
+    public FtpWidgetService(@Value("${spring.profiles.active}") String activeProfile,
+                            @Value("${slidepiper.storage.password}") String storagePassword,
+                            AmazonS3Service amazonS3Service,
+                            ChannelRepository channelRepository,
                             FtpWidgetRepository ftpWidgetRepository,
-                            AmazonS3Service amazonS3Service) {
+                            StorageRepository storageRepository) {
+        this.activeProfile = activeProfile;
+        this.storagePassword = storagePassword;
+        this.amazonS3Service = amazonS3Service;
         this.channelRepository = channelRepository;
         this.ftpWidgetRepository = ftpWidgetRepository;
-        this.amazonS3Service = amazonS3Service;
+        this.storageRepository = storageRepository;
     }
 
     public void uploadManager(MultipartFile[] files, FtpWidgetDataInput ftpWidgetDataInput)
@@ -93,15 +104,29 @@ public class FtpWidgetService {
     }
 
     private String createConnecitonUrl(FtpWidgetData ftpWidgetData) throws URISyntaxException {
-        String userInfo = String.join(":", ftpWidgetData.getUsername(), ftpWidgetData.getPassword());
+        BasicTextEncryptor basicTextEncryptor = new BasicTextEncryptor();
+        basicTextEncryptor.setPassword(storagePassword);
 
-        return new URI(ftpWidgetData.getScheme().name().toLowerCase(),
-                userInfo,
-                ftpWidgetData.getHost(),
-                ftpWidgetData.getPort(),
-                ftpWidgetData.getPath(),
-                null,
-                null).toString();
+        Storage storage = storageRepository.findByType("ENCRYPTED_CONNECTION_URL");
+
+        String encryptedConnectionUrl = storage.getData();
+        if (Objects.nonNull(encryptedConnectionUrl)) {
+            return basicTextEncryptor.decrypt(encryptedConnectionUrl);
+        } else {
+            String userInfo = String.join(":", ftpWidgetData.getUsername(), ftpWidgetData.getPassword());
+            String connectionUrl = new URI(ftpWidgetData.getScheme().name().toLowerCase(),
+                    userInfo,
+                    ftpWidgetData.getHost(),
+                    ftpWidgetData.getPort(),
+                    ftpWidgetData.getPath(),
+                    null,
+                    null).toString();
+
+            storage.setData(basicTextEncryptor.encrypt(connectionUrl));
+            storageRepository.save(storage);
+
+            return connectionUrl;
+        }
     }
 
     private FileSystemOptions createFileSystemOptions(Scheme scheme)
