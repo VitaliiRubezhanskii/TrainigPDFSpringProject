@@ -5,6 +5,7 @@ import com.slidepiper.exception.WidgetNotFoundException;
 import com.slidepiper.model.entity.Document;
 import com.slidepiper.model.input.FtpWidgetDataInput;
 import com.slidepiper.repository.ChannelRepository;
+import com.slidepiper.repository.EncryptedStorageRepository;
 import com.slidepiper.repository.StorageRepository;
 import com.slidepiper.service.amazon.AmazonS3Service;
 import org.apache.commons.io.FileUtils;
@@ -39,6 +40,7 @@ public class FtpWidgetService {
 
     private final AmazonS3Service amazonS3Service;
     private final ChannelRepository channelRepository;
+    private final EncryptedStorageRepository encryptedStorageRepository;
     private final StorageRepository storageRepository;
 
     @Autowired
@@ -46,11 +48,13 @@ public class FtpWidgetService {
                             @Value("${slidepiper.storage.password}") String storagePassword,
                             AmazonS3Service amazonS3Service,
                             ChannelRepository channelRepository,
+                            EncryptedStorageRepository encryptedStorageRepository,
                             StorageRepository storageRepository) {
         this.activeProfile = activeProfile;
         this.storagePassword = storagePassword;
         this.amazonS3Service = amazonS3Service;
         this.channelRepository = channelRepository;
+        this.encryptedStorageRepository = encryptedStorageRepository;
         this.storageRepository = storageRepository;
     }
 
@@ -96,7 +100,7 @@ public class FtpWidgetService {
         BasicTextEncryptor basicTextEncryptor = new BasicTextEncryptor();
         basicTextEncryptor.setPassword(storagePassword);
 
-        String encryptedConnectionUrl = storageRepository.findByType("ENCRYPTED_CONNECTION_URL").getData();
+        String encryptedConnectionUrl = encryptedStorageRepository.findByType("CONNECTION_URL").getData();
         return basicTextEncryptor.decrypt(encryptedConnectionUrl);
     }
 
