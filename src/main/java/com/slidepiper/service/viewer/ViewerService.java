@@ -140,6 +140,7 @@ public class ViewerService {
         navigationBarConfiguration.put("toolbarCtaMargin", viewer.getViewer_toolbar_cta_margin());
         navigationBarConfiguration.put("toolbarCtaPadding",viewer.getViewer_toolbar_cta_padding());
 
+        navigationBarConfiguration.put("toolbarCta1Color", viewer.getViewer_toolbar_cta1_color());
         if (viewer.getViewer_toolbar_cta1_is_enabled().equals("true")) {
             navigationBarConfiguration.put("isCta1Enabled", viewer.getViewer_toolbar_cta1_is_enabled());
             navigationBarConfiguration.put("cta1CollapseMaxWidth", viewer.getViewer_toolbar_cta1_collapse_max_width());
@@ -147,7 +148,6 @@ public class ViewerService {
             navigationBarConfiguration.put("toolbarCta1HoverBackground", viewer.getViewer_toolbar_cta1_hover_background());
             navigationBarConfiguration.put("toolbarCta1Border", viewer.getViewer_toolbar_cta1_border());
             navigationBarConfiguration.put("toolbarCta1HoverBorder", viewer.getViewer_toolbar_cat1_hover_border());
-            navigationBarConfiguration.put("toolbarCta1Color", viewer.getViewer_toolbar_cta1_color());
             navigationBarConfiguration.put("toolbarCta1HoverColor", viewer.getViewer_toolbar_cta1_hover_color());
             navigationBarConfiguration.put("toolbarCta1Text", viewer.getViewer_toolbar_cta1_text());
             navigationBarConfiguration.put("toolbarCta1Link", viewer.getViewer_toolbar_cta1_link());
