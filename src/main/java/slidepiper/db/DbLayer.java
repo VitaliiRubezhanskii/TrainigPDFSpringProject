@@ -566,6 +566,54 @@ public class DbLayer {
 	   		return widgetsSettings;
 	   	}
 
+	public static JSONArray getViewerWidgetsSettings(long fileId) {
+
+		Connection conn = null;
+		Constants.updateConstants();
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+
+		String sql =
+				"SELECT\n"
+						+ "  data\n"
+						+ "FROM widget\n"
+						+ "WHERE FK_file_id_ai = ? AND type IN ('1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11') AND ((data->'$.data.isEnabled' = true AND data->'$.data.items[0].enabled' IS NULL) OR (data->'$.data.isEnabled' IS NULL AND data->'$.data.items[0].enabled' = true))";
+
+		JSONArray widgetsSettings = new JSONArray();
+
+		try {
+			conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
+			PreparedStatement ps = conn.prepareStatement(sql);
+
+			ps.setLong(1, fileId);
+			ResultSet rs = ps.executeQuery();
+
+			while (rs.next()) {
+				JSONObject widget = new JSONObject();
+				widget.put("widgetData", rs.getString("data"));
+				widgetsSettings.put(widget);
+			}
+
+			System.out.println(widgetsSettings.length());
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			if (null != conn) {
+				try {
+					conn.close();
+				} catch (SQLException ex) {
+					ex.printStackTrace();
+				}
+			}
+		}
+
+		return widgetsSettings;
+	}
+
 			/**
        * Set the file link hash used for the file viewer,
        * i.e. www.slidepiper.com/view?f=<file link hash>

@@ -20,6 +20,6 @@ public class ViewerWidgetController {
     @GetMapping("/viewer/widgets")
     public String widgetsConfiguration(@RequestBody @RequestParam("fileLinkHash") String channelFriendlyId) {
         long documentId = channelRepository.findByFriendlyId(channelFriendlyId).getDocument().getId();
-        return DbLayer.getWidgetsSettings(documentId).toString();
+        return DbLayer.getViewerWidgetsSettings(documentId).toString();
     }
 }

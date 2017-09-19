@@ -139,36 +139,46 @@ public class ViewerService {
         navigationBarConfiguration.put("toolbarCtaFont", viewer.getViewer_toolbar_cta_font());
         navigationBarConfiguration.put("toolbarCtaMargin", viewer.getViewer_toolbar_cta_margin());
         navigationBarConfiguration.put("toolbarCtaPadding",viewer.getViewer_toolbar_cta_padding());
-        navigationBarConfiguration.put("isCta1Enabled", viewer.getViewer_toolbar_cta1_is_enabled());
-        navigationBarConfiguration.put("cta1CollapseMaxWidth", viewer.getViewer_toolbar_cta1_collapse_max_width());
-        navigationBarConfiguration.put("toolbarCta1Background", viewer.getViewer_toolbar_cta1_background());
-        navigationBarConfiguration.put("toolbarCta1HoverBackground", viewer.getViewer_toolbar_cta1_hover_background());
-        navigationBarConfiguration.put("toolbarCta1Border", viewer.getViewer_toolbar_cta1_border());
-        navigationBarConfiguration.put("toolbarCta1HoverBorder", viewer.getViewer_toolbar_cat1_hover_border());
-        navigationBarConfiguration.put("toolbarCta1Color", viewer.getViewer_toolbar_cta1_color());
-        navigationBarConfiguration.put("toolbarCta1HoverColor", viewer.getViewer_toolbar_cta1_hover_color());
-        navigationBarConfiguration.put("toolbarCta1Text", viewer.getViewer_toolbar_cta1_text());
-        navigationBarConfiguration.put("toolbarCta1Link", viewer.getViewer_toolbar_cta1_link());
-        navigationBarConfiguration.put("isCta2Enabled", viewer.getViewer_toolbar_cta2_is_enabled());
-        navigationBarConfiguration.put("cta2CollapseMaxWidth", viewer.getViewer_toolbar_cta2_collapse_max_width());
-        navigationBarConfiguration.put("toolbarCta2Background", viewer.getViewer_toolbar_cta2_background());
-        navigationBarConfiguration.put("toolbarCta2HoverBackground", viewer.getViewer_toolbar_cta2_hover_background());
-        navigationBarConfiguration.put("toolbarCta2Border", viewer.getViewer_toolbar_cta2_border());
-        navigationBarConfiguration.put("toolbarCta2HoverBorder", viewer.getViewer_toolbar_cta2_hover_border());
-        navigationBarConfiguration.put("toolbarCta2Color", viewer.getViewer_toolbar_cta2_color());
-        navigationBarConfiguration.put("toolbarCta2HoverColor", viewer.getViewer_toolbar_cta2_hover_color());
-        navigationBarConfiguration.put("toolbarCta2Text", viewer.getViewer_toolbar_cta2_text());
-        navigationBarConfiguration.put("toolbarCta2Link", viewer.getViewer_toolbar_cta2_link());
-        navigationBarConfiguration.put("isCta3Enabled", viewer.getViewer_toolbar_cta3_is_enabled());
-        navigationBarConfiguration.put("cta3CollapseMaxWidth", viewer.getViewer_toolbar_cta3_collapse_max_width());
-        navigationBarConfiguration.put("toolbarCta3Background", viewer.getViewer_toolbar_cta3_background());
-        navigationBarConfiguration.put("toolbarCta3HoverBackground", viewer.getViewer_toolbar_cta3_hover_background());
-        navigationBarConfiguration.put("toolbarCta3Border", viewer.getViewer_toolbar_cta3_border());
-        navigationBarConfiguration.put("toolbarCta3HoverBorder", viewer.getViewer_toolbar_cta3_hover_border());
-        navigationBarConfiguration.put("toolbarCta3Color", viewer.getViewer_toolbar_cta3_color());
-        navigationBarConfiguration.put("toolbarCta3HoverColor", viewer.getViewer_toolbar_cta3_hover_color());
-        navigationBarConfiguration.put("toolbarCta3Text", viewer.getViewer_toolbar_cta3_text());
-        navigationBarConfiguration.put("toolbarCta3Link", viewer.getViewer_toolbar_cta3_link());
+
+        if (viewer.getViewer_toolbar_cta1_is_enabled().equals("true")) {
+            navigationBarConfiguration.put("isCta1Enabled", viewer.getViewer_toolbar_cta1_is_enabled());
+            navigationBarConfiguration.put("cta1CollapseMaxWidth", viewer.getViewer_toolbar_cta1_collapse_max_width());
+            navigationBarConfiguration.put("toolbarCta1Background", viewer.getViewer_toolbar_cta1_background());
+            navigationBarConfiguration.put("toolbarCta1HoverBackground", viewer.getViewer_toolbar_cta1_hover_background());
+            navigationBarConfiguration.put("toolbarCta1Border", viewer.getViewer_toolbar_cta1_border());
+            navigationBarConfiguration.put("toolbarCta1HoverBorder", viewer.getViewer_toolbar_cat1_hover_border());
+            navigationBarConfiguration.put("toolbarCta1Color", viewer.getViewer_toolbar_cta1_color());
+            navigationBarConfiguration.put("toolbarCta1HoverColor", viewer.getViewer_toolbar_cta1_hover_color());
+            navigationBarConfiguration.put("toolbarCta1Text", viewer.getViewer_toolbar_cta1_text());
+            navigationBarConfiguration.put("toolbarCta1Link", viewer.getViewer_toolbar_cta1_link());
+        }
+
+        if (viewer.getViewer_toolbar_cta2_is_enabled().equals("true")) {
+            navigationBarConfiguration.put("isCta2Enabled", viewer.getViewer_toolbar_cta2_is_enabled());
+            navigationBarConfiguration.put("cta2CollapseMaxWidth", viewer.getViewer_toolbar_cta2_collapse_max_width());
+            navigationBarConfiguration.put("toolbarCta2Background", viewer.getViewer_toolbar_cta2_background());
+            navigationBarConfiguration.put("toolbarCta2HoverBackground", viewer.getViewer_toolbar_cta2_hover_background());
+            navigationBarConfiguration.put("toolbarCta2Border", viewer.getViewer_toolbar_cta2_border());
+            navigationBarConfiguration.put("toolbarCta2HoverBorder", viewer.getViewer_toolbar_cta2_hover_border());
+            navigationBarConfiguration.put("toolbarCta2Color", viewer.getViewer_toolbar_cta2_color());
+            navigationBarConfiguration.put("toolbarCta2HoverColor", viewer.getViewer_toolbar_cta2_hover_color());
+            navigationBarConfiguration.put("toolbarCta2Text", viewer.getViewer_toolbar_cta2_text());
+            navigationBarConfiguration.put("toolbarCta2Link", viewer.getViewer_toolbar_cta2_link());
+        }
+
+        if (viewer.getViewer_toolbar_cta3_is_enabled().equals("true")) {
+            navigationBarConfiguration.put("isCta3Enabled", viewer.getViewer_toolbar_cta3_is_enabled());
+            navigationBarConfiguration.put("cta3CollapseMaxWidth", viewer.getViewer_toolbar_cta3_collapse_max_width());
+            navigationBarConfiguration.put("toolbarCta3Background", viewer.getViewer_toolbar_cta3_background());
+            navigationBarConfiguration.put("toolbarCta3HoverBackground", viewer.getViewer_toolbar_cta3_hover_background());
+            navigationBarConfiguration.put("toolbarCta3Border", viewer.getViewer_toolbar_cta3_border());
+            navigationBarConfiguration.put("toolbarCta3HoverBorder", viewer.getViewer_toolbar_cta3_hover_border());
+            navigationBarConfiguration.put("toolbarCta3Color", viewer.getViewer_toolbar_cta3_color());
+            navigationBarConfiguration.put("toolbarCta3HoverColor", viewer.getViewer_toolbar_cta3_hover_color());
+            navigationBarConfiguration.put("toolbarCta3Text", viewer.getViewer_toolbar_cta3_text());
+            navigationBarConfiguration.put("toolbarCta3Link", viewer.getViewer_toolbar_cta3_link());
+        }
+
         navigationBarConfiguration.put("isViewerToolbarIsDownloadEnabled", viewer.isViewer_toolbar_secondary_is_download_enabled());
         navigationBarConfiguration.put("isMobileToolbarSecondaryPresentationEnabled", viewer.isViewer_toolbar_secondary_is_mobile_presentation_enabled());
         navigationBarConfiguration.put("isMobileToolbarSecondaryDownloadEnabled", viewer.isViewer_toolbar_secondary_is_mobile_download_enabled());
