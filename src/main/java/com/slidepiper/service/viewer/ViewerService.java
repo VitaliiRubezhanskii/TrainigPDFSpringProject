@@ -141,7 +141,8 @@ public class ViewerService {
         navigationBarConfiguration.put("toolbarCtaPadding",viewer.getViewer_toolbar_cta_padding());
 
         navigationBarConfiguration.put("toolbarCta1Color", viewer.getViewer_toolbar_cta1_color());
-        if (viewer.getViewer_toolbar_cta1_is_enabled().equals("true")) {
+        if (Objects.nonNull(viewer.getViewer_toolbar_cta1_is_enabled())
+                && viewer.getViewer_toolbar_cta1_is_enabled().equals("true")) {
             navigationBarConfiguration.put("isCta1Enabled", viewer.getViewer_toolbar_cta1_is_enabled());
             navigationBarConfiguration.put("cta1CollapseMaxWidth", viewer.getViewer_toolbar_cta1_collapse_max_width());
             navigationBarConfiguration.put("toolbarCta1Background", viewer.getViewer_toolbar_cta1_background());
@@ -153,7 +154,8 @@ public class ViewerService {
             navigationBarConfiguration.put("toolbarCta1Link", viewer.getViewer_toolbar_cta1_link());
         }
 
-        if (viewer.getViewer_toolbar_cta2_is_enabled().equals("true")) {
+        if (Objects.nonNull(viewer.getViewer_toolbar_cta2_is_enabled())
+                && viewer.getViewer_toolbar_cta2_is_enabled().equals("true")) {
             navigationBarConfiguration.put("isCta2Enabled", viewer.getViewer_toolbar_cta2_is_enabled());
             navigationBarConfiguration.put("cta2CollapseMaxWidth", viewer.getViewer_toolbar_cta2_collapse_max_width());
             navigationBarConfiguration.put("toolbarCta2Background", viewer.getViewer_toolbar_cta2_background());
@@ -166,7 +168,8 @@ public class ViewerService {
             navigationBarConfiguration.put("toolbarCta2Link", viewer.getViewer_toolbar_cta2_link());
         }
 
-        if (viewer.getViewer_toolbar_cta3_is_enabled().equals("true")) {
+        if (Objects.nonNull(viewer.getViewer_toolbar_cta3_is_enabled())
+                && viewer.getViewer_toolbar_cta3_is_enabled().equals("true")) {
             navigationBarConfiguration.put("isCta3Enabled", viewer.getViewer_toolbar_cta3_is_enabled());
             navigationBarConfiguration.put("cta3CollapseMaxWidth", viewer.getViewer_toolbar_cta3_collapse_max_width());
             navigationBarConfiguration.put("toolbarCta3Background", viewer.getViewer_toolbar_cta3_background());
