@@ -35,6 +35,7 @@ dependencyManagement {
 }
 
 dependencies {
+    compile 'com.amazonaws:aws-java-sdk-cloudfront'
     compile 'com.amazonaws:aws-java-sdk-s3'
     compile 'com.amazonaws:aws-java-sdk-ses'
     compile 'com.amazonaws:aws-java-sdk-sns'

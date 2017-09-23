@@ -12,6 +12,7 @@ import com.slidepiper.model.entity.widget.Widget;
 import com.slidepiper.repository.DocumentRepository;
 import com.slidepiper.repository.EventRepository;
 import com.slidepiper.repository.ViewerRepository;
+import com.slidepiper.amazon.AmazonCloudFrontService;
 import com.slidepiper.service.amazon.AmazonS3Service;
 import com.slidepiper.service.amazon.AmazonS3Service.ObjectMetaData;
 import com.slidepiper.service.dashboard.widget.DashboardShareWidgetService;
@@ -21,6 +22,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.util.UriComponentsBuilder;
 import slidepiper.config.ConfigProperties;
 import slidepiper.db.DbLayer;
 
@@ -41,6 +43,7 @@ public class DashboardDocumentService {
     private final String keyPrefix;
     private final int minHashLength;
     private final String salt;
+    private final AmazonCloudFrontService amazonCloudFrontService;
     private final AmazonS3Service amazonS3Service;
     private final DocumentRepository documentRepository;
     private final EntityManager entityManager;
@@ -54,6 +57,7 @@ public class DashboardDocumentService {
                                     @Value("${documents.hashids.salt}") String salt,
                                     @Value("${documents.hashids.minHashLength}") int minHashLength,
                                     @Value("${documents.hashids.alphabet}") String alphabet,
+                                    AmazonCloudFrontService amazonCloudFrontService,
                                     AmazonS3Service amazonS3Service,
                                     DocumentRepository documentRepository,
                                     EntityManager entityManager,
@@ -65,6 +69,7 @@ public class DashboardDocumentService {
         this.salt = salt;
         this.minHashLength = minHashLength;
         this.alphabet = alphabet;
+        this.amazonCloudFrontService = amazonCloudFrontService;
         this.amazonS3Service = amazonS3Service;
         this.documentRepository = documentRepository;
         this.entityManager = entityManager;
@@ -75,6 +80,14 @@ public class DashboardDocumentService {
 
     private String getDocumentPrefix(Document document) {
         return String.join("/", keyPrefix, document.getFriendlyId());
+    }
+
+    private String getDocumentPath(Document document) {
+        return UriComponentsBuilder
+                .newInstance()
+                .path("/{keyPrefix}/{documentFriendlyId}/*")
+                .buildAndExpand(keyPrefix, document.getFriendlyId())
+                .toUriString();
     }
 
     public void upload(MultipartFile[] files, String username) throws IOException {
@@ -127,6 +140,10 @@ public class DashboardDocumentService {
         document.setVersionId(versionId);
         documentRepository.save(document);
 
+        // Invalidate document path.
+        // @TODO: Run command asynchronously.
+        amazonCloudFrontService.invalidate(getDocumentPath(document));
+
         // Save event.
         ObjectNode data = objectMapper.createObjectNode();
         data.put("id", document.getId());
@@ -144,6 +161,10 @@ public class DashboardDocumentService {
 
         document.setStatus(Status.DELETED);
         documentRepository.save(document);
+
+        // Invalidate document path.
+        // @TODO: Run command asynchronously.
+        amazonCloudFrontService.invalidate(getDocumentPath(document));
 
         // Save event.
         ObjectNode data = objectMapper.createObjectNode();
