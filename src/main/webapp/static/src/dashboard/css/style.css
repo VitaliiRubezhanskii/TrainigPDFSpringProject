@@ -6,10 +6,6 @@
     margin-left: 0;
 }
 
-button[data-target="#sp-modal-add-update-customer"] {
-    margin-left: 10px;
-}
-
 form[role="search"], .text-muted, .arrow {
     visibility: hidden;
 }
@@ -582,8 +578,7 @@ td.sp-file-hash {
 [data-target="#sp-modal-upload-files"],
 [data-target="#sp-modal-upload-customers"],
 [data-target="#sp-modal-add-update-customer"] {
-    margin-top: 20px;
-    margin-bottom: -20px;
+    margin: 10px auto 20px;
 }
 
 /* Error Handler */

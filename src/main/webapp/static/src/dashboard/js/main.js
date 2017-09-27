@@ -923,6 +923,13 @@ sp = {
             if (!($.fn.dataTable.isDataTable('#sp-files-management'))) {
                 $('#sp-files-management').DataTable({
                     data: filesArr,
+                    buttons: [
+                        {
+                            extend: 'csv',
+                            filename: 'SlidePiper Portals',
+                            text: 'Export to CSV'
+                        }
+                    ],
                     columns: [
                         {data: 'date'},
                         {data: 'document'},
@@ -930,6 +937,7 @@ sp = {
                     ],
                     scrollY: '55vh',
                     scrollCollapse: true,
+                    dom: '<"sp-datatables-search-left"f><"html5buttons"B>ti',
                     paging: false,
                     order: [0, 'desc'],
                     initComplete: function(settings) {
@@ -1095,6 +1103,13 @@ sp = {
             if (!($.fn.dataTable.isDataTable('#sp-customers-management'))) {
                 $('#sp-customers-management').DataTable({
                     data: nameArr,
+                    buttons: [
+                        {
+                            extend: 'csv',
+                            filename: 'SlidePiper Customers',
+                            text: 'Export to CSV'
+                        }
+                    ],
                     columns: [
                         {data: 'date'},
                         {data: 'name'},
@@ -1105,6 +1120,7 @@ sp = {
                     ],
                     scrollY: '55vh',
                     scrollCollapse: true,
+                    dom: '<"sp-datatables-search-left"f><"html5buttons"B>ti',
                     paging: false,
                     order: [[0, 'desc']],
                     initComplete: function(settings) {
