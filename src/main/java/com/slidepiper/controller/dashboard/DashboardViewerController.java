@@ -85,6 +85,7 @@ public class DashboardViewerController {
         viewer.setViewer_toolbar_logo_link(viewerToolbarLogoLink);
         viewer.setViewer_toolbar_background(viewerToolbarBackground);
         viewer.setViewer_toolbar_color(viewerToolbarTextColor);
+        viewer.setViewer_toolbar_button_background(viewerToolbarCTABackground);
         viewer.setViewer_toolbar_cta1_background(viewerToolbarCTABackground);
         viewer.setViewer_toolbar_cta2_background(viewerToolbarCTABackground);
         viewer.setViewer_toolbar_cta3_background(viewerToolbarCTABackground);

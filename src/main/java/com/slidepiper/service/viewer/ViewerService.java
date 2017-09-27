@@ -121,7 +121,7 @@ public class ViewerService {
         navigationBarConfiguration.put("documentTitle", viewer.getViewer_document_title());
         navigationBarConfiguration.put("toolbarBackground", viewer.getViewer_toolbar_background());
         navigationBarConfiguration.put("toolbarButtonBackground", viewer.getViewer_toolbar_button_background());
-        navigationBarConfiguration.put("toolbarButtonHoverBackground", viewer.getViewer_toolbar_button_background());
+        navigationBarConfiguration.put("toolbarButtonHoverBackground", viewer.getViewer_toolbar_button_hover_background());
         navigationBarConfiguration.put("toolbarButtonBorder", viewer.getViewer_toolbar_button_border());
         navigationBarConfiguration.put("toolbarButtonHoverBorder", viewer.getViewer_toolbar_button_hover_border());
         navigationBarConfiguration.put("toolbarButtonBoxShadow", viewer.getViewer_toolbar_button_box_shadow());
