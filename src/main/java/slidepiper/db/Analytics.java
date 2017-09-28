@@ -28,66 +28,31 @@ public class Analytics {
    * 3. A file's bounce rate is calculated by dividing the number of bounced sessions by the
    * total number of sessions.
    */
-  public static final String sqlFilesDataByName =
+  public static final String sqlFileData =
         "SELECT\n"
-      + "  slides.id AS file_hash,\n"
-      + "  slides.name AS file_name,\n"
-      + "  msg_info.id AS file_link,\n"
+	  + "  file_hash,\n"
       + "  SUM(IF(event_name = 'OPEN_SLIDES', 1, 0)) AS file_sum_open,\n"
       + "  (SUM(IF(event_name = 'OPEN_SLIDES',1,0)) - SUM(IF(event_name = 'VIEW_SLIDE' AND count_distinct_pages_viewed>1,1,0))) / SUM(IF(event_name = 'OPEN_SLIDES',1,0)) AS file_bounce_rate,\n"
       + "  SUM(IF(event_name = 'VIEW_SLIDE', view_duration, 0)) / SUM(IF(event_name = 'VIEW_SLIDE', 1, 0)) AS average_view_duration,\n"
       + "  SUM(IF(event_name = 'VIEW_SLIDE', count_distinct_pages_viewed, 0)) / SUM(IF(event_name = 'VIEW_SLIDE', 1, 0)) AS average_pages_viewed,\n"
-      + "  SUM(IF(event_name = 'CLICKED_CTA', 1, 0)) AS users_cta,\n"
-      + "  0.5 * SUM(IF(event_name = 'VIEW_SLIDE' AND count_distinct_pages_viewed>1,1,0)) / SUM(IF(event_name = 'OPEN_SLIDES',1,0)) + 0.5 * SUM(IF(event_name = 'CLICKED_CTA', 1, 0)) / SUM(IF(event_name = 'OPEN_SLIDES',1,0)) AS file_performance\n"
+      + "  SUM(IF(event_name = 'CLICKED_CTA', 1, 0)) AS users_cta\n"
       + "FROM view_file_agg_by_session_event_name\n"
-      + "RIGHT JOIN slides ON slides.id = file_hash AND slides.status IN ('CREATED', 'UPDATED', 'BEFORE_AWS_S3_TRANSITION')\n"
-      + "INNER JOIN msg_info ON msg_info.slides_id = slides.id\n"
-      + "WHERE msg_info.sales_man_email=? AND msg_info.sales_man_email != '' AND msg_info.customer_email='" + ConfigProperties.getProperty("default_customer_email") + "'\n"
-      + "GROUP BY slides.id\n"
-      + "ORDER BY file_name, slides.timestamp";
-  
-  
-  public static final String sqlFilesDataByPerformance =
-	        "SELECT\n"
-	      + "  slides.id AS file_hash,\n"
-	      + "  slides.name AS file_name,\n"
-	      + "  msg_info.id AS file_link,\n"
-	      + "  SUM(IF(event_name = 'OPEN_SLIDES', 1, 0)) AS file_sum_open,\n"
-	      + "  (SUM(IF(event_name = 'OPEN_SLIDES',1,0)) - SUM(IF(event_name = 'VIEW_SLIDE' AND count_distinct_pages_viewed>1,1,0))) / SUM(IF(event_name = 'OPEN_SLIDES',1,0)) AS file_bounce_rate,\n"
-	      + "  SUM(IF(event_name = 'VIEW_SLIDE', view_duration, 0)) / SUM(IF(event_name = 'VIEW_SLIDE', 1, 0)) AS average_view_duration,\n"
-	      + "  SUM(IF(event_name = 'VIEW_SLIDE', count_distinct_pages_viewed, 0)) / SUM(IF(event_name = 'VIEW_SLIDE', 1, 0)) AS average_pages_viewed,\n"
-	      + "  SUM(IF(event_name = 'CLICKED_CTA', 1, 0)) AS users_cta,\n"
-	      + "  0.5 * SUM(IF(event_name = 'VIEW_SLIDE' AND count_distinct_pages_viewed>1,1,0)) / SUM(IF(event_name = 'OPEN_SLIDES',1,0)) + 0.5 * SUM(IF(event_name = 'CLICKED_CTA', 1, 0)) / SUM(IF(event_name = 'OPEN_SLIDES',1,0)) AS file_performance\n"
-	      + "FROM view_file_agg_by_session_event_name\n"
-	      + "RIGHT JOIN slides ON slides.id = file_hash AND slides.status IN ('CREATED', 'UPDATED', 'BEFORE_AWS_S3_TRANSITION')\n"
-	      + "INNER JOIN msg_info ON msg_info.slides_id = slides.id\n"
-	      + "WHERE msg_info.sales_man_email=? AND msg_info.sales_man_email != '' AND msg_info.customer_email='" + ConfigProperties.getProperty("default_customer_email") + "'\n"
-	      + "GROUP BY slides.id\n"
-	      + "ORDER BY file_performance DESC, slides.timestamp";
+      + "WHERE file_hash = ?";
   
   
   /**
    * Get files data given a salesman and a customer email address.
    */
-  public static final String sqlFilesCustomerData =
+  public static final String sqlFileCustomerData =
         "SELECT\n"
-      + "  file_hash,\n"
-      + "  slides.name AS file_name,\n"
-      + "  view_file_agg_by_session_event_name.file_link,\n"
+	  + "  file_hash,\n"
       + "  SUM(IF(event_name = 'OPEN_SLIDES', 1, 0)) AS file_sum_open,\n"
       + "  (SUM(IF(event_name = 'OPEN_SLIDES',1,0)) - SUM(IF(event_name = 'VIEW_SLIDE' AND count_distinct_pages_viewed>1,1,0))) / SUM(IF(event_name = 'OPEN_SLIDES',1,0)) AS file_bounce_rate,\n"
       + "  SUM(IF(event_name = 'VIEW_SLIDE', view_duration, 0)) / SUM(IF(event_name = 'VIEW_SLIDE', 1, 0)) AS average_view_duration,\n"
       + "  SUM(IF(event_name = 'VIEW_SLIDE', count_distinct_pages_viewed, 0)) / SUM(IF(event_name = 'VIEW_SLIDE', 1, 0)) AS average_pages_viewed,\n"
-      + "  SUM(IF(event_name = 'CLICKED_CTA', 1, 0)) AS users_cta,\n"
-      + "  0.5 * SUM(IF(event_name = 'VIEW_SLIDE' AND count_distinct_pages_viewed>1,1,0)) / SUM(IF(event_name = 'OPEN_SLIDES',1,0)) + 0.5 * SUM(IF(event_name = 'CLICKED_CTA', 1, 0)) / SUM(IF(event_name = 'OPEN_SLIDES',1,0)) AS file_performance#,\n"
-      + "  #customers.name AS customer_name,\n"
-      + "  #customer_email\n"
+      + "  SUM(IF(event_name = 'CLICKED_CTA', 1, 0)) AS users_cta\n"
       + "FROM view_file_agg_by_session_event_name\n"
-      + "INNER JOIN slides ON slides.id = file_hash AND slides.status IN ('CREATED', 'UPDATED', 'BEFORE_AWS_S3_TRANSITION')\n"
-      + "INNER JOIN customers ON customers.sales_man = salesman_email AND customers.email = customer_email\n"
-      + "WHERE salesman_email=? AND customer_email=?\n"
-      + "GROUP BY file_hash, customer_email\n"
-      + "ORDER BY customers.name, slides.name, slides.timestamp\n";
+      + "WHERE file_hash = ? AND customer_email = ?";
   
   
   public static final String sqlTopExitPage =
@@ -343,35 +308,7 @@ public class Analytics {
     + "AND msg_info.sales_man_email = ?\n"
     + "AND msg_info.slides_id = ?\n"
     + "AND msg_info.customer_email = ?";
-  
-  
-  /**
-   * Get notifications for notifications toolbar.
-   * 
-   * Get max 50 notifications.
-   * 
-   * @see 'Format result from TIMEDIFF as dd:hh:mm:ss' http://stackoverflow.com/questions/12024989/format-result-from-timediff-in-dayshoursminsec
-   */
-  public static final String sqlToolbarNotifications = 
-      "SELECT\n"
-	+ "  customer_events.id,\n"	  
-	+ "  event_name AS 'event',\n"
-    + "  is_notification_read AS 'isRead',\n"		  
-	+ "  slides.name AS 'documentName',\n"
-	+ "  msg_info.customer_email AS 'customerEmail',\n"
-	+ "  customer_events.timestamp AS 'timestamp',\n"
-	+ "  current_timestamp() AS 'currentTime',\n"
-	+ "  param_3_varchar AS 'messageReplyEmail',\n"
-	+ "  param_11_varchar AS 'enteredEmailAddress'\n"
-	+ "FROM customer_events\n"
-	+ "INNER JOIN msg_info ON msg_info.id = customer_events.msg_id\n"
-	+ "INNER JOIN slides ON msg_info.slides_id = slides.id AND slides.status IN ('CREATED', 'UPDATED', 'BEFORE_AWS_S3_TRANSITION')\n"
-	+ "WHERE event_name IN ('OPEN_SLIDES', 'VIEWER_WIDGET_ASK_QUESTION')\n"
-	+ "AND msg_info.sales_man_email = ?\n"
-	+ "AND customer_events.timestamp > '2016-01-01'\n"
-	+ "AND msg_info.customer_email <> '" + ConfigProperties.getProperty("test_customer_email") + "'"
-	+ "ORDER BY id DESC LIMIT 50";
-  
+
   
   /**
    * Get notifications for notifications table.

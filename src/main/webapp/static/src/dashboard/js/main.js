@@ -34,115 +34,57 @@ sp = {
         /**
          * Set the file dashboard.
          */
+
+        setFileDashboard();
         function setFileDashboard() {
-            // Set fileHash.
-            /**
-             * The (if) clause is there so that a fileHash is not set to the search field,
-             * as it is contained inside an <li> tag
-             */
-            var fileHash = $(this).children().attr('data-file-hash');
-            if (!($(this).find('input').hasClass('sp-nav-search__input') || $(this).hasClass('sp-sort'))){
-                        if (typeof fileHash === 'undefined' && sp.table && typeof sp.table.filesData !== 'undefined') {
-                    fileHash = sp.table.filesData.row($(this).parent()).data()[0];
+            $.getJSON('/api/v1/analytics', {action: 'getFilesList'}, function(data) {
+                var filesList = data.filesList;
+
+                $('#sp-nav-files__li')
+                    .empty()
+                    .append(
+                        '<a aria-expanded="true"><i class="fa fa-bar-chart"></i> '
+                        + '<span class="nav-label">Marketing Analytics</span></a>'
+                        + '<span class="fa arrow"></span>'
+                        + '<div id="sp-marketing-analytics" class="sp-analytics-container__div">'
+                        + '<ul class="nav nav-second-level sp-search-list">'
+                        + '<div class="sp-sort-search-cont">'
+                        + '<div class="sp-search-container">'
+                        + '<span><input id="sp-search-box" class="sp-nav-search__input" placeholder="Search" /></span>'
+                        + '</div>'
+                        + '</div>'
+                        + '</div>'
+                    );
+
+                    //Without this command, the input field does not focus when clicked on
+                    $('#sp-search-box').focus();
+
+                    for (var i = 0; i < filesList.length; i++) {
+                        $('#sp-nav-files__li ul').append('<li class="sp-marketing-analytics__li"><a class="sp-word-wrap" data-file-hash="'
+                            + filesList[i][0] + '">' + filesList[i][1] + '</a></li>');
+                    }
+
+                    // Init search function
+                    sp.view.marketingAnalytics.search();
+
+                    // Highlight the <li> clicked on
+                    $('.sp-marketing-analytics__li').on('click', function () {
+                        $('.sp-marketing-analytics__li').removeClass('active');
+                        $(this).addClass('active');
+                    });
+
+                    // Temporary solution until sales analytics will show data for all metrics, charts, and table.
+                    $('.sp-metric-top-exit-page, .sp-chart-performance-benchmark').show();
                 }
-            }
-            /**
-             * @param Check what has been clicked on in the menu to decide whether to repopulate the list
-             * or not. I.e. if they have clicked sort repopulate the list, otherwise do not
-             */
-            var clickChoice = $(this).attr('data-sort');
-            $.getJSON(
-                '/api/v1/analytics',
-                {action: 'getFilesData', sortChoice: $(this).attr('data-sort') !== undefined ? $(this).attr('data-sort'): "noSort" },
-                function(data) {
-                        var filesData = data.filesData;
-
-                        if (0 < filesData.length) {
-                            // Build side menu.
-                            /**
-                             *  Put search bar inside <ul> tag, putting it anywhere else causes bugs in the menu
-                             *
-                             *  If the list has not been created, create it (in the else clause)
-                             *  This stops the list from being re-created each time a file is clicked on, but still allows
-                             *  the metrics to be updated
-                             */
-                            var files = [];
-                            if (0 < $('.sp-search-list li').length && undefined === clickChoice) {
-                                for (var i = 0; i < filesData.length; i++) {
-                                    if (filesData[i][0] == fileHash) {
-                                        fileHash = filesData[i][0];
-                                        files[fileHash] = filesData[i];
-                                    }
-                                }
-                            }
-                            else {
-                                $('#sp-nav-files__li')
-                                    .empty()
-                                    .append(
-                                        '<a aria-expanded="true"><i class="fa fa-bar-chart"></i> '
-                                        + '<span class="nav-label">Marketing Analytics</span></a>'
-                                        + '<span class="fa arrow"></span>'
-                                        + '<div id="sp-marketing-analytics" class="sp-analytics-container__div">'
-                                        + '<ul class="nav nav-second-level sp-search-list">'
-                                        + '<div class="sp-sort-search-cont">'
-                                        + '<div class="sp-search-container">'
-                                        + '<span><input id="sp-search-box" class="sp-nav-search__input" placeholder="Search" /></span>'
-                                        + '</div>'
-                                        + '<div class="sp-sort-list">'
-                                        + '<span class="sp-clickable sp-sort sp-sort-options-toggle"><i class="fa fa-sort-amount-asc" aria-hidden="true"></i></i><i class="fa fa-caret-down sp-sort-toggle__icon" aria-hidden="true"></i></span>'
-                                        + '</div>'
-                                        + '<div">'
-                                        + '<li data-sort="fileName" class="sp-sort-option__li sp-sort"><span class="sp-sort-option__a">Sort by Name</span></li>'
-                                        + '<li data-sort="performance" class="sp-sort-option__li sp-sort"><span class="sp-sort-option__a">Sort by Performance</span></li>'
-                                        + '</div>'
-                                        + '</div>'
-                                        + '</div>'
-                                    );
-
-                                //Without this command, the input field does not focus when clicked on
-                                $('#sp-search-box').focus();
-
-                                for (var i = 0; i < filesData.length; i++) {
-                                    $('#sp-nav-files__li ul').append('<li class="sp-marketing-analytics__li"><a class="sp-word-wrap" data-file-hash="'
-                                        + filesData[i][0] + '">' + filesData[i][1] + '</a></li>');
-
-                                    if (filesData[i][0] == fileHash) {
-                                        fileHash = filesData[i][0];
-                                        files[fileHash] = filesData[i];
-                                    }
-                                }
-
-                                // Init search and sort functions
-                                sp.view.marketingAnalytics.search();
-                                sp.view.marketingAnalytics.sort();
-                            }
-
-                            // Highlight the <li> clicked on
-                            $('.sp-marketing-analytics__li').on('click', function () {
-                                $('.sp-marketing-analytics__li').removeClass('active');
-                                $(this).addClass('active');
-                            });
-
-                            // Build dashboard.
-                            sp.metric.getViewerWidgetMetrics(files[fileHash]);
-                            sp.table.getFilesTable(filesData);
-
-
-                            // Temporary solution until sales analytics will show data for all metrics, charts, and table.
-                            $('.sp-metric-top-exit-page, .sp-chart-performance-benchmark').show();
-
-                            // Move to the top of the page.
-                            $('html, body').animate({scrollTop: 0}, 'fast');
-                        }
-                });
+            );
         }
 
-
-        // Run once.
-        setFileDashboard();
-
-        // .click() cannot be used since '#sp-nav-files__li li' haven't been created yet.
-        $(document).on('click', '#sp-nav-files__li li, td.sp-file-hash', setFileDashboard);
+        $(document).on('click', '.sp-marketing-analytics__li a', function() {
+            var fileHash = this.getAttribute('data-file-hash');
+            $.getJSON('/api/v1/analytics?action=getFileData&fileHash=' + fileHash, function(data) {
+                sp.metric.getViewerWidgetMetrics(data.fileData[0]);
+            });
+        });
 
         $(document).ready(function() {
             $.ajaxSetup({
@@ -367,17 +309,18 @@ sp = {
                         break;
 
                     case 'sp-file-dashboard':
-                        sp.table.filesData = undefined;
+                        resetDashboardData();
                         //  Bug fix for bad UI on mozilla - scrollbar still showed
                         $('#sp-sales-analytics-scroll').remove();
                         setFileDashboard();
                         break;
 
                     case 'sp-sales-analytics-view':
-                        sp.view.salesAnalytics.setNavBar("customerName");
+                        $('#sp-file-dashboard').show();
+                        resetDashboardData();
                         //  Bug fix for bad UI on mozilla - scrollbar still showed
                         $('#sp-marketing-analytics').remove();
-                        $('#sp-file-dashboard').show();
+                        sp.view.salesAnalytics.setNavBar();
                         break;
 
                     /**
@@ -404,6 +347,32 @@ sp = {
                         $('.tasks').show();
                         window.sp.tasks.getAll();
                         break;
+                }
+
+                function resetDashboardData() {
+                    $('#sp-widget-total-views').text('0');
+                    $('#sp-widget-bounce-rate, #sp-widget-average-view-duration, #sp-widget-average-pages-viewed, #sp-widget-top-exit-page, #sp-widget-users-cta').text('N/A');
+
+                    $('.hopper__items').empty();
+                    $('.hopper__title').show();
+                    $('#sp-widget-video-youtube-metric-total-number-plays').text('N/A');
+                    $('#sp-widget-ask-question-metric').hide();
+                    $('#sp-widget-total-count-likes').text('N/A');
+                    $('#sp-widget-count-unique-views').text('N/A');
+
+                    sp.chart.averageViewDurationData = {};
+                    if (typeof sp.chart.fileBar !== 'undefined') {
+                        sp.chart.fileBar.destroy();
+                    }
+
+                    sp.chart.totalViewsData = {};
+                    if (typeof sp.chart.fileLine !== 'undefined') {
+                        sp.chart.fileLine.destroy();
+                    }
+
+                    if (typeof sp.chart.visitorsMap !== 'undefined') {
+                        sp.chart.visitorsMap.clearChart();
+                    }
                 }
             }
 
@@ -1237,20 +1206,20 @@ sp = {
          * Display the selected file data metrics.
          */
         getFileMetrics: function(fileData) {
-            if (typeof fileData != 'undefined' && typeof fileData[3] != 'undefined' && parseInt(fileData[3]) > 0) {
+            if (typeof fileData != 'undefined' && typeof fileData[1] != 'undefined' && parseInt(fileData[1]) > 0) {
 
                 // Total views.
-                $('#sp-widget-total-views').text(fileData[3]);
+                $('#sp-widget-total-views').text(fileData[1]);
 
                 // Bounce rate.
-                $('#sp-widget-bounce-rate').text((parseFloat(fileData[4]) * 100).toFixed().toString() + '%');
+                $('#sp-widget-bounce-rate').text((parseFloat(fileData[2]) * 100).toFixed().toString() + '%');
 
                 // Average view duration.
-                if (null != fileData[5]) {
+                if (null != fileData[3]) {
                     /**
                      * @see http://stackoverflow.com/questions/6312993/javascript-seconds-to-time-string-with-format-hhmmss
                      */
-                    var totalSeconds = parseInt(fileData[5], 10);
+                    var totalSeconds = parseInt(fileData[3], 10);
 
                     var hours   = Math.floor(totalSeconds / 3600);
                     var minutes = Math.floor((totalSeconds - (hours * 3600)) / 60);
@@ -1270,8 +1239,8 @@ sp = {
                 }
 
                 // Average pages viewed.
-                if (null != fileData[6]) {
-                    $('#sp-widget-average-pages-viewed').text(parseFloat(fileData[6]).toFixed(1));
+                if (null != fileData[4]) {
+                    $('#sp-widget-average-pages-viewed').text(parseFloat(fileData[4]).toFixed(1));
                 } else {
                     $('#sp-widget-average-pages-viewed').text('N/A');
                 }
@@ -1290,26 +1259,22 @@ sp = {
                 );
 
                 // Users CTA.
-                $('#sp-widget-users-cta').text(fileData[7]);
+                $('#sp-widget-users-cta').text(fileData[5]);
 
             } else {
                 $('#sp-widget-total-views').text('0');
-                $('.sp-widget:not(#sp-widget-total-views)').text('N/A');
+                $('#sp-widget-bounce-rate, #sp-widget-average-view-duration, #sp-widget-average-pages-viewed, #sp-widget-top-exit-page, #sp-widget-users-cta').text('N/A');
             }
         },
 
         /**
          * Get metrics about the viewer widgets.
-         *
-         * @param {object} fileData - Array of data about a file including information such as fileHash and fileLink.
-         * (fileData[3] - Number of times a document has been opened)
-         *
-         * @param {string} customerEmail - The email address of the customer whose information being requested.
          */
         getViewerWidgetMetrics: function(fileData, customerEmail) {
-            if (typeof fileData != 'undefined' && typeof fileData[3] != 'undefined' && parseInt(fileData[3]) > 0) {
+            sp.metric.getFileMetrics(fileData);
 
-                // Hopper data.
+            // Hopper data.
+            if (typeof fileData != 'undefined' && typeof fileData[1] != 'undefined' && parseInt(fileData[1]) > 0) {
                 var items = document.querySelector('.hopper__items');
                 while (items.hasChildNodes()) {
                     items.removeChild(items.lastChild);
@@ -1324,41 +1289,47 @@ sp = {
                         action: 'getHopperData',
                         fileHash: fileData[0]
                     },
-                    function(data) {
-                            if (typeof data['hopperData'][0] !== 'undefined') {
-                                var hops = JSON.parse(data['hopperData'][0][0]).data.items;
-                                var ul = document.createElement('ul');
-                                ul.className = 'todo-list small-list m-t';
-                                hops.forEach(function (hop) {
-                                    var li = document.createElement('li');
-                                    var i = document.createElement('i');
-                                    i.classList = 'fa hopper__item-checkbox'
-                                    switch (hop.status) {
-                                        case 'finished':
-                                            i.classList += ' fa-check-square';
-                                            break;
-                                        default:
-                                            i.classList += ' fa-square-o';
-                                            break;
-                                    }
-                                    li.appendChild(i);
+                    function (data) {
+                        if (typeof data['hopperData'][0] !== 'undefined') {
+                            var hops = JSON.parse(data['hopperData'][0][0]).data.items;
+                            var ul = document.createElement('ul');
+                            ul.className = 'todo-list small-list m-t';
+                            hops.forEach(function (hop) {
+                                var li = document.createElement('li');
+                                var i = document.createElement('i');
+                                i.classList = 'fa hopper__item-checkbox'
+                                switch (hop.status) {
+                                    case 'finished':
+                                        i.classList += ' fa-check-square';
+                                        break;
+                                    default:
+                                        i.classList += ' fa-square-o';
+                                        break;
+                                }
+                                li.appendChild(i);
 
-                                    var span = document.createElement('span');
-                                    span.classList = 'm-l-xs';
-                                    if ('finished' === hop.status) {
-                                        span.classList += ' todo-completed';
-                                    }
-                                    span.textContent = hop.hopperText;
-                                    li.appendChild(span);
-                                    ul.appendChild(li);
-                                });
-                                items.appendChild(ul);
-                                title.style.display = 'none';
-                            }
+                                var span = document.createElement('span');
+                                span.classList = 'm-l-xs';
+                                if ('finished' === hop.status) {
+                                    span.classList += ' todo-completed';
+                                }
+                                span.textContent = hop.hopperText;
+                                li.appendChild(span);
+                                ul.appendChild(li);
+                            });
+                            items.appendChild(ul);
+                            title.style.display = 'none';
                         }
+                    }
                 );
+            } else {
+                $('.hopper__items').empty();
+                $('.hopper__title').show();
+            }
 
-                // Total number of YouTube plays.
+
+            // Total number of YouTube plays.
+            if (typeof fileData != 'undefined' && typeof fileData[1] != 'undefined' && parseInt(fileData[1]) > 0) {
                 $.getJSON(
                     '/api/v1/analytics',
                     {
@@ -1366,13 +1337,17 @@ sp = {
                         customerEmail: customerEmail,
                         fileHash: fileData[0]
                     },
-                    function(data) {
-                            $('#sp-widget-video-youtube-metric-total-number-plays')
-                                .text(data['totalNumberYouTubePlays'][0][0]);
-                        }
+                    function (data) {
+                        $('#sp-widget-video-youtube-metric-total-number-plays')
+                            .text(data['totalNumberYouTubePlays'][0][0]);
+                    }
                 );
+            } else {
+                $('#sp-widget-video-youtube-metric-total-number-plays').text('N/A');
+            }
 
-                // Ask a Question widget questions.
+            // Ask a Question widget questions.
+            if (typeof fileData != 'undefined' && typeof fileData[1] != 'undefined' && parseInt(fileData[1]) > 0) {
                 $.getJSON(
                     '/api/v1/analytics',
                     {
@@ -1380,28 +1355,32 @@ sp = {
                         customerEmail: customerEmail,
                         fileHash: fileData[0]
                     },
-                    function(data) {
-                            $('#sp-widget-ask-question-metric ul.list-group').empty();
+                    function (data) {
+                        $('#sp-widget-ask-question-metric ul.list-group').empty();
 
-                            var quetions = data.widgetAskQuestion;
-                            if (quetions.length > 0) {
-                                $.each(quetions, function (index, value) {
-                                    $('#sp-widget-ask-question-metric ul.list-group').append(
-                                        '<li class="list-group-item">'
-                                        + '<p class="sp-widget-ask-question-metric-email"><strong>' + value[2] + '</strong></p>'
-                                        + '<div class="sp-widget-ask-question-metric-message">' + value[1].replace(/\r\n|\r|\n/g, '<br>') + '</div>'
-                                        + '<small class="block"><i class="fa fa-clock-o"></i> ' + value[0] + '</small>'
-                                        + '</li>');
-                                });
+                        var quetions = data.widgetAskQuestion;
+                        if (quetions.length > 0) {
+                            $.each(quetions, function (index, value) {
+                                $('#sp-widget-ask-question-metric ul.list-group').append(
+                                    '<li class="list-group-item">'
+                                    + '<p class="sp-widget-ask-question-metric-email"><strong>' + value[2] + '</strong></p>'
+                                    + '<div class="sp-widget-ask-question-metric-message">' + value[1].replace(/\r\n|\r|\n/g, '<br>') + '</div>'
+                                    + '<small class="block"><i class="fa fa-clock-o"></i> ' + value[0] + '</small>'
+                                    + '</li>');
+                            });
 
-                                $('#sp-widget-ask-question-metric').show();
-                            } else {
-                                $('#sp-widget-ask-question-metric').hide();
-                            }
+                            $('#sp-widget-ask-question-metric').show();
+                        } else {
+                            $('#sp-widget-ask-question-metric').hide();
                         }
+                    }
                 );
+            } else {
+                $('#sp-widget-ask-question-metric').hide();
+            }
 
-                // Total number of likes.
+            // Total number of likes.
+            if (typeof fileData != 'undefined' && typeof fileData[1] != 'undefined' && parseInt(fileData[1]) > 0) {
                 $.getJSON(
                     '/api/v1/analytics',
                     {
@@ -1409,14 +1388,19 @@ sp = {
                         customerEmail: customerEmail,
                         fileHash: fileData[0]
                     },
-                    function(data) {
-                            if (data.likesCount[0]) {
-                                $('#sp-widget-total-count-likes').text(data.likesCount[0][0]);
-                            }
+                    function (data) {
+                        if (data.likesCount[0]) {
+                            $('#sp-widget-total-count-likes').text(data.likesCount[0][0]);
                         }
+                    }
                 );
+            } else {
+                $('#sp-widget-total-count-likes').text('N/A');
+            }
 
-                // Number of unique views.
+            
+            // Number of unique views.
+            if (typeof fileData != 'undefined' && typeof fileData[1] != 'undefined' && parseInt(fileData[1]) > 0) {
                 $.getJSON(
                     '/api/v1/analytics',
                     {
@@ -1424,66 +1408,61 @@ sp = {
                         customerEmail: customerEmail,
                         fileHash: fileData[0]
                     },
-                    function(data) {
-                            var viewsCountFromFileData = parseInt(fileData[3]);
-                            var uniqueViewsCount = parseInt(data.uniqueViewsCount[0][0]);
-                            var viewsCount = parseInt(data.uniqueViewsCount[0][1]);
+                    function (data) {
+                        var viewsCountFromFileData = parseInt(fileData[1]);
+                        var uniqueViewsCount = parseInt(data.uniqueViewsCount[0][0]);
+                        var viewsCount = parseInt(data.uniqueViewsCount[0][1]);
 
-                            if (uniqueViewsCount > 0 && viewsCount === viewsCountFromFileData) {
-                                $('#sp-widget-count-unique-views').text(uniqueViewsCount + ' (' + (uniqueViewsCount / viewsCount * 100).toFixed(0) + '%)');
-                            } else {
-                                $('#sp-widget-count-unique-views').text('N/A');
-                            }
+                        if (uniqueViewsCount > 0 && viewsCount === viewsCountFromFileData) {
+                            $('#sp-widget-count-unique-views').text(uniqueViewsCount + ' (' + (uniqueViewsCount / viewsCount * 100).toFixed(0) + '%)');
+                        } else {
+                            $('#sp-widget-count-unique-views').text('N/A');
                         }
+                    }
                 );
-
-                sp.metric.getFileMetrics(fileData);
-                sp.chart.getFileLine(fileData[0], customerEmail);
-                sp.chart.getFileBar(fileData[0], customerEmail);
-                sp.chart.getFileVisitorsMap(fileData[0], customerEmail);
             } else {
-                $('#sp-widget-video-youtube-metric-total-number-plays, #sp-widget-total-count-likes, #sp-widget-count-unique-views').text('N/A');
-                $('#sp-widget-ask-question-metric').hide();
+                $('#sp-widget-count-unique-views').text('N/A');
             }
+
+            sp.chart.getFileLine(fileData, customerEmail);
+            sp.chart.getFileBar(fileData, customerEmail);
+            sp.chart.getFileVisitorsMap(fileData, customerEmail);
         }
     },
 
     chart: {
         averageViewDurationData: {},
         totalViewsData: {},
-        performanceBenchmarkData: {},
 
         /**
          * Resize the charts to fit their .ibox-content container when the window resizes.
          */
         resizeCharts: (function() {
-            var timer = {};
-
             $(window).resize(function() {
-                clearTimeout(timer);
-
-                timer = setTimeout(function() {
+                if (!$.isEmptyObject(sp.chart.averageViewDurationData)) {
                     sp.chart.loadBarChart(sp.chart.averageViewDurationData);
+                }
+
+                if (!$.isEmptyObject(sp.chart.totalViewsData)) {
                     sp.chart.loadFileLine(sp.chart.totalViewsData);
-                    sp.chart.loadFilePerformance(sp.chart.performanceBenchmarkData);
-                }, 500);
+                }
             });
         })(),
 
         /**
          * Get the file bar chart.
          */
-        getFileBar: function(fileHash, customerEmail) {
+        getFileBar: function(fileData, customerEmail) {
             if (typeof customerEmail == 'undefined') {
                 customerEmail = null;
             }
 
-            if (typeof fileHash !== 'undefined') {
+            if (typeof fileData != 'undefined' && typeof fileData[1] != 'undefined' && parseInt(fileData[1]) > 0) {
                 $.getJSON(
                     '/api/v1/analytics',
                     {
                         action: 'getFileBarChart',
-                        fileHash: fileHash,
+                        fileHash: fileData[0],
                         customerEmail: customerEmail
                     },
                     function(data) {
@@ -1581,17 +1560,17 @@ sp = {
         /**
          * Get the file line chart.
          */
-        getFileLine: function(fileHash, customerEmail) {
+        getFileLine: function(fileData, customerEmail) {
             if (typeof customerEmail == 'undefined') {
                 customerEmail = null;
             }
 
-            if (typeof fileHash !== 'undefined') {
+            if (typeof fileData != 'undefined' && typeof fileData[1] != 'undefined' && parseInt(fileData[1]) > 0) {
                 $.getJSON(
                     '/api/v1/analytics',
                     {
                         action: 'getFileLineChart',
-                        fileHash: fileHash,
+                        fileHash: fileData[0],
                         customerEmail: customerEmail,
                     },
                     function(data) {
@@ -1757,265 +1736,16 @@ sp = {
         },
 
         /**
-         * Get the file performance chart.
-         */
-        getFilePerformance: function(fileHash) {
-
-            if (typeof fileHash !== 'undefined') {
-                $.getJSON(
-                    '/api/v1/analytics',
-                    {
-                        action: 'getFilePerformanceChart',
-                        fileHash: fileHash
-                    },
-                    function(data) {
-                            sp.chart.performanceBenchmarkData = data;
-                            sp.chart.loadFilePerformance(data);
-                        }
-                );
-            } else {
-                sp.chart.performanceBenchmarkData = {};
-
-                if (typeof sp.chart.filePerformance !== 'undefined') {
-                    sp.chart.filePerformance.destroy();
-                }
-            }
-        },
-
-        loadFilePerformance: function(data) {
-            if (typeof sp.chart.filePerformance !== 'undefined') {
-                sp.chart.filePerformance.destroy();
-            }
-
-            var canvasHeight = $('#lineChart2').height();
-            var chartContainerWidth = $('#sp-line-chart-2-container').closest('.ibox-content').width();
-            $('#sp-line-chart-2-container')
-                .empty()
-                .append('<canvas id="lineChart2" height="' + canvasHeight + '" width="' + chartContainerWidth + '"></canvas>');
-
-            var lineData = {
-                labels: [],
-                datasets: [
-                    {
-                        label: 'Maximum',
-                        backgroundColor: 'rgba(255, 156, 71 ,0.7)',
-                        borderColor: 'rgba(255, 156, 71 ,0.7)',
-                        fill: false,
-                        pointBorderColor: 'rgba(255, 156, 71 ,0.7)',
-                        pointBackgroundColor: 'rgba(255, 156, 71 ,0.7)',
-                        pointBorderWidth: 1,
-                        pointHoverRadius: 3,
-                        pointHoverBackgroundColor: 'rgba(255, 156, 71 ,0.7)',
-                        pointHoverBorderColor: '#fff',
-                        pointHoverBorderWidth: 1,
-                        pointRadius: 3,
-                        pointHitRadius: 1,
-                        data: []
-                    },
-                    {
-                        label: 'Average',
-                        backgroundColor: 'rgba(30, 166, 129, 0.7)',
-                        borderColor: 'rgba(30, 166, 129, 0.7)',
-                        fill: false,
-                        pointBorderColor: 'rgba(30, 166, 129, 0.7)',
-                        pointBackgroundColor: 'rgba(30, 166, 129, 0.7)',
-                        pointBorderWidth: 1,
-                        pointHoverRadius: 3,
-                        pointHoverBackgroundColor: 'rgba(30, 166, 129, 0.7)',
-                        pointHoverBorderColor: '#fff',
-                        pointHoverBorderWidth: 1,
-                        pointRadius: 3,
-                        pointHitRadius: 1,
-                        data: []
-                    },
-                    {
-                        label: 'Document',
-                        backgroundColor: 'rgba(26, 111, 186, 0.7)',
-                        borderColor: 'rgba(26, 111, 186, 0.7)',
-                        fill: false,
-                        pointBorderColor: 'rgba(26, 111, 186, 0.7)',
-                        pointBackgroundColor: 'rgba(26, 111, 186, 0.7)',
-                        pointBorderWidth: 1,
-                        pointHoverRadius: 3,
-                        pointHoverBackgroundColor: 'rgba(26, 111, 186, 0.7)',
-                        pointHoverBorderColor: '#fff',
-                        pointHoverBorderWidth: 1,
-                        pointRadius: 3,
-                        pointHitRadius: 1,
-                        data: []
-                    }
-                ]
-            };
-
-            var individualPerformanceFileName = '';
-
-            /**
-             * This will contain key:value pairs of {date: fileName} e.g. 22-10-16: myfile.pdf
-             */
-            var dateToFileNameMap = {};
-
-            if (typeof data.filePerformanceChart !== 'undefined' && typeof data.filePerformanceChart[0] !== 'undefined') {
-                $.each(data.filePerformanceChart, function(index, value) {
-
-                    individualPerformanceFileName = value[5];
-
-                    dateParts = value[0].split('-');
-                    var date = dateParts[2] + '-' + dateParts[1] + '-' + dateParts[0];
-                    lineData.labels.push(date);
-
-                    dateToFileNameMap[date] = value[4];
-
-                    if (0 == value[1]) {
-                        lineData.datasets[0].data.push(1);
-                    } else {
-                        lineData.datasets[0].data.push(Math.ceil(parseFloat(value[1]) * 100));
-                    }
-
-                    if (0 == value[2]) {
-                        lineData.datasets[1].data.push(1);
-                    } else {
-                        lineData.datasets[1].data.push(Math.ceil(parseFloat(value[2]) * 100));
-                    }
-
-                    if (0 == value[3]) {
-                        lineData.datasets[2].data.push(1);
-                    } else {
-                        lineData.datasets[2].data.push(Math.ceil(parseFloat(value[3]) * 100));
-                    }
-                });
-
-                var ctx = $('#lineChart2')[0].getContext('2d');
-
-                if ((data.filePerformanceChart.length * 18) > chartContainerWidth) {
-                    ctx.canvas.width = data.filePerformanceChart.length * 18;
-
-                    // IE & Firefox solution to fix issue where adding a scrollbar adds height to the container.
-                    $('.sp-chart__container').height($('#sp-line-chart-2-container').height());
-                } else {
-                    ctx.canvas.width = chartContainerWidth;
-                }
-
-                sp.chart.filePerformance = new Chart.Line(ctx, {
-                    data: lineData,
-                    options: {
-                        hover: {
-                            mode: 'x-axis',
-                        },
-                        scales: {
-                            yAxes: [{
-                                ticks: {
-                                    beginAtZero: true,
-                                    callback: function(value, index, values) {
-                                        if (Math.floor(value) === value) {
-                                            return value;
-                                        }
-                                    }
-                                }
-                            }],
-                        },
-                        responsive: false,
-                        tooltips: {
-                            enabled: false,
-                            mode: 'x-axis',
-                            custom: function(tooltip) {
-
-                                // Tooltip Element.
-                                var tooltipEl = $('#sp-performance-benchmark--tooltip');
-
-                                // Hide if no tooltip.
-                                if (tooltip.opacity === 0) {
-                                    tooltipEl.css('opacity', '0');
-                                    return;
-                                }
-
-                                function getBody(bodyItem) {
-                                    return bodyItem.lines;
-                                }
-
-                                // Set tooltip text.
-                                if (tooltip.body) {
-                                    var tooltipTitles = tooltip.title || [];
-                                    var tooltipBody = tooltip.body.map(getBody);
-
-                                    var innerHtml = '<thead>';
-                                    $.each(tooltipTitles, function() {
-                                        innerHtml += '<tr><th>' + this + '</th></tr><br>';
-                                    });
-
-                                    innerHtml += '</thead><tbody>';
-
-                                    $.each(tooltipBody, function(index, body) {
-                                        var colors = tooltip.labelColors[index];
-                                        var style = 'background:' + colors.backgroundColor;
-                                        style += '; border-color:' + colors.borderColor;
-                                        style += '; border-width: 2px';
-                                        var tooltipColorKey = '<span class="sp-chart__chartjs-tooltip-color-key" style="' + style + '"></span>';
-                                        var fileData = '';
-
-                                        switch(index) {
-                                            case 0:
-                                                var fileName = '';
-
-                                                $.each(dateToFileNameMap, function(date, file) {
-                                                    if (tooltip.title.toString() === date) {
-                                                        fileName = file;
-                                                    }
-                                                });
-
-                                                // Max Performance.
-                                                fileData = fileName + ': ' + body[0].split(':').pop();
-                                                break;
-
-                                            case 1:
-
-                                                // Average.
-                                                fileData = body;
-                                                break;
-
-                                            case 2:
-
-                                                // Current document.
-                                                fileData = individualPerformanceFileName + ': ' + body[0].split(':').pop();
-                                                break;
-                                        }
-
-                                        innerHtml += '<tr><td>' + tooltipColorKey + fileData + '</td></tr><br>';
-                                    });
-
-                                    innerHtml += '</tbody>';
-                                    tooltipEl.html(innerHtml);
-                                }
-
-                                var chartLeftPosition = $('#sp-line-chart-2-container').offset().left;
-
-                                // Display, position, and set styles for font.
-                                tooltipEl.css({
-                                    'opacity': '1',
-                                    'left':  (event.pageX - chartLeftPosition) + 'px',
-                                    'top': tooltip.y,
-                                    'font-family': tooltip._bodyFontFamily,
-                                    'font-size': tooltip.bodyFontSize,
-                                    'font-style': tooltip._bodyFontStyle,
-                                    'padding': tooltip.yPadding + 'px ' + tooltip.xPadding + 'px'
-                                });
-                            },
-                        },
-                    },
-                });
-            }
-        },
-
-        /**
          * get the file visitors report.
          */
-        getFileVisitorsMap: function(fileHash, customerEmail) {
+        getFileVisitorsMap: function(fileData, customerEmail) {
             if (typeof customerEmail == 'undefined') {
                 customerEmail = null;
             }
 
-            if (typeof fileHash !== 'undefined') {
+            if (typeof fileData != 'undefined' && typeof fileData[1] != 'undefined' && parseInt(fileData[1]) > 0) {
                 $.getJSON('/api/v1/analytics', {action: 'getFileVisitorsMap',
-                    fileHash: fileHash, customerEmail: customerEmail}, function(data) {
+                    fileHash: fileData[0], customerEmail: customerEmail}, function(data) {
 
                         var dataFormatted = [];
                         if (data.fileVisitorsMap.length > 0) {
@@ -2054,166 +1784,10 @@ sp = {
                             sp.chart.visitorsMap.draw(mapData, options);
                         });
                 });
-            }
-        }
-    },
-
-    table: {
-
-        /**
-         * Place the files data into the DataTables plugin.
-         *
-         * @param object filesData A 2d array consisting of files data.
-         */
-        getFilesTable: function(filesData) {
-            if ($.fn.dataTable.isDataTable('#sp-files-data__table')) {
-
-                if (typeof filesData[0] == 'undefined') {
-                    sp.table.filesData = $('#sp-files-data__table').DataTable()
-                        .clear()
-                        .draw();
-                    return false;
-                }
-
-                sp.table.filesData = $('#sp-files-data__table').DataTable()
-                    .clear()
-                    .rows.add(filesData)
-                    .draw();
             } else {
-                var fileLinkColumnIndex = 2;
-                sp.table.filesData = $('#sp-files-data__table').DataTable({
-                    data: filesData,
-                    buttons: [
-                        {
-                            extend: 'copy',
-                            exportOptions: {
-                                format: {
-                                    body: function(data, columnIndex, rowIndex) {
-                                        if (fileLinkColumnIndex == columnIndex) {
-                                            return data.match(/^(.+?)<button/).pop();
-                                        } else {
-                                            return data;
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        {
-                            extend: 'csv',
-                            title: 'files-data',
-                            exportOptions: {
-                                format: {
-                                    body: function(data, columnIndex, rowIndex) {
-                                        if (fileLinkColumnIndex == columnIndex) {
-                                            return data.match(/^(.+?)<button/).pop();
-                                        } else {
-                                            return data;
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        {
-                            extend: 'excel',
-                            title: 'files-data',
-                            exportOptions: {
-                                format: {
-                                    body: function(data, columnIndex, rowIndex) {
-                                        if (fileLinkColumnIndex == columnIndex) {
-                                            return data.match(/^(.+?)<button/).pop();
-                                        } else {
-                                            return data;
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        {
-                            extend: 'pdf',
-                            title: 'files-data',
-                            exportOptions: {
-                                format: {
-                                    body: function(data, columnIndex, rowIndex) {
-                                        if (fileLinkColumnIndex == columnIndex) {
-                                            return data.match(/^(.+?)<button/).pop();
-                                        } else {
-                                            return data;
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        {
-                            extend: 'print',
-                            exportOptions: {
-                                format: {
-                                    body: function(data, columnIndex, rowIndex) {
-                                        if (fileLinkColumnIndex == columnIndex) {
-                                            return data.match(/^(.+?)<button/).pop();
-                                        } else {
-                                            return data;
-                                        }
-                                    }
-                                }
-                            },
-                            customize: function (win){
-                                $(win.document.body).addClass('white-bg');
-                                $(win.document.body).css('font-size', '10px');
-                                $(win.document.body).find('table')
-                                    .addClass('compact')
-                                    .css('font-size', 'inherit');
-                            }
-                        }
-                    ],
-                    columnDefs: [
-                        {
-                            visible: false,
-                            targets: [0, 5, 6, 7]
-                        },
-                        {
-                            className: 'sp-file-hash',
-                            targets: 1
-                        },
-                        {
-                            render: function (data, type, row) {
-                                return SP.VIEWER_URL_WITHOUT_FILELINK + data
-                                    + '<button class="btn btn-white btn-xs sp-copy__button" data-clipboard-text="'
-                                    + SP.VIEWER_URL_WITHOUT_FILELINK + data + '">'
-                                    + '<i class="fa fa-copy"></i> Copy</button>';
-                            },
-                            className: 'sp-file-link__td',
-                            targets: 2
-                        },
-                        {
-                            render: function (data, type, row) {
-                                if (null != data) {
-                                    return (parseFloat(data) * 100).toFixed(2) + '%';
-                                } else {
-                                    return 'N/A';
-                                }
-                            },
-                            targets: 4
-                        },
-                        {
-                            render: function (data, type, row) {
-                                if (null != data) {
-                                    if (0 == data) {
-                                        return 1;
-                                    } else {
-                                        return Math.ceil(parseFloat(data) * 100);
-                                    }
-                                } else {
-                                    return 'N/A';
-                                }
-                            },
-                            targets: 8
-                        }
-                    ],
-                    dom: '<"html5buttons"B>lTfgitp',
-                    order: [[ 1, 'asc' ]]
-                });
-
-                new Clipboard('.sp-copy__button');
+                if (typeof sp.chart.visitorsMap !== 'undefined') {
+                    sp.chart.visitorsMap.clearChart();
+                }
             }
         }
     },
@@ -2779,88 +2353,67 @@ sp = {
 
     view: {
         salesAnalytics: {
-            setNavBar: function(sortChoice) {
-                $.getJSON(
-                    '/api/v1/analytics',
-                    {
-                        action: 'getCustomersFilesList',
-                        sortChoice: sortChoice
-                    },
-                    function(data) {
-                            var customersFilesList = data.customersFilesList;
-                            if (0 < customersFilesList.length) {
+            setNavBar: function() {
+                $.getJSON('/api/v1/analytics', {action: 'getCustomersFilesList'}, function(data) {
+                    var customersFilesList = data.customersFilesList;
+                    if (0 < customersFilesList.length) {
 
-                                // Arrange the data for future processing.
-                                var customers = {};
-                                $.each(customersFilesList, function (i, v) {
-                                    if (typeof customers[v[0]] == 'undefined') {
-                                        customers[v[0]] = {
-                                            customerName: v[1],
-                                            files: [],
-                                        };
+                        // Arrange the data for future processing.
+                        var customers = {};
+                        $.each(customersFilesList, function (i, v) {
+                            if (typeof customers[v[0]] == 'undefined') {
+                                customers[v[0]] = {
+                                    customerName: v[1],
+                                    files: [],
                                 };
+                        };
 
-                                    var file = {
-                                        fileName: v[3],
-                                        fileHash: v[2],
-                                    };
+                            var file = {
+                                fileName: v[3],
+                                fileHash: v[2],
+                            };
 
-                                    customers[v[0]]['files'].push(file);
-                                });
+                            customers[v[0]]['files'].push(file);
+                        });
 
-                                // Build the nav bar.
-                                $('#sp-nav-sales-analytics__li')
-                                    .empty()
-                                    .append(
-                                        '<a aria-expanded="true"><i class="fa fa-bar-chart"></i> '
-                                        + '<span class="nav-label">Sales Analytics</span></a>'
-                                        + '<span class="fa arrow"></span>'
-                                        + '<ul id="sp-sales-analytics__ul" class="nav nav-second-level sp-sales-search-list">'
-                                        + '<div class="sp-sort-search-cont">'
-                                        + '<div class="sp-search-container">'
-                                        + '<span><input id="sp-sales-search__input" type="text" placeholder="Search" class="sp-nav-search__input"></span>'
-                                        + '</div>'
-                                        + '<div class="sp-sort-list">'
-                                        + '<span class="sp-clickable sp-sort sp-sort-options-toggle"><i class="fa fa-sort-amount-asc" aria-hidden="true"></i></i><i class="fa fa-caret-down sp-sort-toggle__icon" aria-hidden="true"></i></span>'
-                                        + '</div>'
-                                        + '<div>'
-                                        + '<li data-sort="customerName" class="sp-sort-option__li sp-sales-sort"><span class="sp-sort-option__a">Sort by Customer Name</span></li>'
-                                        + '<li data-sort="performance" class="sp-sort-option__li sp-sales-sort"><span class="sp-sort-option__a">Sort by Performance</span></li>'
-                                        + '</div>'
-                                        + '</div>'
-                                    );
+                        // Build the nav bar.
+                        $('#sp-nav-sales-analytics__li')
+                            .empty()
+                            .append(
+                                '<a aria-expanded="true"><i class="fa fa-bar-chart"></i> '
+                                + '<span class="nav-label">Sales Analytics</span></a>'
+                                + '<span class="fa arrow"></span>'
+                                + '<ul id="sp-sales-analytics__ul" class="nav nav-second-level sp-sales-search-list">'
+                                + '<div class="sp-sort-search-cont">'
+                                + '<div class="sp-search-container">'
+                                + '<span><input id="sp-sales-search__input" type="text" placeholder="Search" class="sp-nav-search__input"></span>'
+                                + '</div>'
+                                + '</div>'
+                            );
 
-                                $.each(customers, function (i, v) {
-                                    $('#sp-nav-sales-analytics__li > ul')
-                                        .append('<li class="sp-analytics-customer-name__li"><a class="sp-word-wrap" data-customer-email="' + i + '">' + v.customerName + '</a></li>')
-                                        .append('<ul class="nav nav-third-level" data-customer-email="' + i + '">');
+                        $.each(customers, function (i, v) {
+                            $('#sp-nav-sales-analytics__li > ul')
+                                .append('<li class="sp-analytics-customer-name__li"><a class="sp-word-wrap" data-customer-email="' + i + '">' + v.customerName + '</a></li>')
+                                .append('<ul class="nav nav-third-level" data-customer-email="' + i + '">');
 
-                                    $.each(v.files, function (j, u) {
-                                        $('#sp-nav-sales-analytics__li ul ul[data-customer-email="' + i + '"]')
-                                            .append('<li class="sp-sales-analytics-filename__li"><a class="sp-customer-file__a sp-word-wrap" data-customer-email="'
-                                                + i + '" data-file-hash="' + u.fileHash + '">' + u.fileName + '</a></li>');
-                                    });
-                                });
+                            $.each(v.files, function (j, u) {
+                                $('#sp-nav-sales-analytics__li ul ul[data-customer-email="' + i + '"]')
+                                    .append('<li class="sp-sales-analytics-filename__li"><a class="sp-customer-file__a sp-word-wrap" data-customer-email="'
+                                        + i + '" data-file-hash="' + u.fileHash + '">' + u.fileName + '</a></li>');
+                            });
+                        });
 
-                                //Search and Sort
-                                sp.view.salesAnalytics.search();
-                                sp.view.salesAnalytics.sort();
+                        //Search
+                        sp.view.salesAnalytics.search();
 
-                                /**
-                                 * CSS overflow styling
-                                 */
-                            var scrollCont = $('<div></div>', {class: 'sp-analytics-container__div', id: 'sp-sales-analytics-scroll'});
-                                $('#sp-nav-sales-analytics__li').append(scrollCont);
-                                scrollCont.append($('#sp-sales-analytics__ul'));
-
-                                // A workaround for metisMenu dysfunctionality.
-                                $('#sp-nav-sales-analytics__li ul li:has(a[data-file-hash="' + customersFilesList[0][2]
-                                    + '"][data-customer-email="' + customersFilesList[0][0] + '"]) a')
-                                    .css('color', '#fff');
-                                sp.view.salesAnalytics.setMetrics(customersFilesList[0][0], customersFilesList[0][2]);
-                            }
-                        }
-                );
+                        /**
+                         * CSS overflow styling
+                         */
+                        var scrollCont = $('<div></div>', {class: 'sp-analytics-container__div', id: 'sp-sales-analytics-scroll'});
+                        $('#sp-nav-sales-analytics__li').append(scrollCont);
+                        scrollCont.append($('#sp-sales-analytics__ul'));
+                    }
+                });
             },
 
             search: function () {
@@ -2897,65 +2450,21 @@ sp = {
                 });
             },
 
-            sort: function () {
-                /**
-                 * Init sort capabilities
-                 * Using 'unbind' and 'bind' because of the yoyo effect on the list - this ensures
-                 * there are no leftover click handlers
-                 *
-                 * Callback: Toggle the icon caret to up or down
-                 */
-                $('.sp-sort-options-toggle').off('click');
-                $('.sp-sort-options-toggle').on('click', function () {
-                    $('.sp-sort-option__li').slideToggle('slow','swing', function (){
-                        if (!$('.sp-sort-option__li').is(':hidden')) {
-                            $('.sp-sort-options-toggle i')
-                                .removeClass('.fa fa-caret-down')
-                                .addClass('.fa fa-caret-up');
-                            isDown = false;
-                        }
-                        else {
-                            $('.sp-sort-options-toggle i')
-                                .removeClass('.fa fa-caret-up')
-                                .addClass('.fa fa-caret-down');
-                            isDown = true;
-                        }
-                    });
-                });
-                $('.sp-sales-sort').on('click', function () {
-                    sp.view.salesAnalytics.setNavBar($(this).attr('data-sort'));
-                });
-
-                // Temp until sorting is possible
-                $('[data-sort="performance"]').on('click', function () {
-                    swal('We\'re working on it!', 'Sorting by performance will be with you soon');
-                });
-            },
-
             setMetrics: function(customerEmail, fileHash) {
                 $.getJSON(
                     '/api/v1/analytics',
                     {
-                        action: 'getFilesCustomerData',
+                        action: 'getFileCustomerData',
+                        fileHash: fileHash,
                         customerEmail: customerEmail
                     },
                     function(data) {
-                            var files = [];
-                            $.each(data.filesCustomerData, function (i, v) {
-                                files[v[0]] = v;
-                            });
+                        // Build dashboard.
+                        sp.metric.getViewerWidgetMetrics(data.fileCustomerData[0], customerEmail);
 
-                            // Build dashboard.
-                            sp.metric.getViewerWidgetMetrics(files[fileHash], customerEmail);
-                            var filesArray = [files[fileHash]];
-                            if (typeof filesArray[0] != 'undefined') {
-                                filesArray[0][8] = null;
-                            }
-                            sp.table.getFilesTable(filesArray);
-
-                            // Hide unavailable yet metrics, charts, and table.
-                            $('.sp-metric-top-exit-page, .sp-chart-performance-benchmark').hide();
-                        }
+                        // Hide unavailable yet metrics, charts, and table.
+                        $('.sp-metric-top-exit-page, .sp-chart-performance-benchmark').hide();
+                    }
                 );
             }
         },
@@ -2980,61 +2489,16 @@ sp = {
                         }
                     });
                 });
-
-            },
-            sort: function () {
-                /**
-                 * Init sort capabilities
-                 * Using 'unbind' and 'bind' because of the yoyo effect on the list - this ensures
-                 * there are no leftover click handlers
-                 *
-                 * Callback: Toggle the icon caret to up or down
-                 */
-                $('.sp-sort-options-toggle').off('click');
-                $('.sp-sort-options-toggle').on('click', function () {
-                    $('.sp-sort-option__li').slideToggle('slow','swing', function (){
-                        if (!$('.sp-sort-option__li').is(':hidden')) {
-                            $('.sp-sort-options-toggle i')
-                                .removeClass('.fa fa-caret-down')
-                                .addClass('.fa fa-caret-up');
-                            isDown = false;
-                        }
-                        else {
-                            $('.sp-sort-options-toggle i')
-                                .removeClass('.fa fa-caret-up')
-                                .addClass('.fa fa-caret-down');
-                            isDown = true;
-                        }
-                    });
-                });
-            },
-
+            }
         }
     },
 
     notifications: {
         tableNotifications: 'notificationsTable',
-
-        /**
-         * Get Notifications from the DB.
-         *
-         * @param {string} subAction - Get notifications data for the toolbar or for the table.
-         */
-        getNotifications: function(subAction) {
-            $.getJSON(
-                '/api/v1/analytics',
-                {
-                    action: 'getNotifications',
-                    subAction: subAction
-                },
-                function(data) {
-                        switch (subAction) {
-                            case 'notificationsTable':
-                                sp.notifications.displayTableNotifications(data.notifications);
-                                break;
-                        }
-                    }
-            );
+        getNotifications: function() {
+            $.getJSON('/api/v1/analytics', {action: 'getNotifications'}, function(data) {
+                sp.notifications.displayTableNotifications(data.notifications);
+            });
         },
 
         /**

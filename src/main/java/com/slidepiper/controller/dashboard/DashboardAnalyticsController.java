@@ -29,29 +29,19 @@ public class DashboardAnalyticsController {
     @GetMapping("/api/v1/analytics")
     public String analytics(Principal principal,
                             @RequestParam(value = "action") String action,
-                            @RequestParam(value = "sortChoice", required = false) String sortChoice,
                             @RequestParam(value = "customerEmail", required = false) String customerEmail,
-                            @RequestParam(value = "fileHash", required = false) String fileHash,
-                            @RequestParam(value = "subAction", required = false) String subAction) {
+                            @RequestParam(value = "fileHash", required = false) String fileHash) {
         JSONObject data = new JSONObject();
         ArrayList<String> parameterList = new ArrayList<>();
         List<String[]> sqlData = new ArrayList<>();
 
         switch (action) {
-            case "getFilesData":
-                parameterList.add(principal.getName());
-                switch (sortChoice) {
-                    case "fileName":
-                        sqlData = DbLayer.getEventData(parameterList, Analytics.sqlFilesDataByName);
-                        break;
-                    case "performance":
-                        sqlData = DbLayer.getEventData(parameterList, Analytics.sqlFilesDataByPerformance);
-                        break;
-                    case "noSort":
-                        sqlData = DbLayer.getEventData(parameterList, Analytics.sqlFilesDataByName);
-                        break;
+            case "getFileData":
+                if (documentRepository.findByFriendlyId(fileHash).getViewer().getEmail().equals(principal.getName())) {
+                    parameterList.add(fileHash);
+                    sqlData = DbLayer.getEventData(parameterList, Analytics.sqlFileData);
+                    data.put("fileData", sqlData);
                 }
-                data.put("filesData", sqlData);
                 break;
 
             case "getFilesList":
@@ -79,18 +69,17 @@ public class DashboardAnalyticsController {
 
             case "getCustomersFilesList":
                 parameterList.add(principal.getName());
-                switch (sortChoice){
-                    case "customerName":
-                        sqlData = DbLayer.getEventData(parameterList, Analytics.sqlCustomersFilesList);
-                }
+                sqlData = DbLayer.getEventData(parameterList, Analytics.sqlCustomersFilesList);
                 data.put("customersFilesList", sqlData);
                 break;
 
-            case "getFilesCustomerData":
-                parameterList.add(principal.getName());
-                parameterList.add(customerEmail);
-                sqlData = DbLayer.getEventData(parameterList, Analytics.sqlFilesCustomerData);
-                data.put("filesCustomerData", sqlData);
+            case "getFileCustomerData":
+                if (documentRepository.findByFriendlyId(fileHash).getViewer().getEmail().equals(principal.getName())) {
+                    parameterList.add(fileHash);
+                    parameterList.add(customerEmail);
+                    sqlData = DbLayer.getEventData(parameterList, Analytics.sqlFileCustomerData);
+                    data.put("fileCustomerData", sqlData);
+                }
                 break;
 
             case "getTopExitPage":
@@ -127,15 +116,6 @@ public class DashboardAnalyticsController {
                         sqlData = DbLayer.getEventData(parameterList, Analytics.sqlFileCustomerLineChart);
                     }
                     data.put("fileLineChart", sqlData);
-                }
-                break;
-
-            case "getFilePerformanceChart":
-                if (documentRepository.findByFriendlyId(fileHash).getViewer().getEmail().equals(principal.getName())) {
-                    parameterList.add(fileHash);
-                    parameterList.add(principal.getName());
-                    sqlData = DbLayer.getEventData(parameterList, Analytics.sqlFilePerformanceChart);
-                    data.put("filePerformanceChart", sqlData);
                 }
                 break;
 
@@ -210,16 +190,7 @@ public class DashboardAnalyticsController {
                 break;
 
             case "getNotifications":
-                JSONArray notifications = new JSONArray();
-                switch(subAction) {
-                    case "notificationsToolbar":
-                        notifications = DbLayer.getNotifications(principal.getName(), Analytics.sqlToolbarNotifications);
-                        break;
-
-                    case "notificationsTable":
-                        notifications = DbLayer.getNotifications(principal.getName(), Analytics.sqlTableNotifications);
-                        break;
-                }
+                JSONArray notifications = DbLayer.getNotifications(principal.getName(), Analytics.sqlTableNotifications);
                 data.put("notifications", notifications);
                 break;
 
