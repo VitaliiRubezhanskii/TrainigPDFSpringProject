@@ -702,6 +702,7 @@ sp.viewerWidgetsModal = {
          * @param {object} widget - The settings for the Hopper widget.
          */
         function displayWidget5(widget) {
+            widget.items.sort(compareHopperWidgetItems);
 
             for (var i = 0; i < widget.items.length - 1; i++) {
                 $('#sp-hopper-customize__container').append(
@@ -726,6 +727,22 @@ sp.viewerWidgetsModal = {
                     }
                 });
             });
+        }
+
+        function compareHopperWidgetItems(a, b) {
+            if (parseInt(a.hopperPage) < parseInt(b.hopperPage)) {
+                return -1;
+            }
+            if (parseInt(a.hopperPage) > parseInt(b.hopperPage)) {
+                return 1;
+            }
+            if (a.hopperText < b.hopperText) {
+                return -1;
+            }
+            if (a.hopperText > b.hopperText) {
+                return 1;
+            }
+            return 0;
         }
 
         /**
