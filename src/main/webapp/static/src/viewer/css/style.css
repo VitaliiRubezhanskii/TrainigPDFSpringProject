@@ -221,12 +221,12 @@
 }
 
 .sp-secondary-cta::before {
-  content: url(../js/pdfjs/1.7.310-811a2db/web/images/findbarButton-next.png);
+  content: url(../js/pdfjs/1.7.310-cec6e96/web/images/findbarButton-next.png);
 }
 
 @media screen and (min-resolution: 2dppx) {
   .sp-secondary-cta::before {
-    content: url(../js/pdfjs/1.7.310-811a2db/web/images/findbarButton-next@2x.png);
+    content: url(../js/pdfjs/1.7.310-cec6e96/web/images/findbarButton-next@2x.png);
   }
 }
 
@@ -424,7 +424,7 @@
 
 .sp-widget3__bottom-document-container {
   border: 9px solid transparent;
-  border-image: url(../js/pdfjs/1.7.310-811a2db/web/images/shadow.png) 9 9 repeat;
+  border-image: url(../js/pdfjs/1.7.310-cec6e96/web/images/shadow.png) 9 9 repeat;
   margin: 5px auto;
   position: relative;
 }
