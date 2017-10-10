@@ -702,8 +702,6 @@ sp.viewerWidgetsModal = {
          * @param {object} widget - The settings for the Hopper widget.
          */
         function displayWidget5(widget) {
-            widget.items.sort(compareHopperWidgetItems);
-
             for (var i = 0; i < widget.items.length - 1; i++) {
                 $('#sp-hopper-customize__container').append(
                     '<div class="row sp-hopper-widget__row">' +
@@ -727,22 +725,6 @@ sp.viewerWidgetsModal = {
                     }
                 });
             });
-        }
-
-        function compareHopperWidgetItems(a, b) {
-            if (parseInt(a.hopperPage) < parseInt(b.hopperPage)) {
-                return -1;
-            }
-            if (parseInt(a.hopperPage) > parseInt(b.hopperPage)) {
-                return 1;
-            }
-            if (a.hopperText < b.hopperText) {
-                return -1;
-            }
-            if (a.hopperText > b.hopperText) {
-                return 1;
-            }
-            return 0;
         }
 
         /**
@@ -1275,6 +1257,22 @@ sp.viewerWidgetsModal = {
             });
 
             items.push(item);
+        });
+
+        items.sort(function(a, b) {
+            if (parseInt(a.hopperPage) < parseInt(b.hopperPage)) {
+                return -1;
+            }
+            if (parseInt(a.hopperPage) > parseInt(b.hopperPage)) {
+                return 1;
+            }
+            if (a.hopperText < b.hopperText) {
+                return -1;
+            }
+            if (a.hopperText > b.hopperText) {
+                return 1;
+            }
+            return 0;
         });
 
         widget5.data.items = items;
