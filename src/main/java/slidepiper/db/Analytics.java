@@ -140,27 +140,7 @@ public class Analytics {
       + "WHERE file_hash=? AND salesman_email=? AND customer_email=?\n"
       + "GROUP BY date\n"
       + "HAVING file_sum_open > 0";
-  
-  
-  public static final String sqlFilePerformanceChart = 
-	    "SELECT\n"
-	  + "  t1.date,\n"
-	  + "  t1.file_performance AS max_file_performance,\n"
-	  + "  t4.avg_file_performance,\n"
-	  + "  t3.individual_file_performance,\n"
-	  + "  COALESCE(s1.name, 'File Not Found') AS max_performance_name,\n"
-	  + "  COALESCE(s2.name, 'File Not Found') AS file_performance_name\n"
-      + "FROM view_file_performance_agg_by_date_file_hash as t1\n"
-	  + "INNER JOIN (SELECT date, salesman_email, max(file_performance) AS max_file_performance FROM picascrafxzhbcmd.view_file_performance_agg_by_date_file_hash GROUP BY date, salesman_email) AS t2 ON t1.date = t2.date AND t1.salesman_email = t2.salesman_email AND t1.file_performance = t2.max_file_performance\n"
-	  + "LEFT JOIN picascrafxzhbcmd.slides AS s1 ON t1.file_hash = s1.id AND s1.status IN ('CREATED', 'UPDATED', 'BEFORE_AWS_S3_TRANSITION')\n"
-	  + "INNER JOIN (SELECT date, file_hash, file_performance AS individual_file_performance FROM picascrafxzhbcmd.view_file_performance_agg_by_date_file_hash WHERE file_hash = ?) AS t3 ON t1.date = t3.date\n"
-	  + "LEFT JOIN picascrafxzhbcmd.slides AS s2 ON t3.file_hash = s2.id AND s2.status IN ('CREATED', 'UPDATED', 'BEFORE_AWS_S3_TRANSITION')\n"
-	  + "INNER JOIN (SELECT date, salesman_email, AVG(file_performance) AS avg_file_performance FROM picascrafxzhbcmd.view_file_performance_agg_by_date_file_hash GROUP BY date, salesman_email) AS t4 ON t1.date = t4.date AND t1.salesman_email = t4.salesman_email\n"
-	  + "WHERE t1.salesman_email = ?\n"
-      + "GROUP BY t1.date, t1.salesman_email\n"
-      + "ORDER BY t1.date";
 
-  
   
   public static final String sqlFileVisitorsMap =
         "SELECT\n"
@@ -348,11 +328,4 @@ public class Analytics {
     + "INNER JOIN msg_info ON msg_info.id = customer_events.msg_id\n"
     + "INNER JOIN slides ON msg_info.slides_id = slides.id AND slides.status IN ('CREATED', 'UPDATED', 'BEFORE_AWS_S3_TRANSITION')\n"
     + "WHERE customer_events.id = ?";
-
-
-	public static final String sqlHopperData =
-		"SELECT\n"
-	  + "  t1.data FROM widget AS t1\n"
-	  +	"  JOIN slides as t2 ON t2.id_ai = t1.FK_file_id_ai AND t2.id = ? AND t2.sales_man_email = ?\n"
-	  + "  WHERE t1.type = '5'";
 }

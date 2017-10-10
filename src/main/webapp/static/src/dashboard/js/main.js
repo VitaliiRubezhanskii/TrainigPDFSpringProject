@@ -353,8 +353,10 @@ sp = {
                     $('#sp-widget-total-views').text('0');
                     $('#sp-widget-bounce-rate, #sp-widget-average-view-duration, #sp-widget-average-pages-viewed, #sp-widget-top-exit-page, #sp-widget-users-cta').text('N/A');
 
-                    $('.hopper__items').empty();
-                    $('.hopper__title').show();
+                    $('.sp-hopper-metric__items').empty();
+                    $('.sp-hopper-metric__title').text('N/A').show();
+                    $('.sp-link-metric__items').empty();
+                    $('.sp-link-metric__title').text('N/A').show();
                     $('#sp-widget-video-youtube-metric-total-number-plays').text('N/A');
                     $('#sp-widget-ask-question-metric').hide();
                     $('#sp-widget-total-count-likes').text('N/A');
@@ -1274,59 +1276,147 @@ sp = {
             sp.metric.getFileMetrics(fileData);
 
             // Hopper data.
-            if (typeof fileData != 'undefined' && typeof fileData[1] != 'undefined' && parseInt(fileData[1]) > 0) {
-                var items = document.querySelector('.hopper__items');
-                while (items.hasChildNodes()) {
-                    items.removeChild(items.lastChild);
-                }
-                var title = document.querySelector('.hopper__title');
-                title.textContent = 'N/A';
-                title.style.display = 'block';
+            var hopperTitle = document.querySelector('.sp-hopper-metric__title');
+            hopperTitle.textContent = 'Loading...';
+            hopperTitle.style.display = 'block';
 
-                $.getJSON(
-                    '/api/v1/analytics',
-                    {
-                        action: 'getHopperData',
-                        fileHash: fileData[0]
-                    },
-                    function (data) {
-                        if (typeof data['hopperData'][0] !== 'undefined') {
-                            var hops = JSON.parse(data['hopperData'][0][0]).data.items;
-                            var ul = document.createElement('ul');
-                            ul.className = 'todo-list small-list m-t';
-                            hops.forEach(function (hop) {
-                                var li = document.createElement('li');
-                                var i = document.createElement('i');
-                                i.classList = 'fa hopper__item-checkbox'
-                                switch (hop.status) {
-                                    case 'finished':
-                                        i.classList += ' fa-check-square';
-                                        break;
-                                    default:
-                                        i.classList += ' fa-square-o';
-                                        break;
-                                }
-                                li.appendChild(i);
-
-                                var span = document.createElement('span');
-                                span.classList = 'm-l-xs';
-                                if ('finished' === hop.status) {
-                                    span.classList += ' todo-completed';
-                                }
-                                span.textContent = hop.hopperText;
-                                li.appendChild(span);
-                                ul.appendChild(li);
-                            });
-                            items.appendChild(ul);
-                            title.style.display = 'none';
-                        }
-                    }
-                );
-            } else {
-                $('.hopper__items').empty();
-                $('.hopper__title').show();
+            var hopperItems = document.querySelector('.sp-hopper-metric__items');
+            while (hopperItems.hasChildNodes()) {
+                hopperItems.removeChild(hopperItems.lastChild);
             }
 
+            $('.sp-hopper-metric__save-button').remove();
+
+            if (typeof fileData != 'undefined' && typeof fileData[1] != 'undefined' && parseInt(fileData[1]) > 0) {
+                $.getJSON('/api/v1/widgets/?fileHash=' + fileData[0] + '&type=5', function(data) {
+                    if (data.items.length === 0) {
+                        hopperTitle.textContent = 'N/A';
+                    } else {
+                        var hopperMetric = document.querySelector('.sp-hopper-metric');
+                        hopperMetric.setAttribute('data-link', data.link);
+
+                        var ul = document.createElement('ul');
+                        ul.className = 'todo-list small-list m-t';
+                        data.items.forEach(function(item) {
+                            var li = document.createElement('li');
+                            var a = document.createElement('a');
+                            a.classList = 'sp-hopper-metric__item check-link';
+                            var i = document.createElement('i');
+                            i.classList = 'sp-hopper-metric__item-status';
+                            switch (item.status) {
+                                case 'finished':
+                                    i.classList += ' sp-hopper-metric__item-status--checked fa fa-check-square';
+                                    break;
+                                default:
+                                    i.classList += ' sp-hopper-metric__item-status--unchecked fa fa-square-o';
+                                    break;
+                            }
+                            a.appendChild(i);
+                            li.appendChild(a);
+
+                            var span = document.createElement('span');
+                            span.classList = 'sp-hopper-metric__item-content m-l-xs';
+                            if ('finished' === item.status) {
+                                span.classList += ' todo-completed';
+                            }
+
+                            span.setAttribute('data-hopper-text', item.hopperText);
+                            span.setAttribute('data-hopper-page', item.hopperPage);
+
+                            span.textContent = item.hopperText;
+                            li.appendChild(span);
+                            ul.appendChild(li);
+                        });
+                        hopperItems.appendChild(ul);
+
+                        var saveButton = document.createElement('button');
+                        saveButton.classList = 'btn btn-success m-t-sm sp-hopper-metric__save-button';
+                        saveButton.disabled = true;
+                        saveButton.textContent = 'Save';
+                        hopperMetric.appendChild(saveButton);
+
+                        hopperTitle.style.display = 'none';
+                    }
+                }).fail(function() {
+                    hopperTitle.textContent = 'N/A';
+                });
+            } else {
+                hopperTitle.textContent = 'N/A';
+            }
+
+            // Link data.
+            var linkTitle = document.querySelector('.sp-link-metric__title');
+            linkTitle.textContent = 'Loading...';
+            linkTitle.style.display = 'block';
+
+            var linkItems = document.querySelector('.sp-link-metric__items');
+            while (linkItems.hasChildNodes()) {
+                linkItems.removeChild(linkItems.lastChild);
+            }
+
+            $('.sp-link-metric__save-button').remove();
+
+            if (typeof fileData != 'undefined' && typeof fileData[1] != 'undefined' && parseInt(fileData[1]) > 0) {
+                $.getJSON('/api/v1/widgets/?fileHash=' + fileData[0] + '&type=9', function(data) {
+                    if (data.items.length === 0) {
+                        linkTitle.textContent = 'N/A';
+                    } else {
+                        var linkMetric = document.querySelector('.sp-link-metric');
+                        linkMetric.setAttribute('data-link', data.link);
+
+                        var ul = document.createElement('ul');
+                        ul.className = 'todo-list small-list m-t';
+                        data.items.forEach(function (item) {
+                            var li = document.createElement('li');
+                            var a = document.createElement('a');
+                            a.classList = 'sp-link-metric__item check-link';
+                            var i = document.createElement('i');
+                            i.classList = 'sp-link-metric__item-status';
+                            switch (item.status) {
+                                case 'completed':
+                                    i.classList += ' sp-link-metric__item-status--checked fa fa-check-square';
+                                    break;
+                                default:
+                                    i.classList += ' sp-link-metric__item-status--unchecked fa fa-square-o';
+                                    break;
+                            }
+                            a.appendChild(i);
+                            li.appendChild(a);
+
+                            var span = document.createElement('span');
+                            span.classList = 'sp-link-metric__item-content m-l-xs';
+                            if ('completed' === item.status) {
+                                span.classList += ' todo-completed';
+                            }
+
+                            span.setAttribute('data-icon', item.icon);
+                            span.setAttribute('data-link', item.link);
+                            span.setAttribute('data-layout', item.layout);
+                            span.setAttribute('data-page-to', item.pageTo);
+                            span.setAttribute('data-page-from', item.pageFrom);
+                            span.setAttribute('data-button-text-1', item.buttonText1);
+                            span.setAttribute('data-button-text-2', item.buttonText2);
+
+                            span.textContent = item.buttonText1;
+                            li.appendChild(span);
+                            ul.appendChild(li);
+                        });
+                        linkItems.appendChild(ul);
+
+                        var saveButton = document.createElement('button');
+                        saveButton.classList = 'btn btn-success m-t-sm sp-link-metric__save-button';
+                        saveButton.disabled = true;
+                        saveButton.textContent = 'Save';
+                        linkMetric.appendChild(saveButton);
+
+                        linkTitle.style.display = 'none';
+                    }
+                }).fail(function() {
+                    linkTitle.textContent = 'N/A';
+                });
+            } else {
+                linkTitle.textContent = 'N/A';
+            }
 
             // Total number of YouTube plays.
             if (typeof fileData != 'undefined' && typeof fileData[1] != 'undefined' && parseInt(fileData[1]) > 0) {
@@ -2693,4 +2783,106 @@ document.querySelector('.user-change-password').addEventListener('submit', funct
         }
         $('.close').click();
     };
+});
+
+// Dashboard Hopper / Milestone status change
+$(document).on('click', '.sp-hopper-metric__save-button', function() {
+    var items = [];
+    $('.sp-hopper-metric__item').each(function() {
+        var item = {};
+        if ($(this).find('.sp-hopper-metric__item-status').hasClass('sp-hopper-metric__item-status--checked')) {
+            item.status = 'finished';
+        } else {
+            item.status = 'unfinished';
+        }
+        item.hopperPage = $(this).next('.sp-hopper-metric__item-content').attr('data-hopper-page');
+        item.hopperText = $(this).next('.sp-hopper-metric__item-content').attr('data-hopper-text');
+
+        items.push(item);
+    });
+
+    var data = {
+        type: '5',
+        items: items
+    };
+
+    $.ajax({
+        url: document.querySelector('.sp-hopper-metric').getAttribute('data-link'),
+        method: 'PATCH',
+        beforeSend: function(xhr) {
+            xhr.setRequestHeader(SP.CSRF_HEADER, SP.CSRF_TOKEN);
+        },
+        contentType : 'application/json',
+        data: JSON.stringify(data)
+    }).done(function() {
+        swal("Success!", "You successfully changed the status of the Hopper / Milestone", "success");
+    });
+
+    $('.sp-hopper-metric__save-button').prop('disabled', true);
+});
+
+
+// Dashboard Link / Task status change
+$(document).on('click', '.sp-link-metric__save-button', function() {
+    var items = [];
+    $('.sp-link-metric__item').each(function() {
+        var item = {};
+        if ($(this).find('.sp-link-metric__item-status').hasClass('sp-link-metric__item-status--checked')) {
+            item.status = 'completed';
+        }
+        item.icon = $(this).next('.sp-link-metric__item-content').attr('data-icon');
+        item.link = $(this).next('.sp-link-metric__item-content').attr('data-link');
+        item.layout = $(this).next('.sp-link-metric__item-content').attr('data-layout');
+        item.pageTo = $(this).next('.sp-link-metric__item-content').attr('data-page-to');
+        item.pageFrom = $(this).next('.sp-link-metric__item-content').attr('data-page-from');
+        item.buttonText1 = $(this).next('.sp-link-metric__item-content').attr('data-button-text-1');
+        item.buttonText2 = $(this).next('.sp-link-metric__item-content').attr('data-button-text-2');
+
+        items.push(item);
+    });
+
+    var data = {
+        type: '9',
+        items: items
+    };
+
+    $.ajax({
+        url: document.querySelector('.sp-link-metric').getAttribute('data-link'),
+        method: 'PATCH',
+        beforeSend: function(xhr) {
+            xhr.setRequestHeader(SP.CSRF_HEADER, SP.CSRF_TOKEN);
+        },
+        contentType : 'application/json',
+        data: JSON.stringify(data)
+    }).done(function() {
+        swal("Success!", "You successfully changed the status of the Link / Task", "success");
+    });
+
+    $('.sp-link-metric__save-button').prop('disabled', true);
+});
+
+$(document).on('click', '.sp-hopper-metric__item', function() {
+    /**
+     * @see inspinia.js - Small todo handler
+     */
+    var button = $(this).find('i');
+    var label = $(this).next('span');
+    button.toggleClass('fa-check-square fa-square-o sp-hopper-metric__item-status--checked sp-hopper-metric__item-status--unchecked');
+    label.toggleClass('todo-completed');
+
+    $('.sp-hopper-metric__save-button').prop('disabled', false);
+    return false;
+});
+
+$(document).on('click', '.sp-link-metric__item', function() {
+    /**
+     * @see inspinia.js - Small todo handler
+     */
+    var button = $(this).find('i');
+    var label = $(this).next('span');
+    button.toggleClass('fa-check-square fa-square-o sp-link-metric__item-status--checked sp-link-metric__item-status--unchecked');
+    label.toggleClass('todo-completed');
+
+    $('.sp-link-metric__save-button').prop('disabled', false);
+    return false;
 });

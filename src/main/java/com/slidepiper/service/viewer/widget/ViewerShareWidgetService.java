@@ -4,7 +4,7 @@ import com.slidepiper.model.entity.Document;
 import com.slidepiper.model.entity.widget.ShareWidget;
 import com.slidepiper.model.entity.widget.ShareWidget.ShareWidgetData;
 import com.slidepiper.repository.ChannelRepository;
-import com.slidepiper.repository.widget.ShareWidgetRepository;
+import com.slidepiper.widget.WidgetRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,20 +16,20 @@ import java.util.Optional;
 public class ViewerShareWidgetService {
     private final ChannelRepository channelRepository;
     private final ShareWidgetData defaultShareWidgetData;
-    private final ShareWidgetRepository shareWidgetRepository;
+    private final WidgetRepository widgetRepository;
 
     @Autowired
     public ViewerShareWidgetService(ChannelRepository channelRepository,
                                     ShareWidgetData defaultShareWidgetData,
-                                    ShareWidgetRepository shareWidgetRepository) {
+                                    WidgetRepository widgetRepository) {
         this.channelRepository = channelRepository;
         this.defaultShareWidgetData = defaultShareWidgetData;
-        this.shareWidgetRepository = shareWidgetRepository;
+        this.widgetRepository = widgetRepository;
     }
 
     public ShareWidgetData getShareWidgetData(HttpServletRequest request, String channelName) {
         Document document = channelRepository.findByFriendlyId(channelName).getDocument();
-        ShareWidget shareWidget = shareWidgetRepository.findByDocument(document);
+        ShareWidget shareWidget = (ShareWidget) widgetRepository.findByDocumentAndType(document, "11");
 
         ShareWidgetData shareWidgetData = defaultShareWidgetData;
         if (Objects.nonNull(shareWidget) && shareWidget.getData().isEnabled()) {

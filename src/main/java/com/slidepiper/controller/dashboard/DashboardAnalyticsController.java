@@ -193,15 +193,6 @@ public class DashboardAnalyticsController {
                 JSONArray notifications = DbLayer.getNotifications(principal.getName(), Analytics.sqlTableNotifications);
                 data.put("notifications", notifications);
                 break;
-
-            case "getHopperData":
-                if (documentRepository.findByFriendlyId(fileHash).getViewer().getEmail().equals(principal.getName())) {
-                    parameterList.add(fileHash);
-                    parameterList.add(principal.getName());
-                    sqlData = DbLayer.getEventData(parameterList, Analytics.sqlHopperData);
-                    data.put("hopperData", sqlData);
-                }
-                break;
         }
 
         return data.toString();
