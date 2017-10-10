@@ -1,5 +1,8 @@
 package com.slidepiper.controller;
 
+import com.slidepiper.channel.ChannelNotFoundException;
+import com.slidepiper.document.DocumentNotFoundException;
+import com.slidepiper.document.DocumentRestrictedException;
 import com.slidepiper.exception.WidgetDisabledException;
 import com.slidepiper.exception.WidgetNotFoundException;
 import com.slidepiper.task.TaskNotFoundException;
@@ -22,7 +25,16 @@ public class ExceptionHandlerController {
     @ExceptionHandler({BindException.class, MethodArgumentNotValidException.class})
     public void handleBadRequest() {}
 
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ExceptionHandler(DocumentRestrictedException.class)
+    public void handleForbidden() {}
+
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ExceptionHandler({WidgetDisabledException.class, WidgetNotFoundException.class, TaskNotFoundException.class})
+    @ExceptionHandler({
+            ChannelNotFoundException.class,
+            DocumentNotFoundException.class,
+            TaskNotFoundException.class,
+            WidgetDisabledException.class,
+            WidgetNotFoundException.class})
     public void handleNotFound() {}
 }

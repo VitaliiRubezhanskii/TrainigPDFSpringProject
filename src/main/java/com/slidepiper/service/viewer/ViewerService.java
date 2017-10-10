@@ -42,7 +42,9 @@ public class ViewerService {
         Channel channel = channelRepository.findByFriendlyId(initialChannelFriendlyId);
         Document document = Optional.ofNullable(channel).map(x -> x.getDocument()).orElse(null);
 
-        if (Objects.isNull(document)) {
+        if (Objects.isNull(document)
+                || (!document.getStatus().equals(Document.Status.CREATED)
+                    && !document.getStatus().equals(Document.Status.UPDATED))) {
             return channelRepository.findByFriendlyId("2zdxd9");
         } else if (document.isIpRestricted()
                 && !DbLayer.isIPMatchClientIP(channel.getFriendlyId(), ip)) {

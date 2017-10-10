@@ -36,8 +36,7 @@ public class Document implements Serializable {
         CREATED,
         DELETED,
         DISABLED,
-        UPDATED,
-        BEFORE_AWS_S3_TRANSITION
+        UPDATED
     }
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
