@@ -2620,9 +2620,7 @@ sp = {
                                 replyEmail = notification.customerEmail;
                             }
                         }
-                        action =
-                            '<span>' + replyEmail + " " + setActionValue(notification.event) + ': </span><br>' +
-                            '<span><em>' + notification.messageText + '</em></span><br>';
+                        action = replyEmail + " " + setActionValue(notification.event) + ': ' + notification.messageText;
                         customer = notification.customerEmail;
                     }
                 } else if (notification.event = 'OPEN_SLIDES') {
@@ -2682,9 +2680,18 @@ sp = {
                     ],
                     columns: [
                         {data: 'time'},
-                        {data: 'customer'},
-                        {data: 'action'},
-                        {data: 'document'}
+                        {
+                            data: 'customer',
+                            render: $.fn.dataTable.render.text()
+                        },
+                        {
+                            data: 'action',
+                            render: $.fn.dataTable.render.text()
+                        },
+                        {
+                            data: 'document',
+                            render: $.fn.dataTable.render.text()
+                        }
                     ],
                     dom: '<"sp-datatables-search-left"f><"html5buttons"B>ti',
                     paging: false,
@@ -2707,7 +2714,7 @@ sp = {
 
                 switch(dbAction) {
                     case 'OPEN_SLIDES':
-                        action = 'Opened File';
+                        action = 'Opened portal';
                         break;
 
                     case 'VIEWER_WIDGET_ASK_QUESTION':
