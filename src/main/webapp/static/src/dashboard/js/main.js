@@ -61,7 +61,7 @@ sp = {
 
                     for (var i = 0; i < filesList.length; i++) {
                         $('#sp-nav-files__li ul').append('<li class="sp-marketing-analytics__li"><a class="sp-word-wrap" data-file-hash="'
-                            + filesList[i][0] + '">' + filesList[i][1] + '</a></li>');
+                            + sp.escapeHtml(filesList[i][0]) + '">' + sp.escapeHtml(filesList[i][1]) + '</a></li>');
                     }
 
                     // Init search function
@@ -435,6 +435,12 @@ sp = {
             window.sp.tasks = {
                 getAll: function() {
                     $.getJSON('/api/v1/tasks', function(data) {
+                        data.forEach(function(task) {
+                            if (typeof task.customer !== 'undefined') {
+                                task.customer.name = task.customer.firstName + ' ' + task.customer.lastName + ' (' + task.customer.email + ')';
+                            }
+                        });
+
                         $.fn.dataTable.moment('D/M/Y HH:mm (Z)');
                         if (!($.fn.dataTable.isDataTable('.tasks__table'))) {
                             $('.tasks__table').DataTable({
@@ -447,37 +453,40 @@ sp = {
                                     }
                                 ],
                                 columns: [
-                                    {data: 'dueAt'},
-                                    {data: 'completedAt'},
                                     {
-                                        data: 'customer.firstName',
-                                        defaultContent: 'Not set'
+                                        data: 'dueAt'
                                     },
                                     {
-                                        data: 'customer.lastName',
-                                        defaultContent: 'Not set'
+                                        data: 'completedAt'
                                     },
                                     {
-                                        data: 'customer.email',
-                                        defaultContent: 'Not set'
+                                        data: 'customer.name',
+                                        defaultContent: 'Not set',
+                                        render: $.fn.dataTable.render.text()
                                     },
                                     {
                                         data: 'customer.company',
-                                        defaultContent: 'Not set'
+                                        defaultContent: 'Not set',
+                                        render: $.fn.dataTable.render.text()
                                     },
                                     {
                                         data: 'document.name',
-                                        defaultContent: 'Not set'
+                                        defaultContent: 'Not set',
+                                        render: $.fn.dataTable.render.text()
                                     },
                                     {
                                         data: 'data.pageNumber',
-                                        defaultContent: 'Not set'
+                                        defaultContent: 'Not set',
+                                        render: $.fn.dataTable.render.text()
                                     },
                                     {
                                         data: 'data.taskMessage',
-                                        defaultContent: 'Not set'
+                                        defaultContent: 'Not set',
+                                        render: $.fn.dataTable.render.text()
                                     },
-                                    {data: 'link'}
+                                    {
+                                        data: 'link'
+                                    }
                                 ],
                                 columnDefs: [
                                     {
@@ -510,27 +519,13 @@ sp = {
                                     },
                                     {
                                         render: function(data, type, row) {
-                                            if (typeof data === 'undefined') {
-                                                return 'Not set';
-                                            } else {
-                                                return data + ' ' + row.customer.lastName + ' (' + row.customer.email + ')';
-                                            }
-                                        },
-                                        targets: 2
-                                    },
-                                    {
-                                        visible: false,
-                                        targets: [3,4]
-                                    },
-                                    {
-                                        render: function(data, type, row) {
                                             var disabled = '';
                                             if (row.initializedAt > -1) {
                                                 disabled = 'disabled';
                                             }
-                                            return '<button class="tasks__task-update btn btn-primary btn-xs" data-toggle="modal" data-target=".tasks__task-modal" data-link="' + data + '" ' + disabled + '>Update</button> <button class="tasks__task-delete btn btn-danger btn-xs" data-link="' + data + '" ' + disabled + '>Delete</button>'
+                                            return '<button class="tasks__task-update btn btn-primary btn-xs" data-toggle="modal" data-target=".tasks__task-modal" data-link="' + sp.escapeHtml(data) + '" ' + disabled + '>Update</button> <button class="tasks__task-delete btn btn-danger btn-xs" data-link="' + sp.escapeHtml(data) + '" ' + disabled + '>Delete</button>'
                                         },
-                                        targets: 9
+                                        targets: 7
                                     }
                                 ],
                                 dom: '<"sp-datatables-search-left"f><"html5buttons"B>ti',
@@ -873,13 +868,13 @@ sp = {
                 var date = moment.utc(value[2]).toDate();
                 var obj = {
                     'date': moment(date).format('DD-MM-YYYY HH:mm'),
-                    'document': '<span class="sp-file-mgmt-file-name" data-file-hash="' + value[0] + '">' + value[1] + '</span>',
+                    'document': '<span class="sp-file-mgmt-file-name" data-file-hash="' + sp.escapeHtml(value[0]) + '">' + sp.escapeHtml(value[1]) + '</span>',
                     'options': '<span>'
-                    + '<a><span class="label label-primary sp-file-update" data-toggle="modal" data-target="#sp-modal-update-file" data-file-hash="' + value[0] + '">Update</span></a>'
-                    + '<a href="#"><span class="label label-danger sp-file-delete" data-file-hash="' + value[0] + '">Delete</span></a></span>'
-                    + '<a><span style="margin-left: 10px;" class="sp-document__clone label label-info" data-document-friendly-id="' + value[0] + '" data-document-name="' + value[1] + '">Clone</span></a>'
-                    + '<a><span data-toggle="modal" data-target="#sp-viewer-widgets-modal" style="margin-left: 10px;" class="label label-success sp-file-customize" data-file-hash="' + value[0] + '">Customize</span></a>'
-                    + '<a class="sp-preview-file-link"><span id="sp-preview-file-' + index + '" style="margin-left: 10px;" class="label label-warning">Preview</span></a></span>'
+                    + '<a><span class="label label-primary sp-file-update" data-toggle="modal" data-target="#sp-modal-update-file" data-file-hash="' + sp.escapeHtml(value[0]) + '">Update</span></a>'
+                    + '<a href="#"><span class="label label-danger sp-file-delete" data-file-hash="' + sp.escapeHtml(value[0]) + '">Delete</span></a></span>'
+                    + '<a><span style="margin-left: 10px;" class="sp-document__clone label label-info" data-document-friendly-id="' + sp.escapeHtml(value[0]) + '" data-document-name="' + sp.escapeHtml(value[1]) + '">Clone</span></a>'
+                    + '<a><span data-toggle="modal" data-target="#sp-viewer-widgets-modal" style="margin-left: 10px;" class="label label-success sp-file-customize" data-file-hash="' + sp.escapeHtml(value[0]) + '">Customize</span></a>'
+                    + '<a class="sp-preview-file-link"><span id="sp-preview-file-' + sp.escapeHtml(index) + '" style="margin-left: 10px;" class="label label-warning">Preview</span></a></span>'
                 };
                 filesArr.push(obj);
 
@@ -1061,11 +1056,11 @@ sp = {
                 var date = moment.utc(row[4]).toDate();
                 var obj = {
                     'date': moment(date).format('DD-MM-YYYY HH:mm'),
-                    'name':  '<span id="sp-customer-first-name__td">' + row[0] + '</span> <span id="sp-customer-last-name__td">' + row[1] + '</span></span>' ,
-                    'company': '<span id="sp-customer-company__td">' + row[2] + '</span>',
-                    'email':  '<span class="contact-type"><i class="fa fa-envelope"> </i></span>' + '         '  + row[3] + '',
-                    'options': '<td><a href="#"><span class="label label-primary sp-add-update-customer sp-customer-update" data-add-update="update" data-toggle="modal" data-target="#sp-modal-add-update-customer" data-customer-email="' + row[3] + '">Update</span></a><a href="#"><span class="label label-danger sp-customer-delete" data-customer-email="' + row[3] + '">Delete</span></a></td>',
-                    group: '<span id="sp-customer-group__td">' + row[5] + '</span>',
+                    'name':  '<span id="sp-customer-first-name__td">' + sp.escapeHtml(row[0]) + '</span> <span id="sp-customer-last-name__td">' + sp.escapeHtml(row[1]) + '</span></span>' ,
+                    'company': '<span id="sp-customer-company__td">' + sp.escapeHtml(row[2]) + '</span>',
+                    'email':  '<span class="contact-type"><i class="fa fa-envelope"> </i></span>' + '         '  + sp.escapeHtml(row[3]) + '',
+                    'options': '<td><a href="#"><span class="label label-primary sp-add-update-customer sp-customer-update" data-add-update="update" data-toggle="modal" data-target="#sp-modal-add-update-customer" data-customer-email="' + sp.escapeHtml(row[3]) + '">Update</span></a><a href="#"><span class="label label-danger sp-customer-delete" data-customer-email="' + sp.escapeHtml(row[3]) + '">Delete</span></a></td>',
+                    group: '<span id="sp-customer-group__td">' + sp.escapeHtml(row[5]) + '</span>',
                 };
                 nameArr.push(obj);
             });
@@ -1453,9 +1448,9 @@ sp = {
                             $.each(quetions, function (index, value) {
                                 $('#sp-widget-ask-question-metric ul.list-group').append(
                                     '<li class="list-group-item">'
-                                    + '<p class="sp-widget-ask-question-metric-email"><strong>' + value[2] + '</strong></p>'
-                                    + '<div class="sp-widget-ask-question-metric-message">' + value[1].replace(/\r\n|\r|\n/g, '<br>') + '</div>'
-                                    + '<small class="block"><i class="fa fa-clock-o"></i> ' + value[0] + '</small>'
+                                    + '<p class="sp-widget-ask-question-metric-email"><strong>' + sp.escapeHtml(value[2]) + '</strong></p>'
+                                    + '<div class="sp-widget-ask-question-metric-message">' + sp.escapeHtml(value[1]).replace(/\r\n|\r|\n/g, '<br>') + '</div>'
+                                    + '<small class="block"><i class="fa fa-clock-o"></i> ' + sp.escapeHtml(value[0]) + '</small>'
                                     + '</li>');
                             });
 
@@ -1797,9 +1792,9 @@ sp = {
                                     $.each(tooltipBody, function (index, body) {
                                         var colors = tooltip.labelColors[index];
                                         var style = 'background:' + colors.backgroundColor + '; border-color:' + colors.borderColor;
-                                        var tooltipColorKey = '<span class="sp-chart__chartjs-tooltip-color-key" style="' + style + '"></span>';
+                                        var tooltipColorKey = '<span class="sp-chart__chartjs-tooltip-color-key" style="' + sp.escapeHtml(style) + '"></span>';
 
-                                        innerHtml += '<tr><td>' + tooltipColorKey + body + '</td></tr><br>';
+                                        innerHtml += '<tr><td>' + tooltipColorKey + sp.escapeHtml(body) + '</td></tr><br>';
                                     });
 
                                     innerHtml += '</tbody>';
@@ -1958,11 +1953,11 @@ sp = {
 
                 var obj = {
                     checkbox: index,
-                    name: value[0] + ' ' + value[1],
-                    company: value[2],
-                    email: '<span data-email=' + value[3] +' class="sp-email"> ' + value[3] + '</span>',
+                    name: sp.escapeHtml(value[0]) + ' ' + sp.escapeHtml(value[1]),
+                    company: sp.escapeHtml(value[2]),
+                    email: '<span data-email=' + sp.escapeHtml(value[3]) +' class="sp-email"> ' + sp.escapeHtml(value[3]) + '</span>',
                     date:  moment(date).format('DD-MM-YYYY HH:mm'),
-                    group: value[5]
+                    group: sp.escapeHtml(value[5])
                 };
                 nameArr.push(obj);
             });
@@ -2060,7 +2055,7 @@ sp = {
 
                 var obj = {
                     checkbox: index,
-                    name: '<span class="sp-doc-name" data-file-name=' + value[1] +' data-file-hash=' + value[0] +'>' + value[1] + '</span>',
+                    name: '<span class="sp-doc-name" data-file-name="' + sp.escapeHtml(value[1]) + '" data-file-hash="' + sp.escapeHtml(value[0]) + '">' + sp.escapeHtml(value[1]) + '</span>',
                     date: moment(date).format('DD-MM-YYYY HH:mm'),
                 };
                 fileArr.push(obj);
@@ -2247,8 +2242,8 @@ sp = {
 
             $.each(files, function(index) {
                 $('#sp-send-doc-table__header-row')
-                    .append('<th>sp-file-name-' + (index + 1) + '</th>')
-                    .append('<th>sp-file-link-' + (index + 1) + '</th>');
+                    .append('<th>sp-file-name-' + sp.escapeHtml(index + 1) + '</th>')
+                    .append('<th>sp-file-link-' + sp.escapeHtml(index + 1) + '</th>');
             });
 
             $.each(data, function (index, customer) {
@@ -2258,12 +2253,12 @@ sp = {
                 var documentLink = '';
                 $.each(customer.files, function(index, fileData) {
 
-                    customerTableData.email = '<span class="sp-send-documents__email-address">' + customer.customerEmail + '</span>';
+                    customerTableData.email = '<span class="sp-send-documents__email-address">' + sp.escapeHtml(customer.customerEmail) + '</span>';
                     documentName +=
-                        '<span class="sp-send-documents__file-name">' + sp.customerFileLinksGenerator.getDocumentName(fileData.fileHash, files) + '</span><br>';
+                        '<span class="sp-send-documents__file-name">' + sp.escapeHtml(sp.customerFileLinksGenerator.getDocumentName(fileData.fileHash, files)) + '</span><br>';
 
                     documentLink +=
-                        '<span class="sp-send-documents__file-link">' + SP.VIEWER_URL_WITHOUT_FILELINK + fileData.fileLink + '</span><br>';
+                        '<span class="sp-send-documents__file-link">' + SP.VIEWER_URL_WITHOUT_FILELINK + sp.escapeHtml(fileData.fileLink) + '</span><br>';
 
                     customerTableData.document = documentName;
                     customerTableData.link = documentLink;
@@ -2272,8 +2267,8 @@ sp = {
                         '<i class="fa fa-copy sp-mail__icon"></i><span> Copy</span>' +
                         '</button>';
 
-                    customerTableData['sp-file-name-' + (index + 1)] = sp.customerFileLinksGenerator.getDocumentName(fileData.fileHash, files);
-                    customerTableData['sp-file-link-' + (index + 1)] = SP.VIEWER_URL_WITHOUT_FILELINK + fileData.fileLink;
+                    customerTableData['sp-file-name-' + (index + 1)] = sp.escapeHtml(sp.customerFileLinksGenerator.getDocumentName(fileData.fileHash, files));
+                    customerTableData['sp-file-link-' + (index + 1)] = SP.VIEWER_URL_WITHOUT_FILELINK + sp.escapeHtml(fileData.fileLink);
                 });
 
                 customerFileLinks.push(customerTableData);
@@ -2483,13 +2478,13 @@ sp = {
 
                         $.each(customers, function (i, v) {
                             $('#sp-nav-sales-analytics__li > ul')
-                                .append('<li class="sp-analytics-customer-name__li"><a class="sp-word-wrap" data-customer-email="' + i + '">' + v.customerName + '</a></li>')
-                                .append('<ul class="nav nav-third-level" data-customer-email="' + i + '">');
+                                .append('<li class="sp-analytics-customer-name__li"><a class="sp-word-wrap" data-customer-email="' + sp.escapeHtml(i) + '">' + sp.escapeHtml(v.customerName) + '</a></li>')
+                                .append('<ul class="nav nav-third-level" data-customer-email="' + sp.escapeHtml(i) + '">');
 
                             $.each(v.files, function (j, u) {
-                                $('#sp-nav-sales-analytics__li ul ul[data-customer-email="' + i + '"]')
+                                $('#sp-nav-sales-analytics__li ul ul[data-customer-email="' + sp.escapeHtml(i) + '"]')
                                     .append('<li class="sp-sales-analytics-filename__li"><a class="sp-customer-file__a sp-word-wrap" data-customer-email="'
-                                        + i + '" data-file-hash="' + u.fileHash + '">' + u.fileName + '</a></li>');
+                                        + sp.escapeHtml(i) + '" data-file-hash="' + sp.escapeHtml(u.fileHash) + '">' + sp.escapeHtml(u.fileName) + '</a></li>');
                             });
                         });
 
@@ -2725,6 +2720,23 @@ sp = {
                 return action;
             }
         },
+    },
+    
+    escapeHtml: function(input) {
+        var entityMap = {
+            '&': '&#38;',
+            '<': '&#60;',
+            '>': '&#62;',
+            '"': '&#34;',
+            "'": '&#39;',
+            '/': '&#47;',
+            '`': '&#96;',
+            '=': '&#61;'
+        };
+
+        return String(input).replace(/[&<>"'`=\/]/g, function(char) {
+            return entityMap[char];
+        });
     }
 };
 // End sp.
