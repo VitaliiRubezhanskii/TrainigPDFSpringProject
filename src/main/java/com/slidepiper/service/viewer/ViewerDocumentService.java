@@ -32,11 +32,15 @@ public class ViewerDocumentService {
             baseUrl = UriComponentsBuilder.fromHttpUrl(amazonS3Url).pathSegment(bucket);
         }
 
+        /**
+         * Amazon interprets + sign in path as %2B
+         */
         return baseUrl
                 .path("/{keyPrefix}/{documentFriendlyId}/{documentName}")
                 .queryParam("versionId", document.getVersionId())
                 .buildAndExpand(keyPrefix, document.getFriendlyId(), document.getName())
                 .encode()
-                .toString();
+                .toUriString()
+                .replace("+", "%2B");
     }
 }
