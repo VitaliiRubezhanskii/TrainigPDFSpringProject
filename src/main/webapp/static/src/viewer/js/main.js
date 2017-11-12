@@ -379,7 +379,7 @@ $.ajax({
     if (config.viewer.logoImage || typeof config.viewer.toolbarLogoImage !== 'undefined') {
         var logoImage = config.viewer.logoImage || 'data:image/png;base64,' + config.viewer.toolbarLogoImage;
         $('.sp-toolbar-logo a')
-            .append('<img src="' + logoImage + '">');
+            .append('<img src="' + sp.escapeHtml(logoImage) + '">');
 
         if (typeof config.viewer.toolbarLogoLink !== 'undefined') {
             if (config.viewer.toolbarLogoLink === 'no-logo-link') {
@@ -413,7 +413,7 @@ $.ajax({
 
         if (typeof config.viewer.cta1CollapseMaxWidth !== 'undefined') {
             $('body').append(
-                '<style>@media all and (max-width: ' + config.viewer.cta1CollapseMaxWidth
+                '<style>@media all and (max-width: ' + sp.escapeHtml(config.viewer.cta1CollapseMaxWidth)
                 + ') {#sp-cta1 {display: none;}}</style>');
         }
 
@@ -488,7 +488,7 @@ $.ajax({
 
         if (typeof config.viewer.cta2CollapseMaxWidth !== 'undefined') {
             $('body').append(
-                '<style>@media all and (max-width: ' + config.viewer.cta2CollapseMaxWidth
+                '<style>@media all and (max-width: ' + sp.escapeHtml(config.viewer.cta2CollapseMaxWidth)
                 + ') {#sp-cta2 {display: none;}}</style>');
         }
 
@@ -563,7 +563,7 @@ $.ajax({
 
         if (typeof config.viewer.cta3CollapseMaxWidth !== 'undefined') {
             $('body').append(
-                '<style>@media all and (max-width: ' + config.viewer.cta3CollapseMaxWidth
+                '<style>@media all and (max-width: ' + sp.escapeHtml(config.viewer.cta3CollapseMaxWidth)
                 + ') {#sp-cta3 {display: none;}}</style>');
         }
 
@@ -634,7 +634,7 @@ $.ajax({
 
     if (typeof config.viewer.toolbarLogoCollapseMaxWidth !== 'undefined') {
         $('body').append(
-            '<style>@media all and (max-width: ' + config.viewer.toolbarLogoCollapseMaxWidth
+            '<style>@media all and (max-width: ' + sp.escapeHtml(config.viewer.toolbarLogoCollapseMaxWidth)
             + ') {.sp-toolbar-logo {display: none;}}</style>');
     }
 
@@ -1089,7 +1089,7 @@ $.ajax({
                         } else if ('inside-window' === link.layout) {
                             swal({
                                 cancelButtonText: 'Close',
-                                html: '<iframe style="height: 75vh" frameborder="0" src="' + link.link + '"></iframe>',
+                                html: '<iframe style="height: 75vh" frameborder="0" src="' + sp.escapeHtml(link.link) + '"></iframe>',
                                 showConfirmButton: false,
                                 showCancelButton: true,
                                 width: '100'
@@ -1316,12 +1316,12 @@ $.ajax({
                 $('#sp-widget2').css('margin-top', '20px');
             }
 
-            $('#sp-widget2').html('<i class="fa fa-calendar"></i><div>' + widget.buttonText + '</div>');
+            $('#sp-widget2').html('<i class="fa fa-calendar"></i><div>' + sp.escapeHtml(widget.buttonText) + '</div>');
             $('#sp-widget2').click(function () {
                 swal({
                     showCancelButton: true,
                     showConfirmButton: false,
-                    html: '<iframe src="/assets/viewer/widget/calendly.html?user=' + widget.userName + '" height="420" frameborder="0"></iframe>',
+                    html: '<iframe src="/assets/viewer/widget/calendly.html?user=' + sp.escapeHtml(widget.userName) + '" height="420" frameborder="0"></iframe>',
                     title: widget.buttonText,
                 }).done();
 
@@ -1361,7 +1361,7 @@ $.ajax({
 
             var formMessage = '';
             if (typeof widget.formMessage !== 'undefined' && widget.formMessage !== '') {
-                formMessage = '<div id="sp-widget-3-form-message">' + widget.formMessage + '</div>';
+                formMessage = '<div id="sp-widget-3-form-message">' + sp.escapeHtml(widget.formMessage) + '</div>';
             }
 
             var customMessageLabel = 'Enter your message:';
@@ -1384,7 +1384,7 @@ $.ajax({
             sp.validate = sp.validate || {};
             sp.validate.errorMessage = 'You must provide a valid email address.';
             if (typeof widget.customEmailValidationErrorMessage !== 'undefined' && widget.customEmailValidationErrorMessage !== '') {
-                sp.validate.errorMessage = widget.customEmailValidationErrorMessage;
+                sp.validate.errorMessage = sp.escapeHtml(widget.customEmailValidationErrorMessage);
             }
 
             if (typeof widget.location === 'undefined' || widget.location.right) {
@@ -1411,7 +1411,7 @@ $.ajax({
                         'background-color': buttonColor,
                         'color': config.viewer.toolbarCta1Color,
                     })
-                    .html('<i class="fa fa-comment"></i><div>' + widget.buttonText + '</div>');
+                    .html('<i class="fa fa-comment"></i><div>' + sp.escapeHtml(widget.buttonText) + '</div>');
 
                 $('#sp-widget3').click(function () {
                     $.getScript('/assets/viewer/js/jquery.validate.min.js', function () {
@@ -1436,19 +1436,19 @@ $.ajax({
                     '<div>' +
                     '<h4 id="sp-widget3__bottom-success-message">Thanks, your message has been submitted!</h4>' +
                     '<form id="widget3-bottom-form" class="sp-widget-font-fmaily">' +
-                    '<h2 id="sp-widget-3-form-title">' + formTitle + '</h2>' +
+                    '<h2 id="sp-widget-3-form-title">' + sp.escapeHtml(formTitle) + '</h2>' +
                     '<div class="form-group">' +
-                    '<label for="sp-widget3-bottom-message" class="sp-widget3-label">' + customMessageLabel + '</label>' +
+                    '<label for="sp-widget3-bottom-message" class="sp-widget3-label">' + sp.escapeHtml(customMessageLabel) + '</label>' +
                     '<textarea id="sp-widget3-bottom-message" rows="5"></textarea>' +
                     '</div>' +
                     '<div class="form-group">' +
-                    '<label for="sp-widget3-bottom-email" class="sp-widget3-label"><span>* </span>' + customEmailLabel + '</label>' +
+                    '<label for="sp-widget3-bottom-email" class="sp-widget3-label"><span>* </span>' + sp.escapeHtml(customEmailLabel) + '</label>' +
                     '<input type="text" name="widget3EmailBottom" id="sp-widget3-bottom-email">' +
                     '<span class="form-control-feedback fa"></span>' +
                     '</div>' +
                     formMessage +
                     '<div id="sp-widget3__bottom-document-submit-container" class="form-group">' +
-                    '<div id="sp-widget3__bottom-submit">' + confirmButtonText + '</div>' +
+                    '<div id="sp-widget3__bottom-submit">' + sp.escapeHtml(confirmButtonText) + '</div>' +
                     '<div>' +
                     '</form>' +
                     '</div>' +
@@ -1497,11 +1497,11 @@ $.ajax({
                     showConfirmButton: true,
                     html: '<form id="widget3-form" class="sp-widget-font-fmaily">' +
                     '<div class="form-group">' +
-                    '<label for="sp-widget3-message" class="sp-widget3-label">' + customMessageLabel + '</label>' +
+                    '<label for="sp-widget3-message" class="sp-widget3-label">' + sp.escapeHtml(customMessageLabel) + '</label>' +
                     '<textarea class="swal2-textarea" id="sp-widget3-message" rows="5" autofocus></textarea>' +
                     '</div>' +
                     '<div class="form-group">' +
-                    '<label for="sp-widget3-email" class="sp-widget3-label"><span>* </span>' + customEmailLabel + '</label>' +
+                    '<label for="sp-widget3-email" class="sp-widget3-label"><span>* </span>' + sp.escapeHtml(customEmailLabel) + '</label>' +
                     '<input type="text" name="widget3Email" class="swal2-input" id="sp-widget3-email">' +
                     '<span class="form-control-feedback fa"></span>' +
                     '</div>' +
@@ -1585,9 +1585,9 @@ $.ajax({
             $.each(widget, function (index, value) {
                 var id = 'sp-widget5__hop-' + index;
                 $('#sp-widget5__hopper-container').append(
-                    '<div class="sp-widget5__hop sp-widget5__hop-extended" id="' + id + '" data-page-hop="' + value.hopperPage + '">' +
-                    '<p class="sp-widget5__hop-text sp-widget5__hop--visible">' + value.hopperText + '</p>' +
-                    '<p class="sp-widget5__hop-page sp-widget5__hop--hidden">' + value.hopperPage + '</p>' +
+                    '<div class="sp-widget5__hop sp-widget5__hop-extended" id="' + sp.escapeHtml(id) + '" data-page-hop="' + sp.escapeHtml(value.hopperPage) + '">' +
+                    '<p class="sp-widget5__hop-text sp-widget5__hop--visible">' + sp.escapeHtml(value.hopperText) + '</p>' +
+                    '<p class="sp-widget5__hop-page sp-widget5__hop--hidden">' + sp.escapeHtml(value.hopperPage) + '</p>' +
                     '</div>'
                 );
 
@@ -1695,7 +1695,7 @@ $.ajax({
                 var personImageDiv = '';
 
                 if ('' !== personImage) {
-                    personImageDiv = '<div id="sp-widget6__person-image" style="background-image: url(' + personImage + ');"></div>';
+                    personImageDiv = '<div id="sp-widget6__person-image" style="background-image: url(' + sp.escapeHtml(personImage) + ');"></div>';
                     $('#sp-widget6__button-person-image')
                         .css({'background-image': 'url(' + personImage + ')', 'background-color': 'transparent'});
                     $('#sp-widget6__button i').hide();
@@ -1711,9 +1711,9 @@ $.ajax({
                         swal({
                             customClass: 'sp--direction-ltr',
                             html: personImageDiv +
-                            '<div><i class="fa fa-quote-left"></i> ' + testimonial.replace(/\r\n|\r|\n/g, '<br>') + ' <i class="fa fa-quote-right"></i></div>' +
-                            '<div id="sp-widget6__person-name">' + personName + '</div>' +
-                            '<div id="sp-widget6__person-title">' + personTitle + '</div>'
+                            '<div><i class="fa fa-quote-left"></i> ' + sp.escapeHtml(testimonial).replace(/\r\n|\r|\n/g, '<br>') + ' <i class="fa fa-quote-right"></i></div>' +
+                            '<div id="sp-widget6__person-name">' + sp.escapeHtml(personName) + '</div>' +
+                            '<div id="sp-widget6__person-title">' + sp.escapeHtml(personTitle) + '</div>'
                         }).done();
 
                         /**
@@ -1750,10 +1750,10 @@ $.ajax({
             $('#sp-widget7').css('margin-top', '20px');
         }
 
-        $('#sp-widget7').html('<i class="fa ' + widget.formButtonIcon + '"></i><div><p>' + widget.formButtonTextLine1 + '</p></div>');
+        $('#sp-widget7').html('<i class="fa ' + sp.escapeHtml(widget.formButtonIcon) + '"></i><div><p>' + sp.escapeHtml(widget.formButtonTextLine1) + '</p></div>');
         if ('' !== widget.formButtonTextLine2) {
             $('#sp-widget7 p').after(
-                '<p>' + widget.formButtonTextLine2 + '</p>'
+                '<p>' + sp.escapeHtml(widget.formButtonTextLine2) + '</p>'
             );
         }
 
@@ -1765,10 +1765,10 @@ $.ajax({
                 '</div>'
             );
 
-            $('#sp-widget7__toolbar-button').html('<p>' + widget.formButtonTextLine1 + '</p>');
+            $('#sp-widget7__toolbar-button').html('<p>' + sp.escapeHtml(widget.formButtonTextLine1) + '</p>');
             if ('' !== widget.formButtonTextLine2) {
                 $('#sp-widget7__toolbar-button p').after(
-                    '<p>' + widget.formButtonTextLine2 + '</p>'
+                    '<p>' + sp.escapeHtml(widget.formButtonTextLine2) + '</p>'
                 );
             }
 
@@ -1836,7 +1836,7 @@ $.ajax({
                     imageHeight: 65,
                     showCancelButton: true,
                     showConfirmButton: false,
-                    html: '<iframe id="sp-widget7-form" style="width: 100%" src="' + widget.formUrl + '" frameborder="0"></iframe>',
+                    html: '<iframe id="sp-widget7-form" style="width: 100%" src="' + sp.escapeHtml(widget.formUrl) + '" frameborder="0"></iframe>',
                     title: widget.formTitle,
                     width: 950,
                 }).then(function () {
@@ -1855,8 +1855,8 @@ $.ajax({
 
             function imageSwal() {
                 swal({
-                    html: '<img src="' + widget.formImage + '" style="width: 100%; height: 100%; max-width: '
-                    + widget.formImageMaxWidth + '; max-height: ' + widget.formImageMaxWidth + ';">',
+                    html: '<img src="' + sp.escapeHtml(widget.formImage) + '" style="width: 100%; height: 100%; max-width: '
+                    + sp.escapeHtml(widget.formImageMaxWidth) + '; max-height: ' + sp.escapeHtml(widget.formImageMaxWidth) + ';">',
                     title: widget.formTitle,
                 }).done();
             }
@@ -1913,7 +1913,7 @@ $.ajax({
         swal({
             allowEscapeKey: false,
             allowOutsideClick: false,
-            html: '<h3 id="sp-widget10__form-title">' + widget.formTitle + '</h3>',
+            html: '<h3 id="sp-widget10__form-title">' + sp.escapeHtml(widget.formTitle) + '</h3>',
             input: 'email',
             showCancelButton: false,
             confirmButtonText: 'Submit',
@@ -1994,7 +1994,7 @@ $.ajax({
                 'background-color': buttonColor,
                 'color': config.viewer.toolbarCta1Color,
             })
-            .html('<i class="fa fa-share-alt"></i><div>' + widget.buttonText + '</div>')
+            .html('<i class="fa fa-share-alt"></i><div>' + sp.escapeHtml(widget.buttonText) + '</div>')
             .click(function () {
                 sp.sendEvent({
                     type: sp.viewer.eventName.viewerWidgetShareButtonClicked,
@@ -2015,13 +2015,13 @@ $.ajax({
             + 'a2a_config.target = "#sp-widget11";'
             + 'a2a_config.linkurl = "' + linkUrl + '";'
             + 'a2a_config.templates = {'
-            + 'twitter:' + JSON.stringify(widget.description + ' ' + window.location.href) + ','
+            + 'twitter:' + JSON.stringify(sp.escapeHtml(widget.description) + ' ' + window.location.href) + ','
             + 'email: {'
-            + 'subject:' + JSON.stringify(widget.title) + ','
+            + 'subject:' + JSON.stringify(sp.escapeHtml(widget.title)) + ','
             + 'body:' + JSON.stringify('Follow this link: ' + window.location.href) + ','
             + '},'
-            + 'whatsapp:' + JSON.stringify(widget.description + ' ' + window.location.href) + ','
-            + 'linkedin:' + JSON.stringify(widget.description + ' ' + window.location.href) + ','
+            + 'whatsapp:' + JSON.stringify(sp.escapeHtml(widget.description) + ' ' + window.location.href) + ','
+            + 'linkedin:' + JSON.stringify(sp.escapeHtml(widget.description) + ' ' + window.location.href) + ','
             + '};'
             + 'sp.viewer.widgets.widget11.spWidget11Share = function(data) {'
             + 'sp.viewer.widgets.widget11.sharedService = data.service;'
@@ -2044,6 +2044,23 @@ $.ajax({
         $.getScript('/assets/viewer/js/page.min.js');
     }
 });
+
+sp.escapeHtml = function(input) {
+    var entityMap = {
+        '&': '&#38;',
+        '<': '&#60;',
+        '>': '&#62;',
+        '"': '&#34;',
+        "'": '&#39;',
+        '/': '&#47;',
+        '`': '&#96;',
+        '=': '&#61;'
+    };
+
+    return String(input).replace(/[&<>"'`=\/]/g, function(char) {
+        return entityMap[char];
+    });
+}
 
 
 /**
