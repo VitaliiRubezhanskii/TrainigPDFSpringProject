@@ -10,6 +10,7 @@ import com.slidepiper.repository.EventRepository;
 import com.slidepiper.repository.RoleRepository;
 import com.slidepiper.repository.UserRepository;
 import com.slidepiper.repository.ViewerRepository;
+import com.slidepiper.service.email.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -30,6 +31,7 @@ import java.util.UUID;
 public class UserService {
     private final AuthenticationManager authenticationManager;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final EmailService emailService;
     private final EventRepository eventRepository;
     private final UserDetailsService userDetailsService;
     private final UserRepository userRepository;
@@ -39,6 +41,7 @@ public class UserService {
     @Autowired
     public UserService(AuthenticationManager authenticationManager,
                        BCryptPasswordEncoder bCryptPasswordEncoder,
+                       EmailService emailService,
                        EventRepository eventRepository,
                        UserDetailsService userDetailsService,
                        UserRepository userRepository,
@@ -46,6 +49,7 @@ public class UserService {
                        ViewerRepository viewerRepository) {
         this.authenticationManager = authenticationManager;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.emailService = emailService;
         this.eventRepository = eventRepository;
         this.userDetailsService = userDetailsService;
         this.userRepository = userRepository;
@@ -70,10 +74,16 @@ public class UserService {
         viewer.setFriendlyId(UUID.randomUUID().toString());
         viewer.setEmail(user.getUsername());
         viewer.setName(userSignupInput.getName());
+        viewer.setCompany(userSignupInput.getCompany());
         viewerRepository.save(viewer);
 
         // Save event.
         eventRepository.save(new Event(user.getUsername(), EventType.SIGNUP_USER));
+
+        // Send admin email.
+        String subject = "New User Registration";
+        String body = "Name: " + viewer.getName() + ", Company: " + viewer.getCompany() + ", Email: " + viewer.getEmail();
+        emailService.sendAdminEmail(subject, body);
     }
 
     public void authenticate(String username, String password) {

@@ -7,6 +7,7 @@ import lombok.Data;
 @JsonIgnoreProperties({"password", "signupCode"})
 public class UserSignupInput {
     private String name;
+    private String company;
     private String username;
     private String password;
     private String signupCode;

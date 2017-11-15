@@ -34,6 +34,15 @@ public class UserSignupValidator implements Validator {
 
         // Name.
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "name", null, null, "Name cannot be empty");
+        if (userSignupInput.getName().length() > 40) {
+            errors.rejectValue("name", null, "Name should be up to 40 characters");
+        }
+
+        // Company.
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "company", null, null, "Company cannot be empty");
+        if (userSignupInput.getCompany().length() > 40) {
+            errors.rejectValue("company", null, "Company should be up to 40 characters");
+        }
 
         // Username.
         if (!userSignupInput.getUsername().matches("^[a-zA-Z0-9-_]+(\\.[a-zA-Z0-9-_]+)*@[a-zA-Z0-9-]+(\\.[a-zA-Z0-9-]+)*(\\.[a-zA-Z]+)$")) {
@@ -44,8 +53,8 @@ public class UserSignupValidator implements Validator {
         }
 
         // Password.
-        if (userSignupInput.getPassword().length() < 14 || userSignupInput.getPassword().length() > 32) {
-            errors.rejectValue("password", null, "Password should be between 14 to 32 characters");
+        if (userSignupInput.getPassword().length() < 10 || userSignupInput.getPassword().length() > 32) {
+            errors.rejectValue("password", null, "Password should be between 10 to 32 characters");
         }
         if (!userSignupInput.getPassword().matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*([!@#$%^&*-_=+?])).+$")) {
             errors.rejectValue("password", null, "Password should contain at least one lowercase letter, one uppercase letter, one digit, and one symbol");

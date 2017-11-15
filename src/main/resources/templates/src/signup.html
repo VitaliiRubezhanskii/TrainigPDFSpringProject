@@ -22,7 +22,11 @@
             <h3 style="margin-top: 30px;">Sign Up to SlidePiper</h3>
             <form id="sp-user-signup__form" class="m-t" method="post">
                 <div class="form-group">
-                    <input name="name" class="form-control" placeholder="Full name, e.g. Axl Rose" required>
+                    <input name="name" class="form-control" placeholder="Full name, e.g. Axl Rose" maxlength="40" required>
+                </div>
+
+                <div class="form-group">
+                    <input name="company" class="form-control" placeholder="Company" maxlength="40" required>
                 </div>
 
                 <div class="form-group">
