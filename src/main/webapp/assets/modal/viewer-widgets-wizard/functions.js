@@ -1266,12 +1266,6 @@ sp.viewerWidgetsModal = {
             if (parseInt(a.hopperPage) > parseInt(b.hopperPage)) {
                 return 1;
             }
-            if (a.hopperText < b.hopperText) {
-                return -1;
-            }
-            if (a.hopperText > b.hopperText) {
-                return 1;
-            }
             return 0;
         });
 
