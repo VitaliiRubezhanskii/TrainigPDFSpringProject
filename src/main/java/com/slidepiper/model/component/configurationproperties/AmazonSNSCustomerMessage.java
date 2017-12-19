@@ -6,9 +6,9 @@ import org.springframework.stereotype.Component;
 import lombok.Data;
  
 @Component 
-@ConfigurationProperties("amazon.sns.sns-customer-message")
+@ConfigurationProperties("slidepiper.amazon")
 @Data
 public class AmazonSNSCustomerMessage {
-  private String accessKeyId;
+  private String accessKey;
   private String secretKey;
 }

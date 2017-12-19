@@ -35,8 +35,8 @@ public class AmazonS3Service {
     private final String accessKey;
     private final String secretKey;
 
-    public AmazonS3Service(@Value("${amazon.s3.credentials.accessKey}") String accessKey,
-                           @Value("${amazon.s3.credentials.secretKey}") String secretKey) {
+    public AmazonS3Service(@Value("${slidepiper.amazon.accessKey}") String accessKey,
+                           @Value("${slidepiper.amazon.secretKey}") String secretKey) {
         this.accessKey = accessKey;
         this.secretKey = secretKey;
     }

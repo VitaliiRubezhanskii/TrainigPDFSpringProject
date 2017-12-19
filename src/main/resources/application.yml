@@ -33,24 +33,10 @@ documents:
 
 amazon:
     s3:
-        credentials:
-            accessKey: AKIAJXQE3QZTYFLZRHNQ
-            secretKey: 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
-
         url: https://s3.amazonaws.com
 
     ses:
-        credentials:
-            user:
-                accessKey: AKIAJA7XHSGRV3TSLCWA
-                secretKey: 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
-
         doNotReplyEmailAddress: SlidePiper <do-not-reply@slidepiper.com>
-
-    sns:
-        sns-customer-message:
-            accessKeyId: AKIAIEJ23APCCYRBVASA
-            secretKey: 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
 
 jwt:
     issuer: slidepiper

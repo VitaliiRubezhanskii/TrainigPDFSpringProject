@@ -16,8 +16,8 @@ public class EmailService {
     private final AmazonSesService amazonSesService;
 
     @Autowired
-    EmailService(@Value("${amazon.ses.credentials.user.accessKey}") String accessKey,
-                 @Value("${amazon.ses.credentials.user.secretKey}") String secretKey,
+    EmailService(@Value("${slidepiper.amazon.accessKey}") String accessKey,
+                 @Value("${slidepiper.amazon.secretKey}") String secretKey,
                  @Value("${amazon.ses.doNotReplyEmailAddress}") String from,
                  @Value("${slidepiper.adminEmailAddresses}") String adminEmailAddresses,
                  AmazonSesService amazonSesService) {

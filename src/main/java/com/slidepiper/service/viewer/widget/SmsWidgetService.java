@@ -46,7 +46,7 @@ public class SmsWidgetService {
         getSmsWidgetDataByChannelName(channelFriendlyId);
 
         AWSCredentials awsCredentials = new BasicAWSCredentials(
-                ConfigurationPropertiesUtils.amazonSNSCustomerMessage.getAccessKeyId(),
+                ConfigurationPropertiesUtils.amazonSNSCustomerMessage.getAccessKey(),
                 ConfigurationPropertiesUtils.amazonSNSCustomerMessage.getSecretKey()
         );
         AmazonSNSClient snsClient = new AmazonSNSClient(awsCredentials);

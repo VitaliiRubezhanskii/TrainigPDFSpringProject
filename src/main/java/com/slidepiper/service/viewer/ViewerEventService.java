@@ -36,8 +36,8 @@ public class ViewerEventService {
     private final ViewerEventRepository viewerEventRepository;
 
     @Autowired
-    public ViewerEventService(@Value("${amazon.ses.credentials.user.accessKey}") String accessKey,
-                              @Value("${amazon.ses.credentials.user.secretKey}") String secretKey,
+    public ViewerEventService(@Value("${slidepiper.amazon.accessKey}") String accessKey,
+                              @Value("${slidepiper.amazon.secretKey}") String secretKey,
                               @Value("${amazon.ses.doNotReplyEmailAddress}") String from,
                               @Value("${slidepiper.templates.prefix}") String templatesPrefix,
                               AmazonSesService amazonSesService,
