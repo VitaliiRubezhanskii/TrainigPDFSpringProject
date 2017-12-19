@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -34,11 +35,19 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             throw new UsernameNotFoundException("user is null");
         }
 
+        boolean isCredentialsNonExpired = true;
+        Timestamp passwordExpiresAt = user.getPasswordExpiresAt();
+        long now = System.currentTimeMillis();
+
+        if (Objects.nonNull(passwordExpiresAt) && passwordExpiresAt.getTime() <= now) {
+            isCredentialsNonExpired = false;
+        }
+
         Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
         for (Role role: user.getRoles()) {
             grantedAuthorities.add(new SimpleGrantedAuthority(role.getName()));
         }
 
-        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), grantedAuthorities);
+        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), true, true, isCredentialsNonExpired, true,  grantedAuthorities);
     }
 }

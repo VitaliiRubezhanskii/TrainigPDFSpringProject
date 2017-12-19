@@ -23,9 +23,12 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class UserService {
@@ -62,6 +65,7 @@ public class UserService {
         User user = new User();
         user.setUsername(userSignupInput.getUsername());
         user.setPassword(bCryptPasswordEncoder.encode(userSignupInput.getPassword()));
+        user.setPasswordExpiresAt(new Timestamp(System.currentTimeMillis() + TimeUnit.DAYS.toMillis(365 * 10)));
 
         Set<Role> roles = new HashSet<>();
         roles.add(roleRepository.findByName("ROLE_USER"));
@@ -101,7 +105,12 @@ public class UserService {
     public void changePassword(User user, String password, String newPassword) {
         if (bCryptPasswordEncoder.matches(password, user.getPassword())) {
             user.setPassword(bCryptPasswordEncoder.encode(newPassword));
+            user.setPasswordChangedAt(new Timestamp(System.currentTimeMillis()));
+            user.setPasswordExpiresAt(null);
             userRepository.save(user);
+
+            // Save event.
+            eventRepository.save(new Event(user.getUsername(), EventType.USER_CHANGED_PASSWORD));
         } else {
             throw new BadCredentialsException("Incorrect current password");
         }
@@ -110,5 +119,24 @@ public class UserService {
     @PreAuthorize("hasRole('ROLE_USER')")
     public long getUserId() {
         return userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName()).getId();
+    }
+
+    @PreAuthorize("hasRole('ROLE_USER')")
+    public String getPasswordExpiresAtMessage() {
+        Timestamp passwordExpiresAt = getPasswordExpiresAt();
+        if (Objects.nonNull(passwordExpiresAt)) {
+            long days = TimeUnit.MILLISECONDS.toDays(passwordExpiresAt.getTime() - System.currentTimeMillis());
+            if (days <= 14) {
+                return "Your password will expire in " + days + " days. Please change your password.";
+            }
+        }
+
+        return null;
+    }
+
+    @PreAuthorize("hasRole('ROLE_USER')")
+    private Timestamp getPasswordExpiresAt() {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        return userRepository.findByUsername(username).getPasswordExpiresAt();
     }
 }

@@ -56,7 +56,7 @@ public class UserSignupValidator implements Validator {
         if (userSignupInput.getPassword().length() < 10 || userSignupInput.getPassword().length() > 32) {
             errors.rejectValue("password", null, "Password should be between 10 to 32 characters");
         }
-        if (!userSignupInput.getPassword().matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*([!@#$%^&*-_=+?])).+$")) {
+        if (!userSignupInput.getPassword().matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*_=+?]).+$")) {
             errors.rejectValue("password", null, "Password should contain at least one lowercase letter, one uppercase letter, one digit, and one symbol");
         }
 
