@@ -127,7 +127,13 @@ public class UserService {
         if (Objects.nonNull(passwordExpiresAt)) {
             long days = TimeUnit.MILLISECONDS.toDays(passwordExpiresAt.getTime() - System.currentTimeMillis());
             if (days <= 14) {
-                return "Your password will expire in " + days + " days. Please change your password.";
+                String daysText = "in " + days + " days";
+                if (days == 1) {
+                    daysText = "in one day";
+                } else if (days < 1) {
+                    daysText = "today";
+                }
+                return "Your password will expire " + daysText + ". Please change your password.";
             }
         }
 
