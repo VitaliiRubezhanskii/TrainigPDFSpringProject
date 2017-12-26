@@ -10,7 +10,6 @@ import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.slidepiper.model.component.ConfigurationPropertiesUtils;
 import org.apache.commons.io.FileUtils;
-import slidepiper.config.ConfigProperties;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -24,8 +23,8 @@ public class DocumentShareServlet {
     String key = documentHash + "/widget11/facebook/image/" + imageFileName;
 
     AWSCredentials awsCredentials = new BasicAWSCredentials(
-        ConfigProperties.getProperty("aws_access_key_id"),
-        ConfigProperties.getProperty("aws_secret_access_key")
+        System.getProperty("slidepiper.amazon.accessKey"),
+        System.getProperty("slidepiper.amazon.secretKey")
     );
     
     AmazonS3 s3Client = new AmazonS3Client(awsCredentials);
