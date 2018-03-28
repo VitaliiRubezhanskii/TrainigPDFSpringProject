@@ -604,6 +604,7 @@
   width: 100%;
   position: fixed;
   top: 51px;
+  padding-left: 15px;
 }
 
 #sp-widget5__hopper-container {
@@ -614,9 +615,10 @@
 
 #sp-widget5__steps-container {
   height: 40px;
-  width: 70%;
+  width: 80%;
   overflow-x: auto;
   display: flex;
+  padding-left: 15px;
 }
 
 .sp-widget5__hop {
@@ -787,7 +789,7 @@
     transform: scale3d(1.05, 1.05, 1.05); }
   to {
     -webkit-transform: scale3d(1, 1, 1);
-    transform: scale3d(1, 1, 1); 
+    transform: scale3d(1, 1, 1);
   }
 }
 
@@ -809,7 +811,7 @@
     transform: scale3d(1.05, 1.05, 1.05); }
   to {
     -webkit-transform: scale3d(1, 1, 1);
-    transform: scale3d(1, 1, 1); 
+    transform: scale3d(1, 1, 1);
   }
 }
 
@@ -846,15 +848,15 @@
   height: 500px;
 }
 
-@media only screen and (max-width: 850px) {  
+@media only screen and (max-width: 850px) {
   .sp-widget7--hidden {
     display: none;
   }
-  
+
   .sp-widget7__toolbar-button-container--visibility {
     visibility: visible;
   }
-  
+
   #sp-widget7__toolbar-button i {
     display: none;
   }
@@ -890,19 +892,19 @@
   #sp-widget7-form {
     height: 340px;
   }
-  
+
   .sp-widget7__swal button.styled {
     padding: 5px 25px !important;
   }
-  
+
   .sp-widget7__swal .swal2-image {
     display: none !important;
   }
-  
+
   .sp-widget7__swal {
     padding: 15px !important;
   }
-  
+
   .sp-widget7__swal h2 {
     font-size: 12px !important;
     margin-bottom: 5px !important;
@@ -924,44 +926,44 @@
 }
 
 
-/** 
+/**
  * Media Queries.
  */
 @media only screen and (max-width: 1050px) {
-  
+
   /* Widgets */
   #sp-widget1 iframe {
     height: 225px;
     width: 400px;
   }
-  
+
   #sp-widget1-tab {
     width: 300px;
   }
-  
+
   .sp-right-side-widgets {
     width: 16%;
   }
-  
+
   .sp-widget-button {
     font-size: 1em;
     padding: 15px 0 15px 10px;
   }
-  
+
   .sp-widget-button div {
     margin: 0 auto;
   }
-  
+
   .sp-widget-button i {
     display: block;
     font-size: 1.5em;
     margin-bottom: 8px;
   }
-  
+
   .sp-widget5__hop-text {
   	width: 110px;
   }
-  
+
   .sp-widget5__hop, .sp-widget5__step {
     font-size: 1.2rem;
   }
