@@ -202,7 +202,7 @@ sp.viewer = {
         });
 
         //Animate to selected element automatically
-        $('#sp-widget5__steps-container').animate({scrollLeft: $('#sp-widget5__steps-container>div.selected').offset().right}, 800);
+        $('#sp-widget5__steps-container').animate({scrollLeft: $('#sp-widget5__steps-container>div.selected').offset().left}, 800);
         startTime = endTime;
     }
 
