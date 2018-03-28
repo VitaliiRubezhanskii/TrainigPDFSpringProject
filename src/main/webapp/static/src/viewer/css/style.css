@@ -604,7 +604,7 @@
   width: 100%;
   position: fixed;
   top: 51px;
-  padding-left: 15px;
+  padding-bottom: 18px;
 }
 
 #sp-widget5__hopper-container {
@@ -618,7 +618,7 @@
   width: 80%;
   overflow-x: auto;
   display: flex;
-  padding-left: 15px;
+  padding-bottom: 18px;
 }
 
 .sp-widget5__hop {
