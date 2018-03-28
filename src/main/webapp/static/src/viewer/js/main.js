@@ -192,6 +192,17 @@ sp.viewer = {
         });
 
         viewPage = document.hidden ? undefined : PDFViewerApplication.page;
+        //Selecting active button with different color
+        $('#sp-widget5__steps-container>div.selected').removeClass('selected');
+
+        $('#sp-widget5__steps-container').children().each(function () {
+            if($(this).attr("data-page-step") == PDFViewerApplication.page) {
+                $(this).addClass('selected')
+            }; // "this" is the current element in the loop
+        });
+
+        //Animate to selected element automatically
+        $('#sp-widget5__steps-container').animate({scrollLeft: $('#sp-widget5__steps-container>div.selected').offset().right}, 800);
         startTime = endTime;
     }
 
@@ -682,7 +693,9 @@ $.ajax({
                     var widgetData = JSON.parse(data.widgetData).data;
 
                     if (typeof widgetData !== 'undefined'
-                        && (widgetData.isEnabled || (typeof widgetData.items[0] !== 'undefined' && widgetData.items[0].enabled))) {
+                        && (widgetData.isEnabled || (typeof widgetData.items[0] !== 'undefined' && widgetData.items[0].enabled)
+                            //separate logic for widget5; add it even if isEnabled=false
+                        || (widgetData.widgetId == 5 && widgetData.isStepsEnabled))) {
 
                         var widgetId;
                         if (typeof widgetData.widgetId !== 'undefined') {
@@ -969,7 +982,14 @@ $.ajax({
             });
 
             if (isWidget5Valid) {
-                implementWidget5(widgets.widget5.items);
+                // add vertical hopper
+                if (widgets.widget5.isEnabled) {
+                    implementWidget5(widgets.widget5.items);
+                }
+                // add horizontal hopper
+                if (widgets.widget5.isStepsEnabled) {
+                    implementWidget5Steps(widgets.widget5.items);
+                }
             }
         }
 
@@ -1089,7 +1109,7 @@ $.ajax({
                         } else if ('inside-window' === link.layout) {
                             swal({
                                 cancelButtonText: 'Close',
-                                html: '<iframe style="height: 75vh" frameborder="0" src="' + sp.escapeHtml(link.link) + '"></iframe>',
+                                html: '<iframe style="height: 75vh" frameborder="0" src="' + sp.escapeHtml(link.link) + '" allow="geolocation; microphone; camera"></iframe>',
                                 showConfirmButton: false,
                                 showCancelButton: true,
                                 width: '100'
@@ -1574,6 +1594,8 @@ $.ajax({
         function implementWidget5(widget) {
 
             // Widget 5 - Hopper Widget.
+
+            //Vertical part
             $('body').append(
                 '<div class="widget sp-widget5 sp--direction-ltr">' +
                 '<div class="sp-widget5__extend-button">' +
@@ -1632,6 +1654,64 @@ $.ajax({
             }
         }
 
+        function implementWidget5Steps(widget) {
+
+            // Widget 5 - Hopper Widget.
+
+            //Horizontal part
+            $('body').append(
+                '<div class="widget sp-widget5-steps sp--direction-ltr">' +
+                '<div id="sp-widget5__steps-container"></div>' +
+                '</div>');
+
+            $.each(widget, function (index, value) {
+                var id = 'sp-widget5__step-' + index;
+                $('#sp-widget5__steps-container').append(
+                    '<div class="sp-widget5__step sp-widget5__step-extended" id="' + sp.escapeHtml(id) + '" data-page-step="' + sp.escapeHtml(value.hopperPage) + '">' +
+                    '<p class="sp-widget5__step-text sp-widget5__step--visible">' + sp.escapeHtml(value.hopperText) + '</p>' +
+                    '<p class="sp-widget5__step-page sp-widget5__step--hidden">' + sp.escapeHtml(value.hopperPage) + '</p>' +
+                    '</div>'
+                );
+
+                // Set the steps colour to be the same as CTA buttons.
+                $('.sp-widget5__step, .sp-widget5__extend-button').css({
+                    'background-color': config.viewer.toolbarButtonBackground,
+                    'color': config.viewer.toolbarCta1Color
+                });
+
+                if (typeof value.status !== 'undefined' && 'finished' === value.status) {
+                    $('#' + id).css({'opacity': '0.5', 'text-decoration': 'line-through'});
+                }
+
+                // Send event.
+                $('#sp-widget5__step-' + index).on('click', function () {
+                    sp.sendEvent({
+                        type: sp.viewer.eventName.viewerWidgetHopperClicked,
+                        channelFriendlyId: sp.viewer.linkHash,
+                        sessionId: SP.SESSION_ID,
+                        param_1_varchar: $('#sp-widget5__step-' + index + ' .sp-widget5__step-text').text(),
+                        param_2_varchar: $('#sp-widget5__step-' + index).attr('data-page-step')
+                    });
+
+                    PDFViewerApplication.page = parseInt($('#sp-widget5__step-' + index).attr('data-page-step'));
+                });
+            });
+
+            //Adding div to show arrow for the last step
+            $('#sp-widget5__steps-container').append(
+                '<div style="width: 20px;"></div>'
+            );
+
+            // Set the steps arrow colour to be the same as CTA buttons.
+            $('<style>.sp-widget5__step:after{border-left-color:'+config.viewer.toolbarButtonBackground+'}</style>').appendTo('head');
+
+            // Select active button with color
+            $('#sp-widget5__steps-container').children().each(function () {
+                if($(this).attr("data-page-step") == PDFViewerApplication.page) {
+                    $(this).addClass('selected')
+                }; // "this" is the current element in the loop
+            });
+        }
 
         function implementWidget6(testimonials) {
             if (0 === $('.sp-right-side-widgets').length) {

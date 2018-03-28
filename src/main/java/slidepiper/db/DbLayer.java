@@ -580,7 +580,16 @@ public class DbLayer {
 				"SELECT\n"
 						+ "  data\n"
 						+ "FROM widget\n"
-						+ "WHERE FK_file_id_ai = ? AND type IN ('1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11') AND ((data->'$.data.isEnabled' = true AND data->'$.data.items[0].enabled' IS NULL) OR (data->'$.data.isEnabled' IS NULL AND data->'$.data.items[0].enabled' = true))";
+						+ "WHERE FK_file_id_ai = ? AND type IN ('1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11') " +
+						"AND ((data->'$.data.isEnabled' = true AND data->'$.data.items[0].enabled' IS NULL) " +
+						"OR (data->'$.data.isEnabled' IS NULL AND data->'$.data.items[0].enabled' = true)) " +
+						// Adding widget 5 if only horizontal hopper is enabled
+						"UNION " +
+						"SELECT data\n" +
+						"FROM widget\n" +
+						"WHERE FK_file_id_ai = ?\n" +
+						"      AND type=5\n" +
+						"AND JSON_EXTRACT(data, '$.data.isStepsEnabled')";
 
 		JSONArray widgetsSettings = new JSONArray();
 
@@ -589,6 +598,7 @@ public class DbLayer {
 			PreparedStatement ps = conn.prepareStatement(sql);
 
 			ps.setLong(1, fileId);
+			ps.setLong(2, fileId);
 			ResultSet rs = ps.executeQuery();
 
 			while (rs.next()) {

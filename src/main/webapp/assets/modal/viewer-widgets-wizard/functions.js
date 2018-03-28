@@ -464,10 +464,10 @@ sp.viewerWidgetsModal = {
                 fileHash: fileHash
             },
             function(data) {
-                    widgetSettingsData = data;
-                    sp.viewerWidgetsModal.displayWidgetsSettings(widgetSettingsData, fileHash);
-                    sp.viewerWidgetsModal.setSaveButtons(fileHash);
-                }
+                widgetSettingsData = data;
+                sp.viewerWidgetsModal.displayWidgetsSettings(widgetSettingsData, fileHash);
+                sp.viewerWidgetsModal.setSaveButtons(fileHash);
+            }
         );
 
         sp.widgets.widget11.setDefaultTitle(fileHash);
@@ -496,9 +496,9 @@ sp.viewerWidgetsModal = {
 
             if (typeof widget.data !== 'undefined') {
                 if (typeof widget.data.items !== 'undefined'
-                        && typeof widget.data.items[0] !== 'undefined'
-                        && typeof widget.data.items[0].widgetId !== 'undefined'
-                        && 11 === widget.data.items[0].widgetId) {
+                    && typeof widget.data.items[0] !== 'undefined'
+                    && typeof widget.data.items[0].widgetId !== 'undefined'
+                    && 11 === widget.data.items[0].widgetId) {
                     displayWidget11(widget.data, fileHash);
                 } else {
                     switch (widget.data.widgetId) {
@@ -714,6 +714,10 @@ sp.viewerWidgetsModal = {
                 .prop('checked', widget.isEnabled)
                 .closest('div').removeClass('sp-hide-is-enabled');
 
+            $('[name="steps-widget-is-enabled"]')
+                .prop('checked', widget.isStepsEnabled)
+                .closest('div').removeClass('sp-hide-is-enabled');
+
             $('.sp-hopper-widget__row').each(function(index) {
                 $(this).find('[data-item-setting]').each(function() {
                     if ('hopperText' === $(this).attr('data-item-setting') || 'hopperPage' === $(this).attr('data-item-setting')) {
@@ -816,12 +820,12 @@ sp.viewerWidgetsModal = {
                         }
                     } else if ('icon' === $(this).attr('data-item-setting')) {
                         if (typeof widget.items[index][$(this).attr('data-item-setting')] !== 'undefined'
-                                && $(this).attr('data-icon') === widget.items[index][$(this).attr('data-item-setting')]) {
+                            && $(this).attr('data-icon') === widget.items[index][$(this).attr('data-item-setting')]) {
                             $(this).prop('checked', true);
                         }
                     } else if ('layout' === $(this).attr('data-item-setting')) {
                         if (typeof widget.items[index][$(this).attr('data-item-setting')] !== 'undefined'
-                                && $(this).attr('data-layout') === widget.items[index][$(this).attr('data-item-setting')]) {
+                            && $(this).attr('data-layout') === widget.items[index][$(this).attr('data-item-setting')]) {
                             $(this).prop('checked', true);
                         }
                     } else {
@@ -1222,7 +1226,8 @@ sp.viewerWidgetsModal = {
         var widget5 = {
             data: {
                 widgetId: 5,
-                isEnabled: $('[name="hopper-widget-is-enabled"]').prop('checked')
+                isEnabled: $('[name="hopper-widget-is-enabled"]').prop('checked'),
+                isStepsEnabled: $('[name="steps-widget-is-enabled"]').prop('checked')
             }
         };
 
@@ -1440,9 +1445,9 @@ sp.viewerWidgetsModal = {
             $(this).find('[data-item-setting]').each(function() {
 
                 if ('' === $(this).val() && $(this).attr('data-item-setting') !== 'buttonText2'
-                        && $(this).attr('data-item-setting') !== 'icon'
-                        && $(this).attr('data-item-setting') !== 'layout'
-                        && $(this).attr('data-item-setting') !== 'status') {
+                    && $(this).attr('data-item-setting') !== 'icon'
+                    && $(this).attr('data-item-setting') !== 'layout'
+                    && $(this).attr('data-item-setting') !== 'status') {
 
                     sp.error.handleError('You must fill the field.');
                     $(this).addClass('sp-widget-form-error');
