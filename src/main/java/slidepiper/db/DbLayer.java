@@ -589,7 +589,7 @@ public class DbLayer {
 						"FROM widget\n" +
 						"WHERE FK_file_id_ai = ?\n" +
 						"      AND type=5\n" +
-						"AND JSON_EXTRACT(data, '$.data.isStepsEnabled')";
+						"AND JSON_EXTRACT(data, '$.data.isHorizontalHopperEnabled')";
 
 		JSONArray widgetsSettings = new JSONArray();
 

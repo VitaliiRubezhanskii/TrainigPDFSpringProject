@@ -714,8 +714,8 @@ sp.viewerWidgetsModal = {
                 .prop('checked', widget.isEnabled)
                 .closest('div').removeClass('sp-hide-is-enabled');
 
-            $('[name="steps-widget-is-enabled"]')
-                .prop('checked', widget.isStepsEnabled)
+            $('[name="horizontal-hopper-widget-is-enabled"]')
+                .prop('checked', widget.isHorizontalHopperEnabled)
                 .closest('div').removeClass('sp-hide-is-enabled');
 
             $('.sp-hopper-widget__row').each(function(index) {
@@ -1227,7 +1227,7 @@ sp.viewerWidgetsModal = {
             data: {
                 widgetId: 5,
                 isEnabled: $('[name="hopper-widget-is-enabled"]').prop('checked'),
-                isStepsEnabled: $('[name="steps-widget-is-enabled"]').prop('checked')
+                isHorizontalHopperEnabled: $('[name="horizontal-hopper-widget-is-enabled"]').prop('checked')
             }
         };
 

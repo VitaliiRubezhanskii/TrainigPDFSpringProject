@@ -193,16 +193,16 @@ sp.viewer = {
 
         viewPage = document.hidden ? undefined : PDFViewerApplication.page;
         //Selecting active button with different color
-        $('#sp-widget5__steps-container>div.selected').removeClass('selected');
+        $('#sp-widget5__horizontal-hopper-container>div.selected').removeClass('selected');
 
-        $('#sp-widget5__steps-container').children().each(function () {
-            if($(this).attr("data-page-step") == PDFViewerApplication.page) {
+        $('#sp-widget5__horizontal-hopper-container').children().each(function () {
+            if($(this).attr("data-page-horizontal-hop") == PDFViewerApplication.page) {
                 $(this).addClass('selected')
             }; // "this" is the current element in the loop
         });
 
         //Animate to selected element automatically
-        $('#sp-widget5__steps-container').animate({scrollLeft: $('#sp-widget5__steps-container>div.selected').offset().left}, 800);
+        $('#sp-widget5__horizontal-hopper-container').animate({scrollLeft: $('#sp-widget5__horizontal-hopper-container>div.selected').offset().left}, 800);
         startTime = endTime;
     }
 
@@ -695,7 +695,7 @@ $.ajax({
                     if (typeof widgetData !== 'undefined'
                         && (widgetData.isEnabled || (typeof widgetData.items[0] !== 'undefined' && widgetData.items[0].enabled)
                             //separate logic for widget5; add it even if isEnabled=false
-                        || (widgetData.widgetId == 5 && widgetData.isStepsEnabled))) {
+                        || (widgetData.widgetId == 5 && widgetData.isHorizontalHopperEnabled))) {
 
                         var widgetId;
                         if (typeof widgetData.widgetId !== 'undefined') {
@@ -987,8 +987,8 @@ $.ajax({
                     implementWidget5(widgets.widget5.items);
                 }
                 // add horizontal hopper
-                if (widgets.widget5.isStepsEnabled) {
-                    implementWidget5Steps(widgets.widget5.items);
+                if (widgets.widget5.isHorizontalHopperEnabled) {
+                    implementWidget5HorizontalHopper(widgets.widget5.items);
                 }
             }
         }
@@ -1654,27 +1654,27 @@ $.ajax({
             }
         }
 
-        function implementWidget5Steps(widget) {
+        function implementWidget5HorizontalHopper(widget) {
 
             // Widget 5 - Hopper Widget.
 
             //Horizontal part
             $('body').append(
-                '<div class="widget sp-widget5-steps sp--direction-ltr">' +
-                '<div id="sp-widget5__steps-container"></div>' +
+                '<div class="widget sp-widget5-horizontal-hopper sp--direction-ltr">' +
+                '<div id="sp-widget5__horizontal-hopper-container"></div>' +
                 '</div>');
 
             $.each(widget, function (index, value) {
-                var id = 'sp-widget5__step-' + index;
-                $('#sp-widget5__steps-container').append(
-                    '<div class="sp-widget5__step sp-widget5__step-extended" id="' + sp.escapeHtml(id) + '" data-page-step="' + sp.escapeHtml(value.hopperPage) + '">' +
-                    '<p class="sp-widget5__step-text sp-widget5__step--visible">' + sp.escapeHtml(value.hopperText) + '</p>' +
-                    '<p class="sp-widget5__step-page sp-widget5__step--hidden">' + sp.escapeHtml(value.hopperPage) + '</p>' +
+                var id = 'sp-widget5__horizontal-hop-' + index;
+                $('#sp-widget5__horizontal-hopper-container').append(
+                    '<div class="sp-widget5__horizontal-hop sp-widget5__horizontal-hop-extended" id="' + sp.escapeHtml(id) + '" data-page-horizontal-hop="' + sp.escapeHtml(value.hopperPage) + '">' +
+                    '<p class="sp-widget5__horizontal-hop-text sp-widget5__horizontal-hop--visible">' + sp.escapeHtml(value.hopperText) + '</p>' +
+                    '<p class="sp-widget5__horizontal-hop-page sp-widget5__horizontal-hop--hidden">' + sp.escapeHtml(value.hopperPage) + '</p>' +
                     '</div>'
                 );
 
-                // Set the steps colour to be the same as CTA buttons.
-                $('.sp-widget5__step, .sp-widget5__extend-button').css({
+                // Set the horizontal hopper colour to be the same as CTA buttons.
+                $('.sp-widget5__horizontal-hop, .sp-widget5__extend-button').css({
                     'background-color': config.viewer.toolbarButtonBackground,
                     'color': config.viewer.toolbarCta1Color
                 });
@@ -1684,30 +1684,30 @@ $.ajax({
                 }
 
                 // Send event.
-                $('#sp-widget5__step-' + index).on('click', function () {
+                $('#sp-widget5__horizontal-hop-' + index).on('click', function () {
                     sp.sendEvent({
                         type: sp.viewer.eventName.viewerWidgetHopperClicked,
                         channelFriendlyId: sp.viewer.linkHash,
                         sessionId: SP.SESSION_ID,
-                        param_1_varchar: $('#sp-widget5__step-' + index + ' .sp-widget5__step-text').text(),
-                        param_2_varchar: $('#sp-widget5__step-' + index).attr('data-page-step')
+                        param_1_varchar: $('#sp-widget5__horizontal-hop-' + index + ' .sp-widget5__horizontal-hop-text').text(),
+                        param_2_varchar: $('#sp-widget5__horizontal-hop-' + index).attr('data-page-horizontal-hop')
                     });
 
-                    PDFViewerApplication.page = parseInt($('#sp-widget5__step-' + index).attr('data-page-step'));
+                    PDFViewerApplication.page = parseInt($('#sp-widget5__horizontal-hop-' + index).attr('data-page-horizontal-hop'));
                 });
             });
 
-            //Adding div to show arrow for the last step
-            $('#sp-widget5__steps-container').append(
+            //Adding div to show arrow for the last horizontal hop
+            $('#sp-widget5__horizontal-hopper-container').append(
                 '<div style="width: 20px;"></div>'
             );
 
-            // Set the steps arrow colour to be the same as CTA buttons.
-            $('<style>.sp-widget5__step:after{border-left-color:'+config.viewer.toolbarButtonBackground+'}</style>').appendTo('head');
+            // Set the horizontal hopper arrow colour to be the same as CTA buttons.
+            $('<style>.sp-widget5__horizontal-hop:after{border-left-color:'+config.viewer.toolbarButtonBackground+'}</style>').appendTo('head');
 
             // Select active button with color
-            $('#sp-widget5__steps-container').children().each(function () {
-                if($(this).attr("data-page-step") == PDFViewerApplication.page) {
+            $('#sp-widget5__horizontal-hopper-container').children().each(function () {
+                if($(this).attr("data-page-horizontal-hop") == PDFViewerApplication.page) {
                     $(this).addClass('selected')
                 }; // "this" is the current element in the loop
             });
