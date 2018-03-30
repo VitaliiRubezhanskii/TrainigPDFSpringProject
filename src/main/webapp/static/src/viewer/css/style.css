@@ -653,6 +653,12 @@
   position: relative;
 }
 
+.sp-widget5__horizontal-hop-text {
+  margin-left: 20px;
+  padding: 0 10px;
+  text-align: center;
+}
+
 .sp-widget5__horizontal-hop::after,
 .sp-widget5__horizontal-hop::before {
   content: "";
