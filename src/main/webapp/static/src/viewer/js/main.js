@@ -202,7 +202,7 @@ sp.viewer = {
         });
 
         //Animate to selected element automatically
-        $('#sp-widget5__horizontal-hopper-container').animate({scrollLeft: $('#sp-widget5__horizontal-hopper-container>div.selected').offset().left}, 800);
+        $('#sp-widget5__horizontal-hopper-container').scrollTo($('#sp-widget5__horizontal-hopper-container>div.selected'));
         startTime = endTime;
     }
 
@@ -1696,11 +1696,6 @@ $.ajax({
                     PDFViewerApplication.page = parseInt($('#sp-widget5__horizontal-hop-' + index).attr('data-page-horizontal-hop'));
                 });
             });
-
-            //Adding div to show arrow for the last horizontal hop
-            $('#sp-widget5__horizontal-hopper-container').append(
-                '<div style="width: 20px;"></div>'
-            );
 
             // Set the horizontal hopper arrow colour to be the same as CTA buttons.
             $('<style>.sp-widget5__horizontal-hop:after{border-left-color:'+config.viewer.toolbarButtonBackground+'}</style>').appendTo('head');

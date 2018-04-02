@@ -1,3 +1,5 @@
+import org.apache.tools.ant.taskdefs.condition.Os
+
 buildscript {
     repositories {
         mavenCentral()
@@ -67,7 +69,11 @@ springBoot {
 }
 
 task gulp(type: Exec) {
-    commandLine 'gulp.cmd', 'build'
+    if (Os.isFamily(Os.FAMILY_WINDOWS)) {
+        commandLine 'gulp.cmd', 'build'
+    } else if (Os.isFamily(Os.FAMILY_MAC) || Os.isFamily(Os.FAMILY_UNIX)) {
+        commandLine 'gulp', 'build'
+    }
 }
 
 processResources.dependsOn gulp
