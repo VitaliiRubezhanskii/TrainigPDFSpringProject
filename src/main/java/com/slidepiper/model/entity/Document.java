@@ -61,14 +61,14 @@ public class Document implements Serializable {
     private Viewer viewer;
 
     @Column(name = "is_process_mode")
-    private Boolean isProcessMode = false;
+    private boolean processMode = false;
 
     public Document() {}
 
-    public Document(Viewer viewer, Status status, String name, Boolean isProcessMode) {
+    public Document(Viewer viewer, Status status, String name, Boolean processMode) {
         this.viewer = viewer;
         this.status = status;
         this.name = name;
-        this.isProcessMode = isProcessMode;
+        this.processMode = processMode;
     }
 }

@@ -180,7 +180,7 @@ public class DashboardDocumentService {
         entityManager.detach(sourceDocument);
 
         Viewer viewer = viewerRepository.findByEmail(username);
-        Document destinationDocument = new Document(viewer, Status.DISABLED, destinationDocumentName, sourceDocument.getIsProcessMode());
+        Document destinationDocument = new Document(viewer, Status.DISABLED, destinationDocumentName, sourceDocument.isProcessMode());
         documentRepository.save(destinationDocument);
 
         // Set friendlyId.
@@ -227,7 +227,7 @@ public class DashboardDocumentService {
     public void save(String friendlyId, String email, Boolean isProcessMode) {
         Document document = documentRepository.findByFriendlyId(friendlyId);
 
-        document.setIsProcessMode(isProcessMode);
+        document.setProcessMode(isProcessMode);
         documentRepository.save(document);
 
         // Save event.
