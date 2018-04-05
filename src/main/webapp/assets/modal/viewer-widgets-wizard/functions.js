@@ -455,8 +455,10 @@ sp.viewerWidgetsModal = {
      * Get a file widget settings from the DB.
      *
      * @param {string} fileHash - The file hash.
+     *
+     * @param {boolean} isProcessMode - if process mode is enabled.
      */
-    getWidgetsSettings: function(fileHash) {
+    getWidgetsSettings: function(fileHash, isProcessMode) {
         var widgetSettingsData = null;
         $.getJSON(
             '/api/v1/widgets',
@@ -467,6 +469,7 @@ sp.viewerWidgetsModal = {
                 widgetSettingsData = data;
                 sp.viewerWidgetsModal.displayWidgetsSettings(widgetSettingsData, fileHash);
                 sp.viewerWidgetsModal.setSaveButtons(fileHash);
+                sp.viewerWidgetsModal.setProcessMode(isProcessMode);
             }
         );
 
@@ -1026,6 +1029,11 @@ sp.viewerWidgetsModal = {
             $('#' + targetId).text('Saving...');
             $('.sp-widgets-customisation__spinner').addClass('sp-widgets-customisation__spinner-show');
 
+            var isProcessModeEnabled = {
+                isProcessMode: $('[name="process-mode-is-enabled"]').prop('checked'),
+            };
+
+            postDocumentSettings(isProcessModeEnabled, fileHash);
             sp.viewerWidgetsModal.postWidgetSettings(data, fileHash, targetId);
         } else if (0 === settings.length) {
             $('button[data-dismiss="modal"]').click();
@@ -1806,6 +1814,14 @@ sp.viewerWidgetsModal = {
             return true;
         }
         return false;
+    },
+
+    /**
+     * Set Process Mode
+     * Add data-is-process-mode attribute for the 'Process Mode' checkbox.
+     */
+    setProcessMode: function(isProcessMode) {
+        $('[name="process-mode-is-enabled"]').prop('checked', !!+isProcessMode);
     }
 };
 
@@ -1882,3 +1898,37 @@ $(document).on('click', '.link-widget__url-upload-button', function() {
         }
     });
 });
+
+/**
+ * Post widget settings to ManagementServlet
+ *
+ * @param {object} data - The document settings data.
+ * @param {string} fileHash - The document fileHash.
+ */
+function postDocumentSettings(data, fileHash) {
+    $.ajax({
+        url:'/api/v1/documents/' + fileHash,
+        method: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(data),
+        beforeSend: function(xhr) {
+            xhr.setRequestHeader(SP.CSRF_HEADER, SP.CSRF_TOKEN);
+        },
+    }).done(function(data) {
+        if (typeof data === 'string' && '<!DOCTYPE html>' === data.substring(0, 15)) {
+            window.location = '/login';
+        } else {
+            var resultCode = data;
+
+            if (0 == resultCode) {
+                errorCallback();
+            }
+        }
+    }).fail(function() {
+        errorCallback();
+    });
+
+    function errorCallback() {
+        swal('Error', 'Something went wrong. Your settings weren\'t saved.', 'error');
+    }
+}

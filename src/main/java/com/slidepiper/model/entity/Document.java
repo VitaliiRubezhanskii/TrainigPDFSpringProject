@@ -60,11 +60,15 @@ public class Document implements Serializable {
     @JoinColumn(name = "sales_man_email", referencedColumnName = "email")
     private Viewer viewer;
 
+    @Column(name = "is_process_mode")
+    private Boolean isProcessMode = false;
+
     public Document() {}
 
-    public Document(Viewer viewer, Status status, String name) {
+    public Document(Viewer viewer, Status status, String name, Boolean isProcessMode) {
         this.viewer = viewer;
         this.status = status;
         this.name = name;
+        this.isProcessMode = isProcessMode;
     }
 }
