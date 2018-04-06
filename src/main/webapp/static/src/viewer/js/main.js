@@ -201,6 +201,14 @@ sp.viewer = {
             }; // "this" is the current element in the loop
         });
 
+        // $('#sp-widget5__hopper-container>div.selected').removeClass('selected');
+        //
+        // $('#sp-widget5__hopper-container').children().each(function () {
+        //     if($(this).attr("data-page-hop") == PDFViewerApplication.page) {
+        //         $(this).addClass('selected');
+        //     } // "this" is the current element in the loop
+        // });
+
         //Animate to selected element automatically
         $('#sp-widget5__horizontal-hopper-container').scrollTo($('#sp-widget5__horizontal-hopper-container>div.selected'));
         startTime = endTime;
@@ -990,6 +998,10 @@ $.ajax({
                 if (widgets.widget5.isHorizontalHopperEnabled) {
                     implementWidget5HorizontalHopper(widgets.widget5.items);
                 }
+                // delete margin top when horizontal hoper disabled
+                if (!widgets.widget5.isHorizontalHopperEnabled) {
+                    $('#viewerContainer').addClass('deleteMarginTop');
+                }
             }
         }
 
@@ -1636,6 +1648,11 @@ $.ajax({
                 });
             });
 
+            // $('#sp-widget5__hopper-container').children().each(function () {
+            //     if($(this).attr("data-page-hop") == PDFViewerApplication.page) {
+            //         $(this).addClass('selected');
+            //     } // "this" is the current element in the loop
+            // });
             /**
              * Open and close the hoppers.
              *

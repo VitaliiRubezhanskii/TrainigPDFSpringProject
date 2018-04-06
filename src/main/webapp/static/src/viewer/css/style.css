@@ -123,6 +123,10 @@
   margin-top: 50px;
 }
 
+.deleteMarginTop{
+  margin-top: 0 !important;
+}
+
 #toolbarViewerLeft,
 #toolbarViewerRight {
   margin-top: 9px;
@@ -605,7 +609,6 @@
   width: 100%;
   position: fixed;
   top: 51px;
-  padding-bottom: 18px;
 }
 
 #sp-widget5__hopper-container {
@@ -617,7 +620,6 @@
 #sp-widget5__horizontal-hopper-container {
   height: 40px;
   width: 80%;
-  overflow-x: auto;
   display: flex;
   padding-bottom: 18px;
 }
@@ -637,6 +639,10 @@
   margin: 8px 0;
   padding: 0 4px;
 }
+
+/*.sp-widget5__hop.selected{*/
+  /*background-color: #ec971f !important;*/
+/*}*/
 
 .sp-widget5__horizontal-hop {
   align-items: center;
@@ -673,6 +679,10 @@
   border: solid transparent;
   border-left-color: #ffffff;
   border-width: 20px;
+}
+
+#sp-widget5__horizontal-hopper-container div:first-child::before{
+  display: none;
 }
 
 .sp-widget5__horizontal-hop::after {
