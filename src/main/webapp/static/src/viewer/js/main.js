@@ -1696,9 +1696,9 @@ $.ajax({
                     'color': config.viewer.toolbarCta1Color
                 });
 
-                if (typeof value.status !== 'undefined' && 'finished' === value.status) {
-                    $('#' + id).css({'opacity': '0.5'});
-                }
+                // if (typeof value.status !== 'undefined' && 'finished' === value.status) {
+                //     //$('#' + id).css({'opacity': '0.5'});
+                // }
 
                 // Send event.
                 $('#sp-widget5__horizontal-hop-' + index).on('click', function () {
@@ -1714,8 +1714,8 @@ $.ajax({
                 });
             });
             $('#sp-widget5__horizontal-hopper-container').on("mousewheel",function(event){
-                var value = $(this).scrollLeft() + 300;
-                var value1 = $(this).scrollLeft() - 300;
+                var value = $(this).scrollLeft() + 100;
+                var value1 = $(this).scrollLeft() - 100;
                 if(event.originalEvent.wheelDelta /120 > 0) {
                     $(this).scrollLeft(value);
                 }

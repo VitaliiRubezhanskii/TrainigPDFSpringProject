@@ -686,10 +686,10 @@
   display: none;
 }
 
-.sp-widget5__horizontal-hop.finished{
-  opacity: 0.5;
-  text-decoration: line-through;
-}
+/*.sp-widget5__horizontal-hop.finished{*/
+  /*opacity: 0.5;*/
+  /*text-decoration: line-through;*/
+/*}*/
 
 .sp-widget5__horizontal-hop::after {
   content: "";
