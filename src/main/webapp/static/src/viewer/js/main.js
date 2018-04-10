@@ -998,10 +998,6 @@ $.ajax({
                 if (widgets.widget5.isHorizontalHopperEnabled) {
                     implementWidget5HorizontalHopper(widgets.widget5.items);
                 }
-                // delete margin top when horizontal hoper disabled
-                if (!widgets.widget5.isHorizontalHopperEnabled) {
-                    $('#viewerContainer').addClass('deleteMarginTop');
-                }
             }
         }
 
@@ -1648,11 +1644,6 @@ $.ajax({
                 });
             });
 
-            // $('#sp-widget5__hopper-container').children().each(function () {
-            //     if($(this).attr("data-page-hop") == PDFViewerApplication.page) {
-            //         $(this).addClass('selected');
-            //     } // "this" is the current element in the loop
-            // });
             /**
              * Open and close the hoppers.
              *

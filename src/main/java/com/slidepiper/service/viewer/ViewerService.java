@@ -78,9 +78,6 @@ public class ViewerService {
             viewerEvent.setSessionId(sessionId);
             viewerEventRepository.save(viewerEvent);
 
-            if (channel.getDocument().isProcessMode()) {
-                return "process";
-            }
             return "viewer";
         }
     }

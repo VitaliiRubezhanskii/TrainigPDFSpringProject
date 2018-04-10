@@ -5,7 +5,6 @@ import com.slidepiper.exception.FileInputEmptyException;
 import com.slidepiper.repository.DocumentRepository;
 import com.slidepiper.service.dashboard.DashboardDocumentService;
 import org.apache.commons.lang3.ArrayUtils;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -72,16 +71,6 @@ public class DashboardDocumentController {
         String destinationDocumentName = data.get("destinationDocumentName").asText();
         if (documentRepository.findByFriendlyId(sourceDocumentFriendlyId).getViewer().getEmail().equals(principal.getName())) {
             dashboardDocumentService.clone(sourceDocumentFriendlyId, destinationDocumentName, principal.getName());
-        }
-    }
-
-    @PostMapping("/api/v1/documents/{friendlyId}")
-    public void save(Principal principal,
-                       @PathVariable("friendlyId") String documentFriendlyId, @RequestBody String body) throws IOException {
-        if (documentRepository.findByFriendlyId(documentFriendlyId).getViewer().getEmail().equals(principal.getName())) {
-            JSONObject input = new JSONObject(body);
-            Boolean isProcessMode = input.getBoolean("isProcessMode");
-            dashboardDocumentService.save(documentFriendlyId, principal.getName(), isProcessMode);
         }
     }
 }

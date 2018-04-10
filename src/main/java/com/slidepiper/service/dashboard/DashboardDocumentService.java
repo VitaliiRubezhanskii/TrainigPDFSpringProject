@@ -36,7 +36,6 @@ import java.util.Set;
 @Service
 @PreAuthorize("hasRole('ROLE_USER')")
 public class DashboardDocumentService {
-    private static final boolean IS_PROCESS_MODE = false;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     private final String alphabet;
@@ -96,7 +95,7 @@ public class DashboardDocumentService {
             String name = file.getOriginalFilename();
 
             Viewer viewer = viewerRepository.findByEmail(username);
-            Document document = new Document(viewer, Status.CREATED, name, IS_PROCESS_MODE);
+            Document document = new Document(viewer, Status.CREATED, name);
             documentRepository.save(document);
 
             Hashids hashids = new Hashids(salt, minHashLength, alphabet);
@@ -180,7 +179,7 @@ public class DashboardDocumentService {
         entityManager.detach(sourceDocument);
 
         Viewer viewer = viewerRepository.findByEmail(username);
-        Document destinationDocument = new Document(viewer, Status.DISABLED, destinationDocumentName, sourceDocument.isProcessMode());
+        Document destinationDocument = new Document(viewer, Status.DISABLED, destinationDocumentName);
         documentRepository.save(destinationDocument);
 
         // Set friendlyId.
@@ -222,17 +221,5 @@ public class DashboardDocumentService {
         data.put("id", destinationDocument.getId());
         data.put("name", destinationDocument.getName());
         eventRepository.save(new Event(username, Event.EventType.CLONED_DOCUMENT, data));
-    }
-
-    public void save(String friendlyId, String email, Boolean isProcessMode) {
-        Document document = documentRepository.findByFriendlyId(friendlyId);
-
-        document.setProcessMode(isProcessMode);
-        documentRepository.save(document);
-
-        // Save event.
-        ObjectNode data = objectMapper.createObjectNode();
-        data.put("id", document.getId());
-        eventRepository.save(new Event(email, Event.EventType.PROCESS_MODE_ENABLED_FOR_DOCUMENT, data));
     }
 }
