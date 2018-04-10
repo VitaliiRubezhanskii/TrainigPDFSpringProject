@@ -55,6 +55,15 @@ public class ViewerController {
             model.addAttribute("shareWidgetData", viewerShareWidgetService.getShareWidgetData(request, channel.getFriendlyId()));
         }
 
+        if (view.equals("process")) {
+            view = String.join("/",templatesPrefix , "process");
+
+            model.addAttribute("apiUrl", apiUrl);
+            model.addAttribute("sessionId", sessionId);
+            model.addAttribute("documentUrl", viewerDocumentService.getUrl(channel.getDocument(), request));
+            model.addAttribute("shareWidgetData", viewerShareWidgetService.getShareWidgetData(request, channel.getFriendlyId()));
+        }
+
         return view;
     }
 

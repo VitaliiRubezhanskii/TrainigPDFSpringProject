@@ -44,7 +44,8 @@ public class Event {
         FAILED_TASK,
         COMPLETED_TASK,
         SENT_EMAIL,
-        USER_CHANGED_PASSWORD
+        USER_CHANGED_PASSWORD,
+        PROCESS_MODE_ENABLED_FOR_DOCUMENT
     }
     @Column(name = "event_name")
     @Enumerated(EnumType.STRING)
