@@ -10,14 +10,13 @@ public class Analytics {
   
   public static final String sqlFilesList =
 		"SELECT\n"
-				+ "  id AS file_hash,\n"
-				+ "  name AS file_name,\n"
-				+ "  timestamp AS date_added_or_modified,\n"
-				+ "  id_ai AS id,\n"
-				+ "  is_process_mode AS is_process_mode\n"
-				+ "FROM slides\n"
-				+ "WHERE sales_man_email = ? AND slides.status IN ('CREATED', 'UPDATED', 'BEFORE_AWS_S3_TRANSITION')\n"
-				+ "ORDER BY date_added_or_modified";
+      + "  id AS file_hash,\n"
+      + "  name AS file_name,\n"
+      + "  timestamp AS date_added_or_modified,\n"
+	  + "  id_ai AS id\n"
+      + "FROM slides\n"
+      + "WHERE sales_man_email = ? AND slides.status IN ('CREATED', 'UPDATED', 'BEFORE_AWS_S3_TRANSITION')\n"
+      + "ORDER BY date_added_or_modified";
   
   
   /**

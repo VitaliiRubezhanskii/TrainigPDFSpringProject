@@ -868,13 +868,13 @@ sp = {
                 var date = moment.utc(value[2]).toDate();
                 var obj = {
                     'date': moment(date).format('DD-MM-YYYY HH:mm'),
-                    'document': '<span class="sp-file-mgmt-file-name" data-file-hash="' + sp.escapeHtml(value[0]) +'">' + sp.escapeHtml(value[1]) + '</span>',
+                    'document': '<span class="sp-file-mgmt-file-name" data-file-hash="' + sp.escapeHtml(value[0]) + '">' + sp.escapeHtml(value[1]) + '</span>',
                     'options': '<span>'
                     + '<a><span class="label label-primary sp-file-update" data-toggle="modal" data-target="#sp-modal-update-file" data-file-hash="' + sp.escapeHtml(value[0]) + '">Update</span></a>'
                     + '<a href="#"><span class="label label-danger sp-file-delete" data-file-hash="' + sp.escapeHtml(value[0]) + '">Delete</span></a></span>'
                     + '<a><span style="margin-left: 10px;" class="sp-document__clone label label-info" data-document-friendly-id="' + sp.escapeHtml(value[0]) + '" data-document-name="' + sp.escapeHtml(value[1]) + '">Clone</span></a>'
-                    + '<a><span data-toggle="modal" data-target="#sp-viewer-widgets-modal" style="margin-left: 10px;" class="label label-success sp-file-customize" data-file-hash="' + sp.escapeHtml(value[0]) + '" data-is-process-mode="' + sp.escapeHtml(value[4]) + '">Customize</span></a>'
-                    + '<a class="sp-preview-file-link"><span id="sp-preview-file-' + sp.escapeHtml(index) + '" style="margin-left: 10px;" class="label label-warning" data-is-process-mode="' + sp.escapeHtml(value[4]) + '">Preview</span></a></span>'
+                    + '<a><span data-toggle="modal" data-target="#sp-viewer-widgets-modal" style="margin-left: 10px;" class="label label-success sp-file-customize" data-file-hash="' + sp.escapeHtml(value[0]) + '">Customize</span></a>'
+                    + '<a class="sp-preview-file-link"><span id="sp-preview-file-' + sp.escapeHtml(index) + '" style="margin-left: 10px;" class="label label-warning">Preview</span></a></span>'
                 };
                 filesArr.push(obj);
 
@@ -930,7 +930,6 @@ sp = {
              */
             $('.sp-file-customize').on('click', function() {
                 var fileHash = $(this).attr('data-file-hash');
-                var isProcessMode = $(this).attr('data-is-process-mode');
 
                 $('#sp-viewer-widgets-modal').load('assets/modal/viewer-widgets-wizard/main.html', function () {
                     $('.sp-widgets-customisation__spinner').addClass('sp-widgets-customisation__spinner-show');
@@ -959,7 +958,7 @@ sp = {
 
                     function loadModal() {
                         $.getScript('assets/modal/viewer-widgets-wizard/functions.js', function() {
-                            sp.viewerWidgetsModal.getWidgetsSettings(fileHash, isProcessMode);
+                            sp.viewerWidgetsModal.getWidgetsSettings(fileHash);
 
                             $('#sp-viewer-widgets-modal').off('hidden.bs.modal').on('hidden.bs.modal', function() {
                                 $(this).find('.tabs-container').addClass('sp-hidden');
