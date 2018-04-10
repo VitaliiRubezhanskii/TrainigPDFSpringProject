@@ -1630,9 +1630,9 @@ $.ajax({
                     'background-color': config.viewer.toolbarButtonBackground,
                     'color': config.viewer.toolbarCta1Color
                 });
-                // if (typeof value.status !== 'undefined' && 'finished' === value.status) {
-                //     $('#' + id).css({'opacity': '0.5', 'text-decoration': 'line-through'});
-                // }
+                if (typeof value.status !== 'undefined' && 'finished' === value.status) {
+                    $('#' + id).css({'opacity': '0.5'});
+                }
 
                 // Send event.
                 $('#sp-widget5__hop-' + index).on('click', function () {
@@ -1692,12 +1692,12 @@ $.ajax({
 
                 // Set the horizontal hopper colour to be the same as CTA buttons.
                 $('.sp-widget5__horizontal-hop, .sp-widget5__extend-button').css({
-                    //'background-color': config.viewer.toolbarButtonBackground,
+                    'background-color': config.viewer.toolbarButtonBackground,
                     'color': config.viewer.toolbarCta1Color
                 });
+
                 if (typeof value.status !== 'undefined' && 'finished' === value.status) {
-                    //$('#' + id).css({'opacity': '0.5', 'text-decoration': 'line-through'});
-                    $('#' + id).addClass('finished');
+                    $('#' + id).css({'opacity': '0.5'});
                 }
 
                 // Send event.
@@ -1713,9 +1713,19 @@ $.ajax({
                     PDFViewerApplication.page = parseInt($('#sp-widget5__horizontal-hop-' + index).attr('data-page-horizontal-hop'));
                 });
             });
-
+            $('#sp-widget5__horizontal-hopper-container').on("mousewheel",function(event){
+                var value = $(this).scrollLeft() + 300;
+                var value1 = $(this).scrollLeft() - 300;
+                if(event.originalEvent.wheelDelta /120 > 0) {
+                    $(this).scrollLeft(value);
+                }
+                else{
+                    $(this).scrollLeft(value1);
+                }
+                event.preventDefault();
+            });
             // Set the horizontal hopper arrow colour to be the same as CTA buttons.
-            $('<style>.sp-widget5__horizontal-hop::after{border-left-color:'+config.viewer.toolbarButtonBackground+'}</style>').appendTo('head');
+            $('<style>.sp-widget5__horizontal-hop:after{border-left-color:'+config.viewer.toolbarButtonBackground+'}</style>').appendTo('head');
 
             // Select active button with color
             $('#sp-widget5__horizontal-hopper-container').children().each(function () {
