@@ -201,13 +201,13 @@ sp.viewer = {
             }; // "this" is the current element in the loop
         });
 
-        // $('#sp-widget5__hopper-container>div.selected').removeClass('selected');
-        //
-        // $('#sp-widget5__hopper-container').children().each(function () {
-        //     if($(this).attr("data-page-hop") == PDFViewerApplication.page) {
-        //         $(this).addClass('selected');
-        //     } // "this" is the current element in the loop
-        // });
+        $('#sp-widget5__hopper-container>div.selected').removeClass('selected');
+
+        $('#sp-widget5__hopper-container').children().each(function () {
+            if($(this).attr("data-page-hop") == PDFViewerApplication.page) {
+                $(this).addClass('selected');
+            } // "this" is the current element in the loop
+        });
 
         //Animate to selected element automatically
         $('#sp-widget5__horizontal-hopper-container').scrollTo($('#sp-widget5__horizontal-hopper-container>div.selected'));
@@ -1630,9 +1630,9 @@ $.ajax({
                     'background-color': config.viewer.toolbarButtonBackground,
                     'color': config.viewer.toolbarCta1Color
                 });
-                if (typeof value.status !== 'undefined' && 'finished' === value.status) {
-                    $('#' + id).css({'opacity': '0.5', 'text-decoration': 'line-through'});
-                }
+                // if (typeof value.status !== 'undefined' && 'finished' === value.status) {
+                //     $('#' + id).css({'opacity': '0.5', 'text-decoration': 'line-through'});
+                // }
 
                 // Send event.
                 $('#sp-widget5__hop-' + index).on('click', function () {
@@ -1648,11 +1648,11 @@ $.ajax({
                 });
             });
 
-            // $('#sp-widget5__hopper-container').children().each(function () {
-            //     if($(this).attr("data-page-hop") == PDFViewerApplication.page) {
-            //         $(this).addClass('selected');
-            //     } // "this" is the current element in the loop
-            // });
+            $('#sp-widget5__hopper-container').children().each(function () {
+                if($(this).attr("data-page-hop") == PDFViewerApplication.page) {
+                    $(this).addClass('selected');
+                } // "this" is the current element in the loop
+            });
             /**
              * Open and close the hoppers.
              *
@@ -1692,12 +1692,12 @@ $.ajax({
 
                 // Set the horizontal hopper colour to be the same as CTA buttons.
                 $('.sp-widget5__horizontal-hop, .sp-widget5__extend-button').css({
-                    'background-color': config.viewer.toolbarButtonBackground,
+                    //'background-color': config.viewer.toolbarButtonBackground,
                     'color': config.viewer.toolbarCta1Color
                 });
-
                 if (typeof value.status !== 'undefined' && 'finished' === value.status) {
-                    $('#' + id).css({'opacity': '0.5', 'text-decoration': 'line-through'});
+                    //$('#' + id).css({'opacity': '0.5', 'text-decoration': 'line-through'});
+                    $('#' + id).addClass('finished');
                 }
 
                 // Send event.
@@ -1715,7 +1715,7 @@ $.ajax({
             });
 
             // Set the horizontal hopper arrow colour to be the same as CTA buttons.
-            $('<style>.sp-widget5__horizontal-hop:after{border-left-color:'+config.viewer.toolbarButtonBackground+'}</style>').appendTo('head');
+            $('<style>.sp-widget5__horizontal-hop::after{border-left-color:'+config.viewer.toolbarButtonBackground+'}</style>').appendTo('head');
 
             // Select active button with color
             $('#sp-widget5__horizontal-hopper-container').children().each(function () {
