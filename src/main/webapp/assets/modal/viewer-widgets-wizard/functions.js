@@ -1035,6 +1035,8 @@ sp.viewerWidgetsModal = {
 
 
             function docsSavedCallback(result) {
+                // Setting attribute to current value
+                $("#sp-files-management span[data-file-hash='" + fileHash + "'][data-target='#sp-viewer-widgets-modal']").attr('data-is-process-mode', +isProcessModeEnabled.isProcessMode);
                 sp.viewerWidgetsModal.postWidgetSettings(data, fileHash, targetId);
             }
             postDocumentSettings(isProcessModeEnabled, fileHash, docsSavedCallback);
