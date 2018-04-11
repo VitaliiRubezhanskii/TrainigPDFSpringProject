@@ -13,7 +13,7 @@
             <h4 class="modal-title">Viewer Widgets Settings</h4>
             <small class="font-bold modal-sub-title">Edit what your customers will see when they open your document</small>
         </div>
-        
+
         <div class="modal-body">
             <div class="tabs-container sp-hidden">
                 <ul class="nav nav-tabs">
@@ -29,9 +29,9 @@
                     <li><a class="sp-widgets-customization-window__tab" data-toggle="tab" href="#sp-tab-7"><i class="fa fa-file-text-o"></i></a></li>
                     <li><a class="sp-widgets-customization-window__tab" data-toggle="tab" href="#sp-tab-8"><i class="fa fa-code"></i></a></li>
                 </ul>
-                
+
                 <div class="tab-content sp-viewer-widgets-modal">
-                    
+
                     <!-- Video Widget -->
                     <div id="sp-tab-1" class="tab-pane">
                         <div class="panel-body">
@@ -40,45 +40,45 @@
                                 <input type="checkbox" name="video-widget-is-enabled"> Is Enabled?
                             </div>
                             <hr>
-                                <div class="container-fluid">
-                                    <div class="row">
-                                        <div class="col-xs-4">
-                                            <p>Video Link <i class="fa fa-info-circle sp-video-link-tooltip" data-toggle="tooltip" data-original-title="Currently supporting YouTube and Vimeo. For other players, please contact us."></i></p>
-                                        </div>
-                                        
-                                        <div class="col-xs-4">
-                                            <p>Video Title</p>
-                                        </div>
-                                        
-                                        <div class="col-xs-2">
-                                            <p>Page</p>
-                                        </div>
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="col-xs-4">
+                                        <p>Video Link <i class="fa fa-info-circle sp-video-link-tooltip" data-toggle="tooltip" data-original-title="Currently supporting YouTube and Vimeo. For other players, please contact us."></i></p>
                                     </div>
-                                    <div id="sp-video-customization-options-container">
-                                        <div class="row sp-video-widget-data-row">
-                                            <div class="col-xs-4">
-                                                <input type="text" data-video="videoSource" class="sp-video-widget" name="video-widget-link" placeholder="e.g. https://www.youtube.com/watch?v=tk-_PgWTASU">
-                                            </div>
-                                            
-                                            <div class="col-xs-4">
-                                                <input type="text" data-video="videoTitle" class="sp-video-widget" name="video-widget-title" placeholder="e.g. Watch This Video!">
-                                            </div>
-                                            
-                                            <div class="col-xs-2">
-                                                <input type="number" data-video="videoPageStart" class="sp-video-widget" placeholder="e.g. 1" name="video-widget-page-start" min="1">
-                                            </div>
-                                            
-                                            <div class="col-xs-2">
-                                                <a class="btn btn-white btn-sm sp-delete-video-widget__a">
-                                                    <i class="fa fa-times" aria-hidden="true"></i>
-                                                </a>
-                                            </div>
-                                            
-                                            <input type="checkbox" class="form-control" style="display: none;" name="video-widget-is-youtube-video" data-key-id="4" data-key-type="boolean">
-                                        </div>
+
+                                    <div class="col-xs-4">
+                                        <p>Video Title</p>
+                                    </div>
+
+                                    <div class="col-xs-2">
+                                        <p>Page</p>
                                     </div>
                                 </div>
-                            
+                                <div id="sp-video-customization-options-container">
+                                    <div class="row sp-video-widget-data-row">
+                                        <div class="col-xs-4">
+                                            <input type="text" data-video="videoSource" class="sp-video-widget" name="video-widget-link" placeholder="e.g. https://www.youtube.com/watch?v=tk-_PgWTASU">
+                                        </div>
+
+                                        <div class="col-xs-4">
+                                            <input type="text" data-video="videoTitle" class="sp-video-widget" name="video-widget-title" placeholder="e.g. Watch This Video!">
+                                        </div>
+
+                                        <div class="col-xs-2">
+                                            <input type="number" data-video="videoPageStart" class="sp-video-widget" placeholder="e.g. 1" name="video-widget-page-start" min="1">
+                                        </div>
+
+                                        <div class="col-xs-2">
+                                            <a class="btn btn-white btn-sm sp-delete-video-widget__a">
+                                                <i class="fa fa-times" aria-hidden="true"></i>
+                                            </a>
+                                        </div>
+
+                                        <input type="checkbox" class="form-control" style="display: none;" name="video-widget-is-youtube-video" data-key-id="4" data-key-type="boolean">
+                                    </div>
+                                </div>
+                            </div>
+
                             <div class="sp-add-video-container">
                                 <a class="btn btn-white btn-sm  sp-add-video-widget__a">
                                     <i class="fa fa-plus" aria-hidden="true"></i>  Add Video
@@ -86,145 +86,145 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <!-- Calendly Widget -->
                     <div id="sp-tab-2" class="tab-pane">
                         <div class="panel-body">
                             <strong>Calendly Widget</strong>
                             <br>
-                            <small>(Don't have a Calendly account? <a target="_blank" href="https://calendly.com/">Sign up here</a>)</small>        
-                            
+                            <small>(Don't have a Calendly account? <a target="_blank" href="https://calendly.com/">Sign up here</a>)</small>
+
                             <div class="sp-customization-option__p sp-hide-is-enabled">
                                 <input type="checkbox" name="calendly-widget-is-enabled"> Is Enabled?
                             </div>
                             <hr>
                             <p class="sp-customization-option__p">Calendly Username</p>
                             <input type="text" class="form-control" name="calendly-widget-username" placeholder="e.g. salesman">
-                            
+
                             <p class="sp-customization-option__p">Button Text</p>
                             <input type="text" class="form-control" name="calendly-widget-button-text" placeholder="e.g. Schedule Meeting">
                         </div>
                     </div>
-                    
+
                     <!-- Ask a Question Widget -->
                     <div id="sp-tab-3" class="tab-pane active">
                         <div class="panel-body">
-                        		<div id="sp-widget3__title">
-                        			<strong>Ask a Question / Give Feedback Widget</strong>
-	                        			<a id="sp-widget3__help-button" target="_blank" href="https://www.slidepiper.com/view?f=5pn1e9#page=12">
-	                        				<small class="text-info" >
-	                        					<i class="fa fa-info-circle"></i>  Help
-	                        				</small>
-	                        			</a>
-                        		</div>
-                        		
+                            <div id="sp-widget3__title">
+                                <strong>Ask a Question / Give Feedback Widget</strong>
+                                <a id="sp-widget3__help-button" target="_blank" href="https://www.slidepiper.com/view?f=5pn1e9#page=12">
+                                    <small class="text-info" >
+                                        <i class="fa fa-info-circle"></i>  Help
+                                    </small>
+                                </a>
+                            </div>
+
                             <div class="sp-customization-option__p">
-                            		<div class="checkbox">
-                                	<label><input type="checkbox" name="question-widget-is-enabled">Is Enabled?</label>
+                                <div class="checkbox">
+                                    <label><input type="checkbox" name="question-widget-is-enabled">Is Enabled?</label>
                                 </div>
                             </div>
-                            
+
                             <hr>
-                            
+
                             <div class="container-fluid">
-	                            <form class="form-horizontal">
-						                    <div class="form-group">
-					                          <label class="col-lg-4 control-label"><span class="sp-widgets__required-setting">* </span>Call to Action Button Text</label>
-					                          <div class="col-lg-8">
-					                          	<input type="text" value="Any Questions? Click Here" name="question-widget-text" class="form-control" placeholder="e.g. Ask a Question / Give Feedback">
-					                          	<small>This text will also be the Form Title. If you prefer, you can set the Form Title separately below.</small>
-					                          </div>
-						                    </div>
-						                    
-						                    <div class="form-group">
-			                              <label class="col-lg-4 control-label">Form Title</label>
-			                              <div class="col-lg-8">
-			                                  <input type="text" placeholder="e.g. Any Questions?" class="form-control" name="spWidget3FormTitle" maxlength="100">
-			                              </div>
-				                        </div>
-				                        	
-						                    <div id="sp-widget3__widget-location" class="form-group">
-						                    	<label class="col-lg-4 control-label">Widget Location:</label>
-						                    	
-		                              <div class="col-lg-8">
-		                              	<div class="checkbox">
-		                              		<label><input type="checkbox" name="spWidget3IsLocationRight" checked>Right Side</label>
-		                              	</div>
-		                              	
-		                              	<div class="checkbox">
-		                              		<label><input type="checkbox" name="spWidget3IsLocationBottom">End of the document</label>
-		                              	</div>
-		                              	
-		                              </div>
-						                    </div>
-						                    
-						                    <hr id="sp-widget3__advanced-hr">
-				                            
-						                    <div id="sp-widget3__advanced" class="form-group">
-						                    	<small>Advanced Settings <i class="fa fa-caret-left" aria-hidden="true"></i></small>
-						                    </div>
-						                    
-						                    <div class="sp-widget3__advanced-container">
-						                    	<div class="form-group">
-			                              <label id="sp-widget3__advanced-button-color-container" class="col-lg-4 control-label">Widget Button Color</label>
-			                              <div class="col-lg-8">
-                                  		<label class="radio-inline">
-                                  			<input type="radio" class="spWidget3IsDefaultButtonColorEnabled" checked="checked" name="spWidget3ButtonColorChooser">
-                                  			My default brand color
-                                  		</label>
-                                  		<label class="radio-inline"><input type="radio" class="spWidget3IsCustomButtonColorEnabled" name="spWidget3ButtonColorChooser">
-                                  			<input id="sp-widget3__color-picker" name="spWidget3ButtonColor">
-                                  		</label>
-	                                  </div>
-				                        	</div>
-				                        	
-			                            <div class="form-group">
-			                              <label class="col-lg-4 control-label">Custom Message Label</label>
-			                              <div class="col-lg-8">
-			                                  <input type="text" placeholder="e.g. Enter your message:" class="form-control" name="spWidget3CustomMessageLabel" maxlength="250">
-			                              </div>
-				                        	</div>
-				                          
-					                        <div class="form-group">
-			                              <label class="col-lg-4 control-label">Custom Email Label</label>
-			                              <div class="col-lg-8">
-			                                  <input type="text" placeholder="e.g. Enter your email address:" class="form-control" name="spWidget3CustomEmailLabel" maxlength="250">
-			                              </div>
-					                        </div>
-				                            
-				                          <div class="form-group">
-			                              <label class="col-lg-4 control-label">Confirm Button Text</label>
-			                              <div class="col-lg-8">
-			                                  <input type="text" placeholder="e.g. Submit" class="form-control" name="spWidget3ConfirmButtonText" maxlength="50">
-			                              </div>
-					                        </div>
-					                          
-					                        <div class="form-group">
-			                              <label class="col-lg-4 control-label">Cancel Button Text</label>
-			                              <div class="col-lg-8">
-			                                  <input type="text" placeholder="e.g. Cancel" class="form-control" name="spWidget3CancelButtonText" maxlength="50">
-			                              </div>
-					                        </div>
-				                            
-					                        <div class="form-group">
-			                              <label class="col-lg-4 control-label">Custom Email Error Message</label>
-			                              <div class="col-lg-8">
-			                                  <input type="text" placeholder="e.g. Enter a valid email address." class="form-control" name="spWidget3CustomEmailValidationErrorMessage" maxlength="250">
-			                              </div>
-					                        </div>
-					                          
-					                        <div class="form-group">
-			                              <label class="col-lg-4 control-label">Custom Form Message</label>
-			                              <div class="col-lg-8">
-			                                  <input type="text" placeholder="e.g. We will reply in 3 business days." id="sp-widget3__message" class="form-control" name="spWidget3FormMessage" maxlength="250">
-			                              </div>
-					                        </div>
-					                      </div>
-	                            </form>
+                                <form class="form-horizontal">
+                                    <div class="form-group">
+                                        <label class="col-lg-4 control-label"><span class="sp-widgets__required-setting">* </span>Call to Action Button Text</label>
+                                        <div class="col-lg-8">
+                                            <input type="text" value="Any Questions? Click Here" name="question-widget-text" class="form-control" placeholder="e.g. Ask a Question / Give Feedback">
+                                            <small>This text will also be the Form Title. If you prefer, you can set the Form Title separately below.</small>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-lg-4 control-label">Form Title</label>
+                                        <div class="col-lg-8">
+                                            <input type="text" placeholder="e.g. Any Questions?" class="form-control" name="spWidget3FormTitle" maxlength="100">
+                                        </div>
+                                    </div>
+
+                                    <div id="sp-widget3__widget-location" class="form-group">
+                                        <label class="col-lg-4 control-label">Widget Location:</label>
+
+                                        <div class="col-lg-8">
+                                            <div class="checkbox">
+                                                <label><input type="checkbox" name="spWidget3IsLocationRight" checked>Right Side</label>
+                                            </div>
+
+                                            <div class="checkbox">
+                                                <label><input type="checkbox" name="spWidget3IsLocationBottom">End of the document</label>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                    <hr id="sp-widget3__advanced-hr">
+
+                                    <div id="sp-widget3__advanced" class="form-group">
+                                        <small>Advanced Settings <i class="fa fa-caret-left" aria-hidden="true"></i></small>
+                                    </div>
+
+                                    <div class="sp-widget3__advanced-container">
+                                        <div class="form-group">
+                                            <label id="sp-widget3__advanced-button-color-container" class="col-lg-4 control-label">Widget Button Color</label>
+                                            <div class="col-lg-8">
+                                                <label class="radio-inline">
+                                                    <input type="radio" class="spWidget3IsDefaultButtonColorEnabled" checked="checked" name="spWidget3ButtonColorChooser">
+                                                    My default brand color
+                                                </label>
+                                                <label class="radio-inline"><input type="radio" class="spWidget3IsCustomButtonColorEnabled" name="spWidget3ButtonColorChooser">
+                                                    <input id="sp-widget3__color-picker" name="spWidget3ButtonColor">
+                                                </label>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="col-lg-4 control-label">Custom Message Label</label>
+                                            <div class="col-lg-8">
+                                                <input type="text" placeholder="e.g. Enter your message:" class="form-control" name="spWidget3CustomMessageLabel" maxlength="250">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="col-lg-4 control-label">Custom Email Label</label>
+                                            <div class="col-lg-8">
+                                                <input type="text" placeholder="e.g. Enter your email address:" class="form-control" name="spWidget3CustomEmailLabel" maxlength="250">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="col-lg-4 control-label">Confirm Button Text</label>
+                                            <div class="col-lg-8">
+                                                <input type="text" placeholder="e.g. Submit" class="form-control" name="spWidget3ConfirmButtonText" maxlength="50">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="col-lg-4 control-label">Cancel Button Text</label>
+                                            <div class="col-lg-8">
+                                                <input type="text" placeholder="e.g. Cancel" class="form-control" name="spWidget3CancelButtonText" maxlength="50">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="col-lg-4 control-label">Custom Email Error Message</label>
+                                            <div class="col-lg-8">
+                                                <input type="text" placeholder="e.g. Enter a valid email address." class="form-control" name="spWidget3CustomEmailValidationErrorMessage" maxlength="250">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="col-lg-4 control-label">Custom Form Message</label>
+                                            <div class="col-lg-8">
+                                                <input type="text" placeholder="e.g. We will reply in 3 business days." id="sp-widget3__message" class="form-control" name="spWidget3FormMessage" maxlength="250">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </div>
-                    
+
                     <!-- Like Button Widget -->
                     <div id="sp-tab-4" class="tab-pane">
                         <div class="panel-body">
@@ -235,17 +235,17 @@
                             <hr>
                             <input type="checkbox" checked name="like-widget-counter-is-enabled"> Enable Like Counter
                             <div>
-                            		<small>Show the number of likes within the widget.</small>
+                                <small>Show the number of likes within the widget.</small>
                             </div>
                         </div>
                     </div>
-                    
+
                     <!-- Hopper Widget  -->
                     <div id="sp-tab-5" class="tab-pane">
                         <div class="panel-body">
                             <strong>Hopper / Milestone Widget</strong>
+                            <!--Checkbox for vertical hopper-->
                             <div class="clearfix">
-                                <!--Checkbox for vertical hopper-->
                                 <div class="sp-customization-option__p sp-hide-is-enabled float-left">
                                     <input type="checkbox" name="hopper-widget-is-enabled"> Navigation
                                 </div>
@@ -264,7 +264,7 @@
                                     <div class="col-sm-6">
                                         <p>Hopper Text</p>
                                     </div>
-                                    
+
                                     <div class="col-xs-2">
                                         <p>Page</p>
                                     </div>
@@ -272,13 +272,13 @@
                                         <p>Finished?</p>
                                     </div>
                                 </div>
-                                
+
                                 <div id="sp-hopper-customize__container">
                                     <div class="row sp-hopper-widget__row">
                                         <div class="col-sm-6">
                                             <input type="text" placeholder="e.g. This Interesting Page" maxlength="44" data-item-setting="hopperText" class="sp-hopper__input-elm">
                                         </div>
-                                        
+
                                         <div class="col-sm-2">
                                             <input type="number" data-item-setting="hopperPage" placeholder="e.g. 1" class="sp-hopper__input-elm" min="1">
                                         </div>
@@ -286,7 +286,7 @@
                                         <div class="col-sm-2 text-center">
                                             <input type="checkbox" data-item-setting="status">
                                         </div>
-                                        
+
                                         <div class="col-sm-2">
                                             <a class="btn btn-white btn-sm sp-delete-hopper-widget__a">
                                                 <i class="fa fa-times" aria-hidden="true"></i>
@@ -295,7 +295,7 @@
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <div class="sp-add-hopper-container">
                                 <a class="btn btn-white btn-sm  sp-add-hopper-widget__a">
                                     <i class="fa fa-plus" aria-hidden="true"></i> Add Hopper
@@ -312,7 +312,7 @@
                                 <input id="sp-widget6--is-enabled" type="checkbox"> Is Enabled?
                             </div>
                             <hr>
-                            <div class="container-fluid">                                
+                            <div class="container-fluid">
                                 <div class="sp-widget-item">
                                     <form class="form-horizontal">
                                         <div class="form-group">
@@ -322,41 +322,41 @@
                                             </div>
                                             <input type="hidden" name="person-image">
                                         </div>
-                                        
+
                                         <div class="form-group">
                                             <div class="col-lg-offset-4 col-lg-8">
                                                 <input type="file" class="form-control sp-widget6__input-person-image">
                                             </div>
                                         </div>
-                                        
+
                                         <div class="form-group">
                                             <label class="col-lg-4 control-label">Testimonial</label>
                                             <div class="col-lg-8">
                                                 <textarea class="form-control" name="testimonial" placeholder="e.g. Using SlidePiper has increased my sales..." rows="3" maxlength="250"></textarea>
                                             </div>
                                         </div>
-                                            
+
                                         <div class="form-group">
                                             <label class="col-lg-4 control-label">Person Name</label>
                                             <div class="col-lg-8">
                                                 <input type="text" class="form-control" name="person-name" placeholder="e.g. David Cohen" maxlength="50">
                                             </div>
                                         </div>
-                                        
+
                                         <div class="form-group">
                                             <label class="col-lg-4 control-label">Person Title</label>
                                             <div class="col-lg-8">
                                                 <input type="text" class="form-control" name="person-title" placeholder="e.g. CEO of Company" maxlength="50">
                                             </div>
                                         </div>
-                                        
+
                                         <div class="form-group">
                                             <label class="col-lg-4 control-label">Page</label>
                                             <div class="col-lg-8">
                                                 <input type="number" class="form-control" name="page" placeholder="e.g. 1" min="1">
                                             </div>
                                         </div>
-                                        
+
                                         <div class="form-group">
                                             <div class="col-lg-12">
                                                 <a class="btn btn-white btn-sm sp-widget__delete-item">
@@ -367,13 +367,13 @@
                                     </form>
                                 </div>
                             </div>
-                            
+
                             <a class="btn btn-white btn-sm sp-widget__add-item">
                                 <i class="fa fa-plus" aria-hidden="true"></i> Add Testimonial
                             </a>
                         </div>
                     </div>
-                    
+
                     <!-- Form Widget  -->
                     <div id="sp-tab-7" class="tab-pane">
                         <div class="panel-body">
@@ -382,7 +382,7 @@
                                 <input class="sp-widget--is-enabled" name="widget7-is-enabled" type="checkbox"> Is Enabled?
                             </div>
                             <hr>
-                            <div class="container-fluid">                                
+                            <div class="container-fluid">
                                 <div class="sp-widget-item">
                                     <form class="form-horizontal">
                                         <div class="form-group">
@@ -391,14 +391,14 @@
                                                 <input type="text" placeholder="e.g. Sign Up Here!" maxlength="40" class="form-control" name="formButtonTextLine1">
                                             </div>
                                         </div>
-                                        
+
                                         <div class="form-group">
                                             <label class="col-lg-4 control-label">Button Text<br>(Line 2)</label>
                                             <div class="col-lg-8">
                                                 <input type="text" placeholder="e.g. By clicking here" maxlength="40" class="form-control" name="formButtonTextLine2">
                                             </div>
                                         </div>
-                                        
+
                                         <div class="form-group">
                                             <label class="col-lg-4 control-label">
                                                 Button Icon
@@ -408,9 +408,9 @@
                                                 <input type="text" placeholder="e.g. fa-file-text" class="form-control" name="formButtonIcon">
                                             </div>
                                         </div>
-                                        
+
                                         <hr>
-                                        
+
                                         <div class="form-group">
                                             <label class="col-lg-4 control-label">Beat Animation</label>
                                             <div class="col-lg-8">
@@ -419,17 +419,17 @@
                                                 </label>
                                             </div>
                                         </div>
-                                        
+
                                         <div class="form-group">
                                             <label class="col-lg-4 control-label">Pop Animation</label>
                                             <div class="col-lg-8">
-	                                              <input type="number" value="" class="form-control" placeholder="Input in seconds" name="formAutoLoadTimeout">
-	                                              <small>Number of seconds after which to make the form automatically pop.</small>
+                                                <input type="number" value="" class="form-control" placeholder="Input in seconds" name="formAutoLoadTimeout">
+                                                <small>Number of seconds after which to make the form automatically pop.</small>
                                             </div>
                                         </div>
-                                        
+
                                         <hr>
-                                        
+
                                         <div class="form-group">
                                             <label class="col-lg-4 control-label">
                                                 Mobile & Tablet Widget Location
@@ -439,40 +439,40 @@
                                                     <input type="radio" data-widget-placement="right" checked name="formWidgetPlacement">Right Side
                                                 </label>
                                             </div>
-                                            
+
                                             <div class="col-lg-4">
                                                 <label class="radio-inline">
                                                     <input type="radio" data-widget-placement="belowToolbar" name="formWidgetPlacement">Below Toolbar
                                                 </label>
                                             </div>
                                         </div>
-                                        
+
                                         <hr>
-                                        
+
                                         <div class="form-group">
                                             <label for="sp-widget7__form-title" class="col-lg-4 control-label">Form Title</label>
                                             <div class="col-lg-8">
                                                 <input id="sp-widget7__form-title" type="text" placeholder="e.g. My Company's Form" class="form-control" name="formTitle">
                                             </div>
                                         </div>
-                                        
+
                                         <div id="sp-widget7__form-type-container" class="form-group">
-                                        		<label class="col-lg-4 control-label">
+                                            <label class="col-lg-4 control-label">
                                                 Form Type
                                             </label>
                                             <div class="col-lg-4">
-	                                            <label class="radio-inline">
-	                                                <input id="sp-widget7__upload-form-radio" data-widget-type="form" type="radio" checked name="formSelectType"> Upload Form
-	                                            </label>
+                                                <label class="radio-inline">
+                                                    <input id="sp-widget7__upload-form-radio" data-widget-type="form" type="radio" checked name="formSelectType"> Upload Form
+                                                </label>
                                             </div>
-                                            
+
                                             <div class="col-lg-4">
-	                                            <label class="radio-inline">
-	                                                <input id="sp-widget7__upload-image-radio" data-widget-type="image" type="radio" name="formSelectType"> Upload Image
-	                                            </label>
+                                                <label class="radio-inline">
+                                                    <input id="sp-widget7__upload-image-radio" data-widget-type="image" type="radio" name="formSelectType"> Upload Image
+                                                </label>
                                             </div>
                                         </div>
-                                        
+
                                         <div class="form-group">
                                             <label class="col-lg-4 control-label sp-widget7__company-logo-label">Company Logo</label>
                                             <div class="col-lg-8">
@@ -480,41 +480,41 @@
                                             </div>
                                             <input type="hidden" name="formImage">
                                         </div>
-                                        
+
                                         <div class="form-group">
                                             <div class="col-lg-offset-4 col-lg-8">
                                                 <input type="file" class="form-control sp-widget7__input-form-image">
                                             </div>
                                         </div>
-                                         
+
                                         <div class="form-group sp-widget7__image-elements">
                                             <label class="col-lg-4 control-label">Image Max Width</label>
                                             <div class="col-lg-8">
                                                 <input type="text" placeholder="e.g. 250px"  class="form-control" name="formImageMaxWidth">
                                             </div>
                                         </div>
-                                        
+
                                         <div class="form-group sp-widget7__image-elements">
                                             <label class="col-lg-4 control-label">Image Max Height</label>
                                             <div class="col-lg-8">
                                                 <input type="text" placeholder="e.g. 250px"  class="form-control" name="formImageMaxHeight">
                                             </div>
-                                        </div> 
-                                         
+                                        </div>
+
                                         <div class="form-group sp-widget7__form-elements">
                                             <label for="sp-widget7__form-cancel-button" class="col-lg-4 control-label">Cancel Button</label>
                                             <div class="col-lg-8">
                                                 <input type="text" placeholder="e.g. Cancel" class="form-control" name="formCancelButton">
                                             </div>
                                         </div>
-                                        
+
                                         <div class="form-group">
                                             <label for="sp-widget7__form-cancel-button-color" class="col-lg-4 control-label">Button Color</label>
                                             <div class="col-lg-8">
                                                 <input type="text" placeholder="e.g. #9E9E9E"  class="form-control" name="formCancelButtonColor">
                                             </div>
                                         </div>
-                                        
+
                                         <div class="form-group sp-widget7__form-elements">
                                             <label for="sp-widget7__form-url" class="col-lg-4 control-label">Form URL</label>
                                             <div class="col-lg-8">
@@ -526,7 +526,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <!-- Code Widget  -->
                     <div id="sp-tab-8" class="tab-pane">
                         <div class="panel-body">
@@ -535,33 +535,33 @@
                                 <input class="sp-widget--is-enabled" type="checkbox" name="sp-widget8__is-enabled"> Is Enabled?
                             </div>
                             <hr>
-                            <div class="container-fluid">                                
+                            <div class="container-fluid">
                                 <div class="sp-widget-item">
                                     <div class="form-group">
                                         <label for="sp-widget8__code-description" class="control-label" placeholder="e.g. Google Analytics">Code Description (optional)</label>
                                         <input type="text" class="form-control" id="sp-widget8__code-description" name="codeDescription">
                                     </div>
-                                    
+
                                     <div class="form-group">
                                         <label>Code Location</labe>
-                                        <div class="radio">
-                                            <label><input type="radio" name="codeLocation" value="beforeClosingHead" checked="checked">Before the closing &lt/head&gt</label>
-                                        </div>
-                                        
-                                        <div class="radio">
-                                            <label><input type="radio" name="codeLocation" value="afterOpeningBody">After the opening &ltbody&gt</label>
-                                        </div>
-                                        
-                                        <div class="radio">
-                                            <label><input type="radio" name="codeLocation" value="beforeClosingBody">Before the closing &lt/body&gt</label>
-                                        </div>
+                                            <div class="radio">
+                                                <label><input type="radio" name="codeLocation" value="beforeClosingHead" checked="checked">Before the closing &lt/head&gt</label>
+                                            </div>
+
+                                            <div class="radio">
+                                                <label><input type="radio" name="codeLocation" value="afterOpeningBody">After the opening &ltbody&gt</label>
+                                            </div>
+
+                                            <div class="radio">
+                                                <label><input type="radio" name="codeLocation" value="beforeClosingBody">Before the closing &lt/body&gt</label>
+                                            </div>
                                     </div>
-                                    
+
                                     <div class="form-group">
-                                     <label for="sp-widget8__code-content">Code</label>
+                                        <label for="sp-widget8__code-content">Code</label>
                                         <textarea class="form-control" rows="5" id="sp-widget8__code-content" name="codeContent"></textarea>
                                     </div>
-                                    
+
                                     <!--
                                     <div class="form-group">
                                         <a class="btn btn-white btn-sm sp-widget__delete-item">
@@ -571,7 +571,7 @@
                                     -->
                                 </div>
                             </div>
-                            
+
                             <!--
                             <a class="btn btn-white btn-sm sp-widget__add-item">
                                 <i class="fa fa-plus" aria-hidden="true"></i> Add Code
@@ -579,7 +579,7 @@
                             -->
                         </div>
                     </div>
-                    
+
                     <div id="sp-tab-9" class="tab-pane">
                         <div class="panel-body">
                             <strong>Link / Task Widget</strong>
@@ -708,36 +708,36 @@
                             </a>
                         </div>
                     </div>
-                    
+
                     <div id="sp-tab-10" class="tab-pane">
                         <div class="panel-body">
                             <div id="sp-widget10__title">
-                            	<strong>Email Required Widget</strong>
-                        			<a id="sp-widget10__help-button" target="_blank" href="https://www.slidepiper.com/view?f=5pn1e9">
-                        				<small class="text-info" >
-                        					<i class="fa fa-info-circle"></i>  Help
-                        				</small>
-                        			</a>
-                        		</div>
-                            
+                                <strong>Email Required Widget</strong>
+                                <a id="sp-widget10__help-button" target="_blank" href="https://www.slidepiper.com/view?f=5pn1e9">
+                                    <small class="text-info" >
+                                        <i class="fa fa-info-circle"></i>  Help
+                                    </small>
+                                </a>
+                            </div>
+
                             <div class="sp-customization-option__p checkbox">
                                 <label><input type="checkbox" name="sp-widget10--is-enabled">Is Enabled?</label>
                             </div>
                             <small id="sp-widget10__description">Use this widget to prompt the reader with a form to enter their email address before they can open your document.</small>
-							<hr>
-                            <div class="container-fluid">                   
+                            <hr>
+                            <div class="container-fluid">
                                 <form class="form-horizontal">
-                                  <div class="form-group">
-                                      <label class="col-lg-4 control-label">Form Title</label>
-                                      <div class="col-lg-8">
-                                          <input class="form-control" value="Please enter your email to continue reading this document" name="spWidget10FormTitle" placeholder="e.g. Please enter your email">
-                                      </div>
-                                  </div>
-                              </form>
-                           </div>
-                       </div>
-										</div>
-                            
+                                    <div class="form-group">
+                                        <label class="col-lg-4 control-label">Form Title</label>
+                                        <div class="col-lg-8">
+                                            <input class="form-control" value="Please enter your email to continue reading this document" name="spWidget10FormTitle" placeholder="e.g. Please enter your email">
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
                     <div id="sp-tab-11" class="tab-pane">
                         <div class="panel-body">
                             <strong>Share Widget</strong>
@@ -745,97 +745,97 @@
                                 <label><input type="checkbox" name="sp-widget11--is-enabled">Is Enabled?</label>
                             </div>
                             <small>Use this widget to allow people to share your document.</small>
-                            <hr>							
-                            <div class="container-fluid">                   
-                              <div class="sp-widget-item">
-                                  <form class="form-horizontal">
-                                    <div class="form-group">
-                                        <label class="col-lg-4 control-label">Button Text</label>
-                                        <div class="col-lg-8">
-                                            <input class="form-control" value="Share" name="spWidget11ButtonText" placeholder="e.g. Share" maxlength="40">
+                            <hr>
+                            <div class="container-fluid">
+                                <div class="sp-widget-item">
+                                    <form class="form-horizontal">
+                                        <div class="form-group">
+                                            <label class="col-lg-4 control-label">Button Text</label>
+                                            <div class="col-lg-8">
+                                                <input class="form-control" value="Share" name="spWidget11ButtonText" placeholder="e.g. Share" maxlength="40">
+                                            </div>
                                         </div>
-                                    </div>
-                                    
-                                    <div class="form-group">
-					                              <label id="sp-widget11__advanced-button-color-container" class="col-lg-4 control-label">Widget Button Color</label>
-					                              <div class="col-lg-8">
-			                                		<label class="radio-inline">
-			                                			<input type="radio" class="spWidget11IsDefaultButtonColorEnabled" checked="checked" name="spWidget11ButtonColorChooser">
-			                                			My default brand color
-			                                		</label>
-			                                		<label class="radio-inline"><input type="radio" class="spWidget11IsCustomButtonColorEnabled" name="spWidget11ButtonColorChooser">
-			                                			<input id="sp-widget11__color-picker" name="spWidget11ButtonColor">
-			                                		</label>
-			                                  </div>
-						                       	</div>
-						                       	
-		                       					<hr>
-		                       					<strong>Share Settings</strong>
-		                       					<br>
-		                       					<small>Specify what will be included in a post if someone shares your document. (Currently only available for
-		                       					Facebook sharing).</small>
 
-                                                  <br>
-                                                  <br>
-                                                  <small><strong>1. If you update your settings, please go to <a target="_blank" href="https://developers.facebook.com/tools/debug/sharing/batch">https://developers.facebook.com/tools/debug/sharing/batch</a> to refresh Facebook's information regarding your document links.</strong></small>
-                                                  <br>
-                                                  <br>
-                                                  <small><strong>2. Once 50 actions (likes, shares and comments) have been associated with a document link, you won't be able to update its title.</strong></small>
-                                                  <br>
-                                                  <br>
-		                       					
-		                       					<div class="form-group">
-                                        <label class="col-lg-4 control-label">Title</label>
-                                        <div class="col-lg-8">
-                                            <input class="form-control" name="spWidget11ShareTitle">
+                                        <div class="form-group">
+                                            <label id="sp-widget11__advanced-button-color-container" class="col-lg-4 control-label">Widget Button Color</label>
+                                            <div class="col-lg-8">
+                                                <label class="radio-inline">
+                                                    <input type="radio" class="spWidget11IsDefaultButtonColorEnabled" checked="checked" name="spWidget11ButtonColorChooser">
+                                                    My default brand color
+                                                </label>
+                                                <label class="radio-inline"><input type="radio" class="spWidget11IsCustomButtonColorEnabled" name="spWidget11ButtonColorChooser">
+                                                    <input id="sp-widget11__color-picker" name="spWidget11ButtonColor">
+                                                </label>
+                                            </div>
                                         </div>
-                                    </div>
-                                    
-                                    <div class="form-group">
-                                        <label class="col-lg-4 control-label">Description</label>
-                                        <div class="col-lg-8">
-                                            <input class="form-control" placeholder="Enter a description of your document" name="spWidget11ShareDescription">
+
+                                        <hr>
+                                        <strong>Share Settings</strong>
+                                        <br>
+                                        <small>Specify what will be included in a post if someone shares your document. (Currently only available for
+                                            Facebook sharing).</small>
+
+                                        <br>
+                                        <br>
+                                        <small><strong>1. If you update your settings, please go to <a target="_blank" href="https://developers.facebook.com/tools/debug/sharing/batch">https://developers.facebook.com/tools/debug/sharing/batch</a> to refresh Facebook's information regarding your document links.</strong></small>
+                                        <br>
+                                        <br>
+                                        <small><strong>2. Once 50 actions (likes, shares and comments) have been associated with a document link, you won't be able to update its title.</strong></small>
+                                        <br>
+                                        <br>
+
+                                        <div class="form-group">
+                                            <label class="col-lg-4 control-label">Title</label>
+                                            <div class="col-lg-8">
+                                                <input class="form-control" name="spWidget11ShareTitle">
+                                            </div>
                                         </div>
-                                    </div>
-                                    
-                                    <div class="form-group">
-                                        <label class="col-lg-4 control-label">Image</label>
-                                        <div class="col-lg-8">
-                                            <div class="fa fa-picture-o fa-4x sp-widget11__share-image"></div>
+
+                                        <div class="form-group">
+                                            <label class="col-lg-4 control-label">Description</label>
+                                            <div class="col-lg-8">
+                                                <input class="form-control" placeholder="Enter a description of your document" name="spWidget11ShareDescription">
+                                            </div>
                                         </div>
-                                        <input type="hidden" name="spWidget11ShareImageBase64">
-                                        <input type="hidden" name="spWidget11ShareImageUrl">
-                                    </div>
-                                    
-                                    <div class="form-group">
-                                        <div class="col-lg-offset-4 col-lg-8">
-                                            <input type="file" class="form-control sp-widget11__input-share-image">
+
+                                        <div class="form-group">
+                                            <label class="col-lg-4 control-label">Image</label>
+                                            <div class="col-lg-8">
+                                                <div class="fa fa-picture-o fa-4x sp-widget11__share-image"></div>
+                                            </div>
+                                            <input type="hidden" name="spWidget11ShareImageBase64">
+                                            <input type="hidden" name="spWidget11ShareImageUrl">
                                         </div>
-                                    </div>
-                                    
-                                    <div class="form-group">
-                                        <label class="col-lg-4 control-label">Alternative URL</label>
-                                        <div class="col-lg-8">
-                                            <input class="form-control" placeholder="Enter an alternative URL to share" name="spWidget11ShareUrl">
+
+                                        <div class="form-group">
+                                            <div class="col-lg-offset-4 col-lg-8">
+                                                <input type="file" class="form-control sp-widget11__input-share-image">
+                                            </div>
                                         </div>
-                                    </div>
-                                  </form>
-                              </div>
+
+                                        <div class="form-group">
+                                            <label class="col-lg-4 control-label">Alternative URL</label>
+                                            <div class="col-lg-8">
+                                                <input class="form-control" placeholder="Enter an alternative URL to share" name="spWidget11ShareUrl">
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            
+
             <div class="sk-spinner sk-spinner-wave sp-widgets-customisation__spinner">
                 <div class="sk-rect1"></div>
                 <div class="sk-rect2"></div>
                 <div class="sk-rect3"></div>
                 <div class="sk-rect4"></div>
                 <div class="sk-rect5"></div>
-            </div> 
+            </div>
         </div>
-        
+
         <div class="modal-footer">
             <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
             <button type="button" class="btn btn-primary" id="sp-save-widgets-settings__button">Save</button>

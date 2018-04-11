@@ -210,7 +210,8 @@ sp.viewer = {
         });
 
         //Animate to selected element automatically
-        $('#sp-widget5__horizontal-hopper-container').scrollTo($('#sp-widget5__horizontal-hopper-container>div.selected'));
+        //$('#sp-widget5__horizontal-hopper-container').scrollTo($('#sp-widget5__horizontal-hopper-container>div.selected'));
+        // $('#sp-widget5__horizontal-hopper-container').scrollTo(500,0);
         startTime = endTime;
     }
 
@@ -703,7 +704,7 @@ $.ajax({
                     if (typeof widgetData !== 'undefined'
                         && (widgetData.isEnabled || (typeof widgetData.items[0] !== 'undefined' && widgetData.items[0].enabled)
                             //separate logic for widget5; add it even if isEnabled=false
-                        || (widgetData.widgetId == 5 && widgetData.isHorizontalHopperEnabled))) {
+                            || (widgetData.widgetId == 5 && widgetData.isHorizontalHopperEnabled))) {
 
                         var widgetId;
                         if (typeof widgetData.widgetId !== 'undefined') {
@@ -993,6 +994,10 @@ $.ajax({
                 // add vertical hopper
                 if (widgets.widget5.isEnabled) {
                     implementWidget5(widgets.widget5.items);
+                }
+                //start from first page
+                if(widgets.widget5.startFromFirstPage){
+                    PDFViewerApplication.page = 1;
                 }
                 // add horizontal hopper
                 if (widgets.widget5.isHorizontalHopperEnabled) {

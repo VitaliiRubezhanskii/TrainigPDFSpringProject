@@ -611,7 +611,7 @@ html[dir='rtl'] #toolbarContainer, .findbar, .secondaryToolbar {
 }
 
 .findbar, .secondaryToolbar {
-  top: 32px;
+  top: 41px;
   position: absolute;
   z-index: 10000;
   height: 32px;
