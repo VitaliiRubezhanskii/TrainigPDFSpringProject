@@ -24,6 +24,20 @@
   margin-top: 15px;
 }
 
+.clearfix{
+  display: table;
+  content: '';
+  clear: both;
+}
+
+.sp-customization-option__p.float-left{
+  float: left;
+  margin-right: 200px;
+}
+.sp-customization-option__p.float-right{
+  float: right;
+}
+
 .sp-hide-is-enabled {
   display: none;
 }
