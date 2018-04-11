@@ -209,8 +209,9 @@ sp.viewer = {
         });
 
         //Animate to selected element automatically
-        $('#sp-widget5__horizontal-hopper-container').scrollTo($('#sp-widget5__horizontal-hopper-container>div.selected'));
-        startTime = endTime;
+        //$('#sp-widget5__horizontal-hopper-container').scrollTo($('#sp-widget5__horizontal-hopper-container>div.selected'));
+        // $('#sp-widget5__horizontal-hopper-container').scrollTo(500,0);
+        // startTime = endTime;
     }
 
     var eventQueue = [];
