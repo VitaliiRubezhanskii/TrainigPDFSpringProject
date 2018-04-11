@@ -37,6 +37,7 @@ import java.util.Set;
 @PreAuthorize("hasRole('ROLE_USER')")
 public class DashboardDocumentService {
     private static final boolean IS_PROCESS_MODE = false;
+    private static final boolean IS_MFA_ENABLED = false;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     private final String alphabet;
@@ -96,7 +97,7 @@ public class DashboardDocumentService {
             String name = file.getOriginalFilename();
 
             Viewer viewer = viewerRepository.findByEmail(username);
-            Document document = new Document(viewer, Status.CREATED, name, IS_PROCESS_MODE);
+            Document document = new Document(viewer, Status.CREATED, name, IS_PROCESS_MODE, IS_MFA_ENABLED);
             documentRepository.save(document);
 
             Hashids hashids = new Hashids(salt, minHashLength, alphabet);
@@ -180,7 +181,7 @@ public class DashboardDocumentService {
         entityManager.detach(sourceDocument);
 
         Viewer viewer = viewerRepository.findByEmail(username);
-        Document destinationDocument = new Document(viewer, Status.DISABLED, destinationDocumentName, sourceDocument.isProcessMode());
+        Document destinationDocument = new Document(viewer, Status.DISABLED, destinationDocumentName, sourceDocument.isProcessMode(), sourceDocument.isMfaEnabled());
         documentRepository.save(destinationDocument);
 
         // Set friendlyId.
@@ -224,10 +225,15 @@ public class DashboardDocumentService {
         eventRepository.save(new Event(username, Event.EventType.CLONED_DOCUMENT, data));
     }
 
-    public void save(String friendlyId, String email, Boolean isProcessMode) {
+    public void save(String friendlyId, String email, Boolean isProcessMode, Boolean isMFAEnabled) {
         Document document = documentRepository.findByFriendlyId(friendlyId);
 
-        document.setProcessMode(isProcessMode);
+        if (isProcessMode != null) {
+            document.setProcessMode(isProcessMode);
+        }
+        if (isMFAEnabled != null) {
+            document.setMfaEnabled(isMFAEnabled);
+        }
         documentRepository.save(document);
 
         // Save event.

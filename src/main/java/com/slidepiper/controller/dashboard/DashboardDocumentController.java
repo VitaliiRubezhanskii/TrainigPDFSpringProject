@@ -81,7 +81,8 @@ public class DashboardDocumentController {
         if (documentRepository.findByFriendlyId(documentFriendlyId).getViewer().getEmail().equals(principal.getName())) {
             JSONObject input = new JSONObject(body);
             Boolean isProcessMode = input.getBoolean("isProcessMode");
-            dashboardDocumentService.save(documentFriendlyId, principal.getName(), isProcessMode);
+            Boolean isMFAEnabled = input.getBoolean("isMFAEnabled");
+            dashboardDocumentService.save(documentFriendlyId, principal.getName(), isProcessMode, isMFAEnabled);
         }
     }
 }
