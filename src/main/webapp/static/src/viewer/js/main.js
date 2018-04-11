@@ -120,7 +120,6 @@ sp.viewer = {
     }
 };
 
-
 /**
  * Tracking and sending event mechanism.
  */
@@ -210,8 +209,9 @@ sp.viewer = {
         });
 
         //Animate to selected element automatically
-        $('#sp-widget5__horizontal-hopper-container').scrollTo($('#sp-widget5__horizontal-hopper-container>div.selected'));
-        startTime = endTime;
+        //$('#sp-widget5__horizontal-hopper-container').scrollTo($('#sp-widget5__horizontal-hopper-container>div.selected'));
+        // $('#sp-widget5__horizontal-hopper-container').scrollTo(500,0);
+        // startTime = endTime;
     }
 
     var eventQueue = [];
@@ -811,7 +811,6 @@ $.ajax({
          * everytime the user changes a page.
          */
         $(document).on('pagechange spDefaultPlayerReady spYouTubePlayerReady spWidget6Ready', function (event) {
-
             /* Widget 1 */
             if (sp.viewer.widgets.widget1.isValidated) {
 
@@ -993,6 +992,10 @@ $.ajax({
                 // add vertical hopper
                 if (widgets.widget5.isEnabled) {
                     implementWidget5(widgets.widget5.items);
+                }
+                //start from first page
+                if(widgets.widget5.startFromFirstPage){
+                    PDFViewerApplication.page = 1;
                 }
                 // add horizontal hopper
                 if (widgets.widget5.isHorizontalHopperEnabled) {
@@ -1643,7 +1646,6 @@ $.ajax({
                         param_1_varchar: $('#sp-widget5__hop-' + index + ' .sp-widget5__hop-text').text(),
                         param_2_varchar: $('#sp-widget5__hop-' + index).attr('data-page-hop')
                     });
-
                     PDFViewerApplication.page = parseInt($('#sp-widget5__hop-' + index).attr('data-page-hop'));
                 });
             });
@@ -1709,7 +1711,6 @@ $.ajax({
                         param_1_varchar: $('#sp-widget5__horizontal-hop-' + index + ' .sp-widget5__horizontal-hop-text').text(),
                         param_2_varchar: $('#sp-widget5__horizontal-hop-' + index).attr('data-page-horizontal-hop')
                     });
-
                     PDFViewerApplication.page = parseInt($('#sp-widget5__horizontal-hop-' + index).attr('data-page-horizontal-hop'));
                 });
             });
