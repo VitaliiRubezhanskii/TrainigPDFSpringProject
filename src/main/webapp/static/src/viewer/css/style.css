@@ -613,7 +613,7 @@
 
 #sp-widget5__hopper-container {
   height: 65vh;
-  overflow-y: auto;
+  overflow: hidden;
   direction: rtl;
 }
 

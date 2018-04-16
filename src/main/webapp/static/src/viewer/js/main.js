@@ -210,8 +210,8 @@ sp.viewer = {
         });
 
         //Animate to selected element automatically
-        //$('#sp-widget5__horizontal-hopper-container').scrollTo($('#sp-widget5__horizontal-hopper-container>div.selected'));
-        // $('#sp-widget5__horizontal-hopper-container').scrollTo(500,0);
+        $('#sp-widget5__horizontal-hopper-container').animate({ scrollLeft: $('#sp-widget5__horizontal-hopper-container>div.selected')[0].offsetLeft - $('#sp-widget5__horizontal-hopper-container')[0].offsetWidth / 2},'fast');
+        $('#sp-widget5__hopper-container').animate({ scrollTop: $('#sp-widget5__hopper-container>div.selected')[0].offsetTop - $('#sp-widget5__hopper-container')[0].offsetHeight / 2 + $('#sp-widget5__hopper-container>div.selected')[0].offsetHeight/2},'fast');
         startTime = endTime;
     }
 
@@ -1652,6 +1652,18 @@ $.ajax({
                     PDFViewerApplication.page = parseInt($('#sp-widget5__hop-' + index).attr('data-page-hop'));
                 });
             });
+            //add scrolling for hopper
+            $('#sp-widget5__hopper-container').on("mousewheel",function(event){
+                var value = $(this).scrollTop() - 100;
+                var value1 = $(this).scrollTop() + 100;
+                if(event.originalEvent.wheelDelta /120 > 0) {
+                    $(this).scrollTop(value);
+                }
+                else{
+                    $(this).scrollTop(value1);
+                }
+                event.preventDefault();
+            });
 
             $('#sp-widget5__hopper-container').children().each(function () {
                 if($(this).attr("data-page-hop") == PDFViewerApplication.page) {
@@ -1718,6 +1730,7 @@ $.ajax({
                     PDFViewerApplication.page = parseInt($('#sp-widget5__horizontal-hop-' + index).attr('data-page-horizontal-hop'));
                 });
             });
+            //add scrolling to horizontal hopper
             $('#sp-widget5__horizontal-hopper-container').on("mousewheel",function(event){
                 var value = $(this).scrollLeft() + 100;
                 var value1 = $(this).scrollLeft() - 100;
