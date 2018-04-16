@@ -1,0 +1,17 @@
+  <div id="app">
+    <button @click="goToPage">test</button>
+    <div
+      class="pdf-container"
+      ref="pdf"
+    >
+      <pdf
+        v-for="i in numPages"
+        :key="i"
+        :src="src"
+        :page="i"
+        class="page"
+        @loaded="handleLoad"
+      />
+    </div>
+  </div>
+
