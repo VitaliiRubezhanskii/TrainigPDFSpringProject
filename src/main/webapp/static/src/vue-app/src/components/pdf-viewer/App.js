@@ -17,7 +17,10 @@ export default {
   created() {
     fetch(`${this.sp.API_URL}/viewer/widgets?fileLinkHash=${window.location.search.slice(3)}`)
       .then(response => response.json())
-      .then(data => this.widget = data);
+      .then(data => {
+        debugger;
+        this.widget = data
+      });
     // console.log(this.widget);
   },
   mounted() {
