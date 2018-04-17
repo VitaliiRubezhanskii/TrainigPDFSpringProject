@@ -1748,8 +1748,8 @@ $.ajax({
             // Select active button with color
             $('#sp-widget5__horizontal-hopper-container').children().each(function () {
                 if($(this).attr("data-page-horizontal-hop") == PDFViewerApplication.page) {
-                    $(this).addClass('selected')
-                }; // "this" is the current element in the loop
+                    $(this).addClass('selected');
+                } // "this" is the current element in the loop
             });
         }
 
