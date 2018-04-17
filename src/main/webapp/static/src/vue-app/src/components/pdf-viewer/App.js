@@ -1,29 +1,26 @@
-import pdf from 'vue-pdf';
+import Pdf from './pdf/pdf.vue';
 //import horizontalHopper from '../horizontal-hopper';
 
-var loadingTask = pdf.createLoadingTask(window.SP.DOCUMENT_URL);
+//var loadingTask = pdf.createLoadingTask(window.SP.DOCUMENT_URL);
 
 export default {
   name: 'app',
   data () {
     return {
       sp:window.SP,
-      src: loadingTask,
+      src: window.SP.DOCUMENT_URL,//loadingTask,
       numPages: undefined,
       pageHeight: null,
       widget: null,
     }
   },
   created() {
-    fetch(`${this.sp.API_URL}/viewer/widgets`)
+    fetch(`${this.sp.API_URL}/viewer/widgets?fileLinkHash=${window.location.search.slice(3)}`)
       .then(response => response.json())
       .then(data => this.widget = data);
-    //console.log(this.sp.API_URL);
+    // console.log(this.widget);
   },
   mounted() {
-    this.src.then(pdf => {
-      this.numPages = pdf.numPages;
-  });
   },
   methods: {
     handleLoad(){
@@ -34,7 +31,7 @@ export default {
     }
   },
   components: {
-    pdf,
+    Pdf,
     //'horizontal-hopper': horizontalHopper,
   }
 }

@@ -695,7 +695,6 @@ $.ajax({
 
                 // Prepare the widgets data for implimentation.
                 var widgets = {};
-
                 var numWidgets = data.length;
                 $.each(data, function (index, data) {
                     var widgetData = JSON.parse(data.widgetData).data;
