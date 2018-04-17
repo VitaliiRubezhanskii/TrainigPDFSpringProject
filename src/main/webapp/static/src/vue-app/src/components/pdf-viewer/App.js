@@ -1,4 +1,5 @@
 import pdf from 'vue-pdf';
+//import horizontalHopper from '../horizontal-hopper';
 
 var loadingTask = pdf.createLoadingTask(window.SP.DOCUMENT_URL);
 
@@ -6,10 +7,18 @@ export default {
   name: 'app',
   data () {
     return {
+      sp:window.SP,
       src: loadingTask,
       numPages: undefined,
       pageHeight: null,
+      widget: null,
     }
+  },
+  created() {
+    fetch(`${this.sp.API_URL}/viewer/widgets`)
+      .then(response => response.json())
+      .then(data => this.widget = data);
+    //console.log(this.sp.API_URL);
   },
   mounted() {
     this.src.then(pdf => {
@@ -19,13 +28,13 @@ export default {
   methods: {
     handleLoad(){
       this.pageHeight = document.getElementsByClassName('page')[0].offsetHeight;
-      console.log(this.pageHeight);
     },
     goToPage() {
-      this.$refs.pdf.scrollTop = 3*this.pageHeight;
+      this.$refs.pdf.scrollTop = 2*this.pageHeight;
     }
   },
   components: {
-    pdf
+    pdf,
+    //'horizontal-hopper': horizontalHopper,
   }
 }

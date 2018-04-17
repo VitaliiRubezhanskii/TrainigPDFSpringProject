@@ -7,7 +7,7 @@ module.exports = {
     auth: './src/components/auth/index.js',
   },
   output: {
-    path: path.resolve(__dirname, './dist'),
+    path: path.resolve('../../../', './dist'),
     publicPath: '/dist/',
     filename: "[name].entry.js"
   },

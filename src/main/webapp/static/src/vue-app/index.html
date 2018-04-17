@@ -3,6 +3,25 @@
   <head>
     <meta charset="utf-8">
     <title>vue-pdf</title>
+    <script>
+      'use strict';
+
+      window.SP = {};
+      Object.defineProperties(SP, {
+        API_URL: {
+          value: '{{{apiUrl}}}',
+          enumerable: true
+        },
+        DOCUMENT_URL: {
+          value: "{{{documentUrl}}}",
+          enumerable: true
+        },
+        SESSION_ID: {
+          value: '{{{sessionId}}}',
+          enumerable: true
+        }
+      });
+    </script>
   </head>
   <body>
     <div id="app"></div>
