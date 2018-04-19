@@ -1,13 +1,15 @@
 <div id="app">
-    <div
-      class="pdf-container"
-      ref="pdf"
-    >
-      <Pdf
-        :src="src"
-        :page=12
-      ></Pdf>
-    </div>
-  <HorizontalHopper :widget="widget[1]"></HorizontalHopper>
+  <Spinner v-if="!load" :load="load"></Spinner>
+  <div
+    class="pdf-container"
+    ref="pdf"
+  >
+    <Pdf
+      :src="src"
+      :page=12
+      :loaded="onLoaded"
+    />
+  </div>
+  <HorizontalHopper v-if="widget" :widget="widget"></HorizontalHopper>
   </div>
 

@@ -1,7 +1,6 @@
 import Pdf from './pdf/pdf.vue';
-//import horizontalHopper from '../horizontal-hopper';
-
-//var loadingTask = pdf.createLoadingTask(window.SP.DOCUMENT_URL);
+import HorizontalHopper from '../horizontal-hopper/HorizontalHopper.vue';
+import Spinner from '../spinner/Spinner.vue';
 
 export default {
   name: 'app',
@@ -12,29 +11,38 @@ export default {
       numPages: undefined,
       pageHeight: null,
       widget: null,
+      load: false,
     }
   },
   created() {
+    // fetch(`${this.sp.API_URL}/viewer/widgets?fileLinkHash=${window.location.search.slice(3)}`)
+    //   .then(response => response.json())
+    //   .then(data => {
+    //     this.widget = data.map(e => {
+    //       return JSON.parse(e.widgetData);
+    //     });
+    //   });
+    // console.log(this.widget);
     fetch(`${this.sp.API_URL}/viewer/widgets?fileLinkHash=${window.location.search.slice(3)}`)
       .then(response => response.json())
       .then(data => {
-        debugger;
-        this.widget = data
+        this.widget = data.map(e => {
+          if(JSON.parse(e.widgetData).data.widgetId === 5) {
+            return JSON.parse(e.widgetData);
+          }
+        });
       });
-    // console.log(this.widget);
   },
   mounted() {
   },
   methods: {
-    handleLoad(){
-      this.pageHeight = document.getElementsByClassName('page')[0].offsetHeight;
-    },
-    goToPage() {
-      this.$refs.pdf.scrollTop = 2*this.pageHeight;
+    onLoaded(){
+      this.load = true;
     }
   },
   components: {
     Pdf,
-    //'horizontal-hopper': horizontalHopper,
+    HorizontalHopper,
+    Spinner
   }
 }
