@@ -85,6 +85,7 @@ p {
   position: relative;
   overflow: hidden;
   margin: 0 auto;
+  margin-bottom: 20px;
 }
 .sp-widget5__horizontal-hop {
   height: 40px;

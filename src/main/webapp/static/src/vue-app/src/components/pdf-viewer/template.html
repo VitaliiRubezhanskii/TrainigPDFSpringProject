@@ -1,4 +1,4 @@
-<div id="app">
+<div id="app" xmlns="">
   <Spinner v-if="!load" :load="load"></Spinner>
   <div
     class="pdf-container"
@@ -8,8 +8,11 @@
       :src="src"
       :page=12
       :loaded="onLoaded"
-    />
+    ></Pdf>
   </div>
   <HorizontalHopper v-if="widget" :widget="widget"></HorizontalHopper>
-  </div>
+  <Questions></Questions>
+  <Video></Video>
+  <TestimonialsWidget></TestimonialsWidget>
+</div>
 
