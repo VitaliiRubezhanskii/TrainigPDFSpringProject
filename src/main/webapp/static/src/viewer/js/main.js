@@ -981,6 +981,7 @@ $.ajax({
             && widgets.widget5.items.length > 0) {
 
             var isWidget5Valid = false;
+
             $.each(widgets.widget5.items, function (index, item) {
                 if (isWidgetSettingsDefined(item, widget5RequiredSettings)) {
                     isWidget5Valid = true;
@@ -1003,11 +1004,15 @@ $.ajax({
                 if (widgets.widget5.isHorizontalHopperEnabled) {
                     implementWidget5HorizontalHopper(widgets.widget5.items);
                 }
-                // delete margin top when horizontal hoper disabled
+                // delete margin top when horizontal hopper disabled
                 if (!widgets.widget5.isHorizontalHopperEnabled) {
                     $('#viewerContainer').addClass('deleteMarginTop');
                 }
             }
+        }
+        else{
+            // delete margin top when horizontal and vertical hopper disabled
+            $('#viewerContainer').addClass('deleteMarginTop');
         }
 
         /* Validate Widget 7 */
