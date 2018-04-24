@@ -24,7 +24,9 @@ public class DashboardCustomerController {
                 input.getString("customerLastName"),
                 input.getString("customerCompany"),
                 input.getString("customerGroup"),
-                input.getString("customerEmail")
+                input.getString("customerEmail"),
+                input.getString("customerID"),
+                input.getString("customerPhone")
         );
     }
 

@@ -6,6 +6,7 @@ import com.slidepiper.service.viewer.ViewerService;
 import com.slidepiper.service.viewer.widget.ViewerShareWidgetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.MissingServletRequestParameterException;
@@ -18,6 +19,10 @@ import java.util.UUID;
 
 @Controller
 public class ViewerController {
+    private static final String PORTAL_MODE_PAGE = "viewer";
+    private static final String PROCESS_MODE_PAGE = "process";
+    private static final String LOGIN_CUSTOMER_PAGE = "logincustomer";
+
     private final String apiUrl;
     private final String templatesPrefix;
     private final ViewerDocumentService viewerDocumentService;
@@ -41,30 +46,37 @@ public class ViewerController {
     public String viewer(HttpServletRequest request,
                          @RequestParam(name = "f") String initialChannelFriendlyId,
                          Model model) {
-        String sessionId = UUID.randomUUID().toString();
 
-        Channel channel = viewerService.findChannel(initialChannelFriendlyId, request);
-        String view = viewerService.getView(channel, initialChannelFriendlyId, request, sessionId);
+            String sessionId = UUID.randomUUID().toString();
 
-        if (view.equals("viewer")) {
-            view = String.join("/",templatesPrefix , "viewer");
+            Channel channel = viewerService.findChannel(initialChannelFriendlyId, request);
+            String view = viewerService.getView(channel, initialChannelFriendlyId, request, sessionId);
 
-            model.addAttribute("apiUrl", apiUrl);
-            model.addAttribute("sessionId", sessionId);
-            model.addAttribute("documentUrl", viewerDocumentService.getUrl(channel.getDocument(), request));
-            model.addAttribute("shareWidgetData", viewerShareWidgetService.getShareWidgetData(request, channel.getFriendlyId()));
-        }
+            if (view.equals(PORTAL_MODE_PAGE)) {
+                view = String.join("/", templatesPrefix, PORTAL_MODE_PAGE);
 
-        if (view.equals("process")) {
-            view = String.join("/",templatesPrefix , "process");
+                model.addAttribute("apiUrl", apiUrl);
+                model.addAttribute("sessionId", sessionId);
+                model.addAttribute("documentUrl", viewerDocumentService.getUrl(channel.getDocument(), request));
+                model.addAttribute("shareWidgetData", viewerShareWidgetService.getShareWidgetData(request, channel.getFriendlyId()));
+            }
 
-            model.addAttribute("apiUrl", apiUrl);
-            model.addAttribute("sessionId", sessionId);
-            model.addAttribute("documentUrl", viewerDocumentService.getUrl(channel.getDocument(), request));
-            model.addAttribute("shareWidgetData", viewerShareWidgetService.getShareWidgetData(request, channel.getFriendlyId()));
-        }
+            if (view.equals(PROCESS_MODE_PAGE)) {
+                view = String.join("/", templatesPrefix, PROCESS_MODE_PAGE);
 
-        return view;
+                model.addAttribute("apiUrl", apiUrl);
+                model.addAttribute("sessionId", sessionId);
+                model.addAttribute("documentUrl", viewerDocumentService.getUrl(channel.getDocument(), request));
+                model.addAttribute("shareWidgetData", viewerShareWidgetService.getShareWidgetData(request, channel.getFriendlyId()));
+            }
+
+            /*if (view.equals(LOGIN_CUSTOMER_PAGE)) {
+                model.addAttribute("fileHash", initialChannelFriendlyId);
+                view = String.join("/", templatesPrefix, LOGIN_CUSTOMER_PAGE);
+                return "redirect:/portalauth/login?f=" + initialChannelFriendlyId;
+            }*/
+
+            return view;
     }
 
     @ExceptionHandler(MissingServletRequestParameterException.class)

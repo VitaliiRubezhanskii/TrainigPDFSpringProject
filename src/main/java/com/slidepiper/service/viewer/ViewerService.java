@@ -20,6 +20,11 @@ import java.util.Optional;
 
 @Service
 public class ViewerService {
+    private static final String VERIFIED = "verified";
+    private static final String PORTAL_MODE_PAGE = "viewer";
+    private static final String PROCESS_MODE_PAGE = "process";
+    private static final String LOGIN_CUSTOMER_PAGE = "logincustomer";
+
     private final ChannelRepository channelRepository;
     private final ViewerEventRepository viewerEventRepository;
     private final ViewerDocumentService viewerDocumentService;
@@ -79,9 +84,20 @@ public class ViewerService {
             viewerEventRepository.save(viewerEvent);
 
             if (channel.getDocument().isProcessMode()) {
-                return "process";
+
+                /*if (channel.getDocument().isMfaEnabled()) {
+                    boolean verified = false;
+                    if (request.getSession().getAttribute(VERIFIED) != null) {
+                        verified = (Boolean)request.getSession().getAttribute(VERIFIED);
+                    }
+                    if (verified) {
+                        return PROCESS_MODE_PAGE;
+                    }
+                    return LOGIN_CUSTOMER_PAGE;
+                }*/
+                return PROCESS_MODE_PAGE;
             }
-            return "viewer";
+            return PORTAL_MODE_PAGE;
         }
     }
 

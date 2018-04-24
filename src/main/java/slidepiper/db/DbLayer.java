@@ -66,13 +66,14 @@ public class DbLayer {
 	}
 
 	//add new customer.
-	public static int addNewCustomer(String subAction, String salesMan, String firstName, String lastName, String company, String groupName, String email){
+	public static int addNewCustomer(String subAction, String salesMan, String firstName, String lastName,
+									 String company, String groupName, String email, String customerID, String phone){
 		
 		// customer does not exist.
 		if (getCustomerName(email, salesMan) == null)
 		{
 		 
-				String query = "INSERT INTO customers(email, name, first_name, last_name, sales_man, company, groupName) VALUES (?, ?, ?, ?, ?, ?, ?)";
+				String query = "INSERT INTO customers(email, name, first_name, last_name, sales_man, company, groupName, customer_id, phone) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 				String fullName = null;
 				try (Connection conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);)
 					{			
@@ -97,6 +98,8 @@ public class DbLayer {
 							preparedStatement.setString(5, salesMan.toLowerCase());
 							preparedStatement.setString(6, company);
 							preparedStatement.setString(7, groupName);
+							preparedStatement.setString(8, customerID);
+							preparedStatement.setString(7, phone);
 							preparedStatement.executeUpdate();
 							preparedStatement.close();
 							conn.close();
@@ -115,7 +118,9 @@ public class DbLayer {
 			// customer already exists.
 		  Constants.updateConstants();
       Connection conn = null;
-		  String sql = "UPDATE customers SET first_name = ?, last_name = ?, name = ?, company = ?, groupName = ? WHERE sales_man = ? AND email = ?";
+		  String sql = "UPDATE customers SET first_name = ?, last_name = ?, " +
+				  "name = ?, company = ?, groupName = ?, " +
+				  "customer_id = ?, phone = ? WHERE sales_man = ? AND email = ?";
 		  
 		  try {
         conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
@@ -127,6 +132,8 @@ public class DbLayer {
         stmt.setString(5, groupName);
         stmt.setString(6, salesMan);
         stmt.setString(7, email);
+	  	stmt.setString(8, customerID);
+	  	stmt.setString(9, phone);
         stmt.executeUpdate();
       } catch (SQLException ex) {
         System.err.println("Error code: " + ex.getErrorCode() + " - " + ex.getMessage());
@@ -197,7 +204,7 @@ public class DbLayer {
        * 
        * @return True if a record exists in the DB, otherwise false.
        */
-			public static boolean isCustomerExist(String customerEmail, String salesmanEmail) {
+		public static boolean isCustomerExist(String customerEmail, String salesmanEmail) {
         boolean isEmailExist = false;
         Connection conn = null;
         String sql = "SELECT email FROM customers WHERE email=? AND sales_man=?";

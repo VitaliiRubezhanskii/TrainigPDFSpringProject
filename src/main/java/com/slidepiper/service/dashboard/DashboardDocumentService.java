@@ -113,7 +113,7 @@ public class DashboardDocumentService {
             // Create default customer.
             String defaultCustomerEmail = ConfigProperties.getProperty("default_customer_email");
             if (false == DbLayer.isCustomerExist(username, defaultCustomerEmail)) {
-                DbLayer.addNewCustomer(null, username, "Generic", "Link", null, null, defaultCustomerEmail);
+                DbLayer.addNewCustomer(null, username, "Generic", "Link", null, null, defaultCustomerEmail, null, null);
             }
             DbLayer.setFileLinkHash(defaultCustomerEmail, friendlyId, username);
 

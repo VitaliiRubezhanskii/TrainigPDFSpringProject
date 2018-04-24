@@ -38,7 +38,7 @@ public class SmsWidgetService {
         this.storageRepository = storageRepository;
     }
 
-    public void sendSms(SmsWidgetInput smsWidgetInput) throws IOException {
+        public void sendSms(SmsWidgetInput smsWidgetInput) throws IOException {
         String channelFriendlyId = smsWidgetInput.getChannelName();
         String key = smsWidgetInput.getKey();
         String phoneNumber = "+" + smsWidgetInput.getPhoneNumber();
