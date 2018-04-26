@@ -4,6 +4,9 @@ import Spinner from '../spinner/Spinner.vue';
 import Questions from '../questions/Questions.vue';
 import Video from '../videoWidget/Video.vue';
 import TestimonialsWidget from '../testimonialsWidget/TestimonialsWidget.vue';
+import LinkAndTask from '../linkWidget/LinkAndTask.vue';
+import FormWidget from '../formWidget/FormWidget.vue';
+import $ from 'jquery';
 
 export default {
   name: 'app',
@@ -11,29 +14,38 @@ export default {
     return {
       sp:window.SP,
       src: window.SP.DOCUMENT_URL,
-      numPages: undefined,
       pageHeight: null,
       widget: null,
       load: false,
-      heightPdf: 1
+      widgetData: [],
+      page: 1,
     }
   },
   created() {
     fetch(`${this.sp.API_URL}/viewer/widgets?fileLinkHash=${window.location.search.slice(3)}`)
       .then(response => response.json())
       .then(data => {
-        this.widget = data.map(e => {
-          if(JSON.parse(e.widgetData).data.widgetId === 5) {
-            return JSON.parse(e.widgetData);
-          }
+        this.widgetData = data.map((widget)=>{
+          return JSON.parse(widget.widgetData).data;
         });
       });
+  },
+  directives: {
+    detectHeight:{
+      inserted: function (el, b, c) {
+        //console.log($("canvas").scrollHeight);
+      }
+    }
+
   },
   mounted() {
   },
   methods: {
     onLoaded(){
       this.load = true;
+    },
+    setPage({page}){
+      this.page = page;
     }
   },
   components: {
@@ -42,6 +54,8 @@ export default {
     Spinner,
     Questions,
     Video,
-    TestimonialsWidget
+    TestimonialsWidget,
+    LinkAndTask,
+    FormWidget,
   }
 }

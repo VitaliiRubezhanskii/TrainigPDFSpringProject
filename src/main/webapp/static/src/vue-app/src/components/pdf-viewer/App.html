@@ -1,0 +1,69 @@
+<div id="app" xmlns="" v-detectHeight>
+  <Spinner v-if="!load" :load="load"></Spinner>
+
+  <div class="sp-toolbar-logo">
+    <a target="_blank" href="https://www.slidepiper.com">
+      <img src="https://static.slidepiper.com/images/slidepiper/logo-231x50.png">
+    </a>
+  </div>
+
+  <div
+    class="pdf-container"
+    ref="pdf"
+  >
+    <Pdf
+      :src="src"
+      :page=12
+      :loaded="onLoaded"
+    ></Pdf>
+  </div>
+
+  <HorizontalHopper
+    v-if="widgetData.find(w => w.widgetId === 5) "
+    :widget="widgetData.find(w => w.widgetId === 5)"
+    @go-page="setPage"
+  ></HorizontalHopper>
+
+  <Questions></Questions>
+
+  <Video
+    v-if="widgetData.find(w => w.widgetId === 1) && widgetData.find(w => w.widgetId === 1).isEnabled"
+    :widget="widgetData.find(w => w.widgetId === 1).items[0]"
+  >
+  </Video>
+
+  <TestimonialsWidget
+    v-if="widgetData.find(w => w.widgetId === 6)
+    && widgetData.find(w => w.widgetId === 6).isEnabled
+    && widgetData.find(w => w.widgetId === 6).items.find(item => item.page === page)"
+    :widget="widgetData.find(w => w.widgetId === 6).items.find(item => item.page === page)"
+  >
+  </TestimonialsWidget>
+  <div class="link">
+    <template
+      v-if="widgetData.find(w => w.widgetId === 9)"
+      v-for="widget in widgetData.find(w => w.widgetId === 9).items"
+    >
+
+      <LinkAndTask
+        v-if="Number(widget.pageFrom)<=page && Number(widget.pageTo)>=page"
+        :widget="widget"
+      >
+      </LinkAndTask>
+
+    </template>
+    </div>
+  <FormWidget
+    v-if="widgetData.find(w => w.widgetId === 7) && widgetData.find(w => w.widgetId === 7).isEnabled"
+    :widget="widgetData.find(w => w.widgetId === 7).items[0]"
+  >
+  </FormWidget>
+  <div class="sp--direction-ltr" id="sp-terms-privacy">Powered by
+    <span class="sp-powered-by">
+      <a target="_blank" href="https://www.slidepiper.com">SlidePiper</a>
+    </span> ·
+    <a href="https://www.slidepiper.com/tou.html" target="_blank">Terms</a> ·
+    <a href="https://www.slidepiper.com/privacy.html" target="_blank">Privacy</a>
+  </div>
+</div>
+

@@ -1,0 +1,138 @@
+body{
+  margin: 0;
+  padding: 0;
+}
+#app {
+  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+  margin: 0 auto;
+}
+
+h1, h2 {
+  font-weight: normal;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+li {
+  display: inline-block;
+  margin: 0 10px;
+}
+
+a {
+  color: #42b983;
+  text-decoration: none;
+}
+
+.sp-toolbar-logo{
+  box-shadow: 0 0 5px rgba(0,0,0,0.5);
+  position: fixed;
+  top: 0;
+  width: 100%;
+}
+.pdf-container{
+  height: 300px;
+  overflow: auto;
+  margin-top: 54px;
+}
+.page{
+  display: inline-block;
+  box-shadow: 0 0 20px rgba(0,0,0,0.5);
+}
+
+#sp-terms-privacy {
+  background-color: rgba(246, 246, 246, 0.8);
+  bottom: 0;
+  font-size: 0.72rem;
+  position: fixed;
+  text-align: center;
+  width: 100%;
+}
+.sp-powered-by{
+  font-weight: bold;
+}
+
+.sp-toolbar-logo img {
+  border: none;
+  height: 45px;
+  padding-top: 2px;
+}
+
+#sp-terms-privacy, #sp-terms-privacy a {
+  color: #515151;
+}
+
+.sp--direction-ltr {
+  direction: ltr;
+}
+
+.sp-z-index--0 {
+  z-index: 0;
+}
+
+.sp-opacity--0 {
+  opacity: 0;
+}
+
+.sp-viewer--fadein {
+  animation: fadeIn 1s;
+  -webkit-animation: fadeIn 1s;
+  animation-fill-mode: forwards;
+  -webkit-animation-fill-mode: forwards;
+}
+
+.sp--fadeout {
+  animation: fadeOut 1s;
+  -webkit-animation: fadeOut 1s;
+  animation-fill-mode: forwards;
+  -webkit-animation-fill-mode: forwards;
+}
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@-webkit-keyframes fadeOut {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@-webkit-keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+.link{
+  position: fixed;
+  right: 0;
+  bottom: 25px;
+}
+
+

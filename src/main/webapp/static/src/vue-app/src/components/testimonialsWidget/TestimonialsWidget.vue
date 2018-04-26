@@ -1,34 +1,23 @@
 <template>
-  <div class="sp-right-side-widgets6">
+  <div class="sp-right-side-widgets6" @click="showModal">
     <div class="widget" id="sp-widget6__button">
       <div id="sp-widget6__button-counter">1</div>
-      <div id="sp-widget6__button-person-image" ></div>
-      <i class="fa fa-user fa-inverse"></i>
+      <div id="sp-widget6__button-person-image" :style="{ backgroundImage: `url('${widget.personImage}')`, backgroundColor: 'rgb(0, 150, 136)' }"></div>
+      <i v-if="!widget.personImage" class="fa fa-user fa-inverse" style="display: inline;"></i>
     </div>
   </div>
 </template>
 <script>
 
 import $ from "jquery";
+import { modalTestimonials } from '../../helper/functions.js';
 
 export default{
-  data(){
-    return {
-      testimonialsData: null,
-      sp: window.SP,
-      location: window.location.search,
-      url: null,
+  props: ["widget"],
+  methods: {
+    showModal(){
+      modalTestimonials(this.widget.testimonial,this.widget.personName,this.widget.personTitle,this.widget.personImage);
     }
-  },
-  created() {
-    fetch(`${this.sp.API_URL}/viewer/widgets?fileLinkHash=${this.location.slice(3)}`)
-      .then(response => response.json())
-      .then(data => {
-        this.testimonialsData = data.filter(el => {
-          return JSON.parse(el.widgetData).data.widgetId === 6
-        });
-        //this.url = JSON.parse(this.testimonialsData.widgetData).data.items[0].personImage;
-      });
   }
 }
 </script>
@@ -39,8 +28,7 @@ export default{
   max-width: 230px;
   position: fixed;
   right: 15px;
-  top: 20px;
-  width: 20%;
+  top: 65px;
 }
 #sp-widget6__button {
   cursor: pointer;
@@ -74,23 +62,23 @@ export default{
   border: 1px solid rgba(0, 0, 0, 0.3);
   border-radius: 50%;
   box-shadow: 0px 8px 8px rgba(35, 31, 32, 0.3);
-  height: 90px;
+  height: 75px;
   margin: 0 auto;
   left: 0;
   position: absolute;
-  right: 0;
-  width: 90px;
+  right: 5px;
+  width: 75px;
 }
 
 #sp-widget6__button i {
   display: none;
-  font-size: 3em;
+  font-size: 2em;
   height: 100%;
-  left: 0;
+  left: -2px;
   line-height: 90px;
   position: absolute;
   text-align: center;
-  top: 0;
+  top: -8px;
   width: 100%;
 }
 
@@ -114,4 +102,5 @@ export default{
 #sp-widget6__person-title {
   margin-top: 10px;
 }
+
 </style>
