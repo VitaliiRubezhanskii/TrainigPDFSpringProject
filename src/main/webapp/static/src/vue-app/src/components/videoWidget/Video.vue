@@ -1,5 +1,5 @@
 <template>
-  <div class="widget sp--direction-ltr" id="sp-widget1" v-video @load="getLink">
+  <div class="widget sp--direction-ltr" id="sp-widget1" v-video>
     <div id="sp-widget1-tab">
       <i class="fa fa-video-camera"></i>
       <div class="sp-widget-font-fmaily">{{ widget.videoTitle }}</div>

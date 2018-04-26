@@ -19,7 +19,6 @@ export default {
           let renderPDF = (url, el, opt) => {
             let options = opt || { scale: 2  };
             var promiseArray = [];
-
                 function renderPage(page) {
                     let viewport = page.getViewport(options.scale);
                     let canvas = document.createElement('canvas');

@@ -27,8 +27,8 @@ export default{
 .sp-right-side-widgets6 {
   max-width: 230px;
   position: fixed;
-  right: 15px;
-  top: 65px;
+  right: 0px;
+  top: 55px;
 }
 #sp-widget6__button {
   cursor: pointer;

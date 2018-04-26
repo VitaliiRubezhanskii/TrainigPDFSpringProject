@@ -6,6 +6,8 @@ import Video from '../videoWidget/Video.vue';
 import TestimonialsWidget from '../testimonialsWidget/TestimonialsWidget.vue';
 import LinkAndTask from '../linkWidget/LinkAndTask.vue';
 import FormWidget from '../formWidget/FormWidget.vue';
+import Toolbar from '../toolbar/Toolbar.vue';
+import PoweredBy from '../powered/PoweredBy.vue';
 import $ from 'jquery';
 
 export default {
@@ -33,7 +35,7 @@ export default {
   directives: {
     detectHeight:{
       inserted: function (el, b, c) {
-        //console.log($("canvas").scrollHeight);
+
       }
     }
 
@@ -43,9 +45,15 @@ export default {
   methods: {
     onLoaded(){
       this.load = true;
+      this.pageHeight = document.getElementsByTagName('canvas')[0].scrollHeight;
     },
     setPage({page}){
       this.page = page;
+    }
+  },
+  computed: {
+    linkData() {
+      return this.widgetData.find(w => w.widgetId === 9);
     }
   },
   components: {
@@ -57,5 +65,7 @@ export default {
     TestimonialsWidget,
     LinkAndTask,
     FormWidget,
+    Toolbar,
+    PoweredBy,
   }
 }

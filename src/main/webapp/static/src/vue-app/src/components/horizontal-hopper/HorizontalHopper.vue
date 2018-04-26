@@ -58,8 +58,8 @@ p {
   position: relative;
   overflow: hidden;
   margin: 0 auto;
-  margin-bottom: 3px;
-  padding-right: 40px;
+  margin-bottom: 15px;
+  padding-right: 22px;
 }
 .sp-widget5__horizontal-hop {
   min-height: 40px;
@@ -111,4 +111,3 @@ p {
   border-color: transparent transparent transparent #ec971f;
 }
 </style>
-

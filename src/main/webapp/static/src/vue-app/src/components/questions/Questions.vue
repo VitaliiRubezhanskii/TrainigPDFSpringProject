@@ -1,6 +1,6 @@
 <template>
-  <div class="question-container">
-    <div class="sp-right-side-widgets" v-on:click="showModal">
+  <div class="question-container" >
+    <div class="sp-right-side-widgets" @click="showModal">
       <button class="widget sp-widget-button sp-widget-font-fmaily sp--direction-ltr" id="sp-widget3" style="background-color: rgb(27, 24, 98); color: rgb(255, 255, 255);">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" style="
                                                                              height: 27%;
@@ -28,6 +28,12 @@ export default{
   methods: {
     showModal(){
       modalQuestions();
+    }
+  },
+  computed: {
+    isRender(){
+      console.log(this.widget.widgetData.find(w => w.widgetId === 3));
+      return this.widget.widgetData.find(w => w.widgetId === 3) && this.widget.widgetData.find(w => w.widgetId === 3).isEnabled;
     }
   }
 }
@@ -89,5 +95,3 @@ textarea {
 
 
 </style>
-
-
