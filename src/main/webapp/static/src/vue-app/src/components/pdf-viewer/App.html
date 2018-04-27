@@ -1,6 +1,10 @@
-<div id="app" xmlns="" v-detectHeight>
+<div
+  id="app" xmlns=""
+>
   <Spinner v-if="!load" :load="load" />
-  <Toolbar />
+  <Toolbar
+    :toolbarData="toolbarData"
+  />
   <div
     class="pdf-container"
     ref="pdf"
@@ -21,6 +25,7 @@
 
   <Questions
     v-if="widgetData.find(w => w.widgetId === 3) && widgetData.find(w => w.widgetId === 3).isEnabled"
+    :widget="widgetData.find(w => w.widgetId === 3).items[0]"
   />
 
   <Video

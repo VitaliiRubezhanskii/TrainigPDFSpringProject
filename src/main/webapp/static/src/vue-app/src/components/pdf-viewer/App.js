@@ -15,22 +15,27 @@ export default {
   data () {
     return {
       sp:window.SP,
+      location: window.location.search.slice(3),
       src: window.SP.DOCUMENT_URL,
       pageHeight: null,
       widget: null,
       load: false,
       widgetData: [],
       page: 1,
+      toolbarData: null,
     }
   },
   created() {
-    fetch(`${this.sp.API_URL}/viewer/widgets?fileLinkHash=${window.location.search.slice(3)}`)
+    fetch(`${this.sp.API_URL}/viewer/widgets?fileLinkHash=${this.location}`)
       .then(response => response.json())
       .then(data => {
         this.widgetData = data.map((widget)=>{
           return JSON.parse(widget.widgetData).data;
         });
       });
+    fetch(`${this.sp.API_URL}/viewer/configuration?channelFriendlyId=${this.location}`)
+      .then(response => response.json())
+      .then(data => this.toolbarData = data);
   },
   directives: {
     detectHeight:{

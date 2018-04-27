@@ -58,11 +58,12 @@ p {
   position: relative;
   overflow: hidden;
   margin: 0 auto;
-  margin-bottom: 15px;
   padding-right: 22px;
+  margin-bottom: 10px;
 }
 .sp-widget5__horizontal-hop {
   min-height: 40px;
+  min-width: 150px;
   background-color: rgb(27, 24, 98);
   color: rgb(255, 255, 255);
   position: relative;
@@ -99,10 +100,6 @@ p {
 }
 #sp-widget5__horizontal-hopper-container div:first-child::before{
   display: none;
-}
-#holder canvas{
-  box-shadow: 0 0 20px rgba(0,0,0,0.5);
-  width: 100%;
 }
 .active{
   background-color: #ec971f;

@@ -1,15 +1,12 @@
 <template>
 <div class="widget-7">
   <button
-    class="widget
-    sp-widget-button
-    sp-widget-font-fmaily
-    sp--direction-ltr
-    sp-widget7--beat"
+    class="widget sp-widget-button sp-widget-font-fmaily sp--direction-ltr sp-widget7--beat"
     id="sp-widget7"
-    style="background-color: rgb(27, 24, 98); color: rgb(255, 255, 255);" @click="showLink"
+    style="background-color: rgb(27, 24, 98); color: rgb(255, 255, 255);"
+    @click="showLink"
   >
-    <i :class="widget.formButtonIcon"></i>
+    <i :class="widget.formButtonIcon" />
     <div>
       <p>{{ widget.formButtonTextLine1 }}</p>
       <p>{{ widget.formButtonTextLine2 }}</p>
@@ -30,6 +27,12 @@ props: ["widget"],
 </script>
 
 <style>
+.widget-7 {
+  position: fixed;
+  right: 0px;
+  z-index: 2;
+}
+
 .sp-right-side-widgets {
   max-width: 230px;
   position: fixed;
@@ -70,11 +73,6 @@ props: ["widget"],
   padding-left: 10px;
 }
 
-.widget-7 {
-  position: fixed;
-  top: 160px;
-  right: 0px;
-}
 .sp-widget-button i {
   display: inline-block;
   font-size: 1.5em;
