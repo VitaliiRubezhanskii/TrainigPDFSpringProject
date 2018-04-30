@@ -700,8 +700,6 @@ $.ajax({
                 $.each(data, function (index, data) {
                     var widgetData = JSON.parse(data.widgetData).data;
 
-                    alert(widgetData);
-
                     if (typeof widgetData !== 'undefined'
                         && (widgetData.isEnabled || (typeof widgetData.items[0] !== 'undefined' && widgetData.items[0].enabled)
                             //separate logic for widget5; add it even if isEnabled=false

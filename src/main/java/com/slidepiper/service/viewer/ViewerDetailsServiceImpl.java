@@ -38,7 +38,7 @@ public class ViewerDetailsServiceImpl implements UserDetailsService {
         }
 
         Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
-        grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_VIEWER"));
+        grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_USER"));
 
         return new org.springframework.security.core.userdetails.User(user.getCustomerId() + "" , user.getPhoneNumber(), grantedAuthorities);
     }

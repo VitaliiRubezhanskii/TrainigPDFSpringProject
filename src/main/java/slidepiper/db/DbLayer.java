@@ -99,7 +99,7 @@ public class DbLayer {
 							preparedStatement.setString(6, company);
 							preparedStatement.setString(7, groupName);
 							preparedStatement.setString(8, customerID);
-							preparedStatement.setString(7, phone);
+							preparedStatement.setString(9, phone);
 							preparedStatement.executeUpdate();
 							preparedStatement.close();
 							conn.close();
@@ -762,4 +762,43 @@ public class DbLayer {
         
         return resultCode;
       }
+
+	// if no cust, returns null.
+	public static boolean isCustomerCanAccessDocument(String customer_email, String channel_friendly_id, String salesman_email){
+		boolean canAccess = false;
+
+		String query =
+				"SELECT id FROM msg_info WHERE customer_email=? AND id=? AND sales_man_email=?;";
+
+		Constants.updateConstants();
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		Connection conn = null;
+
+		try
+		{
+			try
+			{
+				conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
+				PreparedStatement statement = conn.prepareStatement(query);
+				statement.setString(1, customer_email.toLowerCase());
+				statement.setString(2, channel_friendly_id.toLowerCase());
+				statement.setString(3, salesman_email.toLowerCase());
+				ResultSet resultset = statement.executeQuery();
+				// should run only once, limit 1 above.
+				if (resultset.next()) {
+					canAccess = true;
+				}
+			} finally{ if(conn!=null){ conn.close();}	}
+		} catch (Exception ex) {
+			System.out.println("exception in isCustomerCanAccessDocument");
+			ex.printStackTrace();
+
+		}
+
+		return canAccess;
+	}
 }

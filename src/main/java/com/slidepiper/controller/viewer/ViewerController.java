@@ -21,7 +21,6 @@ import java.util.UUID;
 public class ViewerController {
     private static final String PORTAL_MODE_PAGE = "viewer";
     private static final String PROCESS_MODE_PAGE = "process";
-    private static final String LOGIN_CUSTOMER_PAGE = "logincustomer";
 
     private final String apiUrl;
     private final String templatesPrefix;
@@ -49,6 +48,12 @@ public class ViewerController {
 
             String sessionId = UUID.randomUUID().toString();
 
+            if (request.getSession().getId() != null) {
+                sessionId = request.getSession().getId();
+            } else {
+                sessionId = UUID.randomUUID().toString();
+            }
+
             Channel channel = viewerService.findChannel(initialChannelFriendlyId, request);
             String view = viewerService.getView(channel, initialChannelFriendlyId, request, sessionId);
 
@@ -69,12 +74,6 @@ public class ViewerController {
                 model.addAttribute("documentUrl", viewerDocumentService.getUrl(channel.getDocument(), request));
                 model.addAttribute("shareWidgetData", viewerShareWidgetService.getShareWidgetData(request, channel.getFriendlyId()));
             }
-
-            /*if (view.equals(LOGIN_CUSTOMER_PAGE)) {
-                model.addAttribute("fileHash", initialChannelFriendlyId);
-                view = String.join("/", templatesPrefix, LOGIN_CUSTOMER_PAGE);
-                return "redirect:/portalauth/login?f=" + initialChannelFriendlyId;
-            }*/
 
             return view;
     }

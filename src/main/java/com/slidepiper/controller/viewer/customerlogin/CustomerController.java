@@ -22,6 +22,7 @@ public class CustomerController {
 
     private static final String LOGIN_CUSTOMER_PAGE = "logincustomer";
     private static final String VERIFY_CODE_PAGE = "verifyotp";
+    private static final String ACCESS_DENIED_PAGE = "accessdenied";
 
     private final Log logger = LogFactory.getLog(getClass());
     private final String templatesPrefix;
@@ -30,16 +31,18 @@ public class CustomerController {
         this.templatesPrefix = templatesPrefix;
     }
 
-    @GetMapping("/portalauth/login")
+    @GetMapping("/view/login")
     public String loginCustomer(HttpServletRequest request, HttpServletResponse response,
                                 Model model, @RequestParam(value = "error", required = false) String error) {
         String sessionId = UUID.randomUUID().toString();
 
         SavedRequest savedRequest = new HttpSessionRequestCache().getRequest(request, response);
         String initialChannelFriendlyId = null;
-        if (savedRequest != null) {
-            initialChannelFriendlyId = savedRequest.getParameterMap().get("f")[0];
+        if (savedRequest == null || savedRequest.getParameterMap().get("f") == null) {
+            return "redirect:/accessdenied";
         }
+
+        initialChannelFriendlyId = savedRequest.getParameterMap().get("f")[0];
 
         model.addAttribute("fileHash", initialChannelFriendlyId);
         if (Objects.nonNull(error)) {
@@ -48,17 +51,20 @@ public class CustomerController {
             model.addAttribute("error", false);
         }
 
-//        return String.join("/",templatesPrefix , LOGIN_CUSTOMER_PAGE);
-        return UriComponentsBuilder.fromPath(templatesPrefix).pathSegment("LOGIN_CUSTOMER_PAGE").build().toUriString();
+        return String.join("/",templatesPrefix, LOGIN_CUSTOMER_PAGE);
     }
 
-    @GetMapping("/portalauth/verifycode")
+    @GetMapping("/view/verifycode")
     public String verifyOTP(HttpServletRequest request,
                             Model model) {
-        String sessionId = UUID.randomUUID().toString();
-
         model.addAttribute("initialChannelFriendlyId", request.getSession().getAttribute("initialChannelFriendlyId"));
 
-        return String.join("/",templatesPrefix , VERIFY_CODE_PAGE);
+        return String.join("/",templatesPrefix, VERIFY_CODE_PAGE);
+    }
+
+    @GetMapping("/accessdenied")
+    public String accessDenied(HttpServletRequest request) {
+
+        return String.join("/",templatesPrefix, ACCESS_DENIED_PAGE);
     }
 }

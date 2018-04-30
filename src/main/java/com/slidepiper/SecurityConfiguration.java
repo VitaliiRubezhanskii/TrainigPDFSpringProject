@@ -26,6 +26,29 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 public class SecurityConfiguration {
     @Configuration
     @Order(1)
+    public static class ViewerConfigurationAdapter extends WebSecurityConfigurerAdapter {
+        @Override
+        protected void configure(HttpSecurity http) throws Exception {
+            http
+                    .requestMatchers()
+                    .antMatchers("/viewer/**", "/utils/**", "/assets/**")
+                    .and()
+                    .headers()
+                    .frameOptions()
+                    .disable()
+                    .and()
+                    .authorizeRequests()
+                    .anyRequest()
+                    .permitAll()
+                    .and()
+                    .csrf()
+                    .disable();
+
+        }
+    }
+
+    @Configuration
+    @Order(2)
     public static class ViewerSecuredConfigurationAdapter extends WebSecurityConfigurerAdapter {
         private final ViewerAuthenticationSuccessHandlerImpl authenticationSuccessHandlerImpl;
         private final CustomerRepository customerRepository;
@@ -45,20 +68,24 @@ public class SecurityConfiguration {
         @Override
         protected void configure(HttpSecurity http) throws Exception {
             http
-                .authorizeRequests()
-                        .regexMatchers("\\A/view\\?f.*\\Z")
-                    .access("@permissionEvaluator.checkIfAuthRequired(authentication, request)")
+                    .regexMatcher("/view(/|\\?f=).*?")
+                    .authorizeRequests()
+                    // Chesk if this portal requires auth
+                    .regexMatchers("\\A/view\\?f.*\\Z").access("@permissionEvaluatorForViewer.checkIfAuthRequired(authentication, request)")
+                    .antMatchers("/view/verifycode")
+                    .authenticated()
                     .and()
-                .formLogin()
-                    .loginPage("/portalauth/login")
+                    .formLogin()
+                    .loginPage("/view/login")
                     .successHandler(authenticationSuccessHandlerImpl)
                     .permitAll()
                     .and()
-                .logout()
+                    .logout()
                     .permitAll()
                     .and()
-                .exceptionHandling()
-                    .accessDeniedPage("/portalauth/login");
+                    .exceptionHandling()
+                    .accessDeniedPage("/view/login");
+            http.sessionManagement().maximumSessions(1);
         }
 
         @Override
@@ -74,29 +101,7 @@ public class SecurityConfiguration {
     }
 
     @Configuration
-    @Order(2)
-    public static class ViewerConfigurationAdapter extends WebSecurityConfigurerAdapter {
-        @Override
-        protected void configure(HttpSecurity http) throws Exception {
-            http
-                .requestMatchers()
-                    .antMatchers("/viewer/**", "/utils/**", "/assets/**")
-                    .and()
-                .headers()
-                    .frameOptions()
-                    .disable()
-                    .and()
-                .authorizeRequests()
-                    .anyRequest()
-                    .permitAll()
-                    .and()
-                .csrf()
-                    .disable();
-
-        }
-    }
-
-    @Configuration
+    @Order(3)
     public static class ApplicationConfigurationAdapter extends WebSecurityConfigurerAdapter {
         private final AuthenticationSuccessHandlerImpl authenticationSuccessHandlerImpl;
         private final UserRepository userRepository;
@@ -121,21 +126,21 @@ public class SecurityConfiguration {
         @Override
         protected void configure(HttpSecurity http) throws Exception {
             http
-                .authorizeRequests()
-                    .antMatchers("/favicon.ico", "/health", "/signup", "/", "/index.html", "/tou.html", "/privacy.html", "/robots.txt", "/static/**", "/assets/**")
+                    .authorizeRequests()
+                    .antMatchers("/favicon.ico", "/health", "/accessdenied", "/signup", "/", "/index.html", "/tou.html", "/privacy.html", "/robots.txt", "/static/**", "/assets/**")
                     .permitAll()
                     .anyRequest()
                     .authenticated()
                     .and()
-                .formLogin()
+                    .formLogin()
                     .loginPage("/login")
                     .successHandler(authenticationSuccessHandlerImpl)
                     .permitAll()
                     .and()
-                .logout()
+                    .logout()
                     .permitAll()
                     .and()
-                .exceptionHandling()
+                    .exceptionHandling()
                     .accessDeniedPage("/login");
         }
 

@@ -3,31 +3,23 @@ package com.slidepiper.service.viewer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.slidepiper.model.entity.Customer;
-import com.slidepiper.model.entity.Event;
-import com.slidepiper.model.entity.Event.EventType;
-import com.slidepiper.model.entity.User;
 import com.slidepiper.model.entity.ViewerEvent;
+import com.slidepiper.repository.ChannelRepository;
 import com.slidepiper.repository.CustomerRepository;
-import com.slidepiper.repository.EventRepository;
 import com.slidepiper.repository.ViewerEventRepository;
 import com.slidepiper.service.mfa.OtpService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
-import org.springframework.security.web.savedrequest.SavedRequest;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
+import slidepiper.db.DbLayer;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.sql.Timestamp;
-import java.util.Objects;
 import java.util.Optional;
-import java.util.concurrent.TimeUnit;
 
 @Service
 public class ViewerAuthenticationSuccessHandlerImpl implements AuthenticationSuccessHandler {
@@ -42,6 +34,9 @@ public class ViewerAuthenticationSuccessHandlerImpl implements AuthenticationSuc
     private final ViewerEventRepository eventRepository;
     private final CustomerRepository customerRepository;
     private final OtpService otpService;
+
+    @Autowired
+    private ChannelRepository channelRepository;
 
     @Autowired
     public ViewerAuthenticationSuccessHandlerImpl(ViewerEventRepository eventRepository,
@@ -63,36 +58,38 @@ public class ViewerAuthenticationSuccessHandlerImpl implements AuthenticationSuc
 
         sendLoginEvent(customerID, request, response, initialChannelFriendlyId);
 
-        Customer user = customerRepository.findCustomerByCustomerId(customerID);
-        String customerPhone = user.getPhoneNumber();
+        Customer customer = customerRepository.findCustomerByCustomerId(customerID);
+        String customerPhone = customer.getPhoneNumber();
 
-        int customercode = otpService.generateCode();
-        /*try {
-            otpService.sendOTP(customerPhone, customercode);
-        } catch (Exception e) {
-            throw new ServletException("Cannot send code: " + e.getMessage());
-        }*/
+        if (!DbLayer.isCustomerCanAccessDocument(customer.getEmail(), initialChannelFriendlyId, channelRepository.findByFriendlyId(initialChannelFriendlyId).getDocument().getViewer().getEmail())) {
+            request.getSession().invalidate();
+            response.sendRedirect("/accessdenied");
+        } else {
 
-        request.getSession().setAttribute(VERIFIED, false);
-        request.getSession().setAttribute(CUSTOMERID, customerID);
-        request.getSession().setAttribute(SMSCODE, customercode);
-        request.getSession().setAttribute(CUSTOMERPHONE, customerPhone);
-        request.getSession().setAttribute(CHANNELID, initialChannelFriendlyId);
+            int customercode = otpService.generateCode();
+            try {
+                otpService.sendOTP(customerPhone, customercode);
+            } catch (Exception e) {
+                throw new ServletException("Cannot send code: " + e.getMessage());
+            }
 
-        // Adding user phone number to user browser cookies.
-        Cookie cookie = new Cookie("phonenumber", customerPhone);
-        cookie.setMaxAge(60*5); //Store cookie for 5 minutes
-        response.addCookie(cookie);
+            request.getSession().setAttribute(VERIFIED, false);
+            request.getSession().setAttribute(CUSTOMERID, customerID);
+            request.getSession().setAttribute(SMSCODE, customercode);
+            request.getSession().setAttribute(CUSTOMERPHONE, customerPhone);
+            request.getSession().setAttribute(CHANNELID, initialChannelFriendlyId);
 
-        response.sendRedirect("/portalauth/verifycode");
+            // Adding user phone number to user browser cookies.
+            Cookie cookie = new Cookie("phonenumber", customerPhone);
+            cookie.setMaxAge(60 * 5); //Store cookie for 5 minutes
+            response.addCookie(cookie);
+
+            response.sendRedirect("/view/verifycode");
+        }
     }
 
     private void sendLoginEvent(String customerID, HttpServletRequest request, HttpServletResponse response, String initialChannelFriendlyId) {
         Customer user = customerRepository.findCustomerByCustomerId(customerID);
-        /*if (Objects.isNull(user.getPasswordChangedAt()) && Objects.isNull(user.getPasswordExpiresAt())) {
-            user.setPasswordExpiresAt(new Timestamp(System.currentTimeMillis() + TimeUnit.DAYS.toMillis(15)));
-            customerRepository.save(user);
-        }*/
 
         String ip = Optional.ofNullable(request.getHeader("X-Forwarded-For"))
                 .map(x -> x.split(",")[0])
