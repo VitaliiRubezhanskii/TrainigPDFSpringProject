@@ -70,7 +70,7 @@ public class DbLayer {
 									 String company, String groupName, String email, String customerID, String phone){
 		
 		// customer does not exist.
-		if (getCustomerName(email, salesMan) == null)
+		if (getCustomerName(email, salesMan) == null && !isCustomerIDExist(customerID, salesMan))
 		{
 		 
 				String query = "INSERT INTO customers(email, name, first_name, last_name, sales_man, company, groupName, customer_id, phone) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -196,15 +196,15 @@ public class DbLayer {
 		return name;
 	}
 
-			/**
-       * Check if a customer record exists in the DB.
-       * 
-       * @param customerEmail The customer email.
-       * @param salesmanEmail The salesman email.
-       * 
-       * @return True if a record exists in the DB, otherwise false.
-       */
-		public static boolean isCustomerExist(String customerEmail, String salesmanEmail) {
+	/**
+   * Check if a customer record exists in the DB.
+   *
+   * @param customerEmail The customer email.
+   * @param salesmanEmail The salesman email.
+   *
+   * @return True if a record exists in the DB, otherwise false.
+   */
+	public static boolean isCustomerExist(String customerEmail, String salesmanEmail) {
         boolean isEmailExist = false;
         Connection conn = null;
         String sql = "SELECT email FROM customers WHERE email=? AND sales_man=?";
@@ -233,7 +233,46 @@ public class DbLayer {
         }
         
         return isEmailExist;
-      }
+  }
+
+	/**
+	 * Check if a customer record exists in the DB.
+	 *
+	 * @param customerID The customer email.
+	 * @param salesmanEmail The salesman email.
+	 *
+	 * @return True if a record exists in the DB, otherwise false.
+	 */
+	public static boolean isCustomerIDExist(String customerID, String salesmanEmail) {
+		boolean isCustomerIDExist = false;
+		Connection conn = null;
+		String sql = "SELECT customer_id FROM customers WHERE customer_id=? AND sales_man=?";
+
+		try {
+			conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt.setString(1, customerID);
+			stmt.setString(2, salesmanEmail);
+			ResultSet rs = stmt.executeQuery();
+
+			rs.last();
+			if (1 == rs.getRow()) {
+				isCustomerIDExist = true;
+			}
+		} catch (SQLException ex) {
+			System.err.println("Error code: " + ex.getErrorCode() + " - " + ex.getMessage());
+		} finally {
+			if (null != conn) {
+				try {
+					conn.close();
+				} catch (SQLException ex) {
+					ex.printStackTrace();
+				}
+			}
+		}
+
+		return isCustomerIDExist;
+	}
 			 
 	  /**
 	   * Check if client IP in request matches IP for file in ip_whitelist table.
@@ -522,7 +561,6 @@ public class DbLayer {
 	    /**
 	     * Get a file link widget settings.
 	     * 
-	     * @param fileLinkHash A file link hash.
 	     * @return the file link widget settings.
 	     */
 	   	public static JSONArray getWidgetsSettings(long fileId) {
