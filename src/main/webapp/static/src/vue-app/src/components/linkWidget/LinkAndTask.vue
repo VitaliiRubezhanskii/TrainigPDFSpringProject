@@ -15,11 +15,13 @@
 </template>
 
 <script>
+import { modalLinkAndTask }  from '../../helper/functions.js';
+
 export default{
   props:  ["widget"],
-   methods: {
+  methods: {
     showLink(){
-      window.open(this.widget.link);
+      this.widget.layout === "external-link"? window.open(this.widget.link): modalLinkAndTask(this.widget.link);
     }
   }
 }

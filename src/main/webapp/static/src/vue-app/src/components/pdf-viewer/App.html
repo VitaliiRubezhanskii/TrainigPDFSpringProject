@@ -14,6 +14,7 @@
       :src="src"
       :page="page"
       :loaded="onLoaded"
+      :pageHeight="pageHeight"
     />
   </div>
 
@@ -52,9 +53,10 @@
     </template>
   </div>
 
-  <FormWidget
+  <!--<FormWidget
     v-if="widgetData.find(w => w.widgetId === 7) && widgetData.find(w => w.widgetId === 7).isEnabled"
     :widget="widgetData.find(w => w.widgetId === 7).items[0]"
-  />
+  />-->
+  <UploadFiles />
   <PoweredBy />
 </div>

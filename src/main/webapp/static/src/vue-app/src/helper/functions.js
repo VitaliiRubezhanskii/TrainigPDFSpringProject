@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import VueSweetalert2 from 'vue-sweetalert2';
 import $ from 'jquery';
+import sp from '../constants/spViewer.js';
 
  function modalTestimonials(testimonials, personName, personTitle, imageUrl){
   return (Vue.swal({
@@ -14,39 +15,45 @@ import $ from 'jquery';
   }));
 }
  function modalQuestions(url,title,emailLabel,messageLabel,canselText,confirmText,emailError){
+   let customEmailLabel = emailLabel ? emailLabel : 'Enter your email address:';
+   let customMessageLabel = messageLabel? messageLabel:'Enter your message:';
+   let cancelButtonText = canselText ? canselText : 'Cansel';
+   let confirmButtonText = confirmText?confirmText:'Submit';
   return Vue.swal({
     title: title,
     html:`<form id="widget3-form" class="sp-widget-font-fmaily">
           <div class="form-group">
-          <label for="sp-widget3-message" class="sp-widget3-label">${ messageLabel? messageLabel:'Enter your message:' }</label>
+          <label for="sp-widget3-message" class="sp-widget3-label">${ customMessageLabel }</label>
           <textarea class="swal2-textarea" id="sp-widget3-message" rows="5" autofocus></textarea>
           </div>
-          <label for="sp-widget3-email" class="sp-widget3-label"><span>* </span>${ emailLabel? emailLabel:'Enter your email address:' }</label>
+          <label for="sp-widget3-email" class="sp-widget3-label"><span>* </span>${ customEmailLabel }</label>
           </form>`,
     input: 'email',
-    cancelButtonText: `${canselText?canselText:'Cansel'}`,
+    cancelButtonText: `${cancelButtonText}`,
     showCancelButton: true,
-    confirmButtonText: `${confirmText?confirmText:'Submit'}`,
+    confirmButtonText: `${confirmButtonText}`,
     showLoaderOnConfirm: true,
-    // preConfirm: (/^[0-9a-z-\.]+\@[0-9a-z-]{2,}\.[a-z]{2,}$/i.test(email)) => {
-    // return fetch(`//api.github.com/users/${url}`)
-    //   .then(response => response.json())
-    //   .catch(error => {
-    //     swal.showValidationError(
-    //       `${emailError?emailError:'Invalid email address'}`
-    //     )
-    //   })
-    // } ,
-    preConfirm: (email,textarea) => {
-      return new Promise((resolve) => {
-        setTimeout(() => {
-          if (!/^[0-9a-z-\.]+\@[0-9a-z-]{2,}\.[a-z]{2,}$/i.test(email)) {
-            Vue.swal.showValidationError(
-              `${ emailError? emailError : 'Enter a valid email address' }`
-            )
-          }
-          resolve()
-        }, 2000)
+    preConfirm: (email) => {
+    let data = {
+        type: sp.viewer.eventName.viewerWidgetAskQuestion,
+        channelFriendlyId: sp.viewer.linkHash,
+        sessionId: SP.SESSION_ID,
+        param_1_varchar: $('#sp-widget3').text(),
+        param_2_varchar: $('#sp-widget3-message').val(),
+        param_3_varchar: $('#sp-widget3-email').val(),
+        param_4_varchar: confirmButtonText,
+        param_5_varchar: cancelButtonText,
+        param_6_varchar: customMessageLabel,
+        param_7_varchar: customEmailLabel,
+        param_8_varchar: 'Invalid email address',
+        param_9_varchar: 'right',
+        param_10_varchar: title,
+    }
+    return postData(data, url)
+      .catch(error => {
+        Vue.swal.showValidationError(
+          `${emailError?emailError:'Invalid email address'}`
+        )
       })
     },
     allowOutsideClick: () => !swal.isLoading()
@@ -56,18 +63,29 @@ import $ from 'jquery';
     }
   });
 }
+function modalLinkAndTask(url){
+  Vue.swal({
+    cancelButtonText: 'Close',
+    html: `<iframe class="link-task" style="height: 75vh" frameborder="0" src=${url} allow="geolocation; microphone; camera"></iframe>`,
+    showConfirmButton: false,
+    showCancelButton: true,
+    width: 800,
+    height: 600
+})
+}
 function postData(data,url){
   return fetch(`${url}/viewer/event`, {
     method: 'POST',
-    credentials: "include",
+    credentials: 'same-origin',
     headers: {
       'Accept': 'application/json, text/plain, */*',
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
     },
-    body: encodeURIComponent(JSON.stringify(data))
-  }).then(res=>res.json())
+    body: JSON.stringify(data)
+  })
 }
 export {
   modalTestimonials,
-  modalQuestions
+  modalQuestions,
+  modalLinkAndTask
 };

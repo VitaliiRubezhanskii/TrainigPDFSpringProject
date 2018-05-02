@@ -12,12 +12,13 @@ export default {
       'src',
       'page',
       'loaded',
+      'pageHeight',
     ],
     directives: {
       pdfRender: {
         inserted: function (el, b, c) {
           let renderPDF = (url, el, opt) => {
-            let options = opt || { scale: 1.49  };
+            let options = opt || { scale: 2, zoom: 100 };
             var promiseArray = [];
                 function renderPage(page) {
                     let viewport = page.getViewport(options.scale);

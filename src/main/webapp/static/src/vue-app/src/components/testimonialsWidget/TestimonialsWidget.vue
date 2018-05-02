@@ -29,6 +29,7 @@ export default{
   position: fixed;
   right: 0px;
   top: 55px;
+  z-index: 3;
 }
 #sp-widget6__button {
   cursor: pointer;
@@ -102,5 +103,9 @@ export default{
 #sp-widget6__person-title {
   margin-top: 10px;
 }
-
+.swal2-popup .swal2-image {
+  border-radius: 50%;
+  height: 100px;
+  width: 100px;
+}
 </style>

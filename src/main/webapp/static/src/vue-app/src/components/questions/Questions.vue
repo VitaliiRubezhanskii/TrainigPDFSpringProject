@@ -4,6 +4,7 @@
   >
     <div
       class="sp-right-side-widgets"
+      :style="{top: `${ !widget.location.bottom ?'160px':''}`, bottom: `${ widget.location.bottom ?'100px':''}`}"
       @click="showModal"
     >
       <button
@@ -29,8 +30,6 @@
 </template>
 
 <script>
-import swal from 'sweetalert2';
-import value from "jquery-validation";
 import { modalQuestions }  from '../../helper/functions.js';
 
 export default{
@@ -78,7 +77,7 @@ textarea {
   max-width: 230px;
   position: fixed;
   right: 0;
-  top: 160px;
+  z-index: 4;
 }
 
 .sp-widget-button {

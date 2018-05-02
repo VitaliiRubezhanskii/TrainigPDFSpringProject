@@ -9,6 +9,7 @@ body{
   text-align: center;
   color: #2c3e50;
   margin: 0 auto;
+  min-height: 1000px;
 }
 
 h1, h2 {
@@ -36,6 +37,8 @@ a {
 }
 .pdf-container{
   overflow: hidden;
+}
+#holder {
   margin-top: 49px;
 }
 .pdf-container::-webkit-scrollbar {
@@ -106,4 +109,9 @@ a {
 .link{
   display: flex;
   justify-content: center;
+  margin-bottom: 10px;
+}
+.link-task{
+  width: 750px;
+  height: 550px;
 }

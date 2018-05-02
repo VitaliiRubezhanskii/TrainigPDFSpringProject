@@ -16,6 +16,7 @@
     position: fixed;
     text-align: center;
     width: 100%;
+    z-index: 2;
   }
   .sp-powered-by{
     font-weight: bold;

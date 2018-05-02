@@ -8,6 +8,8 @@ import LinkAndTask from '../linkWidget/LinkAndTask.vue';
 import FormWidget from '../formWidget/FormWidget.vue';
 import Toolbar from '../toolbar/Toolbar.vue';
 import PoweredBy from '../powered/PoweredBy.vue';
+import UploadFiles from '../upload/UploadFiles.vue';
+import ModalUpload from '../modalUpload/ModalUpload.vue';
 import $ from 'jquery';
 
 export default {
@@ -72,5 +74,7 @@ export default {
     FormWidget,
     Toolbar,
     PoweredBy,
+    UploadFiles,
+    ModalUpload
   }
 }

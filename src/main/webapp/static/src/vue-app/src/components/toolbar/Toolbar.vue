@@ -1,6 +1,6 @@
 <template>
   <div class="sp-toolbar-logo"
-    :style="{backgroundColor: toolbarData.toolbarBackground}"
+    :style="{backgroundColor: toolbarData.toolbarBackground, color: toolbarData.toolbarColor}"
   >
     <a target="_blank" href="https://www.slidepiper.com">
       <img :src="toolbarData.logoImage">
@@ -69,6 +69,7 @@ button{
   left: 0;
   width: 100%;
   margin-bottom: 4px;
+  z-index: 9;
 }
 
 .sp-toolbar-logo img {

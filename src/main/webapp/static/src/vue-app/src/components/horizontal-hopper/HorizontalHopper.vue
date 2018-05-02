@@ -62,7 +62,7 @@ p {
   margin-bottom: 10px;
 }
 .sp-widget5__horizontal-hop {
-  min-height: 40px;
+  height: 40px;
   min-width: 150px;
   background-color: rgb(27, 24, 98);
   color: rgb(255, 255, 255);
@@ -70,7 +70,10 @@ p {
   margin-right: 3px;
   box-sizing: border-box;
   cursor: pointer;
+  display: flex;
   flex:   1   1   100px;
+  justify-content: center;
+  font-size: 14px;
 }
 .sp-widget5__horizontal-hop::after {
   content: "";
@@ -95,8 +98,10 @@ p {
   border-color: transparent transparent transparent #ffffff;
 }
 .sp-widget5__horizontal-hop-text {
-  padding: 0 30px 0 30px;
-  line-height: 40px;
+  padding: 0 0 0 30px;
+  word-wrap: break-word;
+  line-height: 0.9;
+  align-self: center;
 }
 #sp-widget5__horizontal-hopper-container div:first-child::before{
   display: none;
