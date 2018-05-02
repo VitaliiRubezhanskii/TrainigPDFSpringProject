@@ -869,12 +869,16 @@ sp = {
                 var obj = {
                     'date': moment(date).format('DD-MM-YYYY HH:mm'),
                     'document': '<span class="sp-file-mgmt-file-name" data-file-hash="' + sp.escapeHtml(value[0]) +'">' + sp.escapeHtml(value[1]) + '</span>',
-                    'options': '<span>'
+                    'options': `<span>`
                     + '<a><span class="label label-primary sp-file-update" data-toggle="modal" data-target="#sp-modal-update-file" data-file-hash="' + sp.escapeHtml(value[0]) + '">Update</span></a>'
                     + '<a href="#"><span class="label label-danger sp-file-delete" data-file-hash="' + sp.escapeHtml(value[0]) + '">Delete</span></a></span>'
                     + '<a><span style="margin-left: 10px;" class="sp-document__clone label label-info" data-document-friendly-id="' + sp.escapeHtml(value[0]) + '" data-document-name="' + sp.escapeHtml(value[1]) + '">Clone</span></a>'
                     + '<a><span data-toggle="modal" data-target="#sp-viewer-widgets-modal" style="margin-left: 10px;" class="label label-success sp-file-customize" data-file-hash="' + sp.escapeHtml(value[0]) + '" data-is-process-mode="' + sp.escapeHtml(value[4]) + '">Customize</span></a>'
-                    + '<a class="sp-preview-file-link"><span id="sp-preview-file-' + sp.escapeHtml(index) + '" style="margin-left: 10px;" class="label label-warning" data-is-process-mode="' + sp.escapeHtml(value[4]) + '">Preview</span></a></span>'
+                    + '<a class="sp-preview-file-link"><span id="sp-preview-file-' + sp.escapeHtml(index) + '" style="margin-left: 10px;" class="label label-warning" data-is-process-mode="' + sp.escapeHtml(value[4]) + '">Preview</span></a>'
+                    +`<div data-id="${sp.escapeHtml(value[0])}" class="material-switch pull-right options-wrapper"> 
+                            <input class="twofactorauth-switch" id="someSwitchOptionPrimary-${sp.escapeHtml(index)}" name="double-auth-is-enabled" name="someSwitchOption-${sp.escapeHtml(index)}" type="checkbox"/>
+                            <label for="someSwitchOptionPrimary-${sp.escapeHtml(index)}" class="label-primary"></label>
+                        </div></span>`
                 };
                 filesArr.push(obj);
 
@@ -960,7 +964,6 @@ sp = {
                     function loadModal() {
                         $.getScript('assets/modal/viewer-widgets-wizard/functions.js', function() {
                             sp.viewerWidgetsModal.getWidgetsSettings(fileHash, isProcessMode);
-
                             $('#sp-viewer-widgets-modal').off('hidden.bs.modal').on('hidden.bs.modal', function() {
                                 $(this).find('.tabs-container').addClass('sp-hidden');
                             });
@@ -2751,7 +2754,29 @@ $(document).ready(function() {
         $('#sp-help-salesmen__modal').load('assets/modal/help-button/main.html');
         new UserEvent('CLICKED_HELP_BUTTON').send();
     });
+    // send switcher state
+    $('body')
+        .on('change', '.twofactorauth-switch', function (e) {
+            var documentId = $(this).closest('.options-wrapper').data('id');
+            saveAuthSettings({ isDoubleAuth: this.checked }, documentId)
+        });
 });
+
+function saveAuthSettings(data, fileHash) {
+    $.ajax({
+        url:'/api/v1/documents/' + fileHash,
+        method: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(data),
+        beforeSend: function(xhr) {
+            xhr.setRequestHeader(SP.CSRF_HEADER, SP.CSRF_TOKEN);
+        },
+        error: function() {
+            swal('Error', 'Something went wrong. Your settings weren\'t saved.', 'error');
+        }
+    });
+}
+
 
 /**
  * Class for sending user events.

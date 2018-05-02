@@ -933,6 +933,7 @@ sp.viewerWidgetsModal = {
                 sp.viewerWidgetsModal.validateWidgetsSettings(
                     $(this).attr('data-file-hash'), $(this).attr('id'));
             });
+
     },
 
     /**
@@ -1034,11 +1035,15 @@ sp.viewerWidgetsModal = {
             $('.sp-widgets-customisation__spinner').addClass('sp-widgets-customisation__spinner-show');
 
             var isProcessModeEnabled = {
-                isProcessMode: $('[name="process-mode-is-enabled"]').prop('checked'),
+                isProcessMode: $('[name="process-mode-is-enabled"]').prop('checked')
             };
 
-            postDocumentSettings(isProcessModeEnabled, fileHash);
-            sp.viewerWidgetsModal.postWidgetSettings(data, fileHash, targetId);
+            function docsSavedCallback(result) {
+                // Setting attribute to current value
+                $("#sp-files-management span[data-file-hash='" + fileHash + "'][data-target='#sp-viewer-widgets-modal']").attr('data-is-process-mode', +isProcessModeEnabled.isProcessMode);
+                sp.viewerWidgetsModal.postWidgetSettings(data, fileHash, targetId);
+            }
+            postDocumentSettings(isProcessModeEnabled, fileHash, docsSavedCallback);
         } else if (0 === settings.length) {
             $('button[data-dismiss="modal"]').click();
             swal('No settings were saved.', '', 'info');
@@ -1828,6 +1833,9 @@ sp.viewerWidgetsModal = {
     setProcessMode: function(isProcessMode) {
         $('[name="process-mode-is-enabled"]').prop('checked', !!+isProcessMode);
     }
+    // setDoubleAuth: function(isDoubleAuth) {
+    //     $('[name="double-auth-is-enabled"]').prop('checked', !!+isDoubleAuth);
+    // }
 };
 
 /**
@@ -1910,7 +1918,9 @@ $(document).on('click', '.link-widget__url-upload-button', function() {
  * @param {object} data - The document settings data.
  * @param {string} fileHash - The document fileHash.
  */
-function postDocumentSettings(data, fileHash) {
+
+
+function postDocumentSettings(data, fileHash, callback) {
     $.ajax({
         url:'/api/v1/documents/' + fileHash,
         method: 'POST',
@@ -1919,21 +1929,9 @@ function postDocumentSettings(data, fileHash) {
         beforeSend: function(xhr) {
             xhr.setRequestHeader(SP.CSRF_HEADER, SP.CSRF_TOKEN);
         },
-    }).done(function(data) {
-        if (typeof data === 'string' && '<!DOCTYPE html>' === data.substring(0, 15)) {
-            window.location = '/login';
-        } else {
-            var resultCode = data;
-
-            if (0 == resultCode) {
-                errorCallback();
-            }
+        success: callback,
+        error: function() {
+            swal('Error', 'Something went wrong. Your settings weren\'t saved.', 'error');
         }
-    }).fail(function() {
-        errorCallback();
     });
-
-    function errorCallback() {
-        swal('Error', 'Something went wrong. Your settings weren\'t saved.', 'error');
-    }
 }
