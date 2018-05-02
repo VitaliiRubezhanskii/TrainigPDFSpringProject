@@ -2,7 +2,9 @@
   <div class="upload-block">
     <button
       type="button"
-      class="upload-button"
+      class="upload-button btn btn-success"
+      data-toggle="modal"
+      data-target="#sp-modal-upload-files"
       @click="showModal"
       >
         Upload Documents

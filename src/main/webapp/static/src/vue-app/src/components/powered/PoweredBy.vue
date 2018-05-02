@@ -12,7 +12,7 @@
   #sp-terms-privacy {
     background-color: rgba(246, 246, 246, 0.8);
     bottom: 0;
-    font-size: 0.72rem;
+    font-size: 0.75rem;
     position: fixed;
     text-align: center;
     width: 100%;

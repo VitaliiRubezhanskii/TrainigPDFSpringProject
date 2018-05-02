@@ -2,8 +2,10 @@
   <div class="sp-right-side-widgets6" @click="showModal">
     <div class="widget" id="sp-widget6__button">
       <div id="sp-widget6__button-counter">1</div>
-      <div id="sp-widget6__button-person-image" :style="{ backgroundImage: `url('${widget.personImage}')`, backgroundColor: 'rgb(0, 150, 136)' }"></div>
-      <i v-if="!widget.personImage" class="fa fa-user fa-inverse" style="display: inline;"></i>
+      <div id="sp-widget6__button-person-image" :style="{ backgroundImage: `url('${widget.personImage}')`, backgroundColor: 'rgb(0, 150, 136)' }">
+        <i v-if="!widget.personImage" class="fa fa-user fa-inverse" style="display: inline;"></i>
+      </div>
+
     </div>
   </div>
 </template>
@@ -50,7 +52,7 @@ export default{
   line-height: 20px;
   position: absolute;
   text-align: center;
-  top: 0;
+  top: 15px;
   width: 20px;
   z-index: 1;
 }
@@ -75,11 +77,11 @@ export default{
   display: none;
   font-size: 2em;
   height: 100%;
-  left: -2px;
+  left: 1px;
   line-height: 90px;
   position: absolute;
   text-align: center;
-  top: -8px;
+  top: -9px;
   width: 100%;
 }
 

@@ -52,8 +52,9 @@ export default{
   left: 0;
   padding: 7px 7px 0;
   position: fixed;
-  z-index: 1;
+  z-index: 3;
   text-align: left;
+  margin: 0;
 }
 
 #sp-widget1-tab {
