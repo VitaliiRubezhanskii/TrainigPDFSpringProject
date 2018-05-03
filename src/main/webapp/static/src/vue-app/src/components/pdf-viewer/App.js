@@ -10,6 +10,7 @@ import Toolbar from '../toolbar/Toolbar.vue';
 import PoweredBy from '../powered/PoweredBy.vue';
 import UploadFiles from '../upload/UploadFiles.vue';
 import ModalUpload from '../modalUpload/ModalUpload.vue';
+import Arrows from '../arrows/Arrows.vue';
 import $ from 'jquery';
 
 export default {
@@ -22,6 +23,7 @@ export default {
       pageHeight: null,
       widget: null,
       load: false,
+      pages: null,
       widgetData: [],
       page: 1,
       toolbarData: null,
@@ -34,6 +36,7 @@ export default {
         this.widgetData = data.map((widget)=>{
           return JSON.parse(widget.widgetData).data;
         });
+        this.pages = this.widgetData.find(w => w.widgetId === 5).items.length;
       });
     fetch(`${this.sp.API_URL}/viewer/configuration?channelFriendlyId=${this.location}`)
       .then(response => response.json())
@@ -54,9 +57,23 @@ export default {
       this.load = true;
       this.pageHeight = document.getElementsByTagName('canvas')[0].scrollHeight;
     },
-    setPage({page}){
+    setPage({ page }){
       this.page = page;
-    }
+      document.getElementById(this.page).scrollIntoView();
+    },
+    nextPage({ page }){
+      if(page < this.pages){
+        this.page = page + 1;
+        document.getElementById(this.page).scrollIntoView();
+      }
+    },
+    prevPage({ page }){
+      if(page > 1){
+        this.page = page - 1;
+        document.getElementById(this.page).scrollIntoView();
+      }
+
+    },
   },
   computed: {
     linkData() {
@@ -75,6 +92,7 @@ export default {
     Toolbar,
     PoweredBy,
     UploadFiles,
-    ModalUpload
+    ModalUpload,
+    Arrows
   }
 }
