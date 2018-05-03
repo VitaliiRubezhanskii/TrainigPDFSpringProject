@@ -84,8 +84,12 @@ function postData(data,url){
     body: JSON.stringify(data)
   })
 }
+function animateScroll(){
+  return $('#sp-widget5__horizontal-hopper-container').animate({ scrollLeft: $('#sp-widget5__horizontal-hopper-container>div.active')[0].offsetLeft + $('#sp-widget5__horizontal-hopper-container>div.active')[0].offsetWidth/2 - $('#sp-widget5__horizontal-hopper-container')[0].offsetWidth / 2},'fast');
+}
 export {
   modalTestimonials,
   modalQuestions,
-  modalLinkAndTask
+  modalLinkAndTask,
+  animateScroll
 };

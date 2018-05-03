@@ -1,6 +1,11 @@
 <template >
   <div id="sp-widget5__horizontal-hopper-container" v-goToPage v-scroll>
-    <div v-for="e in widget.items" class="sp-widget5__horizontal-hop" :data-page-horizontal-hop="e.hopperPage">
+    <div
+      v-for="(e, index) in widget.items"
+      class="sp-widget5__horizontal-hop"
+      :class="{ active: page === index + 1 }"
+      :data-page-horizontal-hop="e.hopperPage"
+    >
       <p class="sp-widget5__horizontal-hop-text" :data-page-horizontal-hop="e.hopperPage"> {{ e.hopperText }} </p>
     </div>
   </div>
@@ -8,40 +13,33 @@
 
 <script>
 import $ from "jquery";
+import { animateScroll } from '../../helper/functions';
 
 export default{
-  props: ['widget'],
+  props: ['widget', 'page'],
   directives: {
     goToPage: {
       inserted: function (el, b, c) {
       $(el).children()[0].className = "sp-widget5__horizontal-hop active";
         $(el).on('click',function(e){
           c.context.$emit("go-page",{ page: Number(e.target.getAttribute('data-page-horizontal-hop'))});
-          document.getElementById(e.target.getAttribute('data-page-horizontal-hop')).scrollIntoView();
-          if($(".active")[0]) {
-            $(".active")[0].className = "sp-widget5__horizontal-hop";
-          }
-          if(e.target.className == "sp-widget5__horizontal-hop") {
-            e.target.className = "sp-widget5__horizontal-hop active";
-          } else {
-            e.target.parentElement.className = "sp-widget5__horizontal-hop active";
-          }
+          animateScroll();
         })
       }
     },
     scroll:{
       inserted: function (el, b, c) {
-       $(el).on("mousewheel",function(e){
-          if(e.originalEvent.wheelDelta /120 > 0) {
-              $(this).scrollLeft($(this).scrollLeft() + 100);
-          }
-          else{
-              $(this).scrollLeft($(this).scrollLeft() - 100);
-          }
-        });
-        $(el).on("click",() => {
-          $(el).animate({ scrollLeft: $('#sp-widget5__horizontal-hopper-container>div.active')[0].offsetLeft + $('#sp-widget5__horizontal-hopper-container>div.active')[0].offsetWidth/2 - $(el)[0].offsetWidth / 2},'fast');
-        })
+      //  $(el).on("mousewheel",function(e){
+      //     if(e.originalEvent.wheelDelta /120 > 0) {
+      //         $(this).scrollLeft($(this).scrollLeft() + 100);
+      //     }
+      //     else{
+      //         $(this).scrollLeft($(this).scrollLeft() - 100);
+      //     }
+      //   });
+        // $(el).on("click",() => {
+        //   //$(el).animate({ scrollLeft: $('#sp-widget5__horizontal-hopper-container>div.active')[0].offsetLeft + $('#sp-widget5__horizontal-hopper-container>div.active')[0].offsetWidth/2 - $(el)[0].offsetWidth / 2},'fast');
+        // })
       }
     }
   },
@@ -53,14 +51,21 @@ p {
   margin: 0;
   padding: 0;
 }
+
 #sp-widget5__horizontal-hopper-container {
   display: flex;
   position: relative;
-  overflow: hidden;
+  overflow: scroll;
   margin: 0 auto;
   padding-right: 22px;
   margin-bottom: 10px;
 }
+
+#sp-widget5__horizontal-hopper-container::-webkit-scrollbar {
+  display: none;
+  position: relative;
+}
+
 .sp-widget5__horizontal-hop {
   height: 40px;
   min-width: 150px;
