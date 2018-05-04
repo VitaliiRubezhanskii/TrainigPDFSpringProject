@@ -12,11 +12,15 @@ export default {
       'src',
       'page',
       'loaded',
-      'pageHeight',
-      'height',
-      'width',
-      'pageWidth'
     ],
+    data() {
+      return {
+        height: null,
+        width: null,
+        canvasWidth: null,
+        canvasHeight: null,
+      }
+    },
     directives: {
       pdfRender: {
         inserted: function (el, b, c) {
@@ -31,31 +35,30 @@ export default {
                       canvasContext: ctx,
                       viewport: viewport
                     };
-
                     canvas.height = viewport.height;
                     canvas.width = viewport.width;
                     canvas.setAttribute('id', page.pageNumber);
                     el.appendChild(canvas);
-                    // width: auto;
-                    // height: calc(100vh - 250px);
-                    // if(c.context.height/c.context.width > c.context.pageHeight/c.context.pageWidth) {
-                    //   //canvas.css({"width": "100%","height":`${this.height}`});
-                    //   canvas.height = `c.context.height`;
-                    //   canvas.width = `${100%}`;
-                    // }
-                    // else {
-                    //   //canvas.css({"width": "auto","height":"calc(100vh - 250px)"});
-                    //   canvas.height = `${c.context.height - 250}`;
-                    //   canvas.width = 'auto';
-                    // }
-                   page.render(renderContext);
+                    page.render(renderContext);
+
+                    var t = {};
+                    t.height = window.innerHeight - 270;
+                    t.width = window.innerWidth;
+                    t.canvasHeight = canvas.scrollHeight;
+                    t.canvasWidth = canvas.scrollWidth;
+                    if(t.height/t.width > t.canvasHeight/t.canvasWidth) {
+                      canvas.style.height = t.height;
+                      canvas.style.maxWidth = '100%';
+                    } else {
+                      canvas.style.height = `${t.height}px`;
+                      canvas.style.width = 'auto';
+                    }
                 }
                 function renderPages(pdfDoc) {
                     for(var num = 1; num <= pdfDoc.numPages; num++) {
                         promiseArray.push( pdfDoc.getPage(num).then(renderPage) )
                     }
                     Promise.all(promiseArray).then(() => {
-                      //document.getElementById(c.context.page).scrollIntoView();
                       c.context.loaded();
                     });
                 }
@@ -67,14 +70,5 @@ export default {
         }
       }
     },
-    // data() {
-    //     return {}
-    // },
-    // mounted() {
-    //
-    // },
-    // methods: {
-    // }
 }
-
 </script>

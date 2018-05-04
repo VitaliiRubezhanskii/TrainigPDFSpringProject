@@ -1,5 +1,8 @@
 <template >
-  <div id="sp-widget5__horizontal-hopper-container" v-goToPage v-scroll>
+  <div
+    id="sp-widget5__horizontal-hopper-container"
+    v-goToPage
+  >
     <div
       v-for="(e, index) in widget.items"
       class="sp-widget5__horizontal-hop"
@@ -20,28 +23,13 @@ export default{
   directives: {
     goToPage: {
       inserted: function (el, b, c) {
-      $(el).children()[0].className = "sp-widget5__horizontal-hop active";
+      //$(el).children()[0].className = "sp-widget5__horizontal-hop active";
         $(el).on('click',function(e){
           c.context.$emit("go-page",{ page: Number(e.target.getAttribute('data-page-horizontal-hop'))});
           animateScroll();
         })
       }
     },
-    scroll:{
-      inserted: function (el, b, c) {
-      //  $(el).on("mousewheel",function(e){
-      //     if(e.originalEvent.wheelDelta /120 > 0) {
-      //         $(this).scrollLeft($(this).scrollLeft() + 100);
-      //     }
-      //     else{
-      //         $(this).scrollLeft($(this).scrollLeft() - 100);
-      //     }
-      //   });
-        // $(el).on("click",() => {
-        //   //$(el).animate({ scrollLeft: $('#sp-widget5__horizontal-hopper-container>div.active')[0].offsetLeft + $('#sp-widget5__horizontal-hopper-container>div.active')[0].offsetWidth/2 - $(el)[0].offsetWidth / 2},'fast');
-        // })
-      }
-    }
   },
 }
 </script>

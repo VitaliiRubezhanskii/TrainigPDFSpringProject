@@ -113,6 +113,4 @@ textarea {
   vertical-align: middle;
   padding-left: 10px;
 }
-
-
 </style>

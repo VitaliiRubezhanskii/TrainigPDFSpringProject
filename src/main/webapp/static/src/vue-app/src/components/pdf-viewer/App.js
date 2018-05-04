@@ -5,11 +5,8 @@ import Questions from '../questions/Questions.vue';
 import Video from '../videoWidget/Video.vue';
 import TestimonialsWidget from '../testimonialsWidget/TestimonialsWidget.vue';
 import LinkAndTask from '../linkWidget/LinkAndTask.vue';
-import FormWidget from '../formWidget/FormWidget.vue';
 import Toolbar from '../toolbar/Toolbar.vue';
 import PoweredBy from '../powered/PoweredBy.vue';
-import UploadFiles from '../upload/UploadFiles.vue';
-import ModalUpload from '../modalUpload/ModalUpload.vue';
 import Arrows from '../arrows/Arrows.vue';
 import $ from 'jquery';
 
@@ -20,13 +17,9 @@ export default {
       sp:window.SP,
       location: window.location.search.slice(3),
       src: window.SP.DOCUMENT_URL,
-      pageHeight: null,
-      widget: null,
       load: false,
       pages: null,
-      height: null,
-      width: null,
-      pageWidth: null,
+      pageHeight: null,
       widgetData: [],
       page: 1,
       toolbarData: null,
@@ -45,23 +38,10 @@ export default {
       .then(response => response.json())
       .then(data => this.toolbarData = data);
   },
-  directives: {
-    detectHeight:{
-      inserted: function (el, b, c) {
-
-      }
-    }
-
-  },
-  mounted() {
-  },
   methods: {
     onLoaded(){
       this.load = true;
-      this.height = window.innerHeight - 250;
-      this.width = window.innerWidth;
       this.pageHeight = document.getElementsByTagName('canvas')[0].scrollHeight;
-      this.pageWidth = document.getElementsByTagName('canvas')[0].scrollWidth;
     },
     setPage({ page }){
       this.page = page;
@@ -94,11 +74,8 @@ export default {
     Video,
     TestimonialsWidget,
     LinkAndTask,
-    FormWidget,
     Toolbar,
     PoweredBy,
-    UploadFiles,
-    ModalUpload,
     Arrows
   }
 }
