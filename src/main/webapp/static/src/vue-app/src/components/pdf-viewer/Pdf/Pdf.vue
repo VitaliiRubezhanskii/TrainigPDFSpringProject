@@ -13,6 +13,9 @@ export default {
       'page',
       'loaded',
       'pageHeight',
+      'height',
+      'width',
+      'pageWidth'
     ],
     directives: {
       pdfRender: {
@@ -33,7 +36,18 @@ export default {
                     canvas.width = viewport.width;
                     canvas.setAttribute('id', page.pageNumber);
                     el.appendChild(canvas);
-
+                    // width: auto;
+                    // height: calc(100vh - 250px);
+                    // if(c.context.height/c.context.width > c.context.pageHeight/c.context.pageWidth) {
+                    //   //canvas.css({"width": "100%","height":`${this.height}`});
+                    //   canvas.height = `c.context.height`;
+                    //   canvas.width = `${100%}`;
+                    // }
+                    // else {
+                    //   //canvas.css({"width": "auto","height":"calc(100vh - 250px)"});
+                    //   canvas.height = `${c.context.height - 250}`;
+                    //   canvas.width = 'auto';
+                    // }
                    page.render(renderContext);
                 }
                 function renderPages(pdfDoc) {
@@ -53,14 +67,14 @@ export default {
         }
       }
     },
-    data() {
-        return {}
-    },
-    mounted() {
-
-    },
-    methods: {
-    }
+    // data() {
+    //     return {}
+    // },
+    // mounted() {
+    //
+    // },
+    // methods: {
+    // }
 }
 
 </script>

@@ -39,17 +39,14 @@ a {
 
 #holder canvas{
   box-shadow: 0 0 20px rgba(0,0,0,0.5);
-  width: auto;
-  height: calc(100vh - 250px);
-  overflow: auto;
+
 }
 .pdf-container{
   overflow: hidden;
   margin-top: 49px;
+  height: calc(100vh - 250px);
 }
-#holder {
 
-}
 .pdf-container::-webkit-scrollbar {
   display: none;
   position: relative;

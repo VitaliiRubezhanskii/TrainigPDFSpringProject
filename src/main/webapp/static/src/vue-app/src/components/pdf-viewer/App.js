@@ -24,6 +24,9 @@ export default {
       widget: null,
       load: false,
       pages: null,
+      height: null,
+      width: null,
+      pageWidth: null,
       widgetData: [],
       page: 1,
       toolbarData: null,
@@ -55,7 +58,10 @@ export default {
   methods: {
     onLoaded(){
       this.load = true;
+      this.height = window.innerHeight - 250;
+      this.width = window.innerWidth;
       this.pageHeight = document.getElementsByTagName('canvas')[0].scrollHeight;
+      this.pageWidth = document.getElementsByTagName('canvas')[0].scrollWidth;
     },
     setPage({ page }){
       this.page = page;
