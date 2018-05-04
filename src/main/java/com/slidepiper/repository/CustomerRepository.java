@@ -6,6 +6,8 @@ import org.springframework.data.repository.Repository;
 public interface CustomerRepository extends Repository<Customer, Long> {
     Customer findById(long id);
 
+    Customer findCustomerByEmail(String email);
+
     Customer findCustomerByCustomerId(String customerId);
 
     Customer findCustomerByCustomerIdAndPhoneNumber(long customerId, String phone);

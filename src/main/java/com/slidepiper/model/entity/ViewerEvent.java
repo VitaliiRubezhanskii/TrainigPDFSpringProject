@@ -64,7 +64,10 @@ public class ViewerEvent {
         HALMAN_ALDUBI_FAILED_SENDING_FILES,
         PWC_SUBSCRIBED_NEWSLETTER,
         FILE_WIDGET_UPLOADED_FILE,
-        LOGIN_CUSTOMER
+        LOGIN_CUSTOMER,
+        UPLOAD_DOCUMENT,
+        UPDATE_DOCUMENT,
+        DELETE_DOCUMENT
     }
     @Column(name = "event_name")
     @Enumerated(EnumType.STRING)
