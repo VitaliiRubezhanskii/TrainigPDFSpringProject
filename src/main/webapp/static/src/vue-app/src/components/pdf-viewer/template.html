@@ -1,0 +1,18 @@
+<div id="app" xmlns="">
+  <Spinner v-if="!load" :load="load"></Spinner>
+  <div
+    class="pdf-container"
+    ref="pdf"
+  >
+    <Pdf
+      :src="src"
+      :page=12
+      :loaded="onLoaded"
+    ></Pdf>
+  </div>
+  <HorizontalHopper v-if="widget" :widget="widget"></HorizontalHopper>
+  <Questions></Questions>
+  <Video></Video>
+  <TestimonialsWidget></TestimonialsWidget>
+</div>
+
