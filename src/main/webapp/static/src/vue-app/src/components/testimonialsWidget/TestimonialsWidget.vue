@@ -43,7 +43,6 @@ export default{
 
 #sp-widget6__button-counter {
   background-color: #e62117;
-  border: 2px solid #fff;
   border-radius: 50%;
   color: #fff;
   height: 20px;
@@ -55,6 +54,7 @@ export default{
   top: 15px;
   width: 20px;
   z-index: 1;
+  box-shadow: 0 0 0 2px #fff;
 }
 
 #sp-widget6__button-person-image {

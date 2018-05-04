@@ -4,7 +4,6 @@
   >
     <div
       class="sp-right-side-widgets"
-      :style="{top: `${ !widget.location.bottom ?'160px':''}`, bottom: `${ widget.location.bottom ?'100px':''}`}"
       @click="showModal"
     >
       <button
@@ -75,7 +74,7 @@ textarea {
 
 .sp-right-side-widgets {
   max-width: 230px;
-  position: fixed;
+  position: absolute;
   right: 0;
   z-index: 4;
 }
