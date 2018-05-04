@@ -23,7 +23,7 @@ public class SecurityConfiguration {
         protected void configure(HttpSecurity http) throws Exception {
             http
                 .requestMatchers()
-                    .antMatchers("/view", "/viewer/**", "/utils/**", "/assets/**")
+                    .antMatchers("/view", "/viewer/**", "/utils/**", "/assets/**", "/dist/**")
                     .and()
                 .headers()
                     .frameOptions()

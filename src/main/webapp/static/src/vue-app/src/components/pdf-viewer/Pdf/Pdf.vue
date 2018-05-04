@@ -64,7 +64,7 @@ export default {
                 }
 
                 PDFJS.disableWorker = true;
-                PDFJS.getDocument(url).then(renderPages);
+                PDFJS.getDocument(url).then(renderPages).catch(console.log);
           };
           renderPDF(c.context.src, el);
         }
