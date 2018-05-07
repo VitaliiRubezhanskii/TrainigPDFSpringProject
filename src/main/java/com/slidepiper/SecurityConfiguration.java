@@ -30,18 +30,18 @@ public class SecurityConfiguration {
         @Override
         protected void configure(HttpSecurity http) throws Exception {
             http
-                    .requestMatchers()
-                    .antMatchers("/viewer/**", "/utils/**", "/assets/**")
+                .requestMatchers()
+                    .antMatchers("/viewer/**", "/utils/**", "/assets/**", "/dist/**")
                     .and()
-                    .headers()
+                .headers()
                     .frameOptions()
                     .disable()
                     .and()
-                    .authorizeRequests()
+                .authorizeRequests()
                     .anyRequest()
                     .permitAll()
                     .and()
-                    .csrf()
+                .csrf()
                     .disable();
 
         }
@@ -126,21 +126,21 @@ public class SecurityConfiguration {
         @Override
         protected void configure(HttpSecurity http) throws Exception {
             http
-                    .authorizeRequests()
-                    .antMatchers("/favicon.ico", "/health", "/accessdenied", "/signup", "/", "/index.html", "/tou.html", "/privacy.html", "/robots.txt", "/static/**", "/assets/**")
+                .authorizeRequests()
+                    .antMatchers("/favicon.ico", "/health", "/signup", "/", "/index.html", "/tou.html", "/privacy.html", "/robots.txt", "/static/**")
                     .permitAll()
                     .anyRequest()
                     .authenticated()
                     .and()
-                    .formLogin()
+                .formLogin()
                     .loginPage("/login")
                     .successHandler(authenticationSuccessHandlerImpl)
                     .permitAll()
                     .and()
-                    .logout()
+                .logout()
                     .permitAll()
                     .and()
-                    .exceptionHandling()
+                .exceptionHandling()
                     .accessDeniedPage("/login");
         }
 
