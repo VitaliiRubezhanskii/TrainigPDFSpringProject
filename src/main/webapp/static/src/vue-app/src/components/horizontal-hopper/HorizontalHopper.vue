@@ -6,8 +6,10 @@
     <div
       v-for="(e, index) in widget.items"
       class="sp-widget5__horizontal-hop"
+      :style="{'--my-color-var': styleButton, backgroundColor: styleButton, color: colorText}"
       :class="{ active: page === index + 1 }"
       :data-page-horizontal-hop="e.hopperPage"
+
     >
       <p class="sp-widget5__horizontal-hop-text" :data-page-horizontal-hop="e.hopperPage"> {{ e.hopperText }} </p>
     </div>
@@ -19,7 +21,7 @@ import $ from "jquery";
 import { animateScroll } from '../../helper/functions';
 
 export default{
-  props: ['widget', 'page'],
+  props: ['widget', 'page', 'styleButton','colorText'],
   directives: {
     goToPage: {
       inserted: function (el, b, c) {
@@ -57,7 +59,7 @@ p {
 .sp-widget5__horizontal-hop {
   height: 40px;
   min-width: 150px;
-  background-color: rgb(27, 24, 98);
+  /*background-color: rgb(27, 24, 98);*/
   color: rgb(255, 255, 255);
   position: relative;
   margin-right: 3px;
@@ -78,7 +80,8 @@ p {
   height: 0;
   border-style: solid;
   border-width: 20px 0 20px 25px;
-  border-color: transparent transparent transparent rgb(27, 24, 98);;
+  /*background-color: inherit;*/
+  border-color: transparent transparent transparent var(--my-color-var);
 }
 .sp-widget5__horizontal-hop::before {
   content: "";
@@ -100,7 +103,7 @@ p {
   display: none;
 }
 .active{
-  background-color: #ec971f;
+  background-color: #ec971f !important;
 }
 .sp-widget5__horizontal-hop.active::after {
   border-color: transparent transparent transparent #ec971f;

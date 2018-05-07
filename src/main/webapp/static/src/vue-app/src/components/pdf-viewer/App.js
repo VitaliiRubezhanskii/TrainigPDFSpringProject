@@ -23,6 +23,10 @@ export default {
       widgetData: [],
       page: 1,
       toolbarData: null,
+      styleButton: {
+        'backgroundColor': null
+      },
+      colorText: null,
     }
   },
   created() {
@@ -36,7 +40,11 @@ export default {
       });
     fetch(`${this.sp.API_URL}/viewer/configuration?channelFriendlyId=${this.location}`)
       .then(response => response.json())
-      .then(data => this.toolbarData = data);
+      .then(data => {
+        this.toolbarData = data;
+        this.styleButton = {'backgroundColor': this.toolbarData.toolbarButtonBackground};
+        this.colorText = this.toolbarData.toolbarCta2Color;
+      });
   },
   methods: {
     onLoaded(){
