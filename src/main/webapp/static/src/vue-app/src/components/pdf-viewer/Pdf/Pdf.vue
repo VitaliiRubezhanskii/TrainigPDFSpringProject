@@ -42,7 +42,7 @@ export default {
                     page.render(renderContext);
 
                     var t = {};
-                    t.height = window.innerHeight - 200;
+                    t.height = window.innerHeight - 225;
                     t.width = window.innerWidth;
                     t.canvasHeight = canvas.scrollHeight;
                     t.canvasWidth = canvas.scrollWidth;

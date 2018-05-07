@@ -9,7 +9,7 @@
       <button
         class="widget sp-widget-button sp-widget-font-fmaily sp--direction-ltr"
         id="sp-widget3"
-        :style="{backgroundColor: `${ widget.isCustomButtonColorEnabled ? widget.buttonColor : 'rgb(27, 24, 98)' }`, color: 'rgb(255, 255, 255)'}"
+        :style="{backgroundColor: `${ widget.isCustomButtonColorEnabled ? widget.buttonColor : 'rgb(27, 24, 98)'}`, color: 'rgb(255, 255, 255)'}"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
