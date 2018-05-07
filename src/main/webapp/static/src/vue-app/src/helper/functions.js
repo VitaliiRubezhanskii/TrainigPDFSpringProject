@@ -87,9 +87,13 @@ function postData(data,url){
 function animateScroll(){
   return $('#sp-widget5__horizontal-hopper-container').animate({ scrollLeft: $('#sp-widget5__horizontal-hopper-container>div.active')[0].offsetLeft + $('#sp-widget5__horizontal-hopper-container>div.active')[0].offsetWidth/2 - $('#sp-widget5__horizontal-hopper-container')[0].offsetWidth / 2},'fast');
 }
+function uploadDoc(){
+  Vue.swal("Success!", "Your file was uploaded!", "success");
+}
 export {
   modalTestimonials,
   modalQuestions,
   modalLinkAndTask,
-  animateScroll
+  animateScroll,
+  uploadDoc
 };

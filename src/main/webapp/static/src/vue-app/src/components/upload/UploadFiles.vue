@@ -1,5 +1,5 @@
 <template>
-  <div class="upload-block">
+  <div class="upload-block clearfix">
     <button
       type="button"
       class="upload-button btn btn-success"
@@ -9,9 +9,7 @@
       >
         Upload Documents
     </button>
-    <ModalUpload
-      :style="{display: `${showDisplay?'block':'none'}`}"
-    />
+    <ModalUpload />
   </div>
 
 </template>
@@ -49,5 +47,6 @@ export default{
 }
 .upload-block{
   padding: 0 0 0 50px;
+  margin: 0 0 50px 0;
 }
 </style>
