@@ -1,8 +1,8 @@
 <template>
-  <div class="widget sp--direction-ltr" id="sp-widget1" v-video v-if="videoWidgetData">
+  <div class="widget sp--direction-ltr" id="sp-widget1" v-video>
     <div id="sp-widget1-tab">
       <i class="fa fa-video-camera"></i>
-      <div class="sp-widget-font-fmaily">fgd</div>
+      <div class="sp-widget-font-fmaily">{{ widget.videoTitle }}</div>
     </div>
     <i id="sp-widget1-fa-chevron" class="fa fa-chevron-up"></i>
     <div id="sp-widget1-video-container" style="display: none;">
@@ -14,7 +14,7 @@
         encrypted-media"
         title="YouTube video player"
         width="640" height="360"
-        :src="link + '?playlist=' + endOfLink + '&loop=1'"
+        :src="widget.videoSource + '?playlist=' + widget.videoSource.match(/[^/]+$/g)[0] + '&loop=1'"
         style="visibility: visible; display: inline;"
       >
       </iframe>
@@ -26,15 +26,7 @@
 import $ from "jquery";
 
 export default{
-  data(){
-    return {
-      videoWidgetData: null,
-      sp: window.SP,
-      location: window.location.search,
-      link: null,
-      endOfLink: null,
-    }
-  },
+  props: ["widget"],
   directives: {
     video: {
       inserted: function (el, b, c) {
@@ -44,23 +36,12 @@ export default{
         });
       }
     }
-  },
-  created() {
-    fetch(`${this.sp.API_URL}/viewer/widgets?fileLinkHash=${this.location.slice(3)}`)
-      .then(response => response.json())
-      .then(data => {
-        this.videoWidgetData = data.filter(e => {
-          return JSON.parse(e.widgetData).data.widgetId === 1;
-        })[0];
-        this.link = JSON.parse(this.videoWidgetData.widgetData).data.items[0].videoSource;
-        this.endOfLink = this.link.match(/[^/]+$/g)[0];
-      });
   }
 }
 </script>
 
 <style>
-/* Widget 1 */
+
 #sp-widget1 {
   background-color: white;
   border: 1px solid #8D8D8D;
@@ -71,8 +52,9 @@ export default{
   left: 0;
   padding: 7px 7px 0;
   position: fixed;
-  z-index: 1;
+  z-index: 3;
   text-align: left;
+  margin: 0;
 }
 
 #sp-widget1-tab {

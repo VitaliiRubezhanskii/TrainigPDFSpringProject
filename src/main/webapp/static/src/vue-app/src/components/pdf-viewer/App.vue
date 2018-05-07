@@ -1,3 +1,3 @@
-<template src="./template.html"></template>
-<style src="./style.scss"></style>
+<template src="./App.html"></template>
+<style src="./App.scss"></style>
 <script src="./App.js"></script>
