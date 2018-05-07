@@ -3,6 +3,7 @@
 >
   <Spinner v-if="!load" :load="load" />
   <Toolbar
+    v-if="toolbarData"
     :toolbarData="toolbarData"
   />
   <div

@@ -15,14 +15,14 @@
       </button>
       <button
         v-if="toolbarData.isCta2Enabled"
-        @click="showLink(toolbarData.toolbarCta1Link)"
+        @click="showLink(toolbarData.toolbarCta2Link)"
         :style="{backgroundColor: toolbarData.toolbarCta2Background, color: toolbarData.toolbarCta2Color}"
       >
         {{ toolbarData.toolbarCta2Text }}
       </button>
       <button
         v-if="toolbarData.isCta3Enabled"
-        @click="showLink(toolbarData.toolbarCta1Link)"
+        @click="showLink(toolbarData.toolbarCta3Link)"
         :style="{backgroundColor: toolbarData.toolbarCta3Background, color: toolbarData.toolbarCta3Color}"
       >
         {{ toolbarData.toolbarCta3Text }}
