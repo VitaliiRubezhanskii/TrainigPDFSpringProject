@@ -58,7 +58,6 @@ export default {
         this.page = page - 1;
         document.getElementById(this.page).scrollIntoView();
       }
-
     },
   },
   computed: {
