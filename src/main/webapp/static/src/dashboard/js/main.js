@@ -1390,6 +1390,71 @@ sp = {
                 hopperTitle.textContent = 'N/A';
             }
 
+
+
+//////////////////////////// Upload button data.
+            var uploadTitle = document.querySelector('.sp-link-metric__title');
+            uploadTitle.textContent = 'Loading...';
+            uploadTitle.style.display = 'block';
+
+            var uploadItems = document.querySelector('.sp-link-metric__items');
+            while (uploadItems.hasChildNodes()) {
+                uploadItems.removeChild(uploadItems.lastChild);
+            }
+
+            $('.sp-link-metric__save-button').remove();
+
+            if (typeof fileData != 'undefined' && typeof fileData[1] != 'undefined' && parseInt(fileData[1]) > 0) {
+                $.getJSON('/api/v1/widgets/?fileHash=' + fileData[0] + '&type=12', function(data) {
+                    if (data.items.length === 0) {
+                        uploadTitle.textContent = 'N/A';
+                    } else {
+                        var uploadMetric = document.querySelector('.sp-link-metric');
+                        uploadMetric.setAttribute('data-link', data.link);
+
+                        var ul = document.createElement('ul');
+                        ul.className = 'todo-list small-list m-t';
+                        data.items.forEach(function (item) {
+                            var li = document.createElement('li');
+                            var a = document.createElement('a');
+                            a.classList = 'sp-link-metric__item check-link';
+                            var i = document.createElement('i');
+                            i.classList = 'sp-link-metric__item-status';
+                            a.appendChild(i);
+                            li.appendChild(a);
+
+                            var span = document.createElement('span');
+                            span.classList = 'sp-link-metric__item-content m-l-xs';
+
+                            span.setAttribute('data-icon', item.icon);
+                            span.setAttribute('data-page-to', item.pageTo);
+                            span.setAttribute('data-page-from', item.pageFrom);
+                            span.setAttribute('data-button-text-1', item.buttonText1);
+                            span.setAttribute('data-button-text-2', item.buttonText2);
+
+                            span.textContent = item.buttonText1;
+                            li.appendChild(span);
+                            ul.appendChild(li);
+                        });
+                        uploadItems.appendChild(ul);
+
+                        var saveButton = document.createElement('button');
+                        saveButton.classList = 'btn btn-success m-t-sm sp-link-metric__save-button';
+                        saveButton.disabled = true;
+                        saveButton.textContent = 'Save';
+                        uploadMetric.appendChild(saveButton);
+
+                        uploadTitle.style.display = 'none';
+                    }
+                }).fail(function() {
+                    uploadTitle.textContent = 'N/A';
+                });
+            } else {
+                uploadTitle.textContent = 'N/A';
+            }
+////////////////////////////////////////////////////////////////////////////////
+
+
             // Link data.
             var linkTitle = document.querySelector('.sp-link-metric__title');
             linkTitle.textContent = 'Loading...';

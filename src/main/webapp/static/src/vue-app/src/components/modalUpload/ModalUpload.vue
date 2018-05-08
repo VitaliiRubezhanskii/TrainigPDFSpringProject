@@ -93,12 +93,12 @@ export default{
       location: window.location.search.slice(3),
       uploadedFiles: null,
       isUploading: false,
-      status: null,
     }
   },
   methods: {
     handleInput(){
-      this.files = event.target.files;
+      //this.files = event.target.files;
+      this.files = this.$refs.uploadFiles.files
       this.uploadedFiles = this.files['0'].name;
       this.isDisabled = this.files ? false : true;
     },
@@ -107,35 +107,31 @@ export default{
       const body = new FormData();
       body.append('file', this.files[0]);
       body.append('initialChannelFriendlyId', this.location);
-      fetch(`${this.sp.API_URL}/viewer/customerdocuments`, {
-        //referrerPolicy: 'policy',
-        dataType: 'json',
+      fetch(`${this.sp.API_URL}/viewer/customer-documents`, {
         method: 'POST',
         body,
         headers: {
-          'Accept': 'application/json, text/plain, */*',
-          'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+          [this.sp.CSRF_HEADER]: JSON.stringify(this.sp.CSRF_TOKEN)
         },
-        enctype: 'multipart/form-data',
-        processData: false,
-        contentType: false,
-        beforeSend: (xhr) =>  xhr.setRequestHeader(`${sp.CSRF_HEADER}`, `${sp.CSRF_TOKEN}`),
+      })
+      .then((response)=> {
+        if (!response.ok) {
+          throw Error(response.statusText);
+        }
+        return response;
       })
       .then(xhr => {
-        this.status = 'success';
         this.isUploading = false;
         this.$refs.close.click();
         this.showList(this.uploadedFiles);
         Vue.swal("Success!", "Your file was uploaded!", "success");
-        //this.isDisabled = true;
+        this.isDisabled = true;
       })
       .catch(error => {
-        this.status = 'failed';
-        console.log(this.$refs.uploadFiles);
         this.isUploading = false;
         this.$refs.close.click();
         Vue.swal("Error!", "Your file was not uploaded!", "error");
-        //this.isDisabled = true;
+        this.isDisabled = true;
       });
     },
   }
