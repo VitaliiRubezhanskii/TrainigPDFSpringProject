@@ -193,13 +193,6 @@ public class DashboardAnalyticsController {
                 JSONArray notifications = DbLayer.getNotifications(principal.getName(), Analytics.sqlTableNotifications);
                 data.put("notifications", notifications);
                 break;
-
-            case "getCustomerDocumentsList":
-                parameterList.add(principal.getName());
-                parameterList.add(customerEmail);
-                sqlData = DbLayer.getEventData(parameterList, Analytics.sqlFilesListForCustomer);
-                data.put("filesList", sqlData);
-                break;
         }
 
         return data.toString();

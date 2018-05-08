@@ -356,7 +356,6 @@ sp = {
                         $('.sp-email-container-hidden').removeClass('sp-customer-documents-container-hidden');
                         $('#document-wizard-t-0').click();
                         sp.file.getCustomersList(requestOrigin);
-                        sp.customerDocuments.getDocumentsList(requestOrigin);
                         break;
                 }
 
@@ -1220,8 +1219,7 @@ sp = {
         files: [],
         getDocumentsList: function(requestOrigin) {
             $.getJSON(
-                '/api/v1/analytics',
-                {action: 'getCustomerDocumentsList'},
+                '/api/v1/customer-documents',
                 function(data) {
                     /**
                      * Request Origin is a handler to decide where to send the data from the getDocumentsList function
@@ -1244,7 +1242,7 @@ sp = {
              */
 
             if (requestOrigin === 'customerDocumentsGenerator') {
-                sp.customerFileLinksGenerator.formatFile(data);
+                sp.customerDocumentsGenerator.customerDocumentsFormatFile(data);
 
             }
         }
@@ -2497,9 +2495,9 @@ sp = {
 
             $.fn.dataTable.moment('DD-MM-YYYY HH:mm');
             if (!($.fn.dataTable.isDataTable('.sp-documents-customer-table'))) {
-                $('.sp-customer-table').DataTable({
+                $('.sp-documents-customer-table').DataTable({
                     select: {
-                        style: 'multi',
+                        style: 'single'
                     },
                     data: nameArr,
                     columnDefs: [
@@ -2532,30 +2530,12 @@ sp = {
                         }
                     ],
                     buttons: [
-                        {
-                            action: function(e, dt, node, config) {
-                                $('#sp-modal-add-update-customer .modal-title').text('Add Customer');
-                                $('#sp-modal-add-update-customer .modal-sub-title')
-                                    .text('Fill the fields below and then click on add a customer.');
-                                $('#sp-modal-add-update-customer__button').text('Add Customer');
-                                $('#sp-modal-add-update-customer input[type=submit]').val('Add Customer');
-                                $('#sp-modal-add-update-customer input#add-update').val('add');
 
-                                $('#sp-modal-add-update-customer input:not(#add-update, [type=submit])').val('');
-                                $('#sp-modal-add-update-customer input[name="customerEmail"]')
-                                    .prop('readonly', false);
-
-                                $('#sp-modal-add-update-customer').modal();
-                            },
-                            className: 'sp-send-email__add-customer',
-                            text: 'Add a Customer'
-
-                        },
                     ],
-                    dom: '<"sp-datatables-search-left"f><"sp-send-email__add-customer"B>ti',
+                    dom: '<"sp-datatables-search-left"f>ti',
                     order: [[5, 'desc']],
                     scrollY: '15vh',
-                    paging: false,
+                    paging: false
                 });
             } else {
                 $('.sp-documents-customer-table').DataTable()
@@ -2563,6 +2543,125 @@ sp = {
                     .rows.add(nameArr)
                     .draw();
             }
+        },
+
+        /**
+         * This function formats and renders documents to the wizard, using the DataTables API
+         * @params {data-obj} - This is the files data received from the server
+         */
+        customerDocumentsFormatFile: function (data){
+            var fileArr = [];
+
+            $.each(data['filesList'], function (index, value) {
+                var date = moment.utc(value[2]).toDate();
+
+                var obj = {
+                    checkbox: index,
+                    name: '<span class="sp-doc-name" data-file-name="' + sp.escapeHtml(value[1]) + '" data-file-hash="' + sp.escapeHtml(value[0]) + '">' + sp.escapeHtml(value[1]) + '</span>',
+                    date: moment(date).format('DD-MM-YYYY HH:mm'),
+                };
+                fileArr.push(obj);
+            });
+
+            $.fn.dataTable.moment('DD-MM-YYYY HH:mm');
+            if (!($.fn.dataTable.isDataTable('.sp-documents-doc-table'))) {
+                $('.sp-documents-doc-table').DataTable({
+                    select: {
+                        style: 'single'
+                    },
+                    data: fileArr,
+                    columnDefs: [
+                        {
+                            targets: 0,
+                            data: 'checkbox',
+                            checkboxes: {
+                                selectRow: true
+                            }
+                        },
+                        {
+                            targets: 1,
+                            data: 'name'
+                        },
+                        {
+                            targets: 2,
+                            data: 'date'
+                        }
+                    ],
+                    dom: '<"sp-datatables-search-left"f>ti',
+                    order: [[2, 'desc']],
+                    scrollY: '15vh',
+                    paging: false
+                });
+            } else {
+                $('.sp-documents-doc-table').DataTable()
+                    .clear()
+                    .rows.add(fileArr)
+                    .draw();
+            }
+        },
+
+        /**
+         *  Listener to save which boxes have been checked i.e. which documents the
+         *  user wants to send, and to whom.
+         *  $('#document-wizard-t-x') is a selector on the inspinia wizard object
+         *        @see http://webapplayers.com/inspinia_admin-v2.5/form_wizard.html#
+         *  $('a[href="next"]') is also an INSPINIA generated selector
+         */
+
+        documentsCheckboxListener: (function () {
+            $('#customer-document-wizard-t-2').addClass('sp-get-customer-files__button');
+            $('#customer-document-wizard-t-1').addClass('sp-get-customer-files__button');
+            $('#sp-send-docs__button').addClass('sp-get-customer-files__button');
+            $('.sp-get-customer-files__button').on('click', function (e) {
+
+                // This checks If wizard-step is document selector tab in order to start saving the
+                // chosen sections.
+                if ($('li.current').text() === 'current step: 3. Customer Documents'){
+                    var customerArr = [];
+                    var fileArr = [];
+                    var files = [];
+
+                    $('.sp-documents-customer-table').DataTable()
+                        .search('').draw();
+
+                    $('.sp-documents-doc-table').DataTable()
+                        .search('').draw();
+
+                    //This saves all the chosen email addresses.
+                    $(':checked').closest('tr').find('[data-email]').each(function (i, v) {
+                        var email = $(this).text();
+                        customerArr.push(email.slice(1, email.length));
+                    });
+
+                    // This saves all the document hashes & file names into a file array, and
+                    // a files object.
+                    $(':checked').closest('tr').find('[data-file-hash]')
+                        .each(function (i, v) {
+                            fileArr.push($(this).attr('data-file-hash'));
+                            var fileObj = {
+                                name: $(this).text(),
+                                hash: $(this).attr('data-file-hash')
+                            };
+                            files.push(fileObj);
+                        });
+                    sp.customerDocumentsGenerator.prepareDataForGettingFileListForCustomers(customerArr, fileArr, files);
+                }
+            });
+        })(),
+
+        /**
+         * Create obj to send.
+         */
+        prepareDataForGettingFileListForCustomers: function (customers, documents, files) {
+            var dataToSend = [];
+            $.each(customers, function (i, v) {
+                var obj = {
+                    customerEmail: v,
+                    fileHashes: documents
+                };
+                dataToSend.push(obj);
+            });
+            sp.customerDocuments.getDocumentsList(requestOrigin);
         }
     },
 
