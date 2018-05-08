@@ -6,6 +6,6 @@ public class Constants {
     public static String dbURL = System.getProperty("spring.datasource.url");
 
     public static void updateConstants() {
-        System.err.println("Constants.updateConstants is deprecated");
+//        System.err.println("Constants.updateConstants is deprecated");
     }
 }

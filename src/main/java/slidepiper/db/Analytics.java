@@ -329,4 +329,15 @@ public class Analytics {
     + "INNER JOIN msg_info ON msg_info.id = customer_events.msg_id\n"
     + "INNER JOIN slides ON msg_info.slides_id = slides.id AND slides.status IN ('CREATED', 'UPDATED', 'BEFORE_AWS_S3_TRANSITION')\n"
     + "WHERE customer_events.id = ?";
+
+	/**
+	 * Get files list for specific customer
+	 */
+	public static final String sqlFilesListForCustomer =
+			"SELECT slides.id AS file_hash, name AS file_name, slides.timestamp AS date_added_or_modified, slides.id_ai AS id,\n" +
+			" is_process_mode AS is_process_mode FROM slides, msg_info WHERE slides.sales_man_email = ?\n" +
+			" AND slides.status IN ('CREATED', 'UPDATED', 'BEFORE_AWS_S3_TRANSITION')\n" +
+			" AND slides.id = msg_info.slides_id\n" +
+			" AND msg_info.customer_email = ?\n" +
+			" ORDER BY date_added_or_modified";
 }
