@@ -64,7 +64,7 @@ gulp.task('static-revision-clean', function() {
 
 gulp.task('build', gulp.series(
     'static-clean',
-    'vue-vendors',
+    // 'vue-vendors',
     'templates-clean',
     'pdfjs-copy',
     'templates-copy',
