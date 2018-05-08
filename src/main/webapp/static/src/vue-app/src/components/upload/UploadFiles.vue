@@ -11,7 +11,6 @@
     </button>
     <ModalUpload />
   </div>
-
 </template>
 
 <script>

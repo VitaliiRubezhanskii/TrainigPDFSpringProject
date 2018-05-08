@@ -1,5 +1,12 @@
 <template>
-  <div class="modal inmodal in" id="sp-modal-upload-files" tabindex="-1" role="dialog" aria-hidden="true" style="padding-right: 17px;">
+  <div
+    class="modal inmodal in"
+    id="sp-modal-upload-files"
+    tabindex="-1"
+    role="dialog"
+    aria-hidden="true"
+    style="padding-right: 17px;"
+  >
   <div class="modal-dialog">
       <div class="modal-content">
           <div class="modal-header">
@@ -17,7 +24,10 @@
               </small>
           </div>
           <div class="modal-body">
-              <div class="container-fluid">
+              <div
+                v-if="!isUploading"
+                class="container-fluid"
+              >
                   <div class="row">
                       <div class="form-group">
                            <form id="sp-file__upload-form">
@@ -34,12 +44,14 @@
                   </div>
               </div>
               <div
-                class="sk-spinner sk-spinner-wave disabled">
-                  <div class="sk-rect1"></div>
-                  <div class="sk-rect2"></div>
-                  <div class="sk-rect3"></div>
-                  <div class="sk-rect4"></div>
-                  <div class="sk-rect5"></div>
+                v-if="isUploading"
+                class="sk-spinner sk-spinner-wave"
+              >
+                <div class="sk-rect1"></div>
+                <div class="sk-rect2"></div>
+                <div class="sk-rect3"></div>
+                <div class="sk-rect4"></div>
+                <div class="sk-rect5"></div>
               </div>
           </div>
 
@@ -47,7 +59,8 @@
             <button
               type="button"
               class="btn btn-white"
-              data-dismiss="modal">
+              data-dismiss="modal"
+              >
               Close
             </button>
             <button type="button"
@@ -65,7 +78,9 @@
 </template>
 
 <script>
+import Vue from 'vue';
 import { uploadDoc } from '../../helper/functions.js';
+import $ from "jquery";
 
 export default{
   data() {
@@ -76,6 +91,7 @@ export default{
       location: window.location.search.slice(3),
       filesName: [],
       spinnerDisabled: 'disabled',
+      isUploading: false,
     }
   },
   methods: {
@@ -85,10 +101,10 @@ export default{
       //console.log(event.target.files['0']);
       //this.fileName.push(event.target.files['0'].name);
       this.files = event.target.files;
-      event.target.files? this.isDisabled = null : this.isDisabled = 'true';
-      console.log(this.files[0].name);
+      this.isDisabled = event.target.files ? false : true;
     },
     uploadDocument() {
+      this.isUploading = true;
       const body = new FormData();
       body.append('file', this.files[0]);
       body.append('initialChannelFriendlyId', this.location);
@@ -103,10 +119,21 @@ export default{
         enctype: 'multipart/form-data',
         processData: false,
         contentType: false,
-        beforeSend: (xhr) =>  xhr.setRequestHeader('{{{_csrf.headerName}}}', '{{{_csrf.token}}}'),
+        beforeSend: (xhr) =>  xhr.setRequestHeader(`${sp.CSRF_HEADER}`, `${sp.CSRF_TOKEN}`),
       })
-      //.then(data => );
-    }
+      .then(xhr => {
+        this.isUploading = false;
+        $('button[data-dismiss="modal"]').click();
+        Vue.swal("Success!", "Your file was uploaded!", "success");
+        this.isDisabled = true;
+      })
+      .catch(error => {
+        this.isUploading = false;
+        this.isClick = true;
+        $('button[data-dismiss="modal"]').click();
+        Vue.swal("Error!", "Your file was not uploaded!", "error");
+      });
+    },
   }
 }
 </script>
