@@ -1393,7 +1393,7 @@ sp = {
 
 
 //////////////////////////// Upload button data.
-            var uploadTitle = document.querySelector('.sp-link-metric__title');
+           /* var uploadTitle = document.querySelector('.sp-link-metric__title');
             uploadTitle.textContent = 'Loading...';
             uploadTitle.style.display = 'block';
 
@@ -1451,7 +1451,7 @@ sp = {
                 });
             } else {
                 uploadTitle.textContent = 'N/A';
-            }
+            }*/
 ////////////////////////////////////////////////////////////////////////////////
 
 

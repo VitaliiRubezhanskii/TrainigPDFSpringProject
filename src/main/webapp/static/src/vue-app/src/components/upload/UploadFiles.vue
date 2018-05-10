@@ -57,7 +57,7 @@ export default{
 }
 .upload-block{
   padding: 0 0 0 50px;
-  margin: 0 0 50px 0;
+  /*margin: 0 0 50px 0;*/
   text-align: start;
 }
 .files{

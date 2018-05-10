@@ -325,7 +325,7 @@ sp.widgets = {
         }
     },
 //widget12
-    widget12: {
+    /*widget12: {
         html: $('#sp-tab-12 .sp-widget-item').html(),
         init: (function() {
 
@@ -363,7 +363,7 @@ sp.widgets = {
 
             return isEmpty;
         }
-    },
+    },*/
         ////////////////////////////////
     widget9: {
         html: $('#sp-tab-9 .sp-widget-item').html(),
@@ -604,11 +604,11 @@ sp.viewerWidgetsModal = {
                                 displayWidget11(widget.data, fileHash);
                             }
                             break;
-                        case 12:
+                       /* case 12:
                             if (widget.data.items.length > 0) {
                                 displayWidget12(widget.data);
                             }
-                            break;
+                            break;*/
                     }
                 }
             }
@@ -888,7 +888,7 @@ sp.viewerWidgetsModal = {
         }
 
 
-        function displayWidget12(widget) {
+       /* function displayWidget12(widget) {
             $('[name="sp-widget12--is-enabled"]')
                 .prop('checked', widget.isEnabled)
                 .closest('div').removeClass('sp-hide-is-enabled');
@@ -927,7 +927,7 @@ sp.viewerWidgetsModal = {
                     }
                 });
             });
-        }
+        }*/
 
 
 
@@ -1092,10 +1092,10 @@ sp.viewerWidgetsModal = {
         }
 
 
-        if (! sp.widgets.widget12.validate()
+        /*if (! sp.widgets.widget12.validate()
             || ! $('[name="sp-widget12--is-enabled"]').closest('div').hasClass('sp-hide-is-enabled')) {
             settings.push(sp.viewerWidgetsModal.saveWidget12(fileHash));
-        }
+        }*/
 
 
         settings.push(sp.viewerWidgetsModal.saveWidget10(fileHash));
@@ -1605,7 +1605,7 @@ sp.viewerWidgetsModal = {
     },
     /** save widget12*/
 
-    saveWidget12: function(fileHash) {
+    /*saveWidget12: function(fileHash) {
 
         if ($('[name="sp-widget12--is-enabled"]').closest('div').hasClass('sp-hide-is-enabled')) {
             $('[name="sp-widget12--is-enabled"]').prop('checked', true);
@@ -1660,7 +1660,7 @@ sp.viewerWidgetsModal = {
         } else {
             return undefined;
         }
-    },
+    },*/
 
 
     saveWidget10: function(fileHash) {
