@@ -1,5 +1,7 @@
 /* Dashboard settings */
-
+.error{
+    display: none;
+}
 /* Modal */
 
 .sp--margin-left-0 {

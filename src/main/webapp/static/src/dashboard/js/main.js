@@ -3261,3 +3261,35 @@ $(document).on('click', '.sp-link-metric__item', function() {
     $('.sp-link-metric__save-button').prop('disabled', false);
     return false;
 });
+
+$(function() {
+    $("#demo").intlTelInput({
+        allowDropdown: true,
+        autoHideDialCode: true,
+        autoPlaceholder: "polite",
+        customPlaceholder: null,
+        dropdownContainer: "",
+        excludeCountries: [],
+        formatOnDisplay: true,
+        geoIpLookup: null,
+        hiddenInput: "",
+        initialCountry: "",
+        nationalMode: true,
+        onlyCountries: ["us", "gb", "il"],
+        placeholderNumberType: "MOBILE",
+        preferredCountries: false,
+        separateDialCode: false,
+        utilsScript: ""
+    });
+    $("#demo").mask("(000) 000-0000");
+    $("#demo").on("blur", ()=>{
+        if($("#demo").val().length < 14){
+            $(".error").css({display: 'block', color: 'red'});
+            $("#demo").css({border: '1px solid red'})
+        }
+        else{
+            $(".error").css({display: 'none'});
+            $("#demo").css({border: 'none'})
+        }
+    });
+})

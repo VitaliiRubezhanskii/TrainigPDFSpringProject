@@ -40,6 +40,8 @@
     <link type="text/css" rel="stylesheet" href="assets/css/bootstrap-datetimepicker.min.css">
     <link type="text/css" rel="stylesheet" href="assets/css/select2.min.css">
     <link type="text/css" rel="stylesheet" href="assets/css/select2-bootstrap.min.css">
+    <link rel="stylesheet" href="/assets/js/plugins/phone/build/css/intlTelInput.css">
+
 
     <!--SlidePiper scripts-->
     <link type="text/css" href="/static/src/dashboard/css/style.css" rel="stylesheet">
@@ -735,7 +737,17 @@
                     <div class="form-group">
                         <label class="col-lg-3 control-label">Cellular Phone</label>
                         <div class="col-lg-8">
-                            <input type="text" name="customerPhone" placeholder="Cellular Phone" class="form-control" required autocomplete="off">
+                            <input type="tel" id="demo" name="customerPhone" placeholder="(XXX) XXX-XXXX" class="form-control phoneInput" required autocomplete="off">
+                            <div class="error errorMessage">Phone number is incorrect</div>
+                            <!--<select id="selectCountry" size="1" style="border: none; width: 200px;">-->
+                                <!--<option disabled selected>Choose country</option>-->
+                                <!--<option value="+972">+972 Israel</option>-->
+                                <!--<option value="+44">+44 United Kingdom</option>-->
+                                <!--<option value="+1">+1 United States</option>-->
+                                <!--<option value="+0">+0 United States Minor Outlying Islands</option>-->
+                            <!--</select>-->
+                            <!--<input type="tel" name="customerPhone" placeholder="(XXX) XXX-XXXX" class="form-control phoneInput" required autocomplete="off">-->
+
                         </div>
                     </div>
 
@@ -988,6 +1000,10 @@
 <script src="/assets/js/plugins/chartjs/chart.min.js"></script>
 <script src="assets/js/bootstrap-datetimepicker.min.js"></script>
 <script src="assets/js/select2.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.js"></script>
+
+<!--<script src="http://code.jquery.com/jquery-latest.min.js"></script>-->
+<script src="/assets/js/plugins/phone/build/js/intlTelInput.js"></script>
 
 <!-- SlidePiper scripts -->
 <script src="/static/src/dashboard/js/main.js"></script>
