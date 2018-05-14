@@ -1,5 +1,7 @@
 /* Dashboard settings */
-.error{
+.error,
+.errorId,
+.errorEmail{
     display: none;
 }
 /* Modal */
