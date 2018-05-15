@@ -3315,7 +3315,6 @@ $(function() {
         event.preventDefault();
 
         if(!/^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/.test($('input[name^="customerEmail"]').val())){
-       // if(!/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test($('input[name^="customerEmail"]').val())){
             $(".errorEmail").css({display: 'block', color: 'red'});
             $('input[name^="customerEmail"]').css({border: '1px solid red'});
         } else{
@@ -3333,11 +3332,6 @@ $(function() {
     $(".sp-add-update-customer").on("click", ()=>{
         $("#sp-add-update-customer__form")[0].reset();
     });
-
-    // $('.modal-content').on('click',(e)=>{
-    //     e.stopPropagation();
-    //     e.preventDefault();
-    // });
 
     $("#sp-add-update-customer__form").on("propertychange change blur click keyup input paste",function(){
         var phoneNumber = $("#phoneNumber").val().length;

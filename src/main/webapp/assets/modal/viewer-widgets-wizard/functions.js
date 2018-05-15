@@ -324,46 +324,6 @@ sp.widgets = {
             return isEmpty;
         }
     },
-//widget12
-    /*widget12: {
-        html: $('#sp-tab-12 .sp-widget-item').html(),
-        init: (function() {
-
-            // Add item.
-            $(document).off('click', '#sp-tab-12 .sp-widget__add-item').on('click', '#sp-tab-12 .sp-widget__add-item', function() {
-                $('#sp-tab-12 .sp-widget-item').append(sp.widgets.widget12.html);
-            });
-
-            // Delete item.
-            $(document).on('click', '#sp-tab-12 .sp-widget__delete-item', function() {
-                $(this).closest('.sp-link-widget__item').remove();
-            });
-        })(),
-        urlHttpConfig: function(url) {
-
-            if (! url.match(/^.+?:|^#/)) {
-                url = 'http://' + url;
-            }
-
-            return url;
-        },
-        validate: function() {
-            var isEmpty = false;
-
-            // buttonText2 is not a required field.
-            $('#sp-tab-12 form').find('input[data-item-setting="buttonText1"], input[data-item-setting="link"], input[data-item-setting="pageFrom"], input[data-item-setting="pageTo"]').each(function() {
-
-                if ('' === $(this).val()) {
-                    isEmpty = true;
-                } else {
-                    isEmpty = false;
-                    return false;
-                }
-            });
-
-            return isEmpty;
-        }
-    },*/
         ////////////////////////////////
     widget9: {
         html: $('#sp-tab-9 .sp-widget-item').html(),
@@ -604,11 +564,6 @@ sp.viewerWidgetsModal = {
                                 displayWidget11(widget.data, fileHash);
                             }
                             break;
-                       /* case 12:
-                            if (widget.data.items.length > 0) {
-                                displayWidget12(widget.data);
-                            }
-                            break;*/
                     }
                 }
             }
@@ -887,50 +842,6 @@ sp.viewerWidgetsModal = {
             });
         }
 
-
-       /* function displayWidget12(widget) {
-            $('[name="sp-widget12--is-enabled"]')
-                .prop('checked', widget.isEnabled)
-                .closest('div').removeClass('sp-hide-is-enabled');
-
-            for (var i = 0; i < widget.items.length - 1; i++) {
-                $('#sp-tab-12 .sp-widget-item').append(
-                    sp.widgets.widget12.html
-                );
-            }
-
-            // Link data.
-            $('#sp-tab-12 .sp-link-widget__item').each(function(index) {
-                $(this).find('[data-item-setting]').each(function() {
-
-                    if ('buttonText1' === $(this).attr('data-item-setting')) {
-                        $(this).parents('.sp-link-widget__item').find('.sp-link-widget__item-title')
-                            .text(widget.items[index]['buttonText1']);
-                    }
-
-                    if ('status' === $(this).attr('data-item-setting')) {
-                        if ('completed' === widget.items[index]['status']) {
-                            $(this).parents('.sp-link-widget__item').find('.sp-link-widget__item-status').val('completed');
-                        }
-                    } else if ('icon' === $(this).attr('data-item-setting')) {
-                        if (typeof widget.items[index][$(this).attr('data-item-setting')] !== 'undefined'
-                            && $(this).attr('data-icon') === widget.items[index][$(this).attr('data-item-setting')]) {
-                            $(this).prop('checked', true);
-                        }
-                    } else if ('layout' === $(this).attr('data-item-setting')) {
-                        if (typeof widget.items[index][$(this).attr('data-item-setting')] !== 'undefined'
-                            && $(this).attr('data-layout') === widget.items[index][$(this).attr('data-item-setting')]) {
-                            $(this).prop('checked', true);
-                        }
-                    } else {
-                        $(this).val(widget.items[index][$(this).attr('data-item-setting')]);
-                    }
-                });
-            });
-        }*/
-
-
-
         function displayWidget10(widget) {
             $('[name="sp-widget10--is-enabled"]').prop('checked', widget.isEnabled);
             $('[name="spWidget10FormTitle"]').val(widget.items[0].formTitle);
@@ -1090,13 +1001,6 @@ sp.viewerWidgetsModal = {
             || ! $('[name="sp-widget9--is-enabled"]').closest('div').hasClass('sp-hide-is-enabled')) {
             settings.push(sp.viewerWidgetsModal.saveWidget9(fileHash));
         }
-
-
-        /*if (! sp.widgets.widget12.validate()
-            || ! $('[name="sp-widget12--is-enabled"]').closest('div').hasClass('sp-hide-is-enabled')) {
-            settings.push(sp.viewerWidgetsModal.saveWidget12(fileHash));
-        }*/
-
 
         settings.push(sp.viewerWidgetsModal.saveWidget10(fileHash));
 
@@ -1547,7 +1451,7 @@ sp.viewerWidgetsModal = {
             data: {
                 widgetId: 9,
                 isEnabled: $('[name="sp-widget9--is-enabled"]').prop('checked'),
-                items: []
+                items: [],
             }
         };
 
@@ -1603,65 +1507,6 @@ sp.viewerWidgetsModal = {
             return undefined;
         }
     },
-    /** save widget12*/
-
-    /*saveWidget12: function(fileHash) {
-
-        if ($('[name="sp-widget12--is-enabled"]').closest('div').hasClass('sp-hide-is-enabled')) {
-            $('[name="sp-widget12--is-enabled"]').prop('checked', true);
-        }
-
-        var widget12 = {
-            data: {
-                widgetId: 12,
-                isEnabled: $('[name="sp-widget12--is-enabled"]').prop('checked'),
-                items: []
-            }
-        };
-
-        var isWidget12SettingEmpty = false;
-
-        $('#sp-tab-12 .sp-link-widget__item').each(function() {
-            var item = {};
-
-            $(this).find('[data-item-setting]').each(function() {
-
-                if ('' === $(this).val() && $(this).attr('data-item-setting') !== 'buttonText2'
-                    && $(this).attr('data-item-setting') !== 'icon') {
-
-                    sp.error.handleError('You must fill the field.');
-                    $(this).addClass('sp-widget-form-error');
-                    sp.viewerWidgetsModal.openErrorTab();
-                    isWidget12SettingEmpty = true;
-
-                } else if ('link' === $(this).attr('data-item-setting')) {
-                    var url = sp.widgets.widget12.urlHttpConfig($(this).val());
-                    item[$(this).attr('data-item-setting')] = url;
-
-                } else if ('icon' === $(this).attr('data-item-setting')) {
-                    if ($(this).prop('checked')) {
-                        item['icon'] = $(this).attr('data-icon');
-                    }
-                } else {
-                    item[$(this).attr('data-item-setting')] = $(this).val();
-                }
-            });
-
-            widget12.data.items.push(item);
-        });
-
-        if (! isWidget12SettingEmpty) {
-
-            if (sp.widgets.widget12.isWidgetPageOrderValid()) {
-                return widget12;
-            } else {
-                return undefined;
-            }
-        } else {
-            return undefined;
-        }
-    },*/
-
 
     saveWidget10: function(fileHash) {
 
