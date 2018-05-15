@@ -3275,9 +3275,9 @@ $(function() {
         hiddenInput: "",
         initialCountry: "",
         nationalMode: true,
-        onlyCountries: ["us", "gb", "il"],
+        onlyCountries: [],
         placeholderNumberType: "MOBILE",
-        preferredCountries: false,
+        preferredCountries: ["il","us", "gb"],
         separateDialCode: false,
         utilsScript: ""
     });
@@ -3289,7 +3289,7 @@ $(function() {
             event.preventDefault();
         }, true );
 
-    $("#phoneNumber").on("change", ()=>{
+    $("#phoneNumber").on("change input paste propertychange", ()=>{
         event.preventDefault();
         if($("#phoneNumber").val().length !== 14){
             $(".error").css({display: 'block', color: 'red'});
@@ -3300,9 +3300,9 @@ $(function() {
         }
     });
 
-    $('input[name^="customerID"]').on("change",()=>{
+    $('input[name^="customerID"]').on("change input paste propertychange",()=>{
         event.preventDefault();
-        if($('input[name^="customerID"]').val().length !== 9){
+        if($('input[name^="customerID"]').val().length > 9){
             $(".errorId").css({display: 'block', color: 'red'});
             $('input[name^="customerID"]').css({border: '1px solid red'});
         } else{
@@ -3311,9 +3311,11 @@ $(function() {
         }
     });
 
-    $('input[name^="customerEmail"]').on("change",()=>{
+    $('input[name^="customerEmail"]').on("change input paste propertychange",()=>{
         event.preventDefault();
-        if(!/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test($('input[name^="customerEmail"]').val())){
+
+        if(!/^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/.test($('input[name^="customerEmail"]').val())){
+       // if(!/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test($('input[name^="customerEmail"]').val())){
             $(".errorEmail").css({display: 'block', color: 'red'});
             $('input[name^="customerEmail"]').css({border: '1px solid red'});
         } else{
@@ -3325,13 +3327,23 @@ $(function() {
     $(".closeModal").on("click",()=>{
         $(".error, .errorId, .errorEmail").css({display: 'none'});
         $("#phoneNumber, input[name^='customerID'], input[name^='customerEmail']").css({border: '1px solid #e5e6e7'});
+        $("#sp-add-update-customer__form")[0].reset();
     });
 
-    $("#sp-add-update-customer__form").on("change",()=>{
+    $(".sp-add-update-customer").on("click", ()=>{
+        $("#sp-add-update-customer__form")[0].reset();
+    });
+
+    // $('.modal-content').on('click',(e)=>{
+    //     e.stopPropagation();
+    //     e.preventDefault();
+    // });
+
+    $("#sp-add-update-customer__form").on("propertychange change blur click keyup input paste",function(){
         var phoneNumber = $("#phoneNumber").val().length;
+        var customerId = $('input[name^="customerID"]').val().length;
         var email = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test($('input[name^="customerEmail"]').val());
-        var customerID = $('input[name^="customerID"]').val().length;
-        if(email === true && customerID === 9 && phoneNumber === 14){
+        if(email === true && customerId <=9 && phoneNumber === 14){
             $("#sp-modal-add-update-customer__button").prop("disabled", false);
         } else {
             $("#sp-modal-add-update-customer__button").prop("disabled", true);
