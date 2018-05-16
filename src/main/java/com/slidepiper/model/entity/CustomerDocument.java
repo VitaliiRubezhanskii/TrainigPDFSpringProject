@@ -24,6 +24,9 @@ public class CustomerDocument {
     @JoinColumn(name = "salesman_id", referencedColumnName = "id")
     Viewer salesMan;
 
+    @ManyToOne
+    @JoinColumn(name = "channel_id", referencedColumnName = "id_ai")
+    Channel channel;
 
     public enum Status {
         CREATED,
@@ -46,9 +49,10 @@ public class CustomerDocument {
     public CustomerDocument() {
     }
 
-    public CustomerDocument(Customer customer, Viewer viewer, CustomerDocument.Status status, String name) {
+    public CustomerDocument(Customer customer, Viewer viewer, Channel channel, CustomerDocument.Status status, String name) {
         this.customer = customer;
         this.salesMan = viewer;
+        this.channel = channel;
         this.status = status;
         this.name = name;
     }

@@ -348,15 +348,12 @@ sp = {
                         window.sp.tasks.getAll();
                         break;
 
-                    /*case 'sp-customer-documents':
+                    case 'sp-customer-documents':
                         requestOrigin = 'customerDocumentsGenerator';
-                        $('#sp-nav-files__li ul').hide();
-                        // This class is removed because the send-email wizard appears at the botton of
-                        // marketing analytics when the page loads
-                        $('.sp-email-container-hidden').removeClass('sp-customer-documents-container-hidden');
+                        $('.sp-customer-documents-container-hidden').removeClass('sp-customer-documents-container-hidden');
                         $('#document-wizard-t-0').click();
-                        // sp.customerDocuments.getCustomersList(requestOrigin);
-                        break;*/
+                        sp.file.getCustomersList(requestOrigin);
+                        break;
                 }
 
                 function resetDashboardData() {
@@ -1056,9 +1053,9 @@ sp = {
             else if (requestOrigin === 'customerFileLinksGenerator') {
                 sp.customerFileLinksGenerator.formatCustomers(data);
             }
-            /*else if (requestOrigin === 'customerDocumentsGenerator') {
+            else if (requestOrigin === 'customerDocumentsGenerator') {
                 sp.customerDocumentsGenerator.customerDocumentsFormatCustomers(data);
-            }*/
+            }
         },
 
 
@@ -1209,39 +1206,71 @@ sp = {
             });
         }
     },
-    /*customerDocuments: {
-        fileHash: null,
-        files: [],
-        getDocumentsList: function(requestOrigin) {
-            $.getJSON(
-                '/api/v1/customer-documents',
-                function(data) {
-                    /!**
+    customerPortals: {
+        // get all portals generated for specific customer
+        getPortalsListForCustomers: function(customerArr) {
+            $.ajax({
+                url: '/api/v1/customer-portals',
+                type: 'get',
+                dataType: 'json',
+                contentType: 'application/json',
+                data: {"customers" : JSON.stringify(customerArr)},
+                success: function (data) {
+                    sp.customerPortals.portalsCallback(data);
+
+                },
+                error: function (err) {
+                    console.log(err);
+                }
+            });
+        },
+        portalsCallback: function (data) {
+            // do something with data
+            /**
+             * @params {data - obj} This is the data received from the server
+             */
+
+                sp.customerDocumentsGenerator.customerDocumentsFormatFile(data);
+        }
+    },
+    customerDocuments: {
+        // get all documents uploaded by customer on specific portals
+        getDocumentsList: function(dataArr) {
+            $.ajax({
+                url: '/api/v1/customer-documents',
+                type: 'get',
+                dataType: 'json',
+                contentType: 'application/json',
+                beforeSend: function(xhr) {
+                    xhr.setRequestHeader(SP.CSRF_HEADER, SP.CSRF_TOKEN);
+                },
+                data: {"data": JSON.stringify(dataArr)},
+                success: function (data) {
+                    /**
                      * Request Origin is a handler to decide where to send the data from the getDocumentsList function
                      * There are two choices - either to send the file data to the fileupload dashboard (Files & Customers),
                      * or to send it to the customerFileLinkGenerator which allows the user to choose customers and documents
                      * to send out.
-                     *!/
+                     */
+                    sp.customerDocuments.callback(data);
+                },
+                error: function (err) {
+                    console.log(err);
+                }
+            });
 
-                    sp.customerDocuments.callback(data, requestOrigin);
 
-                });
         },
 
-        callback: function (data, requestOrigin) {
+        callback: function (data) {
             // do something with data
-            /!**
+            /**
              * @params {data - obj} This is the data received from the server
-             * @params {requestOrigin - String} The request origin routes the the sending of the data either for the
-             *          file upload, or to the send document wizard
-             *!/
+             */
 
-            if (requestOrigin === 'customerDocumentsGenerator') {
-                sp.customerDocumentsGenerator.customerDocumentsFormatFile(data);
-
-            }
+            sp.customerDocumentsGenerator.portalDocumentsFormatFile(data);
         }
-    },*/
+    },
 
     metric: {
 
@@ -2083,7 +2112,7 @@ sp = {
          * makes this not possible
          */
         scrollTop: $(function () {
-            $('#document-wizard-t-0, #document-wizard-t-1, #document-wizard-t-2, a[href="next"], a[href="previous"]')
+            $('#document-wizard-t-0, #document-wizard-t-1, #document-wizard-t-2, #document-wizard a[href="next"], #document-wizard a[href="previous"]')
                 .on('click', function () {
                     $('.content').animate({scrollTop: 0}, 1, 'linear');
                 });
@@ -2147,8 +2176,8 @@ sp = {
         },
 
         toggleBtnAttr: function () {
-            if ($('li.current').text() === 'current step: 2. Select Documents'){
-                $('a[href="#next"]').attr('id', 'sp-send-docs__button');
+            if ($('#document-wizard li.current').text() === 'current step: 2. Select Documents'){
+                $('#document-wizard a[href="#next"]').attr('id', 'sp-send-docs__button');
             };
         },
 
@@ -2168,7 +2197,7 @@ sp = {
 
                 // This checks If wizard-step is document selector tab in order to start saving the
                 // chosen sections.
-                if ($('li.current').text() === 'current step: 3. Generated Links'){
+                if ($('#document-wizard li.current').text() === 'current step: 3. Generated Links'){
                     var customerArr = [];
                     var fileArr = [];
                     var files = [];
@@ -2428,7 +2457,7 @@ sp = {
                 enableCancelButton: false,
                 enableFinishButton: false,
                 headerTag : 'h3',
-                transitionEffect : 'none'/*,
+                transitionEffect : 'none',
                 onStepChanging: function (event, currentIndex, newIndex){
                     if (currentIndex > newIndex){
                         return true;
@@ -2437,14 +2466,11 @@ sp = {
                     $('#sp-documents-customer-table').DataTable()
                         .search('').draw();
 
-                    $('#sp-documents-doc-table').DataTable()
-                        .search('').draw();
-
                     if (0 === currentIndex && (! $('#sp-documents-customer-table tbody input[type="checkbox"]').is(':checked'))){
-                        // sp.error.handleError('You must select at least one customer to continue');
+                        sp.error.handleError('You must select at least one customer to continue');
                         return false;
                     } else if (1 === currentIndex && (! $('#sp-documents-doc-table tbody input[type="checkbox"]').is(':checked'))) {
-                        // sp.error.handleError('You must select at least one document to continue');
+                        sp.error.handleError('You must select at least one portal to continue');
                         return false;
                     } else {
                         return true;
@@ -2456,18 +2482,8 @@ sp = {
                             $('#sp-documents-customer-table').DataTable()
                                 .columns.adjust().draw();
                             break;
-
-                        case 1:
-                            $('#sp-documents-doc-table').DataTable()
-                                .columns.adjust().draw();
-                            break;
-
-                        case 2:
-                            $('#sp-documents-send-table').DataTable()
-                                .columns.adjust().draw();
-                            break;
                     }
-                }*/
+                }
             });
         })(),
 
@@ -2492,7 +2508,7 @@ sp = {
             if (!($.fn.dataTable.isDataTable('#sp-documents-customer-table'))) {
                 $('#sp-documents-customer-table').DataTable({
                     select: {
-                        style: 'single'
+                        style: 'multi'
                     },
                     data: nameArr,
                     columnDefs: [
@@ -2547,13 +2563,14 @@ sp = {
         customerDocumentsFormatFile: function (data){
             var fileArr = [];
 
-            $.each(data['filesList'], function (index, value) {
+            $.each(data['portalsList'], function (index, value) {
                 var date = moment.utc(value[2]).toDate();
 
                 var obj = {
                     checkbox: index,
                     name: '<span class="sp-doc-name" data-file-name="' + sp.escapeHtml(value[1]) + '" data-file-hash="' + sp.escapeHtml(value[0]) + '">' + sp.escapeHtml(value[1]) + '</span>',
                     date: moment(date).format('DD-MM-YYYY HH:mm'),
+                    customer: '<span class="sp-customer-email" data-customer-email="' + sp.escapeHtml(value[4]) + '">' + sp.escapeHtml(value[4]) + '</span>'
                 };
                 fileArr.push(obj);
             });
@@ -2562,7 +2579,7 @@ sp = {
             if (!($.fn.dataTable.isDataTable('#sp-documents-doc-table'))) {
                 $('#sp-documents-doc-table').DataTable({
                     select: {
-                        style: 'single'
+                        style: 'multi'
                     },
                     data: fileArr,
                     columnDefs: [
@@ -2580,6 +2597,10 @@ sp = {
                         {
                             targets: 2,
                             data: 'date'
+                        },
+                        {
+                            targets: 3,
+                            data: 'customer'
                         }
                     ],
                     dom: '<"sp-datatables-search-left"f>ti',
@@ -2597,15 +2618,15 @@ sp = {
         },
 
         toggleBtnAttr: function () {
-            if ($('li.current').text() === 'current step: 2. Select Portals'){
-                $('a[href="#next"]').attr('id', 'sp-send-customer-docs__button');
+            if ($('#customer-document-wizard li.current').text() === 'current step: 2. Select Portals'){
+                $('#customer-document-wizard a[href="#next"]').attr('id', 'sp-send-customer-docs__button');
             }
         },
 
         /**
-         *  Listener to save which boxes have been checked i.e. which documents the
-         *  user wants to send, and to whom.
-         *  $('#document-wizard-t-x') is a selector on the inspinia wizard object
+         *  Listener to save which boxes have been checked i.e. from what customer and
+         *  specific portal user wants to get documents.
+         *  $('#customer-document-wizard-t-x') is a selector on the inspinia wizard object
          *        @see http://webapplayers.com/inspinia_admin-v2.5/form_wizard.html#
          *  $('a[href="next"]') is also an INSPINIA generated selector
          */
@@ -2616,11 +2637,19 @@ sp = {
             $('#sp-send-customer-docs__button').addClass('sp-get-customer-files__button');
             $('.sp-get-customer-files__button').on('click', function (e) {
 
+                if ($('#customer-document-wizard li.current').text() === 'current step: 2. Select Portals') {
+                    var customerArr = [];
+                    //This saves all the chosen email addresses.
+                    $(':checked').closest('tr').find('[data-email]').each(function (i, v) {
+                        var email = $(this).text();
+                        customerArr.push(email.slice(1, email.length));
+                    });
+                    sp.customerPortals.getPortalsListForCustomers(customerArr);
+                }
+
                 // This checks If wizard-step is document selector tab in order to start saving the
                 // chosen sections.
-                if ($('li.current').text() === 'current step: 3. Customer Documents'){
-                    var customerArr = [];
-                    var fileArr = [];
+                if ($('#customer-document-wizard li.current').text() === 'current step: 3. Customer Documents'){
                     var files = [];
 
                     $('#sp-documents-customer-table').DataTable()
@@ -2629,24 +2658,16 @@ sp = {
                     $('#sp-documents-doc-table').DataTable()
                         .search('').draw();
 
-                    //This saves all the chosen email addresses.
-                    $(':checked').closest('tr').find('[data-email]').each(function (i, v) {
-                        var email = $(this).text();
-                        customerArr.push(email.slice(1, email.length));
-                    });
-
-                    // This saves all the document hashes & file names into a file array, and
-                    // a files object.
-                    $(':checked').closest('tr').find('[data-file-hash]')
+                    // This saves all the document hashes & customers into a file array.
+                    $('#sp-documents-doc-table :checked').closest('tr')
                         .each(function (i, v) {
-                            fileArr.push($(this).attr('data-file-hash'));
                             var fileObj = {
-                                name: $(this).text(),
-                                hash: $(this).attr('data-file-hash')
+                                customer: $(this).find('[data-customer-email]').text(),
+                                hash: $(this).find('[data-file-hash]').attr('data-file-hash')
                             };
                             files.push(fileObj);
                         });
-                    sp.customerDocumentsGenerator.prepareDataForGettingFileListForCustomers(customerArr, fileArr, files);
+                    sp.customerDocumentsGenerator.prepareDataForGettingFileListForCustomers(files);
                 }
             });
         })(),
@@ -2654,16 +2675,67 @@ sp = {
         /**
          * Create obj to send.
          */
-        prepareDataForGettingFileListForCustomers: function (customers, documents, files) {
+        prepareDataForGettingFileListForCustomers: function (files) {
             var dataToSend = [];
-            $.each(customers, function (i, v) {
-                var obj = {
-                    customerEmail: v,
-                    fileHashes: documents
-                };
-                dataToSend.push(obj);
+
+            var group_to_values = files.reduce(function (obj, item) {
+                obj[item.customer] = obj[item.customer] || [];
+                obj[item.customer].push(item.hash);
+                return obj;
+            }, {});
+
+            var dataToSend = Object.keys(group_to_values).map(function (key) {
+                return {customer: key, hash: group_to_values[key]};
             });
-            sp.customerDocuments.getDocumentsList(requestOrigin);
+
+            sp.customerDocuments.getDocumentsList(dataToSend);
+        },
+
+        portalDocumentsFormatFile: function (data){
+            var fileArr = [];
+
+            $.each(data['filesList'], function (index, value) {
+
+                var obj = {
+                    name: '<span class="sp-doc-name" data-file-name="' + sp.escapeHtml(value[2]) + '" data-file-hash="' + sp.escapeHtml(value[3]) + '">' + sp.escapeHtml(value[2]) + '</span>',
+                    portal: '<span class="sp-doc-name" data-portal-name="' + sp.escapeHtml(value[1]) + '" data-portal-hash="' + sp.escapeHtml(value[4]) + '">' + sp.escapeHtml(value[1]) + '</span>',
+                    customer: '<span class="sp-customer-email" data-customer-email="' + sp.escapeHtml(value[0]) + '">' + sp.escapeHtml(value[0]) + '</span>'
+                };
+                fileArr.push(obj);
+            });
+
+            $.fn.dataTable.moment('DD-MM-YYYY HH:mm');
+            if (!($.fn.dataTable.isDataTable('#sp-documents-for-portal-table'))) {
+                $('#sp-documents-for-portal-table').DataTable({
+                    select: {
+                        style: 'multi'
+                    },
+                    data: fileArr,
+                    columnDefs: [
+                        {
+                            targets: 0,
+                            data: 'customer'
+                        },
+                        {
+                            targets: 1,
+                            data: 'portal'
+                        },
+                        {
+                            targets: 2,
+                            data: 'name'
+                        }
+                    ],
+                    dom: '<"sp-datatables-search-left"f>ti',
+                    order: [[2, 'desc']],
+                    scrollY: '15vh',
+                    paging: false
+                });
+            } else {
+                $('#sp-documents-for-portal-table').DataTable()
+                    .clear()
+                    .rows.add(fileArr)
+                    .draw();
+            }
         }
     },
 

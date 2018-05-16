@@ -42,6 +42,7 @@ public class ViewerCustomerDocumentService {
     private final DashboardShareWidgetService dashboardShareWidgetService;
     private final CustomerRepository customerRepository;
     private final ViewerRepository viewerRepository;
+    private final ChannelRepository channelRepository;
 
     @Autowired
     public ViewerCustomerDocumentService(@Value("${customerDocuments.amazon.s3.bucket}") String bucket,
@@ -56,7 +57,8 @@ public class ViewerCustomerDocumentService {
                                          ViewerEventRepository eventRepository,
                                          DashboardShareWidgetService dashboardShareWidgetService,
                                          CustomerRepository customerRepository,
-                                         ViewerRepository viewerRepository) {
+                                         ViewerRepository viewerRepository,
+                                         ChannelRepository channelRepository) {
         this.bucket = bucket;
         this.keyPrefix = keyPrefix;
         this.salt = salt;
@@ -70,6 +72,7 @@ public class ViewerCustomerDocumentService {
         this.dashboardShareWidgetService = dashboardShareWidgetService;
         this.customerRepository = customerRepository;
         this.viewerRepository = viewerRepository;
+        this.channelRepository = channelRepository;
     }
 
     private String getDocumentPrefix(CustomerDocument document) {
@@ -91,7 +94,7 @@ public class ViewerCustomerDocumentService {
             if (customer == null) {
                 customer = customerRepository.findCustomerByCustomerId(username);
             }
-            CustomerDocument document = new CustomerDocument(customer, viewerRepository.findByEmail(customer.getUsername()), Status.CREATED, name);
+            CustomerDocument document = new CustomerDocument(customer, viewerRepository.findByEmail(customer.getUsername()), channelRepository.findByFriendlyId(initialChannelFriendlyId), Status.CREATED, name);
             documentRepository.save(document);
 
             Hashids hashids = new Hashids(salt, minHashLength, alphabet);
@@ -151,7 +154,6 @@ public class ViewerCustomerDocumentService {
         documentRepository.save(document);
 
         // Invalidate document path.
-        // @TODO: Run command asynchronously.
         amazonCloudFrontService.invalidate(getDocumentPath(document));
 
         // Save event.

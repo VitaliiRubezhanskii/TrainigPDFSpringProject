@@ -434,7 +434,8 @@ td.sp-file-hash {
     color: #1ab394;
 }
 
-.sp-email-container-hidden {
+.sp-email-container-hidden,
+.sp-customer-documents-container-hidden {
     display: none;
 }
 
