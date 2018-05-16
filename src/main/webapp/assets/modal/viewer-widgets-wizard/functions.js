@@ -324,7 +324,7 @@ sp.widgets = {
             return isEmpty;
         }
     },
-
+        ////////////////////////////////
     widget9: {
         html: $('#sp-tab-9 .sp-widget-item').html(),
         init: (function() {
@@ -1451,7 +1451,7 @@ sp.viewerWidgetsModal = {
             data: {
                 widgetId: 9,
                 isEnabled: $('[name="sp-widget9--is-enabled"]').prop('checked'),
-                items: []
+                items: [],
             }
         };
 

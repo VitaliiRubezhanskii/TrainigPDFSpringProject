@@ -1414,6 +1414,71 @@ sp = {
                 hopperTitle.textContent = 'N/A';
             }
 
+
+
+//////////////////////////// Upload button data.
+           /* var uploadTitle = document.querySelector('.sp-link-metric__title');
+            uploadTitle.textContent = 'Loading...';
+            uploadTitle.style.display = 'block';
+
+            var uploadItems = document.querySelector('.sp-link-metric__items');
+            while (uploadItems.hasChildNodes()) {
+                uploadItems.removeChild(uploadItems.lastChild);
+            }
+
+            $('.sp-link-metric__save-button').remove();
+
+            if (typeof fileData != 'undefined' && typeof fileData[1] != 'undefined' && parseInt(fileData[1]) > 0) {
+                $.getJSON('/api/v1/widgets/?fileHash=' + fileData[0] + '&type=12', function(data) {
+                    if (data.items.length === 0) {
+                        uploadTitle.textContent = 'N/A';
+                    } else {
+                        var uploadMetric = document.querySelector('.sp-link-metric');
+                        uploadMetric.setAttribute('data-link', data.link);
+
+                        var ul = document.createElement('ul');
+                        ul.className = 'todo-list small-list m-t';
+                        data.items.forEach(function (item) {
+                            var li = document.createElement('li');
+                            var a = document.createElement('a');
+                            a.classList = 'sp-link-metric__item check-link';
+                            var i = document.createElement('i');
+                            i.classList = 'sp-link-metric__item-status';
+                            a.appendChild(i);
+                            li.appendChild(a);
+
+                            var span = document.createElement('span');
+                            span.classList = 'sp-link-metric__item-content m-l-xs';
+
+                            span.setAttribute('data-icon', item.icon);
+                            span.setAttribute('data-page-to', item.pageTo);
+                            span.setAttribute('data-page-from', item.pageFrom);
+                            span.setAttribute('data-button-text-1', item.buttonText1);
+                            span.setAttribute('data-button-text-2', item.buttonText2);
+
+                            span.textContent = item.buttonText1;
+                            li.appendChild(span);
+                            ul.appendChild(li);
+                        });
+                        uploadItems.appendChild(ul);
+
+                        var saveButton = document.createElement('button');
+                        saveButton.classList = 'btn btn-success m-t-sm sp-link-metric__save-button';
+                        saveButton.disabled = true;
+                        saveButton.textContent = 'Save';
+                        uploadMetric.appendChild(saveButton);
+
+                        uploadTitle.style.display = 'none';
+                    }
+                }).fail(function() {
+                    uploadTitle.textContent = 'N/A';
+                });
+            } else {
+                uploadTitle.textContent = 'N/A';
+            }*/
+////////////////////////////////////////////////////////////////////////////////
+
+
             // Link data.
             var linkTitle = document.querySelector('.sp-link-metric__title');
             linkTitle.textContent = 'Loading...';
@@ -3270,3 +3335,86 @@ $(document).on('click', '.sp-link-metric__item', function() {
     $('.sp-link-metric__save-button').prop('disabled', false);
     return false;
 });
+
+$(function() {
+    $("#phoneNumber").intlTelInput({
+        allowDropdown: true,
+        autoHideDialCode: true,
+        autoPlaceholder: "polite",
+        customPlaceholder: null,
+        dropdownContainer: "",
+        excludeCountries: [],
+        formatOnDisplay: true,
+        geoIpLookup: null,
+        hiddenInput: "",
+        initialCountry: "",
+        nationalMode: true,
+        onlyCountries: [],
+        placeholderNumberType: "MOBILE",
+        preferredCountries: ["il","us", "gb"],
+        separateDialCode: false,
+        utilsScript: ""
+    });
+
+    $("#phoneNumber").mask("(000) 000-0000");
+
+    document.querySelector( "#sp-add-update-customer__form" )
+        .addEventListener( "invalid", function( event ) {
+            event.preventDefault();
+        }, true );
+
+    $("#phoneNumber").on("change input paste propertychange", ()=>{
+        event.preventDefault();
+        if($("#phoneNumber").val().length !== 14){
+            $(".error").css({display: 'block', color: 'red'});
+            $("#phoneNumber").css({border: '1px solid red'});
+        } else{
+            $(".error").css({display: 'none'});
+            $("#phoneNumber").css({border: '1px solid #e5e6e7'});
+        }
+    });
+
+    $('input[name^="customerID"]').on("change input paste propertychange",()=>{
+        event.preventDefault();
+        if($('input[name^="customerID"]').val().length > 9){
+            $(".errorId").css({display: 'block', color: 'red'});
+            $('input[name^="customerID"]').css({border: '1px solid red'});
+        } else{
+            $(".errorId").css({display: 'none'});
+            $('input[name^="customerID"]').css({border: '1px solid #e5e6e7'});
+        }
+    });
+
+    $('input[name^="customerEmail"]').on("change input paste propertychange",()=>{
+        event.preventDefault();
+
+        if(!/^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/.test($('input[name^="customerEmail"]').val())){
+            $(".errorEmail").css({display: 'block', color: 'red'});
+            $('input[name^="customerEmail"]').css({border: '1px solid red'});
+        } else{
+            $(".errorEmail").css({display: 'none'});
+            $('input[name^="customerEmail"]').css({border: '1px solid #e5e6e7'});
+        }
+    });
+
+    $(".closeModal").on("click",()=>{
+        $(".error, .errorId, .errorEmail").css({display: 'none'});
+        $("#phoneNumber, input[name^='customerID'], input[name^='customerEmail']").css({border: '1px solid #e5e6e7'});
+        $("#sp-add-update-customer__form")[0].reset();
+    });
+
+    $(".sp-add-update-customer").on("click", ()=>{
+        $("#sp-add-update-customer__form")[0].reset();
+    });
+
+    $("#sp-add-update-customer__form").on("propertychange change blur click keyup input paste",function(){
+        var phoneNumber = $("#phoneNumber").val().length;
+        var customerId = $('input[name^="customerID"]').val().length;
+        var email = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test($('input[name^="customerEmail"]').val());
+        if(email === true && customerId <=9 && phoneNumber === 14){
+            $("#sp-modal-add-update-customer__button").prop("disabled", false);
+        } else {
+            $("#sp-modal-add-update-customer__button").prop("disabled", true);
+        }
+    });
+})

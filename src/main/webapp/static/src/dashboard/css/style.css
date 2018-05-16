@@ -1,5 +1,9 @@
 /* Dashboard settings */
-
+.error,
+.errorId,
+.errorEmail{
+    display: none;
+}
 /* Modal */
 
 .sp--margin-left-0 {

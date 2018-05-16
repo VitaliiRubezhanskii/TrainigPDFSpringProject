@@ -1,5 +1,5 @@
 <template>
-  <div class="upload-block">
+  <div class="upload-block clearfix">
     <button
       type="button"
       class="upload-button btn btn-success"
@@ -10,10 +10,15 @@
         Upload Documents
     </button>
     <ModalUpload
-      :style="{display: `${showDisplay?'block':'none'}`}"
+      :showList="showList"
     />
+    <div
+      v-if="filesName"
+      v-for="(item,i) in filesName"
+    >
+      <p class="files">{{ filesName[i] }}</p>
+    </div>
   </div>
-
 </template>
 
 <script>
@@ -23,6 +28,7 @@ export default{
   data(){
     return {
       showDisplay: false,
+      filesName: [],
     }
   },
   components: {
@@ -32,6 +38,9 @@ export default{
     showModal(){
       this.showDisplay = true;
     },
+    showList(data){
+      this.filesName.push(data);
+    }
   },
 }
 </script>
@@ -45,9 +54,13 @@ export default{
   font-size: 17px;
   font-weight: normal;
   margin: 0;
-  float: left;
 }
 .upload-block{
   padding: 0 0 0 50px;
+  /*margin: 0 0 50px 0;*/
+  text-align: start;
+}
+.files{
+  padding: 5px 10px;
 }
 </style>

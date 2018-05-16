@@ -40,6 +40,8 @@
     <link type="text/css" rel="stylesheet" href="assets/css/bootstrap-datetimepicker.min.css">
     <link type="text/css" rel="stylesheet" href="assets/css/select2.min.css">
     <link type="text/css" rel="stylesheet" href="assets/css/select2-bootstrap.min.css">
+    <link rel="stylesheet" href="/assets/js/plugins/phone/build/css/intlTelInput.css">
+
 
     <!--SlidePiper scripts-->
     <link type="text/css" href="/static/src/dashboard/css/style.css" rel="stylesheet">
@@ -693,7 +695,7 @@ s
         <div class="modal-content">
             <form class="form-horizontal" id="sp-add-update-customer__form">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">
+                    <button type="button" class="close closeModal" data-dismiss="modal">
                         <span aria-hidden="true">&times;</span>
                         <span class="sr-only">Close</span>
                     </button>
@@ -732,23 +734,28 @@ s
                     </div>
 
                     <div class="form-group">
-                        <label class="col-lg-3 control-label">Email</label>
+                        <label class="col-lg-3 control-label">* Email</label>
                         <div class="col-lg-8">
-                            <input type="email" name="customerEmail" placeholder="Email" class="form-control" required autocomplete="off">
+                            <input type="email" name="customerEmail" placeholder="example@email.com" class="form-control" required autocomplete="off">
+                            <div class="errorEmail">You have entered an invalid e-mail address.Please try again</div>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label class="col-lg-3 control-label">Customer ID</label>
                         <div class="col-lg-8">
-                            <input type="text" name="customerID" placeholder="Customer ID" class="form-control" required autocomplete="off">
+                            <input type="text" name="customerID" placeholder="123456789" class="form-control" autocomplete="off">
+                            <div class="errorId">Customer ID must contain less than 10 digits</div>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label class="col-lg-3 control-label">Cellular Phone</label>
+                        <label class="col-lg-3 control-label">* Cellular Phone</label>
                         <div class="col-lg-8">
-                            <input type="text" name="customerPhone" placeholder="Cellular Phone" class="form-control" required autocomplete="off">
+                            <input type="tel" id="phoneNumber" name="customerPhone" placeholder="(XXX) XXX-XXXX" class="form-control phoneInput" required autocomplete="off">
+                            <div class="error">Cellular Phone must contain 10 digits</div>
+                            <!--<input type="tel" name="customerPhone" placeholder="(XXX) XXX-XXXX" class="form-control phoneInput" required autocomplete="off">-->
+
                         </div>
                     </div>
 
@@ -764,8 +771,8 @@ s
                 </div>
 
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
-                    <input type="submit" class="btn btn-primary" id="sp-modal-add-update-customer__button">
+                    <button type="button"  class="btn btn-white closeModal" data-dismiss="modal">Close</button>
+                    <input type="submit" disabled class="btn btn-primary" id="sp-modal-add-update-customer__button">
                 </div>
             </form>
         </div>
@@ -1001,6 +1008,10 @@ s
 <script src="/assets/js/plugins/chartjs/chart.min.js"></script>
 <script src="assets/js/bootstrap-datetimepicker.min.js"></script>
 <script src="assets/js/select2.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.js"></script>
+
+<!--<script src="http://code.jquery.com/jquery-latest.min.js"></script>-->
+<script src="/assets/js/plugins/phone/build/js/intlTelInput.js"></script>
 
 <!-- SlidePiper scripts -->
 <script src="/static/src/dashboard/js/main.js"></script>
