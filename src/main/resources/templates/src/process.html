@@ -1,10 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <title>SlidePiper - Process mode</title>
+    <link type="text/css" rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link type="text/css" rel="stylesheet" href="assets/css/bootstrap-datetimepicker.min.css">
+    <link type="text/css" rel="stylesheet" href="/assets/css/style.css">
+    <link type="text/css" rel="stylesheet" href="assets/css/select2.min.css">
+    <link type="text/css" rel="stylesheet" href="assets/css/select2-bootstrap.min.css">
+    <link type="text/css" rel="stylesheet" href="https://static.slidepiper.com/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link type="text/css" rel="stylesheet" href="https://static.slidepiper.com/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css">
+    <script  type="text/javascript">
+        'use strict';
+
+        window.SP = {};
+        Object.defineProperties(SP, {
+            API_URL: {
+                value: '{{{apiUrl}}}',
+                enumerable: true
+            },
+            DOCUMENT_URL: {
+                value: "{{{documentUrl}}}",
+                enumerable: true
+            },
+            SESSION_ID: {
+                value: '{{{sessionId}}}',
+                enumerable: true
+            }
+        });
+    </script>
     <meta charset="UTF-8">
-    <title>Title</title>
+
 </head>
 <body>
-<h1>Hello world!</h1>
+<div id="app">
+</div>
+<script type="text/javascript" src="/assets/js/jquery-2.1.1.js"></script>
+<script type="text/javascript" src="assets/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="dist/pdfViewer.entry.js"></script>
 </body>
 </html>

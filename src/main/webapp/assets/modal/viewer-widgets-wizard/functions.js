@@ -933,7 +933,6 @@ sp.viewerWidgetsModal = {
                 sp.viewerWidgetsModal.validateWidgetsSettings(
                     $(this).attr('data-file-hash'), $(this).attr('id'));
             });
-
     },
 
     /**
@@ -1833,9 +1832,6 @@ sp.viewerWidgetsModal = {
     setProcessMode: function(isProcessMode) {
         $('[name="process-mode-is-enabled"]').prop('checked', !!+isProcessMode);
     }
-    // setDoubleAuth: function(isDoubleAuth) {
-    //     $('[name="double-auth-is-enabled"]').prop('checked', !!+isDoubleAuth);
-    // }
 };
 
 /**
@@ -1918,8 +1914,6 @@ $(document).on('click', '.link-widget__url-upload-button', function() {
  * @param {object} data - The document settings data.
  * @param {string} fileHash - The document fileHash.
  */
-
-
 function postDocumentSettings(data, fileHash, callback) {
     $.ajax({
         url:'/api/v1/documents/' + fileHash,
@@ -1928,7 +1922,7 @@ function postDocumentSettings(data, fileHash, callback) {
         data: JSON.stringify(data),
         beforeSend: function(xhr) {
             xhr.setRequestHeader(SP.CSRF_HEADER, SP.CSRF_TOKEN);
-        },
+        }
         success: callback,
         error: function() {
             swal('Error', 'Something went wrong. Your settings weren\'t saved.', 'error');

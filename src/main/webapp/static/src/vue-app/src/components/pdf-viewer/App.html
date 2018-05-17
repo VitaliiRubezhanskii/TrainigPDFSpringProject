@@ -1,0 +1,63 @@
+<div
+  id="app" xmlns=""
+>
+  <Spinner v-if="!load" :load="load" />
+  <Toolbar
+    :toolbarData="toolbarData"
+  />
+  <div
+    class="pdf-container"
+    ref="pdf"
+    :style="{height: pageHeight ? `${pageHeight}px` : 'auto' }"
+  >
+    <Pdf
+      :src="src"
+      :page="page"
+      :loaded="onLoaded"
+
+    />
+
+  </div>
+
+  <Arrows
+    :page="page"
+    @next-page="nextPage"
+    @prev-page="prevPage"
+  />
+  <HorizontalHopper
+    v-if="widgetData.find(w => w.widgetId === 5)"
+    :page="page"
+    :widget="widgetData.find(w => w.widgetId === 5)"
+    @go-page="setPage"
+  />
+
+  <Questions
+    v-if="widgetData.find(w => w.widgetId === 3) && widgetData.find(w => w.widgetId === 3).isEnabled"
+    :widget="widgetData.find(w => w.widgetId === 3).items[0]"
+  />
+
+  <Video
+    v-if="widgetData.find(w => w.widgetId === 1) && widgetData.find(w => w.widgetId === 1).isEnabled"
+    :widget="widgetData.find(w => w.widgetId === 1).items[0]"
+  />
+
+  <TestimonialsWidget
+    v-if="widgetData.find(w => w.widgetId === 6)
+    && widgetData.find(w => w.widgetId === 6).isEnabled
+    && widgetData.find(w => w.widgetId === 6).items.find(item => item.page === page)"
+    :widget="widgetData.find(w => w.widgetId === 6).items.find(item => item.page === page)"
+  />
+
+  <div class="link">
+    <template
+      v-if="linkData && linkData.isEnabled"
+    >
+      <LinkAndTask
+        v-for="widget in linkData.items"
+        v-if="Number(widget.pageFrom)<=page && Number(widget.pageTo)>=page"
+        :widget="widget"
+      />
+    </template>
+  </div>
+  <PoweredBy />
+</div>
