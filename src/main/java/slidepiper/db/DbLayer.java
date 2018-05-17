@@ -867,7 +867,6 @@ public class DbLayer {
 
 			for (int i = 0; i < values.size(); i++) {
 				ps.setString(i+3, values.get(i).toString());
-				System.out.println(values.get(i).toString());
 			}
 
 			ResultSet rs = ps.executeQuery();
