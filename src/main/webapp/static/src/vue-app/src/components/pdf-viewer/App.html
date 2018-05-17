@@ -1,10 +1,16 @@
 <div
   id="app" xmlns=""
 >
-  <Spinner v-if="!load" :load="load" />
+  <Spinner
+    v-if="!load"
+    :load="load"
+  />
+
   <Toolbar
+    v-if="toolbarData"
     :toolbarData="toolbarData"
   />
+
   <div
     class="pdf-container"
     ref="pdf"
@@ -16,7 +22,6 @@
       :loaded="onLoaded"
 
     />
-
   </div>
 
   <Arrows
@@ -24,16 +29,20 @@
     @next-page="nextPage"
     @prev-page="prevPage"
   />
+
   <HorizontalHopper
     v-if="widgetData.find(w => w.widgetId === 5)"
     :page="page"
+    :styleButton="styleButton.backgroundColor"
     :widget="widgetData.find(w => w.widgetId === 5)"
     @go-page="setPage"
+    :colorText="colorText"
   />
 
   <Questions
     v-if="widgetData.find(w => w.widgetId === 3) && widgetData.find(w => w.widgetId === 3).isEnabled"
     :widget="widgetData.find(w => w.widgetId === 3).items[0]"
+    :colorText="colorText"
   />
 
   <Video
@@ -56,8 +65,11 @@
         v-for="widget in linkData.items"
         v-if="Number(widget.pageFrom)<=page && Number(widget.pageTo)>=page"
         :widget="widget"
+        :styleButton="styleButton.backgroundColor"
+        :colorText="colorText"
       />
     </template>
   </div>
+
   <PoweredBy />
 </div>

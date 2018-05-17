@@ -2,8 +2,12 @@
     <button
     :class="widget.status" @click="showLink"
       class="widget sp-widget-button sp-widget-button9 sp-widget-font-fmaily sp--direction-ltr sp-widget9"
-      style="background-color: rgb(27, 24, 98); color: rgb(255, 255, 255); margin: 0 20px 0 0;">
-      <i :class="'fa '+ widget.icon"></i>
+      :style="{backgroundColor: styleButton, color: colorText, margin: '0 20px 0 0' }">
+      <i
+        :class="'fa '+ widget.icon"
+        :style="{ color: colorText }"
+      >
+      </i>
       <div
         class="sp-widget9__text"
       >
@@ -18,7 +22,7 @@
 import { modalLinkAndTask }  from '../../helper/functions.js';
 
 export default{
-  props:  ["widget"],
+  props:  ['widget','styleButton','colorText'],
   methods: {
     showLink(){
       this.widget.layout === "external-link"? window.open(this.widget.link): modalLinkAndTask(this.widget.link);
