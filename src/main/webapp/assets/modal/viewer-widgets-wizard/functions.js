@@ -1922,7 +1922,7 @@ function postDocumentSettings(data, fileHash, callback) {
         data: JSON.stringify(data),
         beforeSend: function(xhr) {
             xhr.setRequestHeader(SP.CSRF_HEADER, SP.CSRF_TOKEN);
-        }
+        },
         success: callback,
         error: function() {
             swal('Error', 'Something went wrong. Your settings weren\'t saved.', 'error');

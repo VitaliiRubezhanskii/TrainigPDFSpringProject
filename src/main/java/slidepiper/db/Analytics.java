@@ -14,7 +14,8 @@ public class Analytics {
 				+ "  name AS file_name,\n"
 				+ "  timestamp AS date_added_or_modified,\n"
 				+ "  id_ai AS id,\n"
-				+ "  is_process_mode AS is_process_mode\n"
+				+ "  is_process_mode,\n"
+				+ "  is_mfa_enabled\n"
 				+ "FROM slides\n"
 				+ "WHERE sales_man_email = ? AND slides.status IN ('CREATED', 'UPDATED', 'BEFORE_AWS_S3_TRANSITION')\n"
 				+ "ORDER BY date_added_or_modified";
@@ -74,7 +75,9 @@ public class Analytics {
       + "  email,\n"
       + "  customers.timestamp AS 'date',\n"
       + "  COALESCE(groupName, ''),\n"
-	  + "  id\n"
+	  + "  id,\n"
+	  + "  customer_id,\n"
+	  + "  phone\n"
       + "FROM customers\n"
       + "WHERE sales_man = ? AND email NOT IN ('" + ConfigProperties.getProperty("default_customer_email") + "', '" + ConfigProperties.getProperty("test_customer_email") + "')\n"
       + "ORDER BY date";

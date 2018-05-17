@@ -866,22 +866,25 @@ sp = {
             var filesArr = [];
             $.each(data['filesList'], function (index, value) {
                 var date = moment.utc(value[2]).toDate();
+
+                var checked = "";
+                if(sp.escapeHtml(value[5]) == 1) {
+                    checked = "checked";
+                }
                 var obj = {
                     'date': moment(date).format('DD-MM-YYYY HH:mm'),
                     'document': '<span class="sp-file-mgmt-file-name" data-file-hash="' + sp.escapeHtml(value[0]) +'">' + sp.escapeHtml(value[1]) + '</span>',
-                    'options': `<span>`
+                    'options': '<span>'
                     + '<a><span class="label label-primary sp-file-update" data-toggle="modal" data-target="#sp-modal-update-file" data-file-hash="' + sp.escapeHtml(value[0]) + '">Update</span></a>'
                     + '<a href="#"><span class="label label-danger sp-file-delete" data-file-hash="' + sp.escapeHtml(value[0]) + '">Delete</span></a></span>'
                     + '<a><span style="margin-left: 10px;" class="sp-document__clone label label-info" data-document-friendly-id="' + sp.escapeHtml(value[0]) + '" data-document-name="' + sp.escapeHtml(value[1]) + '">Clone</span></a>'
                     + '<a><span data-toggle="modal" data-target="#sp-viewer-widgets-modal" style="margin-left: 10px;" class="label label-success sp-file-customize" data-file-hash="' + sp.escapeHtml(value[0]) + '" data-is-process-mode="' + sp.escapeHtml(value[4]) + '">Customize</span></a>'
                     + '<a class="sp-preview-file-link"><span id="sp-preview-file-' + sp.escapeHtml(index) + '" style="margin-left: 10px;" class="label label-warning" data-is-process-mode="' + sp.escapeHtml(value[4]) + '">Preview</span></a>'
-                    +`<div data-id="${sp.escapeHtml(value[0])}" class="material-switch pull-right options-wrapper"> 
-                            <input class="twofactorauth-switch" id="someSwitchOptionPrimary-${sp.escapeHtml(index)}" name="double-auth-is-enabled" name="someSwitchOption-${sp.escapeHtml(index)}" type="checkbox"/>
-                            <label for="someSwitchOptionPrimary-${sp.escapeHtml(index)}" class="label-primary"></label>
-                        </div></span>`
+                    +'<div data-id="' + sp.escapeHtml(value[0]) +  '" class="material-switch pull-right options-wrapper">' +
+                    '<input class="twofactorauth-switch" id="someSwitchOptionPrimary-' + sp.escapeHtml(index) + '" name="double-auth-is-enabled" name="someSwitchOption-' + sp.escapeHtml(index) + '" type="checkbox" ' + checked + '/>' +
+                    '<label for="someSwitchOptionPrimary-' + sp.escapeHtml(index) + '" class="label-primary"></label></div></span>'
                 };
                 filesArr.push(obj);
-
                 sp.file.setFileLinkAttribute(
                     value[0],
                     'test@example.com',
@@ -903,7 +906,7 @@ sp = {
                     columns: [
                         {data: 'date'},
                         {data: 'document'},
-                        {data: 'options'},
+                        {data: 'options'}
                     ],
                     scrollY: '55vh',
                     scrollCollapse: true,
@@ -1064,7 +1067,9 @@ sp = {
                     'company': '<span id="sp-customer-company__td">' + sp.escapeHtml(row[2]) + '</span>',
                     'email':  '<span class="contact-type"><i class="fa fa-envelope"> </i></span>' + '         '  + sp.escapeHtml(row[3]) + '',
                     'options': '<td><a href="#"><span class="label label-primary sp-add-update-customer sp-customer-update" data-add-update="update" data-toggle="modal" data-target="#sp-modal-add-update-customer" data-customer-email="' + sp.escapeHtml(row[3]) + '">Update</span></a><a href="#"><span class="label label-danger sp-customer-delete" data-customer-email="' + sp.escapeHtml(row[3]) + '">Delete</span></a></td>',
-                    group: '<span id="sp-customer-group__td">' + sp.escapeHtml(row[5]) + '</span>',
+                    'group': '<span id="sp-customer-group__td">' + sp.escapeHtml(row[5]) + '</span>',
+                    'id': '<span id="sp-customer-id__td">' + sp.escapeHtml(row[7]) + '</span>',
+                    'phone': '<span id="sp-customer-phone__td">' + sp.escapeHtml(row[8]) + '</span>'
                 };
                 nameArr.push(obj);
             });
@@ -1086,6 +1091,8 @@ sp = {
                         {data: 'company'},
                         {data: 'group'},
                         {data: 'email'},
+                        {data: 'id'},
+                        {data: 'phone'},
                         {data: 'options'}
                     ],
                     scrollY: '55vh',
@@ -2758,7 +2765,7 @@ $(document).ready(function() {
     $('body')
         .on('change', '.twofactorauth-switch', function (e) {
             var documentId = $(this).closest('.options-wrapper').data('id');
-            saveAuthSettings({ isDoubleAuth: this.checked }, documentId)
+            saveAuthSettings({ isMFAEnabled: this.checked }, documentId)
         });
 });
 
