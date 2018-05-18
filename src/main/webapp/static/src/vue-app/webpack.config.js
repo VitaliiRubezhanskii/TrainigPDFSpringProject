@@ -4,12 +4,11 @@ var webpack = require('webpack')
 module.exports = {
   entry: {
     pdfViewer: './src/components/pdf-viewer/index.js',
-    auth: './src/components/auth/index.js',
   },
   output: {
     path: path.resolve('../../../', './dist'),
     publicPath: '/dist/',
-    filename: "[name].entry.js"
+    filename: "pdfViewer.entry.js"
   },
   module: {
     rules: [
