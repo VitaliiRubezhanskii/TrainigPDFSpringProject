@@ -2153,14 +2153,14 @@ sp = {
                         .search('').draw();
 
                     //This saves all the chosen email addresses.
-                    $(':checked').closest('tr').find('[data-email]').each(function (i, v) {
+                    $('#sp-customer-table :checked').closest('tr').find('[data-email]').each(function (i, v) {
                         var email = $(this).text();
                         customerArr.push(email.slice(1, email.length));
                     });
 
                     // This saves all the document hashes & file names into a file array, and
                     // a files object.
-                    $(':checked').closest('tr').find('[data-file-hash]')
+                    $('#sp-doc-table :checked').closest('tr').find('[data-file-hash]')
                         .each(function (i, v) {
                             fileArr.push($(this).attr('data-file-hash'));
                             var fileObj = {
