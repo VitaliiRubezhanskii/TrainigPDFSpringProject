@@ -1,9 +1,15 @@
 <template>
-  <div class="sp-toolbar-logo"
+  <div class="sp-toolbar-logo clearfix"
     :style="{backgroundColor: toolbarData.toolbarBackground, color: toolbarData.toolbarColor}"
   >
-    <a target="_blank" href="https://www.slidepiper.com">
-      <img :src="toolbarData.logoImage">
+    <a
+      target="_blank"
+      :href="toolbarData.toolbarLogoLink"
+    >
+      <img
+        class="logo"
+        :src="toolbarData.logoImage ? toolbarData.logoImage : '../../assets/logo-1236x269.png'"
+      >
     </a>
     <div class="toolbar-button-container">
       <button
@@ -77,5 +83,15 @@ button{
   height: 47px;
   display: block;
   margin: 0 auto;
+}
+@media screen and (max-width: 759px){
+  .sp-toolbar-logo img {
+    visibility: hidden;
+  }
+  .toolbar-button-container{
+    left: 50%;
+    transform: translate(-50%, 50%);
+    width: 100%;
+  }
 }
 </style>

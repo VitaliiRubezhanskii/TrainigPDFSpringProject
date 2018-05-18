@@ -1,4 +1,4 @@
-import Pdf from './pdf/pdf.vue';
+import Pdf from './Pdf/Pdf.vue';
 import HorizontalHopper from '../horizontal-hopper/HorizontalHopper.vue';
 import Spinner from '../spinner/Spinner.vue';
 import Questions from '../questions/Questions.vue';
@@ -51,6 +51,9 @@ export default {
       this.load = true;
       this.pageHeight = document.getElementsByTagName('canvas')[0].scrollHeight;
     },
+    onResize(){
+      this.pageHeight = document.getElementsByTagName('canvas')[0].scrollHeight;
+    },
     setPage({ page }){
       this.page = page;
       document.getElementById(this.page).scrollIntoView();
@@ -71,7 +74,19 @@ export default {
   computed: {
     linkData() {
       return this.widgetData.find(w => w.widgetId === 9);
-    }
+    },
+    testimonialsData() {
+      return this.widgetData.find(w => w.widgetId === 6);
+    },
+    videoData() {
+      return this.widgetData.find(w => w.widgetId === 1);
+    },
+    questionData() {
+      return this.widgetData.find(w => w.widgetId === 3);
+    },
+    horizontalHoperData() {
+      return this.widgetData.find(w => w.widgetId === 5);
+    },
   },
   components: {
     Pdf,
