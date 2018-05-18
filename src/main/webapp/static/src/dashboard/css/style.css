@@ -1,8 +1,20 @@
 /* Dashboard settings */
 .error,
 .errorId,
-.errorEmail{
+.errorEmail,
+.errorName,
+.errorLastName,
+.errorLastNameRequired,
+.errorFirstNameRequired,
+.errorEmailRequired{
     display: none;
+}
+.hint{
+    margin: 0 0 0 30px;
+}
+
+.hint-bold {
+    font-weight: bold;
 }
 /* Modal */
 
