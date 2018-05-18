@@ -22,137 +22,128 @@ import java.util.Map;
 import java.util.TimeZone;
 
 public class DbLayer {
-  private static Boolean initialized = false;
+    private static Boolean initialized = false;
 
-
-  public static void init()
-  	{	  	
-	 	if (initialized==false)
-	  	{
-					try {
-						DriverManager.registerDriver(new com.mysql.cj.jdbc.Driver());
-					} catch (SQLException e) {
-						e.printStackTrace();
-					}
-				  Constants.updateConstants();		
-					initialized = true;
-					System.out.println("Initialized DBLayer: registered driver and updated constants.");
+    public static void init() {
+        if (initialized==false) {
+            try {
+                DriverManager.registerDriver(new com.mysql.cj.jdbc.Driver());
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            Constants.updateConstants();
+            initialized = true;
+            System.out.println("Initialized DBLayer: registered driver and updated constants.");
 	  	}
-	 	
   	}
 
-	public static void deleteCustomer(String customer_email, String salesman_email ){
+	public static void deleteCustomer(String customer_email, String salesman_email ) {
 		String query = "DELETE FROM customers"+
 					" WHERE email =?" +
 				" AND sales_man=?;";
 			
 		Connection conn=null;
-		try 
-		{
-			try{				
-					conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);						
-					PreparedStatement preparedStatement = conn.prepareStatement(query);
-					preparedStatement.setString(1, customer_email);
-					preparedStatement.setString(2, salesman_email);
-					preparedStatement.executeUpdate();
-	        preparedStatement.close();
-	        System.out.println("customer: " + customer_email + " was deleted!");
+		try {
+			try {
+				conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
+				PreparedStatement preparedStatement = conn.prepareStatement(query);
+				preparedStatement.setString(1, customer_email);
+				preparedStatement.setString(2, salesman_email);
+				preparedStatement.executeUpdate();
+	        	preparedStatement.close();
 			}
 			finally{ if(conn!=null){ conn.close();}	}
 		} catch (Exception ex) {
 			System.out.println("err: " + ex.getMessage());
 		}
-		
 	}
 
 	//add new customer.
 	public static int addNewCustomer(String subAction, String salesMan, String firstName, String lastName,
-									 String company, String groupName, String email, String customerID, String phone){
+									 String company, String groupName, String email, String customerID,
+                                     String phone){
 		
 		// customer does not exist.
-		if (getCustomerName(email, salesMan) == null && !isCustomerIDExist(customerID, salesMan))
-		{
-		 
-				String query = "INSERT INTO customers(email, name, first_name, last_name, sales_man, company, groupName, customer_id, phone) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-				String fullName = null;
-				try (Connection conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);)
-					{			
-					try{
-							PreparedStatement preparedStatement = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-							System.err.print(firstName);
-							if (! firstName.equals("")) {
-							  System.out.print(firstName);
-							  fullName = firstName;
-							  
-							  if (! lastName.equals("")) { 
-								fullName += " " + lastName;
-							  }
-							} else if (! lastName.equals("")) {
-							  fullName = lastName;
-							}
-							
-							preparedStatement.setString(1, email.toLowerCase());
-							preparedStatement.setString(2, fullName);
-							preparedStatement.setString(3, firstName);
-							preparedStatement.setString(4, lastName);
-							preparedStatement.setString(5, salesMan.toLowerCase());
-							preparedStatement.setString(6, company);
-							preparedStatement.setString(7, groupName);
-							preparedStatement.setString(8, customerID);
-							preparedStatement.setString(9, phone);
-							preparedStatement.executeUpdate();
-							preparedStatement.close();
-							conn.close();
-							//System.out.println("new customer inserted! name=" + name + " company: " + company);
-							return 1;
-					}
-					finally{ if(conn!=null){ conn.close();}	}
-				} catch (Exception ex) {
-					System.out.println("exception in addNewCust");
-					ex.printStackTrace();
-					return 0;
-				}		
+		if (getCustomerName(email, salesMan) == null && !isCustomerIDExist(customerID, salesMan)) {
+		    String query = "INSERT INTO customers(email, name, first_name, last_name, sales_man, company, groupName, customer_id, phone) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            String fullName = null;
+            try (Connection conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass)) {
+                try {
+                    PreparedStatement preparedStatement = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+                    System.err.print(firstName);
+                    if (! firstName.equals("")) {
+                        System.out.print(firstName);
+                        if (! lastName.equals("")) {
+                            fullName += " " + lastName;
+                        }
+                    } else if (! lastName.equals("")) {
+                        fullName = lastName;
+                    }
+
+                    preparedStatement.setString(1, email.toLowerCase());
+                    preparedStatement.setString(2, fullName);
+                    preparedStatement.setString(3, firstName);
+                    preparedStatement.setString(4, lastName);
+                    preparedStatement.setString(5, salesMan.toLowerCase());
+                    preparedStatement.setString(6, company);
+                    preparedStatement.setString(7, groupName);
+                    preparedStatement.setString(8, customerID);
+                    preparedStatement.setString(9, phone);
+                    preparedStatement.executeUpdate();
+                    preparedStatement.close();
+                    conn.close();
+                    return 1;
+                } finally {
+                    if(conn != null) {
+                        conn.close();
+                    }
+                }
+            } catch (Exception ex) {
+                System.out.println("exception in addNewCust");
+                ex.printStackTrace();
+                return 0;
+            }
 		} else if (null != subAction && subAction.equals("add")) {
-		  return -1;
+		    return -1;
 		} else if (null != subAction && subAction.equals("update")) {
-			// customer already exists.
-		  Constants.updateConstants();
-      Connection conn = null;
-		  String sql = "UPDATE customers SET first_name = ?, last_name = ?, " +
-				  "name = ?, company = ?, groupName = ?, " +
-				  "customer_id = ?, phone = ? WHERE sales_man = ? AND email = ?";
-		  
-		  try {
-        conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
-        PreparedStatement stmt = conn.prepareStatement(sql);
-        stmt.setString(1, firstName);
-        stmt.setString(2, lastName);
-        stmt.setString(3, firstName + " " + lastName);
-        stmt.setString(4, company);
-        stmt.setString(5, groupName);
-        stmt.setString(6, salesMan);
-        stmt.setString(7, email);
-	  	stmt.setString(8, customerID);
-	  	stmt.setString(9, phone);
-        stmt.executeUpdate();
-      } catch (SQLException ex) {
-        System.err.println("Error code: " + ex.getErrorCode() + " - " + ex.getMessage());
-      } finally {
-        if (null != conn) {
-          try {
-            conn.close();
-          } catch (SQLException ex) {
-            ex.printStackTrace();
-          }
-        }
-      }
-		  
-		  
-			return 0;
+		    // customer already exists.
+            if (!isCustomerIDExist(customerID, salesMan)) {
+                Constants.updateConstants();
+                Connection conn = null;
+                String sql = "UPDATE customers SET first_name = ?, last_name = ?, " +
+                        "name = ?, company = ?, groupName = ?, " +
+                        "customer_id = ?, phone = ? WHERE sales_man = ? AND email = ?";
+
+                try {
+                    conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
+                    PreparedStatement stmt = conn.prepareStatement(sql);
+                    stmt.setString(1, firstName);
+                    stmt.setString(2, lastName);
+                    stmt.setString(3, firstName + " " + lastName);
+                    stmt.setString(4, company);
+                    stmt.setString(5, groupName);
+                    stmt.setString(6, customerID);
+                    stmt.setString(7, phone);
+                    stmt.setString(8, salesMan);
+                    stmt.setString(9, email);
+                    stmt.executeUpdate();
+                    return 1;
+                } catch (SQLException ex) {
+                    System.err.println("Error code: " + ex.getErrorCode() + " - " + ex.getMessage());
+                } finally {
+                    if (null != conn) {
+                        try {
+                            conn.close();
+                        } catch (SQLException ex) {
+                            ex.printStackTrace();
+                        }
+                    }
+                }
+            }
+            return 0;
 		}
-    
 		return 0;
-	}
+    }
 	
 	// if no cust, returns null.
 	public static String getCustomerName(String customer_email, String salesman_email){		

@@ -256,6 +256,14 @@ sp = {
                     $('#sp-modal-add-update-customer input[name="customerEmail"]')
                         .val($(this).attr('data-customer-email'))
                         .prop('readonly', true);
+
+                    $('#sp-modal-add-update-customer input[name="customerID"]').
+                    val($('[data-customer-email="' + $(this).attr('data-customer-email') + '"]')
+                        .closest('tr').find('#sp-customer-id__td').text());
+
+                    $('#sp-modal-add-update-customer input[name="customerPhone"]').
+                    val($('[data-customer-email="' + $(this).attr('data-customer-email') + '"]')
+                        .closest('tr').find('#sp-customer-phone__td').text());
                 }
             });
 
