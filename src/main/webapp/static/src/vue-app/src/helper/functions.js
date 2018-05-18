@@ -11,7 +11,7 @@ import sp from '../constants/spViewer.js';
               imageUrl: imageUrl,
               imageWidth: 200,
               imageAlt: 'Custom image',
-              animation: false
+              animation: false,
   }));
 }
  function modalQuestions(url,title,emailLabel,messageLabel,canselText,confirmText,emailError){
@@ -52,7 +52,7 @@ import sp from '../constants/spViewer.js';
     return postData(data, url)
       .catch(error => {
         Vue.swal.showValidationError(
-          `${emailError?emailError:'Invalid email address'}`
+          `Request failed: ${error}`
         )
       })
     },

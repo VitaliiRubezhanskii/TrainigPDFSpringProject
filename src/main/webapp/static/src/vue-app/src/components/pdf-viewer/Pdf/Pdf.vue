@@ -12,6 +12,7 @@ export default {
       'src',
       'page',
       'loaded',
+      'resize'
     ],
     data() {
       return {
@@ -26,7 +27,7 @@ export default {
         inserted: function (el, b, c) {
           let renderPDF = (url, el, opt) => {
             let options = opt || { scale: 2, zoom: 100 };
-            var promiseArray = [];
+            let promiseArray = [];
                 function renderPage(page) {
                     let viewport = page.getViewport(options.scale);
                     let canvas = document.createElement('canvas');
@@ -38,20 +39,18 @@ export default {
                     canvas.height = viewport.height;
                     canvas.width = viewport.width;
                     canvas.setAttribute('id', page.pageNumber);
+                    canvas.setAttribute('style', 'display:block;margin:0 auto');
                     el.appendChild(canvas);
                     page.render(renderContext);
 
-                    var t = {};
-                    t.height = window.innerHeight - 225;
-                    t.width = window.innerWidth;
-                    t.canvasHeight = canvas.scrollHeight;
-                    t.canvasWidth = canvas.scrollWidth;
-                    if(t.height/t.width > t.canvasHeight/t.canvasWidth) {
-                      canvas.style.height = t.height;
-                      canvas.style.maxWidth = '100%';
-                    } else {
-                      canvas.style.height = `${t.height}px`;
-                      canvas.style.width = 'auto';
+                    c.context.resizePdf(canvas);
+
+                    window.onresize = () => {
+                      let canv = Array.from($('canvas'));
+                      canv.forEach((canvas) => {
+                        c.context.resize();
+                        c.context.resizePdf(canvas);
+                      })
                     }
                 }
                 function renderPages(pdfDoc) {
@@ -60,6 +59,7 @@ export default {
                     }
                     Promise.all(promiseArray).then(() => {
                       c.context.loaded();
+
                     });
                 }
 
@@ -70,5 +70,21 @@ export default {
         }
       }
     },
+    methods: {
+      resizePdf(canvas){
+          let size = {};
+          size.height = window.innerHeight - 225;
+          size.width = window.innerWidth;
+          size.canvasHeight = canvas.scrollHeight;
+          size.canvasWidth = canvas.scrollWidth;
+            if(size.height/size.width > size.canvHeight/size.canvWidth) {
+              canvas.style.height = size.height;
+              canvas.style.maxWidth = '100%';
+            } else {
+              canvas.style.height = `${size.height}px`;
+              canvas.style.width = 'auto';
+            }
+      }
+    }
 }
 </script>

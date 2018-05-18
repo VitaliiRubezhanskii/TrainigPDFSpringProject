@@ -1,4 +1,4 @@
-import Pdf from './pdf/pdf.vue';
+import Pdf from './Pdf/Pdf.vue';
 import HorizontalHopper from '../horizontal-hopper/HorizontalHopper.vue';
 import Spinner from '../spinner/Spinner.vue';
 import Questions from '../questions/Questions.vue';
@@ -49,6 +49,9 @@ export default {
   methods: {
     onLoaded(){
       this.load = true;
+      this.pageHeight = document.getElementsByTagName('canvas')[0].scrollHeight;
+    },
+    onResize(){
       this.pageHeight = document.getElementsByTagName('canvas')[0].scrollHeight;
     },
     setPage({ page }){

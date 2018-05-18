@@ -25,7 +25,10 @@ export default{
 </script>
 
 <style>
-
+.swal2-modal .swal2-styled:focus {
+	-webkit-box-shadow: none;
+	box-shadow: none;
+}
 .sp-right-side-widgets6 {
   max-width: 230px;
   position: fixed;

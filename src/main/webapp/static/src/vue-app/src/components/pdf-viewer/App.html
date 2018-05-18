@@ -20,7 +20,7 @@
       :src="src"
       :page="page"
       :loaded="onLoaded"
-
+      :resize="onResize"
     />
   </div>
 
@@ -43,6 +43,7 @@
     v-if="widgetData.find(w => w.widgetId === 3) && widgetData.find(w => w.widgetId === 3).isEnabled"
     :widget="widgetData.find(w => w.widgetId === 3).items[0]"
     :colorText="colorText"
+    :styleButton="styleButton.backgroundColor"
   />
 
   <Video
