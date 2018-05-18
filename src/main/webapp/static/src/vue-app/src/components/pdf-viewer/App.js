@@ -74,7 +74,19 @@ export default {
   computed: {
     linkData() {
       return this.widgetData.find(w => w.widgetId === 9);
-    }
+    },
+    testimonialsData() {
+      return this.widgetData.find(w => w.widgetId === 6);
+    },
+    videoData() {
+      return this.widgetData.find(w => w.widgetId === 1);
+    },
+    questionData() {
+      return this.widgetData.find(w => w.widgetId === 3);
+    },
+    horizontalHoperData() {
+      return this.widgetData.find(w => w.widgetId === 5);
+    },
   },
   components: {
     Pdf,

@@ -31,31 +31,31 @@
   />
 
   <HorizontalHopper
-    v-if="widgetData.find(w => w.widgetId === 5)"
+    v-if="horizontalHoperData"
     :page="page"
     :styleButton="styleButton.backgroundColor"
-    :widget="widgetData.find(w => w.widgetId === 5)"
+    :widget="horizontalHoperData"
     @go-page="setPage"
     :colorText="colorText"
   />
 
   <Questions
-    v-if="widgetData.find(w => w.widgetId === 3) && widgetData.find(w => w.widgetId === 3).isEnabled"
-    :widget="widgetData.find(w => w.widgetId === 3).items[0]"
+    v-if="questionData && questionData.isEnabled"
+    :widget="questionData.items[0]"
     :colorText="colorText"
     :styleButton="styleButton.backgroundColor"
   />
 
   <Video
-    v-if="widgetData.find(w => w.widgetId === 1) && widgetData.find(w => w.widgetId === 1).isEnabled"
-    :widget="widgetData.find(w => w.widgetId === 1).items[0]"
+    v-if="videoData && videoData.isEnabled"
+    :widget="videoData.items[0]"
   />
 
   <TestimonialsWidget
-    v-if="widgetData.find(w => w.widgetId === 6)
-    && widgetData.find(w => w.widgetId === 6).isEnabled
-    && widgetData.find(w => w.widgetId === 6).items.find(item => item.page === page)"
-    :widget="widgetData.find(w => w.widgetId === 6).items.find(item => item.page === page)"
+    v-if="testimonialsData
+    && testimonialsData.isEnabled
+    && testimonialsData.items.find(item => item.page === page)"
+    :widget="testimonialsData.items.find(item => item.page === page)"
   />
 
   <div class="link">
