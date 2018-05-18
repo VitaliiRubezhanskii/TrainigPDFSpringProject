@@ -107,7 +107,7 @@ public class DbLayer {
 		    return -1;
 		} else if (null != subAction && subAction.equals("update")) {
 		    // customer already exists.
-            if (!isCustomerIDExist(customerID, salesMan)) {
+            if (!isCustomerIDTakenByAnotherUser(customerID, email, salesMan)) {
                 Constants.updateConstants();
                 Connection conn = null;
                 String sql = "UPDATE customers SET first_name = ?, last_name = ?, " +
@@ -263,6 +263,46 @@ public class DbLayer {
 		}
 
 		return isCustomerIDExist;
+	}
+
+	/**
+	 * Check if a customer record exists in the DB.
+	 *
+	 * @param customerID The customer email.
+	 * @param salesmanEmail The salesman email.
+	 *
+	 * @return True if a record exists in the DB, otherwise false.
+	 */
+	public static boolean isCustomerIDTakenByAnotherUser(String customerID, String customerEmail, String salesmanEmail) {
+		boolean isCustomerIDTakenByAnotherUser = false;
+		Connection conn = null;
+		String sql = "SELECT customer_id FROM customers WHERE customer_id=? AND sales_man=? AND email!=?";
+
+		try {
+			conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt.setString(1, customerID);
+			stmt.setString(2, salesmanEmail);
+			stmt.setString(3,customerEmail);
+			ResultSet rs = stmt.executeQuery();
+
+			rs.last();
+			if (1 == rs.getRow()) {
+				isCustomerIDTakenByAnotherUser = true;
+			}
+		} catch (SQLException ex) {
+			System.err.println("Error code: " + ex.getErrorCode() + " - " + ex.getMessage());
+		} finally {
+			if (null != conn) {
+				try {
+					conn.close();
+				} catch (SQLException ex) {
+					ex.printStackTrace();
+				}
+			}
+		}
+
+		return isCustomerIDTakenByAnotherUser;
 	}
 			 
 	  /**
