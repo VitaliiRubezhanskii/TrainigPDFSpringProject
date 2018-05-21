@@ -62,7 +62,7 @@ public class SecurityConfiguration {
 
         @Bean
         public UserDetailsService viewerDetailsService() {
-            return new ViewerDetailsServiceImpl(customerRepository);
+            return new ViewerDetailsServiceImpl();
         }
 
         @Override
@@ -120,7 +120,7 @@ public class SecurityConfiguration {
 
         @Bean
         public UserDetailsService userDetailsService() {
-            return new UserDetailsServiceImpl(userRepository);
+            return new UserDetailsServiceImpl();
         }
 
         @Override

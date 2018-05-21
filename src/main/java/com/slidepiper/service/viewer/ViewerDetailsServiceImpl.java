@@ -6,6 +6,7 @@ import com.slidepiper.model.entity.User;
 import com.slidepiper.repository.CustomerRepository;
 import com.slidepiper.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,12 +21,12 @@ import java.util.Objects;
 import java.util.Set;
 
 @Service
+@Qualifier("viewerDetailsService")
 public class ViewerDetailsServiceImpl implements UserDetailsService {
-    private final CustomerRepository userRepository;
-
     @Autowired
-    public ViewerDetailsServiceImpl(CustomerRepository userRepository) {
-        this.userRepository = userRepository;
+    private CustomerRepository userRepository;
+
+    public ViewerDetailsServiceImpl() {
     }
 
     @Override
