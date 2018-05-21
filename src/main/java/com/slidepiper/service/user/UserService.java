@@ -12,6 +12,7 @@ import com.slidepiper.repository.UserRepository;
 import com.slidepiper.repository.ViewerRepository;
 import com.slidepiper.service.email.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -46,7 +47,7 @@ public class UserService {
                        BCryptPasswordEncoder bCryptPasswordEncoder,
                        EmailService emailService,
                        EventRepository eventRepository,
-                       UserDetailsService userDetailsService,
+                       @Qualifier("userDetailsService") UserDetailsService userDetailsService,
                        UserRepository userRepository,
                        RoleRepository roleRepository,
                        ViewerRepository viewerRepository) {
