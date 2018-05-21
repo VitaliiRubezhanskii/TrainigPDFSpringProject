@@ -43,6 +43,9 @@
     background: inherit;
     left: 20px;
 }
+.authLabel{
+    margin: 0 10px 0 0;
+}
 
 /* Modal */
 
@@ -1004,4 +1007,14 @@ input:checked + .sp-doc-settings-slider:before {
 
 .tasks__task-form-due-date {
     z-index: 2051;
+}
+
+@media screen and (max-width: 1023px){
+    .pull-right {
+        float: none !important;
+    }
+    .material-switch{
+        margin: 0 auto;
+        padding: 10px 0 0 100px;
+    }
 }

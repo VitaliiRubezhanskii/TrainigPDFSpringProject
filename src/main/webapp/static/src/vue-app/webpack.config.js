@@ -8,7 +8,7 @@ module.exports = {
   output: {
     path: path.resolve('../../../', './dist'),
     publicPath: '/dist/',
-    filename: "pdfViewer.entry.js"
+    filename: "[name].entry.js"
   },
   module: {
     rules: [

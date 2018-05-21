@@ -888,9 +888,10 @@ sp = {
                     + '<a><span style="margin-left: 10px;" class="sp-document__clone label label-info" data-document-friendly-id="' + sp.escapeHtml(value[0]) + '" data-document-name="' + sp.escapeHtml(value[1]) + '">Clone</span></a>'
                     + '<a><span data-toggle="modal" data-target="#sp-viewer-widgets-modal" style="margin-left: 10px;" class="label label-success sp-file-customize" data-file-hash="' + sp.escapeHtml(value[0]) + '" data-is-process-mode="' + sp.escapeHtml(value[4]) + '">Customize</span></a>'
                     + '<a class="sp-preview-file-link"><span id="sp-preview-file-' + sp.escapeHtml(index) + '" style="margin-left: 10px;" class="label label-warning" data-is-process-mode="' + sp.escapeHtml(value[4]) + '">Preview</span></a>'
-                    +'<div data-id="' + sp.escapeHtml(value[0]) +  '" class="material-switch pull-right options-wrapper">' +
-                    '<input class="twofactorauth-switch" id="someSwitchOptionPrimary-' + sp.escapeHtml(index) + '" name="double-auth-is-enabled" name="someSwitchOption-' + sp.escapeHtml(index) + '" type="checkbox" ' + checked + '/>' +
-                    '<label for="someSwitchOptionPrimary-' + sp.escapeHtml(index) + '" class="label-primary"></label></div></span>'
+                    +'<div data-id="' + sp.escapeHtml(value[0]) +  '" class="material-switch pull-right options-wrapper">'
+                    +'<span class="authLabel">2 factor auth on/off</span>'
+                    +'<input class="twofactorauth-switch" id="someSwitchOptionPrimary-' + sp.escapeHtml(index) + '" name="double-auth-is-enabled" name="someSwitchOption-' + sp.escapeHtml(index) + '" type="checkbox" ' + checked + '/>'
+                    +'<label for="someSwitchOptionPrimary-' + sp.escapeHtml(index) + '" class="label-primary"></label></div></span>'
                 };
                 filesArr.push(obj);
                 sp.file.setFileLinkAttribute(
@@ -2773,7 +2774,26 @@ $(document).ready(function() {
     $('body')
         .on('change', '.twofactorauth-switch', function (e) {
             var documentId = $(this).closest('.options-wrapper').data('id');
-            saveAuthSettings({ isMFAEnabled: this.checked }, documentId)
+            var targetElement = $(this);
+            swal({
+                    title: "Are you sure you want to turn on/off double authentication?",
+                    type: "warning",
+                    confirmButtonText: "Yes, turn on/off!",
+                    cancelButtonText: "No",
+                    showCancelButton: true,
+                    closeOnConfirm: true,
+                    closeOnCancel: true
+                },
+                function(isConfirm){
+                console.log(targetElement.prop('checked'));
+                    if (isConfirm) {
+                        targetElement.prop("checked",true);
+                        saveAuthSettings({ isMFAEnabled: this.checked }, documentId);
+                    }
+                    else{
+                        targetElement.prop("checked",false);
+                    }
+                });
         });
 });
 
