@@ -7,7 +7,7 @@
   "private": true,
   "scripts": {
     "dev": "cross-env NODE_ENV=development webpack-dev-server --open --hot",
-    "build": "cross-env NODE_ENV=production rm -rf dist/* && webpack --progress --hide-modules",
+    "build": "cross-env NODE_ENV=production rm -rf ../../../dist/* && webpack --progress --hide-modules && cp src/assets/js/* ../../../dist",
     "watch": "cross-env NODE_ENV=production rm -rf dist/* && webpack --progress --hide-modules --watch"
   },
   "dependencies": {
@@ -30,6 +30,7 @@
     "babel-loader": "^7.1.2",
     "babel-preset-env": "^1.6.0",
     "babel-preset-stage-3": "^6.24.1",
+    "copy-webpack-plugin": "^4.5.1",
     "cross-env": "^5.0.5",
     "css-loader": "^0.28.7",
     "file-loader": "^1.1.4",
