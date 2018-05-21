@@ -2785,7 +2785,7 @@ $(document).ready(function() {
                     closeOnCancel: true
                 },
                 function(isConfirm){
-                console.log(targetElement.prop('checked'));
+                //console.log(targetElement.prop('checked'));
                     if (isConfirm) {
                         targetElement.prop("checked",true);
                         saveAuthSettings({ isMFAEnabled: this.checked }, documentId);
