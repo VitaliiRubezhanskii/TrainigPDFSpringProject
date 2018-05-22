@@ -2774,26 +2774,29 @@ $(document).ready(function() {
     $('body')
         .on('change', '.twofactorauth-switch', function (e) {
             var documentId = $(this).closest('.options-wrapper').data('id');
-            var targetElement = $(this);
+            var targetElement = e.target;
             swal({
-                    title: "Are you sure you want to turn on/off double authentication?",
+                    title: `Please confirm to turn ${targetElement.checked? 'ON':'OFF'} double authentication for this portal?`,
                     type: "warning",
-                    confirmButtonText: "Yes, turn on/off!",
-                    cancelButtonText: "No",
+                    text:`<div class="info-block" data-title= "${targetElement.checked ? "i – Double authentication requires a customer id and cellular number. Then you must make a link for each customer and send it to them.":"i – Turning off double authentication will make this portal public to anyone with a portal link"}">i</div>`,
+                    html: true,
+                    confirmButtonText: `Yes, turn ${targetElement.checked? 'ON':'OFF'}`,
                     showCancelButton: true,
                     closeOnConfirm: true,
-                    closeOnCancel: true
+                    cancelButtonColor: "#DC3545",
+                    closeOnCancel: true,
+                    allowOutsideClick: true,
+
                 },
                 function(isConfirm){
-                //console.log(targetElement.prop('checked'));
                     if (isConfirm) {
-                        targetElement.prop("checked",true);
-                        saveAuthSettings({ isMFAEnabled: this.checked }, documentId);
+                        saveAuthSettings({ isMFAEnabled: targetElement.checked }, documentId);
                     }
                     else{
-                        targetElement.prop("checked",false);
+                        targetElement.checked ? targetElement.checke = false :  targetElement.checked = true;
                     }
                 });
+            $('.sweet-alert button.cancel').addClass('cancel-red');
         });
 });
 
