@@ -1,12 +1,3 @@
-<<<<<<< HEAD
-
-
-
-
-
-
-=======
->>>>>>> 31e9dda049ddd8de8c9f8829c4f797aae66b77db
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -23,20 +14,20 @@
 
   <link crossorigin="anonymous" media="all" integrity="sha512-hqbuBb0QOOmiWgl8a1V1N5q6TI/G0A2hVt/lCFYafR+fYsuXeRUcsdcb/yUyVEHYXktmUXl0Mx9s/BOUNZVq4w==" rel="stylesheet" href="https://assets-cdn.github.com/assets/frameworks-23c9e7262eee71bc6f67f6950190a162.css" />
   <link crossorigin="anonymous" media="all" integrity="sha512-KBPgsRWCm+p9yuo4QLKmVUpf3FkA0OfLpo1q5JamlPWVMuIPn9+yOLmpfWMEtwH8ynnW4a14WyQ4/nY629hQmQ==" rel="stylesheet" href="https://assets-cdn.github.com/assets/github-2bc0d56e5863dcbd5ab6a471d6746f07.css" />
-  
-  
-  
-  
+
+
+
+
 
   <meta name="viewport" content="width=device-width">
-  
+
   <title>pdf.js/pdf.worker.entry.js at master · mozilla/pdf.js</title>
     <meta name="description" content="GitHub is where people build software. More than 27 million people use GitHub to discover, fork, and contribute to over 80 million projects.">
   <link rel="search" type="application/opensearchdescription+xml" href="/opensearch.xml" title="GitHub">
   <link rel="fluid-icon" href="https://github.com/fluidicon.png" title="GitHub">
   <meta property="fb:app_id" content="1401488693436528">
 
-    
+
     <meta property="og:image" content="https://avatars0.githubusercontent.com/u/131524?s=400&amp;v=4" /><meta property="og:site_name" content="GitHub" /><meta property="og:type" content="object" /><meta property="og:title" content="mozilla/pdf.js" /><meta property="og:url" content="https://github.com/mozilla/pdf.js" /><meta property="og:description" content="pdf.js - PDF Reader in JavaScript" />
 
   <link rel="assets" href="https://assets-cdn.github.com/">
@@ -46,7 +37,7 @@
   <meta name="request-id" content="CF4B:0802:1A47CDC:34AE6B5:5B029FE1" data-pjax-transient>
 
 
-  
+
 
   <meta name="selected-link" value="repo_source" data-pjax-transient>
 
@@ -64,7 +55,7 @@
   <meta class="js-ga-set" name="dimension1" content="Logged In">
 
 
-  
+
 
       <meta name="hostname" content="github.com">
     <meta name="user-login" content="Jshe89">
@@ -77,7 +68,7 @@
   <meta name="html-safe-nonce" content="bb1c7212f93b021c2002d285aebfe916e33b173d">
 
   <meta http-equiv="x-pjax-version" content="c7b8cd13ef94266df69d91c52ce0fcb2">
-  
+
 
       <link href="https://github.com/mozilla/pdf.js/commits/master.atom" rel="alternate" title="Recent Commits to pdf.js:master" type="application/atom+xml">
 
@@ -107,19 +98,19 @@
   </head>
 
   <body class="logged-in env-production page-blob">
-    
+
 
   <div class="position-relative js-header-wrapper ">
     <a href="#start-of-content" tabindex="1" class="p-3 bg-blue text-white show-on-focus js-skip-to-content">Skip to content</a>
     <div id="js-pjax-loader-bar" class="pjax-loader-bar"><div class="progress"></div></div>
 
-    
-    
-    
 
 
 
-        
+
+
+
+
 <header class="Header  f5" role="banner">
   <div class="d-flex flex-justify-between px-3 container-lg">
     <div class="d-flex flex-justify-between ">
@@ -177,11 +168,11 @@
       </div>
 
       <div class="d-flex">
-        
+
 <ul class="user-nav d-flex flex-items-center list-style-none" id="user-links">
   <li class="dropdown js-menu-container">
     <span class="d-inline-block  px-2">
-      
+
     <a aria-label="You have unread notifications" class="notification-indicator tooltipped tooltipped-s  js-socket-channel js-notification-indicator" data-hotkey="g n" data-ga-click="Header, go to notifications, icon:unread" data-channel="notification-changed:25458040" href="/notifications">
         <span class="mail-status unread"></span>
         <svg class="octicon octicon-bell" viewBox="0 0 14 16" version="1.1" width="14" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M13.99 11.991v1H0v-1l.73-.58c.769-.769.809-2.547 1.189-4.416.77-3.767 4.077-4.996 4.077-4.996 0-.55.45-1 .999-1 .55 0 1 .45 1 1 0 0 3.387 1.229 4.156 4.996.38 1.879.42 3.657 1.19 4.417l.659.58h-.01zM6.995 15.99c1.11 0 1.999-.89 1.999-1.999H4.996c0 1.11.89 1.999 1.999 1.999z"/></svg>
@@ -199,7 +190,7 @@
       </summary>
 
       <ul class="dropdown-menu dropdown-menu-sw">
-        
+
 <a class="dropdown-item" href="/new" data-ga-click="Header, create new repository">
   New repository
 </a>
@@ -286,7 +277,7 @@
   </div>
 </header>
 
-      
+
 
   </div>
 
@@ -300,13 +291,13 @@
   <div role="main" class="application-main ">
         <div itemscope itemtype="http://schema.org/SoftwareSourceCode" class="">
     <div id="js-repo-pjax-container" data-pjax-container >
-      
 
 
 
 
 
-  
+
+
 
 
 
@@ -393,7 +384,7 @@
   </li>
 
   <li>
-    
+
   <div class="js-toggler-container js-social-container starring-container ">
     <!-- '"` --><!-- </textarea></xmp> --></option></form><form class="starred js-social-form" action="/mozilla/pdf.js/unstar" accept-charset="UTF-8" method="post"><input name="utf8" type="hidden" value="&#x2713;" /><input type="hidden" name="authenticity_token" value="fjEI1wAoE4k5fXXuoeuZK+97ao82VzGnoh2Q30GSR0eKFMjwZHAUOjWuHVx9uzf79gzUfDZyxnl/Il+66YXUuw==" />
       <input type="hidden" name="context" value="repository"></input>
@@ -456,7 +447,7 @@
 </h1>
 
     </div>
-    
+
 <nav class="reponav js-repo-nav js-sidenav-container-pjax container"
      itemscope
      itemtype="http://schema.org/BreadcrumbList"
@@ -509,16 +500,16 @@
 <div class="container new-discussion-timeline experiment-repo-nav  ">
   <div class="repository-content ">
 
-    
+
   <a class="d-none js-permalink-shortcut" data-hotkey="y" href="/mozilla/pdf.js/blob/b7a3a5e7e438926f606853eb8b107a3e3353dc98/src/pdf.worker.entry.js">Permalink</a>
 
   <!-- blob contrib key: blob_contributors:v21:de9f824c7d548d200c213e1937fa72c2 -->
 
   <div class="file-navigation">
-    
+
 <div class="select-menu branch-select-menu js-menu-container js-select-menu float-left">
   <button class=" btn btn-sm select-menu-button js-menu-target css-truncate" data-hotkey="w"
-    
+
     type="button" aria-label="Switch branches or tags" aria-expanded="false" aria-haspopup="true">
       <i>Branch:</i>
       <span class="js-select-button css-truncate-target">master</span>
@@ -1117,7 +1108,7 @@
   </div>
 </div>
 
-    
+
 
   <div itemprop="text" class="blob-wrapper data type-javascript">
       <table class="highlight tab-size js-file-line-container" data-tab-size="2">
@@ -1227,7 +1218,7 @@
 
   </div>
 
-      
+
 <div class="footer container-lg px-3" role="contentinfo">
   <div class="position-relative d-flex flex-justify-between pt-6 pb-2 mt-6 f6 text-gray border-top border-gray-light ">
     <ul class="list-style-none d-flex flex-wrap ">
@@ -1268,13 +1259,13 @@
   </div>
 
 
-    
+
     <script crossorigin="anonymous" integrity="sha512-HD3VGNUZdKcyhzxthfJME6V4ByRTPdCGqlqq7sPm8jFweQQjz00nAJzWMAR9GUDiP2yYWqSxM6JxNxc2J/4rGQ==" type="application/javascript" src="https://assets-cdn.github.com/assets/frameworks-2afbd5df19ed1f9aaf0a04c15e9d0b35.js"></script>
-    
+
     <script crossorigin="anonymous" async="async" integrity="sha512-3BKT7JS8unxMToQvSvCu32OshPyV5Iau3slRBp0qRKb9K3vwFq0g5yoB07VGhTC2S7wi6TIw/WVO6Dr/B6Cstg==" type="application/javascript" src="https://assets-cdn.github.com/assets/github-b373bd0192b235b33334634b93f6d34b.js"></script>
-    
-    
-    
+
+
+
   <div class="js-stale-session-flash stale-session-flash flash flash-warn flash-banner d-none">
     <svg class="octicon octicon-alert" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M8.893 1.5c-.183-.31-.52-.5-.887-.5s-.703.19-.886.5L.138 13.499a.98.98 0 0 0 0 1.001c.193.31.53.501.886.501h13.964c.367 0 .704-.19.877-.5a1.03 1.03 0 0 0 .01-1.002L8.893 1.5zm.133 11.497H6.987v-2.003h2.039v2.003zm0-3.004H6.987V5.987h2.039v4.006z"/></svg>
     <span class="signed-in-tab-flash">You signed in with another tab or window. <a href="">Reload</a> to refresh your session.</span>
