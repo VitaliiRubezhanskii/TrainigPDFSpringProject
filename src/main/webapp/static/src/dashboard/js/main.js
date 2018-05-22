@@ -1,3 +1,7 @@
+function init() {
+    customerDocumentsWizardConfig();
+    documentsCheckboxListener();
+}
 var sp = sp || {};
 sp = {
     init: (function(fileHash) {
@@ -1203,44 +1207,6 @@ sp = {
                     sp.file.getCustomersList('fileUploadDashboard');
                 }
             });
-        }
-    },
-    customerDocuments: {
-        // get all documents uploaded by customer on specific portals
-        getDocumentsList: function(dataArr) {
-            $.ajax({
-                url: '/api/v1/customer-documents',
-                type: 'get',
-                dataType: 'json',
-                contentType: 'application/json',
-                beforeSend: function(xhr) {
-                    xhr.setRequestHeader(SP.CSRF_HEADER, SP.CSRF_TOKEN);
-                },
-                data: {"data": JSON.stringify(dataArr)},
-                success: function (data) {
-                    /**
-                     * Request Origin is a handler to decide where to send the data from the getDocumentsList function
-                     * There are two choices - either to send the file data to the fileupload dashboard (Files & Customers),
-                     * or to send it to the customerFileLinkGenerator which allows the user to choose customers and documents
-                     * to send out.
-                     */
-                    sp.customerDocuments.callback(data);
-                },
-                error: function (err) {
-                    console.log(err);
-                }
-            });
-
-
-        },
-
-        callback: function (data) {
-            // do something with data
-            /**
-             * @params {data - obj} This is the data received from the server
-             */
-
-            sp.customerDocumentsGenerator.portalDocumentsFormatFile(data);
         }
     },
 
@@ -2856,6 +2822,7 @@ sp = {
 // End sp.
 
 $(document).ready(function() {
+    init();
     // Init js tooltip
     $('.sp-doc-settings-info__icon').tooltip({delay: {show: 100, hide: 200}, placement: 'auto' });
 

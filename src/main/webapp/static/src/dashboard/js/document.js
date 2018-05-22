@@ -108,7 +108,7 @@ function customerDocumentsFormatCustomers(data) {
  * This function formats and renders documents to the wizard, using the DataTables API
  * @params {data-obj} - This is the files data received from the server
  */
-function customerDocumentsFormatFile (data) {
+function customerDocumentsFormatFile(data) {
     var fileArr = [];
 
     $.each(data['portalsList'], function (index, value) {
@@ -165,7 +165,7 @@ function customerDocumentsFormatFile (data) {
     toggleNextBtnAttr();
 }
 
-function toggleNextBtnAttr () {
+function toggleNextBtnAttr() {
     if ($('#customer-document-wizard li.current').text() === 'current step: 2. Select Portals'){
         $('#customer-document-wizard a[href="#next"]').attr('id', 'sp-send-customer-docs__button');
     }
@@ -236,10 +236,10 @@ function prepareDataForGettingFileListForCustomers(files) {
         return {customer: key, hash: group_to_values[key]};
     });
 
-    sp.customerDocuments.getDocumentsList(dataToSend);
+    getDocumentsList(dataToSend);
 }
 
-function portalDocumentsFormatFile(data){
+function portalDocumentsFormatFile(data) {
     var fileArr = [];
 
     $.each(data['filesList'], function (index, value) {
@@ -303,10 +303,46 @@ function getPortalsListForCustomers(customerArr) {
         }
     });
 }
+
 function portalsCallback(data) {
     // do something with data
     /**
      * @params {data - obj} This is the data received from the server
      */
     customerDocumentsFormatFile(data);
+}
+
+// get all documents uploaded by customer on specific portals
+function getDocumentsList(dataArr) {
+    $.ajax({
+        url: '/api/v1/customer-documents',
+        type: 'get',
+        dataType: 'json',
+        contentType: 'application/json',
+        beforeSend: function(xhr) {
+            xhr.setRequestHeader(SP.CSRF_HEADER, SP.CSRF_TOKEN);
+        },
+        data: {"data": JSON.stringify(dataArr)},
+        success: function (data) {
+            /**
+             * Request Origin is a handler to decide where to send the data from the getDocumentsList function
+             * There are two choices - either to send the file data to the fileupload dashboard (Files & Customers),
+             * or to send it to the customerFileLinkGenerator which allows the user to choose customers and documents
+             * to send out.
+             */
+            callback(data);
+        },
+        error: function (err) {
+            console.log(err);
+        }
+    });
+}
+
+function callback(data) {
+    // do something with data
+    /**
+     * @params {data - obj} This is the data received from the server
+     */
+
+    portalDocumentsFormatFile(data);
 }
