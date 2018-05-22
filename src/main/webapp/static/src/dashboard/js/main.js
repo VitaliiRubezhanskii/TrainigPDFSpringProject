@@ -3025,9 +3025,31 @@ $(function() {
         }
     });
 
+    $('input[name^="customerFirstName"]').on("change input paste propertychange", ()=>{
+        event.preventDefault();
+        if(!/^[a-zA-Z][a-zA-Z0-9-_\.]{1,20}$/.test($('input[name^="customerFirstName"]').val())){
+            $(".errorName").css({display: 'block', color: 'red'});
+            $('input[name^="customerFirstName"]').css({border: '1px solid red'});
+        } else{
+            $(".errorName").css({display: 'none'});
+            $('input[name^="customerFirstName"]').css({border: '1px solid #e5e6e7'});
+        }
+    });
+
+    $('input[name^="customerLastName"]').on("change input paste propertychange", ()=>{
+        event.preventDefault();
+        if(!/^[a-zA-Z][a-zA-Z0-9-_\.]{1,20}$/.test($('input[name^="customerLastName"]').val())){
+            $(".errorLastName").css({display: 'block', color: 'red'});
+            $('input[name^="customerLastName"]').css({border: '1px solid red'});
+        } else{
+            $(".errorLastName").css({display: 'none'});
+            $('input[name^="customerLastName"]').css({border: '1px solid #e5e6e7'});
+        }
+    });
+
     $('input[name^="customerID"]').on("change input paste propertychange",()=>{
         event.preventDefault();
-        if($('input[name^="customerID"]').val().length > 9){
+        if(!/^[0-9]{0,10}$/.test($('input[name^="customerID"]').val())){
             $(".errorId").css({display: 'block', color: 'red'});
             $('input[name^="customerID"]').css({border: '1px solid red'});
         } else{
@@ -3048,21 +3070,17 @@ $(function() {
         }
     });
 
-    $(".closeModal").on("click",()=>{
-        $(".error, .errorId, .errorEmail").css({display: 'none'});
-        $("#phoneNumber, input[name^='customerID'], input[name^='customerEmail']").css({border: '1px solid #e5e6e7'});
-        $("#sp-add-update-customer__form")[0].reset();
-    });
-
     $(".sp-add-update-customer").on("click", ()=>{
+        $(".error, .errorId, .errorEmail, .errorName, .errorLastName").css({display: 'none'});
+        $("#phoneNumber, input[name^='customerID'], input[name^='customerEmail'], input[name^='customerFirstName'], input[name^='customerLastName']").css({border: '1px solid #e5e6e7'});
         $("#sp-add-update-customer__form")[0].reset();
     });
 
     $("#sp-add-update-customer__form").on("propertychange change blur click keyup input paste",function(){
-        var phoneNumber = $("#phoneNumber").val().length;
-        var customerId = $('input[name^="customerID"]').val().length;
+        var firstName = /^[a-zA-Z][a-zA-Z0-9-_\.]{1,20}$/.test($('input[name^="customerFirstName"]').val());
+        var lastName = /^[a-zA-Z][a-zA-Z0-9-_\.]{1,20}$/.test($('input[name^="customerLastName"]').val());
         var email = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test($('input[name^="customerEmail"]').val());
-        if(email === true && customerId <=9 && phoneNumber === 14){
+        if(email === true && firstName === true && lastName === true){
             $("#sp-modal-add-update-customer__button").prop("disabled", false);
         } else {
             $("#sp-modal-add-update-customer__button").prop("disabled", true);
