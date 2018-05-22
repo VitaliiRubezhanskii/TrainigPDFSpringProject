@@ -706,19 +706,16 @@ s
 
                 <div class="modal-body">
                     <div class="form-group">
-                        <label class="col-lg-3 control-label"><span class="text-danger">*</span> First Name</label>
+                        <label class="col-lg-3 control-label">First Name</label>
                         <div class="col-lg-8">
-                            <input type="text" name="customerFirstName" placeholder="First Name" class="form-control" required autocomplete="off">
-                            <div class="errorName">First Name must contain 2 and less than 20 letters and include sumbols ( _ -  . )</div>
+                            <input type="text" name="customerFirstName" placeholder="First Name" class="form-control" autocomplete="off">
                         </div>
-
                     </div>
 
                     <div class="form-group">
-                        <label class="col-lg-3 control-label"><span class="text-danger">*</span> Last Name</label>
+                        <label class="col-lg-3 control-label">Last Name</label>
                         <div class="col-lg-8">
-                            <input type="text" name="customerLastName" placeholder="Last Name" class="form-control" required autocomplete="off">
-                            <div class="errorLastName">Last Name must contain 2 and less than 20 letters and include sumbols ( _ -  . )</div>
+                            <input type="text" name="customerLastName" placeholder="Last Name" class="form-control" autocomplete="off">
                         </div>
                     </div>
 
@@ -737,7 +734,7 @@ s
                     </div>
 
                     <div class="form-group">
-                        <label class="col-lg-3 control-label"><span class="text-danger">*</span> Email</label>
+                        <label class="col-lg-3 control-label">* Email</label>
                         <div class="col-lg-8">
                             <input type="email" name="customerEmail" placeholder="example@email.com" class="form-control" required autocomplete="off">
                             <div class="errorEmail">You have entered an invalid e-mail address.Please try again</div>
@@ -753,14 +750,14 @@ s
                     </div>
 
                     <div class="form-group">
-                        <label class="col-lg-3 control-label">Cellular Phone</label>
+                        <label class="col-lg-3 control-label">* Cellular Phone</label>
                         <div class="col-lg-8">
-                            <input type="tel" id="phoneNumber" name="customerPhone" placeholder="(XXX) XXX-XXXX" class="form-control phoneInput" autocomplete="off">
+                            <input type="tel" id="phoneNumber" name="customerPhone" placeholder="(XXX) XXX-XXXX" class="form-control phoneInput" required autocomplete="off">
                             <div class="error">Cellular Phone must contain 10 digits</div>
+                            <!--<input type="tel" name="customerPhone" placeholder="(XXX) XXX-XXXX" class="form-control phoneInput" required autocomplete="off">-->
+
                         </div>
                     </div>
-
-                    <div class="hint"><span class="text-danger hint-bold">*</span> - required field</div>
 
                     <input type="hidden" id="add-update">
 
@@ -1017,6 +1014,7 @@ s
 <script src="/assets/js/plugins/phone/build/js/intlTelInput.js"></script>
 
 <!-- SlidePiper scripts -->
+<script src="/static/src/dashboard/js/document.js"></script>
 <script src="/static/src/dashboard/js/main.js"></script>
 <script>
     (function() {
