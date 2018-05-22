@@ -2778,7 +2778,7 @@ $(document).ready(function() {
             swal({
                     title: `Please confirm to turn ${targetElement.checked? 'ON':'OFF'} double authentication for this portal?`,
                     type: "warning",
-                    text:`<div class="info-block" data-title= "${targetElement.checked ? "i – Double authentication requires a customer id and cellular number. Then you must make a link for each customer and send it to them.":"i – Turning off double authentication will make this portal public to anyone with a portal link"}">i</div>`,
+                    text:`<div class="info-block" data-title= "${targetElement.checked ? "i – Double authentication requires a customer id and cellular number. Then you must make a link for each customer and send it to them.":"i – Turning off double authentication will make this portal public to anyone with a portal link"}"><i class="fa fa-info" aria-hidden="true"></i></div>`,
                     html: true,
                     confirmButtonText: `Yes, turn ${targetElement.checked? 'ON':'OFF'}`,
                     showCancelButton: true,
