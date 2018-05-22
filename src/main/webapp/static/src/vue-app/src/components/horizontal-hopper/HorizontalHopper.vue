@@ -10,7 +10,11 @@
       :class="{ active: page === index + 1 }"
       :data-page-horizontal-hop="e.hopperPage"
     >
-      <p class="sp-widget5__horizontal-hop-text" :data-page-horizontal-hop="e.hopperPage"> {{ e.hopperText }} </p>
+      <p
+        class="sp-widget5__horizontal-hop-text"
+        :data-page-horizontal-hop="e.hopperPage">
+          {{ e.hopperText }} 
+      </p>
     </div>
   </div>
 </template>

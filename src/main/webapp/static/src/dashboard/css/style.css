@@ -1,4 +1,17 @@
 /* Dashboard settings */
+.error,
+.errorId,
+.errorEmail,
+.errorName,
+.errorLastName,
+.errorLastNameRequired,
+.errorFirstNameRequired,
+.errorEmailRequired{
+    display: none;
+}
+.hint{
+    margin: 0 0 0 30px;
+}
 .material-switch > input[type="checkbox"] {
     display: none;
 }
@@ -47,6 +60,9 @@
     margin: 0 10px 0 0;
 }
 
+.hint-bold {
+    font-weight: bold;
+}
 /* Modal */
 
 .sp--margin-left-0 {
@@ -481,7 +497,8 @@ td.sp-file-hash {
     color: #1ab394;
 }
 
-.sp-email-container-hidden {
+.sp-email-container-hidden,
+.sp-customer-documents-container-hidden {
     display: none;
 }
 

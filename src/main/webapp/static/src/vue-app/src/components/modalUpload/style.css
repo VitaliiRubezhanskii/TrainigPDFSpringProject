@@ -1,0 +1,11 @@
+[name="upload-file"] {
+  margin: 0 auto;
+}
+
+.sp-file--input-hidden {
+  display: none !important;
+}
+
+.sp-file--text-align-center {
+  text-align: center;
+}

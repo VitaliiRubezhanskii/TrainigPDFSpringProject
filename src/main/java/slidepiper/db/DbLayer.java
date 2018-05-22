@@ -1,5 +1,6 @@
 package slidepiper.db;
 
+import com.google.gson.internal.LinkedTreeMap;
 import org.hashids.Hashids;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -7,19 +8,8 @@ import slidepiper.config.ConfigProperties;
 import slidepiper.constants.Constants;
 
 import javax.xml.bind.DatatypeConverter;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.TimeZone;
+import java.sql.*;
+import java.util.*;
 
 public class DbLayer {
     private static Boolean initialized = false;
@@ -869,5 +859,69 @@ public class DbLayer {
 		}
 
 		return canAccess;
+	}
+
+	/**
+	 * Get all documents customer uploaded on specific portals.
+	 *
+	 * @param salesman_email A principal name.
+	 * @param portalsForCustomer List of portals for every customer
+	 *
+	 * @return The fetched tabular data from the DB.
+	 */
+	public static List<String[]> getDocumentsForSpecificPortal(String salesman_email, LinkedTreeMap portalsForCustomer) {
+		StringBuilder builder = new StringBuilder();
+
+        ArrayList<String> values = ((ArrayList<String>) portalsForCustomer.get("hash"));
+
+        String[] valueArray = values.toArray(new String[0]);
+		values.forEach((v) -> {
+			builder.append("?,");
+		});
+
+		String sqlQuery = "SELECT customers.email as customer_email, slides.name as portal_name, customer_documents.name as file_name," +
+				" customer_documents.friendly_id as file_hash, slides.id as portal_hash FROM customer_documents, msg_info, customers, slides\n" +
+				" WHERE customers.sales_man = ? AND msg_info.customer_email = ?\n" +
+				" AND msg_info.customer_email = customers.email AND customers.id = customer_documents.customer_id\n" +
+				" AND customer_documents.channel_id = msg_info.id_ai AND slides.id = msg_info.slides_id AND msg_info.id IN (" +
+				builder.deleteCharAt( builder.length() -1 ).toString() +
+				") ORDER BY file_name";
+
+		Connection conn = null;
+		List<String[]> dataEventList = new ArrayList<String[]>();
+
+		try {
+			conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
+			PreparedStatement ps = conn.prepareStatement(sqlQuery);
+			ps.setString(1, salesman_email);
+			ps.setString(2, portalsForCustomer.get("customer").toString());
+
+			for (int i = 0; i < values.size(); i++) {
+				ps.setString(i+3, values.get(i).toString());
+			}
+
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				String[] row = new String[rs.getMetaData().getColumnCount()];
+				for (int i = 0; i < row.length; i++) {
+					row[i] = rs.getString(i + 1);
+				}
+				dataEventList.add(row);
+			}
+
+		} catch (SQLException ex) {
+			System.err.println("Error code: " + ex.getErrorCode() + " - " + ex.getMessage());
+			ex.printStackTrace();
+		} finally {
+			if (null != conn) {
+				try {
+					conn.close();
+				} catch (SQLException ex) {
+					ex.printStackTrace();
+				}
+			}
+		}
+
+		return dataEventList;
 	}
 }

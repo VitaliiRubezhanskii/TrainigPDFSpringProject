@@ -40,6 +40,8 @@
     <link type="text/css" rel="stylesheet" href="assets/css/bootstrap-datetimepicker.min.css">
     <link type="text/css" rel="stylesheet" href="assets/css/select2.min.css">
     <link type="text/css" rel="stylesheet" href="assets/css/select2-bootstrap.min.css">
+    <link rel="stylesheet" href="/assets/js/plugins/phone/build/css/intlTelInput.css">
+
 
     <!--SlidePiper scripts-->
     <link type="text/css" href="/static/src/dashboard/css/style.css" rel="stylesheet">
@@ -102,6 +104,12 @@
                         <i class="fa fa-clock-o"></i>
                         <span class="nav-label">Tasks</span>
                         <span class="label label-info pull-right">NEW</span>
+                    </a>
+                </li>
+                <li class="sp-nav-section" data-dashboard="sp-customer-documents">
+                    <a href="#" aria-expanded="true">
+                        <i class="fa fa-file"></i>
+                        <span class="nav-label">Customer Documents</span>
                     </a>
                 </li>
             </ul>
@@ -583,6 +591,74 @@
                     </div>
                 </div>
             </div>
+            <!-- Customer Documents  -->
+            <div class='container-fluid sp-customer-documents-container-hidden'>
+                <div class="sp-dashboard animated fadeInRight" id="sp-customer-documents">
+                    <div class="col-lg-12">
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-title">
+                                <h5>Customer Documents</h5>
+                            </div>
+                            <div class="ibox-content">
+                                <p class="sp-section-description">Manage customer documents for every specific portal</p>
+                                <div id="customer-document-wizard">
+                                    <h3>Select Customers</h3>
+                                    <section id="sp-documents-section1">
+                                        <div class="table-responsive">
+                                            <table class="table table-striped sp-documents-customer-table" id="sp-documents-customer-table">
+                                                <thead>
+                                                <tr>
+                                                    <th></th>
+                                                    <th>Name</th>
+                                                    <th>Company</th>
+                                                    <th>Group</th>
+                                                    <th>Email</th>
+                                                    <th>Date</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody></tbody>
+                                            </table>
+                                        </div>
+                                    </section>
+
+                                    <h3>Select Portals</h3>
+                                    <section id="sp-documents-section2">
+                                        <div class="table-responsive">
+                                            <table class="table table-striped sp-documents-doc-table" id="sp-documents-doc-table">
+                                                <thead>
+                                                <tr>
+                                                    <th></th>
+                                                    <th>Name</th>
+                                                    <th>Date</th>
+                                                    <th>Customer</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody></tbody>
+                                            </table>
+                                        </div>
+                                    </section>
+
+                                    <h3>Customer Documents</h3>
+                                    <section id="sp-documents-section3">
+                                        <div class="table-responsive">
+                                            <table class="table table-striped sp-documents-for-portal-table" id="sp-documents-for-portal-table">
+                                                <thead>
+                                                <tr>
+                                                    <th>Customer</th>
+                                                    <th>Portal</th>
+                                                    <th>Document Name</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody></tbody>
+                                            </table>
+                                        </div>
+                                    </section>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
     <div class="footer">
@@ -598,15 +674,15 @@
 <!-- Toolbar Settings Modal -->
 <div id="sp-toolbar-settings__modal" class="modal inmodal" tabindex="-1" role="dialog" aria-hidden="true"></div>
 
-<!-- Viewer Widgets Modal -->
+<!--&lt;!&ndash; Viewer Widgets Modal &ndash;&gt;
 <div class="modal inmodal" id="sp-viewer-widgets-modal" tabindex="-1" role="dialog" aria-hidden="true"></div>
 
-<!-- Toolbar Settings Modal -->
-<div id="sp-toolbar-settings__modal" class="modal inmodal" tabindex="-1" role="dialog" aria-hidden="true"></div>
+&lt;!&ndash; Toolbar Settings Modal &ndash;&gt;
+<div id="sp-toolbar-settings__modal" class="modal inmodal" tabindex="-1" role="dialog" aria-hidden="true"></div>-->
 
 <!-- Upload files modal -->
 <div class="modal inmodal" id="sp-modal-upload-files" tabindex="-1" role="dialog" aria-hidden="true"></div>
-
+s
 <!-- Update files modal -->
 <div class="modal inmodal" id="sp-modal-update-file" tabindex="-1" role="dialog" aria-hidden="true"></div>
 
@@ -619,7 +695,7 @@
         <div class="modal-content">
             <form class="form-horizontal" id="sp-add-update-customer__form">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">
+                    <button type="button" class="close closeModal" data-dismiss="modal">
                         <span aria-hidden="true">&times;</span>
                         <span class="sr-only">Close</span>
                     </button>
@@ -630,16 +706,19 @@
 
                 <div class="modal-body">
                     <div class="form-group">
-                        <label class="col-lg-3 control-label">First Name</label>
+                        <label class="col-lg-3 control-label"><span class="text-danger">*</span> First Name</label>
                         <div class="col-lg-8">
-                            <input type="text" name="customerFirstName" placeholder="First Name" class="form-control" autocomplete="off">
+                            <input type="text" name="customerFirstName" placeholder="First Name" class="form-control" required autocomplete="off">
+                            <div class="errorName">First Name must contain 2 and less than 20 letters and include sumbols ( _ -  . )</div>
                         </div>
+
                     </div>
 
                     <div class="form-group">
-                        <label class="col-lg-3 control-label">Last Name</label>
+                        <label class="col-lg-3 control-label"><span class="text-danger">*</span> Last Name</label>
                         <div class="col-lg-8">
-                            <input type="text" name="customerLastName" placeholder="Last Name" class="form-control" autocomplete="off">
+                            <input type="text" name="customerLastName" placeholder="Last Name" class="form-control" required autocomplete="off">
+                            <div class="errorLastName">Last Name must contain 2 and less than 20 letters and include sumbols ( _ -  . )</div>
                         </div>
                     </div>
 
@@ -658,25 +737,30 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="col-lg-3 control-label">Email</label>
+                        <label class="col-lg-3 control-label"><span class="text-danger">*</span> Email</label>
                         <div class="col-lg-8">
-                            <input type="email" name="customerEmail" placeholder="Email" class="form-control" required autocomplete="off">
+                            <input type="email" name="customerEmail" placeholder="example@email.com" class="form-control" required autocomplete="off">
+                            <div class="errorEmail">You have entered an invalid e-mail address.Please try again</div>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label class="col-lg-3 control-label">Customer ID</label>
                         <div class="col-lg-8">
-                            <input type="text" name="customerID" placeholder="Customer ID" class="form-control" required autocomplete="off">
+                            <input type="text" name="customerID" placeholder="123456789" class="form-control" autocomplete="off">
+                            <div class="errorId">Customer ID must contain less than 10 digits</div>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label class="col-lg-3 control-label">Cellular Phone</label>
                         <div class="col-lg-8">
-                            <input type="text" name="customerPhone" placeholder="Cellular Phone" class="form-control" required autocomplete="off">
+                            <input type="tel" id="phoneNumber" name="customerPhone" placeholder="(XXX) XXX-XXXX" class="form-control phoneInput" autocomplete="off">
+                            <div class="error">Cellular Phone must contain 10 digits</div>
                         </div>
                     </div>
+
+                    <div class="hint"><span class="text-danger hint-bold">*</span> - required field</div>
 
                     <input type="hidden" id="add-update">
 
@@ -690,8 +774,8 @@
                 </div>
 
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
-                    <input type="submit" class="btn btn-primary" id="sp-modal-add-update-customer__button">
+                    <button type="button"  class="btn btn-white closeModal" data-dismiss="modal">Close</button>
+                    <input type="submit" disabled class="btn btn-primary" id="sp-modal-add-update-customer__button">
                 </div>
             </form>
         </div>
@@ -927,6 +1011,10 @@
 <script src="/assets/js/plugins/chartjs/chart.min.js"></script>
 <script src="assets/js/bootstrap-datetimepicker.min.js"></script>
 <script src="assets/js/select2.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.js"></script>
+
+<!--<script src="http://code.jquery.com/jquery-latest.min.js"></script>-->
+<script src="/assets/js/plugins/phone/build/js/intlTelInput.js"></script>
 
 <!-- SlidePiper scripts -->
 <script src="/static/src/dashboard/js/main.js"></script>
