@@ -946,7 +946,7 @@ sp = {
                     $('.sp-widgets-customisation__spinner').addClass('sp-widgets-customisation__spinner-show');
 
                     $.getScript('assets/js/plugins/spectrum/spectrum.js', function() {
-                        $('#sp-widget3__color-picker').spectrum({
+                        $('#sp-question-widget__color-picker').spectrum({
                             appendTo: '#sp-viewer-widgets-modal',
                             chooseText: 'Choose',
                             cancelText: 'Cancel',
@@ -955,7 +955,7 @@ sp = {
                             showInput: true,
                         });
 
-                        $('#sp-widget11__color-picker').spectrum({
+                        $('#sp-share-widget__color-picker').spectrum({
                             appendTo: '#sp-viewer-widgets-modal',
                             chooseText: 'Choose',
                             cancelText: 'Cancel',

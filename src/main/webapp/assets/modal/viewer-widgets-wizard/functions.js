@@ -3,13 +3,13 @@ var sp = sp || {};
 sp.widgets = {
     widget3: {
         init: (function() {
-            $('#sp-widget3__advanced').contents().click(function() {
-                $('.sp-widget3__advanced-container').slideToggle(function() {
-                    $('#sp-widget3__advanced').find('i').toggleClass('fa-caret-left fa-caret-down');
+            $('#sp-question-widget__advanced').contents().click(function() {
+                $('.sp-question-widget__advanced-container').slideToggle(function() {
+                    $('#sp-question-widget__advanced').find('i').toggleClass('fa-caret-left fa-caret-down');
                 });
             });
 
-            var widgetLocationCheckboxes = $('#sp-widget3__widget-location [type="checkbox"]');
+            var widgetLocationCheckboxes = $('#sp-question-widget__widget-location [type="checkbox"]');
             $(widgetLocationCheckboxes).click(function() {
                 var isBothUnchecked = true;
 
@@ -28,11 +28,11 @@ sp.widgets = {
 
             $('[name="question-widget-is-enabled"]').click(function() {
                 if ($(this).is(':checked')) {
-                    $('[name="spWidget3LocationRightSide"]').prop('checked', true);
+                    $('[name="spQuestionWidgetLocationRightSide"]').prop('checked', true);
                 }
             });
 
-            $('[name="spWidget3ButtonColorChooser"]').click(function() {
+            $('[name="spQuestionWidgetButtonColorChooser"]').click(function() {
                 sp.widgets.widget3.colorPickerHandler();
             });
 
@@ -40,16 +40,16 @@ sp.widgets = {
                 sp.widgets.widget3.colorPickerHandler();
             });
 
-            $('#sp-widget3__help-button').click(function() {
+            $('#sp-question-widget__help-button').click(function() {
                 new UserEvent(UserEventType.CLICKED_HELP_BUTTON, {widgetId: 3}).send();
             });
         })(),
 
         colorPickerHandler: function() {
-            if ($('.spWidget3IsDefaultButtonColorEnabled').is(':checked')) {
-                $('#sp-widget3__color-picker').spectrum('disable');
+            if ($('.spQuestionWidgetIsDefaultButtonColorEnabled').is(':checked')) {
+                $('#sp-question-widget__color-picker').spectrum('disable');
             } else {
-                $('#sp-widget3__color-picker').spectrum('enable');
+                $('#sp-question-widget__color-picker').spectrum('enable');
             }
         },
     },
@@ -68,13 +68,13 @@ sp.widgets = {
             });
 
             // Set person image.
-            $(document).on('change', '.sp-widget6__input-person-image', function() {
+            $(document).on('change', '.sp-testimonials-widget__input-person-image', function() {
                 var $file = $(this);
                 var file = this.files[0];
                 var reader = new FileReader();
 
                 reader.addEventListener('load', function() {
-                    $file.closest('.sp-widget-item').find('.sp-widget6__person-image')
+                    $file.closest('.sp-widget-item').find('.sp-testimonials-widget__person-image')
                         .removeClass('fa fa-user fa-4x')
                         .css('background-image', 'url(' + reader.result + ')');
 
@@ -102,7 +102,7 @@ sp.widgets = {
         displayItems: function(widgetData) {
 
             // Display is enabled.
-            $('#sp-widget6--is-enabled')
+            $('#sp-testimonials-widget--is-enabled')
                 .prop('checked', widgetData.isEnabled)
                 .closest('div').removeClass('sp-hide-is-enabled');
 
@@ -117,10 +117,10 @@ sp.widgets = {
 
                         case 'personImage':
                             if ('' !== value) {
-                                $('.sp-widget6__person-image')[index]
-                                    .className = 'sp-widget6__person-image';
+                                $('.sp-testimonials-widget__person-image')[index]
+                                    .className = 'sp-testimonials-widget__person-image';
 
-                                $('.sp-widget6__person-image')[index]
+                                $('.sp-testimonials-widget__person-image')[index]
                                     .style.backgroundImage = 'url(' + value + ')';
 
                                 $('.sp-widget-item [name="person-image"]')[index].value = value;
@@ -154,7 +154,7 @@ sp.widgets = {
             var widgetSetting = {
                 data: {
                     widgetId: 6,
-                    isEnabled: $('#sp-widget6--is-enabled').prop('checked'),
+                    isEnabled: $('#sp-testimonials-widget--is-enabled').prop('checked'),
                     items: []
                 }
             };
@@ -180,7 +180,7 @@ sp.widgets = {
                 if (jqueryObjectsToValidate.length === emptyJqueryObects.length) {
 
                     // Items have been saved at least once.
-                    if (! $('#sp-widget6--is-enabled').parent().hasClass('sp-hide-is-enabled')) {
+                    if (! $('#sp-testimonials-widget--is-enabled').parent().hasClass('sp-hide-is-enabled')) {
                         sp.error.handleError('You must fill all fields.');
                         validationCode = 1;
                     }
@@ -226,7 +226,7 @@ sp.widgets = {
 
                 // Set isEnabled to true if items are valid and saved for the first time.
                 if (2 === validationCode
-                    && $('#sp-widget6--is-enabled').parent().hasClass('sp-hide-is-enabled')) {
+                    && $('#sp-testimonials-widget--is-enabled').parent().hasClass('sp-hide-is-enabled')) {
 
                     widgetSetting.data.isEnabled = true;
                 }
@@ -241,13 +241,13 @@ sp.widgets = {
     widget7: {
         init: (function() {
             // Set person image.
-            $(document).on('change', '.sp-widget7__input-form-image', function() {
+            $(document).on('change', '.sp-form-widget__input-form-image', function() {
                 var $file = $(this);
                 var file = this.files[0];
                 var reader = new FileReader();
 
                 reader.addEventListener('load', function() {
-                    $file.closest('.sp-widget-item').find('.sp-widget7__form-image')
+                    $file.closest('.sp-widget-item').find('.sp-form-widget__form-image')
                         .removeClass('fa fa-picture-o fa-4x')
                         .css('background-image', 'url(' + reader.result + ')');
 
@@ -262,16 +262,16 @@ sp.widgets = {
 
             $('[name="formSelectType"]').on('change', function(event) {
                 switch($(event.currentTarget).attr('id')) {
-                    case 'sp-widget7__upload-form-radio':
-                        $('.sp-widget7__image-elements').hide();
-                        $('.sp-widget7__form-elements').show();
-                        $('.sp-widget7__form-image').parent().prev('label').text('Company Logo');
+                    case 'sp-form-widget__upload-form-radio':
+                        $('.sp-form-widget__image-elements').hide();
+                        $('.sp-form-widget__form-elements').show();
+                        $('.sp-form-widget__form-image').parent().prev('label').text('Company Logo');
                         break;
 
-                    case 'sp-widget7__upload-image-radio':
-                        $('.sp-widget7__image-elements').show();
-                        $('.sp-widget7__form-elements').hide();
-                        $('.sp-widget7__form-image').parent().prev('label').text('Image');
+                    case 'sp-form-widget__upload-image-radio':
+                        $('.sp-form-widget__image-elements').show();
+                        $('.sp-form-widget__form-elements').hide();
+                        $('.sp-form-widget__form-image').parent().prev('label').text('Image');
                         break;
                 }
             });
@@ -391,7 +391,7 @@ sp.widgets = {
     },
     widget10: {
         init: (function() {
-            $('#sp-widget10__help-button').click(function() {
+            $('#sp-email-required-widget__help-button').click(function() {
                 new UserEvent(UserEventType.CLICKED_HELP_BUTTON, {widgetId: 10}).send();
             });
         })(),
@@ -400,7 +400,7 @@ sp.widgets = {
         imageFileName: null,
         init: (function() {
 
-            $('[name="spWidget11ButtonColorChooser"]').click(function() {
+            $('[name="spShareWidgetButtonColorChooser"]').click(function() {
                 sp.widgets.widget11.colorPickerHandler();
             });
 
@@ -408,20 +408,20 @@ sp.widgets = {
                 sp.widgets.widget11.colorPickerHandler();
             });
 
-            $(document).on('change', '.sp-widget11__input-share-image', function() {
+            $(document).on('change', '.sp-share-widget__input-share-image', function() {
                 var $file = $(this);
                 var file = this.files[0];
                 var reader = new FileReader();
 
                 reader.addEventListener('load', function() {
-                    $file.closest('.sp-widget-item').find('.sp-widget11__share-image')
+                    $file.closest('.sp-widget-item').find('.sp-share-widget__share-image')
                         .removeClass('fa fa-picture-o fa-4x')
                         .css({
                             'background-image': 'url(' + reader.result + ')',
                             height: '100px',
                         });
 
-                    $('[name="spWidget11ShareImageBase64"]').val(reader.result);
+                    $('[name="spShareWidgetShareImageBase64"]').val(reader.result);
                 }, false);
 
                 if (file) {
@@ -432,19 +432,19 @@ sp.widgets = {
         })(),
 
         colorPickerHandler: function() {
-            if ($('.spWidget11IsDefaultButtonColorEnabled').is(':checked')) {
-                $('#sp-widget11__color-picker').spectrum('disable');
+            if ($('.spShareWidgetIsDefaultButtonColorEnabled').is(':checked')) {
+                $('#sp-share-widget__color-picker').spectrum('disable');
             } else {
-                $('#sp-widget11__color-picker').spectrum('enable');
+                $('#sp-share-widget__color-picker').spectrum('enable');
             }
         },
 
         setDefaultTitle: function(fileHash) {
-            if ($('[name="spWidget11ShareTitle"]').val() === '') {
+            if ($('[name="spShareWidgetShareTitle"]').val() === '') {
                 var fileName = $('.sp-file-mgmt-file-name[data-file-hash=' + fileHash + ']').text();
                 fileName = fileName.substring(0, fileName.lastIndexOf("."));
 
-                $('[name="spWidget11ShareTitle"]').val(fileName);
+                $('[name="spShareWidgetShareTitle"]').val(fileName);
             }
         }
     }
@@ -502,7 +502,7 @@ sp.viewerWidgetsModal = {
                     && typeof widget.data.items[0] !== 'undefined'
                     && typeof widget.data.items[0].widgetId !== 'undefined'
                     && 11 === widget.data.items[0].widgetId) {
-                    displayWidget11(widget.data, fileHash);
+                    displayShareWidget(widget.data, fileHash);
                 } else {
                     switch (widget.data.widgetId) {
                         case 1:
@@ -525,7 +525,7 @@ sp.viewerWidgetsModal = {
 
                         case 5:
                             if (widget.data.items.length > 0) {
-                                displayWidget5(widget.data);
+                                displayHopperWidget(widget.data);
                             }
                             break;
 
@@ -537,31 +537,31 @@ sp.viewerWidgetsModal = {
 
                         case 7:
                             if (widget.data.items.length > 0) {
-                                displayWidget7(widget.data);
+                                displayFormWidget(widget.data);
                             }
                             break;
 
                         case 8:
                             if (widget.data.items.length > 0) {
-                                displayWidget8(widget.data);
+                                displayCodeWidget(widget.data);
                             }
                             break;
 
                         case 9:
                             if (widget.data.items.length > 0) {
-                                displayWidget9(widget.data);
+                                displayLinkWidget(widget.data);
                             }
                             break;
 
                         case 10:
                             if (widget.data.items.length > 0) {
-                                displayWidget10(widget.data);
+                                displayEmailRequiredWidget(widget.data);
                             }
                             break;
 
                         case 11:
                             if (widget.data.items.length > 0) {
-                                displayWidget11(widget.data, fileHash);
+                                displayShareWidget(widget.data, fileHash);
                             }
                             break;
                     }
@@ -636,53 +636,53 @@ sp.viewerWidgetsModal = {
             }
 
             if (typeof widget.items[0].cancelButtonText !== 'undefined') {
-                $('[name="spWidget3CancelButtonText"]').val(widget.items[0].cancelButtonText);
+                $('[name="spQuestionWidgetCancelButtonText"]').val(widget.items[0].cancelButtonText);
             }
 
             if (typeof widget.items[0].formTitle !== 'undefined') {
-                $('[name="spWidget3FormTitle"]').val(widget.items[0].formTitle);
+                $('[name="spQuestionWidgetFormTitle"]').val(widget.items[0].formTitle);
             }
 
             if (typeof widget.items[0].formMessage !== 'undefined') {
-                $('[name="spWidget3FormMessage"]').val(widget.items[0].formMessage);
+                $('[name="spQuestionWidgetFormMessage"]').val(widget.items[0].formMessage);
             }
 
             if (typeof widget.items[0].confirmButtonText !== 'undefined') {
-                $('[name="spWidget3ConfirmButtonText"]').val(widget.items[0].confirmButtonText);
+                $('[name="spQuestionWidgetConfirmButtonText"]').val(widget.items[0].confirmButtonText);
             }
 
             if (typeof widget.items[0].customMessageLabel !== 'undefined') {
-                $('[name="spWidget3CustomMessageLabel"]').val(widget.items[0].customMessageLabel);
+                $('[name="spQuestionWidgetCustomMessageLabel"]').val(widget.items[0].customMessageLabel);
             }
 
             if (typeof widget.items[0].customEmailLabel !== 'undefined') {
-                $('[name="spWidget3CustomEmailLabel"]').val(widget.items[0].customEmailLabel);
+                $('[name="spQuestionWidgetCustomEmailLabel"]').val(widget.items[0].customEmailLabel);
             }
 
             if (typeof widget.items[0].customEmailValidationErrorMessage !== 'undefined') {
-                $('[name="spWidget3CustomEmailValidationErrorMessage"]').val(widget.items[0].customEmailValidationErrorMessage);
+                $('[name="spQuestionWidgetCustomEmailValidationErrorMessage"]').val(widget.items[0].customEmailValidationErrorMessage);
             }
 
             if (typeof widget.items[0].location !== 'undefined'
                 && typeof widget.items[0].location.right !== 'undefined') {
-                $('[name="spWidget3IsLocationRight"]').prop('checked', widget.items[0].location.right);
+                $('[name="spQuestionWidgetIsLocationRight"]').prop('checked', widget.items[0].location.right);
             }
 
             if (typeof widget.items[0].location !== 'undefined'
                 && typeof widget.items[0].location.bottom !== 'undefined') {
-                $('[name="spWidget3IsLocationBottom"]').prop('checked', widget.items[0].location.bottom);
+                $('[name="spQuestionWidgetIsLocationBottom"]').prop('checked', widget.items[0].location.bottom);
             }
 
             if (typeof widget.items[0].isDefaultButtonColorEnabled !== 'undefined') {
-                $('.spWidget3IsDefaultButtonColorEnabled').prop('checked', widget.items[0].isDefaultButtonColorEnabled);
+                $('.spQuestionWidgetIsDefaultButtonColorEnabled').prop('checked', widget.items[0].isDefaultButtonColorEnabled);
             }
 
             if (typeof widget.items[0].isDefaultButtonColorEnabled !== 'undefined') {
-                $('.spWidget3IsCustomButtonColorEnabled').prop('checked', widget.items[0].isCustomButtonColorEnabled);
+                $('.spQuestionWidgetIsCustomButtonColorEnabled').prop('checked', widget.items[0].isCustomButtonColorEnabled);
             }
 
             if (typeof widget.items[0].buttonColor !== 'undefined') {
-                $('[name="spWidget3ButtonColor"]')
+                $('[name="spQuestionWidgetButtonColor"]')
                     .val(widget.items[0].buttonColor)
                     .spectrum('set', widget.items[0].buttonColor);
             }
@@ -704,7 +704,7 @@ sp.viewerWidgetsModal = {
          *
          * @param {object} widget - The settings for the Hopper widget.
          */
-        function displayWidget5(widget) {
+        function displayHopperWidget(widget) {
             for (var i = 0; i < widget.items.length - 1; i++) {
                 $('#sp-hopper-customize__container').append(
                     '<div class="row sp-hopper-widget__row">' +
@@ -743,14 +743,14 @@ sp.viewerWidgetsModal = {
          *
          * @params {object} widget - The form widget settings.
          */
-        function displayWidget7(widget) {
-            $('[name="widget7-is-enabled"]')
+        function displayFormWidget(widget) {
+            $('[name="form-widget-is-enabled"]')
                 .prop('checked', widget.isEnabled)
                 .closest('div').removeClass('sp-hide-is-enabled');
 
             $('#sp-tab-7 [name*="form"]').each(function(index) {
                 if ($(this).attr('name') === 'formImage') {
-                    $('.sp-widget7__form-image')
+                    $('.sp-form-widget__form-image')
                         .removeClass('fa fa-picture-o fa-4x')
                         .css('background-image', 'url(' + widget.items[0][$(this).attr('name')] + ')');
                 }
@@ -774,12 +774,12 @@ sp.viewerWidgetsModal = {
             $('[name="isWidgetButtonPulseEnabled"]').prop('checked', widget.items[0]['isWidgetButtonPulseEnabled']);
         }
 
-        function displayWidget8(widget) {
+        function displayCodeWidget(widget) {
             for (var i = 0; i < widget.items.length - 1; i++) {
                 sp.widgets.widget8.addItem();
             }
 
-            $('[name="sp-widget8__is-enabled"]')
+            $('[name="sp-code-widget__is-enabled"]')
                 .prop('checked', widget.isEnabled)
                 .closest('div').removeClass('sp-hide-is-enabled');
 
@@ -801,8 +801,8 @@ sp.viewerWidgetsModal = {
          *
          * @params {object} widget - The Link Widget settings.
          */
-        function displayWidget9(widget) {
-            $('[name="sp-widget9--is-enabled"]')
+        function displayLinkWidget(widget) {
+            $('[name="sp-link-widget--is-enabled"]')
                 .prop('checked', widget.isEnabled)
                 .closest('div').removeClass('sp-hide-is-enabled');
 
@@ -842,62 +842,62 @@ sp.viewerWidgetsModal = {
             });
         }
 
-        function displayWidget10(widget) {
-            $('[name="sp-widget10--is-enabled"]').prop('checked', widget.isEnabled);
-            $('[name="spWidget10FormTitle"]').val(widget.items[0].formTitle);
+        function displayEmailRequiredWidget(widget) {
+            $('[name="sp-email-required-widget--is-enabled"]').prop('checked', widget.isEnabled);
+            $('[name="spEmailRequiredWidgetFormTitle"]').val(widget.items[0].formTitle);
         }
 
-        function displayWidget11(widget, fileHash) {
+        function displayShareWidget(widget, fileHash) {
 
             if (typeof widget.isEnabled !== 'undefined') {
-                $('[name="sp-widget11--is-enabled"]').prop('checked', widget.isEnabled);
+                $('[name="sp-share-widget--is-enabled"]').prop('checked', widget.isEnabled);
             } else {
-                $('[name="sp-widget11--is-enabled"]').prop('checked', widget.items[0].enabled);
+                $('[name="sp-share-widget--is-enabled"]').prop('checked', widget.items[0].enabled);
             }
 
-            $('[name="spWidget11ButtonText"]').val(widget.items[0].buttonText);
+            $('[name="spShareWidgetButtonText"]').val(widget.items[0].buttonText);
 
             if (typeof widget.items[0].isButtonColorCustom !== 'undefined') {
                 if (widget.items[0].isButtonColorCustom) {
-                    $('.spWidget11IsDefaultButtonColorEnabled').prop('checked', false);
-                    $('.spWidget11IsCustomButtonColorEnabled').prop('checked', true);
+                    $('.spShareWidgetIsDefaultButtonColorEnabled').prop('checked', false);
+                    $('.spShareWidgetIsCustomButtonColorEnabled').prop('checked', true);
                 } else {
-                    $('.spWidget11IsDefaultButtonColorEnabled').prop('checked', true);
-                    $('.spWidget11IsCustomButtonColorEnabled').prop('checked', false);
+                    $('.spShareWidgetIsDefaultButtonColorEnabled').prop('checked', true);
+                    $('.spShareWidgetIsCustomButtonColorEnabled').prop('checked', false);
                 }
             }
 
             if (typeof widget.items[0].buttonColor !== 'undefined') {
-                $('[name="spWidget11ButtonColor"]')
+                $('[name="spShareWidgetButtonColor"]')
                     .val(widget.items[0].buttonColor)
                     .spectrum('set', widget.items[0].buttonColor);
             }
 
             if (typeof widget.items[0].title !== 'undefined') {
-                $('[name="spWidget11ShareTitle"]').val(widget.items[0].title);
+                $('[name="spShareWidgetShareTitle"]').val(widget.items[0].title);
             } else {
                 var fileName = $('.sp-file-mgmt-file-name[data-file-hash=' + fileHash + ']').text();
                 fileName = fileName.substring(0, fileName.lastIndexOf("."));
 
-                $('[name="spWidget11ShareTitle"]').val(fileName);
+                $('[name="spShareWidgetShareTitle"]').val(fileName);
             }
 
             if (typeof widget.items[0].description !== 'undefined') {
-                $('[name="spWidget11ShareDescription"]').val(widget.items[0].description);
+                $('[name="spShareWidgetShareDescription"]').val(widget.items[0].description);
             }
 
             if (typeof widget.items[0].imageUrl !== 'undefined') {
-                $('.sp-widget11__share-image')
+                $('.sp-share-widget__share-image')
                     .removeClass('fa fa-picture-o fa-4x')
                     .css({
                         'background-image': 'url(' + widget.items[0].imageUrl + ')',
                         height: '100px',
                     });
 
-                $('[name="spWidget11ShareImageUrl"]').val(widget.items[0].imageUrl);
+                $('[name="spShareWidgetShareImageUrl"]').val(widget.items[0].imageUrl);
 
                 if (typeof widget.items[0].url !== 'undefined') {
-                    $('[name="spWidget11ShareUrl"]').val(widget.items[0].url);
+                    $('[name="spShareWidgetShareUrl"]').val(widget.items[0].url);
                 }
             }
 
@@ -977,34 +977,34 @@ sp.viewerWidgetsModal = {
 
         if (! sp.viewerWidgetsModal.isInputEmpty(5)
             || ! $('[name="hopper-widget-is-enabled"]').closest('div').hasClass('sp-hide-is-enabled')) {
-            settings.push(sp.viewerWidgetsModal.saveWidget5(fileHash));
+            settings.push(sp.viewerWidgetsModal.saveHopperWidget(fileHash));
         }
 
-        var widget6Settings = sp.widgets.widget6.saveItems(fileHash);
-        if (typeof widget6Settings === 'undefined') {
+        var testimonialsWidgetSettings = sp.widgets.widget6.saveItems(fileHash);
+        if (typeof testimonialsWidgetSettings === 'undefined') {
             settings.push(undefined);
-        } else if (widget6Settings.data.items.length > 0 ) {
-            settings.push(widget6Settings);
+        } else if (testimonialsWidgetSettings.data.items.length > 0 ) {
+            settings.push(testimonialsWidgetSettings);
         }
 
         if (! sp.viewerWidgetsModal.isInputEmpty(7)
-            || ! $('[name="widget7-is-enabled"]').closest('div').hasClass('sp-hide-is-enabled')) {
-            settings.push(sp.viewerWidgetsModal.saveWidget7(fileHash));
+            || ! $('[name="form-widget-is-enabled"]').closest('div').hasClass('sp-hide-is-enabled')) {
+            settings.push(sp.viewerWidgetsModal.saveFormWidget(fileHash));
         }
 
         if (! sp.widgets.widget8.validate()
-            || ! $('[name="sp-widget8__is-enabled"]').closest('div').hasClass('sp-hide-is-enabled')) {
-            settings.push(sp.viewerWidgetsModal.saveWidget8(fileHash));
+            || ! $('[name="sp-code-widget__is-enabled"]').closest('div').hasClass('sp-hide-is-enabled')) {
+            settings.push(sp.viewerWidgetsModal.saveCodeWidget(fileHash));
         }
 
         if (! sp.widgets.widget9.validate()
-            || ! $('[name="sp-widget9--is-enabled"]').closest('div').hasClass('sp-hide-is-enabled')) {
-            settings.push(sp.viewerWidgetsModal.saveWidget9(fileHash));
+            || ! $('[name="sp-link-widget--is-enabled"]').closest('div').hasClass('sp-hide-is-enabled')) {
+            settings.push(sp.viewerWidgetsModal.saveLinkWidget(fileHash));
         }
 
-        settings.push(sp.viewerWidgetsModal.saveWidget10(fileHash));
+        settings.push(sp.viewerWidgetsModal.emailRequiredWidget(fileHash));
 
-        settings.push(sp.viewerWidgetsModal.saveWidget11(fileHash));
+        settings.push(sp.viewerWidgetsModal.saveShareWidget(fileHash));
 
         var data = {
             action: 'setWidgetsSettings',
@@ -1185,19 +1185,19 @@ sp.viewerWidgetsModal = {
                 items: [
                     {
                         buttonText: $('[name="question-widget-text"]').val(),
-                        formMessage: $('[name="spWidget3FormMessage"]').val(),
-                        confirmButtonText: $('[name="spWidget3ConfirmButtonText"]').val(),
-                        cancelButtonText: $('[name="spWidget3CancelButtonText"]').val(),
-                        formTitle: $('[name="spWidget3FormTitle"]').val(),
-                        customMessageLabel: $('[name="spWidget3CustomMessageLabel"]').val(),
-                        customEmailLabel: $('[name="spWidget3CustomEmailLabel"]').val(),
-                        customEmailValidationErrorMessage: $('[name="spWidget3CustomEmailValidationErrorMessage"]').val(),
-                        buttonColor: $('[name="spWidget3ButtonColor"]').val(),
-                        isDefaultButtonColorEnabled: $('.spWidget3IsDefaultButtonColorEnabled').prop('checked'),
-                        isCustomButtonColorEnabled: $('.spWidget3IsCustomButtonColorEnabled').prop('checked'),
+                        formMessage: $('[name="spQuestionWidgetFormMessage"]').val(),
+                        confirmButtonText: $('[name="spQuestionWidgetConfirmButtonText"]').val(),
+                        cancelButtonText: $('[name="spQuestionWidgetCancelButtonText"]').val(),
+                        formTitle: $('[name="spQuestionWidgetFormTitle"]').val(),
+                        customMessageLabel: $('[name="spQuestionWidgetCustomMessageLabel"]').val(),
+                        customEmailLabel: $('[name="spQuestionWidgetCustomEmailLabel"]').val(),
+                        customEmailValidationErrorMessage: $('[name="spQuestionWidgetCustomEmailValidationErrorMessage"]').val(),
+                        buttonColor: $('[name="spQuestionWidgetButtonColor"]').val(),
+                        isDefaultButtonColorEnabled: $('.spQuestionWidgetIsDefaultButtonColorEnabled').prop('checked'),
+                        isCustomButtonColorEnabled: $('.spQuestionWidgetIsCustomButtonColorEnabled').prop('checked'),
                         location: {
-                            right: $('[name="spWidget3IsLocationRight"]').prop('checked'),
-                            bottom: $('[name="spWidget3IsLocationBottom"]').prop('checked'),
+                            right: $('[name="spQuestionWidgetIsLocationRight"]').prop('checked'),
+                            bottom: $('[name="spQuestionWidgetIsLocationBottom"]').prop('checked'),
                         },
                     }
                 ]
@@ -1228,18 +1228,18 @@ sp.viewerWidgetsModal = {
      * Validate then save Hopper widget settings.
      *
      * If one of the fields are empty, it returns undefined, otherwise it returns
-     * widget5 which contains the settings for this widget.
+     * hopperWidget which contains the settings for this widget.
      *
      * @param fileHash
-     * @returns widget5 || undefined
+     * @returns hopperWidget || undefined
      */
-    saveWidget5: function(fileHash) {
+    saveHopperWidget: function(fileHash) {
 
         if ($('[name="hopper-widget-is-enabled"]').closest('div').hasClass('sp-hide-is-enabled')) {
             $('[name="hopper-widget-is-enabled"]').prop('checked', true);
         }
 
-        var widget5 = {
+        var hopperWidget = {
             data: {
                 widgetId: 5,
                 isEnabled: $('[name="hopper-widget-is-enabled"]').prop('checked'),
@@ -1291,10 +1291,10 @@ sp.viewerWidgetsModal = {
             return 0;
         });
 
-        widget5.data.items = items;
+        hopperWidget.data.items = items;
 
         if (! isHopperSettingEmpty) {
-            return widget5;
+            return hopperWidget;
         } else {
             return undefined;
         }
@@ -1307,32 +1307,32 @@ sp.viewerWidgetsModal = {
      * Save params for the form widget.
      *
      * @param fileHash
-     * @returns {object} widget7 - The widget data.
+     * @returns {object} formWidget - The widget data.
      */
-    saveWidget7: function(fileHash) {
-        if ($('[name="widget7-is-enabled"]').closest('div').hasClass('sp-hide-is-enabled')) {
-            $('[name="widget7-is-enabled"]').prop('checked', true);
+    saveFormWidget: function(fileHash) {
+        if ($('[name="form-widget-is-enabled"]').closest('div').hasClass('sp-hide-is-enabled')) {
+            $('[name="form-widget-is-enabled"]').prop('checked', true);
         }
 
-        var widget7 = {
+        var formWidget = {
             data: {
                 widgetId: 7,
-                isEnabled: $('[name="widget7-is-enabled"]').prop('checked'),
+                isEnabled: $('[name="form-widget-is-enabled"]').prop('checked'),
                 items: []
             }
         };
 
-        var isWidget7SettingEmpty = false;
+        var isFormWidgetSettingEmpty = false;
         var item = {};
         var fieldsToValidate = [];
 
         switch($('[name="formSelectType"]:checked').attr('id')) {
-            case 'sp-widget7__upload-form-radio':
-                fieldsToValidate = $('#sp-tab-7 .form-group:not(.sp-widget7__image-elements)').find('input');
+            case 'sp-form-widget__upload-form-radio':
+                fieldsToValidate = $('#sp-tab-7 .form-group:not(.sp-form-widget__image-elements)').find('input');
                 break;
 
-            case 'sp-widget7__upload-image-radio':
-                fieldsToValidate = $('#sp-tab-7 .form-group:not(.sp-widget7__form-elements)').find('input');
+            case 'sp-form-widget__upload-image-radio':
+                fieldsToValidate = $('#sp-tab-7 .form-group:not(.sp-form-widget__form-elements)').find('input');
                 break;
         }
 
@@ -1353,7 +1353,7 @@ sp.viewerWidgetsModal = {
                 sp.error.handleError('You must fill the field.');
                 $(this).addClass('sp-widget-form-error');
                 sp.viewerWidgetsModal.openErrorTab();
-                isWidget7SettingEmpty = true;
+                isFormWidgetSettingEmpty = true;
             } else if ($(this).attr('name') === 'formSelectType') {
                 item[$(this).attr('name')] = $('[name="formSelectType"]:checked').attr('data-widget-type');
             } else if ($(this).attr('name') === 'formWidgetPlacement') {
@@ -1365,10 +1365,10 @@ sp.viewerWidgetsModal = {
             }
         });
 
-        widget7.data.items.push(item);
+        formWidget.data.items.push(item);
 
-        if (! isWidget7SettingEmpty) {
-            return widget7;
+        if (! isFormWidgetSettingEmpty) {
+            return formWidget;
         } else {
             return undefined;
         }
@@ -1378,22 +1378,22 @@ sp.viewerWidgetsModal = {
      * Save settings for Code Widget
      *
      * @param {string} fileHash - The file hash.
-     * @returns {object} widget8 - Code Widget settings.
+     * @returns {object} codeWidget - Code Widget settings.
      */
-    saveWidget8: function(fileHash) {
-        if ($('[name="sp-widget8__is-enabled"]').closest('div').hasClass('sp-hide-is-enabled')) {
-            $('[name="sp-widget8__is-enabled"]').prop('checked', true);
+    saveCodeWidget: function(fileHash) {
+        if ($('[name="sp-code-widget__is-enabled"]').closest('div').hasClass('sp-hide-is-enabled')) {
+            $('[name="sp-code-widget__is-enabled"]').prop('checked', true);
         }
 
-        var widget8 = {
+        var codeWidget = {
             data: {
                 widgetId: 8,
-                isEnabled: $('[name="sp-widget8__is-enabled"]').prop('checked'),
+                isEnabled: $('[name="sp-code-widget__is-enabled"]').prop('checked'),
                 items: []
             }
         };
 
-        var isWidget8SettingEmpty = false;
+        var isCodeWidgetSettingEmpty = false;
 
         $('#sp-tab-8 .sp-widget-item').each(function(index) {
             var item = {};
@@ -1405,7 +1405,7 @@ sp.viewerWidgetsModal = {
                             sp.error.handleError('You must fill the field.');
                             $(this).addClass('sp-widget-form-error');
                             sp.viewerWidgetsModal.openErrorTab();
-                            isWidget8SettingEmpty = true;
+                            isCodeWidgetSettingEmpty = true;
                         } else {
                             item[$(this).attr('name')] = $(this).val();
                         }
@@ -1423,11 +1423,11 @@ sp.viewerWidgetsModal = {
                 }
             });
 
-            widget8.data.items.push(item);
+            codeWidget.data.items.push(item);
         });
 
-        if (! isWidget8SettingEmpty) {
-            return widget8;
+        if (! isCodeWidgetSettingEmpty) {
+            return codeWidget;
         }
     },
 
@@ -1438,23 +1438,23 @@ sp.viewerWidgetsModal = {
      * to not be saved.
      *
      * @param fileHash
-     * @returns widget9 || undefined
+     * @returns linkWidget || undefined
      */
-    saveWidget9: function(fileHash) {
+    saveLinkWidget: function(fileHash) {
 
-        if ($('[name="sp-widget9--is-enabled"]').closest('div').hasClass('sp-hide-is-enabled')) {
-            $('[name="sp-widget9--is-enabled"]').prop('checked', true);
+        if ($('[name="sp-link-widget--is-enabled"]').closest('div').hasClass('sp-hide-is-enabled')) {
+            $('[name="sp-link-widget--is-enabled"]').prop('checked', true);
         }
 
-        var widget9 = {
+        var linkWidget = {
             data: {
                 widgetId: 9,
-                isEnabled: $('[name="sp-widget9--is-enabled"]').prop('checked'),
+                isEnabled: $('[name="sp-link-widget--is-enabled"]').prop('checked'),
                 items: [],
             }
         };
 
-        var isWidget9SettingEmpty = false;
+        var isLinkWidgetSettingEmpty = false;
 
         $('#sp-tab-9 .sp-link-widget__item').each(function() {
             var item = {};
@@ -1469,7 +1469,7 @@ sp.viewerWidgetsModal = {
                     sp.error.handleError('You must fill the field.');
                     $(this).addClass('sp-widget-form-error');
                     sp.viewerWidgetsModal.openErrorTab();
-                    isWidget9SettingEmpty = true;
+                    isLinkWidgetSettingEmpty = true;
 
                 } else if ('link' === $(this).attr('data-item-setting')) {
                     var url = sp.widgets.widget9.urlHttpConfig($(this).val());
@@ -1492,13 +1492,13 @@ sp.viewerWidgetsModal = {
                 }
             });
 
-            widget9.data.items.push(item);
+            linkWidget.data.items.push(item);
         });
 
-        if (! isWidget9SettingEmpty) {
+        if (! isLinkWidgetSettingEmpty) {
 
             if (sp.widgets.widget9.isWidgetPageOrderValid()) {
-                return widget9;
+                return linkWidget;
             } else {
                 return undefined;
             }
@@ -1507,62 +1507,62 @@ sp.viewerWidgetsModal = {
         }
     },
 
-    saveWidget10: function(fileHash) {
+    emailRequiredWidget: function(fileHash) {
 
-        var widget10 = {
+        var emailRequiredWidget = {
             data: {
                 widgetId: 10,
-                isEnabled: $('[name="sp-widget10--is-enabled"]').prop('checked'),
+                isEnabled: $('[name="sp-email-required-widget--is-enabled"]').prop('checked'),
                 items: []
             }
         };
 
         var item = {};
-        item.formTitle = $('[name="spWidget10FormTitle"]').val();
+        item.formTitle = $('[name="spEmailRequiredWidgetFormTitle"]').val();
 
-        widget10.data.items.push(item);
+        emailRequiredWidget.data.items.push(item);
 
-        return widget10;
+        return emailRequiredWidget;
     },
 
-    saveWidget11: function(fileHash) {
+    saveShareWidget: function(fileHash) {
 
-        var widget11 = {
+        var shareWidget = {
             data: {
                 widgetId: 11,
-                isEnabled: $('[name="sp-widget11--is-enabled"]').prop('checked'),
+                isEnabled: $('[name="sp-share-widget--is-enabled"]').prop('checked'),
                 items: []
             }
         };
 
         var item = {};
 
-        item.buttonText = $('[name="spWidget11ButtonText"]').val();
-        item.buttonColor = $('[name="spWidget11ButtonColor"]').val();
-        item.title = $('[name="spWidget11ShareTitle"]').val();
-        item.description = $('[name="spWidget11ShareDescription"]').val();
+        item.buttonText = $('[name="spShareWidgetButtonText"]').val();
+        item.buttonColor = $('[name="spShareWidgetButtonColor"]').val();
+        item.title = $('[name="spShareWidgetShareTitle"]').val();
+        item.description = $('[name="spShareWidgetShareDescription"]').val();
 
-        if ($('.spWidget11IsCustomButtonColorEnabled').is(':checked')) {
+        if ($('.spShareWidgetIsCustomButtonColorEnabled').is(':checked')) {
             item.isButtonColorCustom = true;
         } else {
             item.isButtonColorCustom = false;
         }
 
-        if (typeof $('[name="spWidget11ShareImageBase64"]').val() !== 'undefined'
-            && '' !== $('[name="spWidget11ShareImageBase64"]').val()) {
-            item.imageBase64 = $('[name="spWidget11ShareImageBase64"]').val();
+        if (typeof $('[name="spShareWidgetShareImageBase64"]').val() !== 'undefined'
+            && '' !== $('[name="spShareWidgetShareImageBase64"]').val()) {
+            item.imageBase64 = $('[name="spShareWidgetShareImageBase64"]').val();
             item.imageFileName = sp.widgets.widget11.imageFileName;
         } else {
-            item.imageUrl = $('[name="spWidget11ShareImageUrl"]').val();
+            item.imageUrl = $('[name="spShareWidgetShareImageUrl"]').val();
         }
 
-        if ($('[name="spWidget11ShareUrl"]').val()) {
-            item.url = $('[name="spWidget11ShareUrl"]').val();
+        if ($('[name="spShareWidgetShareUrl"]').val()) {
+            item.url = $('[name="spShareWidgetShareUrl"]').val();
         }
 
-        widget11.data.items.push(item);
+        shareWidget.data.items.push(item);
 
-        return widget11;
+        return shareWidget;
     },
 
     /**

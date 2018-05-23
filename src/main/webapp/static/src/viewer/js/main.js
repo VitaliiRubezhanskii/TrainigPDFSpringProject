@@ -1797,7 +1797,7 @@ $.ajax({
                 var personImageDiv = '';
 
                 if ('' !== personImage) {
-                    personImageDiv = '<div id="sp-widget6__person-image" style="background-image: url(' + sp.escapeHtml(personImage) + ');"></div>';
+                    personImageDiv = '<div id="sp-testimonials-widget__person-image" style="background-image: url(' + sp.escapeHtml(personImage) + ');"></div>';
                     $('#sp-widget6__button-person-image')
                         .css({'background-image': 'url(' + personImage + ')', 'background-color': 'transparent'});
                     $('#sp-widget6__button i').hide();
