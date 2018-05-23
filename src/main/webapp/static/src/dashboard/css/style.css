@@ -12,6 +12,63 @@
 .hint{
     margin: 0 0 0 30px;
 }
+.cancel-red{
+    background-color: #e22334 !important;
+}
+
+.cancel-red:hover{
+    background-color: #d22c3b !important;
+}
+
+.info-block{
+    position: absolute;
+    right: 10px;
+    top: -25px;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background-color: #008000;
+    color: #fff;
+    align-items: center;
+    line-height: 25px;
+    cursor: pointer;
+    box-shadow: 0px 4px 3px rgba(35, 31, 32, 0.3);
+    font-size: 12px;
+    opacity: 0.5;
+}
+.info-block:hover{
+    opacity: 1;
+}
+
+.info-block:hover::before{
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 0 10px 10px 10px;
+    border-color: transparent transparent #d3d3d3 transparent;
+    bottom: -10px;
+    right: 2px;
+
+}
+
+.info-block:hover::after {
+    content: attr(data-title);
+    position: absolute;
+    top: calc(100% + 9px);
+    right: -10px;
+    background-color: #d3d3d3;
+    color: #000;
+    width: 300px;
+    border-radius: 5px;
+    font-size: 11px;
+    line-height: 1.5;
+    font-weight: bold;
+    padding: 5px;
+    z-index: 10;
+}
+
 .material-switch > input[type="checkbox"] {
     display: none;
 }
