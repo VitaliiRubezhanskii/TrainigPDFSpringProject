@@ -39,7 +39,7 @@ export default {
                     canvas.height = viewport.height;
                     canvas.width = viewport.width;
                     canvas.setAttribute('id', page.pageNumber);
-                    canvas.setAttribute('style', 'display:block;margin:0 auto');
+                    canvas.setAttribute('style', 'display:block; margin:0 auto');
                     el.appendChild(canvas);
                     page.render(renderContext);
 

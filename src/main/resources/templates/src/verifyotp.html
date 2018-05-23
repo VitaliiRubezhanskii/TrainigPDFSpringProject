@@ -42,20 +42,22 @@
         </script>
     </head>
     <body class="gray-bg">
+      <div id="auth"></div>
         <div class="middle-box text-center loginscreen animated fadeInDown">
             <div style="margin-top: 200px;">
                 <div>
                     <a id="sp-logo" href="#"><img src="/assets/img/logo_wide_1060x229.png" width="250" /></a>
                 </div>
                 <form class="m-t">
-                    <div class="form-group">
+                    <!-- <div class="form-group">
                         <input type="text" placeholder="Verify code" required="" id="code"  name="code"/>
-                    </div>
+                    </div> -->
                     <input type="hidden" name="{{{_csrf.parameterName}}}" value="{{{_csrf.token}}}">
                     <p class="form-text text-danger">{{#error}}{{errorMessage}}{{/error}}</p>
                     <input class="btn btn-primary block full-width m-b" type="button" value="Log in" id="logincustomer"  onclick="loginCustomer(event);" />
                 </form>
             </div>
         </div>
+        <script type="text/javascript" src="/dist/auth.entry.js"></script>
     </body>
 </html>

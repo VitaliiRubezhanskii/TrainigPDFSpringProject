@@ -1,0 +1,121 @@
+p{
+    margin: 0;
+}
+form.m-t{
+    margin: 0;
+}
+.title-form{
+    padding: 20px 0;
+}
+#sp-widget5__horizontal-hopper-container {
+    display: flex;
+    position: relative;
+    overflow: scroll;
+    margin: 0 auto;
+    padding-right: 22px;
+    margin-bottom: 10px;
+}
+
+#sp-widget5__horizontal-hopper-container::-webkit-scrollbar {
+    display: none;
+    position: relative;
+}
+
+.sp-widget5__horizontal-hop {
+    height: 40px;
+    color: rgb(255, 255, 255);
+    position: relative;
+    margin-right: 3px;
+    box-sizing: border-box;
+    cursor: pointer;
+    display: flex;
+    flex:   1   1   100px;
+    justify-content: center;
+    font-size: 14px;
+    background-color: #2317ae;
+    color: #fff;
+}
+.sp-widget5__horizontal-hop::after {
+    content: "";
+    position: absolute;
+    width: 0;
+    top: 0;
+    right: -25px;
+    z-index: 1;
+    height: 0;
+    border-style: solid;
+    border-width: 20px 0 20px 25px;
+    border-color: transparent transparent transparent #2317ae;
+}
+.sp-widget5__horizontal-hop::before {
+    content: "";
+    position: absolute;
+    width: 0;
+    left: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 20px 0 20px 25px;
+    border-color: transparent transparent transparent #ffffff;
+}
+.sp-widget5__horizontal-hop-text {
+    padding: 0 0 0 30px;
+    word-wrap: break-word;
+    line-height: 0.9;
+    align-self: center;
+}
+#sp-widget5__horizontal-hopper-container div:first-child::before{
+    display: none;
+}
+.active{
+    background-color: #ec971f !important;
+}
+.sp-widget5__horizontal-hop.active::after {
+    border-color: transparent transparent transparent #ec971f;
+}
+
+#sp-terms-privacy {
+    font-size: 1.1rem !important;
+}
+
+.help-button {
+    float: left;
+    width: 100px;
+    height: 30px;
+    background-color:#2317ae;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    color: #fff;
+    border-radius: 3px;
+    font-size: 14px;
+}
+.help-button:hover{
+    background-color: #1d1484;
+}
+.clearfix{
+    margin-bottom: 10px;
+}
+.clearfix::after {
+    content: "";
+    display: table;
+    clear: both;
+}
+.help-description{
+    text-align: left;
+}
+.errorId,
+.errorPhone {
+    color: red;
+    text-align: left;
+}
+.errorInputId,
+.errorInputPhone {
+    border: 1px solid red;
+}
+.help-description{
+  display: block;
+}
+
+.hide-help-block {
+    display: none;
+}
