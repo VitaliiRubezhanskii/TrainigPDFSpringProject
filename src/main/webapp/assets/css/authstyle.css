@@ -5,15 +5,14 @@ form.m-t{
     margin: 0;
 }
 .title-form{
-    padding: 20px 0;
+    padding: 15px 0;
 }
 #sp-widget5__horizontal-hopper-container {
     display: flex;
     position: relative;
-    /*overflow: hidden;*/
     margin: 0 auto;
     padding-right: 22px;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
 }
 
 #sp-widget5__horizontal-hopper-container::-webkit-scrollbar {
@@ -119,10 +118,23 @@ form.m-t{
 .hide-help-block {
     display: block;
 }
-#code::placeholder,
-#code::-moz-placeholder,
-#code::-webkit-input-placeholder,
-#code:-ms-input-placeholder,
+
+#code::placeholder{
+  font-size: 12px;
+}
+
+#code::-moz-placeholder{
+  font-size: 12px;
+}
+
+#code::-webkit-input-placeholder{
+  font-size: 12px;
+}
+
+#code:-ms-input-placeholder{
+  font-size: 12px;
+}
+
 #code:-moz-placeholder {
   font-size: 12px;
 }
@@ -136,7 +148,8 @@ form.m-t{
     width: 100%;
     z-index: 2;
 }
-.sp-powered-by{
+
+.sp-powered-by {
     font-weight: bold;
 }
 
