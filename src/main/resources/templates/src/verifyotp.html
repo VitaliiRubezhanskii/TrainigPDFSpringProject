@@ -13,6 +13,7 @@
 
         <link href="/assets/css/animate.css" rel="stylesheet">
         <link href="/assets/css/style.css" rel="stylesheet">
+        <link href="/assets/css/authstyle.css" rel="stylesheet">
         <script type="text/javascript">
             function loginCustomer(event) {
                 event.preventDefault();
@@ -53,21 +54,30 @@
                     </p>
                 </div>
                 <div id="sp-widget5__horizontal-hopper-container">
-                    <div class="sp-widget5__horizontal-hop active">
+                    <div class="sp-widget5__horizontal-hop">
                         <p class="sp-widget5__horizontal-hop-text" > Step 1 </p>
                     </div>
-                    <div class="sp-widget5__horizontal-hop">
+                    <div class="sp-widget5__horizontal-hop active">
                         <p class="sp-widget5__horizontal-hop-text"> Step 2 </p>
                     </div>
                 </div>
                 <form class="m-t">
                     <div class="form-group">
-                        <input type="text" placeholder="Verify code" required="" id="code"  name="code"/>
+                        <input type="text" class="form-control" placeholder="Enter the code you received on your cellphone" required="" id="code"  name="code" />
                     </div>
                     <input type="hidden" name="{{{_csrf.parameterName}}}" value="{{{_csrf.token}}}">
                     <p class="form-text text-danger">{{#error}}{{errorMessage}}{{/error}}</p>
-                    <input class="btn btn-primary block full-width m-b" type="button" value="Validate & Enter" id="logincustomer"  onclick="loginCustomer(event);" />
+                    <input class="btn btn-primary block full-width m-b" class="form-control" type="button" value="Validate & Enter" id="logincustomer"  onclick="loginCustomer(event);" />
                 </form>
+            </div>
+            <div class="clearfix">
+                <button type="button" class="help-button" name="button">
+                    Help
+                </button>
+            </div>
+            <div class="help-description">
+                If you are not able to login to this portal please contact The Portal Builder + email for help or send us a message to
+                <a href="mailto:info@slidepiper.com">info@slidepiper.com</a>
             </div>
         </div>
         <div class="sp--direction-ltr" id="sp-terms-privacy">Powered by
@@ -77,5 +87,11 @@
           <a href="https://www.slidepiper.com/tou.html" target="_blank">Terms</a> ·
           <a href="https://www.slidepiper.com/privacy.html" target="_blank">Privacy</a>
       </div>
+      <script src="/assets/js/jquery-2.1.1.js"></script>
+      <script>
+          $(".help-button").on('click',()=>{
+              $(".help-description").toggleClass('hide-help-block');
+          });
+      </script>
     </body>
 </html>
