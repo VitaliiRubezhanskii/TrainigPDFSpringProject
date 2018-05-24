@@ -8,6 +8,11 @@ form.m-t{
     padding: 15px 0;
 }
 #sp-widget5__horizontal-hopper-container {
+    display:-webkit-flex;
+    display:-webkit-box;
+    display:-moz-flex;
+    display:-moz-box;
+    display:-ms-flexbox;
     display: flex;
     position: relative;
     margin: 0 auto;
@@ -22,14 +27,32 @@ form.m-t{
 
 .sp-widget5__horizontal-hop {
     height: 40px;
+    min-width: 49%;
     color: rgb(255, 255, 255);
     position: relative;
     margin-right: 3px;
     box-sizing: border-box;
     cursor: pointer;
+
+    display:-webkit-flex;
+    display:-webkit-box;
+    display:-moz-flex;
+    display:-moz-box;
+    display:-ms-flexbox;
+
+    -webkit-flex: 1   1   100px;
+    -webkit-box-flex: 1   1   100px;
+    -moz-flex: 1   1   100px;
+    -moz-box-flex: 1   1   100px;
+    -ms-flex: 1   1   100px;
+
+    -webkit-box-align: center;
+    -webkit-justify-content: center;
+
     display: flex;
-    flex:   1   1   100px;
+    flex: 1   1   100px;
     justify-content: center;
+
     font-size: 14px;
     background-color: #2317ae;
     color: #fff;
