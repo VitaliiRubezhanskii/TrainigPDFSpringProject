@@ -72,6 +72,7 @@ function modalLinkAndTask(url){
     width: 800,
     height: 600
 })
+window.open(url, '_self');
 }
 function postData(data,url){
   return fetch(`${url}/viewer/event`, {
