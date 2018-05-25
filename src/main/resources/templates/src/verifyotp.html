@@ -40,6 +40,11 @@
                     }
                 });
             }
+            function loginOnEnter(event){
+                if(event.keyCode === 13){
+                    loginCustomer(event);
+                }
+            }
         </script>
     </head>
     <body class="gray-bg">
@@ -63,11 +68,11 @@
                 </div>
                 <form class="m-t">
                     <div class="form-group">
-                        <input type="text" class="form-control" placeholder="Enter the code you received on your cellphone" required="" id="code"  name="code" />
+                        <input type="text" class="form-control" placeholder="Enter the code you received on your cellphone" required="" id="code"  onkeypress="loginOnEnter(event)" name="code" />
                     </div>
                     <input type="hidden" name="{{{_csrf.parameterName}}}" value="{{{_csrf.token}}}">
                     <p class="form-text text-danger">{{#error}}{{errorMessage}}{{/error}}</p>
-                    <input class="btn btn-primary block full-width m-b" class="form-control" type="button" value="Validate & Enter" id="logincustomer"  onclick="loginCustomer(event);" />
+                    <input class="btn btn-primary block full-width m-b" class="form-control" type="button" value="Validate & Enter" id="logincustomer"   onclick="loginCustomer(event);" />
                 </form>
             </div>
             <div class="clearfix">
@@ -88,10 +93,6 @@
           <a href="https://www.slidepiper.com/privacy.html" target="_blank">Privacy</a>
       </div>
       <script src="/assets/js/jquery-2.1.1.js"></script>
-      <script>
-      $(".help-button").on("click",function() {
-          $(".help-description").toggleClass("hide-help-block")
-      })
-      </script>
+      <script src="/static/src/2factorauth/2factorauth.js"></script>
     </body>
 </html>
