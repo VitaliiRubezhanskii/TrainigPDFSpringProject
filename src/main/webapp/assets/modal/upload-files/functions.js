@@ -82,7 +82,7 @@ sp.uploadFiles = {
               $('button[data-dismiss="modal"]').click();
               $('.sk-spinner').hide();
 
-              sp.file.getFilesList('fileUploadDashboard');
+              getFilesList('fileUploadDashboard');
               sp.uploadFiles.files = [];
               swal("Success!", "Your file was " + successVerb + "!", "success");
           }

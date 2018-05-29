@@ -100,129 +100,125 @@ document.addEventListener('click', function(event) {
 });
 
 // Widgets.
-window.sp.widgetsResource = {
-    findByDocumentFriendlyId: function(documentFriendlyId) {
-        return $.getJSON('/api/v1/widgets?fileHash=' + documentFriendlyId);
-    }
-};
+function findByDocumentFriendlyId(documentFriendlyId) {
+    return $.getJSON('/api/v1/widgets?fileHash=' + documentFriendlyId);
+}
 
 // Tasks.
 // Get all tasks.
-window.sp.tasks = {
-    getAll: function() {
-        $.getJSON('/api/v1/tasks', function(data) {
-            data.forEach(function(task) {
-                if (typeof task.customer !== 'undefined') {
-                    task.customer.name = task.customer.firstName + ' ' + task.customer.lastName + ' (' + task.customer.email + ')';
-                }
-            });
-
-            $.fn.dataTable.moment('D/M/Y HH:mm (Z)');
-            if (!($.fn.dataTable.isDataTable('.tasks__table'))) {
-                $('.tasks__table').DataTable({
-                    data: data,
-                    buttons: [
-                        {
-                            extend: 'csv',
-                            filename: 'SlidePiper Tasks',
-                            text: 'Export to CSV'
-                        }
-                    ],
-                    columns: [
-                        {
-                            data: 'dueAt'
-                        },
-                        {
-                            data: 'completedAt'
-                        },
-                        {
-                            data: 'customer.name',
-                            defaultContent: 'Not set',
-                            render: $.fn.dataTable.render.text()
-                        },
-                        {
-                            data: 'customer.company',
-                            defaultContent: 'Not set',
-                            render: $.fn.dataTable.render.text()
-                        },
-                        {
-                            data: 'document.name',
-                            defaultContent: 'Not set',
-                            render: $.fn.dataTable.render.text()
-                        },
-                        {
-                            data: 'data.pageNumber',
-                            defaultContent: 'Not set',
-                            render: $.fn.dataTable.render.text()
-                        },
-                        {
-                            data: 'data.taskMessage',
-                            defaultContent: 'Not set',
-                            render: $.fn.dataTable.render.text()
-                        },
-                        {
-                            data: 'link'
-                        }
-                    ],
-                    columnDefs: [
-                        {
-                            render: function(data) {
-                                return moment(data).zone(new Date().getTimezoneOffset()).format('D/M/Y HH:mm (Z)');
-                            },
-                            targets: 0
-                        },
-                        {
-                            render: function(data, type, row) {
-                                if (row.completedAt > -1) {
-                                    if ('EMAIL' === row.action) {
-                                        return 'Email sent';
-                                    } else {
-                                        return 'Completed';
-                                    }
-                                } else if (row.failedAt > -1) {
-                                    return 'Failed';
-                                } else if (row.abortedAt > -1) {
-                                    return 'Aborted';
-                                } else if (row.initializedAt > -1) {
-                                    return 'In progress';
-                                } else if (!row.enabled) {
-                                    return 'Not enabled';
-                                } else {
-                                    return 'Scheduled';
-                                }
-                            },
-                            targets: 1
-                        },
-                        {
-                            render: function(data, type, row) {
-                                var disabled = '';
-                                if (row.initializedAt > -1) {
-                                    disabled = 'disabled';
-                                }
-                                return '<button class="tasks__task-update btn btn-primary btn-xs" data-toggle="modal" data-target=".tasks__task-modal" data-link="' + sp.escapeHtml(data) + '" ' + disabled + '>Update</button> <button class="tasks__task-delete btn btn-danger btn-xs" data-link="' + sp.escapeHtml(data) + '" ' + disabled + '>Delete</button>'
-                            },
-                            targets: 7
-                        }
-                    ],
-                    dom: '<"sp-datatables-search-left"f><"html5buttons"B>ti',
-                    paging: false,
-                    order: [[0, 'desc']],
-                    scrollY: '50vh'
-                });
-            } else {
-                $('.tasks__table').DataTable()
-                    .clear()
-                    .rows.add(data)
-                    .draw();
+function getAll() {
+    $.getJSON('/api/v1/tasks', function(data) {
+        data.forEach(function(task) {
+            if (typeof task.customer !== 'undefined') {
+                task.customer.name = task.customer.firstName + ' ' + task.customer.lastName + ' (' + task.customer.email + ')';
             }
         });
-    },
-    get: function(link, callback) {
-        $.getJSON(link, function (data) {
-            callback(data);
-        });
-    }
-};
+
+        $.fn.dataTable.moment('D/M/Y HH:mm (Z)');
+        if (!($.fn.dataTable.isDataTable('.tasks__table'))) {
+            $('.tasks__table').DataTable({
+                data: data,
+                buttons: [
+                    {
+                        extend: 'csv',
+                        filename: 'SlidePiper Tasks',
+                        text: 'Export to CSV'
+                    }
+                ],
+                columns: [
+                    {
+                        data: 'dueAt'
+                    },
+                    {
+                        data: 'completedAt'
+                    },
+                    {
+                        data: 'customer.name',
+                        defaultContent: 'Not set',
+                        render: $.fn.dataTable.render.text()
+                    },
+                    {
+                        data: 'customer.company',
+                        defaultContent: 'Not set',
+                        render: $.fn.dataTable.render.text()
+                    },
+                    {
+                        data: 'document.name',
+                        defaultContent: 'Not set',
+                        render: $.fn.dataTable.render.text()
+                    },
+                    {
+                        data: 'data.pageNumber',
+                        defaultContent: 'Not set',
+                        render: $.fn.dataTable.render.text()
+                    },
+                    {
+                        data: 'data.taskMessage',
+                        defaultContent: 'Not set',
+                        render: $.fn.dataTable.render.text()
+                    },
+                    {
+                        data: 'link'
+                    }
+                ],
+                columnDefs: [
+                    {
+                        render: function(data) {
+                            return moment(data).zone(new Date().getTimezoneOffset()).format('D/M/Y HH:mm (Z)');
+                        },
+                        targets: 0
+                    },
+                    {
+                        render: function(data, type, row) {
+                            if (row.completedAt > -1) {
+                                if ('EMAIL' === row.action) {
+                                    return 'Email sent';
+                                } else {
+                                    return 'Completed';
+                                }
+                            } else if (row.failedAt > -1) {
+                                return 'Failed';
+                            } else if (row.abortedAt > -1) {
+                                return 'Aborted';
+                            } else if (row.initializedAt > -1) {
+                                return 'In progress';
+                            } else if (!row.enabled) {
+                                return 'Not enabled';
+                            } else {
+                                return 'Scheduled';
+                            }
+                        },
+                        targets: 1
+                    },
+                    {
+                        render: function(data, type, row) {
+                            var disabled = '';
+                            if (row.initializedAt > -1) {
+                                disabled = 'disabled';
+                            }
+                            return '<button class="tasks__task-update btn btn-primary btn-xs" data-toggle="modal" data-target=".tasks__task-modal" data-link="' + sp.escapeHtml(data) + '" ' + disabled + '>Update</button> <button class="tasks__task-delete btn btn-danger btn-xs" data-link="' + sp.escapeHtml(data) + '" ' + disabled + '>Delete</button>'
+                        },
+                        targets: 7
+                    }
+                ],
+                dom: '<"sp-datatables-search-left"f><"html5buttons"B>ti',
+                paging: false,
+                order: [[0, 'desc']],
+                scrollY: '50vh'
+            });
+        } else {
+            $('.tasks__table').DataTable()
+                .clear()
+                .rows.add(data)
+                .draw();
+        }
+    });
+}
+function get(link, callback) {
+    $.getJSON(link, function (data) {
+        callback(data);
+    });
+}
 
 // Create / Update task.
 document.addEventListener('click', function(event) {
@@ -234,7 +230,7 @@ document.addEventListener('click', function(event) {
     }
 
     if (event.target.classList.contains('tasks__task-update')) {
-        window.sp.tasks.get(event.target.getAttribute('data-link'), populateTask);
+        get(event.target.getAttribute('data-link'), populateTask);
         $('.tasks__task-form [name=requestLink]').val(event.target.getAttribute('data-link'));
         $('.tasks__task-form [name=requestType]').val('PUT');
         $('.tasks__task-form [name=successMessage]').val('updated');
@@ -290,7 +286,7 @@ function populateTask(task) {
         $('.tasks__task-form-document').val(task.document.id);
 
         var friendlyId = task.document.friendlyId;
-        window.sp.widgetsResource.findByDocumentFriendlyId(friendlyId).then(function(data) {getHopperWidget(data, createMilestone)});
+        findByDocumentFriendlyId(friendlyId).then(function(data) {getHopperWidget(data, createMilestone)});
     });
 
     // Page number.
@@ -325,7 +321,7 @@ function clearTask() {
         });
 
         var friendlyId = $('.tasks__task-form-document option:first-child').attr('data-friendly-id');
-        window.sp.widgetsResource.findByDocumentFriendlyId(friendlyId).then(function(data) {getHopperWidget(data, createMilestone)});
+        findByDocumentFriendlyId(friendlyId).then(function(data) {getHopperWidget(data, createMilestone)});
     });
 
     // Page number.
@@ -339,7 +335,7 @@ document.querySelector('.tasks__task-form-document').onchange = function() {
     $('.tasks__task-form [name=pageNumber]').val('');
 
     var friendlyId = this.options[this.selectedIndex].getAttribute('data-friendly-id');
-    window.sp.widgetsResource.findByDocumentFriendlyId(friendlyId).then(function(data) {getHopperWidget(data, createMilestone)});
+    findByDocumentFriendlyId(friendlyId).then(function(data) {getHopperWidget(data, createMilestone)});
 };
 
 document.querySelector('.tasks__task-form-milestone').onchange = function() {
