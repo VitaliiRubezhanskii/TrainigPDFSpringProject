@@ -216,7 +216,6 @@ sp.viewer = {
 
     var eventQueue = [];
     sp.sendEvent = function(event) {
-        console.log('event=',event);
         if (typeof event === 'string') {
             event = {type: event};
         }
