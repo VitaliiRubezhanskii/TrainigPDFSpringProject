@@ -15,10 +15,10 @@ import sp from '../constants/spViewer.js';
   }));
 }
 
- function modalQuestions(url,title,emailLabel,messageLabel,canselText,confirmText,emailError){
+ function modalQuestions(url,title,emailLabel,messageLabel,cancelText,confirmText,emailError){
    let customEmailLabel = emailLabel ? emailLabel : 'Enter your email address:';
    let customMessageLabel = messageLabel? messageLabel:'Enter your message:';
-   let cancelButtonText = canselText ? canselText : 'Cansel';
+   let cancelButtonText = cancelText ? cancelText : 'Cancel';
    let confirmButtonText = confirmText?confirmText:'Submit';
   return Vue.swal({
     title: title,
