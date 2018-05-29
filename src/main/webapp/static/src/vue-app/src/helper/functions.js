@@ -72,7 +72,6 @@ function modalLinkAndTask(url){
     showConfirmButton: false,
     showCancelButton: true,
     width: 800,
-    height: 600
   })
 }
 

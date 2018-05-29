@@ -85,7 +85,7 @@ export default {
               canvas.style.maxWidth = '100%';
             }
             else {
-              canvas.style.height = `${size.height}px`;
+              canvas.style.maxHeight = `${size.height}px`;
               canvas.style.maxWidth = '100%';
             }
       }

@@ -8,7 +8,7 @@ import LinkAndTask from '../linkWidget/LinkAndTask.vue';
 import Toolbar from '../toolbar/Toolbar.vue';
 import PoweredBy from '../powered/PoweredBy.vue';
 import Arrows from '../arrows/Arrows.vue';
-import $ from 'jquery';
+import sp from '../../constants/spViewer.js';
 
 export default {
   name: 'app',
