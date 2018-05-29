@@ -3220,9 +3220,8 @@ $(document).ready(function() {
                 function(isConfirm){
                     if (isConfirm) {
                         saveAuthSettings({ isMFAEnabled: targetElement.checked }, documentId);
-                    }
-                    else{
-                        targetElement.checked ? targetElement.checke = false :  targetElement.checked = true;
+                    } else {
+                        targetElement.checked ? targetElement.checked = false :  targetElement.checked = true;
                     }
                 });
             $('.sweet-alert button.cancel').addClass('cancel-red');

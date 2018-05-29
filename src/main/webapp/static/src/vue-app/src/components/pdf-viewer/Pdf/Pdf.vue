@@ -39,7 +39,7 @@ export default {
                     canvas.height = viewport.height;
                     canvas.width = viewport.width;
                     canvas.setAttribute('id', page.pageNumber);
-                    canvas.setAttribute('style', 'display:block;margin:0 auto');
+                    canvas.setAttribute('style', 'display:block; margin:0 auto');
                     el.appendChild(canvas);
                     page.render(renderContext);
 
@@ -59,7 +59,6 @@ export default {
                     }
                     Promise.all(promiseArray).then(() => {
                       c.context.loaded();
-
                     });
                 }
 
@@ -79,10 +78,15 @@ export default {
           size.canvasWidth = canvas.scrollWidth;
             if(size.height/size.width > size.canvHeight/size.canvWidth) {
               canvas.style.height = size.height;
+              canvas.style.maxWidth = 'auto';
+            }
+            else if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+              canvas.style.height = 'auto';
               canvas.style.maxWidth = '100%';
-            } else {
+            }
+            else {
               canvas.style.height = `${size.height}px`;
-              canvas.style.width = 'auto';
+              canvas.style.maxWidth = '100%';
             }
       }
     }
