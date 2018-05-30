@@ -3204,12 +3204,14 @@ $(document).ready(function() {
         .on('change', '.twofactorauth-switch', function (e) {
             var documentId = $(this).closest('.options-wrapper').data('id');
             var targetElement = e.target;
-            swal({
-                    title: 'Please confirm to turn ${targetElement.checked? "ON":"OFF"} double authentication for this portal?',
+            var targetElementsChecked = targetElement.checked ? 'ON' : 'OFF';
+            var conditionalMessage = targetElement.checked ? "i – Double authentication requires a customer id and cellular number. Then you must make a link for each customer and send it to them.":"i – Turning off double authentication will make this portal public to anyone with a portal link";
+                swal({
+                    title: 'Please confirm to turn ' +  targetElementsChecked + ' double authentication for this portal?',
                     type: "warning",
-                    text:'<div class="info-block" data-title= "${targetElement.checked ? "i – Double authentication requires a customer id and cellular number. Then you must make a link for each customer and send it to them.":"i – Turning off double authentication will make this portal public to anyone with a portal link"}"><i class="fa fa-info" aria-hidden="true"></i></div>',
+                    text:'<div class="info-block" data-title= "' + conditionalMessage + '"><i class="fa fa-info" aria-hidden="true"></i></div>',
                     html: true,
-                    confirmButtonText: 'Yes, turn ${targetElement.checked? "ON":"OFF"}',
+                    confirmButtonText: 'Yes, turn ' + targetElementsChecked,
                     showCancelButton: true,
                     closeOnConfirm: true,
                     cancelButtonColor: "#DC3545",
@@ -3425,7 +3427,7 @@ $(function() {
             event.preventDefault();
         }, true );
 
-    $("#phoneNumber").on("change input paste propertychange", ()=>{
+    $("#phoneNumber").on("change input paste propertychange", function(){
         event.preventDefault();
         if($("#phoneNumber").val().length !== 14){
             $(".error").css({display: 'block', color: 'red'});
@@ -3436,7 +3438,7 @@ $(function() {
         }
     });
 
-    $('input[name^="customerFirstName"]').on("change input paste propertychange", ()=>{
+    $('input[name^="customerFirstName"]').on("change input paste propertychange", function(){
         event.preventDefault();
         if(!/^[a-zA-Z][a-zA-Z0-9-_\.]{1,20}$/.test($('input[name^="customerFirstName"]').val())){
             $(".errorName").css({display: 'block', color: 'red'});
@@ -3447,7 +3449,7 @@ $(function() {
         }
     });
 
-    $('input[name^="customerLastName"]').on("change input paste propertychange", ()=>{
+    $('input[name^="customerLastName"]').on("change input paste propertychange", function() {
         event.preventDefault();
         if(!/^[a-zA-Z][a-zA-Z0-9-_\.]{1,20}$/.test($('input[name^="customerLastName"]').val())){
             $(".errorLastName").css({display: 'block', color: 'red'});
@@ -3458,7 +3460,7 @@ $(function() {
         }
     });
 
-    $('input[name^="customerID"]').on("change input paste propertychange",()=>{
+    $('input[name^="customerID"]').on("change input paste propertychange",function() {
         event.preventDefault();
         if(!/^[0-9]{0,10}$/.test($('input[name^="customerID"]').val())){
             $(".errorId").css({display: 'block', color: 'red'});
@@ -3469,7 +3471,7 @@ $(function() {
         }
     });
 
-    $('input[name^="customerEmail"]').on("change input paste propertychange",()=>{
+    $('input[name^="customerEmail"]').on("change input paste propertychange",function() {
         event.preventDefault();
 
         if(!/^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/.test($('input[name^="customerEmail"]').val())){
@@ -3481,7 +3483,7 @@ $(function() {
         }
     });
 
-    $(".sp-add-update-customer").on("click", ()=>{
+    $(".sp-add-update-customer").on("click", function() {
         $(".error, .errorId, .errorEmail, .errorName, .errorLastName").css({display: 'none'});
         $("#phoneNumber, input[name^='customerID'], input[name^='customerEmail'], input[name^='customerFirstName'], input[name^='customerLastName']").css({border: '1px solid #e5e6e7'});
         $("#sp-add-update-customer__form")[0].reset();
@@ -3497,4 +3499,4 @@ $(function() {
             $("#sp-modal-add-update-customer__button").prop("disabled", true);
         }
     });
-})
+});
