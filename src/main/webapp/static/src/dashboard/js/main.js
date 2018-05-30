@@ -256,6 +256,14 @@ sp = {
                     $('#sp-modal-add-update-customer input[name="customerEmail"]')
                         .val($(this).attr('data-customer-email'))
                         .prop('readonly', true);
+
+                    $('#sp-modal-add-update-customer input[name="customerID"]').
+                    val($('[data-customer-email="' + $(this).attr('data-customer-email') + '"]')
+                        .closest('tr').find('#sp-customer-id__td').text());
+
+                    $('#sp-modal-add-update-customer input[name="customerPhone"]').
+                    val($('[data-customer-email="' + $(this).attr('data-customer-email') + '"]')
+                        .closest('tr').find('#sp-customer-phone__td').text());
                 }
             });
 
@@ -346,6 +354,13 @@ sp = {
                     case 'navigation__tasks':
                         $('.tasks').show();
                         window.sp.tasks.getAll();
+                        break;
+
+                    case 'sp-customer-documents':
+                        requestOrigin = 'customerDocumentsGenerator';
+                        $('.sp-customer-documents-container-hidden').removeClass('sp-customer-documents-container-hidden');
+                        $('#document-wizard-t-0').click();
+                        sp.file.getCustomersList(requestOrigin);
                         break;
                 }
 
@@ -854,7 +869,6 @@ sp = {
                 sp.customerFileLinksGenerator.formatFile(data);
 
             }
-
         },
         /**
          * @params {data - obj} This is the file data received from the server, which has
@@ -866,18 +880,26 @@ sp = {
             var filesArr = [];
             $.each(data['filesList'], function (index, value) {
                 var date = moment.utc(value[2]).toDate();
+
+                var checked = "";
+                if(sp.escapeHtml(value[5]) == 1) {
+                    checked = "checked";
+                }
                 var obj = {
                     'date': moment(date).format('DD-MM-YYYY HH:mm'),
-                    'document': '<span class="sp-file-mgmt-file-name" data-file-hash="' + sp.escapeHtml(value[0]) + '">' + sp.escapeHtml(value[1]) + '</span>',
+                    'document': '<span class="sp-file-mgmt-file-name" data-file-hash="' + sp.escapeHtml(value[0]) +'">' + sp.escapeHtml(value[1]) + '</span>',
                     'options': '<span>'
                     + '<a><span class="label label-primary sp-file-update" data-toggle="modal" data-target="#sp-modal-update-file" data-file-hash="' + sp.escapeHtml(value[0]) + '">Update</span></a>'
                     + '<a href="#"><span class="label label-danger sp-file-delete" data-file-hash="' + sp.escapeHtml(value[0]) + '">Delete</span></a></span>'
                     + '<a><span style="margin-left: 10px;" class="sp-document__clone label label-info" data-document-friendly-id="' + sp.escapeHtml(value[0]) + '" data-document-name="' + sp.escapeHtml(value[1]) + '">Clone</span></a>'
-                    + '<a><span data-toggle="modal" data-target="#sp-viewer-widgets-modal" style="margin-left: 10px;" class="label label-success sp-file-customize" data-file-hash="' + sp.escapeHtml(value[0]) + '">Customize</span></a>'
-                    + '<a class="sp-preview-file-link"><span id="sp-preview-file-' + sp.escapeHtml(index) + '" style="margin-left: 10px;" class="label label-warning">Preview</span></a></span>'
+                    + '<a><span data-toggle="modal" data-target="#sp-viewer-widgets-modal" style="margin-left: 10px;" class="label label-success sp-file-customize" data-file-hash="' + sp.escapeHtml(value[0]) + '" data-is-process-mode="' + sp.escapeHtml(value[4]) + '">Customize</span></a>'
+                    + '<a class="sp-preview-file-link"><span id="sp-preview-file-' + sp.escapeHtml(index) + '" style="margin-left: 10px;" class="label label-warning" data-is-process-mode="' + sp.escapeHtml(value[4]) + '">Preview</span></a>'
+                    +'<div data-id="' + sp.escapeHtml(value[0]) +  '" class="material-switch pull-right options-wrapper">'
+                    +'<span class="authLabel">2 factor auth on/off</span>'
+                    +'<input class="twofactorauth-switch" id="someSwitchOptionPrimary-' + sp.escapeHtml(index) + '" name="double-auth-is-enabled" name="someSwitchOption-' + sp.escapeHtml(index) + '" type="checkbox" ' + checked + '/>'
+                    +'<label for="someSwitchOptionPrimary-' + sp.escapeHtml(index) + '" class="label-primary"></label></div></span>'
                 };
                 filesArr.push(obj);
-
                 sp.file.setFileLinkAttribute(
                     value[0],
                     'test@example.com',
@@ -899,7 +921,7 @@ sp = {
                     columns: [
                         {data: 'date'},
                         {data: 'document'},
-                        {data: 'options'},
+                        {data: 'options'}
                     ],
                     scrollY: '55vh',
                     scrollCollapse: true,
@@ -930,6 +952,7 @@ sp = {
              */
             $('.sp-file-customize').on('click', function() {
                 var fileHash = $(this).attr('data-file-hash');
+                var isProcessMode = $(this).attr('data-is-process-mode');
 
                 $('#sp-viewer-widgets-modal').load('assets/modal/viewer-widgets-wizard/main.html', function () {
                     $('.sp-widgets-customisation__spinner').addClass('sp-widgets-customisation__spinner-show');
@@ -958,8 +981,7 @@ sp = {
 
                     function loadModal() {
                         $.getScript('assets/modal/viewer-widgets-wizard/functions.js', function() {
-                            sp.viewerWidgetsModal.getWidgetsSettings(fileHash);
-
+                            sp.viewerWidgetsModal.getWidgetsSettings(fileHash, isProcessMode);
                             $('#sp-viewer-widgets-modal').off('hidden.bs.modal').on('hidden.bs.modal', function() {
                                 $(this).find('.tabs-container').addClass('sp-hidden');
                             });
@@ -1046,6 +1068,9 @@ sp = {
             else if (requestOrigin === 'customerFileLinksGenerator') {
                 sp.customerFileLinksGenerator.formatCustomers(data);
             }
+            else if (requestOrigin === 'customerDocumentsGenerator') {
+                sp.customerDocumentsGenerator.customerDocumentsFormatCustomers(data);
+            }
         },
 
 
@@ -1060,7 +1085,9 @@ sp = {
                     'company': '<span id="sp-customer-company__td">' + sp.escapeHtml(row[2]) + '</span>',
                     'email':  '<span class="contact-type"><i class="fa fa-envelope"> </i></span>' + '         '  + sp.escapeHtml(row[3]) + '',
                     'options': '<td><a href="#"><span class="label label-primary sp-add-update-customer sp-customer-update" data-add-update="update" data-toggle="modal" data-target="#sp-modal-add-update-customer" data-customer-email="' + sp.escapeHtml(row[3]) + '">Update</span></a><a href="#"><span class="label label-danger sp-customer-delete" data-customer-email="' + sp.escapeHtml(row[3]) + '">Delete</span></a></td>',
-                    group: '<span id="sp-customer-group__td">' + sp.escapeHtml(row[5]) + '</span>',
+                    'group': '<span id="sp-customer-group__td">' + sp.escapeHtml(row[5]) + '</span>',
+                    'id': '<span id="sp-customer-id__td">' + sp.escapeHtml(row[7]) + '</span>',
+                    'phone': '<span id="sp-customer-phone__td">' + sp.escapeHtml(row[8]) + '</span>'
                 };
                 nameArr.push(obj);
             });
@@ -1082,6 +1109,8 @@ sp = {
                         {data: 'company'},
                         {data: 'group'},
                         {data: 'email'},
+                        {data: 'id'},
+                        {data: 'phone'},
                         {data: 'options'}
                     ],
                     scrollY: '55vh',
@@ -1194,7 +1223,72 @@ sp = {
                     sp.file.getCustomersList('fileUploadDashboard');
                 }
             });
+        }
+    },
+    customerPortals: {
+        // get all portals generated for specific customer
+        getPortalsListForCustomers: function(customerArr) {
+            $.ajax({
+                url: '/api/v1/customer-portals',
+                type: 'get',
+                dataType: 'json',
+                contentType: 'application/json',
+                data: {"customers" : JSON.stringify(customerArr)},
+                success: function (data) {
+                    sp.customerPortals.portalsCallback(data);
+
+                },
+                error: function (err) {
+                    console.log(err);
+                }
+            });
         },
+        portalsCallback: function (data) {
+            // do something with data
+            /**
+             * @params {data - obj} This is the data received from the server
+             */
+
+                sp.customerDocumentsGenerator.customerDocumentsFormatFile(data);
+        }
+    },
+    customerDocuments: {
+        // get all documents uploaded by customer on specific portals
+        getDocumentsList: function(dataArr) {
+            $.ajax({
+                url: '/api/v1/customer-documents',
+                type: 'get',
+                dataType: 'json',
+                contentType: 'application/json',
+                beforeSend: function(xhr) {
+                    xhr.setRequestHeader(SP.CSRF_HEADER, SP.CSRF_TOKEN);
+                },
+                data: {"data": JSON.stringify(dataArr)},
+                success: function (data) {
+                    /**
+                     * Request Origin is a handler to decide where to send the data from the getDocumentsList function
+                     * There are two choices - either to send the file data to the fileupload dashboard (Files & Customers),
+                     * or to send it to the customerFileLinkGenerator which allows the user to choose customers and documents
+                     * to send out.
+                     */
+                    sp.customerDocuments.callback(data);
+                },
+                error: function (err) {
+                    console.log(err);
+                }
+            });
+
+
+        },
+
+        callback: function (data) {
+            // do something with data
+            /**
+             * @params {data - obj} This is the data received from the server
+             */
+
+            sp.customerDocumentsGenerator.portalDocumentsFormatFile(data);
+        }
     },
 
     metric: {
@@ -1338,6 +1432,71 @@ sp = {
             } else {
                 hopperTitle.textContent = 'N/A';
             }
+
+
+
+//////////////////////////// Upload button data.
+           /* var uploadTitle = document.querySelector('.sp-link-metric__title');
+            uploadTitle.textContent = 'Loading...';
+            uploadTitle.style.display = 'block';
+
+            var uploadItems = document.querySelector('.sp-link-metric__items');
+            while (uploadItems.hasChildNodes()) {
+                uploadItems.removeChild(uploadItems.lastChild);
+            }
+
+            $('.sp-link-metric__save-button').remove();
+
+            if (typeof fileData != 'undefined' && typeof fileData[1] != 'undefined' && parseInt(fileData[1]) > 0) {
+                $.getJSON('/api/v1/widgets/?fileHash=' + fileData[0] + '&type=12', function(data) {
+                    if (data.items.length === 0) {
+                        uploadTitle.textContent = 'N/A';
+                    } else {
+                        var uploadMetric = document.querySelector('.sp-link-metric');
+                        uploadMetric.setAttribute('data-link', data.link);
+
+                        var ul = document.createElement('ul');
+                        ul.className = 'todo-list small-list m-t';
+                        data.items.forEach(function (item) {
+                            var li = document.createElement('li');
+                            var a = document.createElement('a');
+                            a.classList = 'sp-link-metric__item check-link';
+                            var i = document.createElement('i');
+                            i.classList = 'sp-link-metric__item-status';
+                            a.appendChild(i);
+                            li.appendChild(a);
+
+                            var span = document.createElement('span');
+                            span.classList = 'sp-link-metric__item-content m-l-xs';
+
+                            span.setAttribute('data-icon', item.icon);
+                            span.setAttribute('data-page-to', item.pageTo);
+                            span.setAttribute('data-page-from', item.pageFrom);
+                            span.setAttribute('data-button-text-1', item.buttonText1);
+                            span.setAttribute('data-button-text-2', item.buttonText2);
+
+                            span.textContent = item.buttonText1;
+                            li.appendChild(span);
+                            ul.appendChild(li);
+                        });
+                        uploadItems.appendChild(ul);
+
+                        var saveButton = document.createElement('button');
+                        saveButton.classList = 'btn btn-success m-t-sm sp-link-metric__save-button';
+                        saveButton.disabled = true;
+                        saveButton.textContent = 'Save';
+                        uploadMetric.appendChild(saveButton);
+
+                        uploadTitle.style.display = 'none';
+                    }
+                }).fail(function() {
+                    uploadTitle.textContent = 'N/A';
+                });
+            } else {
+                uploadTitle.textContent = 'N/A';
+            }*/
+////////////////////////////////////////////////////////////////////////////////
+
 
             // Link data.
             var linkTitle = document.querySelector('.sp-link-metric__title');
@@ -1901,38 +2060,38 @@ sp = {
                 onStepChanging: function (event, currentIndex, newIndex){
                     if (currentIndex > newIndex){
                         return true;
-                    };
+                    }
 
-                    $('.sp-customer-table').DataTable()
+                    $('#sp-customer-table').DataTable()
                         .search('').draw();
 
-                    $('.sp-doc-table').DataTable()
+                    $('#sp-doc-table').DataTable()
                         .search('').draw();
 
-                    if (0 === currentIndex && (! $('.sp-customer-table tbody input[type="checkbox"]').is(':checked'))){
+                    if (0 === currentIndex && (! $('#sp-customer-table tbody input[type="checkbox"]').is(':checked'))){
                         sp.error.handleError('You must select at least one customer to continue');
                         return false;
-                    } else if (1 === currentIndex && (! $('.sp-doc-table tbody input[type="checkbox"]').is(':checked'))) {
+                    } else if (1 === currentIndex && (! $('#sp-doc-table tbody input[type="checkbox"]').is(':checked'))) {
                         sp.error.handleError('You must select at least one document to continue');
                         return false;
                     } else {
                         return true;
-                    };
+                    }
                 },
                 onStepChanged: function(event, currentIndex) {
                     switch(currentIndex) {
                         case 0:
-                            $('.sp-customer-table').DataTable()
+                            $('#sp-customer-table').DataTable()
                                 .columns.adjust().draw();
                             break;
 
                         case 1:
-                            $('.sp-doc-table').DataTable()
+                            $('#sp-doc-table').DataTable()
                                 .columns.adjust().draw();
                             break;
 
                         case 2:
-                            $('.sp-send-table').DataTable()
+                            $('#sp-send-table').DataTable()
                                 .columns.adjust().draw();
                             break;
                     }
@@ -1963,8 +2122,8 @@ sp = {
             });
 
             $.fn.dataTable.moment('DD-MM-YYYY HH:mm');
-            if (!($.fn.dataTable.isDataTable('.sp-customer-table'))) {
-                $('.sp-customer-table').DataTable({
+            if (!($.fn.dataTable.isDataTable('#sp-customer-table'))) {
+                $('#sp-customer-table').DataTable({
                     select: {
                         style: 'multi',
                     },
@@ -2025,7 +2184,7 @@ sp = {
                     paging: false,
                 });
             } else {
-                $('.sp-customer-table').DataTable()
+                $('#sp-customer-table').DataTable()
                     .clear()
                     .rows.add(nameArr)
                     .draw();
@@ -2037,7 +2196,7 @@ sp = {
          * makes this not possible
          */
         scrollTop: $(function () {
-            $('#document-wizard-t-0, #document-wizard-t-1, #document-wizard-t-2, a[href="next"], a[href="previous"]')
+            $('#document-wizard-t-0, #document-wizard-t-1, #document-wizard-t-2, #document-wizard a[href="next"], #document-wizard a[href="previous"]')
                 .on('click', function () {
                     $('.content').animate({scrollTop: 0}, 1, 'linear');
                 });
@@ -2062,8 +2221,8 @@ sp = {
             });
 
             $.fn.dataTable.moment('DD-MM-YYYY HH:mm');
-            if (!($.fn.dataTable.isDataTable('.sp-doc-table'))) {
-                $('.sp-doc-table').DataTable({
+            if (!($.fn.dataTable.isDataTable('#sp-doc-table'))) {
+                $('#sp-doc-table').DataTable({
                     select: {
                         style: 'multi',
                     },
@@ -2091,7 +2250,7 @@ sp = {
                     paging: false,
                 });
             } else {
-                $('.sp-doc-table').DataTable()
+                $('#sp-doc-table').DataTable()
                     .clear()
                     .rows.add(fileArr)
                     .draw();
@@ -2101,8 +2260,8 @@ sp = {
         },
 
         toggleBtnAttr: function () {
-            if ($('li.current').text() === 'current step: 2. Select Documents'){
-                $('a[href="#next"]').attr('id', 'sp-send-docs__button');
+            if ($('#document-wizard li.current').text() === 'current step: 2. Select Documents'){
+                $('#document-wizard a[href="#next"]').attr('id', 'sp-send-docs__button');
             };
         },
 
@@ -2122,26 +2281,26 @@ sp = {
 
                 // This checks If wizard-step is document selector tab in order to start saving the
                 // chosen sections.
-                if ($('li.current').text() === 'current step: 3. Generated Links'){
+                if ($('#document-wizard li.current').text() === 'current step: 3. Generated Links'){
                     var customerArr = [];
                     var fileArr = [];
                     var files = [];
 
-                    $('.sp-customer-table').DataTable()
+                    $('#sp-customer-table').DataTable()
                         .search('').draw();
 
-                    $('.sp-doc-table').DataTable()
+                    $('#sp-doc-table').DataTable()
                         .search('').draw();
 
                     //This saves all the chosen email addresses.
-                    $(':checked').closest('tr').find('[data-email]').each(function (i, v) {
+                    $('#sp-customer-table :checked').closest('tr').find('[data-email]').each(function (i, v) {
                         var email = $(this).text();
                         customerArr.push(email.slice(1, email.length));
                     });
 
                     // This saves all the document hashes & file names into a file array, and
                     // a files object.
-                    $(':checked').closest('tr').find('[data-file-hash]')
+                    $('#sp-doc-table :checked').closest('tr').find('[data-file-hash]')
                         .each(function (i, v) {
                             fileArr.push($(this).attr('data-file-hash'));
                             var fileObj = {
@@ -2219,7 +2378,7 @@ sp = {
              * another would require more columns. This would be an issue for the DataTable already created, thus it is
              * better to create a new one.
              */
-            if ($.fn.dataTable.isDataTable('.sp-send-table')) {
+            if ($.fn.dataTable.isDataTable('#sp-send-table')) {
                 $('.sp-send-table').DataTable().destroy();
             }
 
@@ -2292,7 +2451,7 @@ sp = {
                 targetColumns.push(i);
             }
 
-            if (! $.fn.dataTable.isDataTable('.sp-send-table')) {
+            if (! $.fn.dataTable.isDataTable('#sp-send-table')) {
                 $('.sp-send-table').DataTable({
                     data: customerFileLinks,
                     columns: dataTableColumns,
@@ -2371,6 +2530,296 @@ sp = {
             });
 
             return fileName;
+        }
+    },
+
+    customerDocumentsGenerator: {
+        customerDocumentsWizardConfig : (function() {
+            $('#customer-document-wizard').steps({
+                autoFocus : true,
+                bodyTag : 'section',
+                enableCancelButton: false,
+                enableFinishButton: false,
+                headerTag : 'h3',
+                transitionEffect : 'none',
+                onStepChanging: function (event, currentIndex, newIndex){
+                    if (currentIndex > newIndex){
+                        return true;
+                    }
+
+                    $('#sp-documents-customer-table').DataTable()
+                        .search('').draw();
+
+                    if (0 === currentIndex && (! $('#sp-documents-customer-table tbody input[type="checkbox"]').is(':checked'))){
+                        sp.error.handleError('You must select at least one customer to continue');
+                        return false;
+                    } else if (1 === currentIndex && (! $('#sp-documents-doc-table tbody input[type="checkbox"]').is(':checked'))) {
+                        sp.error.handleError('You must select at least one portal to continue');
+                        return false;
+                    } else {
+                        return true;
+                    }
+                },
+                onStepChanged: function(event, currentIndex) {
+                    switch(currentIndex) {
+                        case 0:
+                            $('#sp-documents-customer-table').DataTable()
+                                .columns.adjust().draw();
+                            break;
+                    }
+                }
+            });
+        })(),
+
+        customerDocumentsFormatCustomers : function(data) {
+            var nameArr = [];
+
+            $.each(data['customersList'], function (index, value) {
+                var date = moment.utc(value[4]).toDate();
+
+                var obj = {
+                    checkbox: index,
+                    name: sp.escapeHtml(value[0]) + ' ' + sp.escapeHtml(value[1]),
+                    company: sp.escapeHtml(value[2]),
+                    email: '<span data-email=' + sp.escapeHtml(value[3]) +' class="sp-email"> ' + sp.escapeHtml(value[3]) + '</span>',
+                    date:  moment(date).format('DD-MM-YYYY HH:mm'),
+                    group: sp.escapeHtml(value[5])
+                };
+                nameArr.push(obj);
+            });
+
+            $.fn.dataTable.moment('DD-MM-YYYY HH:mm');
+            if (!($.fn.dataTable.isDataTable('#sp-documents-customer-table'))) {
+                $('#sp-documents-customer-table').DataTable({
+                    select: {
+                        style: 'multi'
+                    },
+                    data: nameArr,
+                    columnDefs: [
+                        {
+                            targets: 0,
+                            data: 'checkbox',
+                            checkboxes: {
+                                selectRow: true
+                            }
+                        },
+                        {
+                            targets: 1,
+                            data: 'name'
+                        },
+                        {
+                            targets: 2,
+                            data: 'company'
+                        },
+                        {
+                            targets: 3,
+                            data: 'group'
+                        },
+                        {
+                            targets: 4,
+                            data: 'email'
+                        },
+                        {
+                            targets: 5,
+                            data: 'date'
+                        }
+                    ],
+                    buttons: [
+
+                    ],
+                    dom: '<"sp-datatables-search-left"f>ti',
+                    order: [[5, 'desc']],
+                    scrollY: '15vh',
+                    paging: false
+                });
+            } else {
+                $('#sp-documents-customer-table').DataTable()
+                    .clear()
+                    .rows.add(nameArr)
+                    .draw();
+            }
+        },
+
+        /**
+         * This function formats and renders documents to the wizard, using the DataTables API
+         * @params {data-obj} - This is the files data received from the server
+         */
+        customerDocumentsFormatFile: function (data){
+            var fileArr = [];
+
+            $.each(data['portalsList'], function (index, value) {
+                var date = moment.utc(value[2]).toDate();
+
+                var obj = {
+                    checkbox: index,
+                    name: '<span class="sp-doc-name" data-file-name="' + sp.escapeHtml(value[1]) + '" data-file-hash="' + sp.escapeHtml(value[0]) + '">' + sp.escapeHtml(value[1]) + '</span>',
+                    date: moment(date).format('DD-MM-YYYY HH:mm'),
+                    customer: '<span class="sp-customer-email" data-customer-email="' + sp.escapeHtml(value[4]) + '">' + sp.escapeHtml(value[4]) + '</span>'
+                };
+                fileArr.push(obj);
+            });
+
+            $.fn.dataTable.moment('DD-MM-YYYY HH:mm');
+            if (!($.fn.dataTable.isDataTable('#sp-documents-doc-table'))) {
+                $('#sp-documents-doc-table').DataTable({
+                    select: {
+                        style: 'multi'
+                    },
+                    data: fileArr,
+                    columnDefs: [
+                        {
+                            targets: 0,
+                            data: 'checkbox',
+                            checkboxes: {
+                                selectRow: true
+                            }
+                        },
+                        {
+                            targets: 1,
+                            data: 'name'
+                        },
+                        {
+                            targets: 2,
+                            data: 'date'
+                        },
+                        {
+                            targets: 3,
+                            data: 'customer'
+                        }
+                    ],
+                    dom: '<"sp-datatables-search-left"f>ti',
+                    order: [[2, 'desc']],
+                    scrollY: '15vh',
+                    paging: false
+                });
+            } else {
+                $('#sp-documents-doc-table').DataTable()
+                    .clear()
+                    .rows.add(fileArr)
+                    .draw();
+            }
+            sp.customerDocumentsGenerator.toggleBtnAttr();
+        },
+
+        toggleBtnAttr: function () {
+            if ($('#customer-document-wizard li.current').text() === 'current step: 2. Select Portals'){
+                $('#customer-document-wizard a[href="#next"]').attr('id', 'sp-send-customer-docs__button');
+            }
+        },
+
+        /**
+         *  Listener to save which boxes have been checked i.e. from what customer and
+         *  specific portal user wants to get documents.
+         *  $('#customer-document-wizard-t-x') is a selector on the inspinia wizard object
+         *        @see http://webapplayers.com/inspinia_admin-v2.5/form_wizard.html#
+         *  $('a[href="next"]') is also an INSPINIA generated selector
+         */
+
+        documentsCheckboxListener: (function () {
+            $('#customer-document-wizard-t-2').addClass('sp-get-customer-files__button');
+            $('#customer-document-wizard-t-1').addClass('sp-get-customer-files__button');
+            $('#sp-send-customer-docs__button').addClass('sp-get-customer-files__button');
+            $('.sp-get-customer-files__button').on('click', function (e) {
+
+                if ($('#customer-document-wizard li.current').text() === 'current step: 2. Select Portals') {
+                    var customerArr = [];
+                    //This saves all the chosen email addresses.
+                    $(':checked').closest('tr').find('[data-email]').each(function (i, v) {
+                        var email = $(this).text();
+                        customerArr.push(email.slice(1, email.length));
+                    });
+                    sp.customerPortals.getPortalsListForCustomers(customerArr);
+                }
+
+                // This checks If wizard-step is document selector tab in order to start saving the
+                // chosen sections.
+                if ($('#customer-document-wizard li.current').text() === 'current step: 3. Customer Documents'){
+                    var files = [];
+
+                    $('#sp-documents-customer-table').DataTable()
+                        .search('').draw();
+
+                    $('#sp-documents-doc-table').DataTable()
+                        .search('').draw();
+
+                    // This saves all the document hashes & customers into a file array.
+                    $('#sp-documents-doc-table :checked').closest('tr')
+                        .each(function (i, v) {
+                            var fileObj = {
+                                customer: $(this).find('[data-customer-email]').text(),
+                                hash: $(this).find('[data-file-hash]').attr('data-file-hash')
+                            };
+                            files.push(fileObj);
+                        });
+                    sp.customerDocumentsGenerator.prepareDataForGettingFileListForCustomers(files);
+                }
+            });
+        })(),
+
+        /**
+         * Create obj to send.
+         */
+        prepareDataForGettingFileListForCustomers: function (files) {
+            var dataToSend = [];
+
+            var group_to_values = files.reduce(function (obj, item) {
+                obj[item.customer] = obj[item.customer] || [];
+                obj[item.customer].push(item.hash);
+                return obj;
+            }, {});
+
+            var dataToSend = Object.keys(group_to_values).map(function (key) {
+                return {customer: key, hash: group_to_values[key]};
+            });
+
+            sp.customerDocuments.getDocumentsList(dataToSend);
+        },
+
+        portalDocumentsFormatFile: function (data){
+            var fileArr = [];
+
+            $.each(data['filesList'], function (index, value) {
+
+                var obj = {
+                    name: '<span class="sp-doc-name" data-file-name="' + sp.escapeHtml(value[2]) + '" data-file-hash="' + sp.escapeHtml(value[3]) + '">' + sp.escapeHtml(value[2]) + '</span>',
+                    portal: '<span class="sp-doc-name" data-portal-name="' + sp.escapeHtml(value[1]) + '" data-portal-hash="' + sp.escapeHtml(value[4]) + '">' + sp.escapeHtml(value[1]) + '</span>',
+                    customer: '<span class="sp-customer-email" data-customer-email="' + sp.escapeHtml(value[0]) + '">' + sp.escapeHtml(value[0]) + '</span>'
+                };
+                fileArr.push(obj);
+            });
+
+            $.fn.dataTable.moment('DD-MM-YYYY HH:mm');
+            if (!($.fn.dataTable.isDataTable('#sp-documents-for-portal-table'))) {
+                $('#sp-documents-for-portal-table').DataTable({
+                    select: {
+                        style: 'multi'
+                    },
+                    data: fileArr,
+                    columnDefs: [
+                        {
+                            targets: 0,
+                            data: 'customer'
+                        },
+                        {
+                            targets: 1,
+                            data: 'portal'
+                        },
+                        {
+                            targets: 2,
+                            data: 'name'
+                        }
+                    ],
+                    dom: '<"sp-datatables-search-left"f>ti',
+                    order: [[2, 'desc']],
+                    scrollY: '15vh',
+                    paging: false
+                });
+            } else {
+                $('#sp-documents-for-portal-table').DataTable()
+                    .clear()
+                    .rows.add(fileArr)
+                    .draw();
+            }
         }
     },
 
@@ -2750,7 +3199,50 @@ $(document).ready(function() {
         $('#sp-help-salesmen__modal').load('assets/modal/help-button/main.html');
         new UserEvent('CLICKED_HELP_BUTTON').send();
     });
+    // send switcher state
+    $('body')
+        .on('change', '.twofactorauth-switch', function (e) {
+            var documentId = $(this).closest('.options-wrapper').data('id');
+            var targetElement = e.target;
+            swal({
+                    title: `Please confirm to turn ${targetElement.checked? 'ON':'OFF'} double authentication for this portal?`,
+                    type: "warning",
+                    text:`<div class="info-block" data-title= "${targetElement.checked ? "i – Double authentication requires a customer id and cellular number. Then you must make a link for each customer and send it to them.":"i – Turning off double authentication will make this portal public to anyone with a portal link"}"><i class="fa fa-info" aria-hidden="true"></i></div>`,
+                    html: true,
+                    confirmButtonText: `Yes, turn ${targetElement.checked? 'ON':'OFF'}`,
+                    showCancelButton: true,
+                    closeOnConfirm: true,
+                    cancelButtonColor: "#DC3545",
+                    closeOnCancel: true,
+                    allowOutsideClick: true,
+
+                },
+                function(isConfirm){
+                    if (isConfirm) {
+                        saveAuthSettings({ isMFAEnabled: targetElement.checked }, documentId);
+                    } else {
+                        targetElement.checked ? targetElement.checked = false :  targetElement.checked = true;
+                    }
+                });
+            $('.sweet-alert button.cancel').addClass('cancel-red');
+        });
 });
+
+function saveAuthSettings(data, fileHash) {
+    $.ajax({
+        url:'/api/v1/documents/' + fileHash,
+        method: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(data),
+        beforeSend: function(xhr) {
+            xhr.setRequestHeader(SP.CSRF_HEADER, SP.CSRF_TOKEN);
+        },
+        error: function() {
+            swal('Error', 'Something went wrong. Your settings weren\'t saved.', 'error');
+        }
+    });
+}
+
 
 /**
  * Class for sending user events.
@@ -2905,3 +3397,104 @@ $(document).on('click', '.sp-link-metric__item', function() {
     $('.sp-link-metric__save-button').prop('disabled', false);
     return false;
 });
+
+$(function() {
+    $("#phoneNumber").intlTelInput({
+        allowDropdown: true,
+        autoHideDialCode: true,
+        autoPlaceholder: "polite",
+        customPlaceholder: null,
+        dropdownContainer: "",
+        excludeCountries: [],
+        formatOnDisplay: true,
+        geoIpLookup: null,
+        hiddenInput: "",
+        initialCountry: "",
+        nationalMode: true,
+        onlyCountries: [],
+        placeholderNumberType: "MOBILE",
+        preferredCountries: ["il","us", "gb"],
+        separateDialCode: false,
+        utilsScript: ""
+    });
+
+    $("#phoneNumber").mask("(000) 000-0000");
+
+    document.querySelector( "#sp-add-update-customer__form" )
+        .addEventListener( "invalid", function( event ) {
+            event.preventDefault();
+        }, true );
+
+    $("#phoneNumber").on("change input paste propertychange", ()=>{
+        event.preventDefault();
+        if($("#phoneNumber").val().length !== 14){
+            $(".error").css({display: 'block', color: 'red'});
+            $("#phoneNumber").css({border: '1px solid red'});
+        } else{
+            $(".error").css({display: 'none'});
+            $("#phoneNumber").css({border: '1px solid #e5e6e7'});
+        }
+    });
+
+    $('input[name^="customerFirstName"]').on("change input paste propertychange", ()=>{
+        event.preventDefault();
+        if(!/^[a-zA-Z][a-zA-Z0-9-_\.]{1,20}$/.test($('input[name^="customerFirstName"]').val())){
+            $(".errorName").css({display: 'block', color: 'red'});
+            $('input[name^="customerFirstName"]').css({border: '1px solid red'});
+        } else{
+            $(".errorName").css({display: 'none'});
+            $('input[name^="customerFirstName"]').css({border: '1px solid #e5e6e7'});
+        }
+    });
+
+    $('input[name^="customerLastName"]').on("change input paste propertychange", ()=>{
+        event.preventDefault();
+        if(!/^[a-zA-Z][a-zA-Z0-9-_\.]{1,20}$/.test($('input[name^="customerLastName"]').val())){
+            $(".errorLastName").css({display: 'block', color: 'red'});
+            $('input[name^="customerLastName"]').css({border: '1px solid red'});
+        } else{
+            $(".errorLastName").css({display: 'none'});
+            $('input[name^="customerLastName"]').css({border: '1px solid #e5e6e7'});
+        }
+    });
+
+    $('input[name^="customerID"]').on("change input paste propertychange",()=>{
+        event.preventDefault();
+        if(!/^[0-9]{0,10}$/.test($('input[name^="customerID"]').val())){
+            $(".errorId").css({display: 'block', color: 'red'});
+            $('input[name^="customerID"]').css({border: '1px solid red'});
+        } else{
+            $(".errorId").css({display: 'none'});
+            $('input[name^="customerID"]').css({border: '1px solid #e5e6e7'});
+        }
+    });
+
+    $('input[name^="customerEmail"]').on("change input paste propertychange",()=>{
+        event.preventDefault();
+
+        if(!/^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/.test($('input[name^="customerEmail"]').val())){
+            $(".errorEmail").css({display: 'block', color: 'red'});
+            $('input[name^="customerEmail"]').css({border: '1px solid red'});
+        } else{
+            $(".errorEmail").css({display: 'none'});
+            $('input[name^="customerEmail"]').css({border: '1px solid #e5e6e7'});
+        }
+    });
+
+    $(".sp-add-update-customer").on("click", ()=>{
+        $(".error, .errorId, .errorEmail, .errorName, .errorLastName").css({display: 'none'});
+        $("#phoneNumber, input[name^='customerID'], input[name^='customerEmail'], input[name^='customerFirstName'], input[name^='customerLastName']").css({border: '1px solid #e5e6e7'});
+        $("#sp-add-update-customer__form")[0].reset();
+    });
+
+    $("#sp-add-update-customer__form").on("propertychange change blur click keyup input paste",function(){
+        var firstName = /^[a-zA-Z][a-zA-Z0-9-_\.]{1,20}$/.test($('input[name^="customerFirstName"]').val());
+        var lastName = /^[a-zA-Z][a-zA-Z0-9-_\.]{1,20}$/.test($('input[name^="customerLastName"]').val());
+        var email = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test($('input[name^="customerEmail"]').val());
+        if(email === true && firstName === true && lastName === true){
+            $("#sp-modal-add-update-customer__button").prop("disabled", false);
+        } else {
+            $("#sp-modal-add-update-customer__button").prop("disabled", true);
+        }
+    });
+})

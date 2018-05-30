@@ -60,7 +60,7 @@ public class DashboardAnalyticsController {
                 if (documentRepository.findByFriendlyId(fileHash).getViewer().getEmail().equals(principal.getName())) {
                     String salesmanEmail = principal.getName();
                     if (!DbLayer.isCustomerExist(salesmanEmail, customerEmail)) {
-                        DbLayer.addNewCustomer(null, salesmanEmail, "Test", "Viewer", null, null, customerEmail);
+                        DbLayer.addNewCustomer(null, salesmanEmail, "Test", "Viewer", null, null, customerEmail, null, null);
                     }
                     String fileLinkHash = DbLayer.setFileLinkHash(customerEmail, fileHash, salesmanEmail);
                     data.put("fileLinkHash", fileLinkHash);

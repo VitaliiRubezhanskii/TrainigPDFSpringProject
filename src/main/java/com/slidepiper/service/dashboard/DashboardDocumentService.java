@@ -36,6 +36,8 @@ import java.util.Set;
 @Service
 @PreAuthorize("hasRole('ROLE_USER')")
 public class DashboardDocumentService {
+    private static final boolean IS_PROCESS_MODE = false;
+    private static final boolean IS_MFA_ENABLED = false;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     private final String alphabet;
@@ -95,7 +97,7 @@ public class DashboardDocumentService {
             String name = file.getOriginalFilename();
 
             Viewer viewer = viewerRepository.findByEmail(username);
-            Document document = new Document(viewer, Status.CREATED, name);
+            Document document = new Document(viewer, Status.CREATED, name, IS_PROCESS_MODE, IS_MFA_ENABLED);
             documentRepository.save(document);
 
             Hashids hashids = new Hashids(salt, minHashLength, alphabet);
@@ -111,7 +113,7 @@ public class DashboardDocumentService {
             // Create default customer.
             String defaultCustomerEmail = ConfigProperties.getProperty("default_customer_email");
             if (false == DbLayer.isCustomerExist(username, defaultCustomerEmail)) {
-                DbLayer.addNewCustomer(null, username, "Generic", "Link", null, null, defaultCustomerEmail);
+                DbLayer.addNewCustomer(null, username, "Generic", "Link", null, null, defaultCustomerEmail, null, null);
             }
             DbLayer.setFileLinkHash(defaultCustomerEmail, friendlyId, username);
 
@@ -179,7 +181,7 @@ public class DashboardDocumentService {
         entityManager.detach(sourceDocument);
 
         Viewer viewer = viewerRepository.findByEmail(username);
-        Document destinationDocument = new Document(viewer, Status.DISABLED, destinationDocumentName);
+        Document destinationDocument = new Document(viewer, Status.DISABLED, destinationDocumentName, sourceDocument.isProcessMode(), sourceDocument.isMfaEnabled());
         documentRepository.save(destinationDocument);
 
         // Set friendlyId.
@@ -221,5 +223,22 @@ public class DashboardDocumentService {
         data.put("id", destinationDocument.getId());
         data.put("name", destinationDocument.getName());
         eventRepository.save(new Event(username, Event.EventType.CLONED_DOCUMENT, data));
+    }
+
+    public void save(String friendlyId, String email, Boolean isProcessMode, Boolean isMFAEnabled) {
+        Document document = documentRepository.findByFriendlyId(friendlyId);
+
+        if (isProcessMode != null) {
+            document.setProcessMode(isProcessMode);
+        }
+        if (isMFAEnabled != null) {
+            document.setMfaEnabled(isMFAEnabled);
+        }
+        documentRepository.save(document);
+
+        // Save event.
+        ObjectNode data = objectMapper.createObjectNode();
+        data.put("id", document.getId());
+        eventRepository.save(new Event(email, Event.EventType.PROCESS_MODE_ENABLED_FOR_DOCUMENT, data));
     }
 }

@@ -58,6 +58,7 @@ dependencies {
     compile 'org.springframework.boot:spring-boot-starter-security'
     compile 'org.springframework.boot:spring-boot-starter-test'
     compile 'org.springframework.boot:spring-boot-starter-web'
+    compile 'com.google.code.gson:gson:2.8.4'
     optional 'org.springframework.boot:spring-boot-configuration-processor'
     optional 'org.springframework.boot:spring-boot-devtools'
     customProvidedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'

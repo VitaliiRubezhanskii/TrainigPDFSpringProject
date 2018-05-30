@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
 import java.util.Calendar;
 import java.util.Objects;
 
@@ -39,7 +41,7 @@ public class UserController {
     }
 
     @PostMapping("/signup")
-    public String signup(UserSignupInput userSignupInput, BindingResult bindingResult, Model model) {
+    public String signup(HttpServletRequest request, UserSignupInput userSignupInput, BindingResult bindingResult, Model model) throws ServletException {
         userSignupValidator.validate(userSignupInput, bindingResult);
         if (bindingResult.hasErrors()) {
             String defaultMessage = bindingResult.getFieldErrors().get(0).getDefaultMessage();
@@ -48,7 +50,7 @@ public class UserController {
             return UriComponentsBuilder.fromPath(templatesPrefix).pathSegment("signup").build().toUriString();
         } else {
             userService.save(userSignupInput);
-            userService.authenticate(userSignupInput.getUsername(), userSignupInput.getPassword());
+            request.login(userSignupInput.getUsername(), userSignupInput.getPassword());
             return "redirect:/dashboard";
         }
     }

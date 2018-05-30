@@ -31,6 +31,17 @@ documents:
         minHashLength: 8
         alphabet: abcdefghijklmnopqrstuvwxyz0123456789
 
+customerDocuments:
+    amazon:
+        s3:
+            bucket: slidepiper-documents-development
+            keyPrefix: static/customer-documents
+
+    hashids:
+        salt: "wm948t3948thRMHP(#RH*#(*Cr983r2"
+        minHashLength: 8
+        alphabet: abcdefghijklmnopqrstuvwxyz0123456789
+
 amazon:
     s3:
         url: https://s3.amazonaws.com

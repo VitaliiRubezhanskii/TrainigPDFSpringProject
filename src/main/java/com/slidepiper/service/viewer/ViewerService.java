@@ -20,6 +20,9 @@ import java.util.Optional;
 
 @Service
 public class ViewerService {
+    private static final String PORTAL_MODE_PAGE = "viewer";
+    private static final String PROCESS_MODE_PAGE = "process";
+
     private final ChannelRepository channelRepository;
     private final ViewerEventRepository viewerEventRepository;
     private final ViewerDocumentService viewerDocumentService;
@@ -78,7 +81,10 @@ public class ViewerService {
             viewerEvent.setSessionId(sessionId);
             viewerEventRepository.save(viewerEvent);
 
-            return "viewer";
+            if (channel.getDocument().isProcessMode()) {
+                return PROCESS_MODE_PAGE;
+            }
+            return PORTAL_MODE_PAGE;
         }
     }
 

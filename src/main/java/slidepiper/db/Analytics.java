@@ -10,13 +10,15 @@ public class Analytics {
   
   public static final String sqlFilesList =
 		"SELECT\n"
-      + "  id AS file_hash,\n"
-      + "  name AS file_name,\n"
-      + "  timestamp AS date_added_or_modified,\n"
-	  + "  id_ai AS id\n"
-      + "FROM slides\n"
-      + "WHERE sales_man_email = ? AND slides.status IN ('CREATED', 'UPDATED', 'BEFORE_AWS_S3_TRANSITION')\n"
-      + "ORDER BY date_added_or_modified";
+				+ "  id AS file_hash,\n"
+				+ "  name AS file_name,\n"
+				+ "  timestamp AS date_added_or_modified,\n"
+				+ "  id_ai AS id,\n"
+				+ "  is_process_mode,\n"
+				+ "  is_mfa_enabled\n"
+				+ "FROM slides\n"
+				+ "WHERE sales_man_email = ? AND slides.status IN ('CREATED', 'UPDATED', 'BEFORE_AWS_S3_TRANSITION')\n"
+				+ "ORDER BY date_added_or_modified";
   
   
   /**
@@ -73,7 +75,9 @@ public class Analytics {
       + "  email,\n"
       + "  customers.timestamp AS 'date',\n"
       + "  COALESCE(groupName, ''),\n"
-	  + "  id\n"
+	  + "  id,\n"
+	  + "  customer_id,\n"
+	  + "  phone\n"
       + "FROM customers\n"
       + "WHERE sales_man = ? AND email NOT IN ('" + ConfigProperties.getProperty("default_customer_email") + "', '" + ConfigProperties.getProperty("test_customer_email") + "')\n"
       + "ORDER BY date";
@@ -328,4 +332,15 @@ public class Analytics {
     + "INNER JOIN msg_info ON msg_info.id = customer_events.msg_id\n"
     + "INNER JOIN slides ON msg_info.slides_id = slides.id AND slides.status IN ('CREATED', 'UPDATED', 'BEFORE_AWS_S3_TRANSITION')\n"
     + "WHERE customer_events.id = ?";
+
+	/**
+	 * Get files list for specific customer
+	 */
+	public static final String sqlPortalsListForCustomer =
+			"SELECT msg_info.id AS file_hash, name AS file_name, slides.timestamp AS date_added_or_modified, slides.id_ai AS id,\n" +
+			" customer_email AS customer_email FROM slides, msg_info WHERE slides.sales_man_email = ?\n" +
+			" AND slides.status IN ('CREATED', 'UPDATED', 'BEFORE_AWS_S3_TRANSITION')\n" +
+			" AND slides.id = msg_info.slides_id\n" +
+			" AND msg_info.customer_email = ?\n" +
+			" ORDER BY date_added_or_modified";
 }

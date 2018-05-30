@@ -34,4 +34,10 @@ public class Customer implements Serializable {
     // TODO: Replace with user.
     @Column(name = "sales_man")
     private String username;
+
+    @Column(name = "customer_id")
+    private String customerId;
+
+    @Column(name = "phone")
+    private String phoneNumber;
 }

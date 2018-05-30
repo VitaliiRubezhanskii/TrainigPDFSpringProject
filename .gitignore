@@ -14,5 +14,6 @@ bin/
 
 # Gulp
 /node_modules/
+/src/main/webapp/static/src/vue-app/node_modules
 /src/main/resources/templates/build/
 /src/main/webapp/static/build/

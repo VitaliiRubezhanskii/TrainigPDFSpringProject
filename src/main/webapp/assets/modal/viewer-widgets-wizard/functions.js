@@ -324,7 +324,7 @@ sp.widgets = {
             return isEmpty;
         }
     },
-
+        ////////////////////////////////
     widget9: {
         html: $('#sp-tab-9 .sp-widget-item').html(),
         init: (function() {
@@ -455,8 +455,10 @@ sp.viewerWidgetsModal = {
      * Get a file widget settings from the DB.
      *
      * @param {string} fileHash - The file hash.
+     *
+     * @param {boolean} isProcessMode - if process mode is enabled.
      */
-    getWidgetsSettings: function(fileHash) {
+    getWidgetsSettings: function(fileHash, isProcessMode) {
         var widgetSettingsData = null;
         $.getJSON(
             '/api/v1/widgets',
@@ -467,6 +469,7 @@ sp.viewerWidgetsModal = {
                 widgetSettingsData = data;
                 sp.viewerWidgetsModal.displayWidgetsSettings(widgetSettingsData, fileHash);
                 sp.viewerWidgetsModal.setSaveButtons(fileHash);
+                sp.viewerWidgetsModal.setProcessMode(isProcessMode);
             }
         );
 
@@ -1030,7 +1033,16 @@ sp.viewerWidgetsModal = {
             $('#' + targetId).text('Saving...');
             $('.sp-widgets-customisation__spinner').addClass('sp-widgets-customisation__spinner-show');
 
-            sp.viewerWidgetsModal.postWidgetSettings(data, fileHash, targetId);
+            var isProcessModeEnabled = {
+                isProcessMode: $('[name="process-mode-is-enabled"]').prop('checked')
+            };
+
+            function docsSavedCallback(result) {
+                // Setting attribute to current value
+                $("#sp-files-management span[data-file-hash='" + fileHash + "'][data-target='#sp-viewer-widgets-modal']").attr('data-is-process-mode', +isProcessModeEnabled.isProcessMode);
+                sp.viewerWidgetsModal.postWidgetSettings(data, fileHash, targetId);
+            }
+            postDocumentSettings(isProcessModeEnabled, fileHash, docsSavedCallback);
         } else if (0 === settings.length) {
             $('button[data-dismiss="modal"]').click();
             swal('No settings were saved.', '', 'info');
@@ -1438,7 +1450,7 @@ sp.viewerWidgetsModal = {
             data: {
                 widgetId: 9,
                 isEnabled: $('[name="sp-widget9--is-enabled"]').prop('checked'),
-                items: []
+                items: [],
             }
         };
 
@@ -1811,6 +1823,14 @@ sp.viewerWidgetsModal = {
             return true;
         }
         return false;
+    },
+
+    /**
+     * Set Process Mode
+     * Add data-is-process-mode attribute for the 'Process Mode' checkbox.
+     */
+    setProcessMode: function(isProcessMode) {
+        $('[name="process-mode-is-enabled"]').prop('checked', !!+isProcessMode);
     }
 };
 
@@ -1887,3 +1907,25 @@ $(document).on('click', '.link-widget__url-upload-button', function() {
         }
     });
 });
+
+/**
+ * Post widget settings to ManagementServlet
+ *
+ * @param {object} data - The document settings data.
+ * @param {string} fileHash - The document fileHash.
+ */
+function postDocumentSettings(data, fileHash, callback) {
+    $.ajax({
+        url:'/api/v1/documents/' + fileHash,
+        method: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(data),
+        beforeSend: function(xhr) {
+            xhr.setRequestHeader(SP.CSRF_HEADER, SP.CSRF_TOKEN);
+        },
+        success: callback,
+        error: function() {
+            swal('Error', 'Something went wrong. Your settings weren\'t saved.', 'error');
+        }
+    });
+}

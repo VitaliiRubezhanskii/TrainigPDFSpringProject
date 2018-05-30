@@ -1,0 +1,77 @@
+<div
+  id="app" xmlns=""
+>
+  <Spinner
+    v-if="!load"
+    :load="load"
+  />
+
+  <Toolbar
+    v-if="toolbarData"
+    :toolbarData="toolbarData"
+  />
+
+  <div
+    class="pdf-container"
+    ref="pdf"
+    :style="{height: pageHeight ? `${pageHeight}px` : 'auto' }"
+  >
+    <Pdf
+      :src="src"
+      :page="page"
+      :loaded="onLoaded"
+      :resize="onResize"
+    />
+  </div>
+
+  <Arrows
+    :page="page"
+    @next-page="nextPage"
+    @prev-page="prevPage"
+  />
+
+  <HorizontalHopper
+    v-if="horizontalHoperData"
+    :page="page"
+    :styleButton="styleButton.backgroundColor"
+    :widget="horizontalHoperData"
+    @go-page="setPage"
+    :colorText="colorText"
+  />
+
+  <Questions
+    v-if="questionData && questionData.isEnabled"
+    :widget="questionData.items[0]"
+    :colorText="colorText"
+    :styleButton="styleButton.backgroundColor"
+  />
+
+  <Video
+    v-if="videoData && videoData.isEnabled"
+    :widget="videoData.items[0]"
+  />
+
+  <TestimonialsWidget
+    v-if="testimonialsData
+    && testimonialsData.isEnabled
+    && testimonialsData.items.find(item => item.page === page)"
+    :widget="testimonialsData.items.find(item => item.page === page)"
+  />
+
+  <div class="link">
+    <template
+      v-if="linkData && linkData.isEnabled"
+    >
+      <LinkAndTask
+        v-for="widget in linkData.items"
+        v-if="Number(widget.pageFrom)<=page && Number(widget.pageTo)>=page"
+        :widget="widget"
+        :styleButton="styleButton.backgroundColor"
+        :colorText="colorText"
+      />
+    </template>
+  </div>
+
+  <PoweredBy />
+  <UploadFiles />
+</div>

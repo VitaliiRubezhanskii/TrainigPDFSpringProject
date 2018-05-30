@@ -120,7 +120,6 @@ sp.viewer = {
     }
 };
 
-
 /**
  * Tracking and sending event mechanism.
  */
@@ -210,9 +209,9 @@ sp.viewer = {
         });
 
         //Animate to selected element automatically
-        $('#sp-widget5__horizontal-hopper-container').animate({ scrollLeft: $('#sp-widget5__horizontal-hopper-container>div.selected')[0].offsetLeft - $('#sp-widget5__horizontal-hopper-container')[0].offsetWidth / 2},'fast');
-        $('#sp-widget5__hopper-container').animate({ scrollTop: $('#sp-widget5__hopper-container>div.selected')[0].offsetTop - $('#sp-widget5__hopper-container')[0].offsetHeight / 2 + $('#sp-widget5__hopper-container>div.selected')[0].offsetHeight/2},'fast');
-        startTime = endTime;
+        //$('#sp-widget5__horizontal-hopper-container').scrollTo($('#sp-widget5__horizontal-hopper-container>div.selected'));
+        // $('#sp-widget5__horizontal-hopper-container').scrollTo(500,0);
+         startTime = endTime;
     }
 
     var eventQueue = [];
@@ -696,7 +695,6 @@ $.ajax({
 
                 // Prepare the widgets data for implimentation.
                 var widgets = {};
-
                 var numWidgets = data.length;
                 $.each(data, function (index, data) {
                     var widgetData = JSON.parse(data.widgetData).data;
@@ -704,7 +702,7 @@ $.ajax({
                     if (typeof widgetData !== 'undefined'
                         && (widgetData.isEnabled || (typeof widgetData.items[0] !== 'undefined' && widgetData.items[0].enabled)
                             //separate logic for widget5; add it even if isEnabled=false
-                            || (widgetData.widgetId == 5 && widgetData.isHorizontalHopperEnabled))) {
+                        || (widgetData.widgetId == 5 && widgetData.isHorizontalHopperEnabled))) {
 
                         var widgetId;
                         if (typeof widgetData.widgetId !== 'undefined') {
@@ -981,7 +979,6 @@ $.ajax({
             && widgets.widget5.items.length > 0) {
 
             var isWidget5Valid = false;
-
             $.each(widgets.widget5.items, function (index, item) {
                 if (isWidgetSettingsDefined(item, widget5RequiredSettings)) {
                     isWidget5Valid = true;
@@ -1653,7 +1650,6 @@ $.ajax({
                         param_1_varchar: $('#sp-widget5__hop-' + index + ' .sp-widget5__hop-text').text(),
                         param_2_varchar: $('#sp-widget5__hop-' + index).attr('data-page-hop')
                     });
-
                     PDFViewerApplication.page = parseInt($('#sp-widget5__hop-' + index).attr('data-page-hop'));
                 });
             });
@@ -1731,7 +1727,6 @@ $.ajax({
                         param_1_varchar: $('#sp-widget5__horizontal-hop-' + index + ' .sp-widget5__horizontal-hop-text').text(),
                         param_2_varchar: $('#sp-widget5__horizontal-hop-' + index).attr('data-page-horizontal-hop')
                     });
-
                     PDFViewerApplication.page = parseInt($('#sp-widget5__horizontal-hop-' + index).attr('data-page-horizontal-hop'));
                 });
             });
@@ -1753,8 +1748,8 @@ $.ajax({
             // Select active button with color
             $('#sp-widget5__horizontal-hopper-container').children().each(function () {
                 if($(this).attr("data-page-horizontal-hop") == PDFViewerApplication.page) {
-                    $(this).addClass('selected');
-                } // "this" is the current element in the loop
+                    $(this).addClass('selected')
+                }; // "this" is the current element in the loop
             });
         }
 
