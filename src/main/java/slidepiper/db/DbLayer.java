@@ -1,9 +1,11 @@
 package slidepiper.db;
 
 import com.google.gson.internal.LinkedTreeMap;
+import com.slidepiper.model.entity.Customer;
 import org.hashids.Hashids;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import slidepiper.config.ConfigProperties;
 import slidepiper.constants.Constants;
 
@@ -12,10 +14,15 @@ import java.sql.*;
 import java.util.*;
 
 public class DbLayer {
+
+	@Autowired
+	private static DBLayerJPA dbLayerService;
+
     private static Boolean initialized = false;
 
     public static void init() {
         if (initialized==false) {
+
             try {
                 DriverManager.registerDriver(new com.mysql.cj.jdbc.Driver());
             } catch (SQLException e) {
@@ -48,13 +55,23 @@ public class DbLayer {
 		}
 	}
 
+
+	private static void addNewCustomer(Customer customer){
+		dbLayerService.addNewCustomer(customer);
+	}
+
+
+
 	//add new customer.
 	public static int addNewCustomer(String subAction, String salesMan, String firstName, String lastName,
 									 String company, String groupName, String email, String customerID,
                                      String phone){
-		
+
+
 		// customer does not exist.
 		if (getCustomerName(email, salesMan) == null && !isCustomerIDExist(customerID, salesMan)) {
+			//addNewCustomer(new Customer(email,firstName,lastName,company,lastName,salesMan,groupName,customerID,phone));
+
 		    String query = "INSERT INTO customers(email, name, first_name, last_name, sales_man, company, groupName, customer_id, phone) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
             String fullName = null;
             try (Connection conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass)) {
@@ -99,6 +116,7 @@ public class DbLayer {
 		    // customer already exists.
             if (!isCustomerIDTakenByAnotherUser(customerID, email, salesMan)) {
                 Constants.updateConstants();
+
                 Connection conn = null;
                 String sql = "UPDATE customers SET first_name = ?, last_name = ?, " +
                         "name = ?, company = ?, groupName = ?, " +

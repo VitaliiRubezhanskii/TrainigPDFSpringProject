@@ -336,6 +336,8 @@ public class Analytics {
 	/**
 	 * Get files list for specific customer
 	 */
+
+
 	public static final String sqlPortalsListForCustomer =
 			"SELECT msg_info.id AS file_hash, name AS file_name, slides.timestamp AS date_added_or_modified, slides.id_ai AS id,\n" +
 			" customer_email AS customer_email FROM slides, msg_info WHERE slides.sales_man_email = ?\n" +

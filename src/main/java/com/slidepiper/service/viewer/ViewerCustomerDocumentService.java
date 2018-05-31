@@ -17,8 +17,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
-import slidepiper.config.ConfigProperties;
-import slidepiper.db.DbLayer;
 
 import javax.persistence.EntityManager;
 import java.io.IOException;

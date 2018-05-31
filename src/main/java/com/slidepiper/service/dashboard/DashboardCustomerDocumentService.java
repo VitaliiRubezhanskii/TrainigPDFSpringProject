@@ -8,8 +8,6 @@ import com.slidepiper.model.entity.Document;
 import com.slidepiper.model.entity.Document.Status;
 import com.slidepiper.model.entity.Event;
 import com.slidepiper.model.entity.Viewer;
-import com.slidepiper.model.entity.widget.ShareWidget;
-import com.slidepiper.model.entity.widget.Widget;
 import com.slidepiper.repository.DocumentRepository;
 import com.slidepiper.repository.EventRepository;
 import com.slidepiper.repository.ViewerRepository;
@@ -28,10 +26,7 @@ import slidepiper.db.DbLayer;
 
 import javax.persistence.EntityManager;
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 @Service
 @PreAuthorize("hasRole('ROLE_USER')")

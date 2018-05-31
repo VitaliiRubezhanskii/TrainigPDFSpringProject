@@ -23,6 +23,7 @@ import java.net.URISyntaxException;
 @RestController
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 public class FtpWidgetController {
+
   private final FtpWidgetService ftpWidgetService;
   
   @CrossOrigin(origins = "*")

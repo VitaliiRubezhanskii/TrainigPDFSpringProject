@@ -1213,9 +1213,8 @@ sp = {
                     xhr.setRequestHeader(SP.CSRF_HEADER, SP.CSRF_TOKEN);
                 },
                 contentType : 'application/json;',
-                data: JSON.stringify({
-                    customer_email: customerEmail
-                })
+                data:JSON.stringify({email: customerEmail})
+
             }).done(function(data) {
                 if (typeof data === 'string' && '<!DOCTYPE html>' === data.substring(0, 15)) {
                     window.location = '/login';
