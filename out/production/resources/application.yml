@@ -1,0 +1,97 @@
+server:
+    compression:
+        enabled: true
+        mimeTypes: application/javascript,application/json,application/x-javascript,application/xml,application/xml+rss,text/css,text/html,text/javascript,text/plain,text/xml
+
+spring:
+    devtools:
+        restart:
+            exclude: META-INF/maven/**,META-INF/resources/**,resources/**,static/**,public/**,**/*Test.class,**/*Tests.class,git.properties,META-INF/build-info.properties
+
+    http:
+        multipart:
+            maxFileSize: 50MB
+            maxRequestSize: 100MB
+
+    mustache:
+        cache: false
+        expose-request-attributes: true
+
+    profiles:
+        active: development
+
+documents:
+    amazon:
+        s3:
+            bucket: slidepiper-documents-development
+            keyPrefix: static/documents
+
+    hashids:
+        salt: "wm948t3948thRMHP(#RH*#(*Cr983r2"
+        minHashLength: 8
+        alphabet: abcdefghijklmnopqrstuvwxyz0123456789
+
+customerDocuments:
+    amazon:
+        s3:
+            bucket: slidepiper-documents-development
+            keyPrefix: static/customer-documents
+
+    hashids:
+        salt: "wm948t3948thRMHP(#RH*#(*Cr983r2"
+        minHashLength: 8
+        alphabet: abcdefghijklmnopqrstuvwxyz0123456789
+
+amazon:
+    s3:
+        url: https://s3.amazonaws.com
+
+    ses:
+        doNotReplyEmailAddress: SlidePiper <do-not-reply@slidepiper.com>
+
+jwt:
+    issuer: slidepiper
+    secret: "YYeEkSZYKjdo4C$BMH$HQQOan0t@JgDz"
+
+slidepiper:
+    staticUrl: https://static.slidepiper.com
+
+    viewer:
+        amazon:
+            s3:
+                bucket: slidepiper-viewers
+
+    widget:
+        amazon:
+            s3:
+                bucket: slidepiper-widgets
+                shareWidgetImageUrlPrefix: widget11/facebook/image
+        shareWidget:
+            data:
+                defaultTitle: "SlidePiper Document"
+                defaultDescription: "Check out this interactive document!"
+                defaultImageUrl: https://static.slidepiper.com/images/slidepiper/logo-1200x630.png
+                defaultButtonColor: ""
+                defaultButtonText: Share
+                defaultIsButtonColorCustom: false
+---
+spring:
+    profiles: development
+
+slidepiper:
+    templates:
+        prefix: src
+---
+spring:
+    profiles: staging
+
+slidepiper:
+    templates:
+        prefix: build
+---
+spring:
+    profiles: production
+
+slidepiper:
+    templates:
+        prefix: build

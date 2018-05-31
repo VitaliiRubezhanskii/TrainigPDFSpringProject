@@ -1,0 +1,32 @@
+{
+  "groups": [
+    {
+      "name": "slidepiper.amazon",
+      "type": "com.slidepiper.model.component.configurationproperties.AmazonSNSCustomerMessage",
+      "sourceType": "com.slidepiper.model.component.configurationproperties.AmazonSNSCustomerMessage"
+    },
+    {
+      "name": "spring.profiles",
+      "type": "com.slidepiper.model.component.configurationproperties.SpringProfiles",
+      "sourceType": "com.slidepiper.model.component.configurationproperties.SpringProfiles"
+    }
+  ],
+  "properties": [
+    {
+      "name": "slidepiper.amazon.access-key",
+      "type": "java.lang.String",
+      "sourceType": "com.slidepiper.model.component.configurationproperties.AmazonSNSCustomerMessage"
+    },
+    {
+      "name": "slidepiper.amazon.secret-key",
+      "type": "java.lang.String",
+      "sourceType": "com.slidepiper.model.component.configurationproperties.AmazonSNSCustomerMessage"
+    },
+    {
+      "name": "spring.profiles.active",
+      "type": "java.lang.String",
+      "sourceType": "com.slidepiper.model.component.configurationproperties.SpringProfiles"
+    }
+  ],
+  "hints": []
+}
