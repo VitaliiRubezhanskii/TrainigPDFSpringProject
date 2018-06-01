@@ -237,7 +237,9 @@ function sortForDocUpload(data) {
             'company': '<span id="sp-customer-company__td">' + sp.escapeHtml(row[2]) + '</span>',
             'email':  '<span class="contact-type"><i class="fa fa-envelope"> </i></span>' + '         '  + sp.escapeHtml(row[3]) + '',
             'options': '<td><a href="#"><span class="label label-primary sp-add-update-customer sp-customer-update" data-add-update="update" data-toggle="modal" data-target="#sp-modal-add-update-customer" data-customer-email="' + sp.escapeHtml(row[3]) + '">Update</span></a><a href="#"><span class="label label-danger sp-customer-delete" data-customer-email="' + sp.escapeHtml(row[3]) + '">Delete</span></a></td>',
-            group: '<span id="sp-customer-group__td">' + sp.escapeHtml(row[5]) + '</span>',
+            'group': '<span id="sp-customer-group__td">' + sp.escapeHtml(row[5]) + '</span>',
+            'id': '<span id="sp-customer-id__td">' + sp.escapeHtml(row[7]) + '</span>',
+            'phone': '<span id="sp-customer-phone__td">' + sp.escapeHtml(row[8]) + '</span>'
         };
         nameArr.push(obj);
     });
@@ -259,6 +261,8 @@ function sortForDocUpload(data) {
                 {data: 'company'},
                 {data: 'group'},
                 {data: 'email'},
+                {data: 'id'},
+                {data: 'phone'},
                 {data: 'options'}
             ],
             scrollY: '55vh',
