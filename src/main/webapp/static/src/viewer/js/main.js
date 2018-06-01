@@ -211,7 +211,7 @@ sp.viewer = {
         //Animate to selected element automatically
         //$('#sp-widget5__horizontal-hopper-container').scrollTo($('#sp-widget5__horizontal-hopper-container>div.selected'));
         // $('#sp-widget5__horizontal-hopper-container').scrollTo(500,0);
-         startTime = endTime;
+        startTime = endTime;
     }
 
     var eventQueue = [];
@@ -810,6 +810,7 @@ $.ajax({
          * everytime the user changes a page.
          */
         $(document).on('pagechange spDefaultPlayerReady spYouTubePlayerReady spWidget6Ready', function (event) {
+
             /* Widget 1 */
             if (sp.viewer.widgets.widget1.isValidated) {
 
@@ -1000,11 +1001,15 @@ $.ajax({
                 if (widgets.widget5.isHorizontalHopperEnabled) {
                     implementWidget5HorizontalHopper(widgets.widget5.items);
                 }
-                // delete margin top when horizontal hoper disabled
+                // delete margin top when horizontal hopper disabled
                 if (!widgets.widget5.isHorizontalHopperEnabled) {
                     $('#viewerContainer').addClass('deleteMarginTop');
                 }
             }
+        }
+        else{
+            // delete margin top when horizontal and vertical hopper disabled
+            $('#viewerContainer').addClass('deleteMarginTop');
         }
 
         /* Validate Widget 7 */
@@ -1648,6 +1653,18 @@ $.ajax({
                     PDFViewerApplication.page = parseInt($('#sp-widget5__hop-' + index).attr('data-page-hop'));
                 });
             });
+            //add scrolling for hopper
+            $('#sp-widget5__hopper-container').on("mousewheel",function(event){
+                var value = $(this).scrollTop() - 100;
+                var value1 = $(this).scrollTop() + 100;
+                if(event.originalEvent.wheelDelta /120 > 0) {
+                    $(this).scrollTop(value);
+                }
+                else{
+                    $(this).scrollTop(value1);
+                }
+                event.preventDefault();
+            });
 
             $('#sp-widget5__hopper-container').children().each(function () {
                 if($(this).attr("data-page-hop") == PDFViewerApplication.page) {
@@ -1713,6 +1730,7 @@ $.ajax({
                     PDFViewerApplication.page = parseInt($('#sp-widget5__horizontal-hop-' + index).attr('data-page-horizontal-hop'));
                 });
             });
+            //add scrolling to horizontal hopper
             $('#sp-widget5__horizontal-hopper-container').on("mousewheel",function(event){
                 var value = $(this).scrollLeft() + 100;
                 var value1 = $(this).scrollLeft() - 100;

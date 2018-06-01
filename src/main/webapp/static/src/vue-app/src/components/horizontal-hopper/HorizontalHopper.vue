@@ -47,7 +47,7 @@ p {
 #sp-widget5__horizontal-hopper-container {
   display: flex;
   position: relative;
-  overflow: scroll;
+  overflow: hidden;
   margin: 0 auto;
   padding-right: 22px;
   margin-bottom: 10px;

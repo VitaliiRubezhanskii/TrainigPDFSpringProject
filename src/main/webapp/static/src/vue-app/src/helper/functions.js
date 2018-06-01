@@ -14,10 +14,11 @@ import sp from '../constants/spViewer.js';
               animation: false,
   }));
 }
- function modalQuestions(url,title,emailLabel,messageLabel,canselText,confirmText,emailError){
+
+ function modalQuestions(url,title,emailLabel,messageLabel,cancelText,confirmText,emailError){
    let customEmailLabel = emailLabel ? emailLabel : 'Enter your email address:';
    let customMessageLabel = messageLabel? messageLabel:'Enter your message:';
-   let cancelButtonText = canselText ? canselText : 'Cansel';
+   let cancelButtonText = cancelText ? cancelText : 'Cancel';
    let confirmButtonText = confirmText?confirmText:'Submit';
   return Vue.swal({
     title: title,
@@ -63,16 +64,17 @@ import sp from '../constants/spViewer.js';
     }
   });
 }
+
 function modalLinkAndTask(url){
   Vue.swal({
     cancelButtonText: 'Close',
-    html: `<iframe class="link-task" style="height: 75vh" frameborder="0" src=${url} allow="geolocation; microphone; camera"></iframe>`,
+    html: `<iframe class="link-task" style="height: 75vh" frameborder="0" src="${url}" allow="geolocation; microphone; camera"></iframe>`,
     showConfirmButton: false,
     showCancelButton: true,
     width: 800,
-    height: 600
-})
+  })
 }
+
 function postData(data,url){
   return fetch(`${url}/viewer/event`, {
     method: 'POST',
@@ -84,6 +86,7 @@ function postData(data,url){
     body: JSON.stringify(data)
   })
 }
+
 function animateScroll(){
   return $('#sp-widget5__horizontal-hopper-container').animate({ scrollLeft: $('#sp-widget5__horizontal-hopper-container>div.active')[0].offsetLeft + $('#sp-widget5__horizontal-hopper-container>div.active')[0].offsetWidth/2 - $('#sp-widget5__horizontal-hopper-container')[0].offsetWidth / 2},'fast');
 }
