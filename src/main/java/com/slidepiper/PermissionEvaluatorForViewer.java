@@ -41,6 +41,12 @@ public class PermissionEvaluatorForViewer {
                             request.getSession().invalidate();
                             return false;
                         }
+                        System.out.println(request.getSession().getAttribute("verified"));
+                        if(request.getSession().getAttribute("verified") != null) {
+                            if (!(Boolean) request.getSession().getAttribute("verified")) {
+                                return false;
+                            }
+                        }
                         return true;
                     }
 

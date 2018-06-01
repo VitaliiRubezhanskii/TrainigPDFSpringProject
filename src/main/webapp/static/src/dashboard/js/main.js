@@ -205,7 +205,7 @@ sp = {
 
                     case 'navigation__tasks':
                         $('.tasks').show();
-                        window.sp.tasks.getAll();
+                        getAll();
                         break;
 
                     case 'sp-customer-documents':
@@ -244,125 +244,6 @@ sp = {
                     }
                 }
             }
-
-            function getHopperWidget(data, callback) {
-                var hopperWidget = null;
-                data.forEach(function(widget) {
-                    var widgetData = JSON.parse(widget.widgetData);
-                    if (5 === widgetData.data.widgetId) {
-                        hopperWidget = widgetData.data;
-                    }
-                });
-
-                callback(hopperWidget);
-            }
-
-            function createMilestone(hopperWidget) {
-                $('.tasks__task-form-milestone').empty();
-
-                if (hopperWidget) {
-                    $('.tasks__task-form-milestone').append($('<option>').text('Choose...').prop({disabled: true, selected: true}));
-                    hopperWidget.items.forEach(function(item) {
-                        $('.tasks__task-form-milestone').append($('<option>').val(item.hopperPage).text(item.hopperText));
-                    });
-                }
-            }
-
-            function compareCustomer(a, b) {
-                if (a[0] < b[0]) {
-                    return -1;
-                }
-                if (a[0] > b[0]) {
-                    return 1;
-                }
-                return 0;
-            }
-
-            function compareDocument(a, b) {
-                if (a[1] < b[1]) {
-                    return -1;
-                }
-                if (a[1] > b[1]) {
-                    return 1;
-                }
-                return 0;
-            }
-
-            // Save task.
-            document.addEventListener('submit', function(event) {
-                if (event.target.classList.contains('tasks__task-form')) {
-                    event.preventDefault();
-
-                    var data = {
-                        enabled: $('.tasks__task-form [name=enabled]').prop('checked'),
-                        dueAt: $('.tasks__task-form-due-date').data("DateTimePicker").date().valueOf(),
-                        type: 'DOCUMENT',
-                        action: 'EMAIL',
-                        customerId: parseInt($('.tasks__task-form-customer').val()),
-                        documentId: parseInt($('.tasks__task-form-document').val()),
-                        data: {
-                            pageNumber: parseInt($('.tasks__task-form [name=pageNumber]').val()),
-                            taskMessage: $('.tasks__task-form [name=taskMessage]').val()
-                        }
-                    };
-
-                    $.ajax({
-                        url: $('.tasks__task-form [name=requestLink]').val(),
-                        type: $('.tasks__task-form [name=requestType]').val(),
-                        data: JSON.stringify(data),
-                        contentType : 'application/json',
-                        beforeSend: function(xhr) {
-                            xhr.setRequestHeader(SP.CSRF_HEADER, SP.CSRF_TOKEN);
-                        }
-                    }).done(function () {
-                        if (typeof data === 'string' && '<!DOCTYPE html>' === data.substring(0, 15)) {
-                            window.location = '/login';
-                        } else {
-                            swal('Success!', 'You have successfully ' + $('.tasks__task-form [name=successMessage]').val() + ' a task', 'success');
-                            window.sp.tasks.getAll();
-                            $('button[data-dismiss="modal"]').click();
-                        }
-                    }).fail(function () {
-                        swal('Error!', 'Please contact support@slidepiper.com for assistance', 'error');
-                    });
-                }
-            });
-
-            // Delete task.
-            document.addEventListener('click', function(event) {
-                if (event.target.classList.contains('tasks__task-delete')) {
-                    swal({
-                            title: "Are you sure you want to delete this task?",
-                            type: "warning",
-                            confirmButtonText: "Yes",
-                            cancelButtonText: "No",
-                            showCancelButton: true,
-                            closeOnConfirm: false,
-                            closeOnCancel: true
-                        },
-                        function(isConfirm) {
-                            if (isConfirm) {
-                                $.ajax({
-                                    url: event.target.getAttribute('data-link'),
-                                    type: 'DELETE',
-                                    beforeSend: function (xhr) {
-                                        xhr.setRequestHeader(SP.CSRF_HEADER, SP.CSRF_TOKEN);
-                                    }
-                                }).done(function () {
-                                    if (typeof data === 'string' && '<!DOCTYPE html>' === data.substring(0, 15)) {
-                                        window.location = '/login';
-                                    } else {
-                                        swal('Success!', 'You have successfully deleted a task', 'success');
-                                        window.sp.tasks.getAll();
-                                    }
-                                }).fail(function () {
-                                    swal('Error!', 'Please contact support@slidepiper.com for assistance', 'error');
-                                });
-                            }
-                        }
-                    );
-                }
-            });
 
             // Link Widget.
             document.addEventListener('click', function(event) {

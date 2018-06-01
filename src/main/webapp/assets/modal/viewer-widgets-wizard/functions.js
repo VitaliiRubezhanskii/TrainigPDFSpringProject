@@ -921,7 +921,7 @@ sp.viewerWidgetsModal = {
             .attr('data-file-hash', fileHash);
 
         // 2)
-        sp.file.setFileLinkAttribute(
+        setFileLinkAttribute(
             fileHash,
             'test@example.com',
             'sp-save-test-widgets-settings__button'

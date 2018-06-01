@@ -40,7 +40,7 @@ public class OtpServiceImpl implements OtpService {
 
             PublishResult result =
                     snsClient.publish(new PublishRequest()
-                            .withMessage("Your code to login to SlidePiper document is:" + otp)
+                            .withMessage("Your code to login to SlidePiper document is: " + otp)
                             .withPhoneNumber(phoneNumber)
                             .withMessageAttributes(smsAttributes));
             log.info("SMS sent to " + phoneNumber + " " + result);

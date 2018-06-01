@@ -68,7 +68,7 @@ public class ViewerAuthenticationSuccessHandlerImpl implements AuthenticationSuc
 
             int customercode = otpService.generateCode();
             try {
-                otpService.sendOTP(customerPhone, customercode);
+//                otpService.sendOTP(customerPhone, customercode);
             } catch (Exception e) {
                 throw new ServletException("Cannot send code: " + e.getMessage());
             }
