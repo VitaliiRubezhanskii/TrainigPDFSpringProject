@@ -44,6 +44,11 @@ function sortDocsInDocsMgmtPanel(data) {
     var filesArr = [];
     $.each(data['filesList'], function (index, value) {
         var date = moment.utc(value[2]).toDate();
+
+        var checked = "";
+        if(sp.escapeHtml(value[5]) == 1) {
+            checked = "checked";
+        }
         var obj = {
             'date': moment(date).format('DD-MM-YYYY HH:mm'),
             'document': '<span class="sp-file-mgmt-file-name" data-file-hash="' + sp.escapeHtml(value[0]) +'">' + sp.escapeHtml(value[1]) + '</span>',
@@ -52,7 +57,11 @@ function sortDocsInDocsMgmtPanel(data) {
             + '<a href="#"><span class="label label-danger sp-file-delete" data-file-hash="' + sp.escapeHtml(value[0]) + '">Delete</span></a></span>'
             + '<a><span style="margin-left: 10px;" class="sp-document__clone label label-info" data-document-friendly-id="' + sp.escapeHtml(value[0]) + '" data-document-name="' + sp.escapeHtml(value[1]) + '">Clone</span></a>'
             + '<a><span data-toggle="modal" data-target="#sp-viewer-widgets-modal" style="margin-left: 10px;" class="label label-success sp-file-customize" data-file-hash="' + sp.escapeHtml(value[0]) + '" data-is-process-mode="' + sp.escapeHtml(value[4]) + '">Customize</span></a>'
-            + '<a class="sp-preview-file-link"><span id="sp-preview-file-' + sp.escapeHtml(index) + '" style="margin-left: 10px;" class="label label-warning" data-is-process-mode="' + sp.escapeHtml(value[4]) + '">Preview</span></a></span>'
+            + '<a class="sp-preview-file-link"><span id="sp-preview-file-' + sp.escapeHtml(index) + '" style="margin-left: 10px;" class="label label-warning" data-is-process-mode="' + sp.escapeHtml(value[4]) + '">Preview</span></a>'
+            +'<div data-id="' + sp.escapeHtml(value[0]) +  '" class="material-switch pull-right options-wrapper">'
+            +'<span class="authLabel">2 factor auth on/off</span>'
+            +'<input class="twofactorauth-switch" id="someSwitchOptionPrimary-' + sp.escapeHtml(index) + '" name="double-auth-is-enabled" name="someSwitchOption-' + sp.escapeHtml(index) + '" type="checkbox" ' + checked + '/>'
+            +'<label for="someSwitchOptionPrimary-' + sp.escapeHtml(index) + '" class="label-primary"></label></div></span>'
         };
         filesArr.push(obj);
 
