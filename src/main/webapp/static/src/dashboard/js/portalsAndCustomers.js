@@ -523,6 +523,16 @@ $(document).on('click', '.sp-add-update-customer', function() {
         $('#sp-modal-add-update-customer input[name="customerEmail"]')
             .val($(this).attr('data-customer-email'))
             .prop('readonly', true);
+
+        $('#sp-modal-add-update-customer input[name="customerID"]').
+        val($('[data-customer-email="' + $(this).attr('data-customer-email') + '"]')
+            .closest('tr').find('#sp-customer-id__td').text());
+
+        var separator = $("#phoneNumber").intlTelInput("getSelectedCountryData").dialCode.length + 1;
+
+        $('#sp-modal-add-update-customer input[name="customerPhone"]').
+        val($('[data-customer-email="' + $(this).attr('data-customer-email') + '"]')
+            .closest('tr').find('#sp-customer-phone__td').text().substr(separator));
     }
 });
 

@@ -44,10 +44,15 @@ function sortDocsInDocsMgmtPanel(data) {
     var filesArr = [];
     $.each(data['filesList'], function (index, value) {
         var date = moment.utc(value[2]).toDate();
-
         var checked = "";
+        var processChecked = sp.escapeHtml(value[4]) === '0' ? false : true;
+
         if(sp.escapeHtml(value[5]) == 1) {
             checked = "checked";
+        }
+
+        if(sp.escapeHtml(value[4]) == 1) {
+            processChecked = "checked";
         }
         var obj = {
             'date': moment(date).format('DD-MM-YYYY HH:mm'),
@@ -59,9 +64,15 @@ function sortDocsInDocsMgmtPanel(data) {
             + '<a><span data-toggle="modal" data-target="#sp-viewer-widgets-modal" style="margin-left: 10px;" class="label label-success sp-file-customize" data-file-hash="' + sp.escapeHtml(value[0]) + '" data-is-process-mode="' + sp.escapeHtml(value[4]) + '">Customize</span></a>'
             + '<a class="sp-preview-file-link"><span id="sp-preview-file-' + sp.escapeHtml(index) + '" style="margin-left: 10px;" class="label label-warning" data-is-process-mode="' + sp.escapeHtml(value[4]) + '">Preview</span></a>'
             +'<div data-id="' + sp.escapeHtml(value[0]) +  '" class="material-switch pull-right options-wrapper">'
-            +'<span class="authLabel">2 factor auth on/off</span>'
+            +'<span class="authLabel">MFA on/off</span>'
             +'<input class="twofactorauth-switch" id="someSwitchOptionPrimary-' + sp.escapeHtml(index) + '" name="double-auth-is-enabled" name="someSwitchOption-' + sp.escapeHtml(index) + '" type="checkbox" ' + checked + '/>'
-            +'<label for="someSwitchOptionPrimary-' + sp.escapeHtml(index) + '" class="label-primary"></label></div></span>'
+            +'<label for="someSwitchOptionPrimary-' + sp.escapeHtml(index) + '" class="label-primary"></label></div>'
+            +'<div data-id="' + sp.escapeHtml(value[0]) +  '" class="material-switch pull-right options-wrapper">'
+            +'<span class="processModeLabel">Mode Portal/Process</span>'
+            +'<input class="processMode-switch" id="procSwitchOptionPrimary-' + sp.escapeHtml(index) + '" name="process-mode-is-enabled" name="procSwitchOption-' + sp.escapeHtml(index) + '" type="checkbox"' + processChecked + '/>'
+            +'<label for="procSwitchOptionPrimary-' + sp.escapeHtml(index) + '" class="label-primary"></label>'
+            + '</div>'
+            +'</span>'
         };
         filesArr.push(obj);
 
@@ -118,7 +129,7 @@ function sortDocsInDocsMgmtPanel(data) {
     $('.sp-file-customize').on('click', function() {
         var fileHash = $(this).attr('data-file-hash');
         var isProcessMode = $(this).attr('data-is-process-mode');
-
+        var processModeChecked = $(this).closest("td").find(".processMode-switch")[0].checked;
         $('#sp-viewer-widgets-modal').load('assets/modal/viewer-widgets-wizard/main.html', function () {
             $('.sp-widgets-customisation__spinner').addClass('sp-widgets-customisation__spinner-show');
 
@@ -146,6 +157,14 @@ function sortDocsInDocsMgmtPanel(data) {
 
             function loadModal() {
                 $.getScript('assets/modal/viewer-widgets-wizard/functions.js', function() {
+                    $('#sp-save-test-widgets-settings__button').attr('data-is-process-mode', processModeChecked);
+                    if(processModeChecked){
+                        $('a[href = "#sp-tab-10"],a[href = "#sp-tab-2"],a[href = "#sp-tab-11"],a[href = "#sp-tab-4"],a[href = "#sp-tab-7"],a[href = "#sp-tab-8"]').addClass('hidden-block');
+                        $('input[name^="hopper-widget-is-enabled"], input[name^="horizontal-hopper-widget-start-page"]').closest('div').addClass('hidden-block');
+                    }
+                    else {
+                        $('a[href = "#sp-tab-10"],a[href = "#sp-tab-2"],a[href = "#sp-tab-11"],a[href = "#sp-tab-4"],a[href = "#sp-tab-7"],a[href = "#sp-tab-8"]').removeClass('hidden-block');
+                    }
                     sp.viewerWidgetsModal.getWidgetsSettings(fileHash, isProcessMode);
 
                     $('#sp-viewer-widgets-modal').off('hidden.bs.modal').on('hidden.bs.modal', function() {
@@ -329,7 +348,12 @@ function addUpdateCustomer(event) {
         'subAction': subAction
     };
     $('#sp-add-update-customer__form input:not([type="hidden"])').each(function() {
-        data[$(this).attr('name')] = $(this).val();
+        // data[$(this).attr('name')] = $(this).val();
+        if($(this).attr('name') === "customerPhone"){
+            data[$(this).attr('name')] = $('#phoneNumber').intlTelInput("getNumber");
+        } else{
+            data[$(this).attr('name')] = $(this).val();
+        }
     });
 
     $.ajax({

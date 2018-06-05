@@ -458,7 +458,7 @@ sp.viewerWidgetsModal = {
      *
      * @param {boolean} isProcessMode - if process mode is enabled.
      */
-    getWidgetsSettings: function(fileHash, isProcessMode) {
+    getWidgetsSettings: function(fileHash) {//, processModeChecked) {
         var widgetSettingsData = null;
         $.getJSON(
             '/api/v1/widgets',
@@ -469,7 +469,7 @@ sp.viewerWidgetsModal = {
                 widgetSettingsData = data;
                 sp.viewerWidgetsModal.displayWidgetsSettings(widgetSettingsData, fileHash);
                 sp.viewerWidgetsModal.setSaveButtons(fileHash);
-                sp.viewerWidgetsModal.setProcessMode(isProcessMode);
+                //sp.viewerWidgetsModal.setProcessMode(processModeChecked);
             }
         );
 
@@ -721,8 +721,10 @@ sp.viewerWidgetsModal = {
                 .prop('checked', widget.startFromFirstPage)
                 .closest('div').removeClass('sp-hide-is-enabled');
 
+            var checked = $('#sp-save-test-widgets-settings__button').attr('data-is-process-mode') === 'true'? true : widget.isHorizontalHopperEnabled;
+
             $('[name="horizontal-hopper-widget-is-enabled"]')
-                .prop('checked', widget.isHorizontalHopperEnabled)
+                .prop('checked', checked)
                 .closest('div').removeClass('sp-hide-is-enabled');
 
             $('.sp-hopper-widget__row').each(function(index) {
@@ -1033,16 +1035,16 @@ sp.viewerWidgetsModal = {
             $('#' + targetId).text('Saving...');
             $('.sp-widgets-customisation__spinner').addClass('sp-widgets-customisation__spinner-show');
 
-            var isProcessModeEnabled = {
-                isProcessMode: $('[name="process-mode-is-enabled"]').prop('checked')
-            };
+            // var isProcessModeEnabled = {
+            //     isProcessMode: $('[name="process-mode-is-enabled"]').prop('checked')
+            // };
 
-            function docsSavedCallback(result) {
+           // function docsSavedCallback(result) {
                 // Setting attribute to current value
-                $("#sp-files-management span[data-file-hash='" + fileHash + "'][data-target='#sp-viewer-widgets-modal']").attr('data-is-process-mode', +isProcessModeEnabled.isProcessMode);
+                //$("#sp-files-management span[data-file-hash='" + fileHash + "'][data-target='#sp-viewer-widgets-modal']").attr('data-is-process-mode', +isProcessModeEnabled.isProcessMode);
                 sp.viewerWidgetsModal.postWidgetSettings(data, fileHash, targetId);
-            }
-            postDocumentSettings(isProcessModeEnabled, fileHash, docsSavedCallback);
+            //}
+           // postDocumentSettings(isProcessModeEnabled, fileHash, docsSavedCallback);
         } else if (0 === settings.length) {
             $('button[data-dismiss="modal"]').click();
             swal('No settings were saved.', '', 'info');
@@ -1829,9 +1831,9 @@ sp.viewerWidgetsModal = {
      * Set Process Mode
      * Add data-is-process-mode attribute for the 'Process Mode' checkbox.
      */
-    setProcessMode: function(isProcessMode) {
-        $('[name="process-mode-is-enabled"]').prop('checked', !!+isProcessMode);
-    }
+    // setProcessMode: function(processModeChecked) {
+    //     $('[name="process-mode-is-enabled"]').prop('checked', processModeChecked);
+    // }
 };
 
 /**
