@@ -389,6 +389,70 @@ sp.widgets = {
             });
         },
     },
+    widget12: {
+        html: $('#sp-tab-12 .sp-widget-item').html(),
+        init: (function() {
+
+            // Add item.
+            $(document).off('click', '#sp-tab-12 .sp-widget__add-item').on('click', '#sp-tab-12 .sp-widget__add-item', function() {
+                $('#sp-tab-12 .sp-widget-item').append(sp.widgets.widget12.html);
+            });
+
+            // Delete item.
+            $(document).on('click', '#sp-tab-12 .sp-widget__delete-item', function() {
+                $(this).closest('.sp-link-widget__item').remove();
+            });
+        })(),
+
+        /**
+         * If url doesn't have //, i.e. the url provided is missing a protocol such as http://.
+         *
+         * @params {string} url - The link given by the user for the link widget.
+         * @returns {string} url - If the url did not have a protocol attached, it is returned with a protocol,
+         * otherwise it is returned as it was received.
+         */
+        urlHttpConfig: function(url) {
+
+            if (! url.match(/^.+?:|^#/)) {
+                url = 'http://' + url;
+            }
+
+            return url;
+        },
+        validate: function() {
+            var isEmpty = false;
+
+            // buttonText2 is not a required field.
+            $('#sp-tab-12 form').find('input[data-item-setting="buttonText1"], input[data-item-setting="link"], input[data-item-setting="pageFrom"], input[data-item-setting="pageTo"]').each(function() {
+
+                if ('' === $(this).val()) {
+                    isEmpty = true;
+                } else {
+                    isEmpty = false;
+                    return false;
+                }
+            });
+
+            return isEmpty;
+        },
+        isWidgetPageOrderValid: function() {
+            return Array.prototype.slice.call(document.querySelectorAll('#sp-tab-12 form')).every(function(element) {
+                var pageFrom = parseInt($(element).find('[data-item-setting="pageFrom"]').val());
+                var pageTo = parseInt($(element).find('[data-item-setting="pageTo"]').val());
+
+                if (pageFrom > pageTo) {
+                    $(element).find('[data-item-setting="pageFrom"]').addClass('sp-widget-form-error');
+                    $(element).find('[data-item-setting="pageTo"]').addClass('sp-widget-form-error');
+                    sp.error.handleError('You cannot set the widget to hide before it shows.');
+                    sp.viewerWidgetsModal.openErrorTab();
+
+                    return false;
+                } else {
+                    return true;
+                }
+            });
+        },
+    },
     widget10: {
         init: (function() {
             $('#sp-email-required-widget__help-button').click(function() {
