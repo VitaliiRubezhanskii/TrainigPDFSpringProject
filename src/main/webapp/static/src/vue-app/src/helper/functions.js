@@ -68,7 +68,7 @@ import sp from '../constants/spViewer.js';
 function modalLinkAndTask(url){
   Vue.swal({
     cancelButtonText: 'Close',
-    html: `<iframe class="link-task" style="height: 75vh" frameborder="0" src="${url}"  sandbox="allow-same-origin allow-scripts allow-popups" allow="geolocation; microphone; camera"></iframe>`,
+    html: `<iframe class="link-task" style="height: 75vh" frameborder="0" src="${url}" allow="geolocation; microphone; camera"></iframe>`,
     showConfirmButton: false,
     showCancelButton: true,
     width: 800,
