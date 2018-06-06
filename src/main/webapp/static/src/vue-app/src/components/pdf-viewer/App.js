@@ -9,6 +9,7 @@ import Toolbar from '../toolbar/Toolbar.vue';
 import PoweredBy from '../powered/PoweredBy.vue';
 import Arrows from '../arrows/Arrows.vue';
 import sp from '../../constants/spViewer.js';
+import { postData } from '../../helper/functions.js';
 
 export default {
   name: 'app',
@@ -43,10 +44,24 @@ export default {
       .then(data => {
         this.toolbarData = data;
         this.styleButton = {'backgroundColor': this.toolbarData.toolbarButtonBackground};
-        this.colorText = this.toolbarData.toolbarCta2Color;
+        this.colorText = this.toolbarData.toolbarCta1Color;
       });
+    this.sendMessages();
   },
   methods: {
+    sendMessages(){
+      let event = {
+        type: 'OPEN_SLIDES',
+        channelFriendlyId: sp.viewer.linkHash,
+        sessionId: this.sp.SESSION_ID,
+        param1int: this.pages,
+        param3str: navigator.userAgent,
+        data: {
+          dispatchedEventType: "spsessionstart"
+        }
+      };
+      postData(event, this.sp.API_URL);
+    },
     onLoaded(){
       this.load = true;
       this.pageHeight = document.getElementsByTagName('canvas')[0].scrollHeight;

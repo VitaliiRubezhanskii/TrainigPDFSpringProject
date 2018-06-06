@@ -688,7 +688,7 @@ $(document).ready(function() {
             swal({
                     title: `Please confirm turning ${targetElement.checked? 'process':'portal'} mode`,
                     type: "warning",
-                    text:`<div class="info-block" data-title= "${targetElement.checked ? "i – Process mode is usually used to run a 'to-do' process with tasks and a process bar. widgets available in this mode are: process Hopper, Questions widget, Video, Testimonial, task widget, code widget":"i – Portal mode is usually used to run a presentation style or informational portal. widgets available in this mode are: Navigation Hopper and horizontal, Questions widget, Video, Testimonial, task widget, like widget, calendly widget and code widget"}"><i class="fa fa-info" aria-hidden="true"></i></div>`,
+                    text:`<div class="info-block" data-title= "${targetElement.checked ? "i – Process mode is usually used to run a 'to-do' process with tasks and a process bar. Widgets available in this mode are: process Hopper, Questions widget, Video, Testimonial, Task widget":"i – Portal mode is usually used to run a presentation style or informational portal. widgets available in this mode are: Navigation Hopper and horizontal, Questions widget, Video, Testimonial, Task widget, Like widget, Calendly widget and Code widget"}"><i class="fa fa-info" aria-hidden="true"></i></div>`,
                     html: true,
                     confirmButtonText: `Yes, turn on ${targetElement.checked? 'process':'portal'} mode`,
                     showCancelButton: true,

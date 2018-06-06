@@ -8,7 +8,7 @@
     >
       <img
         class="logo"
-        :src="toolbarData.logoImage ? toolbarData.logoImage : '../../assets/logo-1236x269.png'"
+        :src="toolbarData.logoImage === 'https://www.slidepiper.com' ? '../../assets/logo-1236x269.png' : toolbarData.logoImage"
       >
     </a>
     <div class="toolbar-button-container">

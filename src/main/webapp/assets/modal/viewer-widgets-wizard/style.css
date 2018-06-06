@@ -1,3 +1,11 @@
+.sp-link-widget__item-configuration{
+  float: right;
+}
+
+.sp-widget__delete-item{
+  float: right;
+}
+
 .sp-add-hopper-widget__a,
 .sp-add-video-widget__a,
 .sp-widget__add-item {

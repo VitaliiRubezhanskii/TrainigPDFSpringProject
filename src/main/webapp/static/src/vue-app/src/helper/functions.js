@@ -68,7 +68,7 @@ import sp from '../constants/spViewer.js';
 function modalLinkAndTask(url){
   Vue.swal({
     cancelButtonText: 'Close',
-    html: `<iframe class="link-task" style="height: 75vh" frameborder="0" src="${url}" allow="geolocation; microphone; camera"></iframe>`,
+    html: `<iframe class="link-task" style="height: 75vh" frameborder="0" src="${url}"  sandbox="allow-same-origin allow-scripts allow-popups" allow="geolocation; microphone; camera"></iframe>`,
     showConfirmButton: false,
     showCancelButton: true,
     width: 800,
@@ -90,6 +90,7 @@ function postData(data,url){
 function animateScroll(){
   return $('#sp-widget5__horizontal-hopper-container').animate({ scrollLeft: $('#sp-widget5__horizontal-hopper-container>div.active')[0].offsetLeft + $('#sp-widget5__horizontal-hopper-container>div.active')[0].offsetWidth/2 - $('#sp-widget5__horizontal-hopper-container')[0].offsetWidth / 2},'fast');
 }
+
 function uploadDoc(){
   Vue.swal("Success!", "Your file was uploaded!", "success");
 }
@@ -98,5 +99,6 @@ export {
   modalQuestions,
   modalLinkAndTask,
   animateScroll,
-  uploadDoc
+  uploadDoc,
+  postData
 };
