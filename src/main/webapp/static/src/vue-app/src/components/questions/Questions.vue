@@ -51,6 +51,10 @@ export default{
         this.widget.confirmButtonText,
         this.widget.customEmailValidationErrorMessage
       );
+      $(`<div class="formMessage">${ this.widget.formMessage }</div>`).insertBefore($(".swal2-buttonswrapper"));
+      $('.swal2-confirm').on('click', () => {
+        this.widget.customEmailValidationErrorMessage ? $('.swal2-validationerror').text('hhh') : 'Invalid email address';
+      });
     }
   },
   computed: {
@@ -62,6 +66,28 @@ export default{
 </script>
 
 <style>
+.star-color{
+  color: #f27474;
+}
+
+.formMessage{
+  margin-top: 15px;
+  font-size: 16px;
+  font-weight: 300;
+  color: #808080;
+}
+
+.swal2-validationerror{
+  color: #f27474 !important;
+  background: none !important;
+  text-align: left !important;
+  padding: 10px 20px 10px 20px !important;
+}
+
+.swal2-popup .swal2-validationerror::before{
+  display: none !important;
+}
+
 input,
 textarea {
   margin: 0 !important;

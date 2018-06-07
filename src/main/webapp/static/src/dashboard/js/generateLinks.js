@@ -158,9 +158,14 @@ function sortDocsInDocsMgmtPanel(data) {
             function loadModal() {
                 $.getScript('assets/modal/viewer-widgets-wizard/functions.js', function() {
                     $('#sp-save-test-widgets-settings__button').attr('data-is-process-mode', processModeChecked);
+                    $('.rightSide').css('padding-left', '0');
+                    $('.endDoc').css('padding-left', '0');
                     if(processModeChecked){
                         $('a[href = "#sp-tab-10"],a[href = "#sp-tab-2"],a[href = "#sp-tab-11"],a[href = "#sp-tab-4"],a[href = "#sp-tab-7"],a[href = "#sp-tab-8"]').addClass('hidden-block');
                         $('input[name^="hopper-widget-is-enabled"], input[name^="horizontal-hopper-widget-start-page"]').closest('div').addClass('hidden-block');
+                        // $('#sp-question-widget__widget-location').addClass('hidden-block');
+                        // $('.rightSide').text('Right Side top');
+                        // $('.endDoc').text('Right Side bottom');
                     }
                     else {
                         $('a[href = "#sp-tab-10"],a[href = "#sp-tab-2"],a[href = "#sp-tab-11"],a[href = "#sp-tab-4"],a[href = "#sp-tab-7"],a[href = "#sp-tab-8"]').removeClass('hidden-block');

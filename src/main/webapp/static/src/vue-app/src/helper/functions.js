@@ -27,7 +27,7 @@ import sp from '../constants/spViewer.js';
           <label for="sp-widget3-message" class="sp-widget3-label">${ customMessageLabel }</label>
           <textarea class="swal2-textarea" id="sp-widget3-message" rows="5" autofocus></textarea>
           </div>
-          <label for="sp-widget3-email" class="sp-widget3-label"><span>* </span>${ customEmailLabel }</label>
+          <label for="sp-widget3-email" class="sp-widget3-label"><span class="star-color">* </span>${ customEmailLabel }</label>
           </form>`,
     input: 'email',
     cancelButtonText: `${cancelButtonText}`,
@@ -63,6 +63,7 @@ import sp from '../constants/spViewer.js';
       Vue.swal("Success!", "Your message has been sent.", "success");
     }
   });
+
 }
 
 function modalLinkAndTask(url){
