@@ -48,8 +48,8 @@ public class Application extends SpringBootServletInitializer {
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.slidepiper.controller"))
-                .paths(PathSelectors.ant("/*"))
+                .apis(RequestHandlerSelectors.basePackage("com.slidepiper"))
+                .paths(PathSelectors.any())
                 .build()
                 .apiInfo(metaData());
     }

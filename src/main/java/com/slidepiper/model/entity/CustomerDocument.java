@@ -1,7 +1,5 @@
 package com.slidepiper.model.entity;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.slidepiper.widget.WidgetSerializer;
 import lombok.Getter;
 import lombok.Setter;
 
