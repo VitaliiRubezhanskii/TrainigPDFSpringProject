@@ -2065,7 +2065,7 @@ function postDocumentSettings(data, fileHash, callback) {
 
 function postUploadWidgetSettings(data, fileHash) {
     $.ajax({
-        url:'/api/v1/upload-document-widget?documentId=' + fileHash,
+        url:'/api/v1/upload-document-widget/' + fileHash,
         method: 'POST',
         contentType: 'application/json',
         data: JSON.stringify(data),
@@ -2073,9 +2073,9 @@ function postUploadWidgetSettings(data, fileHash) {
             xhr.setRequestHeader(SP.CSRF_HEADER, SP.CSRF_TOKEN);
         },
         // success: callback,
-        error: function() {
-            swal('Error', 'Something went wrong. Your settings weren\'t saved.', 'error');
-        }
+        // error: function() {
+        //     swal('Error', 'Something went wrong. Your settings weren\'t saved.', 'error');
+        // }
     });
 }
 
