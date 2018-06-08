@@ -5,6 +5,7 @@
     <div
       class="sp-right-side-widgets"
       @click="showModal"
+      :style="{ top: `${ widget.locationProcessMode.top ? '160px' : 'inherit' }` }"
     >
       <button
         class="widget sp-widget-button sp-widget-font-fmaily sp--direction-ltr"
@@ -51,9 +52,10 @@ export default{
         this.widget.confirmButtonText,
         this.widget.customEmailValidationErrorMessage
       );
+
       $(`<div class="formMessage">${ this.widget.formMessage }</div>`).insertBefore($(".swal2-buttonswrapper"));
       $('.swal2-confirm').on('click', () => {
-        this.widget.customEmailValidationErrorMessage ? $('.swal2-validationerror').text('hhh') : 'Invalid email address';
+        this.widget.customEmailValidationErrorMessage ? $('.swal2-validationerror').text(`${this.widget.customEmailValidationErrorMessage}`) : 'Invalid email address';
       });
     }
   },

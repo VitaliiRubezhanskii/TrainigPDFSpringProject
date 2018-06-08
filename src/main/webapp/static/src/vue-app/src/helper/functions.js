@@ -57,7 +57,7 @@ import sp from '../constants/spViewer.js';
         )
       })
     },
-    allowOutsideClick: () => !swal.isLoading()
+    allowOutsideClick: () => !Vue.swal.isLoading()
   }).then((result) => {
     if (result.value) {
       Vue.swal("Success!", "Your message has been sent.", "success");

@@ -49,7 +49,7 @@ sp.uploadFiles = {
         });
     } else if ('update' === action) {
         formData.append('file', sp.uploadFiles.files[0]);
-        url += '/' + sp.file.fileHash;
+        url += '/' + sp.fileHash;
         type = 'PUT';
     }
     

@@ -673,6 +673,18 @@ sp.viewerWidgetsModal = {
                 $('[name="spQuestionWidgetIsLocationBottom"]').prop('checked', widget.items[0].location.bottom);
             }
 
+            //location
+            if (typeof widget.items[0].locationProcessMode !== 'undefined'
+                && typeof widget.items[0].locationProcessMode.top !== 'undefined') {
+                $('[name="spQuestionWidgetIsLocationTop"]').prop('checked', widget.items[0].locationProcessMode.top);
+            }
+
+            if (typeof widget.items[0].locationProcessMode !== 'undefined'
+                && typeof widget.items[0].locationProcessMode.bottom !== 'undefined') {
+                $('[name="spQuestionWidgetIsLocationRightBottom"]').prop('checked', widget.items[0].locationProcessMode.bottom);
+            }
+            ///////
+
             if (typeof widget.items[0].isDefaultButtonColorEnabled !== 'undefined') {
                 $('.spQuestionWidgetIsDefaultButtonColorEnabled').prop('checked', widget.items[0].isDefaultButtonColorEnabled);
             }
@@ -1204,6 +1216,10 @@ sp.viewerWidgetsModal = {
                         location: {
                             right: $('[name="spQuestionWidgetIsLocationRight"]').prop('checked'),
                             bottom: $('[name="spQuestionWidgetIsLocationBottom"]').prop('checked'),
+                        },
+                        locationProcessMode: {
+                            top: $('[name="spQuestionWidgetIsLocationTop"]').prop('checked'),
+                            bottom: $('[name="spQuestionWidgetIsLocationRightBottom"]').prop('checked'),
                         },
                     }
                 ]
