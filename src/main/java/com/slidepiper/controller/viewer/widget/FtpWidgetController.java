@@ -1,6 +1,6 @@
 package com.slidepiper.controller.viewer.widget;
 
-import com.slidepiper.model.input.FtpWidgetDataInput;
+import com.slidepiper.model.input.widget.FtpWidgetDataInput;
 import com.slidepiper.model.output.ExceptionResponseOutput;
 import com.slidepiper.service.viewer.widget.FtpWidgetService;
 import lombok.AllArgsConstructor;
