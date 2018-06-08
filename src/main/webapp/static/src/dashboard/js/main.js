@@ -683,30 +683,8 @@ $(document).ready(function() {
 });
 
 function saveAuthSettings(data, fileHash) {
-    // $.ajax({
-    //     url:'/api/v1/documents/' + fileHash,
-    //     method: 'POST',
-    //     contentType: 'application/json',
-    //     data: JSON.stringify(data),
-    //     beforeSend: function(xhr) {
-    //         xhr.setRequestHeader(SP.CSRF_HEADER, SP.CSRF_TOKEN);
-    //     },
-    //     error: function() {
-    //         swal('Error', 'Something went wrong. Your settings weren\'t saved.', 'error');
-    //     }
-    // });
-
-    var data = {
-        "icon": "123",
-        "pageFrom": 1,
-        "pageTo": 1,
-        "buttonText1": "12",
-        "buttonText2" : "34",
-        "isEnabled": 1
-    };
-
     $.ajax({
-        url:'/api/v1/upload-document-widget/' + fileHash,
+        url:'/api/v1/documents/' + fileHash,
         method: 'POST',
         contentType: 'application/json',
         data: JSON.stringify(data),
