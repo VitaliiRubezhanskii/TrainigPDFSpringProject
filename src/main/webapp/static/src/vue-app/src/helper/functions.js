@@ -3,23 +3,23 @@ import VueSweetalert2 from 'vue-sweetalert2';
 import $ from 'jquery';
 import sp from '../constants/spViewer.js';
 
- function modalTestimonials(testimonials, personName, personTitle, imageUrl){
+function modalTestimonials(testimonials, personName, personTitle, imageUrl){
   return (Vue.swal({
-              html: `<div><i class="fa fa-quote-left"></i>${testimonials}<i class="fa fa-quote-right"></i></div>
+    html: `<div><i class="fa fa-quote-left"></i>${testimonials}<i class="fa fa-quote-right"></i></div>
                       <div id="sp-widget6__person-name">${personName}</div>
                       <div id="sp-widget6__person-title">${personTitle}</div>`,
-              imageUrl: imageUrl,
-              imageWidth: 200,
-              imageAlt: 'Custom image',
-              animation: false,
+    imageUrl: imageUrl,
+    imageWidth: 200,
+    imageAlt: 'Custom image',
+    animation: false,
   }));
 }
 
- function modalQuestions(url,title,emailLabel,messageLabel,cancelText,confirmText,emailError){
-   let customEmailLabel = emailLabel ? emailLabel : 'Enter your email address:';
-   let customMessageLabel = messageLabel? messageLabel:'Enter your message:';
-   let cancelButtonText = cancelText ? cancelText : 'Cancel';
-   let confirmButtonText = confirmText?confirmText:'Submit';
+function modalQuestions(url,title,emailLabel,messageLabel,cancelText,confirmText,emailError){
+  let customEmailLabel = emailLabel ? emailLabel : 'Enter your email address:';
+  let customMessageLabel = messageLabel? messageLabel:'Enter your message:';
+  let cancelButtonText = cancelText ? cancelText : 'Cancel';
+  let confirmButtonText = confirmText?confirmText:'Submit';
   return Vue.swal({
     title: title,
     html:`<form id="widget3-form" class="sp-widget-font-fmaily">
@@ -36,33 +36,33 @@ import sp from '../constants/spViewer.js';
     showLoaderOnConfirm: true,
     preConfirm: (email) => {
     let data = {
-        type: sp.viewer.eventName.viewerWidgetAskQuestion,
-        channelFriendlyId: sp.viewer.linkHash,
-        sessionId: SP.SESSION_ID,
-        param_1_varchar: $('#sp-widget3').text(),
-        param_2_varchar: $('#sp-widget3-message').val(),
-        param_3_varchar: $('#sp-widget3-email').val(),
-        param_4_varchar: confirmButtonText,
-        param_5_varchar: cancelButtonText,
-        param_6_varchar: customMessageLabel,
-        param_7_varchar: customEmailLabel,
-        param_8_varchar: 'Invalid email address',
-        param_9_varchar: 'right',
-        param_10_varchar: title,
+      type: sp.viewer.eventName.viewerWidgetAskQuestion,
+      channelFriendlyId: sp.viewer.linkHash,
+      sessionId: SP.SESSION_ID,
+      param_1_varchar: $('#sp-widget3').text(),
+      param_2_varchar: $('#sp-widget3-message').val(),
+      param_3_varchar: $('#sp-widget3-email').val(),
+      param_4_varchar: confirmButtonText,
+      param_5_varchar: cancelButtonText,
+      param_6_varchar: customMessageLabel,
+      param_7_varchar: customEmailLabel,
+      param_8_varchar: 'Invalid email address',
+      param_9_varchar: 'right',
+      param_10_varchar: title,
     }
     return postData(data, url)
       .catch(error => {
-        Vue.swal.showValidationError(
-          `Request failed: ${error}`
-        )
-      })
-    },
-    allowOutsideClick: () => !swal.isLoading()
-  }).then((result) => {
+      Vue.swal.showValidationError(
+      `Request failed: ${error}`
+    )
+  })
+},
+  allowOutsideClick: () => !Vue.swal.isLoading()
+}).then((result) => {
     if (result.value) {
-      Vue.swal("Success!", "Your message has been sent.", "success");
-    }
-  });
+    Vue.swal("Success!", "Your message has been sent.", "success");
+  }
+});
 }
 
 function modalLinkAndTask(url){

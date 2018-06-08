@@ -720,12 +720,12 @@
                     <div id="sp-tab-12" class="tab-pane">
                         <div class="panel-body">
                             <strong>Upload Widget</strong>
-                            <div class="sp-customization-option__p sp-hide-is-enabled">
-                                <input type="checkbox" name="sp-widget12--is-enabled"> Is Enabled?
-                            </div>
                             <hr>
                             <div class="sp-widget-item">
                                 <div class="sp-link-widget__item m-xs p-xs">
+                                    <div class="sp-customization-option__p">
+                                        <input type="checkbox" name="sp-widget12--is-enabled"> Is Enabled?
+                                    </div>
                                     <div class="sp-link-widget__item-header container-fluid">
                                         <div class="row">
                                             <div class="col-sm-6 sp-link-widget__item-title">&lt;Button Text 1&gt;</div>
@@ -734,6 +734,16 @@
                                                 <i class="sp-link-widget__item-configuration-icon fa fa-plus"></i>
                                                 <span class="sp-link-widget__item-configuration-title"> Settings</span>
                                             </div>
+
+                                        </div>
+                                        <hr>
+                                        <div>
+                                            <input type="radio" name="group1" id="documentToDownload">
+                                            <label for="documentToDownload">Document To Download</label>
+                                        </div>
+                                        <div>
+                                            <input type="radio" name="group1" id="uploadRequiredDocument">
+                                            <label for="uploadRequiredDocument">Upload Required Document</label>
                                         </div>
                                     </div>
 
@@ -795,6 +805,18 @@
                                                     </div>
                                                     <div class="radio sp--margin-left-0">
                                                         <label><input type="radio" name="icon" data-item-setting="icon" data-icon="fa-pencil-square-o"><i class="fa fa-pencil-square-o"></i> Signature</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group uploadLayout">
+                                                <label class="col-lg-4 control-label">Layout</label>
+                                                <div class="col-lg-8">
+                                                    <div class="radio sp--margin-left-0">
+                                                        <label><input type="radio" name="layout" data-item-setting="layout" data-layout="external-link" checked> External Link</label>
+                                                    </div>
+                                                    <div class="radio sp--margin-left-0">
+                                                        <label><input type="radio" name="layout" data-item-setting="layout" data-layout="inside-window"> Inside window</label>
                                                     </div>
                                                 </div>
                                             </div>

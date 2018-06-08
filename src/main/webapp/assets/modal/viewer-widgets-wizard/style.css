@@ -1,3 +1,7 @@
+ .sp-link-widget__item-configuration{
+   float: right;
+ }
+
 .sp-add-hopper-widget__a,
 .sp-add-video-widget__a,
 .sp-widget__add-item {
@@ -22,6 +26,7 @@
 
 .sp-customization-option__p {
   margin-top: 15px;
+  margin-bottom: 15px;
 }
 
 .clearfix{
