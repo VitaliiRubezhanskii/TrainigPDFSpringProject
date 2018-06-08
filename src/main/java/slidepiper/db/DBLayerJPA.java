@@ -15,18 +15,25 @@ public class DBLayerJPA implements DBLayerService {
 
     @Override
     public void deleteCustomer(Customer customer) {
+      //  Customer deleteCustomer=getCustomerByEmail(customer.getEmail());
         dbLayerRepository.delete(customer);
     }
 
+
+
     @Override
-    public int addNewCustomer(Customer customer) {
+    public void addNewCustomer(Customer customer) {
         dbLayerRepository.save(customer);
-        return 0;
     }
 
     @Override
     public String getCustomerName(Customer customer) {
         return null;
+    }
+
+    @Override
+    public Customer getCustomerByEmail(String email, String username) {
+        return dbLayerRepository.getCustomerByEmail(email);
     }
 
     @Override
@@ -44,8 +51,5 @@ public class DBLayerJPA implements DBLayerService {
         return false;
     }
 
-    @Override
-    public Customer getCustomerByEmail(String email) {
-        return dbLayerRepository.getCustomerByEmail(email);
-    }
+
 }

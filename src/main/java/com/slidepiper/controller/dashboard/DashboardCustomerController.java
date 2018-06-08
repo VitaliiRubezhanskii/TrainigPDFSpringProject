@@ -19,9 +19,9 @@ import java.security.Principal;
 @PreAuthorize("hasRole('ROLE_USER')")
 @ComponentScan("slidepiper.db")
 public class DashboardCustomerController {
-
-    @Autowired
-    private DBLayerJPA dbLayerService;
+//
+//    @Autowired
+//    private DBLayerJPA dbLayerService;
 
     /** @deprecated */
     @PostMapping("/api/v1/customers")
@@ -43,17 +43,17 @@ public class DashboardCustomerController {
 
 
 
-//    /** @deprecated */
-//    @PostMapping("/api/v1/customer-delete")
-//    public void deleteCustomer(Principal principal, @RequestBody String body) {
-//        JSONObject input = new JSONObject(body);
-//        DbLayer.deleteCustomer(input.getString("customer_email"), principal.getName());
-//    }
-
-
+    /** @deprecated */
     @PostMapping("/api/v1/customer-delete")
-    public void deleteCustomer(@RequestBody Customer customer){
-        Customer customerToDelete=dbLayerService.getCustomerByEmail(customer.getEmail());
-        dbLayerService.deleteCustomer(customerToDelete);
+    public void deleteCustomer(Principal principal, @RequestBody String body) {
+        JSONObject input = new JSONObject(body);
+        DbLayer.deleteCustomer(input.getString("customer_email"), principal.getName());
     }
+
+
+//    @PostMapping("/api/v1/customer-delete")
+//    public void deleteCustomer(@RequestBody Customer customer){
+//        Customer customerToDelete=dbLayerService.getCustomerByEmail(customer.getEmail());
+//        dbLayerService.deleteCustomer(customerToDelete);
+//    }
 }

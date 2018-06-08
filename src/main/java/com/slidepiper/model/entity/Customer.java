@@ -16,7 +16,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "customers")
 @Data
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 public class Customer implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

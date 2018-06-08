@@ -70,7 +70,8 @@ public class DbLayer {
 
 		// customer does not exist.
 		if (getCustomerName(email, salesMan) == null && !isCustomerIDExist(customerID, salesMan)) {
-			//addNewCustomer(new Customer(email,firstName,lastName,company,lastName,salesMan,groupName,customerID,phone));
+//			Customer customer=new Customer(email,firstName,lastName,company,lastName,salesMan,groupName,customerID,phone);
+//			addNewCustomer(customer);
 
 		    String query = "INSERT INTO customers(email, name, first_name, last_name, sales_man, company, groupName, customer_id, phone) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
             String fullName = null;
@@ -110,6 +111,8 @@ public class DbLayer {
                 ex.printStackTrace();
                 return 0;
             }
+
+
 		} else if (null != subAction && subAction.equals("add")) {
 		    return -1;
 		} else if (null != subAction && subAction.equals("update")) {
@@ -152,7 +155,13 @@ public class DbLayer {
 		}
 		return 0;
     }
-	
+
+
+//    public String getCustomerName2(String customer_email, String salesman_email){
+//		dbLayerService.getCustomerName(customer_email,salesman_email);
+//
+//	}
+
 	// if no cust, returns null.
 	public static String getCustomerName(String customer_email, String salesman_email){		
 		String name = null;
