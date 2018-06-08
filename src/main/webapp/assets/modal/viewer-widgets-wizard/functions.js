@@ -389,6 +389,70 @@ sp.widgets = {
             });
         },
     },
+    widget12: {
+        html: $('#sp-tab-12 .sp-widget-item').html(),
+        init: (function() {
+
+            // Add item.
+            $(document).off('click', '#sp-tab-12 .sp-widget__add-item').on('click', '#sp-tab-12 .sp-widget__add-item', function() {
+                $('#sp-tab-12 .sp-widget-item').append(sp.widgets.widget12.html);
+            });
+
+            // Delete item.
+            $(document).on('click', '#sp-tab-12 .sp-widget__delete-item', function() {
+                $(this).closest('.sp-link-widget__item').remove();
+            });
+        })(),
+
+        /**
+         * If url doesn't have //, i.e. the url provided is missing a protocol such as http://.
+         *
+         * @params {string} url - The link given by the user for the link widget.
+         * @returns {string} url - If the url did not have a protocol attached, it is returned with a protocol,
+         * otherwise it is returned as it was received.
+         */
+        urlHttpConfig: function(url) {
+
+            if (! url.match(/^.+?:|^#/)) {
+                url = 'http://' + url;
+            }
+
+            return url;
+        },
+        validate: function() {
+            var isEmpty = false;
+
+            // buttonText2 is not a required field.
+            $('#sp-tab-12 form').find('input[data-item-setting="buttonText1"], input[data-item-setting="link"], input[data-item-setting="pageFrom"], input[data-item-setting="pageTo"]').each(function() {
+
+                if ('' === $(this).val()) {
+                    isEmpty = true;
+                } else {
+                    isEmpty = false;
+                    return false;
+                }
+            });
+
+            return isEmpty;
+        },
+        isWidgetPageOrderValid: function() {
+            return Array.prototype.slice.call(document.querySelectorAll('#sp-tab-12 form')).every(function(element) {
+                var pageFrom = parseInt($(element).find('[data-item-setting="pageFrom"]').val());
+                var pageTo = parseInt($(element).find('[data-item-setting="pageTo"]').val());
+
+                if (pageFrom > pageTo) {
+                    $(element).find('[data-item-setting="pageFrom"]').addClass('sp-widget-form-error');
+                    $(element).find('[data-item-setting="pageTo"]').addClass('sp-widget-form-error');
+                    sp.error.handleError('You cannot set the widget to hide before it shows.');
+                    sp.viewerWidgetsModal.openErrorTab();
+
+                    return false;
+                } else {
+                    return true;
+                }
+            });
+        },
+    },
     widget10: {
         init: (function() {
             $('#sp-email-required-widget__help-button').click(function() {
@@ -955,6 +1019,7 @@ sp.viewerWidgetsModal = {
      */
     validateWidgetsSettings: function(fileHash, targetId) {
         var settings = [];
+        var deletedWidgetIndex = null;
 
         $('.sp-viewer-widgets-modal input').removeClass('sp-widget-form-error');
 
@@ -1002,6 +1067,14 @@ sp.viewerWidgetsModal = {
             settings.push(sp.viewerWidgetsModal.saveLinkWidget(fileHash));
         }
 
+        //upload widget
+        if (! sp.widgets.widget12.validate()) {
+            settings.push(sp.viewerWidgetsModal.saveUploadWidget(fileHash));
+            deletedWidgetIndex = settings.length - 1;
+            var dataUpload = sp.viewerWidgetsModal.saveUploadWidget(fileHash);
+            postUploadWidgetSettings(dataUpload, fileHash)
+        }
+
         settings.push(sp.viewerWidgetsModal.emailRequiredWidget(fileHash));
 
         settings.push(sp.viewerWidgetsModal.saveShareWidget(fileHash));
@@ -1025,6 +1098,10 @@ sp.viewerWidgetsModal = {
                 isValidWidgetSettings = true;
             }
         });
+
+        if (deletedWidgetIndex) {
+            settings.splice(deletedWidgetIndex, 1);
+        }
 
         if (isValidWidgetSettings) {
             $('.tabs-container').contents().hide();
@@ -1506,7 +1583,63 @@ sp.viewerWidgetsModal = {
             return undefined;
         }
     },
+// widget 12
+    saveUploadWidget: function(fileHash) {
 
+        var uploadWidget = {
+                widgetId: 12,
+                items: [],
+        };
+
+        var isUploadWidgetSettingEmpty = false;
+
+        $('#sp-tab-12 .sp-link-widget__item').each(function() {
+            var item = {};
+
+            var isEnabled = $(this).find('input[name = "sp-widget12--is-enabled"]')[0].checked;
+
+            $(this).find('[data-item-setting]').each(function() {
+                item['isEnabled'] = isEnabled;
+                if ('' === $(this).val() && $(this).attr('data-item-setting') !== 'buttonText2'
+                    && $(this).attr('data-item-setting') !== 'icon'
+                    && $(this).attr('data-item-setting') !== 'layout'
+                    && $(this).attr('data-item-setting') !== 'status') {
+
+                    sp.error.handleError('You must fill the field.');
+                    $(this).addClass('sp-widget-form-error');
+                    sp.viewerWidgetsModal.openErrorTab();
+                    isUploadWidgetSettingEmpty = true;
+
+                } else if ('link' === $(this).attr('data-item-setting')) {
+                    var url = sp.widgets.widget12.urlHttpConfig($(this).val());
+                    item[$(this).attr('data-item-setting')] = url;
+
+                } else if ('icon' === $(this).attr('data-item-setting')) {
+                    if ($(this).prop('checked')) {
+                        item['icon'] = $(this).attr('data-icon');
+                    }
+                } else if ('layout' === $(this).attr('data-item-setting')) {
+                    if ($(this).prop('checked')) {
+                        item['layout'] = $(this).attr('data-layout');
+                    }
+                }  else {
+                    item[$(this).attr('data-item-setting')] = $(this).val();
+                }
+            });
+            uploadWidget.items.push(item)
+        })
+
+        if (! isUploadWidgetSettingEmpty) {
+
+            if (sp.widgets.widget12.isWidgetPageOrderValid()) {
+                return uploadWidget;
+            } else {
+                return undefined;
+            }
+        } else {
+            return undefined;
+        }
+    },
     emailRequiredWidget: function(fileHash) {
 
         var emailRequiredWidget = {
@@ -1929,3 +2062,27 @@ function postDocumentSettings(data, fileHash, callback) {
         }
     });
 }
+
+function postUploadWidgetSettings(data, fileHash) {
+    $.ajax({
+        url:'/api/v1/upload-document-widget?documentId=' + fileHash,
+        method: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(data),
+        beforeSend: function(xhr) {
+            xhr.setRequestHeader(SP.CSRF_HEADER, SP.CSRF_TOKEN);
+        },
+        // success: callback,
+        error: function() {
+            swal('Error', 'Something went wrong. Your settings weren\'t saved.', 'error');
+        }
+    });
+}
+
+// $('#uploadRequiredDocument, #documentToDownload').on('change',()=> {
+//     if($('#uploadRequiredDocument')[0].checked) {
+//        $('.uploadLayout').css("display","none");
+//     } else {
+//     $('.uploadLayout').css("display","block");
+//     }
+// })
