@@ -1,7 +1,10 @@
 package com.slidepiper.controller.viewer.customerlogin;
 
+import com.slidepiper.model.entity.Channel;
+import com.slidepiper.repository.ChannelRepository;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import org.springframework.security.web.savedrequest.SavedRequest;
@@ -27,6 +30,9 @@ public class CustomerController {
     private final Log logger = LogFactory.getLog(getClass());
     private final String templatesPrefix;
 
+    @Autowired
+    private ChannelRepository channelRepository;
+
     public CustomerController(@Value("${slidepiper.templates.prefix}") String templatesPrefix) {
         this.templatesPrefix = templatesPrefix;
     }
@@ -42,16 +48,20 @@ public class CustomerController {
             return "redirect:/accessdenied";
         }
 
+        Channel channel=channelRepository.findByFriendlyId("x2z35n");
+
         initialChannelFriendlyId = savedRequest.getParameterMap().get("f")[0];
 
         model.addAttribute("fileHash", initialChannelFriendlyId);
+        model.addAttribute("mail",channel.getSalesManEmail());
+        System.out.println(channel.getSalesManEmail());
         if (Objects.nonNull(error)) {
             model.addAttribute("error", new Object() {String errorMessage = "Bad username or password";});
         } else {
             model.addAttribute("error", false);
         }
 
-        return String.join("/",templatesPrefix, LOGIN_CUSTOMER_PAGE);
+        return "logincustomer";//String.join("/",templatesPrefix, LOGIN_CUSTOMER_PAGE);
     }
 
     @GetMapping("/view/verifycode")
@@ -63,8 +73,10 @@ public class CustomerController {
     }
 
     @GetMapping("/accessdenied")
-    public String accessDenied(HttpServletRequest request) {
-
-        return String.join("/",templatesPrefix, ACCESS_DENIED_PAGE);
+    public String accessDenied(HttpServletRequest request,Model model) {
+        Channel channel=channelRepository.findByFriendlyId("x2z35n");
+        model.addAttribute("mail",channel.getSalesManEmail());
+        System.out.println(channel.getSalesManEmail());
+        return "accessdenied"; //String.join("/",templatesPrefix, ACCESS_DENIED_PAGE);
     }
 }

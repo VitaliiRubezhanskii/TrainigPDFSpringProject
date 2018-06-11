@@ -38,6 +38,9 @@ dependencyManagement {
 }
 
 dependencies {
+    compile("org.springframework.boot:spring-boot-starter-thymeleaf")
+    compile ("org.thymeleaf.extras:thymeleaf-extras-springsecurity4:3.0.0.RELEASE")
+    compile ("io.github.jpenren:thymeleaf-spring-data-dialect:3.1.1")
     compile 'com.amazonaws:aws-java-sdk-cloudfront'
     compile 'com.amazonaws:aws-java-sdk-s3'
     compile 'com.amazonaws:aws-java-sdk-ses'
@@ -91,17 +94,17 @@ war {
     classpath = sourceSets.main.output + configurations.runtime - configurations.customProvidedRuntime
     exclude('static/src')
 
-    def tag = new ByteArrayOutputStream()
-    exec {
-        commandLine 'git', 'describe', '--tags', '--abbrev=0'
-        standardOutput = tag
-    }
-
-    def commitId = new ByteArrayOutputStream()
-    exec {
-        commandLine 'git', 'rev-parse', '--short', 'HEAD'
-        standardOutput = commitId
-    }
-
-    archiveName = tag.toString().trim() + '+' + commitId.toString().trim() + '.war'
+//    def tag = new ByteArrayOutputStream()
+//    exec {
+//        commandLine "cmd",  "git", "describe", "--tags", "--abbrev=0"
+//        standardOutput = tag
+//    }
+//
+//    def commitId = new ByteArrayOutputStream()
+//    exec {
+//        commandLine "cmd", "git", "rev-parse", "--short", "HEAD"
+//        standardOutput = commitId
+//    }
+//
+//    archiveName = tag.toString().trim() + '+' + commitId.toString().trim() + '.war'
 }

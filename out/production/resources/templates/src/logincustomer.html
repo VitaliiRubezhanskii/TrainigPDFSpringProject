@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -55,6 +55,19 @@
         <a href="mailto:info@slidepiper.com">info@slidepiper.com</a>
     </div>
 </div>
+
+
+<div>
+    <span th:text="${mail}"></span>
+
+        If you are not able to login to this portal please contact The Portal Builder + email for help or send us a message to
+        <a href="mailto:info@slidepiper.com">info@slidepiper.com</a>
+
+    </span>
+
+</div>
+
+
 <div class="sp--direction-ltr" id="sp-terms-privacy">Powered by
     <span class="sp-powered-by">
       <a target="_blank" href="https://www.slidepiper.com">SlidePiper</a>
