@@ -57,7 +57,7 @@ function sortDocsInDocsMgmtPanel(data) {
             + '<a href="#"><span class="label label-danger sp-file-delete" data-file-hash="' + sp.escapeHtml(value[0]) + '">Delete</span></a></span>'
             + '<a><span style="margin-left: 10px;" class="sp-document__clone label label-info" data-document-friendly-id="' + sp.escapeHtml(value[0]) + '" data-document-name="' + sp.escapeHtml(value[1]) + '">Clone</span></a>'
             + '<a><span data-toggle="modal" data-target="#sp-viewer-widgets-modal" style="margin-left: 10px;" class="label label-success sp-file-customize" data-file-hash="' + sp.escapeHtml(value[0]) + '" data-is-process-mode="' + sp.escapeHtml(value[4]) + '">Customize</span></a>'
-            + '<a class="sp-preview-file-link"><span id="sp-preview-file-' + sp.escapeHtml(index) + '" style="margin-left: 10px;" class="label label-warning" data-is-process-mode="' + sp.escapeHtml(value[4]) + '">Preview</span></a>'
+            + '<a class="sp-preview-file-link"><span id="sp-preview-file-' + sp.escapeHtml(index) + '" style="margin-left: 10px;" class="label label-warning"  data-is-process-mode="' + sp.escapeHtml(value[4]) + '">Preview</span></a>'
             +'<div data-id="' + sp.escapeHtml(value[0]) +  '" class="material-switch pull-right options-wrapper">'
             +'<span class="authLabel">2 factor auth on/off</span>'
             +'<input class="twofactorauth-switch" id="someSwitchOptionPrimary-' + sp.escapeHtml(index) + '" name="double-auth-is-enabled" name="someSwitchOption-' + sp.escapeHtml(index) + '" type="checkbox" ' + checked + '/>'
@@ -118,6 +118,8 @@ function sortDocsInDocsMgmtPanel(data) {
     $('.sp-file-customize').on('click', function() {
         var fileHash = $(this).attr('data-file-hash');
         var isProcessMode = $(this).attr('data-is-process-mode');
+        var isDoubleAuth = $(this).closest('tr').find('.twofactorauth-switch').prop('checked');
+
 
         $('#sp-viewer-widgets-modal').load('assets/modal/viewer-widgets-wizard/main.html', function () {
             $('.sp-widgets-customisation__spinner').addClass('sp-widgets-customisation__spinner-show');
@@ -147,7 +149,7 @@ function sortDocsInDocsMgmtPanel(data) {
             function loadModal() {
                 $.getScript('assets/modal/viewer-widgets-wizard/functions.js', function() {
                     sp.viewerWidgetsModal.getWidgetsSettings(fileHash, isProcessMode);
-
+                    $('#sp-save-widgets-settings__button').attr('data-2factor-auth',isDoubleAuth);
                     $('#sp-viewer-widgets-modal').off('hidden.bs.modal').on('hidden.bs.modal', function() {
                         $(this).find('.tabs-container').addClass('sp-hidden');
                     });

@@ -1072,7 +1072,7 @@ sp.viewerWidgetsModal = {
             settings.push(sp.viewerWidgetsModal.saveUploadWidget(fileHash));
             deletedWidgetIndex = settings.length - 1;
             var dataUpload = sp.viewerWidgetsModal.saveUploadWidget(fileHash);
-            postUploadWidgetSettings(dataUpload, fileHash)
+            postUploadWidgetSettings(dataUpload, fileHash);
         }
 
         settings.push(sp.viewerWidgetsModal.emailRequiredWidget(fileHash));
@@ -1587,42 +1587,29 @@ sp.viewerWidgetsModal = {
     saveUploadWidget: function(fileHash) {
 
         var uploadWidget = {
-                'icon' : null,
-                'layout': null,
-                'pageFrom' : $('input[name = "pageFrom"]').val(),
-                'pageTo' : $('input[name = "pageTo"]').val(),
-                'buttonText1' : $('input[name = "uploadText1"]').val(),
-                'buttonText2' : $('input[name = "uploadText2"]').val(),
-                'isEnabled' : $('input[name = "sp-widget12--is-enabled"]').prop('checked'),
-                'widgetId': 12,
-                'documents': [],
+                icon : null,
+                pageFrom : $('input[name = "pageFrom"]').val(),
+                pageTo : $('input[name = "pageTo"]').val(),
+                buttonText1 : $('input[name = "uploadText1"]').val(),
+                buttonText2 : $('input[name = "uploadText2"]').val(),
+                isEnabled : $('input[name = "sp-widget12--is-enabled"]').prop('checked'),
+                documents: []
         };
 
         var isUploadWidgetSettingEmpty = false;
 
         $('#sp-tab-12 .sp-link-widget__item').each(function() {
 
-
-
             $(this).find('[data-item-setting]').each(function() {
-                if ('' === $(this).val() && $(this).attr('data-item-setting') !== 'buttonText2'
-                    && $(this).attr('data-item-setting') !== 'icon'
-                    && $(this).attr('data-item-setting') !== 'layout') {
-
+                if ('' === $(this).val() && $(this).attr('data-item-setting') !== 'buttonText2' && $(this).attr('data-item-setting') !== 'icon') {
                     sp.error.handleError('You must fill the field.');
                     $(this).addClass('sp-widget-form-error');
                     sp.viewerWidgetsModal.openErrorTab();
                     isUploadWidgetSettingEmpty = true;
-
                 }
                 else if ('icon' === $(this).attr('data-item-setting')) {
                     if ($(this).prop('checked')) {
                         uploadWidget.icon = $(this).attr('data-icon');
-                    }
-                }
-                else if ('layout' === $(this).attr('data-item-setting')) {
-                    if ($(this).prop('checked')) {
-                        uploadWidget.layout = $(this).attr('data-layout');
                     }
                 }
             })
@@ -1640,7 +1627,6 @@ sp.viewerWidgetsModal = {
                 }
             })
             uploadWidget.documents.push(items);
-
         });
 
         if (! isUploadWidgetSettingEmpty) {
