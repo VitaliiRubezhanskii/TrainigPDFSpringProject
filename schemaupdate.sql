@@ -39,11 +39,9 @@ CREATE TABLE upload_document_widget
     PRIMARY KEY,
   salesman_id INT                                                                                              NOT NULL,
   document_id BIGINT                                                                                           NOT NULL,
-  customer_document_id BIGINT                                                                                  NOT NULL,
   icon VARCHAR(255)                                                                                            NOT NULL,
   page_from VARCHAR(255)                                                                                       NOT NULL,
   page_to VARCHAR(255)                                                                                         NOT NULL,
-  status TINYINT DEFAULT 0                                                                                     NOT NULL,
   button_text_1 VARCHAR(255)                                                                                   NOT NULL,
   button_text_2 VARCHAR(255)                                                                                   NOT NULL,
   enabled TINYINT DEFAULT 0                                                                                    NOT NULL,
@@ -52,7 +50,5 @@ CREATE TABLE upload_document_widget
   CONSTRAINT upload_document_widget_ibfk_1
   FOREIGN KEY (salesman_id) REFERENCES sales_men (id),
   CONSTRAINT upload_document_widget_ibfk_2
-  FOREIGN KEY (document_id) REFERENCES slides (id_ai),
-  CONSTRAINT upload_document_widget_ibfk_3
-  FOREIGN KEY (customer_document_id) REFERENCES customer_documents (id)
+  FOREIGN KEY (document_id) REFERENCES slides (id_ai)
 );

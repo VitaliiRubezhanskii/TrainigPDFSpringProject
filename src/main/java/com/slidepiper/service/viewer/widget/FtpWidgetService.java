@@ -3,7 +3,7 @@ package com.slidepiper.service.viewer.widget;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.slidepiper.exception.WidgetNotFoundException;
 import com.slidepiper.model.entity.Document;
-import com.slidepiper.model.input.FtpWidgetDataInput;
+import com.slidepiper.model.input.widget.FtpWidgetDataInput;
 import com.slidepiper.repository.ChannelRepository;
 import com.slidepiper.repository.EncryptedStorageRepository;
 import com.slidepiper.repository.StorageRepository;

@@ -24,10 +24,6 @@ public class UploadDocumentWidget {
     @JoinColumn(name = "document_id", referencedColumnName = "id_ai")
     Document document;
 
-    @ManyToOne
-    @JoinColumn(name = "customer_document_id", referencedColumnName = "id")
-    CustomerDocument customerDocument;
-
     private String icon;
 
     private int pageFrom;
@@ -36,8 +32,10 @@ public class UploadDocumentWidget {
 
     private boolean status;
 
+    @Column(name = "button_text_1")
     private String buttonText1;
 
+    @Column(name = "button_text_2")
     private String buttonText2;
 
     @Column(name = "enabled")

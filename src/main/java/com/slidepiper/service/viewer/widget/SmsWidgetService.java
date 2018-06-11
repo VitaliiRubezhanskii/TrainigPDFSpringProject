@@ -11,7 +11,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.slidepiper.exception.WidgetNotFoundException;
 import com.slidepiper.model.component.ConfigurationPropertiesUtils;
 import com.slidepiper.model.entity.Document;
-import com.slidepiper.model.input.SmsWidgetInput;
+import com.slidepiper.model.input.widget.SmsWidgetInput;
 import com.slidepiper.repository.ChannelRepository;
 import com.slidepiper.repository.StorageRepository;
 import org.slf4j.Logger;
