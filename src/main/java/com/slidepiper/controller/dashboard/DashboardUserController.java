@@ -80,6 +80,7 @@ public class DashboardUserController {
 
         viewer.setViewerOpenDocumentEmailEnabled(userEmailConfigurationInput.isViewerOpenDocumentEmailEnabled());
         viewer.setViewerEventEmailEnabled(userEmailConfigurationInput.isViewerEventEmailEnabled());
+
         viewerRepository.save(viewer);
     }
 

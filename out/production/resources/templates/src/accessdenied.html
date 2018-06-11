@@ -1,10 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org"
+        lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8"/>
     <title>SlidePiper - Access Denied</title>
 </head>
 <body>
     <pre>Access denied!</pre>
+    <span th:text="${mail}"></span>
 </body>
 </html>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <script>
         'use strict';
@@ -836,6 +836,7 @@ s
                 <small class="font-bold modal-sub-title"></small>
             </div>
             <div class="modal-body">
+
                 <form class="form-horizontal">
                     <div class="form-group">
                         <label class="control-label col-sm-4" for="notificationEmail">Notification email:</label>
@@ -866,6 +867,7 @@ s
                                 <i data-toggle="tooltip" data-placement="left" title="Send me an email when I receive a question or feedback" class="fa fa-info-circle sp-clickable sp-doc-settings-info__icon" aria-hidden="true"></i>       Enable questions and feedback notifications
                             </label>
                         </div>
+
                         <div class="col-md-4 col-sm-4">
                             <label class="sp-switch">
                                 <input id="sp-enable-notification-emails__checkbox" class="sp-settings__checkbox" type="checkbox">
@@ -880,6 +882,7 @@ s
                                 Add me as BCC to emails that are sent to my customers
                             </label>
                         </div>
+
                         <div class="col-md-4 col-sm-4">
                             <label class="sp-switch">
                                 <input class="user__receive-customer-email" class="sp-settings__checkbox" type="checkbox">
@@ -887,6 +890,22 @@ s
                             </label>
                         </div>
                     </div>
+
+                    <div class="row">
+                        <div class="col-md-6 col-md-offset-1 col-sm-6 col-sm-offset-1">
+                            <label class="control-label sp-switch-title__label">
+                               bla-bla-bla
+                            </label>
+                        </div>
+
+                        <div class="col-md-4 col-sm-4">
+                            <label class="sp-switch">
+                                <input class="user__receive-customer-email" class="sp-settings__checkbox" type="checkbox" th:field="*{}">
+                                <div class="sp-doc-settings-slider sp-round"></div>
+                            </label>
+                        </div>
+                    </div>
+
                 </div>
 
             </div>

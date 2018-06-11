@@ -70,7 +70,6 @@ public class Application extends SpringBootServletInitializer {
 
 
     @Bean
-    @Description("Thymeleaf template resolver serving HTML 5")
     public ClassLoaderTemplateResolver templateResolver() {
 
         ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
@@ -85,7 +84,6 @@ public class Application extends SpringBootServletInitializer {
     }
 
     @Bean
-    @Description("Thymeleaf template engine with Spring integration")
     public SpringTemplateEngine templateEngine() {
 
         SpringTemplateEngine templateEngine = new SpringTemplateEngine();
@@ -95,7 +93,6 @@ public class Application extends SpringBootServletInitializer {
     }
 
     @Bean
-    @Description("Thymeleaf view resolver")
     public ViewResolver viewResolver() {
 
         ThymeleafViewResolver viewResolver = new ThymeleafViewResolver();
