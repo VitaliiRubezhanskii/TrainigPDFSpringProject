@@ -676,12 +676,12 @@ sp.viewerWidgetsModal = {
             //location
             if (typeof widget.items[0].locationProcessMode !== 'undefined'
                 && typeof widget.items[0].locationProcessMode.top !== 'undefined') {
-                $('[name="spQuestionWidgetIsLocationTop"]').prop('checked', widget.items[0].locationProcessMode.top);
+                $('#rightTop').prop('checked', widget.items[0].locationProcessMode.top);
             }
 
             if (typeof widget.items[0].locationProcessMode !== 'undefined'
                 && typeof widget.items[0].locationProcessMode.bottom !== 'undefined') {
-                $('[name="spQuestionWidgetIsLocationRightBottom"]').prop('checked', widget.items[0].locationProcessMode.bottom);
+                $('#rightBottom').prop('checked', widget.items[0].locationProcessMode.bottom);
             }
             ///////
 
@@ -1218,8 +1218,8 @@ sp.viewerWidgetsModal = {
                             bottom: $('[name="spQuestionWidgetIsLocationBottom"]').prop('checked'),
                         },
                         locationProcessMode: {
-                            top: $('[name="spQuestionWidgetIsLocationTop"]').prop('checked'),
-                            bottom: $('[name="spQuestionWidgetIsLocationRightBottom"]').prop('checked'),
+                            top: $('#rightTop').prop('checked'),
+                            bottom: $('#rightBottom').prop('checked')
                         },
                     }
                 ]
