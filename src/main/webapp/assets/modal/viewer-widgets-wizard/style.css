@@ -1,4 +1,27 @@
- .sp-link-widget__item-configuration{
+.sp-widget__delete-item{
+    float: right;
+}
+
+.deleteDoc{
+    padding: 0 !important;
+}
+
+.doc {
+    width: 100% !important;
+    padding: 10px 0;
+}
+
+.form-doc{
+    width: 90% !important;
+    margin-left: 0 !important;
+}
+
+.doc-group{
+    width: 100% !important;
+    margin-bottom: 0 !important;
+}
+
+.sp-link-widget__item-configuration{
    float: right;
  }
 
@@ -11,7 +34,7 @@
   border: 1px solid #e5e6e7;
   border-radius: 4px;
   float: right;
-  margin-top: 20px;
+  margin-bottom: 20px;
   padding: 6px 12px;
   position: relative;
   right: -9px;

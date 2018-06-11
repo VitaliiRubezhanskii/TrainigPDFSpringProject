@@ -720,12 +720,15 @@
                     <div id="sp-tab-12" class="tab-pane">
                         <div class="panel-body">
                             <strong>Upload Widget</strong>
+                            <div class="sp-customization-option__p">
+                                <input type="checkbox" name="sp-widget12--is-enabled"> Is Enabled?
+                            </div>
                             <hr>
                             <div class="sp-widget-item">
                                 <div class="sp-link-widget__item m-xs p-xs">
-                                    <div class="sp-customization-option__p">
-                                        <input type="checkbox" name="sp-widget12--is-enabled"> Is Enabled?
-                                    </div>
+                                    <!--<div class="sp-customization-option__p">-->
+                                        <!--<input type="checkbox" name="sp-widget12&#45;&#45;is-enabled"> Is Enabled?-->
+                                    <!--</div>-->
                                     <div class="sp-link-widget__item-header container-fluid">
                                         <div class="row">
                                             <div class="col-sm-6 sp-link-widget__item-title">&lt;Button Text 1&gt;</div>
@@ -736,37 +739,66 @@
                                             </div>
 
                                         </div>
-                                        <hr>
-                                        <div>
-                                            <input type="radio" name="group1" id="documentToDownload">
-                                            <label for="documentToDownload">Document To Download</label>
-                                        </div>
-                                        <div>
-                                            <input type="radio" name="group1" id="uploadRequiredDocument">
-                                            <label for="uploadRequiredDocument">Upload Required Document</label>
-                                        </div>
+                                        <!--<hr>-->
+                                        <!--<div>-->
+                                            <!--<input type="radio" name="group1" id="documentToDownload">-->
+                                            <!--<label for="documentToDownload">Document To Download</label>-->
+                                        <!--</div>-->
+                                        <!--<div>-->
+                                            <!--<input type="radio" name="group1" id="uploadRequiredDocument">-->
+                                            <!--<label for="uploadRequiredDocument">Upload Required Document</label>-->
+                                        <!--</div>-->
                                     </div>
 
                                     <div class="sp-link-widget__item-body container-fluid">
                                         <form class="form-horizontal">
+                                            <hr>
+                                            <div class="form-doc">
+                                                <div class="form-group doc-group">
+                                                    <div class="doc">
+                                                        <input class="form-control" data-item-setting="docName" placeholder="Document name" maxlength="50">
+                                                    </div>
+                                                    <div class="doc">
+                                                        <input type="checkbox" data-item-setting="isUpdate" id="docName">
+                                                        <label  for="docName">Customer can update after uploading?</label>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <div class="col-lg-12 deleteDoc">
+                                                            <a class="btn btn-white btn-sm sp-widget__delete-item">
+                                                                <i class="fa fa-times" aria-hidden="true"></i>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                    <hr>
+                                                </div>
+
+                                            </div>
+                                            <div class="clearfix">
+                                                <a class="btn btn-white btn-sm sp-widget__add-item">
+                                                    <i class="fa fa-plus" aria-hidden="true"></i> Add another document
+                                                </a>
+                                            </div>
+
+
+
                                             <div class="form-group">
                                                 <label class="col-lg-4 control-label">Upload Button Text<br>(Line 1)</label>
                                                 <div class="col-lg-8">
-                                                    <input class="form-control" data-item-setting="buttonText1" placeholder="e.g. My Website" maxlength="50">
+                                                    <input class="form-control" name="uploadText1" data-item-setting="buttonText1" placeholder="e.g. My Website" maxlength="50">
                                                 </div>
                                             </div>
 
                                             <div class="form-group">
                                                 <label class="col-lg-4 control-label">Upload Button Text<br>(Line 2)</label>
                                                 <div class="col-lg-8">
-                                                    <input class="form-control" data-item-setting="buttonText2" placeholder="e.g. Is through this link..." maxlength="50">
+                                                    <input class="form-control" name="uploadText2" data-item-setting="buttonText2" placeholder="e.g. Is through this link..." maxlength="50">
                                                 </div>
                                             </div>
 
                                             <div class="form-group">
                                                 <label class="col-lg-4 control-label">From Page</label>
                                                 <div class="col-lg-8">
-                                                    <input type="number" class="form-control" data-item-setting="pageFrom" placeholder="e.g. 1" min="1">
+                                                    <input type="number" class="form-control"  name="pageFrom" data-item-setting="pageFrom" placeholder="e.g. 1" min="1">
                                                     <small>On this page, the widget will appear from the right side of the page.</small>
                                                 </div>
                                             </div>
@@ -774,7 +806,7 @@
                                             <div class="form-group">
                                                 <label class="col-lg-4 control-label">To Page</label>
                                                 <div class="col-lg-8">
-                                                    <input type="number" class="form-control" data-item-setting="pageTo" placeholder="e.g. 3" min="1">
+                                                    <input type="number" class="form-control"  name="pageTo" vdata-item-setting="pageTo" placeholder="e.g. 3" min="1">
                                                     <small>After this page, the widget will hide on the right side of the page.</small>
                                                 </div>
                                             </div>
@@ -791,21 +823,21 @@
                                                     <div class="radio sp--margin-left-0">
                                                         <label><input type="radio" name="icon" data-item-setting="icon" data-icon="fa-download"><i class="fa fa-download"></i> Download</label>
                                                     </div>
-                                                    <div class="radio sp--margin-left-0">
-                                                        <label><input type="radio" name="icon" data-item-setting="icon" data-icon="fa-upload"><i class="fa fa-upload"></i> Upload</label>
-                                                    </div>
-                                                    <div class="radio sp--margin-left-0">
-                                                        <label><input type="radio" name="icon" data-item-setting="icon" data-icon="fa-calendar"><i class="fa fa-calendar"></i> Calendar</label>
-                                                    </div>
-                                                    <div class="radio sp--margin-left-0">
-                                                        <label><input type="radio" name="icon" data-item-setting="icon" data-icon="fa-camera"><i class="fa fa-camera"></i> Take Snapshot</label>
-                                                    </div>
-                                                    <div class="radio sp--margin-left-0">
-                                                        <label><input type="radio" name="icon" data-item-setting="icon" data-icon="fa-video-camera"><i class="fa fa-video-camera"></i> Record Video</label>
-                                                    </div>
-                                                    <div class="radio sp--margin-left-0">
-                                                        <label><input type="radio" name="icon" data-item-setting="icon" data-icon="fa-pencil-square-o"><i class="fa fa-pencil-square-o"></i> Signature</label>
-                                                    </div>
+                                                    <!--<div class="radio sp&#45;&#45;margin-left-0">-->
+                                                        <!--<label><input type="radio" name="icon" data-item-setting="icon" data-icon="fa-upload"><i class="fa fa-upload"></i> Upload</label>-->
+                                                    <!--</div>-->
+                                                    <!--<div class="radio sp&#45;&#45;margin-left-0">-->
+                                                        <!--<label><input type="radio" name="icon" data-item-setting="icon" data-icon="fa-calendar"><i class="fa fa-calendar"></i> Calendar</label>-->
+                                                    <!--</div>-->
+                                                    <!--<div class="radio sp&#45;&#45;margin-left-0">-->
+                                                        <!--<label><input type="radio" name="icon" data-item-setting="icon" data-icon="fa-camera"><i class="fa fa-camera"></i> Take Snapshot</label>-->
+                                                    <!--</div>-->
+                                                    <!--<div class="radio sp&#45;&#45;margin-left-0">-->
+                                                        <!--<label><input type="radio" name="icon" data-item-setting="icon" data-icon="fa-video-camera"><i class="fa fa-video-camera"></i> Record Video</label>-->
+                                                    <!--</div>-->
+                                                    <!--<div class="radio sp&#45;&#45;margin-left-0">-->
+                                                        <!--<label><input type="radio" name="icon" data-item-setting="icon" data-icon="fa-pencil-square-o"><i class="fa fa-pencil-square-o"></i> Signature</label>-->
+                                                    <!--</div>-->
                                                 </div>
                                             </div>
 
@@ -821,21 +853,21 @@
                                                 </div>
                                             </div>
 
-                                            <div class="form-group">
-                                                <div class="col-lg-12">
-                                                    <a class="btn btn-white btn-sm sp-widget__delete-item">
-                                                        <i class="fa fa-times" aria-hidden="true"></i>
-                                                    </a>
-                                                </div>
-                                            </div>
+                                            <!--<div class="form-group">-->
+                                                <!--<div class="col-lg-12">-->
+                                                    <!--<a class="btn btn-white btn-sm sp-widget__delete-item">-->
+                                                        <!--<i class="fa fa-times" aria-hidden="true"></i>-->
+                                                    <!--</a>-->
+                                                <!--</div>-->
+                                            <!--</div>-->
                                         </form>
                                     </div>
                                 </div>
                             </div>
 
-                            <a class="btn btn-white btn-sm sp-widget__add-item">
-                                <i class="fa fa-plus" aria-hidden="true"></i> Add Upload Button
-                            </a>
+                            <!--<a class="btn btn-white btn-sm sp-widget__add-item">-->
+                                <!--<i class="fa fa-plus" aria-hidden="true"></i> Add Upload Button-->
+                            <!--</a>-->
                         </div>
                     </div>
 

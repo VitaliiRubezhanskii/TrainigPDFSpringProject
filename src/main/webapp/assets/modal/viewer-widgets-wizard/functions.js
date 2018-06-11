@@ -390,17 +390,17 @@ sp.widgets = {
         },
     },
     widget12: {
-        html: $('#sp-tab-12 .sp-widget-item').html(),
+        html: $('#sp-tab-12 .form-doc').html(),
         init: (function() {
 
             // Add item.
             $(document).off('click', '#sp-tab-12 .sp-widget__add-item').on('click', '#sp-tab-12 .sp-widget__add-item', function() {
-                $('#sp-tab-12 .sp-widget-item').append(sp.widgets.widget12.html);
+                $('.form-doc').append(sp.widgets.widget12.html);
             });
 
             // Delete item.
             $(document).on('click', '#sp-tab-12 .sp-widget__delete-item', function() {
-                $(this).closest('.sp-link-widget__item').remove();
+                $(this).closest('.doc-group').remove();
             });
         })(),
 
@@ -423,7 +423,7 @@ sp.widgets = {
             var isEmpty = false;
 
             // buttonText2 is not a required field.
-            $('#sp-tab-12 form').find('input[data-item-setting="buttonText1"], input[data-item-setting="link"], input[data-item-setting="pageFrom"], input[data-item-setting="pageTo"]').each(function() {
+            $('#sp-tab-12 form').find('input[data-item-setting="docName"], input[data-item-setting="buttonText1"], input[data-item-setting="link"], input[data-item-setting="pageFrom"], input[data-item-setting="pageTo"]').each(function() {
 
                 if ('' === $(this).val()) {
                     isEmpty = true;
@@ -1587,47 +1587,61 @@ sp.viewerWidgetsModal = {
     saveUploadWidget: function(fileHash) {
 
         var uploadWidget = {
-                widgetId: 12,
-                items: [],
+                'icon' : null,
+                'layout': null,
+                'pageFrom' : $('input[name = "pageFrom"]').val(),
+                'pageTo' : $('input[name = "pageTo"]').val(),
+                'buttonText1' : $('input[name = "uploadText1"]').val(),
+                'buttonText2' : $('input[name = "uploadText2"]').val(),
+                'isEnabled' : $('input[name = "sp-widget12--is-enabled"]').prop('checked'),
+                'widgetId': 12,
+                'documents': [],
         };
 
         var isUploadWidgetSettingEmpty = false;
 
         $('#sp-tab-12 .sp-link-widget__item').each(function() {
-            var item = {};
 
-            var isEnabled = $(this).find('input[name = "sp-widget12--is-enabled"]')[0].checked;
+
 
             $(this).find('[data-item-setting]').each(function() {
-                item['isEnabled'] = isEnabled;
                 if ('' === $(this).val() && $(this).attr('data-item-setting') !== 'buttonText2'
                     && $(this).attr('data-item-setting') !== 'icon'
-                    && $(this).attr('data-item-setting') !== 'layout'
-                    && $(this).attr('data-item-setting') !== 'status') {
+                    && $(this).attr('data-item-setting') !== 'layout') {
 
                     sp.error.handleError('You must fill the field.');
                     $(this).addClass('sp-widget-form-error');
                     sp.viewerWidgetsModal.openErrorTab();
                     isUploadWidgetSettingEmpty = true;
 
-                } else if ('link' === $(this).attr('data-item-setting')) {
-                    var url = sp.widgets.widget12.urlHttpConfig($(this).val());
-                    item[$(this).attr('data-item-setting')] = url;
-
-                } else if ('icon' === $(this).attr('data-item-setting')) {
-                    if ($(this).prop('checked')) {
-                        item['icon'] = $(this).attr('data-icon');
-                    }
-                } else if ('layout' === $(this).attr('data-item-setting')) {
-                    if ($(this).prop('checked')) {
-                        item['layout'] = $(this).attr('data-layout');
-                    }
-                }  else {
-                    item[$(this).attr('data-item-setting')] = $(this).val();
                 }
-            });
-            uploadWidget.items.push(item)
-        })
+                else if ('icon' === $(this).attr('data-item-setting')) {
+                    if ($(this).prop('checked')) {
+                        uploadWidget.icon = $(this).attr('data-icon');
+                    }
+                }
+                else if ('layout' === $(this).attr('data-item-setting')) {
+                    if ($(this).prop('checked')) {
+                        uploadWidget.layout = $(this).attr('data-layout');
+                    }
+                }
+            })
+        });
+
+        $('#sp-tab-12 .doc-group').each(function() {
+            var items = {};
+
+            $(this).find('[data-item-setting]').each(function() {
+                if ('docName' === $(this).attr('data-item-setting')) {
+                    items['docName'] = $(this).val();
+                }
+                else if ('isUpdate' === $(this).attr('data-item-setting')) {
+                    items['isUpdate'] = $(this).prop('checked');
+                }
+            })
+            uploadWidget.documents.push(items);
+
+        });
 
         if (! isUploadWidgetSettingEmpty) {
 
