@@ -36,7 +36,7 @@
                       name="upload-file"
                       multiple=""
                       type="file"
-                      accept=".pdf"
+                      accept=".pdf,.doc,.docx,.ppt,.pptx,.jpeg,.png"
                       @change="handleInput"
                       ref="uploadFiles"
                     >
@@ -54,7 +54,14 @@
               <div class="sk-rect4"></div>
               <div class="sk-rect5"></div>
             </div>
+            <div>
+              <span class="fileTypes">File types allowed:</span> pdf, doc, docx, ppt, pptx, exl, exlx jpeg, png, jpg
+            </div>
+            <div>
+              <span class="fileTypes">File size:</span> upto 10mb
+            </div>
         </div>
+
         <div class="modal-footer">
           <button
             type="button"
@@ -141,5 +148,8 @@ export default{
 <style>
 .disabled {
   display: none;
+}
+.fileTypes{
+font-weight: bold;
 }
 </style>

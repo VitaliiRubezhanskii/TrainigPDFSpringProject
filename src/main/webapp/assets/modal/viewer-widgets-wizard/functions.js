@@ -552,7 +552,6 @@ sp.viewerWidgetsModal = {
             }
         }, interval);
     },
-
     /**
      * @param {object} widgetData - The widget settings for this file, received from
      * the ManagementServlet.
@@ -1601,10 +1600,13 @@ sp.viewerWidgetsModal = {
         $('#sp-tab-12 .sp-link-widget__item').each(function() {
 
             $(this).find('[data-item-setting]').each(function() {
-                if ('' === $(this).val() && $(this).attr('data-item-setting') !== 'buttonText2' && $(this).attr('data-item-setting') !== 'icon') {
+                if ($(this).val() === ''
+                    && $(this).attr('data-item-setting') !== 'buttonText2'
+                    && $(this).attr('data-item-setting') !== 'icon') {
                     sp.error.handleError('You must fill the field.');
                     $(this).addClass('sp-widget-form-error');
                     sp.viewerWidgetsModal.openErrorTab();
+
                     isUploadWidgetSettingEmpty = true;
                 }
                 else if ('icon' === $(this).attr('data-item-setting')) {
@@ -1619,23 +1621,18 @@ sp.viewerWidgetsModal = {
             var items = {};
 
             $(this).find('[data-item-setting]').each(function() {
-                if ('docName' === $(this).attr('data-item-setting')) {
+                if ($(this).attr('data-item-setting') === 'docName') {
                     items['docName'] = $(this).val();
                 }
-                else if ('isUpdate' === $(this).attr('data-item-setting')) {
-                    items['isUpdate'] = $(this).prop('checked');
+                else if ($(this).attr('data-item-setting') === 'canUpdate') {
+                    items['canUpdate'] = $(this).prop('checked');
                 }
             })
             uploadWidget.documents.push(items);
         });
 
-        if (! isUploadWidgetSettingEmpty) {
-
-            if (sp.widgets.widget12.isWidgetPageOrderValid()) {
-                return uploadWidget;
-            } else {
-                return undefined;
-            }
+        if (!isUploadWidgetSettingEmpty) {
+            sp.widgets.widget12.isWidgetPageOrderValid() ? uploadWidget: undefined ;
         } else {
             return undefined;
         }
