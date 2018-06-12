@@ -1,8 +1,8 @@
 package com.slidepiper.task;
 
 import com.samskivert.mustache.Mustache;
-import com.slidepiper.model.entity.Customer;
-import com.slidepiper.model.entity.CustomerData;
+import com.slidepiper.model.customer.Customer;
+import com.slidepiper.model.customer.CustomerData;
 import com.slidepiper.model.entity.Document;
 import com.slidepiper.model.entity.Viewer;
 import com.slidepiper.repository.CustomerRepository;

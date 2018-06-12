@@ -1,7 +1,7 @@
-package com.slidepiper.model.entity;
+package com.slidepiper.model.customer;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.slidepiper.widget.WidgetSerializer;
+import com.slidepiper.model.entity.Channel;
+import com.slidepiper.model.entity.Viewer;
 import lombok.Getter;
 import lombok.Setter;
 

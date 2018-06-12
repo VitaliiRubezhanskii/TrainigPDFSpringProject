@@ -1,6 +1,6 @@
 package com.slidepiper.repository;
 
-import com.slidepiper.model.entity.CustomerDocument;
+import com.slidepiper.model.customer.CustomerDocument;
 import org.springframework.data.repository.Repository;
 import org.springframework.security.access.prepost.PreAuthorize;
 

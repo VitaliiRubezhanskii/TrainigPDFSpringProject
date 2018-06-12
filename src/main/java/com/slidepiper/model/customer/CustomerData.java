@@ -1,4 +1,4 @@
-package com.slidepiper.model.entity;
+package com.slidepiper.model.customer;
 
 import lombok.Getter;
 

@@ -1,6 +1,6 @@
 package com.slidepiper.task;
 
-import com.slidepiper.model.entity.Customer;
+import com.slidepiper.model.customer.Customer;
 import com.slidepiper.model.entity.Document;
 import com.slidepiper.repository.CustomerRepository;
 import com.slidepiper.repository.DocumentRepository;

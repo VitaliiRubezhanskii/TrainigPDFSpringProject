@@ -2,7 +2,7 @@ package com.slidepiper.service.viewer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.slidepiper.model.entity.Customer;
+import com.slidepiper.model.customer.Customer;
 import com.slidepiper.model.entity.ViewerEvent;
 import com.slidepiper.repository.ChannelRepository;
 import com.slidepiper.repository.CustomerRepository;
