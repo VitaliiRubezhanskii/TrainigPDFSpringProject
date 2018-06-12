@@ -537,12 +537,13 @@ sp.viewerWidgetsModal = {
             }
         );
 
-        $.getJSON(
-            '/api/v1/upload-document-widget/' + fileHash,
-            function(data) {
-                console.log(data);
-            }
-        );
+        // $.getJSON(
+        //     '/api/v1/upload-document-widget/' + fileHash,
+        //     function(data) {
+        //         console.log(data);
+        //         //sp.viewerWidgetsModal.displayUploadWidgetSettings(data, fileHash);
+        //     }
+        // );
 
 
         sp.widgets.widget11.setDefaultTitle(fileHash);
@@ -559,6 +560,44 @@ sp.viewerWidgetsModal = {
                 clearInterval(setIntervalToDisplayWidgetsSettings);
             }
         }, interval);
+    },
+    displayUploadWidgetSettings: function(widget) {
+        $('[name="sp-widget12--is-enabled"]')
+            .prop('checked', widget.isEnabled);
+
+        // for (var i = 0; i < widget.documents.length - 1; i++) {
+            $('#sp-tab-12 .form-doc').append(
+                sp.widgets.widget12.html
+            );
+        // }
+
+        // Link data.
+        $('#sp-tab-12 .sp-link-widget__item').each(function(index) {
+            $(this).find('[data-item-setting]').each(function() {
+
+                if ('buttonText1' === $(this).attr('data-item-setting')) {
+                    $(this).parents('.sp-link-widget__item').find('.sp-link-widget__item-title')
+                        .text(widget.buttonText1);
+                }
+                 else if ($(this).attr('data-item-setting') === 'icon') {
+                    if (typeof widget.icon !== 'undefined'
+                        && $(this).attr('data-icon') === widget.icon) {
+                        $(this).prop('checked', true);
+                    }
+                }
+            });
+        });
+        $('#sp-tab-12 .doc-group').each(function(index) {
+            $(this).find('[data-item-setting]').each(function() {
+                if ($(this).attr('data-item-setting') === 'docName') {
+                    $(this).val(widget.documents[index].docName);
+                }
+                else if ($(this).attr('data-item-setting') === 'isUpdate') {
+                    $(this).prop('checked', widget.documents[index].isUpdate);
+                }
+            });
+        });
+
     },
     /**
      * @param {object} widgetData - The widget settings for this file, received from
