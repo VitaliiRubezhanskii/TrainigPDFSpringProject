@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -55,6 +56,9 @@
         <a href="mailto:info@slidepiper.com">info@slidepiper.com</a>
     </div>
 </div>
+
+<span th:text="'Message: ' + ${salesManEmail}">Default</span>
+
 <div class="sp--direction-ltr" id="sp-terms-privacy">Powered by
     <span class="sp-powered-by">
       <a target="_blank" href="https://www.slidepiper.com">SlidePiper</a>

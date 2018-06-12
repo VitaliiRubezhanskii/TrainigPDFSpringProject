@@ -77,6 +77,14 @@ slidepiper:
 ---
 spring:
     profiles: development
+#    thymeleaf:
+#        cache: false
+#        check-template: true
+#        check-template-location: true
+#        content-type: text/html
+#        enabled: true
+#        encoding: UTF-8
+
 
 slidepiper:
     templates:
@@ -91,7 +99,30 @@ slidepiper:
 ---
 spring:
     profiles: production
+    freemarker:
+
+
+#     thymeleaf:
+#        enabled: true
+#        check-template-location: true
+#        check-template: true
+#        prefix: /templates/src
+#        suffix: .html
+
 
 slidepiper:
     templates:
         prefix: build
+
+---
+spring:
+  thymeleaf:
+    cache: false
+    check-template: true
+    check-template-location: true
+    content-type: text/html
+    enabled: true
+    encoding: UTF-8
+    prefix: /templates/
+
+

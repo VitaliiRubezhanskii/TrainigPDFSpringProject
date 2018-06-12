@@ -28,4 +28,6 @@ public class Channel {
     @ManyToOne
     @JoinColumn(name = "slides_id", referencedColumnName = "id")
     private Document document;
+
+
 }

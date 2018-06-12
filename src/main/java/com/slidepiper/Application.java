@@ -12,6 +12,10 @@ import org.springframework.context.annotation.Import;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.web.servlet.ViewResolver;
+import org.thymeleaf.spring4.SpringTemplateEngine;
+import org.thymeleaf.spring4.view.ThymeleafViewResolver;
+import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 import slidepiper.db.DBLayerJPA;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
@@ -63,6 +67,40 @@ public class Application extends SpringBootServletInitializer {
                 .licenseUrl("https://www.apache.org/licenses/LICENSE-2.0\"")
                 .contact(new Contact("John Thompson", "https://springframework.guru/about/", "john@springfrmework.guru"))
                 .build();
+    }
+
+    @Bean
+    public ClassLoaderTemplateResolver templateResolver() {
+
+        ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
+
+        templateResolver.setPrefix("templates/src/");
+        templateResolver.setCacheable(false);
+        templateResolver.setSuffix(".html");
+        templateResolver.setTemplateMode("HTML5");
+        templateResolver.setCharacterEncoding("UTF-8");
+
+        return templateResolver;
+    }
+
+    @Bean
+    public SpringTemplateEngine templateEngine() {
+
+        SpringTemplateEngine templateEngine = new SpringTemplateEngine();
+        templateEngine.setTemplateResolver(templateResolver());
+
+        return templateEngine;
+    }
+
+    @Bean
+    public ViewResolver viewResolver() {
+
+        ThymeleafViewResolver viewResolver = new ThymeleafViewResolver();
+
+        viewResolver.setTemplateEngine(templateEngine());
+        viewResolver.setCharacterEncoding("UTF-8");
+
+        return viewResolver;
     }
 
 

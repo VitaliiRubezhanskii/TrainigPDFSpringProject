@@ -20,6 +20,12 @@ apply plugin: 'war'
 
 group 'com.slidepiper'
 
+
+war {
+    baseName = 'mvc-thymeleaf-bootstrap'
+    version =  '0.1.0'
+}
+
 repositories {
     mavenCentral()
     jcenter()
@@ -38,11 +44,14 @@ dependencyManagement {
 }
 
 dependencies {
+
+
     compile 'com.amazonaws:aws-java-sdk-cloudfront'
     compile 'com.amazonaws:aws-java-sdk-s3'
     compile 'com.amazonaws:aws-java-sdk-ses'
     compile 'com.amazonaws:aws-java-sdk-sns'
     compile 'com.auth0:java-jwt:3.1.0'
+
     compile 'com.maxmind.geoip2:geoip2:0.8.0'
     compile 'com.jcraft:jsch:0.1.54'
     compile 'commons-io:commons-io:2.4'
@@ -51,6 +60,11 @@ dependencies {
     compile 'org.apache.commons:commons-lang3:3.4'
     compile 'org.apache.commons:commons-vfs2:2.1'
     compile 'org.hashids:hashids:1.0.1'
+
+
+    compile("org.springframework.boot:spring-boot-starter-thymeleaf")
+    compile ("org.thymeleaf.extras:thymeleaf-extras-springsecurity4:3.0.0.RELEASE")
+    compile ("io.github.jpenren:thymeleaf-spring-data-dialect:3.1.1")
     compile 'org.jasypt:jasypt:1.9.2'
     compile 'org.json:json:20141113'
     compileOnly 'org.projectlombok:lombok:1.16.10'

@@ -26,10 +26,12 @@ public class Viewer implements Serializable {
     private String friendlyId;
 
     // TODO: Remove user data.
+    @Column(name = "email")
     private String email;
     private String name;
     @Column(name = "email_alert_enabled") private boolean viewerOpenDocumentEmailEnabled = true;
     @Column(name = "email_notifications_enabled") private boolean viewerEventEmailEnabled = true;
+    @Column(name = "enable_support_mail_show") private boolean viewerSupportMailEnabled=true;
 
     @Data
     public static class UserData implements Serializable {
@@ -47,6 +49,12 @@ public class Viewer implements Serializable {
 
     private String company;
     // TODO: End remove user data.
+
+
+
+
+//    @Column(name = "enable_support_mail_show")
+//    private int emailShow;
 
     private String viewer_document_title = "SlidePiper";
     private String viewer_toolbar_background = "#FFF";
