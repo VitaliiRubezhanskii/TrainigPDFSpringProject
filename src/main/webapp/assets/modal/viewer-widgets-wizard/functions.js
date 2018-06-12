@@ -537,6 +537,14 @@ sp.viewerWidgetsModal = {
             }
         );
 
+        $.getJSON(
+            '/api/v1/upload-document-widget/' + fileHash,
+            function(data) {
+                console.log(data);
+            }
+        );
+
+
         sp.widgets.widget11.setDefaultTitle(fileHash);
 
         // Show widgets when loaded.
@@ -1070,8 +1078,6 @@ sp.viewerWidgetsModal = {
         if (! sp.widgets.widget12.validate()) {
             settings.push(sp.viewerWidgetsModal.saveUploadWidget(fileHash));
             deletedWidgetIndex = settings.length - 1;
-            var dataUpload = sp.viewerWidgetsModal.saveUploadWidget(fileHash);
-            postUploadWidgetSettings(dataUpload, fileHash);
         }
 
         settings.push(sp.viewerWidgetsModal.emailRequiredWidget(fileHash));
@@ -1117,6 +1123,8 @@ sp.viewerWidgetsModal = {
                 // Setting attribute to current value
                 $("#sp-files-management span[data-file-hash='" + fileHash + "'][data-target='#sp-viewer-widgets-modal']").attr('data-is-process-mode', +isProcessModeEnabled.isProcessMode);
                 sp.viewerWidgetsModal.postWidgetSettings(data, fileHash, targetId);
+                var dataUpload = sp.viewerWidgetsModal.saveUploadWidget(fileHash);
+                postUploadWidgetSettings(dataUpload, fileHash);
             }
             postDocumentSettings(isProcessModeEnabled, fileHash, docsSavedCallback);
         } else if (0 === settings.length) {
@@ -1624,15 +1632,19 @@ sp.viewerWidgetsModal = {
                 if ($(this).attr('data-item-setting') === 'docName') {
                     items['docName'] = $(this).val();
                 }
-                else if ($(this).attr('data-item-setting') === 'canUpdate') {
-                    items['canUpdate'] = $(this).prop('checked');
+                else if ($(this).attr('data-item-setting') === 'isUpdate') {
+                    items['isUpdate'] = $(this).prop('checked');
                 }
-            })
+            });
             uploadWidget.documents.push(items);
         });
 
         if (!isUploadWidgetSettingEmpty) {
-            sp.widgets.widget12.isWidgetPageOrderValid() ? uploadWidget: undefined ;
+            if(sp.widgets.widget12.isWidgetPageOrderValid()) {
+                return uploadWidget;
+            } else{
+                return undefined;
+            }
         } else {
             return undefined;
         }

@@ -43,7 +43,7 @@ CREATE TABLE upload_document_widget
   page_from INT                                                                                                NOT NULL,
   page_to INT                                                                                                  NOT NULL,
   button_text_1 VARCHAR(255)                                                                                   NOT NULL,
-  button_text_2 VARCHAR(255)                                                                                   NOT NULL,
+  button_text_2 VARCHAR(255)                                                                                   ,
   enabled TINYINT DEFAULT 0                                                                                    NOT NULL,
   created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP                                                              NULL,
   updated_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP                                                              NULL ON UPDATE CURRENT_TIMESTAMP,
