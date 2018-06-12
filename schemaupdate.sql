@@ -35,13 +35,13 @@ CREATE TABLE customer_documents
 /* 06.06.2018; */
 CREATE TABLE upload_document_widget
 (
-  id       BIGINT AUTO_INCREMENT
-    PRIMARY KEY,
+  id INT AUTO_INCREMENT
+  PRIMARY KEY,
   salesman_id INT                                                                                              NOT NULL,
-  document_id BIGINT                                                                                           NOT NULL,
+  document_id BIGINT                                                                                              NOT NULL,
   icon VARCHAR(255)                                                                                            NOT NULL,
-  page_from VARCHAR(255)                                                                                       NOT NULL,
-  page_to VARCHAR(255)                                                                                         NOT NULL,
+  page_from INT                                                                                                NOT NULL,
+  page_to INT                                                                                                  NOT NULL,
   button_text_1 VARCHAR(255)                                                                                   NOT NULL,
   button_text_2 VARCHAR(255)                                                                                   NOT NULL,
   enabled TINYINT DEFAULT 0                                                                                    NOT NULL,
@@ -51,4 +51,18 @@ CREATE TABLE upload_document_widget
   FOREIGN KEY (salesman_id) REFERENCES sales_men (id),
   CONSTRAINT upload_document_widget_ibfk_2
   FOREIGN KEY (document_id) REFERENCES slides (id_ai)
+);
+
+/* 06.06.2018; */
+CREATE TABLE upload_document_widget_docs_template
+(
+  id INT AUTO_INCREMENT
+  PRIMARY KEY,
+  widget_id INT                                                                                                NOT NULL,
+  document_name VARCHAR(255)                                                                                   NOT NULL,
+  can_update TINYINT DEFAULT 0                                                                                 NOT NULL,
+  created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP                                                              NULL,
+  updated_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP                                                              NULL ON UPDATE CURRENT_TIMESTAMP,
+  CONSTRAINT upload_document_widget_docs_template_ibfk_1
+  FOREIGN KEY (widget_id) REFERENCES upload_document_widget (id)
 );

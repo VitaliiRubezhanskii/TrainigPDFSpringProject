@@ -14,7 +14,7 @@ import javax.persistence.*;
 public class UploadDocumentWidget {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    Integer id;
 
     @ManyToOne
     @JoinColumn(name = "salesman_id", referencedColumnName = "id")
@@ -30,29 +30,25 @@ public class UploadDocumentWidget {
 
     private int pageTo;
 
-    private boolean status;
-
     @Column(name = "button_text_1")
     private String buttonText1;
 
     @Column(name = "button_text_2")
     private String buttonText2;
 
-    @Column(name = "enabled")
-    private boolean isEnabled;
+    private boolean enabled;
 
     public UploadDocumentWidget() {
     }
 
-    public UploadDocumentWidget(Viewer salesMan, Document document, String icon, int pageFrom, int pageTo, boolean status, String buttonText1, String buttonText2, boolean isEnabled) {
+    public UploadDocumentWidget(Viewer salesMan, Document document, String icon, int pageFrom, int pageTo, String buttonText1, String buttonText2, boolean isEnabled) {
         this.salesMan = salesMan;
         this.document = document;
         this.icon = icon;
         this.pageFrom = pageFrom;
         this.pageTo = pageTo;
-        this.status = status;
         this.buttonText1 = buttonText1;
         this.buttonText2 = buttonText2;
-        this.isEnabled = isEnabled;
+        this.enabled = isEnabled;
     }
 }

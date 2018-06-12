@@ -1,11 +1,20 @@
 package com.slidepiper.controller.dashboard.widget;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.gson.Gson;
+import com.slidepiper.model.entity.Document;
 import com.slidepiper.model.entity.widget.UploadDocumentWidget;
+import com.slidepiper.model.entity.widget.UploadDocumentWidgetDocsTemplate;
+import com.slidepiper.model.entity.widget.Widget;
 import com.slidepiper.model.input.widget.UploadFileWidgetInput;
 import com.slidepiper.repository.DocumentRepository;
+import com.slidepiper.repository.UploadDocumentWidgetDocsTemplateRepository;
 import com.slidepiper.repository.UploadDocumentWidgetRepository;
 import com.slidepiper.repository.ViewerRepository;
+import org.hibernate.boot.jaxb.SourceType;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -16,24 +25,60 @@ import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @PreAuthorize("hasRole('ROLE_USER')")
 public class UploadDocumentsWidgetController {
 
-    private final DocumentRepository documentRepository;
-    private final ViewerRepository salesManRepository;
-    private final UploadDocumentWidgetRepository uploadDocumentWidgetRepository;
-
     @Autowired
-    public UploadDocumentsWidgetController(DocumentRepository documentRepository, ViewerRepository salesManRepository,
-                                           UploadDocumentWidgetRepository uploadDocumentWidgetRepository) {
-        this.documentRepository = documentRepository;
-        this.salesManRepository = salesManRepository;
-        this.uploadDocumentWidgetRepository = uploadDocumentWidgetRepository;
+    private DocumentRepository documentRepository;
+    @Autowired
+    private ViewerRepository salesManRepository;
+    @Autowired
+    private UploadDocumentWidgetRepository uploadDocumentWidgetRepository;
+    @Autowired
+    private UploadDocumentWidgetDocsTemplateRepository uploadDocumentWidgetDocsTemplateRepository;
+    @Autowired
+    private ObjectMapper objectMapper;
+
+    public UploadDocumentsWidgetController() {
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @RequestMapping(value = "/api/v1/upload-document-widget/{friendlyId}", method = RequestMethod.GET)
+    public ObjectNode getUploadDocumentWidget(Principal principal,
+                                         @PathVariable("friendlyId") String documentFriendlyId) {
+        if (documentRepository.findByFriendlyId(documentFriendlyId).getViewer().getEmail().equals(principal.getName())) {
+            Document doc = documentRepository.findByFriendlyId(documentFriendlyId);
+            if (doc != null) {
+                UploadDocumentWidget widget = uploadDocumentWidgetRepository.findByDocument(doc);
+                if (widget != null) {
+                    ObjectNode objectNode = objectMapper.createObjectNode();
+                    objectNode.put("icon", widget.getIcon());
+                    objectNode.put("pageFrom", widget.getPageFrom());
+                    objectNode.put("pageTo", widget.getPageTo());
+                    objectNode.put("buttonText1", widget.getButtonText1());
+                    objectNode.put("buttonText2", widget.getButtonText2());
+                    objectNode.put("isEnabled", widget.isEnabled());LinkedHashMap<String, Object>[] docs;
+
+                    LinkedHashMap<String, Object> tempData = new LinkedHashMap<>();
+                    List<LinkedHashMap> docsList = new ArrayList<>();
+
+                    for (UploadDocumentWidgetDocsTemplate template : uploadDocumentWidgetDocsTemplateRepository.getAllByWidget(widget)) {
+                        tempData.put("docName", template.getDocumentName());
+                        tempData.put("isUpdate", template.isCanUpdate());
+                        docsList.add(tempData);
+                    }
+
+                    ArrayNode arrayNode = objectMapper.valueToTree(docsList);
+                            objectNode.putArray("documents").addAll(arrayNode);
+                    return objectNode;
+                }
+                return null;
+            }
+        }
+        return null;
     }
 
     @ResponseStatus(HttpStatus.OK)
@@ -53,17 +98,12 @@ public class UploadDocumentsWidgetController {
             widget.setButtonText2(body.getButtonText2());
             widget.setEnabled(body.isEnabled());
             uploadDocumentWidgetRepository.save(widget);
-        }
-    }
 
-    public static Map<String, String> splitQuery(URL url) throws UnsupportedEncodingException {
-        Map<String, String> query_pairs = new LinkedHashMap<String, String>();
-        String query = url.getQuery();
-        String[] pairs = query.split("&");
-        for (String pair : pairs) {
-            int idx = pair.indexOf("=");
-            query_pairs.put(URLDecoder.decode(pair.substring(0, idx), "UTF-8"), URLDecoder.decode(pair.substring(idx + 1), "UTF-8"));
+            for (int i=0; i < body.getDocuments().length; i++) {
+                HashMap<String, Object> map = (HashMap<String, Object>) body.getDocuments()[i];
+                UploadDocumentWidgetDocsTemplate template = new UploadDocumentWidgetDocsTemplate(widget, (String) map.get("docName"), (Boolean) map.get("isUpdate"));
+                uploadDocumentWidgetDocsTemplateRepository.save(template);
+            }
         }
-        return query_pairs;
     }
 }

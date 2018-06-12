@@ -1,6 +1,6 @@
 package com.slidepiper.repository;
 
-import com.slidepiper.model.entity.Customer;
+import com.slidepiper.model.customer.Customer;
 import org.springframework.data.repository.Repository;
 
 public interface CustomerRepository extends Repository<Customer, Long> {

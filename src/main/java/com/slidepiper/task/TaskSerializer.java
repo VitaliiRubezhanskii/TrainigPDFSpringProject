@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.jsontype.TypeSerializer;
-import com.slidepiper.model.entity.Customer;
+import com.slidepiper.model.customer.Customer;
 import com.slidepiper.model.entity.Document;
 import com.slidepiper.repository.CustomerRepository;
 import com.slidepiper.repository.DocumentRepository;

@@ -2,7 +2,7 @@ package com.slidepiper.converter;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.slidepiper.model.entity.CustomerData;
+import com.slidepiper.model.customer.CustomerData;
 
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
