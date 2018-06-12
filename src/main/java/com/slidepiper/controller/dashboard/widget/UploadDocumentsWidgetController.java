@@ -62,10 +62,10 @@ public class UploadDocumentsWidgetController {
                     objectNode.put("buttonText2", widget.getButtonText2());
                     objectNode.put("isEnabled", widget.isEnabled());LinkedHashMap<String, Object>[] docs;
 
-                    LinkedHashMap<String, Object> tempData = new LinkedHashMap<>();
                     List<LinkedHashMap> docsList = new ArrayList<>();
 
                     for (UploadDocumentWidgetDocsTemplate template : uploadDocumentWidgetDocsTemplateRepository.getAllByWidget(widget)) {
+                        LinkedHashMap<String, Object> tempData = new LinkedHashMap<>();
                         tempData.put("docName", template.getDocumentName());
                         tempData.put("isUpdate", template.isCanUpdate());
                         docsList.add(tempData);
