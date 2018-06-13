@@ -11,6 +11,6 @@ public class UploadFileWidgetInput {
     private int pageTo;
     private String buttonText1;
     private String buttonText2;
-    private boolean isEnabled;
+    private Boolean isEnabled;
     private Object[] documents;
 }

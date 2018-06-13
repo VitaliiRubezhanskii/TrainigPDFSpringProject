@@ -96,7 +96,7 @@ public class UploadDocumentsWidgetController {
             widget.setPageTo(body.getPageTo());
             widget.setButtonText1(body.getButtonText1());
             widget.setButtonText2(body.getButtonText2());
-            widget.setEnabled(body.isEnabled());
+            widget.setEnabled(body.getIsEnabled());
             uploadDocumentWidgetRepository.save(widget);
 
             for (int i=0; i < body.getDocuments().length; i++) {
