@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 @Data
 public class UploadFileWidgetInput {
+    private int widgetId;
     private String icon;
     private int pageFrom;
     private int pageTo;

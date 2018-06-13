@@ -64,7 +64,7 @@ public class UploadDocumentsWidgetController {
 
                     List<LinkedHashMap> docsList = new ArrayList<>();
 
-                    for (UploadDocumentWidgetDocsTemplate template : uploadDocumentWidgetDocsTemplateRepository.getAllByWidget(widget)) {
+                    for (UploadDocumentWidgetDocsTemplate template : uploadDocumentWidgetDocsTemplateRepository.getAllByWidgetAAndDeleted(widget, false)) {
                         LinkedHashMap<String, Object> tempData = new LinkedHashMap<>();
                         tempData.put("docName", template.getDocumentName());
                         tempData.put("isUpdate", template.isCanUpdate());
@@ -86,24 +86,64 @@ public class UploadDocumentsWidgetController {
     public void saveUploadDocumentWidget(Principal principal,
                                          @PathVariable("friendlyId") String documentFriendlyId, @RequestBody UploadFileWidgetInput body) throws UnsupportedEncodingException {
         if (documentRepository.findByFriendlyId(documentFriendlyId).getViewer().getEmail().equals(principal.getName())) {
+            Document doc = documentRepository.findByFriendlyId(documentFriendlyId);
+            if (doc != null) {
 
+                UploadDocumentWidget widget;
 
-            UploadDocumentWidget widget = new UploadDocumentWidget();
-            widget.setSalesMan(salesManRepository.findByEmail(principal.getName()));
-            widget.setDocument(documentRepository.findByFriendlyId(documentFriendlyId));
-            widget.setIcon(body.getIcon());
-            widget.setPageFrom(body.getPageFrom());
-            widget.setPageTo(body.getPageTo());
-            widget.setButtonText1(body.getButtonText1());
-            widget.setButtonText2(body.getButtonText2());
-            widget.setEnabled(body.getIsEnabled());
-            uploadDocumentWidgetRepository.save(widget);
+                if (body.getWidgetId() != 0) {
+                    widget = uploadDocumentWidgetRepository.findById(body.getWidgetId());
+                } else {
+                    widget = new UploadDocumentWidget();
+                    widget.setSalesMan(salesManRepository.findByEmail(principal.getName()));
+                    widget.setDocument(documentRepository.findByFriendlyId(documentFriendlyId));
+                }
 
-            for (int i=0; i < body.getDocuments().length; i++) {
-                HashMap<String, Object> map = (HashMap<String, Object>) body.getDocuments()[i];
-                UploadDocumentWidgetDocsTemplate template = new UploadDocumentWidgetDocsTemplate(widget, (String) map.get("docName"), (Boolean) map.get("isUpdate"));
-                uploadDocumentWidgetDocsTemplateRepository.save(template);
+                widget.setIcon(body.getIcon());
+                widget.setPageFrom(body.getPageFrom());
+                widget.setPageTo(body.getPageTo());
+                widget.setButtonText1(body.getButtonText1());
+                widget.setButtonText2(body.getButtonText2());
+                widget.setEnabled(body.getIsEnabled());
+                uploadDocumentWidgetRepository.save(widget);
+
+                List<UploadDocumentWidgetDocsTemplate> templatesToUpdate = uploadDocumentWidgetDocsTemplateRepository.getAllByWidget(widget);
+                for (int i = 0; i < body.getDocuments().length; i++) {
+                    HashMap<String, Object> map = (HashMap<String, Object>) body.getDocuments()[i];
+                    UploadDocumentWidgetDocsTemplate template = new UploadDocumentWidgetDocsTemplate();
+                    if (map.get("docId") != null) {
+                        template = uploadDocumentWidgetDocsTemplateRepository.findById((Integer) map.get("docId"));
+                    } else {
+                        template = uploadDocumentWidgetDocsTemplateRepository.findByDocumentNameAndWidget((String) map.get("docName"), widget);
+                    }
+
+                    if (template != null) {
+                        template.setDocumentName((String) map.get("docName"));
+                        template.setCanUpdate((Boolean) map.get("isUpdate"));
+                        templatesToUpdate.remove(template);
+                    } else {
+                        template = new UploadDocumentWidgetDocsTemplate(widget, (String) map.get("docName"), (Boolean) map.get("isUpdate"), false);
+                    }
+                    uploadDocumentWidgetDocsTemplateRepository.save(template);
+
+                    if (templatesToUpdate.size() > 0) {
+                        for (UploadDocumentWidgetDocsTemplate tmpl : templatesToUpdate) {
+                            tmpl.setDeleted(true);
+                        }
+                    }
+                }
             }
         }
+    }
+
+    private static boolean cmp( List<?> l1, List<?> l2 ) {
+        // make a copy of the list so the original list is not changed, and remove() is supported
+        ArrayList<?> cp = new ArrayList<>( l1 );
+        for ( Object o : l2 ) {
+            if ( !cp.remove( o ) ) {
+                return false;
+            }
+        }
+        return cp.isEmpty();
     }
 }
