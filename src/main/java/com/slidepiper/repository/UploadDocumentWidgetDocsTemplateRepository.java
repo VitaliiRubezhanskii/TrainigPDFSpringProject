@@ -10,7 +10,11 @@ import java.util.List;
 public interface UploadDocumentWidgetDocsTemplateRepository extends Repository<UploadDocumentWidgetDocsTemplate, Integer> {
     UploadDocumentWidgetDocsTemplate findById(int id);
 
+    UploadDocumentWidgetDocsTemplate findByDocumentNameAndWidget(String docName, UploadDocumentWidget widget);
+
     List<UploadDocumentWidgetDocsTemplate> getAllByWidget(UploadDocumentWidget widget);
+
+    List<UploadDocumentWidgetDocsTemplate> getAllByWidgetAndDeleted(UploadDocumentWidget widget, boolean deleted);
 
     @PreAuthorize("hasRole('ROLE_USER')")
     UploadDocumentWidgetDocsTemplate save(UploadDocumentWidgetDocsTemplate entity);

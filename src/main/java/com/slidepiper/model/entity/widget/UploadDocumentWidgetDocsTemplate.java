@@ -12,7 +12,7 @@ import javax.persistence.*;
 public class UploadDocumentWidgetDocsTemplate {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    int id;
 
     @OneToOne
     @JoinColumn(name = "widget_id", referencedColumnName = "id")
@@ -22,12 +22,15 @@ public class UploadDocumentWidgetDocsTemplate {
 
     private boolean canUpdate;
 
+    private boolean deleted;
+
     public UploadDocumentWidgetDocsTemplate() {
     }
 
-    public UploadDocumentWidgetDocsTemplate(UploadDocumentWidget widget, String documentName, boolean canUpdate) {
+    public UploadDocumentWidgetDocsTemplate(UploadDocumentWidget widget, String documentName, boolean canUpdate, boolean deleted) {
         this.widget = widget;
         this.documentName = documentName;
         this.canUpdate = canUpdate;
+        this.deleted = deleted;
     }
 }

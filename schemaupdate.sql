@@ -53,7 +53,7 @@ CREATE TABLE upload_document_widget
   FOREIGN KEY (document_id) REFERENCES slides (id_ai)
 );
 
-/* 06.06.2018; */
+/* 12.06.2018; */
 CREATE TABLE upload_document_widget_docs_template
 (
   id INT AUTO_INCREMENT
@@ -61,8 +61,11 @@ CREATE TABLE upload_document_widget_docs_template
   widget_id INT                                                                                                NOT NULL,
   document_name VARCHAR(255)                                                                                   NOT NULL,
   can_update TINYINT DEFAULT 0                                                                                 NOT NULL,
+  deleted TINYINT DEFAULT 0                                                                                    NOT NULL,
   created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP                                                              NULL,
   updated_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP                                                              NULL ON UPDATE CURRENT_TIMESTAMP,
   CONSTRAINT upload_document_widget_docs_template_ibfk_1
   FOREIGN KEY (widget_id) REFERENCES upload_document_widget (id)
 );
+
+ALTER TABLE upload_document_widget_docs_template ADD COLUMN deleted TINYINT(1) NOT NULL DEFAULT 0;
