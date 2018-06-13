@@ -2132,6 +2132,7 @@ function postDocumentSettings(data, fileHash, callback) {
 }
 
 function postUploadWidgetSettings(data, fileHash) {
+    console.log(JSON.stringify(data));
     $.ajax({
         url:'/api/v1/upload-document-widget/' + fileHash,
         method: 'POST',

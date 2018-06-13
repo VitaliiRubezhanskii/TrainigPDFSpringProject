@@ -55,6 +55,7 @@ public class UploadDocumentsWidgetController {
                 UploadDocumentWidget widget = uploadDocumentWidgetRepository.findByDocument(doc);
                 if (widget != null) {
                     ObjectNode objectNode = objectMapper.createObjectNode();
+                    objectNode.put("widgetId", widget.getId());
                     objectNode.put("icon", widget.getIcon());
                     objectNode.put("pageFrom", widget.getPageFrom());
                     objectNode.put("pageTo", widget.getPageTo());
@@ -64,9 +65,10 @@ public class UploadDocumentsWidgetController {
 
                     List<LinkedHashMap> docsList = new ArrayList<>();
 
-                    for (UploadDocumentWidgetDocsTemplate template : uploadDocumentWidgetDocsTemplateRepository.getAllByWidgetAAndDeleted(widget, false)) {
+                    for (UploadDocumentWidgetDocsTemplate template : uploadDocumentWidgetDocsTemplateRepository.getAllByWidgetAndDeleted(widget, false)) {
                         LinkedHashMap<String, Object> tempData = new LinkedHashMap<>();
                         tempData.put("docName", template.getDocumentName());
+                        tempData.put("docId", template.getId());
                         tempData.put("isUpdate", template.isCanUpdate());
                         docsList.add(tempData);
                     }
@@ -111,8 +113,9 @@ public class UploadDocumentsWidgetController {
                 for (int i = 0; i < body.getDocuments().length; i++) {
                     HashMap<String, Object> map = (HashMap<String, Object>) body.getDocuments()[i];
                     UploadDocumentWidgetDocsTemplate template = new UploadDocumentWidgetDocsTemplate();
-                    if (map.get("docId") != null) {
-                        template = uploadDocumentWidgetDocsTemplateRepository.findById((Integer) map.get("docId"));
+                    int docId = Integer.valueOf((String) map.get("docId"));
+                    if (docId != 0) {
+                        template = uploadDocumentWidgetDocsTemplateRepository.findById(docId);
                     } else {
                         template = uploadDocumentWidgetDocsTemplateRepository.findByDocumentNameAndWidget((String) map.get("docName"), widget);
                     }

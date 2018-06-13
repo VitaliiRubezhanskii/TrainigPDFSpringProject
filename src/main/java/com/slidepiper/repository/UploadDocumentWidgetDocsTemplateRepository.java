@@ -14,7 +14,7 @@ public interface UploadDocumentWidgetDocsTemplateRepository extends Repository<U
 
     List<UploadDocumentWidgetDocsTemplate> getAllByWidget(UploadDocumentWidget widget);
 
-    List<UploadDocumentWidgetDocsTemplate> getAllByWidgetAAndDeleted(UploadDocumentWidget widget, boolean deleted);
+    List<UploadDocumentWidgetDocsTemplate> getAllByWidgetAndDeleted(UploadDocumentWidget widget, boolean deleted);
 
     @PreAuthorize("hasRole('ROLE_USER')")
     UploadDocumentWidgetDocsTemplate save(UploadDocumentWidgetDocsTemplate entity);

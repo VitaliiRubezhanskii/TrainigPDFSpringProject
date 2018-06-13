@@ -12,7 +12,7 @@ import javax.persistence.*;
 public class UploadDocumentWidgetDocsTemplate {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    int id;
 
     @OneToOne
     @JoinColumn(name = "widget_id", referencedColumnName = "id")
