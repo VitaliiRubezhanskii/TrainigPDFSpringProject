@@ -537,14 +537,12 @@ sp.viewerWidgetsModal = {
             }
         );
 
-        // $.getJSON(
-        //     '/api/v1/upload-document-widget/' + fileHash,
-        //     function(data) {
-        //         console.log(data);
-        //         //sp.viewerWidgetsModal.displayUploadWidgetSettings(data, fileHash);
-        //     }
-        // );
-
+        $.getJSON(
+            "/api/v1/upload-document-widget/" + fileHash,
+            function(data) {
+                sp.viewerWidgetsModal.displayUploadWidgetSettings(data, fileHash);
+            }
+        );
 
         sp.widgets.widget11.setDefaultTitle(fileHash);
 
@@ -562,22 +560,27 @@ sp.viewerWidgetsModal = {
         }, interval);
     },
     displayUploadWidgetSettings: function(widget) {
-        $('[name="sp-widget12--is-enabled"]')
-            .prop('checked', widget.isEnabled);
+        $('#sp-tab-12 .sp-customization-option__p').each(function() {
+                $(this).find('[name="sp-widget12--is-enabled"]').prop('checked', widget.isEnabled);
+        });
 
-        // for (var i = 0; i < widget.documents.length - 1; i++) {
+        for (var i = 0; i < widget.documents.length - 1; i++) {
             $('#sp-tab-12 .form-doc').append(
                 sp.widgets.widget12.html
             );
-        // }
+        }
 
         // Link data.
         $('#sp-tab-12 .sp-link-widget__item').each(function(index) {
             $(this).find('[data-item-setting]').each(function() {
 
                 if ('buttonText1' === $(this).attr('data-item-setting')) {
+                    $(this).val(widget.buttonText1);
                     $(this).parents('.sp-link-widget__item').find('.sp-link-widget__item-title')
                         .text(widget.buttonText1);
+                }
+                else if ('buttonText2' === $(this).attr('data-item-setting')) {
+                    $(this).val(widget.buttonText2);
                 }
                  else if ($(this).attr('data-item-setting') === 'icon') {
                     if (typeof widget.icon !== 'undefined'
@@ -1675,6 +1678,7 @@ sp.viewerWidgetsModal = {
                     items['isUpdate'] = $(this).prop('checked');
                 }
             });
+            // if()
             uploadWidget.documents.push(items);
         });
 
