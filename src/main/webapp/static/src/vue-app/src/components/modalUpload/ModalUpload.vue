@@ -54,6 +54,12 @@
               <div class="sk-rect4"></div>
               <div class="sk-rect5"></div>
             </div>
+            <div class="wrong-type">
+              Wrong file type, Please upload only allowed file types: File types allowed: pdf, doc, docx. ppt, pptx, exl, exlx, jpeg, png, jpg
+            </div>
+            <div class="wrong-size">
+              File is too large, Please upload a file less than 10mb
+            </div>
             <div>
               <span class="fileTypes">File types allowed:</span> pdf, doc, docx, ppt, pptx, exl, exlx jpeg, png, jpg
             </div>
@@ -146,6 +152,11 @@ export default{
 </script>
 
 <style>
+.wrong-type,
+.wrong-size{
+  color: #ff0000;
+  display: none;
+}
 .disabled {
   display: none;
 }

@@ -577,18 +577,18 @@ sp.viewerWidgetsModal = {
         $('#sp-tab-12 .sp-link-widget__item').each(function(index) {
             $(this).find('[data-item-setting]').each(function() {
 
-                if ('buttonText1' === $(this).attr('data-item-setting')) {
+                if ($(this).attr('data-item-setting') === 'buttonText1') {
                     $(this).val(widget.buttonText1);
                     $(this).parents('.sp-link-widget__item').find('.sp-link-widget__item-title')
                         .text(widget.buttonText1);
                 }
-                else if ('buttonText2' === $(this).attr('data-item-setting')) {
+                else if ($(this).attr('data-item-setting') === 'buttonText2') {
                     $(this).val(widget.buttonText2);
                 }
-                else if ('pageFrom' === $(this).attr('data-item-setting')) {
+                else if ($(this).attr('data-item-setting') === 'pageFrom') {
                     $(this).val(widget.pageFrom);
                 }
-                else if ('pageTo' === $(this).attr('data-item-setting')) {
+                else if ($(this).attr('data-item-setting') === 'pageTo') {
                     $(this).val(widget.pageTo);
                 }
                  else if ($(this).attr('data-item-setting') === 'icon') {

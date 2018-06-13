@@ -9,6 +9,7 @@ import Toolbar from '../toolbar/Toolbar.vue';
 import PoweredBy from '../powered/PoweredBy.vue';
 import Arrows from '../arrows/Arrows.vue';
 import UploadFiles from '../upload/UploadFiles.vue';
+import TableUploadFiles from '../tableForUploading/TableUploadFiles.vue';
 import sp from '../../constants/spViewer.js';
 
 export default {
@@ -54,12 +55,13 @@ export default {
     //     debugger;
     //     this.uploadData = data;
     //   });
-    // const xhr = new XMLHttpRequest();
-    // xhr.open('GET', "/api/v1/upload-document-widget/" + "j496d2ld");
-    // xhr.send();
-    // xhr.onload = response =>
-    //   this.uploadData = JSON.parse(response.target.responseText);
-  },
+      const xhr = new XMLHttpRequest();
+      xhr.open('GET', "/api/v1/upload-document-widget/j496d2ld");
+      xhr.send();
+      xhr.onload = (response) => {
+        this.uploadData = JSON.parse(response.target.responseText);
+      }
+    },
   methods: {
     onLoaded(){
       this.load = true;
@@ -113,6 +115,7 @@ export default {
     Toolbar,
     PoweredBy,
     Arrows,
-    UploadFiles
+    UploadFiles,
+    TableUploadFiles,
   }
 }
