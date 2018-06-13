@@ -608,7 +608,11 @@ sp.viewerWidgetsModal = {
                     $(this).prop('checked', widget.documents[index].isUpdate);
                 }
                 else if ($(this).attr('data-item-setting') === 'docId') {
-                    $(this).attr('data-docId', widget.documents[index].docId);
+                    if(widget.documents[index].docId !== '0'){
+                        $(this).attr('data-docId', widget.documents[index].docId);
+                    } else {
+                        $(this).attr('data-docId', '0');
+                    }
                 }
             });
         });
