@@ -609,9 +609,9 @@ sp.viewerWidgetsModal = {
                 }
                 else if ($(this).attr('data-item-setting') === 'docId') {
                     if(widget.documents[index].docId !== '0'){
-                        $(this).attr('data-docId', widget.documents[index].docId);
+                        $(this).val(widget.documents[index].docId);
                     } else {
-                        $(this).attr('data-docId', '0');
+                        $(this).val('0');
                     }
                 }
             });
@@ -1707,7 +1707,7 @@ sp.viewerWidgetsModal = {
                     items['isUpdate'] = $(this).prop('checked');
                 }
                 else if ($(this).attr('data-item-setting') === 'docId') {
-                    items['docId'] = $('.docId').attr('data-docId');
+                    items['docId'] = $(this).val();
                 }
             });
             uploadWidget.documents.push(items);

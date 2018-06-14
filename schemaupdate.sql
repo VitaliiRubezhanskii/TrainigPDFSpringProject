@@ -68,4 +68,8 @@ CREATE TABLE upload_document_widget_docs_template
   FOREIGN KEY (widget_id) REFERENCES upload_document_widget (id)
 );
 
+/* 13.06.2018; */
 ALTER TABLE upload_document_widget_docs_template ADD COLUMN deleted TINYINT(1) NOT NULL DEFAULT 0;
+
+/* 14chi.06.2018; */
+ALTER TABLE upload_document_widget ADD CONSTRAINT document_unique UNIQUE (document_id);
