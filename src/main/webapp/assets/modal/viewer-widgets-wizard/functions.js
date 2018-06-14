@@ -600,9 +600,9 @@ sp.viewerWidgetsModal = {
         });
         $('#sp-tab-12 .doc-group').each(function(index) {
             $(this).find('[data-item-setting]').each(function() {
-                $(this).prop('disabled',true);
                 if ($(this).attr('data-item-setting') === 'docName') {
                     $(this).val(widget.documents[index].docName);
+                    $(this).prop('disabled',true);
                 }
                 else if ($(this).attr('data-item-setting') === 'isUpdate') {
                     $(this).prop('checked', widget.documents[index].isUpdate);

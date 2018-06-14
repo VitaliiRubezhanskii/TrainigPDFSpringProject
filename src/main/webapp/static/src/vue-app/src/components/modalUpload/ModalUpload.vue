@@ -54,14 +54,20 @@
               <div class="sk-rect4"></div>
               <div class="sk-rect5"></div>
             </div>
-            <div class="wrong-type">
-              Wrong file type, Please upload only allowed file types: File types allowed: pdf, doc, docx. ppt, pptx, exl, exlx, jpeg, png, jpg
+            <div
+              class=" wrong-type { 'wrong-type-show-error': accseptFilesType.some(file => fileType)  } "
+            >
+              Wrong file type, Please upload only allowed file types: File types allowed: pdf, doc, docx, ppt, pptx, exl, exlx, jpeg, png, jpg
             </div>
-            <div class="wrong-size">
+            <div
+              :class=" fileSize > 10 ? 'wrong-size-show-error' : '' "
+              class="wrong-size"
+            >
               File is too large, Please upload a file less than 10mb
             </div>
+            <hr>
             <div>
-              <span class="fileTypes">File types allowed:</span> pdf, doc, docx, ppt, pptx, exl, exlx jpeg, png, jpg
+              <span class="fileTypes">File types allowed:</span> pdf, doc, docx, ppt, pptx, xls, xlsx jpeg, png, jpg
             </div>
             <div>
               <span class="fileTypes">File size:</span> upto 10mb
@@ -94,7 +100,7 @@
 <script>
 import Vue from 'vue';
 import { uploadDoc } from '../../helper/functions.js';
-import $ from "jquery";
+import $ from 'jquery';
 
 export default{
   props: ['showList'],
@@ -104,18 +110,22 @@ export default{
       files: null,
       sp: window.SP,
       location: window.location.search.slice(3),
-      uploadedFiles: null,
+      // uploadedFiles: null,
+      accseptFilesType: ['image/gif', 'image/jpeg', 'image/png', 'application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/msword', 'application/vnd.ms-powerpoint', 'application/vnd.openxmlformats-officedocument.presentationml.presentation', 'application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'],
       isUploading: false,
+      fileSize: null,
+      fileType: null,
     }
   },
   methods: {
     handleInput(){
-      //this.files = event.target.files;
       this.files = this.$refs.uploadFiles.files
-      this.uploadedFiles = this.files['0'].name;
+      this.fileSize = this.$refs.uploadFiles.files[0].size/(1024*1024);
+      this.fileType = this.$refs.uploadFiles.files[0].type;
       this.isDisabled = this.files ? false : true;
     },
     uploadDocument() {
+      console.log(this.fileType,this.accseptFilesType.some(file => file === this.fileType));
       this.isUploading = true;
       const body = new FormData();
       body.append('file', this.files[0]);
@@ -152,11 +162,18 @@ export default{
 </script>
 
 <style>
+
 .wrong-type,
 .wrong-size{
   color: #ff0000;
   display: none;
 }
+
+div.wrong-size-show-error,
+div.wrong-type-show-error {
+  display: block;
+}
+
 .disabled {
   display: none;
 }

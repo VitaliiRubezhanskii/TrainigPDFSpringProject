@@ -73,8 +73,7 @@
   </div>
   <!-- <UploadFiles /> -->
   <TableUploadFiles
-    v-if="uploadData
-      && uploadData.isEnabled 
+    v-if="uploadData 
       && Number(uploadData.pageFrom)<=page && Number(uploadData.pageTo)>=page"
     :uploadData="uploadData"
     :styleButton="styleButton.backgroundColor"
