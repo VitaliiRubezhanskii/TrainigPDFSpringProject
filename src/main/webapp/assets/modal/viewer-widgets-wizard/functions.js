@@ -424,7 +424,6 @@ sp.widgets = {
 
             // buttonText2 is not a required field.
             $('#sp-tab-12 form').find('input[data-item-setting="docName"], input[data-item-setting="buttonText1"], input[data-item-setting="link"], input[data-item-setting="pageFrom"], input[data-item-setting="pageTo"]').each(function() {
-
                 if ('' === $(this).val()) {
                     isEmpty = true;
                 } else {
@@ -601,6 +600,7 @@ sp.viewerWidgetsModal = {
         });
         $('#sp-tab-12 .doc-group').each(function(index) {
             $(this).find('[data-item-setting]').each(function() {
+                $(this).prop('disabled',true);
                 if ($(this).attr('data-item-setting') === 'docName') {
                     $(this).val(widget.documents[index].docName);
                 }
@@ -1179,9 +1179,17 @@ sp.viewerWidgetsModal = {
 
             function docsSavedCallback(result) {
                 // Setting attribute to current value
+                var dataUpload = sp.viewerWidgetsModal.saveUploadWidget(fileHash);
+                if(sp.viewerWidgetsModal.hasDuplicates(dataUpload.documents.map(d => d.docName))) {
+
+                    $('#sp-tab-12 .doc-group').find('[data-item-setting="docName"]').each(function(index){
+                        $(this).addClass('sp-widget-form-error');
+                    });
+                    sp.error.handleError('You must enter only unique document name.');
+                    return;
+                }
                 $("#sp-files-management span[data-file-hash='" + fileHash + "'][data-target='#sp-viewer-widgets-modal']").attr('data-is-process-mode', +isProcessModeEnabled.isProcessMode);
                 sp.viewerWidgetsModal.postWidgetSettings(data, fileHash, targetId);
-                var dataUpload = sp.viewerWidgetsModal.saveUploadWidget(fileHash);
                 postUploadWidgetSettings(dataUpload, fileHash);
             }
             postDocumentSettings(isProcessModeEnabled, fileHash, docsSavedCallback);
@@ -1189,6 +1197,9 @@ sp.viewerWidgetsModal = {
             $('button[data-dismiss="modal"]').click();
             swal('No settings were saved.', '', 'info');
         }
+    },
+    hasDuplicates: function(array) {
+        return (new Set(array)).size !== array.length;
     },
 
     /**
@@ -1702,6 +1713,15 @@ sp.viewerWidgetsModal = {
             uploadWidget.documents.push(items);
         });
 
+        if (sp.viewerWidgetsModal.hasDuplicates(uploadWidget.documents.map(d => d.docName))) {
+
+            $('#sp-tab-12 .doc-group').find('[data-item-setting="docName"]').each(function(index){
+                $(this).addClass('sp-widget-form-error');
+            });
+            sp.error.handleError('You must enter only unique document name.');
+            return;
+        }
+
         if (!isUploadWidgetSettingEmpty) {
             if(sp.widgets.widget12.isWidgetPageOrderValid()) {
                 return uploadWidget;
@@ -1886,6 +1906,7 @@ sp.viewerWidgetsModal = {
             }
         });
     },
+
 
     /**
      * Check if input fields are empty in document cusomization.
@@ -2136,7 +2157,6 @@ function postDocumentSettings(data, fileHash, callback) {
 }
 
 function postUploadWidgetSettings(data, fileHash) {
-    console.log(JSON.stringify(data));
     $.ajax({
         url:'/api/v1/upload-document-widget/' + fileHash,
         method: 'POST',
