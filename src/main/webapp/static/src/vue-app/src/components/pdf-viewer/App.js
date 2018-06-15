@@ -48,13 +48,6 @@ export default {
         this.styleButton = {'backgroundColor': this.toolbarData.toolbarButtonBackground};
         this.colorText = this.toolbarData.toolbarCta2Color;
       });
-    // fetch(`${this.sp.API_URL}/api/v1/upload-document-widget/j496d2ld`)
-    //   // .then(response => response.json())
-    //   .then(data => {
-    //     const a = data;
-    //     debugger;
-    //     this.uploadData = data;
-    //   });
       const xhr = new XMLHttpRequest();
       xhr.open('GET', "/api/v1/upload-document-widget/j496d2ld");
       xhr.send();

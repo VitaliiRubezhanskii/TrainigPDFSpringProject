@@ -1179,6 +1179,9 @@ sp.viewerWidgetsModal = {
 
             function docsSavedCallback(result) {
                 // Setting attribute to current value
+
+                $("#sp-files-management span[data-file-hash='" + fileHash + "'][data-target='#sp-viewer-widgets-modal']").attr('data-is-process-mode', +isProcessModeEnabled.isProcessMode);
+                sp.viewerWidgetsModal.postWidgetSettings(data, fileHash, targetId);
                 var dataUpload = sp.viewerWidgetsModal.saveUploadWidget(fileHash);
                 if(sp.viewerWidgetsModal.hasDuplicates(dataUpload.documents.map(d => d.docName))) {
 
@@ -1188,8 +1191,10 @@ sp.viewerWidgetsModal = {
                     sp.error.handleError('You must enter only unique document name.');
                     return;
                 }
-                $("#sp-files-management span[data-file-hash='" + fileHash + "'][data-target='#sp-viewer-widgets-modal']").attr('data-is-process-mode', +isProcessModeEnabled.isProcessMode);
-                sp.viewerWidgetsModal.postWidgetSettings(data, fileHash, targetId);
+
+                if($('input[name="sp-widget12--is-enabled"]')[0].checked === false){
+                    return;
+                }
                 postUploadWidgetSettings(dataUpload, fileHash);
             }
             postDocumentSettings(isProcessModeEnabled, fileHash, docsSavedCallback);
@@ -1674,27 +1679,29 @@ sp.viewerWidgetsModal = {
         };
 
         var isUploadWidgetSettingEmpty = false;
+        if($('input[name="sp-widget12--is-enabled"]')[0].checked === true) {
+            $('#sp-tab-12 .sp-link-widget__item').each(function() {
 
-        $('#sp-tab-12 .sp-link-widget__item').each(function() {
+                $(this).find('[data-item-setting]').each(function() {
+                    if ($(this).val() === ''
+                        && $(this).attr('data-item-setting') !== 'buttonText2'
+                        && $(this).attr('data-item-setting') !== 'docId'
+                        && $(this).attr('data-item-setting') !== 'icon') {
+                        sp.error.handleError('You must fill the field.');
+                        $(this).addClass('sp-widget-form-error');
+                        sp.viewerWidgetsModal.openErrorTab();
 
-            $(this).find('[data-item-setting]').each(function() {
-                if ($(this).val() === ''
-                    && $(this).attr('data-item-setting') !== 'buttonText2'
-                    && $(this).attr('data-item-setting') !== 'docId'
-                    && $(this).attr('data-item-setting') !== 'icon') {
-                    sp.error.handleError('You must fill the field.');
-                    $(this).addClass('sp-widget-form-error');
-                    sp.viewerWidgetsModal.openErrorTab();
-
-                    isUploadWidgetSettingEmpty = true;
-                }
-                else if ('icon' === $(this).attr('data-item-setting')) {
-                    if ($(this).prop('checked')) {
-                        uploadWidget.icon = $(this).attr('data-icon');
+                        isUploadWidgetSettingEmpty = true;
                     }
-                }
-            })
-        });
+                    else if ('icon' === $(this).attr('data-item-setting')) {
+                        if ($(this).prop('checked')) {
+                            uploadWidget.icon = $(this).attr('data-icon');
+                        }
+                    }
+                })
+            });
+        }
+
 
         $('#sp-tab-12 .doc-group').each(function() {
             var items = {};
@@ -2165,10 +2172,10 @@ function postUploadWidgetSettings(data, fileHash) {
         beforeSend: function(xhr) {
             xhr.setRequestHeader(SP.CSRF_HEADER, SP.CSRF_TOKEN);
         },
-        // success: callback,
-        // error: function() {
-        //     swal('Error', 'Something went wrong. Your settings weren\'t saved.', 'error');
-        // }
+        success: callback,
+        error: function() {
+            swal('Error', 'Something went wrong. Your settings weren\'t saved.', 'error');
+        }
     });
 }
 

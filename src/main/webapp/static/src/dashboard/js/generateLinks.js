@@ -150,6 +150,12 @@ function sortDocsInDocsMgmtPanel(data) {
                 $.getScript('assets/modal/viewer-widgets-wizard/functions.js', function() {
                     sp.viewerWidgetsModal.getWidgetsSettings(fileHash, isProcessMode);
                     $('#sp-save-widgets-settings__button').attr('data-2factor-auth',isDoubleAuth);
+                    if(!isDoubleAuth){
+                        $('a[href = "#sp-tab-12"]').addClass('hidden-block');
+                    }
+                    else{
+                        $('a[href = "#sp-tab-12"]').removeClass('hidden-block');
+                    }
                     $('#sp-viewer-widgets-modal').off('hidden.bs.modal').on('hidden.bs.modal', function() {
                         $(this).find('.tabs-container').addClass('sp-hidden');
                     });
