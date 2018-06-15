@@ -71,5 +71,11 @@ CREATE TABLE upload_document_widget_docs_template
 /* 13.06.2018; */
 ALTER TABLE upload_document_widget_docs_template ADD COLUMN deleted TINYINT(1) NOT NULL DEFAULT 0;
 
-/* 14chi.06.2018; */
+/* 14.06.2018; */
 ALTER TABLE upload_document_widget ADD CONSTRAINT document_unique UNIQUE (document_id);
+
+/* 15.06.2018; */
+SET collation_connection = 'utf8_general_ci';
+ALTER DATABASE picascrafxzhbcmd CHARACTER SET utf8 COLLATE utf8_general_ci;
+ALTER TABLE upload_document_widget CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
+ALTER TABLE upload_document_widget_docs_template CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;

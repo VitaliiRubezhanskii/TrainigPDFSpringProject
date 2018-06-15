@@ -123,16 +123,17 @@ public class UploadDocumentsWidgetController {
                     if (template != null) {
                         template.setDocumentName((String) map.get("docName"));
                         template.setCanUpdate((Boolean) map.get("isUpdate"));
+                        template.setDeleted(false);
                         templatesToUpdate.remove(template);
                     } else {
                         template = new UploadDocumentWidgetDocsTemplate(widget, (String) map.get("docName"), (Boolean) map.get("isUpdate"), false);
                     }
                     uploadDocumentWidgetDocsTemplateRepository.save(template);
-
-                    if (templatesToUpdate.size() > 0) {
-                        for (UploadDocumentWidgetDocsTemplate tmpl : templatesToUpdate) {
-                            tmpl.setDeleted(true);
-                        }
+                }
+                if (templatesToUpdate.size() > 0) {
+                    for (UploadDocumentWidgetDocsTemplate tmpl : templatesToUpdate) {
+                        tmpl.setDeleted(true);
+                        uploadDocumentWidgetDocsTemplateRepository.save(tmpl);
                     }
                 }
             }
