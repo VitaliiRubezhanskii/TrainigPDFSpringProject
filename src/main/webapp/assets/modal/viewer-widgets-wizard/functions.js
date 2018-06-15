@@ -521,7 +521,7 @@ sp.viewerWidgetsModal = {
      *
      * @param {boolean} isProcessMode - if process mode is enabled.
      */
-    getWidgetsSettings: function(fileHash, isProcessMode) {
+    getWidgetsSettings: function(fileHash) {//, processModeChecked) {
         var widgetSettingsData = null;
         $.getJSON(
             '/api/v1/widgets',
@@ -532,7 +532,7 @@ sp.viewerWidgetsModal = {
                 widgetSettingsData = data;
                 sp.viewerWidgetsModal.displayWidgetsSettings(widgetSettingsData, fileHash);
                 sp.viewerWidgetsModal.setSaveButtons(fileHash);
-                sp.viewerWidgetsModal.setProcessMode(isProcessMode);
+                //sp.viewerWidgetsModal.setProcessMode(processModeChecked);
             }
         );
 
@@ -802,6 +802,18 @@ sp.viewerWidgetsModal = {
                 $('[name="spQuestionWidgetIsLocationBottom"]').prop('checked', widget.items[0].location.bottom);
             }
 
+            //location
+            if (typeof widget.items[0].locationProcessMode !== 'undefined'
+                && typeof widget.items[0].locationProcessMode.top !== 'undefined') {
+                $('#rightTop').prop('checked', widget.items[0].locationProcessMode.top);
+            }
+
+            if (typeof widget.items[0].locationProcessMode !== 'undefined'
+                && typeof widget.items[0].locationProcessMode.bottom !== 'undefined') {
+                $('#rightBottom').prop('checked', widget.items[0].locationProcessMode.bottom);
+            }
+            ///////
+
             if (typeof widget.items[0].isDefaultButtonColorEnabled !== 'undefined') {
                 $('.spQuestionWidgetIsDefaultButtonColorEnabled').prop('checked', widget.items[0].isDefaultButtonColorEnabled);
             }
@@ -850,8 +862,14 @@ sp.viewerWidgetsModal = {
                 .prop('checked', widget.startFromFirstPage)
                 .closest('div').removeClass('sp-hide-is-enabled');
 
+            var checked = $('#sp-save-test-widgets-settings__button').attr('data-is-process-mode') === 'true'? true : widget.isHorizontalHopperEnabled;
+
+            if($('#sp-save-test-widgets-settings__button').attr('data-is-process-mode') === 'true'){
+                $('[name="horizontal-hopper-widget-is-enabled"]').attr('disabled',true);
+            }
+
             $('[name="horizontal-hopper-widget-is-enabled"]')
-                .prop('checked', widget.isHorizontalHopperEnabled)
+                .prop('checked', checked)
                 .closest('div').removeClass('sp-hide-is-enabled');
 
             $('.sp-hopper-widget__row').each(function(index) {
@@ -1173,9 +1191,9 @@ sp.viewerWidgetsModal = {
             $('#' + targetId).text('Saving...');
             $('.sp-widgets-customisation__spinner').addClass('sp-widgets-customisation__spinner-show');
 
-            var isProcessModeEnabled = {
-                isProcessMode: $('[name="process-mode-is-enabled"]').prop('checked')
-            };
+            // var isProcessModeEnabled = {
+            //     isProcessMode: $('[name="process-mode-is-enabled"]').prop('checked')
+            // };
 
             function docsSavedCallback(result) {
                 // Setting attribute to current value
@@ -1197,7 +1215,7 @@ sp.viewerWidgetsModal = {
                 }
                 postUploadWidgetSettings(dataUpload, fileHash);
             }
-            postDocumentSettings(isProcessModeEnabled, fileHash, docsSavedCallback);
+           // postDocumentSettings(isProcessModeEnabled, fileHash, docsSavedCallback);
         } else if (0 === settings.length) {
             $('button[data-dismiss="modal"]').click();
             swal('No settings were saved.', '', 'info');
@@ -1356,6 +1374,10 @@ sp.viewerWidgetsModal = {
                         location: {
                             right: $('[name="spQuestionWidgetIsLocationRight"]').prop('checked'),
                             bottom: $('[name="spQuestionWidgetIsLocationBottom"]').prop('checked'),
+                        },
+                        locationProcessMode: {
+                            top: $('#rightTop').prop('checked'),
+                            bottom: $('#rightBottom').prop('checked')
                         },
                     }
                 ]
@@ -1914,7 +1936,6 @@ sp.viewerWidgetsModal = {
         });
     },
 
-
     /**
      * Check if input fields are empty in document cusomization.
      *
@@ -2062,9 +2083,9 @@ sp.viewerWidgetsModal = {
      * Set Process Mode
      * Add data-is-process-mode attribute for the 'Process Mode' checkbox.
      */
-    setProcessMode: function(isProcessMode) {
-        $('[name="process-mode-is-enabled"]').prop('checked', !!+isProcessMode);
-    }
+    // setProcessMode: function(processModeChecked) {
+    //     $('[name="process-mode-is-enabled"]').prop('checked', processModeChecked);
+    // }
 };
 
 /**

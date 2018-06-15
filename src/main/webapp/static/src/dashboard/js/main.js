@@ -680,6 +680,33 @@ $(document).ready(function() {
                 });
             $('.sweet-alert button.cancel').addClass('cancel-red');
         });
+
+    $('body')
+        .on('change', '.processMode-switch', function (e) {
+            var documentId = $(this).closest('.options-wrapper').data('id');
+            var targetElement = e.target;
+            swal({
+                    title: `Please confirm turning ${targetElement.checked? 'process':'portal'} mode`,
+                    type: "warning",
+                    text:`<div class="info-block" data-title= "${targetElement.checked ? "i – Process mode is usually used to run a 'to-do' process with tasks and a process bar. Widgets available in this mode are: process Hopper, Questions widget, Video, Testimonial, Task widget":"i – Portal mode is usually used to run a presentation style or informational portal. widgets available in this mode are: Navigation Hopper and horizontal, Questions widget, Video, Testimonial, Task widget, Like widget, Calendly widget and Code widget"}"><i class="fa fa-info" aria-hidden="true"></i></div>`,
+                    html: true,
+                    confirmButtonText: `Yes, turn on ${targetElement.checked? 'process':'portal'} mode`,
+                    showCancelButton: true,
+                    closeOnConfirm: true,
+                    cancelButtonColor: "#DC3545",
+                    closeOnCancel: true,
+                    allowOutsideClick: true,
+
+                },
+                function(isConfirm){
+                    if (isConfirm) {
+                        saveAuthSettings({isProcessMode: targetElement.checked }, documentId);
+                    } else {
+                        targetElement.checked ? targetElement.checked = false :  targetElement.checked = true;
+                    }
+                });
+            $('.sweet-alert button.cancel').addClass('cancel-red');
+        });
 });
 
 function saveAuthSettings(data, fileHash) {
@@ -869,10 +896,10 @@ $(function() {
         placeholderNumberType: "MOBILE",
         preferredCountries: ["il","us", "gb"],
         separateDialCode: false,
-        utilsScript: ""
+        utilsScript: "../../../../assets/js/plugins/phone/build/js/utils.js"
     });
 
-    $("#phoneNumber").mask("(000) 000-0000");
+    // $("#phoneNumber").mask("(000) 000-0000");
 
     document.querySelector( "#sp-add-update-customer__form" )
         .addEventListener( "invalid", function( event ) {
@@ -881,7 +908,7 @@ $(function() {
 
     $("#phoneNumber").on("change input paste propertychange", function(){
         event.preventDefault();
-        if($("#phoneNumber").val().length !== 14){
+        if(!$("#phoneNumber").intlTelInput("isValidNumber")){
             $(".error").css({display: 'block', color: 'red'});
             $("#phoneNumber").css({border: '1px solid red'});
         } else{
@@ -890,56 +917,56 @@ $(function() {
         }
     });
 
-    $('input[name^="customerFirstName"]').on("change input paste propertychange", function(){
+    $('input[name^="customerFirstName"]').on("change input paste propertychange", ()=>{
         event.preventDefault();
-        if(!/^[a-zA-Z][a-zA-Z0-9-_\.]{1,20}$/.test($('input[name^="customerFirstName"]').val())){
-            $(".errorName").css({display: 'block', color: 'red'});
-            $('input[name^="customerFirstName"]').css({border: '1px solid red'});
-        } else{
-            $(".errorName").css({display: 'none'});
-            $('input[name^="customerFirstName"]').css({border: '1px solid #e5e6e7'});
-        }
-    });
+    if(!/^[a-zA-Z][a-zA-Z0-9-_\.]{1,20}$/.test($('input[name^="customerFirstName"]').val())){
+        $(".errorName").css({display: 'block', color: 'red'});
+        $('input[name^="customerFirstName"]').css({border: '1px solid red'});
+    } else{
+        $(".errorName").css({display: 'none'});
+        $('input[name^="customerFirstName"]').css({border: '1px solid #e5e6e7'});
+    }
+});
 
-    $('input[name^="customerLastName"]').on("change input paste propertychange", function() {
+    $('input[name^="customerLastName"]').on("change input paste propertychange", ()=>{
         event.preventDefault();
-        if(!/^[a-zA-Z][a-zA-Z0-9-_\.]{1,20}$/.test($('input[name^="customerLastName"]').val())){
-            $(".errorLastName").css({display: 'block', color: 'red'});
-            $('input[name^="customerLastName"]').css({border: '1px solid red'});
-        } else{
-            $(".errorLastName").css({display: 'none'});
-            $('input[name^="customerLastName"]').css({border: '1px solid #e5e6e7'});
-        }
-    });
+    if(!/^[a-zA-Z][a-zA-Z0-9-_\.]{1,20}$/.test($('input[name^="customerLastName"]').val())){
+        $(".errorLastName").css({display: 'block', color: 'red'});
+        $('input[name^="customerLastName"]').css({border: '1px solid red'});
+    } else{
+        $(".errorLastName").css({display: 'none'});
+        $('input[name^="customerLastName"]').css({border: '1px solid #e5e6e7'});
+    }
+});
 
-    $('input[name^="customerID"]').on("change input paste propertychange",function() {
+    $('input[name^="customerID"]').on("change input paste propertychange",()=>{
         event.preventDefault();
-        if(!/^[0-9]{0,10}$/.test($('input[name^="customerID"]').val())){
-            $(".errorId").css({display: 'block', color: 'red'});
-            $('input[name^="customerID"]').css({border: '1px solid red'});
-        } else{
-            $(".errorId").css({display: 'none'});
-            $('input[name^="customerID"]').css({border: '1px solid #e5e6e7'});
-        }
-    });
+    if(!/^[0-9]{0,10}$/.test($('input[name^="customerID"]').val())){
+        $(".errorId").css({display: 'block', color: 'red'});
+        $('input[name^="customerID"]').css({border: '1px solid red'});
+    } else{
+        $(".errorId").css({display: 'none'});
+        $('input[name^="customerID"]').css({border: '1px solid #e5e6e7'});
+    }
+});
 
-    $('input[name^="customerEmail"]').on("change input paste propertychange",function() {
+    $('input[name^="customerEmail"]').on("change input paste propertychange",()=>{
         event.preventDefault();
 
-        if(!/^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/.test($('input[name^="customerEmail"]').val())){
-            $(".errorEmail").css({display: 'block', color: 'red'});
-            $('input[name^="customerEmail"]').css({border: '1px solid red'});
-        } else{
-            $(".errorEmail").css({display: 'none'});
-            $('input[name^="customerEmail"]').css({border: '1px solid #e5e6e7'});
-        }
-    });
+    if(!/^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/.test($('input[name^="customerEmail"]').val())){
+        $(".errorEmail").css({display: 'block', color: 'red'});
+        $('input[name^="customerEmail"]').css({border: '1px solid red'});
+    } else{
+        $(".errorEmail").css({display: 'none'});
+        $('input[name^="customerEmail"]').css({border: '1px solid #e5e6e7'});
+    }
+});
 
-    $(".sp-add-update-customer").on("click", function() {
+    $(".sp-add-update-customer").on("click", ()=>{
         $(".error, .errorId, .errorEmail, .errorName, .errorLastName").css({display: 'none'});
-        $("#phoneNumber, input[name^='customerID'], input[name^='customerEmail'], input[name^='customerFirstName'], input[name^='customerLastName']").css({border: '1px solid #e5e6e7'});
-        $("#sp-add-update-customer__form")[0].reset();
-    });
+    $("#phoneNumber, input[name^='customerID'], input[name^='customerEmail'], input[name^='customerFirstName'], input[name^='customerLastName']").css({border: '1px solid #e5e6e7'});
+    $("#sp-add-update-customer__form")[0].reset();
+});
 
     $("#sp-add-update-customer__form").on("propertychange change blur click keyup input paste",function(){
         var firstName = /^[a-zA-Z][a-zA-Z0-9-_\.]{1,20}$/.test($('input[name^="customerFirstName"]').val());
@@ -951,4 +978,4 @@ $(function() {
             $("#sp-modal-add-update-customer__button").prop("disabled", true);
         }
     });
-});
+})

@@ -39,7 +39,7 @@ public class DashboardLinkWidgetService {
                 .buildAndExpand(activeProfile, documentFriendlyId, uuid, fileName)
                 .toUriString();
 
-        amazonS3Service.upload(file, null, bucket, key, null);
+            amazonS3Service.upload(file, file.getContentType(), bucket, key, null);
 
         return UriComponentsBuilder
                 .fromHttpUrl(url)

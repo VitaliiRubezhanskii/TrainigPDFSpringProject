@@ -1,30 +1,3 @@
-.sp-widget__delete-item{
-    float: right;
-}
-
-.deleteDoc{
-    padding: 0 !important;
-}
-
-.doc {
-    width: 100% !important;
-    padding: 10px 0;
-}
-
-.form-doc{
-    width: 90% !important;
-    margin-left: 0 !important;
-}
-
-.doc-group{
-    width: 100% !important;
-    margin-bottom: 0 !important;
-}
-
-.sp-link-widget__item-configuration{
-   float: right;
- }
-
 .sp-add-hopper-widget__a,
 .sp-add-video-widget__a,
 .sp-widget__add-item {
