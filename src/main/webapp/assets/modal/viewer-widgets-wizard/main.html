@@ -16,11 +16,11 @@
 
         <div class="modal-body">
             <!-- Enable process mode -->
-            <div class="checkbox">
-                <label>
-                    <input type="checkbox" name="process-mode-is-enabled"> Process Mode
-                </label>
-            </div>
+            <!--<div class="checkbox">-->
+                <!--<label>-->
+                    <!--<input type="checkbox" name="process-mode-is-enabled"> Process Mode-->
+                <!--</label>-->
+            <!--</div>-->
             <div class="tabs-container sp-hidden">
                 <ul class="nav nav-tabs">
                     <li class="active"><a class="sp-widgets-customization-window__tab" data-toggle="tab" href="#sp-tab-3"><i class="fa fa-comment"></i></a></li>
@@ -153,17 +153,36 @@
 						                    <div id="sp-question-widget__widget-location" class="form-group">
 						                    	<label class="col-lg-4 control-label">Widget Location:</label>
 
-		                              <div class="col-lg-8">
-		                              	<div class="checkbox">
-		                              		<label><input type="checkbox" name="spQuestionWidgetIsLocationRight" checked>Right Side</label>
-		                              	</div>
+                                              <div class="col-lg-8">
+                                                <div class="checkbox checkboxRight">
+                                                    <input type="checkbox" id="rightSide" name="spQuestionWidgetIsLocationRight" checked><label class="rightSide" for="rightSide">Right Side</label>
+                                                </div>
 
-		                              	<div class="checkbox">
-		                              		<label><input type="checkbox" name="spQuestionWidgetIsLocationBottom">End of the document</label>
-		                              	</div>
 
-		                              </div>
+                                                <div class="checkbox checkboxRightBottom">
+                                                    <input type="checkbox" id="endDoc" name="spQuestionWidgetIsLocationBottom"><label class="endDoc" for="endDoc">End of the document</label>
+                                                </div>
+
+                                              </div>
+
 						                    </div>
+
+                                    <div id="sp-question-widget__widget-locationProcessMode" class="form-group hidden-block">
+                                        <label class="col-lg-4 control-label">Widget Location For Process mode:</label>
+
+                                        <div class="col-lg-8">
+
+                                            <div class="checkbox checkboxTop">
+                                                <input type="radio" id="rightTop" name="spQuestionWidgetIsLocationTop" checked><label class="top" for="rightTop">Right Side Top</label>
+                                            </div>
+
+                                            <div class="checkbox checkboxBottom">
+                                                <input type="radio" id="rightBottom" name="spQuestionWidgetIsLocationTop" checked><label class="bottom" for="rightBottom">Right Side Bottom</label>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
 
 						                    <hr id="sp-question-widget__advanced-hr">
 

@@ -9,6 +9,10 @@
 .errorEmailRequired{
     display: none;
 }
+.hidden-block{
+    display: none !important;
+}
+
 .hint{
     margin: 0 0 0 30px;
 }
@@ -113,8 +117,17 @@
     background: inherit;
     left: 20px;
 }
-.authLabel{
+.authLabel,
+.processModeLabel{
     margin: 0 10px 0 0;
+}
+
+.pull-right{
+    margin: 0 10px 0 0;
+}
+
+.sa-button-container{
+    margin: 0 0 15px 0;
 }
 
 .hint-bold {
@@ -1083,7 +1096,7 @@ input:checked + .sp-doc-settings-slider:before {
     z-index: 2051;
 }
 
-@media screen and (max-width: 1023px){
+@media screen and (max-width: 1024px){
     .pull-right {
         float: none !important;
     }

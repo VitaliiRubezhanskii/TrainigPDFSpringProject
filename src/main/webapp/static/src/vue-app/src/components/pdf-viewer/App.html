@@ -47,8 +47,10 @@
   />
 
   <Video
-    v-if="videoData && videoData.isEnabled"
-    :widget="videoData.items[0]"
+    v-if="videoData
+    && videoData.isEnabled
+    && videoData.items.find(item => item.videoPageStart === page)"
+    :widget="videoData.items.find(item => item.videoPageStart === page)"
   />
 
   <TestimonialsWidget

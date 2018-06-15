@@ -11,6 +11,7 @@ import Arrows from '../arrows/Arrows.vue';
 import UploadFiles from '../upload/UploadFiles.vue';
 import TableUploadFiles from '../tableForUploading/TableUploadFiles.vue';
 import sp from '../../constants/spViewer.js';
+import { postData } from '../../helper/functions.js';
 
 export default {
   name: 'app',
@@ -35,19 +36,20 @@ export default {
   created() {
     fetch(`${this.sp.API_URL}/viewer/widgets?fileLinkHash=${this.location}`)
       .then(response => response.json())
-      .then(data => {
-        this.widgetData = data.map((widget)=>{
-          return JSON.parse(widget.widgetData).data;
-        });
-        this.pages = this.widgetData.find(w => w.widgetId === 5).items.length;
-      });
+  .then(data => {
+      this.widgetData = data.map((widget)=>{
+      return JSON.parse(widget.widgetData).data;
+  });
+    this.pages = this.widgetData.find(w => w.widgetId === 5).items.length;
+  });
     fetch(`${this.sp.API_URL}/viewer/configuration?channelFriendlyId=${this.location}`)
       .then(response => response.json())
       .then(data => {
         this.toolbarData = data;
         this.styleButton = {'backgroundColor': this.toolbarData.toolbarButtonBackground};
         this.colorText = this.toolbarData.toolbarCta2Color;
-      });
+      })
+    ;
     // fetch(`${this.sp.API_URL}/api/v1/upload-document-widget/j496d2ld`)
     //   // .then(response => response.json())
     //   .then(data => {
@@ -63,6 +65,19 @@ export default {
       }
     },
   methods: {
+    sendMessages(){
+      let event = {
+        type: 'OPEN_SLIDES',
+        channelFriendlyId: sp.viewer.linkHash,
+        sessionId: this.sp.SESSION_ID,
+        param1int: this.pages,
+        param3str: navigator.userAgent,
+        data: {
+          dispatchedEventType: "spsessionstart"
+        }
+      };
+      postData(event, this.sp.API_URL);
+    },
     onLoaded(){
       this.load = true;
       this.pageHeight = document.getElementsByTagName('canvas')[0].scrollHeight;
