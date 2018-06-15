@@ -55,7 +55,8 @@
               <div class="sk-rect5"></div>
             </div>
             <div
-              class=" wrong-type { 'wrong-type-show-error': accseptFilesType.some(file => fileType)  } "
+              :class="{ 'wrong-type-show-error' : (!isRightType) }"
+              class="wrong-type"
             >
               Wrong file type, Please upload only allowed file types: File types allowed: pdf, doc, docx, ppt, pptx, exl, exlx, jpeg, png, jpg
             </div>
@@ -114,7 +115,7 @@ export default{
       accseptFilesType: ['image/gif', 'image/jpeg', 'image/png', 'application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/msword', 'application/vnd.ms-powerpoint', 'application/vnd.openxmlformats-officedocument.presentationml.presentation', 'application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'],
       isUploading: false,
       fileSize: null,
-      fileType: null,
+      fileType: '',
     }
   },
   methods: {
@@ -122,10 +123,9 @@ export default{
       this.files = this.$refs.uploadFiles.files
       this.fileSize = this.$refs.uploadFiles.files[0].size/(1024*1024);
       this.fileType = this.$refs.uploadFiles.files[0].type;
-      this.isDisabled = this.files ? false : true;
+      this.isDisabled = !(this.isRightType && (this.fileSize < 10));
     },
     uploadDocument() {
-      console.log(this.fileType,this.accseptFilesType.some(file => file === this.fileType));
       this.isUploading = true;
       const body = new FormData();
       body.append('file', this.files[0]);
@@ -157,7 +157,12 @@ export default{
         this.isDisabled = true;
       });
     },
-  }
+  },
+  computed: {
+    isRightType() {
+      return this.fileType ? this.accseptFilesType.some(file => file === this.fileType) : true;
+    }
+  },
 }
 </script>
 

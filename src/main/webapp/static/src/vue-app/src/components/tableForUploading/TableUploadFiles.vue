@@ -90,7 +90,16 @@ export default {
 }
 </script>
 
-<style lang="css">
+<style lang="css" scoped>
+
+.sp-widget-button div{
+  margin-left: 0 !important;
+    margin-right: 25px !important;
+}
+
+.sp-widget-button9 {
+  border-radius: 50px !important;
+}
 
 .tableBlock {
   max-width: 900px;
@@ -128,6 +137,7 @@ table a:hover {
 }
 
 table {
+  width: 100%;
 	font-family:Arial, Helvetica, sans-serif;
 	color:#666;
 	font-size:12px;
