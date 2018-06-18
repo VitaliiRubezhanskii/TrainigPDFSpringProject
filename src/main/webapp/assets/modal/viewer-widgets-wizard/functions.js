@@ -1,6 +1,7 @@
 var sp = sp || {};
 
 sp.widgets = {
+    isTouched: false,
     widget3: {
         init: (function() {
             $('#sp-question-widget__advanced').contents().click(function() {
@@ -1074,6 +1075,9 @@ sp.viewerWidgetsModal = {
             'sp-save-test-widgets-settings__button'
         );
 
+        $("input[name = 'sp-widget12--is-enabled'], [data-item-setting=docName], [data-item-setting=isUpdate], [data-item-setting=uploadText1], [data-item-setting=pageFrom], [data-item-setting=pageTo]").on("change", function(event){
+            sp.widgets.isTouched = true;
+        });
         // 3)
         $('#sp-save-widgets-settings__button, #sp-save-test-widgets-settings__button')
             .on('click', function () {
@@ -1151,7 +1155,8 @@ sp.viewerWidgetsModal = {
         }
 
         //upload widget
-        if (! sp.widgets.widget12.validate()) {
+        var isUploadValid = ! sp.widgets.widget12.validate();
+        if (isUploadValid) {
             settings.push(sp.viewerWidgetsModal.saveUploadWidget(fileHash));
             deletedWidgetIndex = settings.length - 1;
         }
@@ -1185,41 +1190,30 @@ sp.viewerWidgetsModal = {
         }
 
         if (isValidWidgetSettings) {
-            $('.tabs-container').contents().hide();
-            $('#sp-save-widgets-settings__button, #sp-save-test-widgets-settings__button')
-                .attr('disabled', 'true');
-            $('#' + targetId).text('Saving...');
-            $('.sp-widgets-customisation__spinner').addClass('sp-widgets-customisation__spinner-show');
-
-            // var isProcessModeEnabled = {
-            //     isProcessMode: $('[name="process-mode-is-enabled"]').prop('checked')
-            // };
-
-            function docsSavedCallback(result) {
-                // Setting attribute to current value
-
-                $("#sp-files-management span[data-file-hash='" + fileHash + "'][data-target='#sp-viewer-widgets-modal']").attr('data-is-process-mode', +isProcessModeEnabled.isProcessMode);
-                sp.viewerWidgetsModal.postWidgetSettings(data, fileHash, targetId);
+            if (sp.widgets.isTouched) {
                 var dataUpload = sp.viewerWidgetsModal.saveUploadWidget(fileHash);
-                if(sp.viewerWidgetsModal.hasDuplicates(dataUpload.documents.map(d => d.docName))) {
-
-                    $('#sp-tab-12 .doc-group').find('[data-item-setting="docName"]').each(function(index){
-                        $(this).addClass('sp-widget-form-error');
-                    });
-                    sp.error.handleError('You must enter only unique document name.');
-                    return;
+                if (dataUpload) {
+                    sp.viewerWidgetsModal.showSpinner(targetId);
+                    sp.viewerWidgetsModal.postWidgetSettings(data, fileHash, targetId);
+                    postUploadWidgetSettings(dataUpload, fileHash);
                 }
-
-                if($('input[name="sp-widget12--is-enabled"]')[0].checked === false){
-                    return;
-                }
-                postUploadWidgetSettings(dataUpload, fileHash);
+            } else {
+                sp.viewerWidgetsModal.showSpinner(targetId);
+                sp.viewerWidgetsModal.postWidgetSettings(data, fileHash, targetId);
             }
-           // postDocumentSettings(isProcessModeEnabled, fileHash, docsSavedCallback);
+            sp.widgets.isTouched = false;
+
         } else if (0 === settings.length) {
             $('button[data-dismiss="modal"]').click();
             swal('No settings were saved.', '', 'info');
         }
+    },
+    showSpinner: function(targetId) {
+        $('.tabs-container').contents().hide();
+        $('#sp-save-widgets-settings__button, #sp-save-test-widgets-settings__button')
+            .attr('disabled', 'true');
+        $('#' + targetId).text('Saving...');
+        $('.sp-widgets-customisation__spinner').addClass('sp-widgets-customisation__spinner-show');
     },
     hasDuplicates: function(array) {
         return (new Set(array)).size !== array.length;
@@ -1688,8 +1682,7 @@ sp.viewerWidgetsModal = {
     },
 // widget 12
     saveUploadWidget: function(fileHash) {
-
-        var uploadWidget = {
+            var uploadWidget = {
                 widgetId: $('.widgetId').attr('data-widgetId'),
                 icon : null,
                 pageFrom : $('input[name = "pageFrom"]').val(),
@@ -1698,22 +1691,21 @@ sp.viewerWidgetsModal = {
                 buttonText2 : $('input[name = "uploadText2"]').val(),
                 isEnabled : $('input[name = "sp-widget12--is-enabled"]').prop('checked'),
                 documents: [],
-        };
+            };
 
-        var isUploadWidgetSettingEmpty = false;
-        if($('input[name="sp-widget12--is-enabled"]')[0].checked === true) {
+            var isUploadWidgetSettingEmpty = false;
+
             $('#sp-tab-12 .sp-link-widget__item').each(function() {
 
                 $(this).find('[data-item-setting]').each(function() {
-                    if ($(this).val() === ''
+                    if ( $(this).val() === ''
                         && $(this).attr('data-item-setting') !== 'buttonText2'
-                        && $(this).attr('data-item-setting') !== 'docId'
                         && $(this).attr('data-item-setting') !== 'icon') {
                         sp.error.handleError('You must fill the field.');
                         $(this).addClass('sp-widget-form-error');
                         sp.viewerWidgetsModal.openErrorTab();
-
                         isUploadWidgetSettingEmpty = true;
+                        return undefined;
                     }
                     else if ('icon' === $(this).attr('data-item-setting')) {
                         if ($(this).prop('checked')) {
@@ -1722,44 +1714,41 @@ sp.viewerWidgetsModal = {
                     }
                 })
             });
-        }
+            $('#sp-tab-12 .doc-group').each(function() {
+                var items = {};
 
-
-        $('#sp-tab-12 .doc-group').each(function() {
-            var items = {};
-
-            $(this).find('[data-item-setting]').each(function() {
-                if ($(this).attr('data-item-setting') === 'docName') {
-                    items['docName'] = $(this).val();
-                }
-                else if ($(this).attr('data-item-setting') === 'isUpdate') {
-                    items['isUpdate'] = $(this).prop('checked');
-                }
-                else if ($(this).attr('data-item-setting') === 'docId') {
-                    items['docId'] = $(this).val();
-                }
+                $(this).find('[data-item-setting]').each(function() {
+                    if ($(this).attr('data-item-setting') === 'docName') {
+                        items['docName'] = $(this).val();
+                    }
+                    else if ($(this).attr('data-item-setting') === 'isUpdate') {
+                        items['isUpdate'] = $(this).prop('checked');
+                    }
+                    else if ($(this).attr('data-item-setting') === 'docId') {
+                        items['docId'] = $(this).val();
+                    }
+                });
+                uploadWidget.documents.push(items);
             });
-            uploadWidget.documents.push(items);
-        });
 
-        if (sp.viewerWidgetsModal.hasDuplicates(uploadWidget.documents.map(d => d.docName))) {
+            if (sp.viewerWidgetsModal.hasDuplicates(uploadWidget.documents.map(d => d.docName))) {
 
-            $('#sp-tab-12 .doc-group').find('[data-item-setting="docName"]').each(function(index){
-                $(this).addClass('sp-widget-form-error');
-            });
-            sp.error.handleError('You must enter only unique document name.');
-            return;
-        }
+                $('#sp-tab-12 .doc-group').find('[data-item-setting="docName"]').each(function(index){
+                    $(this).addClass('sp-widget-form-error');
+                    sp.viewerWidgetsModal.openErrorTab();
+                    isUploadWidgetSettingEmpty = true;
+                });
+                sp.error.handleError('You must enter only unique document name.');
 
-        if (!isUploadWidgetSettingEmpty) {
-            if(sp.widgets.widget12.isWidgetPageOrderValid()) {
-                return uploadWidget;
-            } else{
-                return undefined;
+                return;
             }
-        } else {
+
+            if (!isUploadWidgetSettingEmpty) {
+                if(sp.widgets.widget12.isWidgetPageOrderValid()) {
+                    return uploadWidget;
+                }
+            }
             return undefined;
-        }
     },
     emailRequiredWidget: function(fileHash) {
 
@@ -2194,9 +2183,9 @@ function postUploadWidgetSettings(data, fileHash) {
             xhr.setRequestHeader(SP.CSRF_HEADER, SP.CSRF_TOKEN);
         },
         success: callback,
-        error: function() {
-            swal('Error', 'Something went wrong. Your settings weren\'t saved.', 'error');
-        }
+        // error: function() {
+        //     swal('Error', 'Something went wrong. Your settings weren\'t saved.', 'error');
+        // }
     });
 }
 
