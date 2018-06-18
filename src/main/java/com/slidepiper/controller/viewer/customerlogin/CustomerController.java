@@ -84,7 +84,7 @@ public class CustomerController {
             model.addAttribute("error", false);
         }
 
-        return "logincustomer";//String.join("/",templatesPrefix, LOGIN_CUSTOMER_PAGE);
+        return LOGIN_CUSTOMER_PAGE;
     }
 
     @GetMapping("/view/verifycode")
