@@ -80,6 +80,7 @@ public class DashboardUserController {
 
         viewer.setViewerOpenDocumentEmailEnabled(userEmailConfigurationInput.isViewerOpenDocumentEmailEnabled());
         viewer.setViewerEventEmailEnabled(userEmailConfigurationInput.isViewerEventEmailEnabled());
+        viewer.setEnabledSupportEmail(userEmailConfigurationInput.isSupportEmailEnabled());
         viewerRepository.save(viewer);
     }
 
@@ -95,7 +96,7 @@ public class DashboardUserController {
         userConfiguration.put("email_alert_enabled", viewer.isViewerOpenDocumentEmailEnabled());
         userConfiguration.put("email_notifications_enabled", viewer.isViewerEventEmailEnabled());
         userConfiguration.put("receiveCustomerEmailEnabled", Optional.ofNullable(viewer.getData()).map(data -> data.isReceiveCustomerEmailEnabled()).orElse(null));
-
+        userConfiguration.put("email_support_show_alert_enabled",viewer.isEnabledSupportEmail());
         return userConfiguration;
     }
 }

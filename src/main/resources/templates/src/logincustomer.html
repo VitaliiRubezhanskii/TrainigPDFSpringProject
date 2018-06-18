@@ -1,17 +1,17 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
     <title>SlidePiper - Customer Login</title>
 
-    <link rel="stylesheet" href="https://static.slidepiper.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://static.slidepiper.com/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://static.slidepiper.com/libs/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://static.slidepiper.com/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
 
-    <link href="/assets/css/animate.css" rel="stylesheet">
-    <link href="/assets/css/style.css" rel="stylesheet">
-    <link href="/assets/css/authstyle.css" rel="stylesheet">
+    <link href="/assets/css/animate.css" rel="stylesheet"/>
+    <link href="/assets/css/style.css" rel="stylesheet"/>
+    <link href="/assets/css/authstyle.css" rel="stylesheet"/>
 </head>
 
 <body class="gray-bg">
@@ -35,13 +35,13 @@
         </div>
         <form class="m-t" method="post">
             <div class="form-group">
-                <input name="username" type="text" class="form-control" placeholder="Customer ID" required>
+                <input name="username" type="text" class="form-control" placeholder="Customer ID" th:required="required" />
             </div>
             <div class="form-group">
-                <input type="text" name="password" class="form-control" placeholder="Phone: +972545555555" required>
+                <input type="text" name="password" class="form-control" placeholder="Phone: +972545555555" th:required="required"/>
             </div>
-            <input type="hidden" name="{{{_csrf.parameterName}}}" value="{{{_csrf.token}}}">
-            <p class="form-text text-danger">{{#error}}{{errorMessage}}{{/error}}</p>
+            <input type="hidden" name="{{{_csrf.parameterName}}}" value="{{{_csrf.token}}}"/>
+            <!--<p class="form-text text-danger">{{#error}}{{errorMessage}}{{/error}}</p>-->
             <button class="btn btn-primary block full-width m-b">NEXT</button>
         </form>
     </div>
@@ -50,7 +50,17 @@
             Help
         </button>
     </div>
+
+    <div style="text-align: center">
+
+        <span th:text="${salesManEmail}">def</span>
+
+    </div>
+
     <div class="help-description">
+
+
+
         If you are not able to login to this portal please contact The Portal Builder + email for help or send us a message to
         <a href="mailto:info@slidepiper.com">info@slidepiper.com</a>
     </div>

@@ -28,4 +28,11 @@ public class Channel {
     @ManyToOne
     @JoinColumn(name = "slides_id", referencedColumnName = "id")
     private Document document;
+
+
+    @Column(name = "sales_man_email")
+    private String salesManEmail;
+
+    @Column(name = "customer_email")
+    private String customerEmail;
 }
