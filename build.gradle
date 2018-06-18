@@ -17,6 +17,7 @@ apply plugin: 'java'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'propdeps'
 apply plugin: 'war'
+//apply plugin: 'liquibase'
 
 group 'com.slidepiper'
 
@@ -37,6 +38,11 @@ dependencyManagement {
 }
 
 dependencies {
+//    compile group: 'org.liquibase', name: 'liquibase-core', version: '3.3.2'
+
+    compile("org.springframework.boot:spring-boot-starter-thymeleaf")
+    compile ("org.thymeleaf.extras:thymeleaf-extras-springsecurity4:3.0.0.RELEASE")
+    compile ("io.github.jpenren:thymeleaf-spring-data-dialect:3.1.1")
     compile 'com.amazonaws:aws-java-sdk-cloudfront'
     compile 'com.amazonaws:aws-java-sdk-s3'
     compile 'com.amazonaws:aws-java-sdk-ses'

@@ -10,6 +10,7 @@ ALTER TABLE `customers` ADD COLUMN `phone` VARCHAR(256) DEFAULT NULL;
 
 /* 30.04.2018; On devel */
 CREATE TABLE customer_documents
+
 (
   id       BIGINT AUTO_INCREMENT
     PRIMARY KEY,
@@ -38,7 +39,7 @@ CREATE TABLE upload_document_widget
   id INT AUTO_INCREMENT
   PRIMARY KEY,
   salesman_id INT                                                                                              NOT NULL,
-  document_id BIGINT                                                                                              NOT NULL,
+  document_id BIGINT                                                                                           NOT NULL,
   icon VARCHAR(255)                                                                                            NOT NULL,
   page_from INT                                                                                                NOT NULL,
   page_to INT                                                                                                  NOT NULL,
@@ -79,3 +80,25 @@ SET collation_connection = 'utf8_general_ci';
 ALTER DATABASE picascrafxzhbcmd CHARACTER SET utf8 COLLATE utf8_general_ci;
 ALTER TABLE upload_document_widget CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
 ALTER TABLE upload_document_widget_docs_template CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
+
+CREATE TABLE upload_document_widget_docs_for_customer
+(
+  id INT AUTO_INCREMENT
+  PRIMARY KEY,
+  widget_id INT                                                                                                NOT NULL,
+  widget_docs_template_id INT                                                                                  NULL,
+  document_name VARCHAR(255)                                                                                   NOT NULL,
+  can_update TINYINT DEFAULT 0                                                                                 NOT NULL,
+  comment VARCHAR(255)                                                                                         NULL,
+  status INT                                                                                                   NOT NULL,
+  created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP                                                              NULL,
+  updated_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP                                                              NULL ON UPDATE CURRENT_TIMESTAMP,
+  CONSTRAINT upload_document_widget_docs_for_customer_ibfk_1
+  FOREIGN KEY (widget_id) REFERENCES upload_document_widget (id)
+);
+
+ALTER TABLE customer_documents ADD COLUMN upload_document_widget_docs_for_customer_id  INT NOT NULL;
+ALTER TABLE customer_documents ADD CONSTRAINT customer_documents_ibfk_4 FOREIGN KEY (upload_document_widget_docs_for_customer_id) REFERENCES upload_document_widget_docs_for_customer (id);
+
+/* 18.06.2018; */
+ALTER TABLE sales_men ADD COLUMN enable_support_mail_show TINYINT(1) NOT NULL DEFAULT 0;

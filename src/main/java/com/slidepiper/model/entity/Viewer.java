@@ -28,8 +28,10 @@ public class Viewer implements Serializable {
     // TODO: Remove user data.
     private String email;
     private String name;
+
     @Column(name = "email_alert_enabled") private boolean viewerOpenDocumentEmailEnabled = true;
     @Column(name = "email_notifications_enabled") private boolean viewerEventEmailEnabled = true;
+    @Column(name = "enable_support_mail_show") private boolean enabledSupportEmail=true;
 
     @Data
     public static class UserData implements Serializable {
