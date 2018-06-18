@@ -39,7 +39,9 @@ dependencyManagement {
 
 dependencies {
 //    compile group: 'org.liquibase', name: 'liquibase-core', version: '3.3.2'
+// https://mvnrepository.com/artifact/junit/junit
 
+    testCompile group: 'junit', name: 'junit', version: '4.4'
     compile("org.springframework.boot:spring-boot-starter-thymeleaf")
     compile ("org.thymeleaf.extras:thymeleaf-extras-springsecurity4:3.0.0.RELEASE")
     compile ("io.github.jpenren:thymeleaf-spring-data-dialect:3.1.1")
@@ -68,6 +70,7 @@ dependencies {
     optional 'org.springframework.boot:spring-boot-configuration-processor'
     optional 'org.springframework.boot:spring-boot-devtools'
     customProvidedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
+    compile 'junit:junit:4.12'
 }
 
 springBoot {

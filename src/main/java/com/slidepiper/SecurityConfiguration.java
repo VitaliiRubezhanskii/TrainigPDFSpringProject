@@ -24,6 +24,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfiguration {
+
     @Configuration
     @Order(1)
     public static class ViewerConfigurationAdapter extends WebSecurityConfigurerAdapter {

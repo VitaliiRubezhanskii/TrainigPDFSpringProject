@@ -875,6 +875,7 @@ public class DbLayer {
         ArrayList<String> values = ((ArrayList<String>) portalsForCustomer.get("hash"));
 
         String[] valueArray = values.toArray(new String[0]);
+
 		values.forEach((v) -> {
 			builder.append("?,");
 		});

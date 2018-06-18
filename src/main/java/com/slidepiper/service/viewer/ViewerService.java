@@ -41,6 +41,7 @@ public class ViewerService {
                 .map(x -> x.split(",")[0])
                 .orElse(request.getRemoteAddr());
 
+
         // TODO: Refactor if block.
         Channel channel = channelRepository.findByFriendlyId(initialChannelFriendlyId);
         Document document = Optional.ofNullable(channel).map(x -> x.getDocument()).orElse(null);
