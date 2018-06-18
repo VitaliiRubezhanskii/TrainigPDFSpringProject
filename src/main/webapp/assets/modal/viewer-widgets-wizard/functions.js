@@ -2,6 +2,7 @@ var sp = sp || {};
 
 sp.widgets = {
     isTouched: false,
+    isHopperTouched: false,
     widget3: {
         init: (function() {
             $('#sp-question-widget__advanced').contents().click(function() {
@@ -856,12 +857,12 @@ sp.viewerWidgetsModal = {
             }
 
             $('[name="hopper-widget-is-enabled"]')
-                .prop('checked', widget.isEnabled)
-                .closest('div').removeClass('sp-hide-is-enabled');
+                .prop('checked', widget.isEnabled);
+                //.closest('div').removeClass('sp-hide-is-enabled');
 
             $('[name="horizontal-hopper-widget-start-page"]')
-                .prop('checked', widget.startFromFirstPage)
-                .closest('div').removeClass('sp-hide-is-enabled');
+                .prop('checked', widget.startFromFirstPage);
+                //.closest('div').removeClass('sp-hide-is-enabled');
 
             var checked = $('#sp-save-test-widgets-settings__button').attr('data-is-process-mode') === 'true'? true : widget.isHorizontalHopperEnabled;
 
@@ -870,8 +871,8 @@ sp.viewerWidgetsModal = {
             }
 
             $('[name="horizontal-hopper-widget-is-enabled"]')
-                .prop('checked', checked)
-                .closest('div').removeClass('sp-hide-is-enabled');
+                .prop('checked', checked);
+                //.closest('div').removeClass('sp-hide-is-enabled');
 
             $('.sp-hopper-widget__row').each(function(index) {
                 $(this).find('[data-item-setting]').each(function() {
@@ -1075,9 +1076,14 @@ sp.viewerWidgetsModal = {
             'sp-save-test-widgets-settings__button'
         );
 
-        $("input[name = 'sp-widget12--is-enabled'], [data-item-setting=docName], [data-item-setting=isUpdate], [data-item-setting=uploadText1], [data-item-setting=pageFrom], [data-item-setting=pageTo]").on("change", function(event){
+        $("input[name = 'sp-widget12--is-enabled'], [data-item-setting=docName], [data-item-setting=isUpdate], [data-item-setting=uploadText1], [data-item-setting=pageFrom], [data-item-setting=pageTo]").on("change", function(){
             sp.widgets.isTouched = true;
         });
+
+        $("[data-item-setting=hopperText], [data-item-setting=hopperPage], input[name='hopper-widget-is-enabled'], input[name='horizontal-hopper-widget-is-enabled'], input[name='horizontal-hopper-widget-start-page']").on("change", function(){
+            sp.widgets.isHopperTouched = true;
+        });
+
         // 3)
         $('#sp-save-widgets-settings__button, #sp-save-test-widgets-settings__button')
             .on('click', function () {
@@ -1127,8 +1133,12 @@ sp.viewerWidgetsModal = {
 
         settings.push(sp.viewerWidgetsModal.saveLikeWidgetSettings(fileHash));
 
-        if (! sp.viewerWidgetsModal.isInputEmpty(5)
-            || ! $('[name="hopper-widget-is-enabled"]').closest('div').hasClass('sp-hide-is-enabled')) {
+        // if (! sp.viewerWidgetsModal.isInputEmpty(5)
+        //     || ! $('[name="hopper-widget-is-enabled"]').closest('div').hasClass('sp-hide-is-enabled')) {
+        //     settings.push(sp.viewerWidgetsModal.saveHopperWidget(fileHash));
+        // }
+
+        if (! sp.viewerWidgetsModal.isInputEmpty(5) || sp.widgets.isHopperTouched) {
             settings.push(sp.viewerWidgetsModal.saveHopperWidget(fileHash));
         }
 
@@ -1202,6 +1212,7 @@ sp.viewerWidgetsModal = {
                 sp.viewerWidgetsModal.postWidgetSettings(data, fileHash, targetId);
             }
             sp.widgets.isTouched = false;
+            sp.widgets.isHopperTouched = false;
 
         } else if (0 === settings.length) {
             $('button[data-dismiss="modal"]').click();
