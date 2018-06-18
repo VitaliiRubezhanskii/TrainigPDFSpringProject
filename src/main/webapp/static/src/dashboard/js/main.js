@@ -34,6 +34,14 @@ sp = {
             } else {
                 $('.user__receive-customer-email').prop('checked', false);
             }
+
+            if (data.email_support_show_alert_enabled) {
+                $('#sp-enable-support-emails__checkbox').prop('checked', true);
+            } else {
+                $('#sp-enable-support-emails__checkbox').prop('checked', false);
+            }
+
+
             // End email configuration.
             // End user configuration.
         });
@@ -309,7 +317,8 @@ sp = {
                     viewerOpenDocumentEmailEnabled: $('#sp-enable-alert-emails__checkbox').prop('checked'),
                     viewerEventEmailEnabled: $('#sp-enable-notification-emails__checkbox').prop('checked'),
                     'notificationEmail': $('#sp-document-settings__modal [name=notificationEmail]').val(),
-                    receiveCustomerEmailEnabled: $('.user__receive-customer-email').prop('checked')
+                    receiveCustomerEmailEnabled: $('.user__receive-customer-email').prop('checked'),
+                    supportEmailEnabled: $('#sp-enable-support-emails__checkbox').prop('checked')
                 };
 
                 $.ajax({

@@ -10,6 +10,7 @@ ALTER TABLE `customers` ADD COLUMN `phone` VARCHAR(256) DEFAULT NULL;
 
 /* 30.04.2018 */
 CREATE TABLE customer_documents
+
 (
   id       BIGINT AUTO_INCREMENT
     PRIMARY KEY,

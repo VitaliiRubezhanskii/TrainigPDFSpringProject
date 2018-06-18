@@ -8,4 +8,5 @@ public class UserEmailConfigurationInput {
     private boolean viewerOpenDocumentEmailEnabled;
     private boolean viewerEventEmailEnabled;
     private boolean isReceiveCustomerEmailEnabled;
+    private boolean supportEmailEnabled;
 }
