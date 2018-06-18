@@ -141,15 +141,4 @@ public class UploadDocumentsWidgetController {
             }
         }
     }
-
-    private static boolean cmp( List<?> l1, List<?> l2 ) {
-        // make a copy of the list so the original list is not changed, and remove() is supported
-        ArrayList<?> cp = new ArrayList<>( l1 );
-        for ( Object o : l2 ) {
-            if ( !cp.remove( o ) ) {
-                return false;
-            }
-        }
-        return cp.isEmpty();
-    }
 }
