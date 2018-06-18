@@ -7,8 +7,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import org.springframework.security.web.savedrequest.SavedRequest;
 import org.springframework.stereotype.Controller;
@@ -18,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.security.Principal;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -61,12 +58,6 @@ public class CustomerController {
         Channel channel=channelRepository.findChannelById(initialChannelFriendlyId);
 
         boolean enabledMessages=viewerRepository.findChannelByEmail(channel.getSalesManEmail()).isEnabledSupportEmail();
-        System.out.println(enabledMessages);
-        System.out.println(request.getUserPrincipal());
-        System.out.println();
-//
-//        model.addAttribute("salesManEmail", "If you are not able to login to" +
-//                " this portal please contact "+channel.getSalesManEmail());
 
         if (enabledMessages) {
             model.addAttribute("salesManEmail", "If you are not able to login to" +

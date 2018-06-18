@@ -99,3 +99,6 @@ CREATE TABLE upload_document_widget_docs_for_customer
 
 ALTER TABLE customer_documents ADD COLUMN upload_document_widget_docs_for_customer_id  INT NOT NULL;
 ALTER TABLE customer_documents ADD CONSTRAINT customer_documents_ibfk_4 FOREIGN KEY (upload_document_widget_docs_for_customer_id) REFERENCES upload_document_widget_docs_for_customer (id);
+
+/* 18.06.2018; */
+ALTER TABLE sales_men ADD COLUMN enable_support_mail_show TINYINT(1) NOT NULL DEFAULT 0;
