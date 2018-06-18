@@ -36,27 +36,19 @@ export default {
   created() {
     fetch(`${this.sp.API_URL}/viewer/widgets?fileLinkHash=${this.location}`)
       .then(response => response.json())
-  .then(data => {
-      this.widgetData = data.map((widget)=>{
-      return JSON.parse(widget.widgetData).data;
-  });
-    this.pages = this.widgetData.find(w => w.widgetId === 5).items.length;
-  });
+      .then(data => {
+        this.widgetData = data.map((widget)=>{
+          return JSON.parse(widget.widgetData).data;
+        });
+        this.pages = this.widgetData.find(w => w.widgetId === 5).items.length;
+      });
     fetch(`${this.sp.API_URL}/viewer/configuration?channelFriendlyId=${this.location}`)
       .then(response => response.json())
       .then(data => {
         this.toolbarData = data;
         this.styleButton = {'backgroundColor': this.toolbarData.toolbarButtonBackground};
         this.colorText = this.toolbarData.toolbarCta2Color;
-      })
-    ;
-    // fetch(`${this.sp.API_URL}/api/v1/upload-document-widget/j496d2ld`)
-    //   // .then(response => response.json())
-    //   .then(data => {
-    //     const a = data;
-    //     debugger;
-    //     this.uploadData = data;
-    //   });
+      });
       const xhr = new XMLHttpRequest();
       xhr.open('GET', "/api/v1/upload-document-widget/j496d2ld");
       xhr.send();

@@ -51,7 +51,7 @@ export default{
   border-color: #1c84c6;
   color: #FFFFFF;
   padding: 6px 12px;
-  font-size: 17px;
+  font-size: 15px;
   font-weight: normal;
   margin: 0;
 }

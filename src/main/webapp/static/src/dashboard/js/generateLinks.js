@@ -173,6 +173,13 @@ function sortDocsInDocsMgmtPanel(data) {
                         $('a[href = "#sp-tab-10"],a[href = "#sp-tab-2"],a[href = "#sp-tab-11"],a[href = "#sp-tab-4"],a[href = "#sp-tab-7"],a[href = "#sp-tab-8"]').removeClass('hidden-block');
                     }
                     sp.viewerWidgetsModal.getWidgetsSettings(fileHash, isProcessMode);
+                    $('#sp-save-widgets-settings__button').attr('data-2factor-auth',isDoubleAuth);
+                    if(!isDoubleAuth){
+                        $('a[href = "#sp-tab-12"]').addClass('hidden-block');
+                    }
+                    else{
+                        $('a[href = "#sp-tab-12"]').removeClass('hidden-block');
+                    }
 
                     $('#sp-viewer-widgets-modal').off('hidden.bs.modal').on('hidden.bs.modal', function() {
                         $(this).find('.tabs-container').addClass('sp-hidden');

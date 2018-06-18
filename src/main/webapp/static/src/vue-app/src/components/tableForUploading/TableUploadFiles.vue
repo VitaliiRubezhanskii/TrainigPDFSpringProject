@@ -92,6 +92,32 @@ export default {
 
 <style lang="css" scoped>
 
+.showDocument{
+  background-color: #f8ac59;
+  padding: 6px 12px;
+  color: #fff;
+  font-size: 15px;
+  font-weight: normal;
+  margin: 0;
+}
+
+.showDocument:hover{
+  background-color: #e6aa69;
+}
+
+.close-table {
+  background-color: #ed5565;
+  padding: 6px 12px;
+  color: #fff;
+  font-size: 15px;
+  font-weight: normal;
+  margin: 0;
+}
+
+.close-table:hover{
+  background-color: #cc4956;
+}
+
 .sp-widget-button div{
   margin-left: 0 !important;
     margin-right: 25px !important;

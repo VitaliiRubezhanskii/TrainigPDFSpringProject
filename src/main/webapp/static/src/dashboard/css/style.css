@@ -1,4 +1,8 @@
 /* Dashboard settings */
+.hidden-block{
+    display: none !important;
+}
+
 .error,
 .errorId,
 .errorEmail,
