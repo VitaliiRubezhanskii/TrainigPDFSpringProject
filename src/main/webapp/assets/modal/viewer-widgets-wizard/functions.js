@@ -395,7 +395,7 @@ sp.widgets = {
         html: $('#sp-tab-12 .form-doc').html(),
         init: (function() {
 
-            // Add item.
+                // Add item.
             $(document).off('click', '#sp-tab-12 .sp-widget__add-item').on('click', '#sp-tab-12 .sp-widget__add-item', function() {
                 $('.form-doc').append(sp.widgets.widget12.html);
             });
@@ -1076,11 +1076,19 @@ sp.viewerWidgetsModal = {
             'sp-save-test-widgets-settings__button'
         );
 
-        $("input[name = 'sp-widget12--is-enabled'], [data-item-setting=docName], [data-item-setting=isUpdate], [data-item-setting=uploadText1], [data-item-setting=pageFrom], [data-item-setting=pageTo]").on("change", function(){
+        $(document).on("change input","input[name = 'sp-widget12--is-enabled'], [data-item-setting=docName], [data-item-setting=isUpdate], [data-item-setting=buttonText1], [data-item-setting=pageFrom], [data-item-setting=pageTo], [data-item-setting=icon]", function(){
             sp.widgets.isTouched = true;
         });
 
-        $("[data-item-setting=hopperText], [data-item-setting=hopperPage], input[name='hopper-widget-is-enabled'], input[name='horizontal-hopper-widget-is-enabled'], input[name='horizontal-hopper-widget-start-page']").on("change", function(){
+        $(document).on("click",".delete-upload, .add-upload", function(){
+            sp.widgets.isTouched = true;
+        });
+
+        $(document).on("change input", "[data-item-setting=hopperText], [data-item-setting=hopperPage], input[name='hopper-widget-is-enabled'], input[name='horizontal-hopper-widget-is-enabled'], input[name='horizontal-hopper-widget-start-page'], [data-item-setting=status]", function(){
+            sp.widgets.isHopperTouched = true;
+        });
+
+        $(document).on("click", ".sp-delete-hopper-widget__a, .sp-add-hopper-widget__a", function(){
             sp.widgets.isHopperTouched = true;
         });
 
@@ -1201,12 +1209,10 @@ sp.viewerWidgetsModal = {
 
         if (isValidWidgetSettings) {
             if (sp.widgets.isTouched) {
-                var dataUpload = sp.viewerWidgetsModal.saveUploadWidget(fileHash);
-                if (dataUpload) {
+                    var dataUpload = sp.viewerWidgetsModal.saveUploadWidget(fileHash);
                     sp.viewerWidgetsModal.showSpinner(targetId);
                     sp.viewerWidgetsModal.postWidgetSettings(data, fileHash, targetId);
                     postUploadWidgetSettings(dataUpload, fileHash);
-                }
             } else {
                 sp.viewerWidgetsModal.showSpinner(targetId);
                 sp.viewerWidgetsModal.postWidgetSettings(data, fileHash, targetId);
@@ -2119,6 +2125,8 @@ sp.viewerWidgetsModal = {
 
 
 $('.sp-video-link-tooltip').tooltip({delay: {show: 100, hide: 200}, placement: 'top'});
+
+
 
 $(document).on('click', '.link-widget__url-upload-button', function() {
     var that = this;
