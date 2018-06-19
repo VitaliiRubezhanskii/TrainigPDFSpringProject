@@ -8,9 +8,11 @@ import com.slidepiper.model.entity.Document.Status;
 import com.slidepiper.model.entity.Event;
 import com.slidepiper.model.entity.Viewer;
 import com.slidepiper.model.entity.widget.ShareWidget;
+import com.slidepiper.model.entity.widget.UploadDocumentWidget;
 import com.slidepiper.model.entity.widget.Widget;
 import com.slidepiper.repository.DocumentRepository;
 import com.slidepiper.repository.EventRepository;
+import com.slidepiper.repository.UploadDocumentWidgetRepository;
 import com.slidepiper.repository.ViewerRepository;
 import com.slidepiper.amazon.AmazonCloudFrontService;
 import com.slidepiper.service.amazon.AmazonS3Service;
@@ -52,6 +54,7 @@ public class DashboardDocumentService {
     private final EventRepository eventRepository;
     private final DashboardShareWidgetService dashboardShareWidgetService;
     private final ViewerRepository viewerRepository;
+    private final UploadDocumentWidgetRepository uploadDocumentWidgetRepository;
 
     @Autowired
     public DashboardDocumentService(@Value("${documents.amazon.s3.bucket}") String bucket,
@@ -65,7 +68,8 @@ public class DashboardDocumentService {
                                     EntityManager entityManager,
                                     EventRepository eventRepository,
                                     DashboardShareWidgetService dashboardShareWidgetService,
-                                    ViewerRepository viewerRepository) {
+                                    ViewerRepository viewerRepository,
+                                    UploadDocumentWidgetRepository uploadDocumentWidgetRepository) {
         this.bucket = bucket;
         this.keyPrefix = keyPrefix;
         this.salt = salt;
@@ -78,6 +82,7 @@ public class DashboardDocumentService {
         this.eventRepository = eventRepository;
         this.dashboardShareWidgetService = dashboardShareWidgetService;
         this.viewerRepository = viewerRepository;
+        this.uploadDocumentWidgetRepository = uploadDocumentWidgetRepository;
     }
 
     private String getDocumentPrefix(Document document) {
@@ -233,6 +238,13 @@ public class DashboardDocumentService {
         }
         if (isMFAEnabled != null) {
             document.setMfaEnabled(isMFAEnabled);
+            if (!isMFAEnabled) {
+                UploadDocumentWidget widget = uploadDocumentWidgetRepository.findByDocument(document);
+                if (widget != null) {
+                    widget.setEnabled(false);
+                    uploadDocumentWidgetRepository.save(widget);
+                }
+            }
         }
         documentRepository.save(document);
 

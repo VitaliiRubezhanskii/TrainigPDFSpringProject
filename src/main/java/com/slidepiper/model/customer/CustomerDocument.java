@@ -2,6 +2,7 @@ package com.slidepiper.model.customer;
 
 import com.slidepiper.model.entity.Channel;
 import com.slidepiper.model.entity.Viewer;
+import com.slidepiper.model.entity.widget.UploadDocumentWidgetDocsForCustomer;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -46,14 +47,19 @@ public class CustomerDocument {
 
     private String name;
 
+    @ManyToOne
+    @JoinColumn(name = "upload_document_widget_docs_for_customer_id", referencedColumnName = "id")
+    private UploadDocumentWidgetDocsForCustomer docsForCustomer;
+
     public CustomerDocument() {
     }
 
-    public CustomerDocument(Customer customer, Viewer viewer, Channel channel, CustomerDocument.Status status, String name) {
+    public CustomerDocument(Customer customer, Viewer viewer, Channel channel, CustomerDocument.Status status, String name, UploadDocumentWidgetDocsForCustomer docsForCustomer) {
         this.customer = customer;
         this.salesMan = viewer;
         this.channel = channel;
         this.status = status;
         this.name = name;
+        this.docsForCustomer = docsForCustomer;
     }
 }

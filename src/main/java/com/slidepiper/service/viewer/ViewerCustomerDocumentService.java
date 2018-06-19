@@ -8,6 +8,7 @@ import com.slidepiper.model.customer.Customer;
 import com.slidepiper.model.customer.CustomerDocument;
 import com.slidepiper.model.entity.*;
 import com.slidepiper.model.customer.CustomerDocument.Status;
+import com.slidepiper.model.entity.widget.UploadDocumentWidgetDocsForCustomer;
 import com.slidepiper.repository.*;
 import com.slidepiper.service.amazon.AmazonS3Service;
 import com.slidepiper.service.amazon.AmazonS3Service.ObjectMetaData;
@@ -43,6 +44,7 @@ public class ViewerCustomerDocumentService {
     private final CustomerRepository customerRepository;
     private final ViewerRepository viewerRepository;
     private final ChannelRepository channelRepository;
+    private final UploadDocumentWidgetDocsForCustomerRepository uploadDocumentWidgetDocsForCustomerRepository;
 
     @Autowired
     public ViewerCustomerDocumentService(@Value("${customerDocuments.amazon.s3.bucket}") String bucket,
@@ -58,7 +60,8 @@ public class ViewerCustomerDocumentService {
                                          DashboardShareWidgetService dashboardShareWidgetService,
                                          CustomerRepository customerRepository,
                                          ViewerRepository viewerRepository,
-                                         ChannelRepository channelRepository) {
+                                         ChannelRepository channelRepository,
+                                         UploadDocumentWidgetDocsForCustomerRepository uploadDocumentWidgetDocsForCustomerRepository) {
         this.bucket = bucket;
         this.keyPrefix = keyPrefix;
         this.salt = salt;
@@ -73,6 +76,7 @@ public class ViewerCustomerDocumentService {
         this.customerRepository = customerRepository;
         this.viewerRepository = viewerRepository;
         this.channelRepository = channelRepository;
+        this.uploadDocumentWidgetDocsForCustomerRepository = uploadDocumentWidgetDocsForCustomerRepository;
     }
 
     private String getDocumentPrefix(CustomerDocument document) {
@@ -87,14 +91,14 @@ public class ViewerCustomerDocumentService {
                 .toUriString();
     }
 
-    public void upload(MultipartFile file, String username, String initialChannelFriendlyId) throws IOException {
+    public void upload(MultipartFile file, String username, String initialChannelFriendlyId, int docsForCustomerId) throws IOException {
             String name = file.getOriginalFilename();
 
             Customer customer = customerRepository.findCustomerByEmail(username);
             if (customer == null) {
                 customer = customerRepository.findCustomerByCustomerId(username);
             }
-            CustomerDocument document = new CustomerDocument(customer, viewerRepository.findByEmail(customer.getUsername()), channelRepository.findByFriendlyId(initialChannelFriendlyId), Status.CREATED, name);
+            CustomerDocument document = new CustomerDocument(customer, viewerRepository.findByEmail(customer.getUsername()), channelRepository.findByFriendlyId(initialChannelFriendlyId), Status.CREATED, name, uploadDocumentWidgetDocsForCustomerRepository.findById(docsForCustomerId));
             documentRepository.save(document);
 
             Hashids hashids = new Hashids(salt, minHashLength, alphabet);

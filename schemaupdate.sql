@@ -90,7 +90,7 @@ CREATE TABLE upload_document_widget_docs_for_customer
   document_name VARCHAR(255)                                                                                   NOT NULL,
   can_update TINYINT DEFAULT 0                                                                                 NOT NULL,
   comment VARCHAR(255)                                                                                         NULL,
-  status INT                                                                                                   NOT NULL,
+  status VARCHAR(255)                                                                                          NOT NULL,
   created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP                                                              NULL,
   updated_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP                                                              NULL ON UPDATE CURRENT_TIMESTAMP,
   CONSTRAINT upload_document_widget_docs_for_customer_ibfk_1
