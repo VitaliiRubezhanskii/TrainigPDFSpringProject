@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.security.Principal;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @PreAuthorize("hasRole('ROLE_USER')")
@@ -33,8 +34,7 @@ public class DocumentCustomerPortalPermissionController {
     private ViewerRepository viewerRepository;
 
 
-    @GetMapping(value = "/portal-assignment/customers",
-            produces = "application/json; charset=UTF-8")
+    @GetMapping(value = "/portal-assignment/customers")
     public ResponseEntity<List<Customer>> getCustomersForSelection(Principal principal){
         List<Customer> foundCustomers=customerRepository
                 .findCustomerBySalesMan(principal.getName());
@@ -44,9 +44,16 @@ public class DocumentCustomerPortalPermissionController {
     }
 
     @GetMapping(value = "/portal-assignment/portals")
-    public ResponseEntity<List<Document>> getPortalsForSelection(Principal principal){
+    public ResponseEntity<List<Document>> getAllUnasignedPortals(Principal principal){
         List<Document> foundDocuments=documentRepository.findDocumentBySalesManEmail(principal.getName());
             return new ResponseEntity<>(foundDocuments, HttpStatus.OK);
+
+    }
+
+    @GetMapping(value = "/portal-assignment/assigned-portals")
+    public ResponseEntity<Set<Document>> getAssignedPortals(Principal principal){
+        Set<Document> documents = customerRepository.findCustomerByEmail(principal.getName()).getDocuments();
+        return new ResponseEntity<>(documents, HttpStatus.OK);
 
     }
 
