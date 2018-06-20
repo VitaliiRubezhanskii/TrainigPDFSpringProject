@@ -16,5 +16,7 @@ public interface DocumentRepository extends Repository<Document, Long> {
     @PreAuthorize("hasRole('ROLE_USER')")
     Document save(Document entity);
 
-    List<Document> findDocumentByViewer(Viewer salesMan);
+    @Query("select document from Document  document" +
+            " where document.viewer.email=:email")
+    List<Document> findDocumentBySalesManEmail(@Param("email") String email);
 }

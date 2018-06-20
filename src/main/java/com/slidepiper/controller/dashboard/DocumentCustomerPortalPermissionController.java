@@ -42,9 +42,9 @@ public class DocumentCustomerPortalPermissionController {
     }
 
     @GetMapping(value = "/portal-assignment/portals",
-                produces = "application/json; charset=UTF-8")
+            produces = "application/json; charset=UTF-8")
     public ResponseEntity<List<Document>> getPortalsForSelection(Principal principal){
-        List<Document> foundDocuments=documentRepository.findDocumentByViewer(viewerRepository.findByEmail(principal.getName()));
+        List<Document> foundDocuments=documentRepository.findDocumentBySalesManEmail(principal.getName());
             return new ResponseEntity<>(foundDocuments, HttpStatus.OK);
 
     }
