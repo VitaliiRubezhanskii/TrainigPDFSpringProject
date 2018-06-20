@@ -1,21 +1,11 @@
 package com.slidepiper.model.entity;
 
+import com.slidepiper.model.customer.Customer;
 import com.slidepiper.model.entity.widget.Widget;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Set;
 
@@ -65,6 +55,12 @@ public class Document implements Serializable {
 
     @Column(name = "is_mfa_enabled")
     private boolean mfaEnabled = false;
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "customer_slide",
+            joinColumns = { @JoinColumn(name = "slide_id") },
+            inverseJoinColumns = { @JoinColumn(name = "customer_id") })
+    private Set<Customer> customers;
 
     public Document() {}
 

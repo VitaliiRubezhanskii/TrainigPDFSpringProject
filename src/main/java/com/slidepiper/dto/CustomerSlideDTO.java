@@ -1,38 +1,19 @@
 package com.slidepiper.dto;
 
-import com.slidepiper.model.customer.Customer;
-import com.slidepiper.model.entity.Document;
+import lombok.Data;
 
-import java.util.List;
-
+@Data
 public class CustomerSlideDTO {
 
-
-    private Customer customer;
-    private List<Document> documentList;
-
-    public Customer getCustomer() {
-        return customer;
-    }
-
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
-    }
-
-    public List<Document> getDocumentList() {
-        return documentList;
-    }
-
-    public void setDocumentList(List<Document> documentList) {
-        this.documentList = documentList;
-    }
+    private String customerEmail;
+    private String[] documentList;
 
     public CustomerSlideDTO() {
 
     }
 
-    public CustomerSlideDTO(Customer customer, List<Document> documentList) {
-        this.customer = customer;
+    public CustomerSlideDTO(String customerEmail, String[] documentList) {
+        this.customerEmail = customerEmail;
         this.documentList = documentList;
     }
 }

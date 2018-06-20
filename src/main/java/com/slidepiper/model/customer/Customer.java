@@ -1,16 +1,12 @@
 package com.slidepiper.model.customer;
 
 import com.slidepiper.converter.CustomerDataConverter;
+import com.slidepiper.model.entity.Document;
 import lombok.Data;
 
-import javax.persistence.Column;
-import javax.persistence.Convert;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Set;
 
 @Entity
 @Table(name = "customers")
@@ -40,4 +36,10 @@ public class Customer implements Serializable {
 
     @Column(name = "phone")
     private String phoneNumber;
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "customer_slide",
+            joinColumns = { @JoinColumn(name = "customer_id") },
+            inverseJoinColumns = { @JoinColumn(name = "slide_id") })
+    private Set<Document> documents;
 }

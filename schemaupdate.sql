@@ -111,3 +111,13 @@ id INT AUTO_INCREMENT
   customer_id VARCHAR(255) not null,
   slide_id VARCHAR(255) not null
 );
+
+CREATE TABLE customer_slide (
+  customer_id INT(11) NOT NULL,
+  slide_id BIGINT(11) NOT NULL,
+  PRIMARY KEY (customer_id,slide_id),
+  KEY fk_customer (customer_id),
+  KEY fk_slide (slide_id),
+  CONSTRAINT fk_customer FOREIGN KEY (customer_id) REFERENCES customers (id),
+  CONSTRAINT fk_slide FOREIGN KEY (slide_id) REFERENCES slides (id_ai)
+);

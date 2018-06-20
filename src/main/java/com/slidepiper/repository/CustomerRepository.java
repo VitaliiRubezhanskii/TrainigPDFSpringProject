@@ -8,6 +8,8 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface CustomerRepository extends Repository<Customer, Long> {
+    Customer save (Customer customer);
+
     Customer findById(long id);
 
     Customer findCustomerByEmail(String email);

@@ -2,24 +2,23 @@ package com.slidepiper.controller.dashboard;
 
 import com.slidepiper.dto.CustomerSlideDTO;
 import com.slidepiper.model.customer.Customer;
-import com.slidepiper.model.customer.CustomerSlide;
 import com.slidepiper.model.entity.Document;
-import com.slidepiper.model.entity.Viewer;
 import com.slidepiper.repository.CustomerRepository;
-import com.slidepiper.repository.CustomerSlideRepository;
 import com.slidepiper.repository.DocumentRepository;
 import com.slidepiper.repository.ViewerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.security.Principal;
+import java.util.Arrays;
 import java.util.List;
 
 @RestController
-@PreAuthorize("hasRole('ROLE_USER')")
 public class DocumentCustomerPortalPermissionController {
 
     @Autowired
@@ -29,13 +28,10 @@ public class DocumentCustomerPortalPermissionController {
     private DocumentRepository documentRepository;
 
     @Autowired
-    private CustomerSlideRepository customerSlideRepository;
-
-    @Autowired
     private ViewerRepository viewerRepository;
 
 
-    @GetMapping(value = "/portals/customers",
+    @GetMapping(value = "/portal-assignment/customers",
             produces = "application/json; charset=UTF-8")
     public ResponseEntity<List<Customer>> getCustomersForSelection(Principal principal){
         List<Customer> foundCustomers=customerRepository
@@ -45,7 +41,7 @@ public class DocumentCustomerPortalPermissionController {
 
     }
 
-    @GetMapping(value = "/portals/portals",
+    @GetMapping(value = "/portal-assignment/portals",
                 produces = "application/json; charset=UTF-8")
     public ResponseEntity<List<Document>> getPortalsForSelection(Principal principal){
         List<Document> foundDocuments=documentRepository.findDocumentByViewer(viewerRepository.findByEmail(principal.getName()));
@@ -53,29 +49,30 @@ public class DocumentCustomerPortalPermissionController {
 
     }
 
-    @PostMapping(value = "/portals/portals",
-            produces = "application/json; charset=UTF-8",
-            consumes = "application/json")
-    public ResponseEntity<List<Document>> choosePortalsForCustomer(@RequestBody CustomerSlideDTO customerSlideDTO){
-          String customerEmail=customerSlideDTO.getCustomer().getEmail();
-          List<Document>documents=customerSlideDTO.getDocumentList();
+    @PostMapping(value = "/portal-assignment/portals")
+    public ResponseEntity<String[]> choosePortalsForCustomer(@RequestBody CustomerSlideDTO customerSlideDTO){
+          String customerEmail=customerSlideDTO.getCustomerEmail();
+          String[] documents=customerSlideDTO.getDocumentList();
 
-          documents.forEach(document -> customerSlideRepository.save(
-                new CustomerSlide(customerEmail,document.getFriendlyId()))
-               );
+          List<String> friendlyIDs = Arrays.asList(documents);
+
+          Customer customer = customerRepository.findCustomerByEmail(customerEmail);
+
+          friendlyIDs.forEach(documentFriendlyId -> customer.getDocuments().add(documentRepository.findByFriendlyId(documentFriendlyId)));
+          customerRepository.save(customer);
           return new ResponseEntity<>(documents,HttpStatus.OK);
     }
 
 
 
-    @DeleteMapping(value ="/portals/portals",
+    /*@DeleteMapping(value ="/portals/portals",
                    produces = "application/json; charset=UTF-8")
     public ResponseEntity<List<CustomerSlide>>detachPortalsFromCustomer(@RequestBody CustomerSlideDTO customerSlideDTO){
         String customerEmail=customerSlideDTO.getCustomer().getEmail();
         List<CustomerSlide> customerSlideList=customerSlideRepository.getCustomerSlideByCustomerMail(customerEmail);
         customerSlideList.forEach(customerSlide ->  customerSlideRepository.deleteByCustomerEmail(customerEmail));
         return new ResponseEntity<>(customerSlideList,HttpStatus.OK);
-    }
+    }*/
 
 
 
