@@ -9,6 +9,7 @@ import com.slidepiper.repository.ViewerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,6 +20,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @RestController
+@PreAuthorize("hasRole('ROLE_USER')")
 public class DocumentCustomerPortalPermissionController {
 
     @Autowired
@@ -41,8 +43,7 @@ public class DocumentCustomerPortalPermissionController {
 
     }
 
-    @GetMapping(value = "/portal-assignment/portals",
-            produces = "application/json; charset=UTF-8")
+    @GetMapping(value = "/portal-assignment/portals")
     public ResponseEntity<List<Document>> getPortalsForSelection(Principal principal){
         List<Document> foundDocuments=documentRepository.findDocumentBySalesManEmail(principal.getName());
             return new ResponseEntity<>(foundDocuments, HttpStatus.OK);

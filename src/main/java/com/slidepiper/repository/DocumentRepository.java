@@ -16,7 +16,7 @@ public interface DocumentRepository extends Repository<Document, Long> {
     @PreAuthorize("hasRole('ROLE_USER')")
     Document save(Document entity);
 
-    @Query("select document from Document  document" +
-            " where document.viewer.email=:email")
+    @Query(value = "SELECT * FROM slides WHERE sales_man_email = :email AND status IN ('CREATED', 'UPDATED', 'BEFORE_AWS_S3_TRANSITION') AND slides.id_ai NOT IN (SELECT slide_id FROM customer_slide);"
+            , nativeQuery = true)
     List<Document> findDocumentBySalesManEmail(@Param("email") String email);
 }
