@@ -1,5 +1,8 @@
 package com.slidepiper.controller.dashboard;
 
+
+import com.slidepiper.dto.CustomerDTO;
+import com.slidepiper.model.customer.Customer;
 import com.slidepiper.repository.DocumentRepository;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -21,6 +24,9 @@ public class DashboardAnalyticsController {
     private final DocumentRepository documentRepository;
 
     @Autowired
+    private DbLayer dbLayer;
+
+    @Autowired
     public DashboardAnalyticsController(DocumentRepository documentRepository) {
         this.documentRepository = documentRepository;
     }
@@ -40,6 +46,7 @@ public class DashboardAnalyticsController {
                 if (documentRepository.findByFriendlyId(fileHash).getViewer().getEmail().equals(principal.getName())) {
                     parameterList.add(fileHash);
                     sqlData = DbLayer.getEventData(parameterList, Analytics.sqlFileData);
+
                     data.put("fileData", sqlData);
                 }
                 break;
@@ -59,8 +66,14 @@ public class DashboardAnalyticsController {
             case "getFileLinkHash":
                 if (documentRepository.findByFriendlyId(fileHash).getViewer().getEmail().equals(principal.getName())) {
                     String salesmanEmail = principal.getName();
-                    if (!DbLayer.isCustomerExist(salesmanEmail, customerEmail)) {
-                        DbLayer.addNewCustomer(null, salesmanEmail, "Test", "Viewer", null, null, customerEmail, null, null);
+                    if (!dbLayer.isCustomerExist(salesmanEmail, customerEmail)) {
+                     //   dbLayer.addNewCustomer2(null, salesmanEmail, "Test", "Viewer", null, null, customerEmail, null, null);
+                        CustomerDTO customer=new CustomerDTO();
+                        customer.setSalesMan(salesmanEmail);
+                        customer.setCustomerFirstName("Test");
+                        customer.setCustomerLastName("Viewer");
+                        customer.setCustomerEmail(customerEmail);
+                        dbLayer.addNewCustomer(customer);
                     }
                     String fileLinkHash = DbLayer.setFileLinkHash(customerEmail, fileHash, salesmanEmail);
                     data.put("fileLinkHash", fileLinkHash);

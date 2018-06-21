@@ -26,6 +26,7 @@ public class Viewer implements Serializable {
     private String friendlyId;
 
     // TODO: Remove user data.
+    @Column(name = "email")
     private String email;
     private String name;
 

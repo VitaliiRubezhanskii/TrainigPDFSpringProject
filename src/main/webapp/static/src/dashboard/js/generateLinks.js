@@ -357,9 +357,23 @@ function addUpdateCustomer(event) {
         subAction = 'update';
     }
 
+
     var data = {
+
         'action': 'addNewCustomer',
         'subAction': subAction
+
+        // 'salesMan': "" ,
+        // 'firstName': "",
+        // 'lastName': "",
+        // 'company': "" ,
+        // 'groupName': "",
+        // 'email': "",
+        // 'customerID': "" ,
+        // 'phone': ""
+
+
+
     };
     $('#sp-add-update-customer__form input:not([type="hidden"])').each(function() {
         // data[$(this).attr('name')] = $(this).val();
@@ -412,7 +426,7 @@ function deleteCustomer(customerEmail) {
         },
         contentType : 'application/json;',
         data: JSON.stringify({
-            customer_email: customerEmail
+            email: customerEmail
         })
     }).done(function(data) {
         if (typeof data === 'string' && '<!DOCTYPE html>' === data.substring(0, 15)) {

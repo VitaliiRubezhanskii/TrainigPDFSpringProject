@@ -4,6 +4,7 @@ import com.amazonaws.services.s3.model.DeleteObjectsRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.slidepiper.amazon.AmazonCloudFrontService;
+import com.slidepiper.dto.CustomerDTO;
 import com.slidepiper.model.entity.Document;
 import com.slidepiper.model.entity.Document.Status;
 import com.slidepiper.model.entity.Event;
@@ -52,6 +53,7 @@ public class DashboardCustomerDocumentService {
     private final EventRepository eventRepository;
     private final DashboardShareWidgetService dashboardShareWidgetService;
     private final ViewerRepository viewerRepository;
+    private DbLayer dbLayer;
 
     @Autowired
     public DashboardCustomerDocumentService(@Value("${customerDocuments.amazon.s3.bucket}") String bucket,
@@ -65,7 +67,8 @@ public class DashboardCustomerDocumentService {
                                             EntityManager entityManager,
                                             EventRepository eventRepository,
                                             DashboardShareWidgetService dashboardShareWidgetService,
-                                            ViewerRepository viewerRepository) {
+                                            ViewerRepository viewerRepository,
+                                            DbLayer dbLayer) {
         this.bucket = bucket;
         this.keyPrefix = keyPrefix;
         this.salt = salt;
@@ -78,6 +81,7 @@ public class DashboardCustomerDocumentService {
         this.eventRepository = eventRepository;
         this.dashboardShareWidgetService = dashboardShareWidgetService;
         this.viewerRepository = viewerRepository;
+        this.dbLayer=dbLayer;
     }
 
     private String getDocumentPrefix(Document document) {
@@ -111,8 +115,14 @@ public class DashboardCustomerDocumentService {
 
         // Create default customer.
         String defaultCustomerEmail = ConfigProperties.getProperty("default_customer_email");
-        if (false == DbLayer.isCustomerExist(username, defaultCustomerEmail)) {
-            DbLayer.addNewCustomer(null, username, "Generic", "Link", null, null, defaultCustomerEmail, null, null);
+        if (false == dbLayer.isCustomerExist(username, defaultCustomerEmail)) {
+            CustomerDTO customer=new CustomerDTO();
+            customer.setSalesMan(username);
+            customer.setCustomerFirstName("Generic");
+            customer.setCustomerLastName("Link");
+            customer.setCustomerEmail(defaultCustomerEmail);
+            dbLayer.addNewCustomer(customer);
+           // dbLayer.addNewCustomer2(null, username, "Generic", "Link", null, null, defaultCustomerEmail, null, null);
         }
         DbLayer.setFileLinkHash(defaultCustomerEmail, friendlyId, username);
 

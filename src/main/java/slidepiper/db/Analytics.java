@@ -74,7 +74,7 @@ public class Analytics {
       + "  company,\n"
       + "  email,\n"
       + "  customers.timestamp AS 'date',\n"
-      + "  COALESCE(groupName, ''),\n"
+      + "  COALESCE(group_name, ''),\n"
 	  + "  id,\n"
 	  + "  customer_id,\n"
 	  + "  phone\n"

@@ -1,5 +1,10 @@
 package com.slidepiper;
 
+import com.slidepiper.model.customer.Customer;
+import com.slidepiper.model.entity.Channel;
+import com.slidepiper.repository.ChannelRepository;
+import com.slidepiper.repository.CustomerRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -11,19 +16,32 @@ import org.springframework.web.servlet.ViewResolver;
 import org.thymeleaf.spring4.SpringTemplateEngine;
 import org.thymeleaf.spring4.view.ThymeleafViewResolver;
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
+import slidepiper.config.ConfigProperties;
+import slidepiper.db.DbLayer;
+
+import java.util.List;
 
 @SpringBootApplication
 @EnableScheduling
 public class Application extends SpringBootServletInitializer {
 
+
+    @Autowired
+    private static CustomerRepository customerRepository;
+    @Autowired
+    private static ChannelRepository channelRepository;
+
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+
         return application.sources(Application.class);
+
     }
 
     public static void main(String[] args) throws Exception {
         SpringApplication.run(Application.class, args);
-    }
+       }
+
 
     @Bean
     public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
@@ -62,5 +80,11 @@ public class Application extends SpringBootServletInitializer {
         viewResolver.setCharacterEncoding("UTF-8");
 
         return viewResolver;
+    }
+
+
+    @Bean
+    public DbLayer dbLayer(){
+        return new DbLayer();
     }
 }

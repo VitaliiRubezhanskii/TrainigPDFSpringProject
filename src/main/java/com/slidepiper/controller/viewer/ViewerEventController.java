@@ -7,6 +7,7 @@ import com.slidepiper.model.entity.ViewerEvent;
 import com.slidepiper.model.entity.ViewerEvent.ViewerEventType;
 import com.slidepiper.model.input.ViewerEventInput;
 import com.slidepiper.repository.ChannelRepository;
+import com.slidepiper.repository.CustomerRepository;
 import com.slidepiper.service.viewer.ViewerEventService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CookieValue;
@@ -38,6 +39,8 @@ public class ViewerEventController {
 
     private final ChannelRepository channelRepository;
     private final ViewerEventService viewerEventService;
+    @Autowired
+    private CustomerRepository customerRepository;
 
     @Autowired
     public ViewerEventController(ChannelRepository channelRepository,
@@ -108,7 +111,9 @@ public class ViewerEventController {
             emailParamList.add(Long.toString(viewerEvent.getId()));
             String[] notificationData = DbLayer.getEventData(emailParamList, Analytics.sqlEmailNotifications).get(0);
 
-            String channelRecipientName = DbLayer.getCustomerName(notificationData[0], notificationData[2]);
+           // String channelRecipientName = DbLayer.getCustomerName(notificationData[0], notificationData[2]);
+            String channelRecipientName=customerRepository.findCustomerByEmailAndSalesMan(
+                    notificationData[0],notificationData[2]).getName();
             String viewerName = channelRecipientName;
             String viewerEmail = notificationData[0];
             String viewerMessage = null;

@@ -18,18 +18,20 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+@EnableGlobalMethodSecurity//(prePostEnabled = true)
 public class SecurityConfiguration {
+
     @Configuration
     @Order(1)
     public static class ViewerConfigurationAdapter extends WebSecurityConfigurerAdapter {
         @Override
         protected void configure(HttpSecurity http) throws Exception {
-            http
+            http//.anonymous().and().csrf().disable();;
+                   // .csrf().disable();
+
+
                 .requestMatchers()
                     .antMatchers("/viewer/**", "/utils/**", "/assets/**", "/dist/**")
                     .and()
@@ -68,23 +70,31 @@ public class SecurityConfiguration {
         @Override
         protected void configure(HttpSecurity http) throws Exception {
             http
+                    //.csrf().disable()
                     .regexMatcher("/view(/|\\?f=).*?")
                     .authorizeRequests()
                     // Chesk if this portal requires auth
                     .regexMatchers("\\A/view\\?f.*\\Z").access("@permissionEvaluatorForViewer.checkIfAuthRequired(authentication, request)")
                     .antMatchers("/view/verifycode")
+
+
                     .authenticated()
                     .and()
                     .formLogin()
                     .loginPage("/view/login")
                     .successHandler(authenticationSuccessHandlerImpl)
-                    .permitAll()
+
+
+                   // .permitAll();
+
                     .and()
                     .logout()
                     .permitAll()
                     .and()
                     .exceptionHandling()
                     .accessDeniedPage("/view/login");
+
+
             http.sessionManagement().maximumSessions(1);
         }
 
@@ -126,10 +136,16 @@ public class SecurityConfiguration {
         @Override
         protected void configure(HttpSecurity http) throws Exception {
             http
+                 //  .csrf().disable()
                 .authorizeRequests()
                     .antMatchers("/favicon.ico", "/health", "/signup", "/", "/index.html", "/tou.html", "/privacy.html", "/robots.txt", "/static/**")
                     .permitAll()
                     .anyRequest()
+
+
+                  //  .permitAll()
+
+            //to comment for security disabling
                     .authenticated()
                     .and()
                 .formLogin()

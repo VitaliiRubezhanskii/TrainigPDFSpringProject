@@ -40,6 +40,9 @@ public class DashboardWidgetController {
     private final WidgetRepository widgetRepository;
 
     @Autowired
+    private DbLayer dbLayer;
+
+    @Autowired
     public DashboardWidgetController(DocumentRepository documentRepository,
                                      WidgetRepository widgetRepository) {
         this.documentRepository = documentRepository;
@@ -103,7 +106,7 @@ public class DashboardWidgetController {
                     }
                 }
 
-                resultCode = DbLayer.setWidgetSettings(widgetSetting, input.getString("fileHash"));
+                resultCode = dbLayer.setWidgetSettings(widgetSetting, input.getString("fileHash"));
             }
         }
 
@@ -130,7 +133,6 @@ public class DashboardWidgetController {
                     ((ObjectNode) linkWidget.getData().get("data")).set("items", jsonNode.get("items"));
                     break;
             }
-
             widgetRepository.save(widget);
         }
     }
