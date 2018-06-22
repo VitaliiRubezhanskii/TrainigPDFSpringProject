@@ -20,11 +20,12 @@ import com.slidepiper.service.dashboard.widget.DashboardShareWidgetService;
 import org.hashids.Hashids;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
-import slidepiper.config.ConfigProperties;
+
 import slidepiper.db.DbLayer;
 
 import javax.persistence.EntityManager;
@@ -36,11 +37,15 @@ import java.util.Set;
 
 @Service
 @PreAuthorize("hasRole('ROLE_USER')")
+@PropertySource(name = "myProperties", value = "config.properties")
 public class DashboardCustomerDocumentService {
     private static final boolean IS_PROCESS_MODE = false;
     private static final boolean IS_MFA_ENABLED = false;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
+
+
+    private final String defaultCustomerEmail;
     private final String alphabet;
     private final String bucket;
     private final String keyPrefix;
@@ -61,6 +66,7 @@ public class DashboardCustomerDocumentService {
                                             @Value("${customerDocuments.hashids.salt}") String salt,
                                             @Value("${customerDocuments.hashids.minHashLength}") int minHashLength,
                                             @Value("${customerDocuments.hashids.alphabet}") String alphabet,
+                                            @Value("${default_customer_email}") String defaultCustomerEmail,
                                             AmazonCloudFrontService amazonCloudFrontService,
                                             AmazonS3Service amazonS3Service,
                                             DocumentRepository documentRepository,
@@ -74,6 +80,7 @@ public class DashboardCustomerDocumentService {
         this.salt = salt;
         this.minHashLength = minHashLength;
         this.alphabet = alphabet;
+        this.defaultCustomerEmail=defaultCustomerEmail;
         this.amazonCloudFrontService = amazonCloudFrontService;
         this.amazonS3Service = amazonS3Service;
         this.documentRepository = documentRepository;
@@ -114,7 +121,7 @@ public class DashboardCustomerDocumentService {
         documentRepository.save(document);
 
         // Create default customer.
-        String defaultCustomerEmail = ConfigProperties.getProperty("default_customer_email");
+     //   String defaultCustomerEmail = ConfigProperties.getProperty("default_customer_email");
         if (false == dbLayer.isCustomerExist(username, defaultCustomerEmail)) {
             CustomerDTO customer=new CustomerDTO();
             customer.setSalesMan(username);
@@ -122,9 +129,10 @@ public class DashboardCustomerDocumentService {
             customer.setCustomerLastName("Link");
             customer.setCustomerEmail(defaultCustomerEmail);
             dbLayer.addNewCustomer(customer);
+
            // dbLayer.addNewCustomer2(null, username, "Generic", "Link", null, null, defaultCustomerEmail, null, null);
         }
-        DbLayer.setFileLinkHash(defaultCustomerEmail, friendlyId, username);
+        dbLayer.setFileLinkHash(defaultCustomerEmail, friendlyId, username);
 
         // Save event.
         ObjectNode data = objectMapper.createObjectNode();

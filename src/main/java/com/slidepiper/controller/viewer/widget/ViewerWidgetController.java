@@ -6,6 +6,7 @@ import com.slidepiper.document.DocumentRestrictedException;
 import com.slidepiper.model.entity.Channel;
 import com.slidepiper.model.entity.Document;
 import com.slidepiper.repository.ChannelRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,10 +19,15 @@ import java.util.Optional;
 
 @RestController
 public class ViewerWidgetController {
-    private final ChannelRepository channelRepository;
 
-    public ViewerWidgetController(ChannelRepository channelRepository) {
+    private final ChannelRepository channelRepository;
+    private final DbLayer dbLayer;
+
+    @Autowired
+    public ViewerWidgetController(ChannelRepository channelRepository,
+                                  DbLayer dbLayer) {
         this.channelRepository = channelRepository;
+        this.dbLayer=dbLayer;
     }
 
     @CrossOrigin(origins = "*")
@@ -46,7 +52,7 @@ public class ViewerWidgetController {
         }
 
         if (document.isIpRestricted()
-                && !DbLayer.isIPMatchClientIP(channel.getFriendlyId(), ip)) {
+                && !dbLayer.isIPMatchClientIP(channel.getFriendlyId(), ip)) {
             throw new DocumentRestrictedException();
         }
 

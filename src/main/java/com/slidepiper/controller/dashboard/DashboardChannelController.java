@@ -18,9 +18,13 @@ public class DashboardChannelController {
     private final DocumentRepository documentRepository;
 
     @Autowired
+    private DbLayer dbLayer;
+
+    @Autowired
     public DashboardChannelController(DocumentRepository documentRepository) {
         this.documentRepository = documentRepository;
     }
+
 
     /** @deprecated */
     @PostMapping("/api/v1/channels")
@@ -44,7 +48,7 @@ public class DashboardChannelController {
                 if (documentRepository.findByFriendlyId(fileHashes.getString(j)).getViewer().getEmail().equals(principal.getName())) {
 
                     file.put("fileLink",
-                            DbLayer.setFileLinkHash(
+                            dbLayer.setFileLinkHash(
                                     customerEmail,
                                     fileHashes.getString(j),
                                     principal.getName())

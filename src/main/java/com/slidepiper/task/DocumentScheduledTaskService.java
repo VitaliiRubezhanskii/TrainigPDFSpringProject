@@ -32,6 +32,7 @@ class DocumentScheduledTaskService extends AbstractScheduledTaskService {
     private final AmazonSesService amazonSesService;
     private final CustomerRepository customerRepository;
     private final DocumentRepository documentRepository;
+    private final DbLayer dbLayer;
 
     DocumentScheduledTaskService(EventRepository eventRepository,
                                  TaskRepository taskRepository,
@@ -42,7 +43,8 @@ class DocumentScheduledTaskService extends AbstractScheduledTaskService {
                                  @Value("${slidepiper.templates.prefix}") String templatesPrefix,
                                  AmazonSesService amazonSesService,
                                  CustomerRepository customerRepository,
-                                 DocumentRepository documentRepository) {
+                                 DocumentRepository documentRepository,
+                                 DbLayer dbLayer) {
         super(eventRepository, taskRepository, viewerRepository);
         this.url = url;
         this.accessKey = accessKey;
@@ -51,6 +53,7 @@ class DocumentScheduledTaskService extends AbstractScheduledTaskService {
         this.amazonSesService = amazonSesService;
         this.customerRepository = customerRepository;
         this.documentRepository = documentRepository;
+        this.dbLayer=dbLayer;
     }
 
     @Override
@@ -87,7 +90,7 @@ class DocumentScheduledTaskService extends AbstractScheduledTaskService {
 
                     String link = UriComponentsBuilder.fromHttpUrl(url)
                             .pathSegment("view")
-                            .queryParam("f", DbLayer.setFileLinkHash(customer.getEmail(), document.getFriendlyId(), customer.getUsername()))
+                            .queryParam("f", dbLayer.setFileLinkHash(customer.getEmail(), document.getFriendlyId(), customer.getUsername()))
                             .fragment("page=" + documentTask.getData().getPageNumber())
                             .build()
                             .toUriString();

@@ -58,6 +58,7 @@ public class ViewerController {
             String view = viewerService.getView(channel, initialChannelFriendlyId, request, sessionId);
 
             if (view.equals(PORTAL_MODE_PAGE)) {
+
                 view = String.join("/", templatesPrefix, PORTAL_MODE_PAGE);
 
                 model.addAttribute("apiUrl", apiUrl);

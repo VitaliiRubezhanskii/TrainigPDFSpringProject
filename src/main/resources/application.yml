@@ -95,3 +95,11 @@ spring:
 slidepiper:
     templates:
         prefix: build
+
+emails:
+          def:
+             customer:
+                    email: default@example.com
+          test:
+             customer:
+                    email: test@example.com

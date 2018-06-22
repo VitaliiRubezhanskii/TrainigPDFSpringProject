@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <title>SlidePiper - Customer Login</title>
+
+    <link rel="stylesheet" href="https://static.slidepiper.com/libs/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://static.slidepiper.com/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
+
+    <link href="/assets/css/animate.css" rel="stylesheet"/>
+    <link href="/assets/css/style.css" rel="stylesheet"/>
+    <link href="/assets/css/authstyle.css" rel="stylesheet"/>
+</head>
+
+<body class="gray-bg">
+<div class="middle-box text-center loginscreen animated fadeInDown">
+    <div style="margin-top: 100px;">
+        <div>
+            <a id="sp-logo" href="#"><img src="/assets/img/logo_wide_1060x229.png" width="250" /></a>
+        </div>
+        <div class="title-form">
+            <p>
+                You are entering a 2 step secure process.
+            </p>
+        </div>
+        <div id="sp-widget5__horizontal-hopper-container">
+            <div class="sp-widget5__horizontal-hop active">
+                <p class="sp-widget5__horizontal-hop-text" > Step 1 </p>
+            </div>
+            <div class="sp-widget5__horizontal-hop">
+                <p class="sp-widget5__horizontal-hop-text"> Step 2 </p>
+            </div>
+        </div>
+        <form class="m-t" method="post">
+            <div class="form-group">
+                <input name="username" type="text" class="form-control" placeholder="Customer ID" th:required="required" />
+            </div>
+            <div class="form-group">
+                <input type="text" name="password" class="form-control" placeholder="Phone: +972545555555" th:required="required"/>
+            </div>
+            <input type="hidden" name="{{{_csrf.parameterName}}}" value="{{{_csrf.token}}}"/>
+            <!--<p class="form-text text-danger">{{#error}}{{errorMessage}}{{/error}}</p>-->
+            <button class="btn btn-primary block full-width m-b">NEXT</button>
+        </form>
+    </div>
+    <div class="clearfix">
+        <button type="button" class="help-button" name="button">
+            Help
+        </button>
+    </div>
+
+    <div style="text-align: center">
+
+        <span th:text="${salesManEmail}">def</span>
+
+    </div>
+
+    <div class="help-description">
+
+
+
+        If you are not able to login to this portal please contact The Portal Builder + email for help or send us a message to
+        <a href="mailto:info@slidepiper.com">info@slidepiper.com</a>
+    </div>
+</div>
+<div class="sp--direction-ltr" id="sp-terms-privacy">Powered by
+    <span class="sp-powered-by">
+      <a target="_blank" href="https://www.slidepiper.com">SlidePiper</a>
+    </span> ·
+    <a href="https://www.slidepiper.com/tou.html" target="_blank">Terms</a> ·
+    <a href="https://www.slidepiper.com/privacy.html" target="_blank">Privacy</a>
+</div>
+<script src="/assets/js/jquery-2.1.1.js"></script>
+<script src="/static/src/2factorauth/2factorauth.js"></script>
+</body>
+</html>

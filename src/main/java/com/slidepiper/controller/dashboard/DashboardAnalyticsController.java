@@ -25,6 +25,8 @@ public class DashboardAnalyticsController {
 
     @Autowired
     private DbLayer dbLayer;
+    @Autowired
+    private Analytics analytics;
 
     @Autowired
     public DashboardAnalyticsController(DocumentRepository documentRepository) {
@@ -59,7 +61,7 @@ public class DashboardAnalyticsController {
 
             case "getCustomersList":
                 parameterList.add(principal.getName());
-                sqlData = DbLayer.getEventData(parameterList, Analytics.sqlCustomersList);
+                sqlData = DbLayer.getEventData(parameterList, analytics.sqlCustomersList);
                 data.put("customersList", sqlData);
                 break;
 
@@ -75,7 +77,7 @@ public class DashboardAnalyticsController {
                         customer.setCustomerEmail(customerEmail);
                         dbLayer.addNewCustomer(customer);
                     }
-                    String fileLinkHash = DbLayer.setFileLinkHash(customerEmail, fileHash, salesmanEmail);
+                    String fileLinkHash = dbLayer.setFileLinkHash(customerEmail, fileHash, salesmanEmail);
                     data.put("fileLinkHash", fileLinkHash);
                 }
                 break;

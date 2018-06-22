@@ -1,0 +1,1060 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script>
+        'use strict';
+
+        window.SP = {};
+        Object.defineProperties(SP, {
+            CSRF_HEADER: {
+                value: '{{{_csrf.headerName}}}',
+                enumerable: true
+            },
+            CSRF_TOKEN: {
+                value: '{{{_csrf.token}}}',
+                enumerable: true
+            },
+            VIEWER_URL_WITHOUT_FILELINK: {
+                value: '{{{viewerUrlWithoutFileLink}}}',
+                enumerable: true
+            }
+        });
+    </script>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>SlidePiper - Dashboard</title>
+
+    <link type="text/css" rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link type="text/css" rel="stylesheet" href="assets/css/font-awesome.min.css">
+    <link type="text/css" href="/assets/css/animate.css" rel="stylesheet">
+    <link type="text/css" href="/assets/css/style.css" rel="stylesheet">
+    <link type="text/css" href="/assets/css/plugins/jquerySteps/jquery.steps.css" rel="stylesheet">
+    <link type="text/css" href="/assets/css/plugins/datatables/datatables.min.css" rel="stylesheet">
+    <link type="text/css" href="/assets/css/plugins/datatables/select.dataTables.min.css" rel="stylesheet">
+    <link type="text/css" href="/assets/css/plugins/datatables/dataTables.checkboxes.css" rel="stylesheet">
+    <!-- <script src="https://www.google.com/jsapi?autoload=%7B%27modules%27:%5B%7B%27name%27:%27visualization%27,%27version%27:%271.1%27,%27packages%27:%5B%27geochart%27%5D%7D%5D%7D"></script> -->
+    <link type="text/css" href="/assets/css/plugins/toastr/toastr.css" rel="stylesheet">
+    <link type="text/css" href="/assets/css/plugins/sweetalerts/sweetalert.css" rel="stylesheet">
+    <link type="text/css" rel="stylesheet" href="assets/css/bootstrap-datetimepicker.min.css">
+    <link type="text/css" rel="stylesheet" href="assets/css/select2.min.css">
+    <link type="text/css" rel="stylesheet" href="assets/css/select2-bootstrap.min.css">
+    <link rel="stylesheet" href="/assets/js/plugins/phone/build/css/intlTelInput.css">
+
+
+    <!--SlidePiper scripts-->
+    <link type="text/css" href="/static/src/dashboard/css/style.css" rel="stylesheet">
+</head>
+
+<body>
+<div id="wrapper">
+    <nav class="navbar-default navbar-static-side" role="navigation">
+        <div class="sidebar-collapse">
+            <ul class="nav metismenu" id="side-menu">
+                <li class="nav-header">
+                    <div class="dropdown profile-element">
+                        <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                                <span class="clear">
+                                    <span class="block m-t-xs" id="sp-salesman-full-name">
+                                        <strong class="font-bold"></strong>
+                                    </span>
+                                    <span class="text-muted text-xs block">Position <b class="caret"></b> </span>
+                                </span>
+                        </a>
+                    </div>
+                    <div class="logo-element">SP</div>
+                </li>
+                <li class="sp-nav-section" data-dashboard="sp-file-upload">
+                    <a href="#">
+                        <i class="fa fa-folder"></i>
+                        <span class="nav-label">Portals & Customers</span>
+                    </a>
+                </li>
+
+                <li class="sp-nav-section" data-dashboard="sp-send-email">
+                    <a href="#" aria-expanded="true">
+                        <i class="fa fa-link"></i>
+                        <span class="nav-label">Generate Links</span>
+                    </a>
+                </li>
+
+                <li class="sp-nav-section active" id="sp-nav-files__li" data-dashboard="sp-file-dashboard">
+                    <a href="#" aria-expanded="true">
+                        <i class="fa fa-bar-chart"></i>
+                        <span class="nav-label">Marketing Analytics</span>
+                    </a>
+                </li>
+
+                <li class="sp-nav-section" id="sp-nav-sales-analytics__li" data-dashboard="sp-sales-analytics-view">
+                    <a href="#" aria-expanded="true">
+                        <i class="fa fa-bar-chart"></i>
+                        <span class="nav-label">Sales Analytics</span>
+                    </a>
+                </li>
+
+                <li class="sp-nav-section" id="sp-nav-notifications" data-dashboard='sp-notifications-table'>
+                    <a href="#" aria-expanded="true">
+                        <i class="fa fa-bell"></i>
+                        <span class="nav-label">Notifications</span>
+                    </a>
+                </li>
+                <li class="sp-nav-section" data-dashboard="navigation__tasks">
+                    <a href="#">
+                        <i class="fa fa-clock-o"></i>
+                        <span class="nav-label">Tasks</span>
+                        <span class="label label-info pull-right">NEW</span>
+                    </a>
+                </li>
+                <li class="sp-nav-section" data-dashboard="sp-customer-documents">
+                    <a href="#" aria-expanded="true">
+                        <i class="fa fa-file"></i>
+                        <span class="nav-label">Customer Documents</span>
+                        <span class="label label-info pull-right">NEW</span>
+                    </a>
+                </li>
+            </ul>
+
+        </div>
+    </nav>
+
+    <div id="page-wrapper" class="gray-bg">
+        <div class="row border-bottom">
+            <nav class="navbar navbar-static-top white-bg" role="navigation" style="margin-bottom: 0">
+                <div class="navbar-header">
+                    <div class="sp-error-box"></div>
+                    <a class="navbar-minimalize minimalize-styl-2 btn btn-primary" href="#">
+                        <i class="fa fa-bars"></i>
+                    </a>
+                    <form role="search" class="navbar-form-custom" method="post" action="#">
+                        <div class="form-group">
+                            <input type="text" placeholder="Search for something..." class="form-control" name="top-search" id="top-search">
+                        </div>
+                    </form>
+                </div>
+
+                <ul class="nav navbar-top-links navbar-right">
+                    <li data-toggle="modal" data-target="#sp-help-salesmen__modal" class="sp-help-salesmen__icon">
+                        <a href="#">
+                            <i class="fa fa-info-circle" aria-hidden="true"></i>Help
+                        </a>
+                    </li>
+
+                    <li>
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-default dropdown-toggle sp-settings-dropdown__button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fa fa-cog" aria-hidden="true"></i>    Settings    <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li class="sp-dropdown-settings__li" data-toggle="modal" data-target="#sp-document-settings__modal"><a href="#">Account Settings</a></li>
+                                <li class="sp-dropdown-settings__li" data-toggle="modal" data-target="#sp-toolbar-settings__modal"><a href="#">Toolbar Settings</a></li>
+                                <li data-toggle="modal" data-target="#sp-change-password__modal" class="sp-change-pwd__li sp-dropdown-settings__li"><a href="#">Change Password</a></li>
+                            </ul>
+                        </div>
+                    </li>
+
+                    <li>
+                        <form class="logout" action="/logout" method="post">
+                            <input type="hidden" name="{{{_csrf.parameterName}}}" value="{{{_csrf.token}}}">
+                            <button class="btn btn-outline btn-link logout__button">Log Out</button>
+                        </form>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+
+        <div class="wrapper wrapper-content animated fadeInRight">
+            <!-- File dashboard -->
+            <div class="sp-dashboard animated fadeInRight" id="sp-file-dashboard">
+                <div class="row">
+                    <div class="col-lg-2">
+                        <div class="widget style1 blue-bg sp-data-widget">
+                            <div class="row">
+                                <div class="col-xs-4">
+                                    <i class="fa fa-eye"></i>
+                                </div>
+                                <div class="col-xs-8 text-right">
+                                    <div class="sp-metric-title">Total Views</div>
+                                    <h2 class="font-bold sp-widget sp-widget-text" id="sp-widget-total-views">0</h2>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-2">
+                        <div class="widget style1 navy-bg sp-data-widget">
+                            <div class="row">
+                                <div class="col-xs-4">
+                                    <i class="fa fa-external-link"></i>
+                                </div>
+                                <div class="col-xs-8 text-right">
+                                    <div class="sp-metric-title">Bounce Rate</div>
+                                    <h2 class="font-bold sp-widget sp-widget-text" id="sp-widget-bounce-rate">N/A</h2>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-2">
+                        <div class="widget style1 yellow-bg sp-data-widget">
+                            <div class="row">
+                                <div class="col-xs-4">
+                                    <i class="fa fa-hourglass-end"></i>
+                                </div>
+                                <div class="col-xs-8 text-right">
+                                    <div class="sp-metric-title">Avg. Duration</div>
+                                    <h2 class="font-bold sp-widget sp-widget-text" id="sp-widget-average-view-duration">N/A</h2>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-2">
+                        <div class="widget style1 lazur-bg sp-data-widget">
+                            <div class="row">
+                                <div class="col-xs-4">
+                                    <i class="fa fa-clone"></i>
+                                </div>
+                                <div class="col-xs-8 text-right">
+                                    <div class="sp-metric-title">Avg. Pages</div>
+                                    <h2 class="font-bold sp-widget sp-widget-text" id="sp-widget-average-pages-viewed">N/A</h2>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-2 sp-metric-top-exit-page">
+                        <div class="widget style1 red-bg sp-data-widget">
+                            <div class="row">
+                                <div class="col-xs-4">
+                                    <i class="fa fa-external-link-square"></i>
+                                </div>
+                                <div class="col-xs-8 text-right">
+                                    <div class="sp-metric-title">Top Exit Page</div>
+                                    <h2 class="font-bold sp-widget sp-widget-text" id="sp-widget-top-exit-page">N/A</h2>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-2">
+                        <div class="widget style1 blue-bg sp-data-widget">
+                            <div class="row">
+                                <div class="col-xs-4">
+                                    <i class="fa fa-user-plus"></i>
+                                </div>
+                                <div class="col-xs-8 text-right">
+                                    <div class="sp-metric-title">Call to Action</div>
+                                    <h2 class="font-bold sp-widget sp-widget-text" id="sp-widget-users-cta">N/A</h2>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-6 metric">
+                        <div class="ibox">
+                            <div class="ibox-content">
+                                <i class="fa fa-2x fa-bookmark m-r-sm metric__icon"></i><span class="metric__title">Hopper / Milestone</span>
+                                <div class="sp-hopper-metric">
+                                    <div class="sp-hopper-metric__title metric__sub-title m-t-sm">N/A</div>
+                                    <div class="sp-hopper-metric__items"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6 metric">
+                        <div class="ibox">
+                            <div class="ibox-content">
+                                <i class="fa fa-2x fa-external-link m-r-sm metric__icon"></i><span class="metric__title">Link / Task</span>
+                                <div class="sp-link-metric">
+                                    <div class="sp-link-metric__title metric__sub-title m-t-sm">N/A</div>
+                                    <div class="sp-link-metric__items"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-title">
+                                <i class="fa fa-line-chart sp-chart-title-fa fa-2x"></i>
+                                <h4>Total views</h4>
+                            </div>
+                            <div class="ibox-content">
+                                <div class="sp-chart__container" id="sp-line-chart-container">
+                                    <canvas id="lineChart" height="290" width="450"></canvas>
+                                </div>
+                                <div id="sp-total-views--tooltip"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-title">
+                                <i class="fa fa-bar-chart-o sp-chart-title-fa fa-2x"></i>
+                                <h4>Average view duration per page (sec.)</h4>
+                            </div>
+                            <div class="ibox-content">
+                                <div class="sp-chart__container" id="sp-bar-chart-container">
+                                    <canvas id="barChart" height="290" width="450"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-title">
+                                <i class="fa fa-map-marker sp-chart-title-fa fa-2x"></i>
+                                <h4>Visitors map</h4>
+                            </div>
+                            <div class="ibox-content">
+                                <div class="sp-chart__container">
+                                    <div id="sp-google-geochart"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 sp-chart-performance-benchmark">
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-title">
+                                <i class="fa fa-signal sp-chart-title-fa fa-2x"></i>
+                                <h4>Performance benchmark (coming soon)</h4>
+                            </div>
+                            <div class="ibox-content">
+                                <div class="sp-chart__container" id="sp-line-chart-2-container">
+                                    <canvas id="lineChart2" height="290" width="450"></canvas>
+                                </div>
+                                <div id="sp-performance-benchmark--tooltip"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Viewer Widget Analytics -->
+                <!-- Video Widget Analytics -->
+                <div class="row">
+                    <div class="col-lg-3">
+                        <div class="ibox">
+                            <div class="ibox-content">
+                                <h5><i class="fa fa-2x fa-youtube sp-widget-video-youtube-metric-title__i"></i>YouTube Video</h5>
+                                <h1 id="sp-widget-video-youtube-metric-total-number-plays" class="no-margins">N/A</h1>
+                                <small>Total Plays</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Like Widget Analytics -->
+                    <div class="col-lg-3">
+                        <div class="ibox">
+                            <div class="ibox-content">
+                                <h5><i class="fa fa-2x fa-thumbs-o-up sp-widget-like-metric__i"></i>Like Button</h5>
+                                <h1 id="sp-widget-total-count-likes" class="no-margins">N/A</h1>
+                                <small>Total Likes</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Views Analytics -->
+                    <div class="col-lg-3">
+                        <div class="ibox">
+                            <div class="ibox-content">
+                                <h5><i class="fa fa-2x fa-eye sp__metric-extended"></i>Unique Viewers</h5>
+                                <h1 id="sp-widget-count-unique-views" class="no-margins">N/A</h1>
+                                <small>Unique viewers (% from total views)</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ibox float-e-margins" id="sp-widget-ask-question-metric">
+                    <div class="ibox-title">
+                        <h5><i class="fa fa-comment sp-widget-video-youtube-metric-title__i"></i>Ask a Question</h5>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="close-link">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content no-padding">
+                        <ul class="list-group"></ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- File Upload -->
+            <div class="sp-dashboard animated fadeInRight" id="sp-file-upload">
+                <div class="wrapper wrapper-content animated fadeInRight">
+                    <div class="row">
+                        <div class="ibox">
+                            <div class="ibox-content">
+                                <div class="sp-files-customers-mgmt-top-part" id="sp-files-mgmt-top-part">
+                                    <h2>Documents</h2>
+                                    <p>Here is the place where you can upload new files,
+                                        update, and delete them.
+                                    </p>
+                                </div>
+
+                                <div class="sp-files-customers-mgmt-top-part" id="sp-customers-mgmt-top-part">
+                                    <h2>Customers</h2>
+                                    <p>Here is the place where you can upload new customers, update, and
+                                        delete them.
+                                    </p>
+                                </div>
+
+                                <div class="clients-list">
+                                    <ul class="nav nav-tabs sp-doc-and-file-tab__ul">
+                                        <li class="sp-files-customers-mgmt-tab active" id="sp-files-mgmt-tab">
+                                            <a data-toggle="tab" href="#tab-1">
+                                                <i class="fa fa-file"></i>
+                                                Documents
+                                            </a>
+                                        </li>
+                                        <li class="sp-files-customers-mgmt-tab" id="sp-customers-mgmt-tab">
+                                            <a data-toggle="tab" href="#tab-2" aria-expanded="false">
+                                                <i class="fa fa-user"></i>
+                                                Customers
+                                            </a>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content">
+                                        <!-- Files mgmt -->
+                                        <div id="tab-1" class="tab-pane active">
+                                            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#sp-modal-upload-files">
+                                                Upload Documents
+                                            </button>
+                                            <button class="btn btn-success tasks__task-create sp-documents__header-buttons" data-toggle="modal" data-target=".tasks__task-modal">Create Task</button>
+                                            <div class="table-responsive">
+                                                <table class="table table-striped table-hover" id="sp-files-management">
+                                                    <thead style="z-depth: 1;">
+                                                    <tr>
+                                                        <th class="sp-customers-management-table__date-th"><i data-toggle="tooltip" data-placement="right" title="Date file was added or updated" class="fa fa-info-circle sp-table-date__info"></i> Date</th>
+                                                        <th>Document</th>
+                                                        <th></th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody></tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+
+                                        <!-- Users mgmt -->
+                                        <div id="tab-2" class="tab-pane">
+                                            <button type="button" class="btn btn-primary sp-add-update-customer" data-add-update="add" data-toggle="modal" data-target="#sp-modal-add-update-customer">
+                                                Add a Customer
+                                            </button>
+                                            <div class="table-responsive">
+                                                <table class="table table-striped table-hover" id="sp-customers-management">
+                                                    <thead>
+                                                    <tr>
+                                                        <th>Date</th>
+                                                        <th>Name</th>
+                                                        <th>Company</th>
+                                                        <th>Group</th>
+                                                        <th style="margin-left: 30px;">Email</th>
+                                                        <th>Customer ID</th>
+                                                        <th>Cellular Phone</th>
+                                                        <th></th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody></tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Send Email  -->
+            <div class='container-fluid sp-email-container-hidden'>
+                <div class="sp-dashboard animated fadeInRight" id="sp-send-email">
+                    <div class="col-lg-12">
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-title">
+                                <h5>Generate Links</h5>
+                            </div>
+                            <div class="ibox-content">
+                                <p class="sp-section-description">Generate links using this wizard</p>
+                                <div id="document-wizard">
+                                    <h3>Select Customers</h3>
+                                    <section id="sp-section1">
+                                        <div class="table-responsive">
+                                            <table class="table table-striped sp-customer-table" id="sp-customer-table">
+                                                <thead>
+                                                <tr>
+                                                    <th></th>
+                                                    <th>Name</th>
+                                                    <th>Company</th>
+                                                    <th>Group</th>
+                                                    <th>Email</th>
+                                                    <th>Date</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody></tbody>
+                                            </table>
+                                        </div>
+                                    </section>
+
+                                    <h3>Select Documents</h3>
+                                    <section id="sp-section2">
+                                        <div class="table-responsive">
+                                            <table class="table table-striped sp-doc-table" id="sp-doc-table">
+                                                <thead>
+                                                <tr>
+                                                    <th></th>
+                                                    <th>Name</th>
+                                                    <th>Date</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody></tbody>
+                                            </table>
+                                        </div>
+                                    </section>
+
+                                    <h3>Generated Links</h3>
+                                    <section id="sp-section3">
+                                    </section>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Notifications -->
+            <div class="container-fluid">
+                <div class="sp-dashboard animated fadeInRight sp-notifications-table--display-none" id="sp-notifications-table">
+                    <div class="col-lg-12">
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-title">
+                                <h5>Notifications</h5>
+                            </div>
+                            <div class="ibox-content">
+                                <div class="table-responsive">
+                                    <table class="table table-striped sp-notifications__table">
+                                        <thead>
+                                        <tr>
+                                            <th>Date</th>
+                                            <th>Customer</th>
+                                            <th>Event</th>
+                                            <th>Document</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                                <small>We will display up to 1,000 notifications.</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tasks -->
+            <div class="container-fluid">
+                <div class="tasks sp-dashboard animated fadeInRight">
+                    <div class="col-lg-12">
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-title">
+                                <h5>Tasks</h5>
+                            </div>
+                            <div class="ibox-content">
+                                <button class="tasks__task-create btn btn-success" data-toggle="modal" data-target=".tasks__task-modal">Create Task</button>
+
+                                <div class="table-responsive">
+                                    <table class="tasks__table table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Due Date</th>
+                                                <th>Task Status</th>
+                                                <th>Customer</th>
+                                                <th>Company</th>
+                                                <th>Portal</th>
+                                                <th>Page Number</th>
+                                                <th>Task Message</th>
+                                                <th>Operations</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Customer Documents  -->
+            <div class='container-fluid sp-customer-documents-container-hidden'>
+                <div class="sp-dashboard animated fadeInRight" id="sp-customer-documents">
+                    <div class="col-lg-12">
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-title">
+                                <h5>Customer Documents</h5>
+                            </div>
+                            <div class="ibox-content">
+                                <p class="sp-section-description">Manage customer documents for every specific portal</p>
+                                <div id="customer-document-wizard">
+                                    <h3>Select Customers</h3>
+                                    <section id="sp-documents-section1">
+                                        <div class="table-responsive">
+                                            <table class="table table-striped sp-documents-customer-table" id="sp-documents-customer-table">
+                                                <thead>
+                                                <tr>
+                                                    <th></th>
+                                                    <th>Name</th>
+                                                    <th>Company</th>
+                                                    <th>Group</th>
+                                                    <th>Email</th>
+                                                    <th>Date</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody></tbody>
+                                            </table>
+                                        </div>
+                                    </section>
+
+                                    <h3>Select Portals</h3>
+                                    <section id="sp-documents-section2">
+                                        <div class="table-responsive">
+                                            <table class="table table-striped sp-documents-doc-table" id="sp-documents-doc-table">
+                                                <thead>
+                                                <tr>
+                                                    <th></th>
+                                                    <th>Name</th>
+                                                    <th>Date</th>
+                                                    <th>Customer</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody></tbody>
+                                            </table>
+                                        </div>
+                                    </section>
+
+                                    <h3>Customer Documents</h3>
+                                    <section id="sp-documents-section3">
+                                        <div class="table-responsive">
+                                            <table class="table table-striped sp-documents-for-portal-table" id="sp-documents-for-portal-table">
+                                                <thead>
+                                                <tr>
+                                                    <th>Customer</th>
+                                                    <th>Portal</th>
+                                                    <th>Document Name</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody></tbody>
+                                            </table>
+                                        </div>
+                                    </section>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    <div class="footer">
+        <div class="pull-right"></div>
+        <div>SlidePiper &copy; {{currentYear}}</div>
+    </div>
+</div>
+</div>
+
+<!-- Viewer Widgets Modal -->
+<div class="modal inmodal" id="sp-viewer-widgets-modal" tabindex="-1" role="dialog" aria-hidden="true"></div>
+
+<!-- Toolbar Settings Modal -->
+<div id="sp-toolbar-settings__modal" class="modal inmodal" tabindex="-1" role="dialog" aria-hidden="true"></div>
+
+<!--&lt;!&ndash; Viewer Widgets Modal &ndash;&gt;
+<div class="modal inmodal" id="sp-viewer-widgets-modal" tabindex="-1" role="dialog" aria-hidden="true"></div>
+
+&lt;!&ndash; Toolbar Settings Modal &ndash;&gt;
+<div id="sp-toolbar-settings__modal" class="modal inmodal" tabindex="-1" role="dialog" aria-hidden="true"></div>-->
+
+<!-- Upload files modal -->
+<div class="modal inmodal" id="sp-modal-upload-files" tabindex="-1" role="dialog" aria-hidden="true"></div>
+s
+<!-- Update files modal -->
+<div class="modal inmodal" id="sp-modal-update-file" tabindex="-1" role="dialog" aria-hidden="true"></div>
+
+<!-- Help Salesman Modal -->
+<div id="sp-help-salesmen__modal" class="modal inmodal" tabindex="-1" role="dialog" aria-hidden="true"></div>
+
+<!-- Add / update a customer modal -->
+<div class="modal inmodal" id="sp-modal-add-update-customer" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form class="form-horizontal" id="sp-add-update-customer__form">
+                <div class="modal-header">
+                    <button type="button" class="close closeModal" data-dismiss="modal">
+                        <span aria-hidden="true">&times;</span>
+                        <span class="sr-only">Close</span>
+                    </button>
+                    <i class="fa fa-cloud-upload modal-icon"></i>
+                    <h4 class="modal-title"></h4>
+                    <small class="font-bold modal-sub-title"></small>
+                </div>
+
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label"><span class="text-danger">*</span> First Name</label>
+                        <div class="col-lg-8">
+                            <input type="text" name="customerFirstName" placeholder="First Name" class="form-control" required autocomplete="off">
+                            <div class="errorName">First Name must contain 2 and less than 20 letters and include sumbols ( _ -  . )</div>
+                        </div>
+
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label"><span class="text-danger">*</span> Last Name</label>
+                        <div class="col-lg-8">
+                            <input type="text" name="customerLastName" placeholder="Last Name" class="form-control" required autocomplete="off">
+                            <div class="errorLastName">Last Name must contain 2 and less than 20 letters and include sumbols ( _ -  . )</div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label">Company</label>
+                        <div class="col-lg-8">
+                            <input type="text" name="customerCompany" placeholder="Company" class="form-control" autocomplete="off">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label">Group</label>
+                        <div class="col-lg-8">
+                            <input type="text" name="customerGroup" placeholder="Group" class="form-control" autocomplete="off">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label"><span class="text-danger">*</span> Email</label>
+                        <div class="col-lg-8">
+                            <input type="email" name="customerEmail" placeholder="example@email.com" class="form-control" required autocomplete="off">
+                            <div class="errorEmail">You have entered an invalid e-mail address.Please try again</div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label">Customer ID</label>
+                        <div class="col-lg-8">
+                            <input type="text" name="customerID" placeholder="123456789" class="form-control" autocomplete="off">
+                            <div class="errorId">Customer ID must contain less than 10 digits</div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label">Cellular Phone</label>
+                        <div class="col-lg-8">
+                            <input type="tel" id="phoneNumber" name="customerPhone" class="form-control phoneInput" autocomplete="off">
+                            <div class="error">Cellular Phone is incorrect</div>
+                        </div>
+                    </div>
+
+                    <div class="hint"><span class="text-danger hint-bold">*</span> - required field</div>
+
+                    <input type="hidden" id="add-update">
+
+                    <div class="sk-spinner sk-spinner-wave">
+                        <div class="sk-rect1"></div>
+                        <div class="sk-rect2"></div>
+                        <div class="sk-rect3"></div>
+                        <div class="sk-rect4"></div>
+                        <div class="sk-rect5"></div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button"  class="btn btn-white closeModal" data-dismiss="modal">Close</button>
+                    <input type="submit" disabled class="btn btn-primary" id="sp-modal-add-update-customer__button">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Change Password Modal -->
+<div id="sp-change-password__modal" class="modal inmodal user-change-password" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                <h4 class="modal-title">Change Password</h4>
+                <small class="font-bold modal-sub-title"></small>
+            </div>
+
+            <form class="user-change-password form-horizontal">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="col-sm-5 control-label">Current password</label>
+                        <div class="col-sm-7">
+                            <input name="password" class="form-control" placeholder="Current password" type="password" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-5 control-label">New password</label>
+                        <div class="col-sm-7">
+                            <input name="newPassword" class="form-control" placeholder="New password" type="password" required>
+                            <small class="form-text">Password must be at least 10 characters long</small>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-5 control-label">Confirm new password</label>
+                        <div class="col-sm-7">
+                            <input name="newPasswordConfirm" class="form-control" placeholder="Confirm new password" type="password" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <div class="form-group user-change-password__submit">
+                        <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
+                        <button class="btn btn-primary user-change-password__submit-button">Change Password</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Document Settings Modal  -->
+<div id="sp-document-settings__modal" class="modal inmodal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                <h4 class="modal-title">Account Settings</h4>
+                <small class="font-bold modal-sub-title"></small>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label class="control-label col-sm-4" for="notificationEmail">Notification email:</label>
+                        <div class="col-sm-8">
+                            <input type="email" class="form-control" id="notificationEmail" name="notificationEmail">
+                        </div>
+                    </div>
+                </form>
+
+                <div class="sp-switch-container">
+                    <div class="row">
+                        <div class="col-md-6 col-md-offset-1  col-sm-6 col-sm-offset-1">
+                            <label class="control-label sp-switch-title__label">
+                                <i data-toggle="tooltip" data-placement="left" title="Send me an alert email when someone opens my document" class="fa fa-info-circle sp-clickable sp-doc-settings-info__icon" aria-hidden="true"></i>       Enable document opened alert
+                            </label>
+                        </div>
+                        <div class="col-md-4  col-sm-4">
+                            <label class="sp-switch">
+                                <input id="sp-enable-alert-emails__checkbox" class="sp-settings__checkbox" type="checkbox">
+                                <div class="sp-doc-settings-slider sp-round"></div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 col-md-offset-1  col-sm-6 col-sm-offset-1">
+                            <label class="control-label sp-switch-title__label">
+                                <i data-toggle="tooltip" data-placement="left" title="Send me an alert email when someone opens my document" class="fa fa-info-circle sp-clickable sp-doc-settings-info__icon" aria-hidden="true"></i>       Enable support email notification
+                            </label>
+                        </div>
+                        <div class="col-md-4  col-sm-4">
+                            <label class="sp-switch">
+                                <input id="sp-enable-support-emails__checkbox" class="sp-settings__checkbox" type="checkbox">
+                                <div class="sp-doc-settings-slider sp-round"></div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 col-md-offset-1 col-sm-6 col-sm-offset-1">
+                            <label class="control-label sp-switch-title__label">
+                                <i data-toggle="tooltip" data-placement="left" title="Send me an email when I receive a question or feedback" class="fa fa-info-circle sp-clickable sp-doc-settings-info__icon" aria-hidden="true"></i>       Enable questions and feedback notifications
+                            </label>
+                        </div>
+                        <div class="col-md-4 col-sm-4">
+                            <label class="sp-switch">
+                                <input id="sp-enable-notification-emails__checkbox" class="sp-settings__checkbox" type="checkbox">
+                                <div class="sp-doc-settings-slider sp-round"></div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 col-md-offset-1 col-sm-6 col-sm-offset-1">
+                            <label class="control-label sp-switch-title__label">
+                                Add me as BCC to emails that are sent to my customers
+                            </label>
+                        </div>
+                        <div class="col-md-4 col-sm-4">
+                            <label class="sp-switch">
+                                <input class="user__receive-customer-email" class="sp-settings__checkbox" type="checkbox">
+                                <div class="sp-doc-settings-slider sp-round"></div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
+                <button id="sp-save-doc-settings-changes" type="button" class="btn btn-primary">Save Changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="tasks__task-modal modal inmodal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <span class="sr-only">Close</span>
+                </button>
+                <i class="fa fa-clock-o modal-icon"></i>
+                <h4 class="modal-title">Add / Update Task</h4>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="form-group">
+                            <form class="tasks__task-form" id="task-form">
+                                <div class="form-group">
+                                    <div class="checkbox">
+                                        <label><input type="checkbox" name="enabled">Enabled?</label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Due Date</label>
+                                    <div class="tasks__task-form-due-date input-group date">
+                                        <input class="form-control">
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-calendar"></span>
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Customer</label>
+                                    <select class="tasks__task-form-customer form-control"></select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Portal</label>
+                                    <select class="tasks__task-form-document form-control"></select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Hopper / Milestone</label>
+                                    <select class="tasks__task-form-milestone form-control"></select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Page Number</label>
+                                    <input type="number" class="form-control" name="pageNumber" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Task Message</label>
+                                    <input class="form-control" name="taskMessage" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Template</label>
+                                    <p>Hi &lt;customer first name&gt;,</p>
+                                    <p>
+                                        This is a reminder to &lt;task message&gt;.<br>
+                                        For more information, please visit your portal <a href="#">here</a>.
+                                    </p>
+                                    <p>
+                                        Thank you,<br>
+                                        &lt;user company&gt;
+                                    </p>
+                                </div>
+
+                                <input type="hidden" name="requestLink">
+                                <input type="hidden" name="requestType">
+                                <input type="hidden" name="successMessage">
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-white" data-dismiss="modal">Close</button>
+                <button class="btn btn-primary" form="task-form">Save Task</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Mainly scripts -->
+<script src="/assets/js/jquery-2.1.1.js"></script>
+<script src="assets/js/bootstrap.min.js"></script>
+
+<!-- Custom and plugin javascript -->
+<script src="/assets/js/inspinia.js"></script>
+<script src="/assets/js/plugins/jquerySteps/jquery.steps.min.js"></script>
+<script src="/assets/js/plugins/pace/pace.min.js"></script>
+<script src="/assets/js/plugins/clipboard/clipboard.min.js"></script>
+<script src="/assets/js/plugins/datatables/datatables.min.js"></script>
+<script src="/assets/js/plugins/datatables/dataTables.select.min.js"></script>
+<script src="/assets/js/plugins/datatables/dataTables.checkboxes.min.js"></script>
+<script src="/assets/js/plugins/toastr/toastr.js"></script>
+<script src="/assets/js/plugins/sweetalerts/sweetalert.min.js"></script>
+<script src="/assets/js/plugins/momentjs/moment.min.js"></script>
+<script src="/assets/js/plugins/datetime-moment.js"></script>
+<script src="/assets/js/plugins/chartjs/chart.min.js"></script>
+<script src="assets/js/bootstrap-datetimepicker.min.js"></script>
+<script src="assets/js/select2.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.js"></script>
+
+<!--<script src="http://code.jquery.com/jquery-latest.min.js"></script>-->
+<script src="/assets/js/plugins/phone/build/js/intlTelInput.js"></script>
+
+<!-- SlidePiper scripts -->
+<script src="/static/src/dashboard/js/document.js"></script>
+<script src="/static/src/dashboard/js/generateLinks.js"></script>
+<script src="/static/src/dashboard/js/portalsAndCustomers.js"></script>
+<script src="/static/src/dashboard/js/analytics.js"></script>
+<script src="/static/src/dashboard/js/main.js"></script>
+<script>
+    (function() {
+        var notification = {};
+        Object.defineProperties(notification, {
+            message: {
+                value: '{{message}}',
+                enumerable: true
+            }
+        });
+
+        if (notification.message !== '') {
+            toastr.error(notification.message, null, {closeButton: true, progressBar: true, timeOut: 15000});
+        }
+    })();
+</script>
+
+<!-- Start of HubSpot Embed Code -->
+<script type="text/javascript" id="hs-script-loader" async defer src="//js.hs-scripts.com/2462657.js"></script>
+<!-- End of HubSpot Embed Code -->
+</body>
+</html>

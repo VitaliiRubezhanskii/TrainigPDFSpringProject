@@ -5,6 +5,7 @@ import com.slidepiper.model.entity.Channel;
 import com.slidepiper.repository.ChannelRepository;
 import com.slidepiper.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -16,24 +17,18 @@ import org.springframework.web.servlet.ViewResolver;
 import org.thymeleaf.spring4.SpringTemplateEngine;
 import org.thymeleaf.spring4.view.ThymeleafViewResolver;
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
-import slidepiper.config.ConfigProperties;
+import slidepiper.db.Analytics;
 import slidepiper.db.DbLayer;
 
-import java.util.List;
 
 @SpringBootApplication
 @EnableScheduling
 public class Application extends SpringBootServletInitializer {
 
 
-    @Autowired
-    private static CustomerRepository customerRepository;
-    @Autowired
-    private static ChannelRepository channelRepository;
 
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-
         return application.sources(Application.class);
 
     }
@@ -50,24 +45,19 @@ public class Application extends SpringBootServletInitializer {
 
     @Bean
     public ClassLoaderTemplateResolver templateResolver() {
-
         ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
-
         templateResolver.setPrefix("templates/src/");
         templateResolver.setCacheable(false);
         templateResolver.setSuffix(".html");
         templateResolver.setTemplateMode("HTML5");
         templateResolver.setCharacterEncoding("UTF-8");
-
         return templateResolver;
     }
 
     @Bean
     public SpringTemplateEngine templateEngine() {
-
         SpringTemplateEngine templateEngine = new SpringTemplateEngine();
         templateEngine.setTemplateResolver(templateResolver());
-
         return templateEngine;
     }
 
@@ -75,16 +65,18 @@ public class Application extends SpringBootServletInitializer {
     public ViewResolver viewResolver() {
 
         ThymeleafViewResolver viewResolver = new ThymeleafViewResolver();
-
         viewResolver.setTemplateEngine(templateEngine());
         viewResolver.setCharacterEncoding("UTF-8");
 
         return viewResolver;
     }
 
-
     @Bean
     public DbLayer dbLayer(){
         return new DbLayer();
+    }
+    @Bean
+    public Analytics analytics(){
+        return  new Analytics();
     }
 }

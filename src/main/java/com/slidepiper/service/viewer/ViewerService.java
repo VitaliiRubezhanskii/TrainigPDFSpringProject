@@ -26,14 +26,17 @@ public class ViewerService {
     private final ChannelRepository channelRepository;
     private final ViewerEventRepository viewerEventRepository;
     private final ViewerDocumentService viewerDocumentService;
+    private  final DbLayer dbLayer;
 
     @Autowired
     public ViewerService(ChannelRepository channelRepository,
                          ViewerEventRepository viewerEventRepository,
-                         ViewerDocumentService viewerDocumentService) {
+                         ViewerDocumentService viewerDocumentService,
+                         DbLayer dbLayer) {
         this.channelRepository = channelRepository;
         this.viewerEventRepository = viewerEventRepository;
         this.viewerDocumentService = viewerDocumentService;
+        this.dbLayer=dbLayer;
     }
 
     public Channel findChannel(String initialChannelFriendlyId, HttpServletRequest request) {
@@ -44,6 +47,9 @@ public class ViewerService {
 
         // TODO: Refactor if block.
         Channel channel = channelRepository.findByFriendlyId(initialChannelFriendlyId);
+        boolean b=dbLayer.isIPMatchClientIP(channel.getFriendlyId(), ip);
+        System.out.println(b);
+
         Document document = Optional.ofNullable(channel).map(x -> x.getDocument()).orElse(null);
 
         if (Objects.isNull(document)
@@ -51,7 +57,7 @@ public class ViewerService {
                     && !document.getStatus().equals(Document.Status.UPDATED))) {
             return channelRepository.findByFriendlyId("2zdxd9");
         } else if (document.isIpRestricted()
-                && !DbLayer.isIPMatchClientIP(channel.getFriendlyId(), ip)) {
+                && !dbLayer.isIPMatchClientIP(channel.getFriendlyId(), ip)) {
 
             ViewerEvent viewerEvent = createViewerEvent(ViewerEventType.INIT_IP_NOT_WHITELISTED, channel, request);
             viewerEvent.setParam_4_varchar("https://www.slidepiper.com/view?f=27nm85");

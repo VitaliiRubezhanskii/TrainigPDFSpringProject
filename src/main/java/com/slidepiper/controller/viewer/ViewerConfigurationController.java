@@ -23,12 +23,15 @@ import java.util.Optional;
 public class ViewerConfigurationController {
     private final ChannelRepository channelRepository;
     private final ViewerService viewerService;
+    private final DbLayer dbLayer;
 
     @Autowired
     public ViewerConfigurationController(ChannelRepository channelRepository,
-                                         ViewerService viewerService) {
+                                         ViewerService viewerService,
+                                         DbLayer dbLayer) {
         this.channelRepository = channelRepository;
         this.viewerService = viewerService;
+        this.dbLayer=dbLayer;
     }
 
     @CrossOrigin("*")
@@ -53,7 +56,7 @@ public class ViewerConfigurationController {
         }
 
         if (document.isIpRestricted()
-                && !DbLayer.isIPMatchClientIP(channel.getFriendlyId(), ip)) {
+                && !dbLayer.isIPMatchClientIP(channel.getFriendlyId(), ip)) {
             throw new DocumentRestrictedException();
         }
 

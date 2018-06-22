@@ -26,7 +26,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
-import slidepiper.config.ConfigProperties;
+
 import slidepiper.db.DbLayer;
 
 import javax.persistence.EntityManager;
@@ -43,6 +43,8 @@ public class DashboardDocumentService {
     private static final boolean IS_MFA_ENABLED = false;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
+
+    private final String defaultCustomerEmail;
     private final String alphabet;
     private final String bucket;
     private final String keyPrefix;
@@ -54,9 +56,9 @@ public class DashboardDocumentService {
     private final EntityManager entityManager;
     private final EventRepository eventRepository;
     private final DashboardShareWidgetService dashboardShareWidgetService;
-    private final ViewerRepository viewerRepository;
+    private  final ViewerRepository viewerRepository;
     private final UploadDocumentWidgetRepository uploadDocumentWidgetRepository;
-    private DbLayer dbLayer;
+    private final DbLayer dbLayer;
 
     @Autowired
     public DashboardDocumentService(@Value("${documents.amazon.s3.bucket}") String bucket,
@@ -64,6 +66,7 @@ public class DashboardDocumentService {
                                     @Value("${documents.hashids.salt}") String salt,
                                     @Value("${documents.hashids.minHashLength}") int minHashLength,
                                     @Value("${documents.hashids.alphabet}") String alphabet,
+                                    @Value("${default_customer_email}") String defaultCustomerEmail,
                                     AmazonCloudFrontService amazonCloudFrontService,
                                     AmazonS3Service amazonS3Service,
                                     DocumentRepository documentRepository,
@@ -71,14 +74,14 @@ public class DashboardDocumentService {
                                     EventRepository eventRepository,
                                     DashboardShareWidgetService dashboardShareWidgetService,
                                     ViewerRepository viewerRepository,
-                                    UploadDocumentWidgetRepository uploadDocumentWidgetRepository) {
-                                    ViewerRepository viewerRepository,
+                                    UploadDocumentWidgetRepository uploadDocumentWidgetRepository,
                                     DbLayer dbLayer) {
         this.bucket = bucket;
         this.keyPrefix = keyPrefix;
         this.salt = salt;
         this.minHashLength = minHashLength;
         this.alphabet = alphabet;
+        this.defaultCustomerEmail=defaultCustomerEmail;
         this.amazonCloudFrontService = amazonCloudFrontService;
         this.amazonS3Service = amazonS3Service;
         this.documentRepository = documentRepository;
@@ -121,7 +124,7 @@ public class DashboardDocumentService {
             documentRepository.save(document);
 
             // Create default customer.
-            String defaultCustomerEmail = ConfigProperties.getProperty("default_customer_email");
+           // String defaultCustomerEmail = ConfigProperties.getProperty("default_customer_email");
             if (false == dbLayer.isCustomerExist(username, defaultCustomerEmail)) {
                 CustomerDTO customer=new CustomerDTO();
                 customer.setSalesMan(username);
@@ -131,7 +134,7 @@ public class DashboardDocumentService {
                 dbLayer.addNewCustomer(customer);
               //  dbLayer.addNewCustomer2(null, username, "Generic", "Link", null, null, defaultCustomerEmail, null, null);
             }
-            DbLayer.setFileLinkHash(defaultCustomerEmail, friendlyId, username);
+            dbLayer.setFileLinkHash(defaultCustomerEmail, friendlyId, username);
 
             // Save event.
             ObjectNode data = objectMapper.createObjectNode();
@@ -231,8 +234,8 @@ public class DashboardDocumentService {
         documentRepository.save(destinationDocument);
 
         // Create default link.
-        String defaultCustomerEmail = ConfigProperties.getProperty("default_customer_email");
-        DbLayer.setFileLinkHash(defaultCustomerEmail, destinationDocument.getFriendlyId(), username);
+     //   String defaultCustomerEmail = ConfigProperties.getProperty("default_customer_email");
+        dbLayer.setFileLinkHash(defaultCustomerEmail, destinationDocument.getFriendlyId(), username);
 
         // Save event.
         ObjectNode data = objectMapper.createObjectNode();

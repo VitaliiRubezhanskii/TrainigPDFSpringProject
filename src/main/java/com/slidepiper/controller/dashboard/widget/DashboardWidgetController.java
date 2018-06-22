@@ -74,6 +74,7 @@ public class DashboardWidgetController {
     /** @deprecated */
     @PostMapping("/api/v1/widgets")
     public int saveWidgetsConfiguration(Principal principal, @RequestBody String body) throws IOException {
+
         JSONObject input = new JSONObject(body);
         JSONArray widgetsSettings = input.getJSONArray("widgetsSettings");
         int resultCode = 0;

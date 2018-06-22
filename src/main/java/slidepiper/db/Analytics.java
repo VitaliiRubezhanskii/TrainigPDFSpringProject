@@ -1,14 +1,37 @@
 package slidepiper.db;
 
-import slidepiper.config.ConfigProperties;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.stereotype.Component;
 
+
+
+
+@PropertySource(name = "myProperties", value = "config.properties")
 public class Analytics {
 
   /**
    * Data.
    */
-  
-  public static final String sqlFilesList =
+
+
+  	private static String defaultCustomerEmail="default@example.com";
+	private static String testCustomerEmail="test@example.com";
+
+
+
+		public Analytics(@Value("${emails.def.customer.email}") String defaultCustomerEmail,
+						 @Value("${emails.test.customer.email}") String testCustomerEmail){
+		this.defaultCustomerEmail=defaultCustomerEmail;
+		this.testCustomerEmail=testCustomerEmail;
+	}
+
+	public Analytics() {
+	}
+
+	public static final String sqlFilesList =
 		"SELECT\n"
 				+ "  id AS file_hash,\n"
 				+ "  name AS file_name,\n"
@@ -67,7 +90,7 @@ public class Analytics {
       + "LIMIT 1";
 
   
-  public static final String sqlCustomersList =
+  public String sqlCustomersList =
       "SELECT\n"
       + "  first_name,\n"
       + "  last_name,\n"
@@ -79,7 +102,7 @@ public class Analytics {
 	  + "  customer_id,\n"
 	  + "  phone\n"
       + "FROM customers\n"
-      + "WHERE sales_man = ? AND email NOT IN ('" + ConfigProperties.getProperty("default_customer_email") + "', '" + ConfigProperties.getProperty("test_customer_email") + "')\n"
+      + "WHERE sales_man = ? AND email NOT IN ('" + defaultCustomerEmail + "', '" + testCustomerEmail + "')\n"
       + "ORDER BY date";
   
   
@@ -92,7 +115,7 @@ public class Analytics {
       + "FROM msg_info\n"
       + "JOIN customers ON msg_info.sales_man_email = customers.sales_man AND msg_info.customer_email = customers.email\n"
       + "JOIN slides ON msg_info.slides_id = slides.id AND slides.status IN ('CREATED', 'UPDATED', 'BEFORE_AWS_S3_TRANSITION')\n"
-      + "WHERE msg_info.sales_man_email=? AND msg_info.customer_email NOT IN ('" + ConfigProperties.getProperty("default_customer_email") + "', '" + ConfigProperties.getProperty("test_customer_email") + "')\n"
+      + "WHERE msg_info.sales_man_email=? AND msg_info.customer_email NOT IN ('" + defaultCustomerEmail + "', '" + testCustomerEmail + "')\n"
       + "GROUP BY msg_info.customer_email, msg_info.slides_id\n"
       + "ORDER BY customer_full_name_or_email";
   
@@ -155,7 +178,7 @@ public class Analytics {
       + "  COUNT(*) as total_views\n"
       + "FROM customer_events\n"
       + "INNER JOIN msg_info ON msg_info.id = customer_events.msg_id\n"
-      + "WHERE msg_info.slides_id=? AND msg_info.sales_man_email=? AND event_name = 'OPEN_SLIDES' AND msg_info.customer_email != '" + ConfigProperties.getProperty("test_customer_email") + "'\n"
+      + "WHERE msg_info.slides_id=? AND msg_info.sales_man_email=? AND event_name = 'OPEN_SLIDES' AND msg_info.customer_email != '" + testCustomerEmail + "'\n"
       + "GROUP BY param_2_varchar, param_4_varchar\n"
       + "HAVING latitude IS NOT NULL AND longitude IS NOT NULL AND param_2_varchar IS NOT NULL";
   
@@ -187,7 +210,7 @@ public class Analytics {
     + "WHERE event_name = 'VIEWER_WIDGET_VIDEO_YOUTUBE_PLAYED'\n"
     + "AND msg_info.sales_man_email = ?\n"
     + "AND msg_info.slides_id = ?\n"
-    + "AND msg_info.customer_email <> '" + ConfigProperties.getProperty("test_customer_email") + "'";
+    + "AND msg_info.customer_email <> '" + testCustomerEmail + "'";
   
   
   /**
@@ -217,7 +240,7 @@ public class Analytics {
     + "WHERE event_name = 'VIEWER_WIDGET_ASK_QUESTION'\n"
     + "AND msg_info.sales_man_email = ?\n"
     + "AND msg_info.slides_id = ?\n"
-    + "AND msg_info.customer_email <> '" + ConfigProperties.getProperty("test_customer_email") + "'";
+    + "AND msg_info.customer_email <> '" + testCustomerEmail + "'";
   
 
   /**
@@ -247,7 +270,7 @@ public class Analytics {
   	+ "WHERE event_name = 'VIEWER_WIDGET_LIKE_CLICKED'\n"
   	+ "AND msg_info.sales_man_email = ?\n"
   	+ "AND msg_info.slides_id = ?\n"
-  	+ "AND msg_info.customer_email <> '" + ConfigProperties.getProperty("test_customer_email") + "'";
+  	+ "AND msg_info.customer_email <> '" + testCustomerEmail + "'";
   
   
   /**
@@ -276,7 +299,7 @@ public class Analytics {
     + "WHERE viewer_id IS NOT NULL\n"
     + "AND msg_info.sales_man_email = ?\n"
     + "AND msg_info.slides_id = ?\n"
-    + "AND msg_info.customer_email <> '" + ConfigProperties.getProperty("test_customer_email") + "'";
+    + "AND msg_info.customer_email <> '" + testCustomerEmail + "'";
   
   
   /**
@@ -314,7 +337,7 @@ public class Analytics {
 	+ "INNER JOIN slides ON msg_info.slides_id = slides.id AND slides.status IN ('CREATED', 'UPDATED', 'BEFORE_AWS_S3_TRANSITION')\n"
 	+ "WHERE event_name IN ('OPEN_SLIDES', 'VIEWER_WIDGET_ASK_QUESTION')\n"
 	+ "AND msg_info.sales_man_email = ?\n"
-	+ "AND msg_info.customer_email <> '" + ConfigProperties.getProperty("test_customer_email") + "'"
+	+ "AND msg_info.customer_email <> '" + testCustomerEmail + "'"
 	+ "AND customer_events.timestamp > '2016-01-01'\n"
 	+ "ORDER BY id DESC LIMIT 1000";
   
@@ -328,7 +351,7 @@ public class Analytics {
     + "  slides.name AS 'documentName',\n"
     + "  msg_info.sales_man_email AS 'salesmanEmail',\n"
 	+ "  customer_events.param_11_varchar\n"
-    + "FROM picascrafxzhbcmd.customer_events\n"
+    + "FROM slidepiper.customer_events\n"
     + "INNER JOIN msg_info ON msg_info.id = customer_events.msg_id\n"
     + "INNER JOIN slides ON msg_info.slides_id = slides.id AND slides.status IN ('CREATED', 'UPDATED', 'BEFORE_AWS_S3_TRANSITION')\n"
     + "WHERE customer_events.id = ?";

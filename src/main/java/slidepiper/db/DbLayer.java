@@ -5,27 +5,35 @@ import com.slidepiper.dto.CustomerDTO;
 import com.slidepiper.model.customer.Customer;
 import com.slidepiper.repository.CustomerRepository;
 import com.slidepiper.repository.DocumentRepository;
+import com.slidepiper.repository.IpWhitelistRepository;
 import org.hashids.Hashids;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
-import slidepiper.config.ConfigProperties;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import slidepiper.constants.Constants;
-
 import javax.xml.bind.DatatypeConverter;
 import java.sql.*;
 import java.util.*;
 
 
-
+@Configuration
+@PropertySource(name = "myProperties", value = "config.properties")
 public class DbLayer {
     private static Boolean initialized = false;
+
+	@Value("${customerDocuments.hashids.salt}")  private  String salt;
+	@Value("${customerDocuments.hashids.minHashLength}") private  int minHashLength;
+	@Value("${customerDocuments.hashids.alphabet}") private  String alphabet;
 
     @Autowired
 	private  CustomerRepository customerRepository;
     @Autowired
 	private DocumentRepository documentRepository;
+    @Autowired
+    private IpWhitelistRepository ipWhitelistRepository;
 
     public static void init() {
         if (initialized==false) {
@@ -108,54 +116,59 @@ public class DbLayer {
 	   * @param ip - The IP address of the client request.
 	   * @return isIPMatchClientIP - If the client IP matches the IP in the DB.
 	   */
-	  public static boolean isIPMatchClientIP(String fileLinkHash, String ip) {
-		  
-		Constants.updateConstants();
-		try {
-		  Class.forName("com.mysql.cj.jdbc.Driver");
-		} catch (ClassNotFoundException e) {
-		  e.printStackTrace();
-		}
-		
-		String sql = "SELECT EXISTS(\n"
-						+ "SELECT\n" 
-						+ "	whitelist_ip\n"
-						+ "FROM ip_whitelist\n"
-						+ "INNER JOIN slides ON ip_whitelist.FK_file_id_ai = slides.id_ai AND slides.status IN ('CREATED', 'UPDATED', 'BEFORE_AWS_S3_TRANSITION')\n"
-						+ "INNER JOIN msg_info ON msg_info.slides_id = slides.id\n"
-					    + "WHERE whitelist_ip = ?\n"
-					    + "AND msg_info.id = ?\n"
-					+ ")";
-		
-		Connection conn = null;
-		boolean isIPMatchClientIP = false;
-		
-	    try {
-		  conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
-		  PreparedStatement ps = conn.prepareStatement(sql); 
-		  
-		  ps.setString(1, ip);
-		  ps.setString(2, fileLinkHash);
-		  ResultSet rs = ps.executeQuery();
-		  
-		  while(rs.next()) {
-			  isIPMatchClientIP = rs.getBoolean(1);
-		  }
-	 		  
-	    } catch (SQLException e) {
-	 		e.printStackTrace();
-		} finally {
-	        if (null != conn) {
-	          try {
-	            conn.close();
-	          } catch (SQLException ex) {
-	            ex.printStackTrace();
-	          }
-	        }
-	    }
-	    
-		return isIPMatchClientIP;
+	  public  boolean isIPMatchClientIP(String fileLinkHash, String ip) {
+		  Object bool=ipWhitelistRepository.isIPMatchClientIP(fileLinkHash, ip);
+		  System.out.println(bool.toString()+"--isIPMatchClientIP--");
+		  return true;
 	  }
+
+//		Constants.updateConstants();
+//		try {
+//		  Class.forName("com.mysql.cj.jdbc.Driver");
+//		} catch (ClassNotFoundException e) {
+//		  e.printStackTrace();
+//		}
+//
+//		String sql = "SELECT EXISTS(\n"
+//						+ "SELECT\n"
+//						+ "	whitelist_ip\n"
+//						+ "FROM ip_whitelist\n"
+//						+ "INNER JOIN slides ON ip_whitelist.FK_file_id_ai = slides.id_ai "
+//				        + "AND slides.status IN ('CREATED', 'UPDATED', 'BEFORE_AWS_S3_TRANSITION')\n"
+//						+ "INNER JOIN msg_info ON msg_info.slides_id = slides.id\n"
+//					    + "WHERE whitelist_ip = ?\n"
+//					    + "AND msg_info.id = ?\n"
+//					+ ")";
+//
+//		Connection conn = null;
+//		boolean isIPMatchClientIP = false;
+//
+//	    try {
+//		  conn = DriverManager.getConnection(Constants.dbURL, Constants.dbUser, Constants.dbPass);
+//		  PreparedStatement ps = conn.prepareStatement(sql);
+//
+//		  ps.setString(1, ip);
+//		  ps.setString(2, fileLinkHash);
+//		  ResultSet rs = ps.executeQuery();
+//
+//		  while(rs.next()) {
+//			  isIPMatchClientIP = rs.getBoolean(1);
+//		  }
+//
+//	    } catch (SQLException e) {
+//	 		e.printStackTrace();
+//		} finally {
+//	        if (null != conn) {
+//	          try {
+//	            conn.close();
+//	          } catch (SQLException ex) {
+//	            ex.printStackTrace();
+//	          }
+//	        }
+//	    }
+//
+//		return isIPMatchClientIP;
+//	  }
     	
 //      /**
 //       * Get the file ID from a file hash.
@@ -420,8 +433,8 @@ public class DbLayer {
 						widget.put("widgetData", rs.getString("data"));
 						widgetsSettings.put(widget);
 				  }
-				  int x=widgetsSettings.length();
-				  System.out.println("--- "+widgetsSettings.length());
+
+				  System.out.println(widgetsSettings.length());
 				  
 	   		} catch (SQLException e) {
 	   			e.printStackTrace();
@@ -506,8 +519,10 @@ public class DbLayer {
        * 
        * @return The file link enumerated hash.
        */
-      public static String setFileLinkHash(String customerEmail, String fileHash,
+      public  String setFileLinkHash(String customerEmail, String fileHash,
           String salesmanEmail) {
+
+
          
         Connection conn = null;
       
@@ -539,11 +554,10 @@ public class DbLayer {
             ps.setString(3, fileHash);
             ps.executeUpdate();
             rs = ps.getGeneratedKeys();
-            
+
             if (rs.next()) {
-              Hashids hashids = new Hashids(ConfigProperties.getProperty("hashids_salt"), 
-                  Integer.parseInt(ConfigProperties.getProperty("hashids_minimum_file_link_hash_length")),
-                  ConfigProperties.getProperty("hashids_custom_hash_alphabet"));
+				Hashids hashids=new Hashids(salt, minHashLength,alphabet);
+
               long generatedKey = rs.getLong(1);
               fileLinkHash = hashids.encode(generatedKey);
               
@@ -584,6 +598,9 @@ public class DbLayer {
        * @returns resultCode - A number representing the status of the operation.
        */
       public  int setWidgetSettings(JSONObject widgetSetting, String fileHash) {
+
+		  System.out.println("-------setWidgetSettings------");
+
       	int resultCode = 0;
     	
         Constants.updateConstants();
@@ -599,7 +616,7 @@ public class DbLayer {
 		        		   + "data = VALUES(data)";
         
         JSONObject data = widgetSetting.getJSONObject("data");
-        //int fileId = DbLayer.getFileIdFromFileHash(fileHash);
+
 		  int fileId=(int) documentRepository.getDocumentFromFileHash(fileHash).getId();
         String type = String.valueOf(data.getInt("widgetId"));
         
