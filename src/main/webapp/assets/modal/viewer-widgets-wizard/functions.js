@@ -1,6 +1,8 @@
 var sp = sp || {};
 
 sp.widgets = {
+    isTouched: false,
+    isHopperTouched: false,
     widget3: {
         init: (function() {
             $('#sp-question-widget__advanced').contents().click(function() {
@@ -393,7 +395,7 @@ sp.widgets = {
         html: $('#sp-tab-12 .form-doc').html(),
         init: (function() {
 
-            // Add item.
+                // Add item.
             $(document).off('click', '#sp-tab-12 .sp-widget__add-item').on('click', '#sp-tab-12 .sp-widget__add-item', function() {
                 $('.form-doc').append(sp.widgets.widget12.html);
             });
@@ -855,12 +857,12 @@ sp.viewerWidgetsModal = {
             }
 
             $('[name="hopper-widget-is-enabled"]')
-                .prop('checked', widget.isEnabled)
-                .closest('div').removeClass('sp-hide-is-enabled');
+                .prop('checked', widget.isEnabled);
+                //.closest('div').removeClass('sp-hide-is-enabled');
 
             $('[name="horizontal-hopper-widget-start-page"]')
-                .prop('checked', widget.startFromFirstPage)
-                .closest('div').removeClass('sp-hide-is-enabled');
+                .prop('checked', widget.startFromFirstPage);
+                //.closest('div').removeClass('sp-hide-is-enabled');
 
             var checked = $('#sp-save-test-widgets-settings__button').attr('data-is-process-mode') === 'true'? true : widget.isHorizontalHopperEnabled;
 
@@ -869,8 +871,8 @@ sp.viewerWidgetsModal = {
             }
 
             $('[name="horizontal-hopper-widget-is-enabled"]')
-                .prop('checked', checked)
-                .closest('div').removeClass('sp-hide-is-enabled');
+                .prop('checked', checked);
+                //.closest('div').removeClass('sp-hide-is-enabled');
 
             $('.sp-hopper-widget__row').each(function(index) {
                 $(this).find('[data-item-setting]').each(function() {
@@ -1074,6 +1076,22 @@ sp.viewerWidgetsModal = {
             'sp-save-test-widgets-settings__button'
         );
 
+        $(document).on("change input","input[name = 'sp-widget12--is-enabled'], [data-item-setting=docName], [data-item-setting=isUpdate], [data-item-setting=buttonText1], [data-item-setting=pageFrom], [data-item-setting=pageTo], [data-item-setting=icon]", function(){
+            sp.widgets.isTouched = true;
+        });
+
+        $(document).on("click",".delete-upload, .add-upload", function(){
+            sp.widgets.isTouched = true;
+        });
+
+        $(document).on("change input", "[data-item-setting=hopperText], [data-item-setting=hopperPage], input[name='hopper-widget-is-enabled'], input[name='horizontal-hopper-widget-is-enabled'], input[name='horizontal-hopper-widget-start-page'], [data-item-setting=status]", function(){
+            sp.widgets.isHopperTouched = true;
+        });
+
+        $(document).on("click", ".sp-delete-hopper-widget__a, .sp-add-hopper-widget__a", function(){
+            sp.widgets.isHopperTouched = true;
+        });
+
         // 3)
         $('#sp-save-widgets-settings__button, #sp-save-test-widgets-settings__button')
             .on('click', function () {
@@ -1123,8 +1141,12 @@ sp.viewerWidgetsModal = {
 
         settings.push(sp.viewerWidgetsModal.saveLikeWidgetSettings(fileHash));
 
-        if (! sp.viewerWidgetsModal.isInputEmpty(5)
-            || ! $('[name="hopper-widget-is-enabled"]').closest('div').hasClass('sp-hide-is-enabled')) {
+        // if (! sp.viewerWidgetsModal.isInputEmpty(5)
+        //     || ! $('[name="hopper-widget-is-enabled"]').closest('div').hasClass('sp-hide-is-enabled')) {
+        //     settings.push(sp.viewerWidgetsModal.saveHopperWidget(fileHash));
+        // }
+
+        if (! sp.viewerWidgetsModal.isInputEmpty(5) || sp.widgets.isHopperTouched) {
             settings.push(sp.viewerWidgetsModal.saveHopperWidget(fileHash));
         }
 
@@ -1151,7 +1173,8 @@ sp.viewerWidgetsModal = {
         }
 
         //upload widget
-        if (! sp.widgets.widget12.validate()) {
+        var isUploadValid = ! sp.widgets.widget12.validate();
+        if (isUploadValid) {
             settings.push(sp.viewerWidgetsModal.saveUploadWidget(fileHash));
             deletedWidgetIndex = settings.length - 1;
         }
@@ -1185,41 +1208,29 @@ sp.viewerWidgetsModal = {
         }
 
         if (isValidWidgetSettings) {
-            $('.tabs-container').contents().hide();
-            $('#sp-save-widgets-settings__button, #sp-save-test-widgets-settings__button')
-                .attr('disabled', 'true');
-            $('#' + targetId).text('Saving...');
-            $('.sp-widgets-customisation__spinner').addClass('sp-widgets-customisation__spinner-show');
-
-            // var isProcessModeEnabled = {
-            //     isProcessMode: $('[name="process-mode-is-enabled"]').prop('checked')
-            // };
-
-            function docsSavedCallback(result) {
-                // Setting attribute to current value
-
-                $("#sp-files-management span[data-file-hash='" + fileHash + "'][data-target='#sp-viewer-widgets-modal']").attr('data-is-process-mode', +isProcessModeEnabled.isProcessMode);
+            if (sp.widgets.isTouched) {
+                    var dataUpload = sp.viewerWidgetsModal.saveUploadWidget(fileHash);
+                    sp.viewerWidgetsModal.showSpinner(targetId);
+                    sp.viewerWidgetsModal.postWidgetSettings(data, fileHash, targetId);
+                    postUploadWidgetSettings(dataUpload, fileHash);
+            } else {
+                sp.viewerWidgetsModal.showSpinner(targetId);
                 sp.viewerWidgetsModal.postWidgetSettings(data, fileHash, targetId);
-                var dataUpload = sp.viewerWidgetsModal.saveUploadWidget(fileHash);
-                if(sp.viewerWidgetsModal.hasDuplicates(dataUpload.documents.map(d => d.docName))) {
-
-                    $('#sp-tab-12 .doc-group').find('[data-item-setting="docName"]').each(function(index){
-                        $(this).addClass('sp-widget-form-error');
-                    });
-                    sp.error.handleError('You must enter only unique document name.');
-                    return;
-                }
-
-                if($('input[name="sp-widget12--is-enabled"]')[0].checked === false){
-                    return;
-                }
-                postUploadWidgetSettings(dataUpload, fileHash);
             }
-           // postDocumentSettings(isProcessModeEnabled, fileHash, docsSavedCallback);
+            sp.widgets.isTouched = false;
+            sp.widgets.isHopperTouched = false;
+
         } else if (0 === settings.length) {
             $('button[data-dismiss="modal"]').click();
             swal('No settings were saved.', '', 'info');
         }
+    },
+    showSpinner: function(targetId) {
+        $('.tabs-container').contents().hide();
+        $('#sp-save-widgets-settings__button, #sp-save-test-widgets-settings__button')
+            .attr('disabled', 'true');
+        $('#' + targetId).text('Saving...');
+        $('.sp-widgets-customisation__spinner').addClass('sp-widgets-customisation__spinner-show');
     },
     hasDuplicates: function(array) {
         return (new Set(array)).size !== array.length;
@@ -1688,8 +1699,7 @@ sp.viewerWidgetsModal = {
     },
 // widget 12
     saveUploadWidget: function(fileHash) {
-
-        var uploadWidget = {
+            var uploadWidget = {
                 widgetId: $('.widgetId').attr('data-widgetId'),
                 icon : null,
                 pageFrom : $('input[name = "pageFrom"]').val(),
@@ -1698,22 +1708,21 @@ sp.viewerWidgetsModal = {
                 buttonText2 : $('input[name = "uploadText2"]').val(),
                 isEnabled : $('input[name = "sp-widget12--is-enabled"]').prop('checked'),
                 documents: [],
-        };
+            };
 
-        var isUploadWidgetSettingEmpty = false;
-        if($('input[name="sp-widget12--is-enabled"]')[0].checked === true) {
+            var isUploadWidgetSettingEmpty = false;
+
             $('#sp-tab-12 .sp-link-widget__item').each(function() {
 
                 $(this).find('[data-item-setting]').each(function() {
-                    if ($(this).val() === ''
+                    if ( $(this).val() === ''
                         && $(this).attr('data-item-setting') !== 'buttonText2'
-                        && $(this).attr('data-item-setting') !== 'docId'
                         && $(this).attr('data-item-setting') !== 'icon') {
                         sp.error.handleError('You must fill the field.');
                         $(this).addClass('sp-widget-form-error');
                         sp.viewerWidgetsModal.openErrorTab();
-
                         isUploadWidgetSettingEmpty = true;
+                        return undefined;
                     }
                     else if ('icon' === $(this).attr('data-item-setting')) {
                         if ($(this).prop('checked')) {
@@ -1722,44 +1731,41 @@ sp.viewerWidgetsModal = {
                     }
                 })
             });
-        }
+            $('#sp-tab-12 .doc-group').each(function() {
+                var items = {};
 
-
-        $('#sp-tab-12 .doc-group').each(function() {
-            var items = {};
-
-            $(this).find('[data-item-setting]').each(function() {
-                if ($(this).attr('data-item-setting') === 'docName') {
-                    items['docName'] = $(this).val();
-                }
-                else if ($(this).attr('data-item-setting') === 'isUpdate') {
-                    items['isUpdate'] = $(this).prop('checked');
-                }
-                else if ($(this).attr('data-item-setting') === 'docId') {
-                    items['docId'] = $(this).val();
-                }
+                $(this).find('[data-item-setting]').each(function() {
+                    if ($(this).attr('data-item-setting') === 'docName') {
+                        items['docName'] = $(this).val();
+                    }
+                    else if ($(this).attr('data-item-setting') === 'isUpdate') {
+                        items['isUpdate'] = $(this).prop('checked');
+                    }
+                    else if ($(this).attr('data-item-setting') === 'docId') {
+                        items['docId'] = $(this).val();
+                    }
+                });
+                uploadWidget.documents.push(items);
             });
-            uploadWidget.documents.push(items);
-        });
 
-        if (sp.viewerWidgetsModal.hasDuplicates(uploadWidget.documents.map(d => d.docName))) {
+            if (sp.viewerWidgetsModal.hasDuplicates(uploadWidget.documents.map(d => d.docName))) {
 
-            $('#sp-tab-12 .doc-group').find('[data-item-setting="docName"]').each(function(index){
-                $(this).addClass('sp-widget-form-error');
-            });
-            sp.error.handleError('You must enter only unique document name.');
-            return;
-        }
+                $('#sp-tab-12 .doc-group').find('[data-item-setting="docName"]').each(function(index){
+                    $(this).addClass('sp-widget-form-error');
+                    sp.viewerWidgetsModal.openErrorTab();
+                    isUploadWidgetSettingEmpty = true;
+                });
+                sp.error.handleError('You must enter only unique document name.');
 
-        if (!isUploadWidgetSettingEmpty) {
-            if(sp.widgets.widget12.isWidgetPageOrderValid()) {
-                return uploadWidget;
-            } else{
-                return undefined;
+                return;
             }
-        } else {
+
+            if (!isUploadWidgetSettingEmpty) {
+                if(sp.widgets.widget12.isWidgetPageOrderValid()) {
+                    return uploadWidget;
+                }
+            }
             return undefined;
-        }
     },
     emailRequiredWidget: function(fileHash) {
 
@@ -2120,6 +2126,8 @@ sp.viewerWidgetsModal = {
 
 $('.sp-video-link-tooltip').tooltip({delay: {show: 100, hide: 200}, placement: 'top'});
 
+
+
 $(document).on('click', '.link-widget__url-upload-button', function() {
     var that = this;
 
@@ -2194,9 +2202,9 @@ function postUploadWidgetSettings(data, fileHash) {
             xhr.setRequestHeader(SP.CSRF_HEADER, SP.CSRF_TOKEN);
         },
         success: callback,
-        error: function() {
-            swal('Error', 'Something went wrong. Your settings weren\'t saved.', 'error');
-        }
+        // error: function() {
+        //     swal('Error', 'Something went wrong. Your settings weren\'t saved.', 'error');
+        // }
     });
 }
 

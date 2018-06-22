@@ -90,7 +90,7 @@ CREATE TABLE upload_document_widget_docs_for_customer
   document_name VARCHAR(255)                                                                                   NOT NULL,
   can_update TINYINT DEFAULT 0                                                                                 NOT NULL,
   comment VARCHAR(255)                                                                                         NULL,
-  status INT                                                                                                   NOT NULL,
+  status VARCHAR(255)                                                                                          NOT NULL,
   created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP                                                              NULL,
   updated_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP                                                              NULL ON UPDATE CURRENT_TIMESTAMP,
   CONSTRAINT upload_document_widget_docs_for_customer_ibfk_1
@@ -104,9 +104,20 @@ ALTER TABLE customer_documents ADD CONSTRAINT customer_documents_ibfk_4 FOREIGN 
 ALTER TABLE sales_men ADD COLUMN enable_support_mail_show TINYINT(1) NOT NULL DEFAULT 0;
 
 /* 19.06.2018 */
+CREATE TABLE customer_slide
+(
+id INT AUTO_INCREMENT
+  PRIMARY KEY,
+  customer_id VARCHAR(255) not null,
+  slide_id VARCHAR(255) not null
+);
 
-create  table customer_slide(
-  customer_id vh not null,
-  slide_id int not null
-  key int auto
+CREATE TABLE customer_slide (
+  customer_id INT(11) NOT NULL,
+  slide_id BIGINT(11) NOT NULL,
+  PRIMARY KEY (customer_id,slide_id),
+  KEY fk_customer (customer_id),
+  KEY fk_slide (slide_id),
+  CONSTRAINT fk_customer FOREIGN KEY (customer_id) REFERENCES customers (id),
+  CONSTRAINT fk_slide FOREIGN KEY (slide_id) REFERENCES slides (id_ai)
 );

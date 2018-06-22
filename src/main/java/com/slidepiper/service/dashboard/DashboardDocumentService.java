@@ -9,9 +9,11 @@ import com.slidepiper.model.entity.Document.Status;
 import com.slidepiper.model.entity.Event;
 import com.slidepiper.model.entity.Viewer;
 import com.slidepiper.model.entity.widget.ShareWidget;
+import com.slidepiper.model.entity.widget.UploadDocumentWidget;
 import com.slidepiper.model.entity.widget.Widget;
 import com.slidepiper.repository.DocumentRepository;
 import com.slidepiper.repository.EventRepository;
+import com.slidepiper.repository.UploadDocumentWidgetRepository;
 import com.slidepiper.repository.ViewerRepository;
 import com.slidepiper.amazon.AmazonCloudFrontService;
 import com.slidepiper.service.amazon.AmazonS3Service;
@@ -53,6 +55,7 @@ public class DashboardDocumentService {
     private final EventRepository eventRepository;
     private final DashboardShareWidgetService dashboardShareWidgetService;
     private final ViewerRepository viewerRepository;
+    private final UploadDocumentWidgetRepository uploadDocumentWidgetRepository;
     private DbLayer dbLayer;
 
     @Autowired
@@ -68,6 +71,8 @@ public class DashboardDocumentService {
                                     EventRepository eventRepository,
                                     DashboardShareWidgetService dashboardShareWidgetService,
                                     ViewerRepository viewerRepository,
+                                    UploadDocumentWidgetRepository uploadDocumentWidgetRepository) {
+                                    ViewerRepository viewerRepository,
                                     DbLayer dbLayer) {
         this.bucket = bucket;
         this.keyPrefix = keyPrefix;
@@ -81,6 +86,7 @@ public class DashboardDocumentService {
         this.eventRepository = eventRepository;
         this.dashboardShareWidgetService = dashboardShareWidgetService;
         this.viewerRepository = viewerRepository;
+        this.uploadDocumentWidgetRepository = uploadDocumentWidgetRepository;
         this.dbLayer=dbLayer;
     }
 
@@ -243,6 +249,13 @@ public class DashboardDocumentService {
         }
         if (isMFAEnabled != null) {
             document.setMfaEnabled(isMFAEnabled);
+            if (!isMFAEnabled) {
+                UploadDocumentWidget widget = uploadDocumentWidgetRepository.findByDocument(document);
+                if (widget != null) {
+                    widget.setEnabled(false);
+                    uploadDocumentWidgetRepository.save(widget);
+                }
+            }
         }
         documentRepository.save(document);
 

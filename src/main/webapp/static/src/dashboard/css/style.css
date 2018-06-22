@@ -3,6 +3,10 @@
     display: none !important;
 }
 
+.deleteDoc{
+    text-align: right;
+}
+
 .error,
 .errorId,
 .errorEmail,

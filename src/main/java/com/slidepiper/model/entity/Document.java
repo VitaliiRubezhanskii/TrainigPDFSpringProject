@@ -58,18 +58,15 @@ public class Document implements Serializable {
     @Column(name = "is_mfa_enabled")
     private boolean mfaEnabled = false;
 
-
-
-//    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-//    @JoinTable(name = "customer_slide", joinColumns = {
-//            @JoinColumn(name = "id", nullable = false, updatable = false) },
-//            inverseJoinColumns = { @JoinColumn(name = "email",
-//                    nullable = false, updatable = false) })
-//    private List<Customer> customerList;
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "customer_slide",
+            joinColumns = { @JoinColumn(name = "slide_id") },
+            inverseJoinColumns = { @JoinColumn(name = "customer_id") })
+    private Set<Customer> customers;
 
     public Document() {}
 
-    public Document(Viewer viewer,  Status status, String name, Boolean processMode, Boolean mfaEnabled) {
+    public Document(Viewer viewer, Status status, String name, Boolean processMode, Boolean mfaEnabled) {
         this.viewer = viewer;
         this.status = status;
         this.name = name;

@@ -4,14 +4,20 @@ import com.slidepiper.model.customer.Customer;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.Repository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
 public interface CustomerRepository extends JpaRepository<Customer, Long> {
 
+
+
+    Customer save (Customer customer);
 
     Customer findById(long id);
 
@@ -70,9 +76,8 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
                         @Param("username") String username, @Param("email") String email);
 
 
-//    "UPDATE customers SET first_name = ?, last_name = ?, " +
-//            "name = ?, company = ?, group_name = ?, " +
-//            "customer_id = ?, phone = ? WHERE sales_man = ? AND email = ?"
+
+
 
 
 

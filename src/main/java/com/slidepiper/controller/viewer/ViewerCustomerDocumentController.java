@@ -1,12 +1,9 @@
 package com.slidepiper.controller.viewer;
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.slidepiper.exception.FileInputEmptyException;
 import com.slidepiper.repository.CustomerDocumentRepository;
 import com.slidepiper.service.viewer.ViewerCustomerDocumentService;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -28,11 +25,12 @@ public class ViewerCustomerDocumentController {
 
     @RequestMapping(method = RequestMethod.POST, value = "/viewer/customer-documents")
     @ResponseBody
-    public void uploadFile(Principal principal, @RequestParam("file") MultipartFile multipartFile, @RequestParam("initialChannelFriendlyId") String initialChannelFriendlyId) throws IOException {
+    public void uploadFile(Principal principal, @RequestParam("file") MultipartFile multipartFile, @RequestParam("initialChannelFriendlyId") String initialChannelFriendlyId,
+                           @RequestParam("docsForCustomerId") int docsForCustomerId) throws IOException {
         if (Objects.isNull(multipartFile)) {
             throw new FileInputEmptyException();
         } else {
-            viewerDocumentService.upload(multipartFile, principal.getName(), initialChannelFriendlyId);
+            viewerDocumentService.upload(multipartFile, principal.getName(), initialChannelFriendlyId, docsForCustomerId);
         }
     }
 

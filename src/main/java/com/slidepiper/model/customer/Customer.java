@@ -6,7 +6,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "customers")
@@ -19,8 +19,10 @@ public class Customer implements Serializable {
     @Column(name = "id")
     private long id;
 
+
     @Column(name = "email")
     private String email;
+
 
     @Column(name = "first_name")
     private String firstName;
@@ -31,15 +33,20 @@ public class Customer implements Serializable {
     @Column(name="name")
     private String name;
 
+
+
+
     @Column(name = "company")
     private String company;
 
     @Convert(converter = CustomerDataConverter.class)
     private CustomerData data;
 
-
     @Column(name = "group_name")
     private String customerGroup;
+
+
+
 
     // TODO: Replace with user.
     @Column(name = "sales_man")
@@ -50,28 +57,13 @@ public class Customer implements Serializable {
 
     @Column(name = "phone")
     private String phoneNumber;
-//
-//    @ManyToMany(fetch = FetchType.LAZY,
-//            cascade = {
-//                    CascadeType.PERSIST,
-//                    CascadeType.MERGE
-//            }, mappedBy = "customerList")
-//    private List<Document> documentList;
 
 
-    public Customer() {
-    }
 
-    public Customer(String email, String firstName, String lastName,
-                    String company, CustomerData data, String username,
-                    String customerId, String phoneNumber) {
-        this.email = email;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.company = company;
-        this.data = data;
-        this.username = username;
-        this.customerId = customerId;
-        this.phoneNumber = phoneNumber;
-    }
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "customer_slide",
+            joinColumns = { @JoinColumn(name = "customer_id") },
+            inverseJoinColumns = { @JoinColumn(name = "slide_id") })
+    private Set<Document> documents;
 }
